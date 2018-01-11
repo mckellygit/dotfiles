@@ -1,0 +1,95 @@
+
+### Package supplied configuration settings
+##### All lines starting with # are comments
+##### All other lines should be of the form keyword=value
+
+##### Shell Behavior Defaults
+### NOTE: verbose and paramiko_log_level settings are obsolete
+### Use loglevel instead, and logging from both RadSSH and paramiko get captured to radssh.log
+###
+### loglevel can be set to [CRITICAL|ERROR|WARNING|INFO|DEBUG]
+# loglevel=ERROR
+
+# shell.prompt=RadSSH $
+# shell.console=color
+### To see last few lines of output of in-flight jobs when pressing Ctrl-C
+### set this parameter to the number of lines to retain. Can be very memory
+### intensive.
+# stalled_job_buffer=0
+
+# max_threads=120
+### Automatically save log files into date/time-stamped local directory
+# logdir=session_%Y%m%d_%H%M%S
+logdir=~/radssh/sessions/session_%Y%m%d_%H%M%S
+### Log all normal output to given filename in logdir. Set empty to turn off
+### NOTE: This logging is in addition to host-by-host logging
+# log_out=out.log
+### Log all error output to given filename in logdir. Set empty to turn off
+### NOTE: This is in addition to host-by-host error logging
+# log_err=err.log
+
+### Command line history file, saved across sessions
+# historyfile=~/.radssh_history
+
+### Available modes: {stream, ordered, off}
+output_mode=ordered
+### Can override character encoding (will use sys.stdout.encoding if not specified)
+### character_encoding=UTF-8
+### Avoiding runaway commands with either too much output, or
+### waiting indefinately at a user prompt...
+# quota.time=0
+# quota.lines=0
+# quota.bytes=0
+
+### Connection & Authentication Options
+### Username defaults to $SSH_USER (or $USER) if not set here
+### username=root
+### Supplemental authentication file for more keys and/or passwords
+# authfile=~/.radssh_auth
+
+### Network Tweaks
+# socket.timeout=30
+# keepalive=180
+
+### Extensions to the shell via plugins
+### System plugin collections always loaded from ${EXEC}/plugins
+### User plugins loaded from directories listed here (optional)
+plugins=~/radssh/plugins
+### Selectively disable plugins, if for some reason you want to
+### avoid loading some system (or user) plugins that normally load
+# disable_plugins=
+
+### Options hostkey.verify and hostkey.known_hosts are obsoleted
+### in favor of using standard SSH Config settings StrictHostKeyChecking
+### and UserKnownHostsFile. RadSSH can use a different config settings
+### file by overriding the path to 'ssh_config' here:
+# ssh_config=~/.ssh/config
+
+### Enable loading of user specific settings (and command line options)
+### Only if this is set.
+# user.settings=~/.radssh_config
+
+### Rudimentary command safeguards
+### First, outright forbid commands that should only be run with a TTY
+### which RadSSH typically does not provide...
+# commands.forbidden=telnet,ftp,sftp,vi,vim,ssh
+### Also, for commands that could have devastating side effects, have
+### RadSSH prompt the user if they are 100% sure they want to run...
+commands.restricted=reboot,shutdown,halt,poweroff,telinit
+
+### Some SSH hosts do not support exec_command invocation, and require
+### a session to be used via invoke_shell() instead. In addition, based
+### on observation, the underlying transport is terminated when the session
+### is closed, so the open session MUST stay persistent across command
+### invocations.
+### Identify such "problem" hosts by their SSH Server version string, which
+### can be gathered using ssh-keyscan.
+# force_tty=Cisco,force10networks
+### In addition, allow custom command(s) to be issued at signon and signoff
+### to permit session to behave as RadSSH expects, without user input...
+# force_tty.signon=term length 0
+# force_tty.signoff=term length 20
+
+### Should RadSSH initially send auth_none request (needed for OpenSSH 4.3 banner)
+# try_auth_none=off
+
