@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# list=$(xinput list | grep -i 'Microsoft' | grep 'Nano Transceiver' | grep pointer | awk -F= '{ print $2}' | awk '{print $1}')
+list=$(xinput list | grep -i -E 'Logitech USB Receiver|ITON HID Wireless Dongle|Compx 2.4G Receiver' | grep pointer | awk -F= '{ print $2}' | awk '{print $1}')
+
+while read -r item
+do
+# echo "... $item ..."
+  if [ -n "${item}" ] ; then
+    xinput set-button-map ${item} 1 3 2 4 5 6 7 8 9 10 11 12 13
+  fi
+done <<< "$list"
+
