@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Parcellite
+GenericName=Parcellite
+Comment=Parcellite
+Exec=parcellite -n > /dev/null 2>&1 &
+Terminal=false
+Type=Application
+Icon=
+Categories=
+StartupNotify=false
