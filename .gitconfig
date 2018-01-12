@@ -1,0 +1,21 @@
+[user]
+	name = My Name
+	email = My Email Address
+[core]
+	autocrlf = input
+	whitespace = trailing-space,tab-in-indent
+	editor = vim
+	excludesfile = ~/.gitignore
+    preloadindex = true
+[apply]
+	whitespace = error
+[credential]
+	helper = cache --timeout=9600
+[alias]
+	undo = "!f() { git reset --hard $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
+	dt = difftool
+[diff]
+	compactionHeuristic = true
+	tool = vimdiff
+[difftool]
+	prompt = false
