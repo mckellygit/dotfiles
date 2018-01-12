@@ -694,7 +694,8 @@ if has("autocmd")
  if !&diff
   " When editing a file, always jump to the last cursor position.
   " This must be after the uncompress commands.
-  " see also Plugin above that can do the same
+  " see also vim-lastplace plugin above that can do the same
+  " Dont want this for .../.git/COMMIT_EDITMSG for example ...
    autocmd BufReadPost * if line("'\"") && line("'\"") <= line("$") | exe "keepjumps normal `\"" | endif
  endif
 
