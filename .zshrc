@@ -38,6 +38,7 @@ bindkey '^e' end-of-line
 export KEYTIMEOUT=3
 
 alias ll='ls -ltr'
+alias lla='ls -latr'
 alias rm='rm -i'
 #if [ ! -f /etc/redhat-release ] ; then
 #  alias dmesg='dmesg -T'
