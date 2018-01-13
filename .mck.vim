@@ -88,7 +88,8 @@ Plugin 'itchyny/lightline.vim'
 "
 " start at prev cursor position, except for git etc.
 " (make sure to disable code below that also does this)
-"Plugin 'farmergreg/vim-lastplace'
+" lastplace to start at prev cursor pos (**modified++)
+Plugin 'farmergreg/vim-lastplace'
 "
 "" All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -691,12 +692,15 @@ if has("autocmd")
  " This was disabled, because it changes the jumplist.  Can't use CTRL-O to go
  " back to positions in previous files more than once.
  " skip this for vimdiff (ie always start at beginning)
+ "if !&diff
+ " " When editing a file, always jump to the last cursor position.
+ " " This must be after the uncompress commands.
+ " " see also vim-lastplace plugin above that can do the same
+ " " Dont want this for .../.git/COMMIT_EDITMSG for example ...
+ "  autocmd BufReadPost * if line("'\"") && line("'\"") <= line("$") | exe "keepjumps normal `\"" | endif
+ "endif
  if !&diff
-  " When editing a file, always jump to the last cursor position.
-  " This must be after the uncompress commands.
-  " see also vim-lastplace plugin above that can do the same
-  " Dont want this for .../.git/COMMIT_EDITMSG for example ...
-   autocmd BufReadPost * if line("'\"") && line("'\"") <= line("$") | exe "keepjumps normal `\"" | endif
+   let g:lastplace_vimdiff_disable = 1
  endif
 
  " clear all jumps when starting new edit
