@@ -268,6 +268,11 @@ let g:qfenter_keymap = {}
 let g:qfenter_keymap.topen = ['<Leader><Tab>', '<C-t>']
 " QFEnter -------------
 
+" lastplace -----------
+" mods to skip for vimdiff
+let g:lastplace_vimdiff_disable = 1
+" lastplace -----------
+
 " improves color highlighing with dark terminals
 set background=dark
 " tmux default term set to screen-256color
@@ -699,9 +704,6 @@ if has("autocmd")
  " " Dont want this for .../.git/COMMIT_EDITMSG for example ...
  "  autocmd BufReadPost * if line("'\"") && line("'\"") <= line("$") | exe "keepjumps normal `\"" | endif
  "endif
- if !&diff
-   let g:lastplace_vimdiff_disable = 1
- endif
 
  " clear all jumps when starting new edit
  aug VimStartup
