@@ -343,8 +343,8 @@ set ruler
 "set mouse-=a
 " to get mouse support and 
 " selection buffer copied automatically to clipboard
-set mouse=nv
-"set mouse=a
+"set mouse=nv
+set mouse=a
 
 " use shift + left click to get back to previous (mouse=~a)
 
