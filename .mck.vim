@@ -89,6 +89,7 @@ Plugin 'itchyny/lightline.vim'
 " start at prev cursor position, except for git etc.
 " (make sure to disable code below that also does this)
 " lastplace to start at prev cursor pos (**modified++)
+" see note below about doing this after uncompress
 Plugin 'farmergreg/vim-lastplace'
 "
 "" All of your Plugins must be added before the following line
@@ -270,7 +271,9 @@ let g:qfenter_keymap.topen = ['<Leader><Tab>', '<C-t>']
 
 " lastplace -----------
 " mods to skip for vimdiff
-let g:lastplace_vimdiff_disable = 1
+if &diff
+  let b:loaded_lastplace_plugin = 1
+endif
 " lastplace -----------
 
 " improves color highlighing with dark terminals
@@ -700,8 +703,8 @@ if has("autocmd")
  "if !&diff
  " " When editing a file, always jump to the last cursor position.
  " " This must be after the uncompress commands.
- " " see also vim-lastplace plugin above that can do the same
- " " Dont want this for .../.git/COMMIT_EDITMSG for example ...
+ " " see also vim-lastplace plugin above that is similar
+ " " (dont want this for .../.git/COMMIT_EDITMSG for example)
  "  autocmd BufReadPost * if line("'\"") && line("'\"") <= line("$") | exe "keepjumps normal `\"" | endif
  "endif
 
