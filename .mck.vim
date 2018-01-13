@@ -290,6 +290,8 @@ endif
 
 colorscheme deus
 
+"set ttyfast
+
 " -----------------------------
 
 " Switch syntax highlighting on, when the terminal has colors
