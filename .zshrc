@@ -88,6 +88,10 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
+#alias rdpclient='rdesktop -g 1280x820 -d RISK -u $LOGNAME -p password -a 16 -k en-us -K -r clipboard:CLIPBOARD <host> &|'
+#alias rdpclient='rdesktop -g 1580x932 -d RISK -u $LOGNAME -p password -a 16 -k en-us -K -r clipboard:CLIPBOARD <host> &|'
+ alias rdpclient='rdesktop -g 1580x932 -d RISK -u $LOGNAME -p password -a 24 -k en-us -K -r clipboard:CLIPBOARD <host> &|'
+
 alias gitsubrecur='git submodule update --init --recursive'
 
 alias cmakedbg='cmake    -DCMAKE_BUILD_TYPE=Debug          -DUSE_LIBXSLT=ON -DUSE_CPPUNIT=ON  -DUSE_SHLIBDEPS=OFF -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DECLWATCH_BUILD_STRATEGY=NO_COMPRESS ../HPCC-Platform'
@@ -119,6 +123,7 @@ export FZF_DEFAULT_OPTS='
   --color info:108,prompt:109,spinner:108,pointer:168,marker:168
   '
 
+# This can be slow, try it in byobu/tmux status bar ...
 # git repo info/status in prompt
 #if [ -f ~/.git-prompt.sh ] ; then
 #  export GIT_PS1_SHOWDIRTYSTATE=1
@@ -129,12 +134,12 @@ export FZF_DEFAULT_OPTS='
 #    precmd () { __git_ps1 "%n@%m" ":%~%% " "|%s" } 
 #  fi
 #fi
- if [ -f ~/.git-repo.sh ] ; then
-   source ~/.git-repo.sh
-   if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] ; then
-     precmd () { __git_ps1 "ssh-%n@%m" ":%~%% " "|%s" } 
-   else
-     precmd () { __git_ps1 "%n@%m" ":%~%% " "|%s" } 
-   fi
- fi
+#if [ -f ~/.git-repo.sh ] ; then
+#  source ~/.git-repo.sh
+#  if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] ; then
+#    precmd () { __git_ps1 "ssh-%n@%m" ":%~%% " "|%s" }
+#  else
+#    precmd () { __git_ps1 "%n@%m" ":%~%% " "|%s" }
+#  fi
+#fi
 
