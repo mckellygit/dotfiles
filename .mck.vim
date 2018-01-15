@@ -92,6 +92,10 @@ Plugin 'itchyny/lightline.vim'
 " see note below about doing this after uncompress
 Plugin 'farmergreg/vim-lastplace'
 "
+" run cmd in background and output to quickfix ...
+" :AsyncRun gcc % -c %< for example
+"Plugin 'skywind3000/asyncrun.vim'
+"
 "" All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -160,8 +164,11 @@ function! MyLightlineGitbranch()
     return ''
   else
     "return fugitive#statusline()
+    "---
     let branch = fugitive#head()
     return branch ==# '' ? '' : 'git:<' . branch . '>'
+    "---
+    "return b:mckgitstatus
   endif
 endfunction
 
@@ -1015,4 +1022,35 @@ inoremap <M-,> <Esc>:tabprevious<CR>
 nnoremap <M-,>      :tabprevious<CR>
 inoremap <M-;> <Esc>:tabprevious<CR>
 nnoremap <M-;>      :tabprevious<CR>
+
+" -----------------------------
+
+" interval timer job for git status
+
+let b:mckgitstatus = "new"
+
+function! MyGSCloseHandler(ch)
+  if ch_canread(a:ch)
+    let b:mckgitstatus = ch_read(a:ch)
+    "echomsg "output = " . b:mckgitstatus
+  else
+    let b:mckgitstatus = "git:<err(ch_read)>"
+  endif
+  unlet b:MyGSJob
+endfunction
+
+function! MyGitStatus(timer)
+  if exists('b:MyGSJob')
+    echo "git status cmd still running ..."
+  else
+    let command = '/bin/sh -c ~/.byobu/bin/5_gitstatus ' . expand('%:p:h')
+    "echomsg "command = " . command
+    let b:MyGSJob = job_start(command, { 'close_cb':'MyGSCloseHandler' })
+  endif
+  call lightline#update()
+endfunction
+
+"autocmd BufReadPost,FileReadPost * call timer_start(5174, 'MyGitStatus', {'repeat': -1})
+
+" -----------------------------
 
