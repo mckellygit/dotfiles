@@ -168,7 +168,7 @@ function! MyLightlineGitbranch()
     let branch = fugitive#head()
     return branch ==# '' ? '' : 'git:<' . branch . '>'
     "---
-    "return b:mckgitstatus
+    "return w:mckgitstatus
   endif
 endfunction
 
@@ -1025,32 +1025,32 @@ nnoremap <M-;>      :tabprevious<CR>
 
 " -----------------------------
 
-" interval timer job for git status
+" Interval timer job for git status
 
-let b:mckgitstatus = "new"
+let w:mckgitstatus = "git:<?>"
 
 function! MyGSCloseHandler(ch)
   if ch_canread(a:ch)
-    let b:mckgitstatus = ch_read(a:ch)
-    "echomsg "output = " . b:mckgitstatus
+    let w:mckgitstatus = ch_read(a:ch)
   else
-    let b:mckgitstatus = "git:<err(ch_read)>"
+    let w:mckgitstatus = "git:<err(ch_read)>"
   endif
-  unlet b:MyGSJob
+  "echomsg w:mckgitstatus
+  unlet w:MyGSJob
 endfunction
 
 function! MyGitStatus(timer)
-  if exists('b:MyGSJob')
+  if exists('w:MyGSJob')
     echo "git status cmd still running ..."
   else
     let command = '/bin/sh -c ~/.byobu/bin/5_gitstatus ' . expand('%:p:h')
     "echomsg "command = " . command
-    let b:MyGSJob = job_start(command, { 'close_cb':'MyGSCloseHandler' })
+    let w:MyGSJob = job_start(command, { 'close_cb':'MyGSCloseHandler' })
   endif
   call lightline#update()
 endfunction
 
-"autocmd BufReadPost,FileReadPost * call timer_start(5174, 'MyGitStatus', {'repeat': -1})
+"autocmd BufNewFile,BufReadPost,FileReadPost * call timer_start(5174, 'MyGitStatus', {'repeat': -1})
 
 " -----------------------------
 
