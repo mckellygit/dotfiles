@@ -165,10 +165,14 @@ function! MyLightlineGitbranch()
   else
     "return fugitive#statusline()
     "---
-    let branch = fugitive#head()
-    return branch ==# '' ? '' : 'git:<' . branch . '>'
+    "let branch = fugitive#head()
+    "return branch ==# '' ? '' : 'git:<' . branch . '>'
     "---
-    "return w:mckgitstatus
+    if exists('t:mckgitstatus')
+      return t:mckgitstatus
+    else
+      return "git:<???>"
+    endif
   endif
 endfunction
 
@@ -1027,30 +1031,48 @@ nnoremap <M-;>      :tabprevious<CR>
 
 " Interval timer job for git status
 
-let w:mckgitstatus = "git:<?>"
+" info/status script
+let g:gitinfo_script = "~/bin/gitinfo"
+" interval time (ms)
+let g:gitinfo_interval = 5000
+
+" -------
+
+let t:mckgitstatus = "git:<???>"
 
 function! MyGSCloseHandler(ch)
   if ch_canread(a:ch)
-    let w:mckgitstatus = ch_read(a:ch)
+    let t:mckgitstatus = ch_read(a:ch)
   else
-    let w:mckgitstatus = "git:<err(ch_read)>"
+    let t:mckgitstatus = "git:<err(ch_read)>"
   endif
-  "echomsg w:mckgitstatus
-  unlet w:MyGSJob
+  "echomsg t:mckgitstatus
+  if exists('t:MyGSJob')
+    unlet t:MyGSJob
+  endif
 endfunction
 
 function! MyGitStatus(timer)
-  if exists('w:MyGSJob')
+  let l:jstat = "complete"
+  if exists('t:MyGSJob')
+    let l:jstat = job_status(t:MyGSJob)
+  endif
+  "echomsg "l:jstat = " . l:jstat
+  if l:jstat == "run"
     echo "git status cmd still running ..."
   else
-    let command = '/bin/sh -c ~/.byobu/bin/5_gitstatus ' . expand('%:p:h')
-    "echomsg "command = " . command
-    let w:MyGSJob = job_start(command, { 'close_cb':'MyGSCloseHandler' })
+    if filereadable(expand(g:gitinfo_script))
+      let l:command = '/bin/sh -c ' . '"' . g:gitinfo_script . ' ' . expand('%:p:h') . '"'
+      "echomsg "starting job " . l:command
+      let t:MyGSJob = job_start(l:command, { 'close_cb':'MyGSCloseHandler' })
+    endif
   endif
   call lightline#update()
 endfunction
 
-"autocmd BufNewFile,BufReadPost,FileReadPost * call timer_start(5174, 'MyGitStatus', {'repeat': -1})
+if !&diff
+  autocmd BufReadPost,BufNewFile,FileReadPost * call timer_start(g:gitinfo_interval, 'MyGitStatus', {'repeat': -1})
+endif
 
 " -----------------------------
 
