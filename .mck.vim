@@ -1076,7 +1076,9 @@ function! MyGitStatus(timer)
   endif
 endfunction
 
-if !&diff
+if &diff
+  let t:mckgitstatus = "diff"
+else
   autocmd BufReadPost,BufNewFile,FileReadPost * call timer_start(g:gitinfo_interval, 'MyGitStatus', {'repeat': -1})
 endif
 
