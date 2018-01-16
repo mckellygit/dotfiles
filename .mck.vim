@@ -1052,7 +1052,7 @@ function! MyGSCloseHandler(ch)
   endif
 endfunction
 
-function! MyGitStatus(timer)
+function! MyGSStart()
   let l:jstat = "complete"
   if exists('t:MyGSJob')
     let l:jstat = job_status(t:MyGSJob)
@@ -1068,6 +1068,12 @@ function! MyGitStatus(timer)
     endif
   endif
   call lightline#update()
+endfunction
+
+function! MyGitStatus(timer)
+  if &filetype !=# 'qf'
+    call MyGSStart()
+  endif
 endfunction
 
 if !&diff
