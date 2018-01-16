@@ -2,6 +2,9 @@
 
 dbg=0
 
+tfile="/tmp/git-status$$.tmp"
+trap "rm -f $tfile" SIGINT SIGTERM SIGQUIT
+
 if [ $# -gt 0 ] ; then
   # dir supplied on cmd-line
   active_tmux_dir=$1
@@ -55,7 +58,7 @@ gs="git:<${branch}>"
 let untracked_count=0 unstaged_count=0 staged_count=0 other_count=0
 
 # skip .sw* files so current edit(s) do not show as untracked
-git status --porcelain | grep -v '\.sw*' | cut -b -2 | sort -u > /tmp/git-status$$.tmp 2>/dev/null
+git status --porcelain | grep -v '\.sw*' | cut -b -2 | sort -u > $tfile 2>/dev/null
 
 while IFS=_ read t; do
 # echo "t = <$t>"
@@ -68,9 +71,9 @@ while IFS=_ read t; do
   else
     ((other_count++))
   fi
-done < /tmp/git-status$$.tmp
+done < $tfile
 
-rm -f /tmp/git-status$$.tmp
+rm -f $tfile
 
 #echo "untracked_count(*) = $untracked_count"
 #echo "unstaged_count(#)  = $unstaged_count"
