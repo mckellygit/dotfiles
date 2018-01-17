@@ -585,35 +585,41 @@ endfunction
 "noremap <C-j> @="1\<lt>C-D>"<CR>:set scroll=0<CR>
 "noremap <C-k> @="1\<lt>C-U>"<CR>:set scroll=0<CR>
 
-" I couldn't find any get_number_of_visible_lines function, so I made my own.
-function GetNumberOfVisibleLines()
-  let cur_line = line(".")
-  let cur_col = virtcol(".")
-  keepjumps normal H
-  let top_line = line(".")
-  keepjumps normal L
-  let bot_line = line(".")
-  execute "keepjumps normal " . cur_line . "G"
-  execute "keepjumps normal " . cur_col . "|"
-  return bot_line - top_line
-endfunc
-
-" noremap <PageUp> 39<C-U>:set scroll=0<CR>
-function! MyPageUp()
-  let visible_lines = GetNumberOfVisibleLines()
-  execute "keepjumps normal " . visible_lines . "\<C-U>:set scroll=0\r"
-endfunction
-
-" noremap <PageDown> 39<C-D>:set scroll=0<CR>
-function! MyPageDown()
-  let visible_lines = GetNumberOfVisibleLines()
-  execute "keepjumps normal " . visible_lines . "\<C-D>:set scroll=0\r"
-endfunction
-
+"" I couldn't find any get_number_of_visible_lines function, so I made my own.
+"function GetNumberOfVisibleLines()
+"  let cur_line = line(".")
+"  let cur_col = virtcol(".")
+"  keepjumps normal H
+"  let top_line = line(".")
+"  keepjumps normal L
+"  let bot_line = line(".")
+"  execute "keepjumps normal " . cur_line . "G"
+"  execute "keepjumps normal " . cur_col . "|"
+"  return bot_line - top_line
+"endfunc
+"
+"" noremap <PageUp> 39<C-U>:set scroll=0<CR>
+"function! MyPageUp()
+"  let visible_lines = GetNumberOfVisibleLines()
+"  execute "keepjumps normal " . visible_lines . "\<C-U>:set scroll=0\r"
+"endfunction
+"
+"" noremap <PageDown> 39<C-D>:set scroll=0<CR>
+"function! MyPageDown()
+"  let visible_lines = GetNumberOfVisibleLines()
+"  execute "keepjumps normal " . visible_lines . "\<C-D>:set scroll=0\r"
+"endfunction
+"
 " BorlandPascal pageup/down behaviour!
 " todo: when hitting top/bottom of file, then restore Y to last Y
 "noremap <PageUp> :call MyPageUp()<CR>
 "noremap <PageDown> :call MyPageDown()<CR>
+
+" mouse scroll not to go past end
+"noremap <ScrollWheelUp>   H5k
+"noremap <ScrollWheelDown> L5j
+noremap <ScrollWheelUp>   :call <SID>scrollDN(5)<CR>
+noremap <ScrollWheelDown> :call <SID>scrollUP(5)<CR>
 
 " ------ scroll ------
 
