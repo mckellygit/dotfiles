@@ -365,9 +365,9 @@ set mouse=a
 " use shift + left click to get back to previous (mouse=~a)
 
 " use both clipboard (unnamed) and primary (unnamedplus)
-"set clipboard=unnamed
-"set clipboard=unnamedplus
-set clipboard=unnamed,unnamedplus
+"set clipboard^=unnamed
+"set clipboard^=unnamedplus
+set clipboard^=unnamed,unnamedplus
 
 " map Ctrl-C to yank selection into paste buffer/clipboard
 ":vmap <C-C> "+y 
