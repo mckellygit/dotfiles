@@ -364,6 +364,7 @@ set mouse=a
 
 " use shift + left click to get back to previous (mouse=~a)
 
+" use both clipboard (unnamed) and primary (unnamedplus)
 "set clipboard=unnamed
 "set clipboard=unnamedplus
 set clipboard=unnamed,unnamedplus
@@ -869,7 +870,12 @@ let g:localvimrc_persistent = 1
 "\rb	Jump to previous location
 "
 let g:rtagsUseLocationList=1
-let g:rtagsAutoLaunchRdm=1
+" dont start rdm if from sudo
+if $USER != 'root'
+  let g:rtagsAutoLaunchRdm=1
+else
+  let g:rtagsAutoLaunchRdm=0
+endif
 nmap <C-]> :call rtags#JumpTo(g:SAME_WINDOW)<CR>
 " C-o to go back
 " C-t to go back (not implemented)
