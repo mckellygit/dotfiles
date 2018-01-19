@@ -617,10 +617,10 @@ endfunction
 "noremap <PageDown> :call MyPageDown()<CR>
 
 " mouse scroll not to go past end
-"noremap <ScrollWheelUp>   H5k
-"noremap <ScrollWheelDown> L5j
-noremap <ScrollWheelUp>   :call <SID>scrollDN(5)<CR>
-noremap <ScrollWheelDown> :call <SID>scrollUP(5)<CR>
+"noremap <silent> <ScrollWheelUp>   H5k
+"noremap <silent> <ScrollWheelDown> L5j
+noremap <silent> <ScrollWheelUp>   :call <SID>scrollDN(5)<CR>
+noremap <silent> <ScrollWheelDown> :call <SID>scrollUP(5)<CR>
 
 " ------ scroll ------
 
