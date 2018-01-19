@@ -168,8 +168,8 @@ function! MyLightlineGitbranch()
     "let branch = fugitive#head()
     "return branch ==# '' ? '' : 'git:<' . branch . '>'
     "---
-    if exists('t:mckgitstatus')
-      return t:mckgitstatus
+    if exists('b:mckgitstatus')
+      return b:mckgitstatus
     else
       return "git:<???>"
     endif
@@ -1029,15 +1029,23 @@ execute "set <M-,>=\e,"
 execute "set <M-;>=\e;"
 
 " Alt .(>)|' next tab
-inoremap <M-.> <Esc>:tabnext<CR>
-nnoremap <M-.>      :tabnext<CR>
-inoremap <M-'> <Esc>:tabnext<CR>
-nnoremap <M-'>      :tabnext<CR>
+inoremap <silent> <M-.> <Esc>:tabnext<CR>
+nnoremap <silent> <M-.>      :tabnext<CR>
+inoremap <silent> <M-'> <Esc>:tabnext<CR>
+nnoremap <silent> <M-'>      :tabnext<CR>
 " Alt ,(<)|; prev tab
-inoremap <M-,> <Esc>:tabprevious<CR>
-nnoremap <M-,>      :tabprevious<CR>
-inoremap <M-;> <Esc>:tabprevious<CR>
-nnoremap <M-;>      :tabprevious<CR>
+inoremap <silent> <M-,> <Esc>:tabprevious<CR>
+nnoremap <silent> <M-,>      :tabprevious<CR>
+inoremap <silent> <M-;> <Esc>:tabprevious<CR>
+nnoremap <silent> <M-;>      :tabprevious<CR>
+
+" -----------------------------
+
+function! s:log(message)
+  silent execute '!echo "'
+        \ . strftime('%T', localtime()) . ' - ' . a:message . '"'
+        \ '>> /tmp/vim$$.log'
+endfunction
 
 " -----------------------------
 
@@ -1050,48 +1058,77 @@ let g:gitinfo_interval = 5000
 
 " -------
 
-let t:mckgitstatus = "git:<???>"
+let b:mckgitstatus = "git:<???>"
+
+let g:tablist = {} " { bufnum, timerid }
 
 function! MyGSCloseHandler(ch)
   if ch_canread(a:ch)
-    let t:mckgitstatus = ch_read(a:ch)
+    let b:mckgitstatus = ch_read(a:ch)
   else
-    let t:mckgitstatus = "git:<err(ch_read)>"
+    let b:mckgitstatus = "git:<err(ch_read)>"
   endif
-  "echomsg t:mckgitstatus
-  if exists('t:MyGSJob')
-    unlet t:MyGSJob
+  "echomsg b:mckgitstatus
+  if exists('b:MyGSJob')
+    unlet b:MyGSJob
   endif
 endfunction
 
-function! MyGSStart()
+function! MyGSStart(timer)
   let l:jstat = "complete"
-  if exists('t:MyGSJob')
-    let l:jstat = job_status(t:MyGSJob)
+  if exists('b:MyGSJob')
+    let l:jstat = job_status(b:MyGSJob)
   endif
   "echomsg "l:jstat = " . l:jstat
   if l:jstat == "run"
-    echo "git status cmd still running ..."
+    echo "git status cmd running ..."
   else
     if filereadable(expand(g:gitinfo_script))
       let l:command = '/bin/sh -c ' . '"' . g:gitinfo_script . ' ' . expand('%:p:h') . '"'
       "echomsg "starting job " . l:command
-      let t:MyGSJob = job_start(l:command, { 'close_cb':'MyGSCloseHandler' })
+      let b:MyGSJob = job_start(l:command, { 'close_cb':'MyGSCloseHandler' })
     endif
   endif
   call lightline#update()
 endfunction
 
-function! MyGitStatus(timer)
-  if &filetype !=# 'qf'
-    call MyGSStart()
+function! MyGitStatus()
+  if &filetype ==# 'qf'
+    return
+  endif
+  let l:bufnm = bufnr("%")
+  let l:found = has_key(g:tablist, l:bufnm)
+  "let l:msg = "MyGitStatus " . l:bufnm . " " . l:fname . " " . l:found
+  "echomsg l:msg
+  if l:found ==# 0
+    let l:timer = timer_start(g:gitinfo_interval, 'MyGSStart', {'repeat': -1})
+    let g:tablist[l:bufnm] = l:timer
+  endif
+endfunction
+
+function! MyGitLeave()
+  let l:bufnm = bufnr("%")
+  let l:found = has_key(g:tablist, l:bufnm)
+  "let l:msg = "MyGitLeave " . l:bufnm . " " . l:found
+  "echomsg l:msg
+  if l:found ==# 1
+    "let l:msg = "MyGitLeave removing " . l:bufnm
+    "echomsg l:msg
+    let l:timer = get(g:tablist, l:bufnm, "-1")
+    if l:timer !=# "-1"
+      "let l:msg = "MyGitLeave stopping timer " . l:timer
+      "echomsg l:msg
+      call timer_stop(l:timer)
+    endif
+    call remove(g:tablist, l:bufnm)
   endif
 endfunction
 
 if &diff
-  let t:mckgitstatus = "diff"
+  let b:mckgitstatus = "diff"
 else
-  autocmd BufReadPost,BufNewFile,FileReadPost * call timer_start(g:gitinfo_interval, 'MyGitStatus', {'repeat': -1})
+  autocmd BufReadPost,BufNewFile,FileReadPost * call MyGitStatus()
+  autocmd BufUnload * call MyGitLeave()
 endif
 
 " -----------------------------
