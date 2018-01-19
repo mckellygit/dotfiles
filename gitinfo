@@ -2,8 +2,9 @@
 
 dbg=0
 
-tfile="/tmp/git-status$$.tmp"
-trap "rm -f $tfile" SIGINT SIGTERM SIGQUIT
+tfile1="/tmp/git-status1$$.tmp"
+tfile2="/tmp/git-status2$$.tmp"
+trap "rm -f $tfile1 $tfile2" SIGINT SIGTERM SIGQUIT
 
 if [ $# -gt 0 ] ; then
   # dir supplied on cmd-line
@@ -58,8 +59,23 @@ gs="git:<${branch}>"
 let untracked_count=0 unstaged_count=0 staged_count=0 other_count=0
 
 # skip .sw* files so current edit(s) do not show as untracked
-git status --porcelain | grep -v '\.sw*' | cut -b -2 | sort -u > $tfile 2>/dev/null
+git status --porcelain --branch | grep -v '\.sw*' > $tfile1 2>/dev/null
 
+ab=""
+grep -q '\[ahead ' $tfile1
+rc=$?
+if [[ $rc -eq 0 ]] ; then
+  # ahead of origin
+  ab="^"
+fi
+grep -q '\[behind ' $tfile1
+rc=$?
+if [[ $rc -eq 0 ]] ; then
+  # behind of origin
+  ab="${ab}-"
+fi
+
+tail -n +2 $tfile1 | cut -b -2 | sort -u > $tfile2 2>/dev/null
 while IFS=_ read t; do
 # echo "t = <$t>"
   if [[ "$t" = " M" ]] ; then
@@ -71,9 +87,15 @@ while IFS=_ read t; do
   else
     ((other_count++))
   fi
-done < $tfile
+done < $tfile2
 
-rm -f $tfile
+rm -f $tfile1 $tfile2
+
+stash=""
+stash=$(git stash list 2>/dev/null)
+if [[ -n "${stash}" ]] ; then
+  ab="${ab}s"
+fi
 
 #echo "untracked_count(*) = $untracked_count"
 #echo "unstaged_count(#)  = $unstaged_count"
@@ -92,6 +114,8 @@ fi
 if [[ $other_count -gt 0 ]] ; then
   gs="${gs}o"
 fi
+
+gs="${gs}${ab}"
 
 if [[ -n "$gs" ]] ; then
 # window name has dir now, so skip dir in output
