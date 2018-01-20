@@ -972,18 +972,26 @@ nnoremap <C-X><C-c> :conf qa<cr>
 noremap <Leader>xc  :conf qa<cr>
 noremap <Leader>ax  :conf qa<cr>
 
-" for vimdiff make :q quit both ...
+" for vimdiff make :q quit both
+" and some better colors
 if &diff
-  cmap    q<CR>  qa<CR>
-  cmap    q!<CR> qa!<CR>
+  cmap    <silent> q<CR>  qa<CR>
+  cmap    <silent> q!<CR> qa!<CR>
   noremap <C-l>  :diffupdate<CR><C-l>
-  map <Leader>dn ]c
-  map <Leader>dp [c
+  map     <silent> <Leader>dn ]c
+  map     <silent> <Leader>dp [c
   "hi DiffAdd    ctermfg=233 ctermbg=LightGreen guifg=#003300 guibg=#DDFFDD gui=none cterm=none
   "hi DiffChange ctermbg=white  guibg=#ececec gui=none   cterm=none
   "hi DiffText   ctermfg=233  ctermbg=yellow  guifg=#000033 guibg=#DDDDFF gui=none cterm=none
   " to ignore whitespace diffs
   "set diffopt+=iwhite
+  "colorscheme desert
+  "colorscheme evening
+  "highlight! link DiffText MatchParen
+  highlight DiffAdd    cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
+  highlight DiffDelete cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
+  highlight DiffChange cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
+  highlight DiffText   cterm=bold ctermfg=10 ctermbg=88 gui=none guifg=bg guibg=Red
 endif
 
 set noshowmode
