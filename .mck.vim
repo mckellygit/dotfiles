@@ -797,7 +797,7 @@ let g:localvimrc_persistent = 1
 "noremap <silent> <Leader>cc :windo lcl\|ccl<CR>:echo<CR>
 " gtags -----------------
 
-" gtags-scope -----------
+" gtags-cscope -----------
 " manual plugin in ~/.vim/plugin
 " https://www.gnu.org/software/global/
 "
