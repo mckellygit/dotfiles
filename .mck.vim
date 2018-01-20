@@ -39,16 +39,20 @@ Plugin 'justmao945/vim-clang'
 Plugin 'airblade/vim-rooter'
 "
 " rtags for code navigation (**modified++)
-Plugin 'lyuts/vim-rtags'
+"Plugin 'lyuts/vim-rtags'
+Plugin 'mckellyln/vim-rtags'
 "
 " qf/loclist window in all windows/tabs (**modified++)
-Plugin 'yssl/QFEnter'
+"Plugin 'yssl/QFEnter'
+Plugin 'mckellyln/QFEnter'
 "
 " fswitch to switch between .cpp/.h{pp} (**modified++)
-Plugin 'derekwyatt/vim-fswitch'
+"Plugin 'derekwyatt/vim-fswitch'
+Plugin 'mckellyln/vim-fswitch'
 "
 " FileBeagle for dir/file browsing (**modified++)
-Plugin 'jeetsukumaran/vim-filebeagle'
+"Plugin 'jeetsukumaran/vim-filebeagle'
+Plugin 'mckellyln/vim-filebeagle'
 "
 "Plugin 'tpope/vim-vinegar'
 "Plugin 'scrooloose/nerdtree'
@@ -59,7 +63,8 @@ Plugin 'jeetsukumaran/vim-filebeagle'
 " gitgutter
 Plugin 'airblade/vim-gitgutter'
 " fugitive for more git utils (**modified++)
-Plugin 'tpope/vim-fugitive'
+"Plugin 'tpope/vim-fugitive'
+Plugin 'mckellyln/vim-fugitive'
 "
 " fzf for fuzzy listing/searching
 "Plugin 'junegunn/fzf' " (not needed because its in ~/.fzf already)
@@ -90,7 +95,8 @@ Plugin 'itchyny/lightline.vim'
 " (make sure to disable code below that also does this)
 " lastplace to start at prev cursor pos (**modified++)
 " see note below about doing this after uncompress
-Plugin 'farmergreg/vim-lastplace'
+"Plugin 'farmergreg/vim-lastplace'
+Plugin 'mckellyln/vim-lastplace'
 "
 " run cmd in background and output to quickfix ...
 " :AsyncRun gcc % -c %< for example
