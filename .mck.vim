@@ -1110,7 +1110,8 @@ function! MyGitStatus()
   "echomsg l:msg
   if l:found ==# 0
     let l:timer = timer_start(g:gitinfo_interval, 'MyGSStart', {'repeat': -1})
-    let g:tablist[l:bufnm] = l:timer
+    "let g:tablist[l:bufnm] = l:timer
+    call extend(g:tablist, {l:bufnm : l:timer})
   endif
 endfunction
 
