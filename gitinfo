@@ -2,8 +2,8 @@
 
 dbg=0
 
-tfile1="/tmp/git-status1$$.tmp"
-tfile2="/tmp/git-status2$$.tmp"
+tfile1="/tmp/.git-status1$$.tmp"
+tfile2="/tmp/.git-status2$$.tmp"
 trap "rm -f $tfile1 $tfile2" SIGINT SIGTERM SIGQUIT
 
 if [ $# -gt 0 ] ; then
