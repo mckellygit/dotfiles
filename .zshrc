@@ -12,6 +12,12 @@ autoload -Uz compinit
 compinit
 # End of lines added by compinstall
 
+zstyle ':completion:*' menu select
+zstyle ':completion:*' show-completer true
+zstyle ':completion:*' verbose true
+
+zmodload zsh/complist
+
 random_title=$[$RANDOM%100]
 precmd () { print -Pn "\e]2;%n@%M | %~ $random_title\a" }
 
@@ -32,6 +38,8 @@ bindkey '\eOB' down-line-or-beginning-search
 bindkey '\e[B' down-line-or-beginning-search
 bindkey '^a' beginning-of-line
 bindkey '^e' end-of-line
+bindkey -M menuselect '^[[Z' reverse-menu-complete
+bindkey '^I' expand-or-complete-prefix
 
 # set -o ignoreeof
 
