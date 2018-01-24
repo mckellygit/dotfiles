@@ -45,6 +45,7 @@ alias rm='rm -i'
 #fi
 alias dmesg='dmesg -keux'
 alias vdiff='vimdiff'
+alias more='less'
 
 # export NCPUS=`cat /proc/cpuinfo | grep processor | wc -l`
 numcpus=$(getconf _NPROCESSORS_ONLN 2>/dev/null)
