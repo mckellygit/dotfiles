@@ -5,10 +5,15 @@ fi
 
 # This is done in .config/autostart/<prog>.desktop now
 #
-#if [ -z "$SSH_CLIENT" ] && [ -z "$SSH_TTY" ] ; then
-#  nohup parcellite -n > /dev/null 2>&1 &
-#  nohup redshift > /dev/null 2>&1 &
-#fi
+if [ -z "$SSH_CLIENT" ] && [ -z "$SSH_TTY" ] ; then
+  # parcellite can sometimes have trouble starting from autostart
+  pgrep parcellite > /dev/null 2>&1
+  rc=$?
+  if [[ $rc -ne 0 ]] ; then
+    nohup parcellite -n > /dev/null 2>&1 &
+  fi
+# nohup redshift > /dev/null 2>&1 &
+fi
 
 # bump stacksize 
 # ulimit -s unlimited
