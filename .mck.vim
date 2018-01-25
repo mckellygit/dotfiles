@@ -560,7 +560,9 @@ function! s:scrollDN(num)
 endfunction
 
  noremap <silent> <C-J>     :call <SID>scrollUP(1)<CR>
+ noremap <silent> <C-Down>  :call <SID>scrollUP(1)<CR>
  noremap <silent> <C-K>     :call <SID>scrollDN(1)<CR>
+ noremap <silent> <C-Up>    :call <SID>scrollDN(1)<CR>
  noremap <silent> <C-F>     :call <SID>scrollUP(-1)<CR>
  noremap <silent> <C-B>     :call <SID>scrollDN(-1)<CR>
 "noremap <silent> <PageDown>:call <SID>scrollUP(-2)<CR>
@@ -576,8 +578,10 @@ endfunction
 " move and scroll
 "nmap <silent> <C-J>           :call <SID>Saving_scrollV("1<C-V><C-D>")<CR>
  vmap <silent> <C-J> <Esc>     :call <SID>Saving_scrollV("gv1<C-V><C-D>")<CR>
+ vmap <silent> <C-Down> <Esc>  :call <SID>Saving_scrollV("gv1<C-V><C-D>")<CR>
 "nmap <silent> <C-K>           :call <SID>Saving_scrollV("1<C-V><C-U>")<CR>
  vmap <silent> <C-K> <Esc>     :call <SID>Saving_scrollV("gv1<C-V><C-U>")<CR>
+ vmap <silent> <C-Up> <Esc>    :call <SID>Saving_scrollV("gv1<C-V><C-U>")<CR>
 
 "nmap <silent> <C-F>           :call <SID>Saving_scrollV("<C-V><C-D>")<CR>
  vmap <silent> <C-F> <Esc>     :call <SID>Saving_scrollV("gv<C-V><C-D>")<CR>
