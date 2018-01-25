@@ -6,32 +6,48 @@ tfile1="/tmp/.git-status1$$.tmp"
 tfile2="/tmp/.git-status2$$.tmp"
 trap "rm -f $tfile1 $tfile2" SIGINT SIGTERM SIGQUIT
 
-if [ $# -gt 0 ] ; then
-  # dir supplied on cmd-line
-  active_tmux_dir=$1
-  meth=dir
-else
+# ----------
+
+meth="dir"
+git_dir="."
+for arg in "$@"
+do
+  if [[ "${arg}" = "--use-tmux" ]] ; then
+    # if calling this from byobu custom script, then
+    # have that "5_gitinfo" script call this script
+    # with a "--use-tmux" arg ...
+    meth="tmux"
+  else
+    git_dir=${arg}
+  fi
+done
+
+if [[ "${meth}" = "tmux" ]] ; then
   # get dir from current tmux window
-  active_tmux_win=$(tmux list-windows | grep active | awk '{print $1}' | sed -e 's/://g')
+  tmux_win=$(tmux list-windows | grep active | awk '{print $1}' | sed -e 's/://g')
   # strangely the -t<pane> is really a window index ...
-  active_tmux_dir=$(tmux display-message -p -F "#{pane_current_path}" -t${active_tmux_win})
-  if [[ -z "${active_tmux_dir}" ]] ; then
+  git_dir=$(tmux display-message -p -F "#{pane_current_path}" -t${tmux_win})
+  if [[ -z "${git_dir}" ]] ; then
     echo "git:<err(pane:null)>"
     exit 1
   fi
-  meth=tmux
 fi
+
+# ----------
+
+#echo "meth = ${meth}"
+#echo "git_dir = ${git_dir}"
 
 if [[ $dbg -ge 1 ]] ; then
-  echo "pid: $$ meth: $meth dir: ${active_tmux_dir}" >> /tmp/dbg.$$
+  echo "pid: $$ meth: $meth dir: ${git_dir}" >> /tmp/dbg.$$
 fi
 
-cd ${active_tmux_dir} 2>/dev/null
+cd ${git_dir} 2>/dev/null
 rc=$?
 if [[ $rc -ne 0 ]] ; then
-  echo "git:<err(dir:${active_tmux_dir})>"
+  echo "git:<err(dir:${git_dir})>"
   if [[ $dbg -ge 1 ]] ; then
-    echo "pid: $$ meth: $meth git:<err(dir:${active_tmux_dir})>" >> /tmp/dbg.$$
+    echo "pid: $$ meth: $meth git:<err(dir:${git_dir})>" >> /tmp/dbg.$$
   fi
   exit 1
 fi
@@ -119,7 +135,7 @@ gs="${gs}${ab}"
 
 if [[ -n "$gs" ]] ; then
 # window name has dir now, so skip dir in output
-# ldir=$(echo ${active_tmux_dir} | awk -F/ '{print $NF}')
+# ldir=$(echo ${git_dir} | awk -F/ '{print $NF}')
 # echo ".../$ldir $gs"
   echo "$gs"
   if [[ $dbg -ge 1 ]] ; then
