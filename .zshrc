@@ -14,7 +14,7 @@ compinit
 
 zstyle ':completion:*' menu select
 zstyle ':completion:*' show-completer true
-zstyle ':completion:*' verbose true
+zstyle ':completion:*' verbose false
 
 zmodload zsh/complist
 
