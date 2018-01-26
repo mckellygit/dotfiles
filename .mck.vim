@@ -439,7 +439,6 @@ set scrolloff=0
 
 function! NoremapNormalCmd(key, preserve_omni, ...)
   let cmd = ''
-
   let icmd = ''
   for x in a:000
     let cmd .= x
@@ -462,8 +461,17 @@ endfunction
 "call NoremapNormalCmd("<End>", 0, "g<End>")
 
 " PageUp/PageDown preserve relative cursor position
- call NoremapNormalCmd("<PageUp>", 0, "<C-U>", "<C-U>")
- call NoremapNormalCmd("<PageDown>", 0, "<C-D>", "<C-D>")
+" Only issue with these is when at last top or bottom
+" screen cursor still moves up or down
+" These work in insert mode as well, whereas the
+" C-f / C-b below do not
+call NoremapNormalCmd("<PageUp>", 0, "<C-U>", "<C-U>")
+call NoremapNormalCmd("<PageDown>", 0, "<C-D>", "<C-D>")
+
+" C-U is halfpage scroll as compared to C-B
+" C- versions could be halfpage-up/down
+map <C-PageUp>   <PageUp>
+map <C-PageDown> <PageDown>
 
 function! s:GoToMID()
   let mid = (winheight(0) + 1) / 2
