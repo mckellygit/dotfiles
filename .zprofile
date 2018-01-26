@@ -1,6 +1,8 @@
 
-if [ -x $HOME/.mouse_buttons ] ; then
-  $HOME/.mouse_buttons
+if [ -z "$SSH_CLIENT" ] && [ -z "$SSH_TTY" ] ; then
+  if [ -x $HOME/.mouse_buttons ] ; then
+    $HOME/.mouse_buttons
+  fi
 fi
 
 # This is done in .config/autostart/<prog>.desktop now
