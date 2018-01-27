@@ -14,11 +14,13 @@
 set nocompatible
 
 "" vundle ------------------------------
-filetype off                  " required
+filetype off              " required
 "" set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
+"
 " fzf from git install in ~/.fzf 
 set rtp+=~/.fzf
+"
 call vundle#begin()
 "" alternatively, pass a path where Vundle should install plugins
 ""call vundle#begin('~/some/path/here')
@@ -103,8 +105,9 @@ Plugin 'mckellyln/vim-lastplace'
 "Plugin 'skywind3000/asyncrun.vim'
 "
 "" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
+call vundle#end()         " required
+filetype plugin indent on " required
+"
 "" To ignore plugin indent changes, instead use:
 """filetype plugin on
 ""
@@ -1113,12 +1116,12 @@ noremap <Leader>hl :set hlsearch! hlsearch?<CR>
 hi Search ctermbg=58
 
 " clear cmd window (or just <C-l> to redraw)
+" 'cc' already used for quickfix close
+" **careful** as 'xc' is for quit all ...
 noremap <Leader>cx :echo<CR>
 
 " tab open
 noremap <Leader>to :tabnew<CR>
-" use 'x' for exit here, could also use 'k' to kill 
-" but since a save could happen 'x' seems more appropriate
 " tab close (same as window close)
 noremap <Leader>tc :conf q<cr>
 
