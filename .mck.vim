@@ -478,10 +478,12 @@ endfunction
    let fulldn = full . "<C-D>"
    let halfup = half . "<C-U>"
    let halfdn = half . "<C-D>"
-   call NoremapNormalCmd("<C-f>",      0, halfdn)
-   call NoremapNormalCmd("<C-b>",      0, halfup)
-   call NoremapNormalCmd("<PageDown>", 0, fulldn)
-   call NoremapNormalCmd("<PageUp>",   0, fullup)
+   call NoremapNormalCmd("<C-f>",        0, halfdn)
+   call NoremapNormalCmd("<C-b>",        0, halfup)
+   call NoremapNormalCmd("<PageDown>",   0, fulldn)
+   call NoremapNormalCmd("<PageUp>",     0, fullup)
+   call NoremapNormalCmd("<C-PageDown>", 0, halfdn)
+   call NoremapNormalCmd("<C-PageUp>",   0, halfup)
  endfunction
 
  call MapScrollKeys()
@@ -619,9 +621,13 @@ endfunction
 "vnoremap <silent> <PageDown> <Esc> :call <SID>scrollUP(-2,1)<CR>
 "inoremap <silent> <PageDown> <C-\><C-o><PageDown>
 
+" C-PageDown
+
 "nnoremap <silent> <PageUp>         :call <SID>scrollDN(-2,0)<CR>
 "vnoremap <silent> <PageUp>   <Esc> :call <SID>scrollDN(-2,1)<CR>
 "inoremap <silent> <PageUp>   <C-\><C-o><PageUp>
+
+" C-PageUp
 
 " ---------
 
@@ -652,8 +658,12 @@ endfunction
 "nnoremap <silent> <PageDown>       :call <SID>Saving_scrollV("<C-V><C-D>")<CR>
 "vnoremap <silent> <PageDown> <Esc> :call <SID>Saving_scrollV("gv<C-V><C-D>")<CR>
 
+" C-PageDown
+
 "nnoremap <silent> <PageUp>         :call <SID>Saving_scrollV("<C-V><C-U>")<CR>
 "vnoremap <silent> <PageUp>   <Esc> :call <SID>Saving_scrollV("gv<C-V><C-U>")<CR>
+
+" C-PageUp
 
 " ---------
 
@@ -708,12 +718,6 @@ endfunction
 "vnoremap <silent> <ScrollWheelDown> <Esc> :call <SID>Saving_scrollV("gv5<C-V><C-D>")<CR>
 
 endif " disable old scroll functions
-
-" ---------
-
-" C-Page Up/Down versions could be halfpage-up/down
-map <C-PageUp>   <C-b>
-map <C-PageDown> <C-f>
 
 " ------ scroll ------
 
