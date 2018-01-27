@@ -263,8 +263,6 @@ nmap <silent> -          <Plug>FileBeagleOpenCurrentBufferDir
 " unmap these in qf
 autocmd BufReadPost quickfix nnoremap <buffer> <Leader>fb <Nop>
 autocmd BufReadPost quickfix nnoremap <buffer> - -
-" :q in qf to also quit
-autocmd BufReadPost quickfix cmap     <buffer> q<CR> qa<CR>
 " FileBeagle ----------
 
 " gitgutter -----------
@@ -375,25 +373,25 @@ set mouse=a
 "set clipboard^=unnamedplus
 set clipboard^=unnamed,unnamedplus
 
-" map Ctrl-C to yank selection into paste buffer/clipboard
-":vmap <C-C> "+y 
-
-"nnoremap <C-c> "+y<LeftRelease>
-"vnoremap <C-c> "+y<LeftRelease>
-" y`] to goto end of block, or even better
-" gv<Esc> leave cursor at last pos
-nnoremap <C-c> "+ygv<Esc>
-vnoremap <C-c> "+ygv<Esc>
-
-nnoremap <C-x> "+d<LeftRelease>
-vnoremap <C-x> "+d<LeftRelease>
-
-inoremap <C-v> <C-r>+
-
 set timeoutlen=1000 ttimeoutlen=0
 
+" map Ctrl-C to yank selection into paste buffer/clipboard
+":vmap <silent> <C-C> "+y
+
+"nnoremap <silent> <C-c> "+y<LeftRelease>
+"vnoremap <silent> <C-c> "+y<LeftRelease>
+" y`] to goto end of block, or even better
+" gv<Esc> leave cursor at last pos
+nnoremap <silent> <C-c> "+ygv<Esc>
+vnoremap <silent> <C-c> "+ygv<Esc>
+
+nnoremap <silent> <C-x> "+d<LeftRelease>
+vnoremap <silent> <C-x> "+d<LeftRelease>
+
+inoremap <silent> <C-v> <C-r>+
+
 " or when you release the mouse button ...
-":noremap <LeftRelease> "+y<LeftRelease>
+":noremap <silent> <LeftRelease> "+y<LeftRelease>
 
 " if mouse not supported try vim-extended or gvim -v
 
@@ -423,8 +421,8 @@ set tabstop=4
 " Don't use Ex mode, use Q for formatting
 " map Q gq
 " No, use Q for recording (@ for playback)
-noremap Q q
-noremap q <Nop>
+noremap <silent> Q q
+noremap <silent> q <Nop>
 
 " Make p in Visual mode replace the selected text with the "" register.
 "vnoremap p <Esc>:let current_reg = @"<CR>gvdi<C-R>=current_reg<CR><Esc>
@@ -437,6 +435,8 @@ set virtualedit=block
 set nostartofline
 set scrolloff=0
 
+" ---------
+
 function! NoremapNormalCmd(key, preserve_omni, ...)
   let cmd = ''
   let icmd = ''
@@ -444,49 +444,81 @@ function! NoremapNormalCmd(key, preserve_omni, ...)
     let cmd .= x
     let icmd .= "<C-\\><C-O>" . x
   endfor
-  execute ":keepjumps :nnoremap <silent> " . a:key . " " . cmd
-  execute ":keepjumps :vnoremap <silent> " . a:key . " " . cmd
+  execute ":nnoremap <silent> " . a:key . " " . cmd
+  execute ":vnoremap <silent> " . a:key . " " . cmd
   if a:preserve_omni
-    execute ":keepjumps :inoremap <silent> <expr> " . a:key . " pumvisible() ? \"" . a:key . "\" : \"" . icmd . "\""
+    execute ":inoremap <silent> <expr> " . a:key . " pumvisible() ? \"" . a:key . "\" : \"" . icmd . "\""
   else
-    execute ":keepjumps :inoremap <silent> " . a:key . " " . icmd
+    execute ":inoremap <silent> " . a:key . " " . icmd
   endif
 endfunction
 
 " Cursor moves by screen lines
-"call NoremapNormalCmd("<Up>", 1, "gk")
-"call NoremapNormalCmd("<Down>", 1, "gj")
+ call NoremapNormalCmd("<Up>",   1, "gk")
+ call NoremapNormalCmd("<Down>", 1, "gj")
+ call NoremapNormalCmd("<Home>", 0, "g<Home>")
+ call NoremapNormalCmd("<End>",  0, "g<End>")
 
-"call NoremapNormalCmd("<Home>", 0, "g<Home>")
-"call NoremapNormalCmd("<End>", 0, "g<End>")
+ call NoremapNormalCmd("<C-j>",    0, "1<C-D>")
+ call NoremapNormalCmd("<C-Down>", 0, "1<C-D>")
 
-" PageUp/PageDown preserve relative cursor position
-" Only issue with these is when at last top or bottom
-" screen cursor still moves up or down
-" These work in insert mode as well, whereas the
-" C-f / C-b below do not
-call NoremapNormalCmd("<PageUp>", 0, "<C-U>", "<C-U>")
-call NoremapNormalCmd("<PageDown>", 0, "<C-D>", "<C-D>")
+ call NoremapNormalCmd("<C-k>",    0, "1<C-U>")
+ call NoremapNormalCmd("<C-Up>",   0, "1<C-U>")
 
-" C-U is halfpage scroll as compared to C-B
-" C- versions could be halfpage-up/down
-map <C-PageUp>   <PageUp>
-map <C-PageDown> <PageDown>
+ call NoremapNormalCmd("<ScrollWheelDown>", 0, "5<C-D>")
+ call NoremapNormalCmd("<ScrollWheelUp>",   0, "5<C-U>")
 
-function! s:GoToMID()
+ function! MapScrollKeys()
+   let half = winheight(0) / 2
+   if (half < 1)
+     half = 1
+   endif
+   let full = half + half
+   let fullup = full . "<C-U>"
+   let fulldn = full . "<C-D>"
+   let halfup = half . "<C-U>"
+   let halfdn = half . "<C-D>"
+   call NoremapNormalCmd("<C-f>",      0, halfdn)
+   call NoremapNormalCmd("<C-b>",      0, halfup)
+   call NoremapNormalCmd("<PageDown>", 0, fulldn)
+   call NoremapNormalCmd("<PageUp>",   0, fullup)
+ endfunction
+
+ call MapScrollKeys()
+
+ autocmd VimResized * call MapScrollKeys()
+
+" ---------
+
+function! s:GoToMID(curr_mode)
   let mid = (winheight(0) + 1) / 2
   let row = winline()
-  if (row > mid)
-    let delta = row - mid
-    execute "keepjumps normal" . delta . "gk"
-  elseif (row < mid)
-    let delta = mid - row
-    execute "keepjumps normal" . delta . "gj"
+  if (a:curr_mode == 0)
+    if (row > mid)
+      let delta = row - mid
+      execute "keepjumps normal" . delta . "gk"
+    elseif (row < mid)
+      let delta = mid - row
+      execute "keepjumps normal" . delta . "gj"
+    endif
+  elseif (a:curr_mode == 1)
+    if (row > mid)
+      let delta = row - mid
+      execute "keepjumps normal gv" . delta . "gk"
+    elseif (row < mid)
+      let delta = mid - row
+      execute "keepjumps normal gv" . delta . "gj"
+    endif
   endif
 endfunction
 
 " C-/ to center line in screen
-noremap <silent> <C-_> :call <SID>GoToMID()<CR>
+nnoremap <silent> <C-_> :call <SID>GoToMID(0)<CR>
+vnoremap <silent> <C-_> :call <SID>GoToMID(1)<CR>
+
+" ---------
+
+if 0 " disable old scroll functions
 
 function! s:GetNumScroll(num)
   let num_rows = winheight(0)
@@ -502,7 +534,7 @@ function! s:GetNumScroll(num)
   return num_scroll
 endfunction
 
-function! s:RtrnToOrig(before_scr_line)
+function! s:RtrnToOrig(before_scr_line, curr_mode)
   keepjumps normal H
   let delta = a:before_scr_line - winline()
   while (delta != 0)
@@ -524,7 +556,7 @@ function! s:RtrnToOrig(before_scr_line)
   endwhile
 endfunction
 
-function! s:scrollUP(num)
+function! s:scrollUP(num, curr_mode)
   let num_scroll = <SID>GetNumScroll(a:num)
   let num_rows = winheight(0)
   " -------------
@@ -540,10 +572,10 @@ function! s:scrollUP(num)
     let iter +=1
   endwhile
   " -------------
-  call <SID>RtrnToOrig(before_scr_line)
+  call <SID>RtrnToOrig(before_scr_line, a:curr_mode)
 endfunction
   
-function! s:scrollDN(num)
+function! s:scrollDN(num, curr_mode)
   let num_scroll = <SID>GetNumScroll(a:num)
   " -------------
   let before_scr_line = winline()
@@ -564,17 +596,34 @@ function! s:scrollDN(num)
     let iter +=1
   endwhile
   " -------------
-  call <SID>RtrnToOrig(before_scr_line)
+  call <SID>RtrnToOrig(before_scr_line, a:curr_mode)
 endfunction
 
- noremap <silent> <C-J>     :call <SID>scrollUP(1)<CR>
- noremap <silent> <C-Down>  :call <SID>scrollUP(1)<CR>
- noremap <silent> <C-K>     :call <SID>scrollDN(1)<CR>
- noremap <silent> <C-Up>    :call <SID>scrollDN(1)<CR>
- noremap <silent> <C-F>     :call <SID>scrollUP(-1)<CR>
- noremap <silent> <C-B>     :call <SID>scrollDN(-1)<CR>
-"noremap <silent> <PageDown>:call <SID>scrollUP(-2)<CR>
-"noremap <silent> <PageUp>  :call <SID>scrollDN(-2)<CR>
+"nnoremap <silent> <C-J>            :call <SID>scrollUP(1,0)<CR>
+"nnoremap <silent> <C-Down>         :call <SID>scrollUP(1,0)<CR>
+"vnoremap <silent> <C-J>      <Esc> :call <SID>scrollUP(1,1)<CR>
+"vnoremap <silent> <C-Down>   <Esc> :call <SID>scrollUP(1,1)<CR>
+
+"nnoremap <silent> <C-K>            :call <SID>scrollDN(1,0)<CR>
+"nnoremap <silent> <C-Up>           :call <SID>scrollDN(1,0)<CR>
+"vnoremap <silent> <C-K>      <Esc> :call <SID>scrollDN(1,1)<CR>
+"vnoremap <silent> <C-Up>     <Esc> :call <SID>scrollDN(1,1)<CR>
+
+"nnoremap <silent> <C-F>            :call <SID>scrollUP(-1,0)<CR>
+"vnoremap <silent> <C-F>      <Esc> :call <SID>scrollUP(-1,1)<CR>
+
+"nnoremap <silent> <C-B>            :call <SID>scrollDN(-1,0)<CR>
+"vnoremap <silent> <C-B>      <Esc> :call <SID>scrollDN(-1,1)<CR>
+
+"nnoremap <silent> <PageDown>       :call <SID>scrollUP(-2,0)<CR>
+"vnoremap <silent> <PageDown> <Esc> :call <SID>scrollUP(-2,1)<CR>
+"inoremap <silent> <PageDown> <C-\><C-o><PageDown>
+
+"nnoremap <silent> <PageUp>         :call <SID>scrollDN(-2,0)<CR>
+"vnoremap <silent> <PageUp>   <Esc> :call <SID>scrollDN(-2,1)<CR>
+"inoremap <silent> <PageUp>   <C-\><C-o><PageUp>
+
+" ---------
 
 " N<C-D> and N<C-U> idiotically change the scroll setting
 function! s:Saving_scrollV(cmd)
@@ -584,27 +633,39 @@ function! s:Saving_scrollV(cmd)
 endfunction
 
 " move and scroll
-"nmap <silent> <C-J>           :call <SID>Saving_scrollV("1<C-V><C-D>")<CR>
- vmap <silent> <C-J> <Esc>     :call <SID>Saving_scrollV("gv1<C-V><C-D>")<CR>
- vmap <silent> <C-Down> <Esc>  :call <SID>Saving_scrollV("gv1<C-V><C-D>")<CR>
-"nmap <silent> <C-K>           :call <SID>Saving_scrollV("1<C-V><C-U>")<CR>
- vmap <silent> <C-K> <Esc>     :call <SID>Saving_scrollV("gv1<C-V><C-U>")<CR>
- vmap <silent> <C-Up> <Esc>    :call <SID>Saving_scrollV("gv1<C-V><C-U>")<CR>
+"nnoremap <silent> <C-J>            :call <SID>Saving_scrollV("1<C-V><C-D>")<CR>
+"nnoremap <silent> <C-Down>         :call <SID>Saving_scrollV("1<C-V><C-D>")<CR>
+"vnoremap <silent> <C-J>      <Esc> :call <SID>Saving_scrollV("gv1<C-V><C-D>")<CR>
+"vnoremap <silent> <C-Down>   <Esc> :call <SID>Saving_scrollV("gv1<C-V><C-D>")<CR>
 
-"nmap <silent> <C-F>           :call <SID>Saving_scrollV("<C-V><C-D>")<CR>
- vmap <silent> <C-F> <Esc>     :call <SID>Saving_scrollV("gv<C-V><C-D>")<CR>
-"nmap <silent> <PageDown>      :call <SID>Saving_scrollV("<C-V><C-D>")<CR>
-"vmap <silent> <PageDown> <Esc>:call <SID>Saving_scrollV("gv<C-V><C-D>")<CR>
+"nnoremap <silent> <C-K>            :call <SID>Saving_scrollV("1<C-V><C-U>")<CR>
+"nnoremap <silent> <C-Up>           :call <SID>Saving_scrollV("1<C-V><C-U>")<CR>
+"vnoremap <silent> <C-K>      <Esc> :call <SID>Saving_scrollV("gv1<C-V><C-U>")<CR>
+"vnoremap <silent> <C-Up>     <Esc> :call <SID>Saving_scrollV("gv1<C-V><C-U>")<CR>
 
-"nmap <silent> <C-B>           :call <SID>Saving_scrollV("<C-V><C-U>")<CR>
- vmap <silent> <C-B> <Esc>     :call <SID>Saving_scrollV("gv<C-V><C-U>")<CR>
-"nmap <silent> <PageUp>        :call <SID>Saving_scrollV("<C-V><C-U>")<CR>
-"vmap <silent> <PageUp> <Esc>  :call <SID>Saving_scrollV("gv<C-V><C-U>")<CR>
+"nnoremap <silent> <C-F>            :call <SID>Saving_scrollV("<C-V><C-D>")<CR>
+"vnoremap <silent> <C-F>      <Esc> :call <SID>Saving_scrollV("gv<C-V><C-D>")<CR>
+
+"nnoremap <silent> <C-B>            :call <SID>Saving_scrollV("<C-V><C-U>")<CR>
+"vnoremap <silent> <C-B>      <Esc> :call <SID>Saving_scrollV("gv<C-V><C-U>")<CR>
+
+"nnoremap <silent> <PageDown>       :call <SID>Saving_scrollV("<C-V><C-D>")<CR>
+"vnoremap <silent> <PageDown> <Esc> :call <SID>Saving_scrollV("gv<C-V><C-D>")<CR>
+
+"nnoremap <silent> <PageUp>         :call <SID>Saving_scrollV("<C-V><C-U>")<CR>
+"vnoremap <silent> <PageUp>   <Esc> :call <SID>Saving_scrollV("gv<C-V><C-U>")<CR>
+
+" ---------
 
 "noremap <C-j> @="1\<lt>C-D>"<CR>:set scroll=0<CR>
 "noremap <C-k> @="1\<lt>C-U>"<CR>:set scroll=0<CR>
 
-"" I couldn't find any get_number_of_visible_lines function, so I made my own.
+"noremap <PageUp>   39<C-U>:set scroll=0<CR>
+"noremap <PageDown> 39<C-D>:set scroll=0<CR>
+
+" ---------
+
+"" I couldn't find any get_num_of_vis_lines function, so I made my own.
 "function GetNumberOfVisibleLines()
 "  let cur_line = line(".")
 "  let cur_col = virtcol(".")
@@ -613,17 +674,15 @@ endfunction
 "  keepjumps normal L
 "  let bot_line = line(".")
 "  execute "keepjumps normal " . cur_line . "G"
-"  execute "keepjumps normal " . cur_col . "|"
+"  execute "keepjumps normal " . cur_col  . "|"
 "  return bot_line - top_line
 "endfunc
 "
-"" noremap <PageUp> 39<C-U>:set scroll=0<CR>
 "function! MyPageUp()
 "  let visible_lines = GetNumberOfVisibleLines()
 "  execute "keepjumps normal " . visible_lines . "\<C-U>:set scroll=0\r"
 "endfunction
 "
-"" noremap <PageDown> 39<C-D>:set scroll=0<CR>
 "function! MyPageDown()
 "  let visible_lines = GetNumberOfVisibleLines()
 "  execute "keepjumps normal " . visible_lines . "\<C-D>:set scroll=0\r"
@@ -631,14 +690,30 @@ endfunction
 "
 " BorlandPascal pageup/down behaviour!
 " todo: when hitting top/bottom of file, then restore Y to last Y
-"noremap <PageUp> :call MyPageUp()<CR>
+"noremap <PageUp>   :call MyPageUp()<CR>
 "noremap <PageDown> :call MyPageDown()<CR>
 
+" ---------
+
 " mouse scroll not to go past end
-"noremap <silent> <ScrollWheelUp>   H5k
-"noremap <silent> <ScrollWheelDown> L5j
-noremap <silent> <ScrollWheelUp>   :call <SID>scrollDN(5)<CR>
-noremap <silent> <ScrollWheelDown> :call <SID>scrollUP(5)<CR>
+" noremap <silent> <ScrollWheelUp>   H5k
+" noremap <silent> <ScrollWheelDown> L5j
+"nnoremap <silent> <ScrollWheelUp>         :call <SID>scrollDN(5,0)<CR>
+"nnoremap <silent> <ScrollWheelDown>       :call <SID>scrollUP(5,0)<CR>
+"vnoremap <silent> <ScrollWheelUp>         :call <SID>scrollDN(5,1)<CR>
+"vnoremap <silent> <ScrollWheelDown>       :call <SID>scrollUP(5,1)<CR>
+"nnoremap <silent> <ScrollWheelUp>         :call <SID>Saving_scrollV("5<C-V><C-U>")<CR>
+"nnoremap <silent> <ScrollWheelDown>       :call <SID>Saving_scrollV("5<C-V><C-D>")<CR>
+"vnoremap <silent> <ScrollWheelUp>   <Esc> :call <SID>Saving_scrollV("gv5<C-V><C-U>")<CR>
+"vnoremap <silent> <ScrollWheelDown> <Esc> :call <SID>Saving_scrollV("gv5<C-V><C-D>")<CR>
+
+endif " disable old scroll functions
+
+" ---------
+
+" C-Page Up/Down versions could be halfpage-up/down
+map <C-PageUp>   <C-b>
+map <C-PageDown> <C-f>
 
 " ------ scroll ------
 
@@ -970,6 +1045,9 @@ endfunction
 hi QuickFixLine cterm=None
 hi cursorline cterm=None ctermbg=239
 
+" :q in qf to also quit
+autocmd BufReadPost quickfix cmap <silent> <buffer> q<CR> qa<CR>
+
 " -----------------------------
 
 noremap <C-a> 0
@@ -1055,15 +1133,19 @@ execute "set <M-,>=\e,"
 execute "set <M-;>=\e;"
 
 " Alt .(>)|' next tab
-inoremap <silent> <M-.> <Esc>:tabnext<CR>
 nnoremap <silent> <M-.>      :tabnext<CR>
-inoremap <silent> <M-'> <Esc>:tabnext<CR>
+vnoremap <silent> <M-.> <Esc>:tabnext<CR>
+inoremap <silent> <M-.> <Esc>:tabnext<CR>
 nnoremap <silent> <M-'>      :tabnext<CR>
+vnoremap <silent> <M-'> <Esc>:tabnext<CR>
+inoremap <silent> <M-'> <Esc>:tabnext<CR>
 " Alt ,(<)|; prev tab
-inoremap <silent> <M-,> <Esc>:tabprevious<CR>
 nnoremap <silent> <M-,>      :tabprevious<CR>
-inoremap <silent> <M-;> <Esc>:tabprevious<CR>
+vnoremap <silent> <M-,> <Esc>:tabprevious<CR>
+inoremap <silent> <M-,> <Esc>:tabprevious<CR>
 nnoremap <silent> <M-;>      :tabprevious<CR>
+vnoremap <silent> <M-;> <Esc>:tabprevious<CR>
+inoremap <silent> <M-;> <Esc>:tabprevious<CR>
 
 " -----------------------------
 
@@ -1107,7 +1189,7 @@ function! MyGSStart(timer)
   endif
   "echomsg "l:jstat = " . l:jstat
   if l:jstat == "run"
-    echo "git status cmd running ..."
+    "echo "git status cmd running ..."
   else
     if filereadable(expand(g:gitinfo_script))
       let l:command = '/bin/sh -c ' . '"' . g:gitinfo_script . ' ' . expand('%:p:h') . '"'
