@@ -225,6 +225,12 @@ function! MyLightlineTabModified(n)
   call settabvar(a:n, 'lightline_tab_modified', tab_modified)
   return tab_modified
 endfunction
+
+" modify tab active/inactive colors
+let s:palette = g:lightline#colorscheme#wombat#palette
+let s:palette.tabline.left   = [ [ '#d0d0d0', '#585858', 252, 240  ] ]
+let s:palette.tabline.tabsel = [ [ '#d0d0d0', '#5f8787', 252, 66, 'bold' ] ]
+unlet s:palette
 " lightline ----------
 
 " vinegar ------------
