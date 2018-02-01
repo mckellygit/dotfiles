@@ -74,7 +74,11 @@ ulimit -s unlimited
 path+=(~/openmpi/bin)
 
 path+=(~/bin)
+path+=(~/go/bin)
+path+=(/usr/local/go/bin)
 export PATH
+
+#export GOPATH=$HOME
 
 function collapse_pwd {
     echo $(pwd | sed -e "s,^$HOME,~,")
