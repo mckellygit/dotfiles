@@ -77,6 +77,7 @@ Plugin 'mileszs/ack.vim'
 " colorscheme
 Plugin 'ajmwagar/vim-deus'
 "Plugin 'beigebrucewayne/Turtles'
+"Plugin 'altercation/vim-colors-solarized'
 " one for all colors
 "Plugin 'flazz/vim-colorschemes'
 "
@@ -312,6 +313,8 @@ if &term=="xterm"
   "highlight Comment ctermfg=blue
 endif
 
+"let g:solarized_termcolors=256
+"colorscheme solarized
 colorscheme deus
 
 "set ttyfast
