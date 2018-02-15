@@ -48,6 +48,12 @@ Plugin 'mckellyln/vim-rtags'
 "Plugin 'yssl/QFEnter'
 Plugin 'mckellyln/QFEnter'
 "
+" other qf plugin
+"Plugin 'romainl/vim-qf'
+"
+" other bufutils
+"Plugin 'smitajit/bufutils.vim'
+"
 " fswitch to switch between .cpp/.h{pp} (**modified++)
 "Plugin 'derekwyatt/vim-fswitch'
 Plugin 'mckellyln/vim-fswitch'
