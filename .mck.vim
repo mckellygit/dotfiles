@@ -337,6 +337,7 @@ colorscheme deus
 "current default is:
 "iskeyword=@,48-57,_,192-255,#
 "tmux uses " ='`;|[](){},/?\\\""
+set iskeyword=@,48-57,_,192-255,@-@,<,>,-,+,*,%,$,!,~,.,:,#,^
 
 " -----------------------------
 
@@ -1090,10 +1091,14 @@ endfunction
 hi QuickFixLine cterm=None
 hi cursorline cterm=None ctermbg=239
 
+" -----------------------------
+
+if 0 " quickfix quit/close
+
 " :q in qf to also quit
 autocmd BufReadPost quickfix cmap <silent> <buffer> q<CR> qa<CR>
 
-" -----------------------------
+else " quickfix quit/close
 
 " quit Vim if only quickfix or preview/help windows remain
 " (this is prob not needed if autocomplete window is closed
@@ -1184,6 +1189,8 @@ if has('autocmd')
         autocmd WinEnter * nested call s:QuitIfOnlyWindow()
     aug END
 endif
+
+endif " quickfix quit/close
 
 " -----------------------------
 

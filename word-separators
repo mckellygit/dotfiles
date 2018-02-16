@@ -1,0 +1,8 @@
+	librt.so.1 => /lib/x86_64-linux-gnu/librt.so.1 (0x000015413301e000)
+
+words
+    <dog> :dog: -dog- +dog+ *dog* ^dog^ %dog% $dog$ #dog# @dog@ !dog! ~dog~ .dog.
+
+separators
+    [dog] {dog} (dog) ;dog; "dog" ,dog, |dog| =dog= `dog` 'dog' ?dog? /dog/ \dog\
+
