@@ -169,6 +169,8 @@ let g:lightline = {
 function! MyLightlineMode()
   if &filetype ==# 'qf'
     return ''
+  elseif !&buflisted
+    return ''
   else
     return lightline#mode()
   endif
@@ -177,6 +179,8 @@ endfunction
 " no git branch for qf
 function! MyLightlineGitbranch()
   if &filetype ==# 'qf'
+    return ''
+  elseif !&buflisted
     return ''
   else
     "return fugitive#statusline()
@@ -196,6 +200,8 @@ endfunction
 function! MyLightlineFilename()
   if &filetype ==# 'qf'
     return 'qf'
+  elseif !&buflisted
+    return 'ac'
   else
     let filename = expand('%:t') !=# '' ? expand('%:t') : '[No Name]'
     return filename
@@ -205,6 +211,8 @@ endfunction
 " no modified for qf
 function! MyLightlineModified()
   if &filetype ==# 'qf'
+    return ''
+  elseif !&buflisted
     return ''
   else
     return &modified ? '+' : ''
@@ -883,6 +891,8 @@ let g:clang_complete_copen = 1
 let g:clang_auto = 1
 let g:clang_load_if_clang_dotfile = 1
 let g:clang_dotfile = '.clang_complete'
+" close autocomplete window when finished with selection
+autocmd CompleteDone * silent! pclose!
 " vim-clang ----------
 
 " localvimrc ---------
@@ -1080,7 +1090,10 @@ autocmd BufReadPost quickfix cmap <silent> <buffer> q<CR> qa<CR>
 
 " -----------------------------
 
-" quit Vim if only quickfix or preview windows remain ...
+" quit Vim if only quickfix or preview/help windows remain
+" (this is prob not needed if autocomplete window is closed
+"  automatically when autocomplete finishes, see above for
+"  autocmd CompleteDone ...)
 
 " s:NextNormalWindow() {{{2
 function! s:NextNormalWindow() abort
@@ -1321,6 +1334,8 @@ endfunction
 
 function! MyGitStatus()
   if &filetype ==# 'qf'
+    return
+  elseif !&buflisted
     return
   endif
   let l:bufnm = bufnr("%")
