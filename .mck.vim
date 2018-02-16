@@ -336,6 +336,7 @@ colorscheme deus
 "set iskeyword for word separators ...
 "current default is:
 "iskeyword=@,48-57,_,192-255,#
+"tmux uses " ='`;|[](){},/?\\\""
 
 " -----------------------------
 
@@ -430,8 +431,12 @@ inoremap <silent> <C-v> <C-r>+
 " so that clipboard is pushed/pulled to/from all other apps
 
 " TripleClick for next larger entity, not whole line
+nnoremap <silent> <2-LeftMouse> lbve
+vnoremap <silent> <2-LeftMouse> <Esc>lbve
 nnoremap <silent> <3-LeftMouse> lBvE
 vnoremap <silent> <3-LeftMouse> <Esc>lBvE
+nnoremap <silent> <4-LeftMouse> <Nop>
+vnoremap <silent> <4-LeftMouse> <Nop>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
