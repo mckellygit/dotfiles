@@ -96,10 +96,8 @@ ___update_needed() {
 		now=$(date +%s)
 		delta=$(($now-$d0))
 		if [ $d0 -lt 0 -o $d1 -ge $d0 -o $d2 -ge $d0 -o $d3 -ge $d0 -o $delta -ge 3605 ] ; then
-			echo "ret 0"
 			return 0
 		else
-			echo "ret 1"
 			return 1
 		fi
 	elif [ -e "/var/lib/PackageKit/transactions.db" ]; then
