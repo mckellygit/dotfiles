@@ -1194,6 +1194,9 @@ endif " quickfix quit/close
 
 " -----------------------------
 
+" disable : in visual mode
+vmap <silent> : <Nop>
+
 noremap <C-a> 0
 " ctrl-e was scroll down one line so we lose that
 noremap <C-e> $
