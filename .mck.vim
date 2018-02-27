@@ -1199,21 +1199,34 @@ vmap <silent> : <Nop>
 
 noremap <C-a> 0
 " ctrl-e was scroll down one line so we lose that
+" (but its been remapped to <C-j>)
 noremap <C-e> $
 
-" close all windows and quit
+" close all windows and write then quit
 inoremap <C-X>w     <Esc>:wqa<cr>
-nnoremap <C-X>w     :wqa<cr>
+vnoremap <C-X>w     <Esc>:wqa<cr>
+nnoremap <C-X>w          :wqa<cr>
+
 inoremap <C-X><C-w> <Esc>:wqa<cr>
-nnoremap <C-X><C-w> :wqa<cr>
+vnoremap <C-X><C-w> <Esc>:wqa<cr>
+nnoremap <C-X><C-w>      :wqa<cr>
 
+" close all windows and confirm then quit
 inoremap <C-X>c     <Esc>:conf qa<cr>
-nnoremap <C-X>c     :conf qa<cr>
-inoremap <C-X><C-c> <Esc>:conf qa<cr>
-nnoremap <C-X><C-c> :conf qa<cr>
+vnoremap <C-X>c     <Esc>:conf qa<cr>
+nnoremap <C-X>c          :conf qa<cr>
 
-noremap <Leader>xc  :conf qa<cr>
-noremap <Leader>ax  :conf qa<cr>
+inoremap <C-X><C-c> <Esc>:conf qa<cr>
+vnoremap <C-X><C-c> <Esc>:conf qa<cr>
+nnoremap <C-X><C-c>      :conf qa<cr>
+
+" no imap for this
+vnoremap <Leader>xc  <Esc>:conf qa<cr>
+nnoremap <Leader>xc       :conf qa<cr>
+
+" no imap for this
+vnoremap <Leader>ax  <Esc>:conf qa<cr>
+nnoremap <Leader>ax       :conf qa<cr>
 
 " for vimdiff make :q quit both
 " and some better colors
