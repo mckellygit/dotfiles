@@ -429,6 +429,7 @@ inoremap <silent> <C-q> <C-r>+
 
 " change default to paste before (at) cursor
 " instead of after cursor
+" good for words but can be strange for lines
 vnoremap <silent> p P
 nnoremap <silent> p P
 vnoremap <silent> P p
