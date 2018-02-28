@@ -392,10 +392,12 @@ set ruler
 
 " -------- mouse / cut - paste - clipboard --------
 
+" to disable mouse in visual mode
 "set mouse-=a
 " to get mouse support and 
 " selection buffer copied automatically to clipboard
 "set mouse=nv
+" all modes / full support
 set mouse=a
 
 " use shift + left click to get back to previous (mouse=~a)
@@ -407,20 +409,52 @@ set clipboard^=unnamed,unnamedplus
 
 set timeoutlen=1000 ttimeoutlen=0
 
-" map Ctrl-C to yank selection into paste buffer/clipboard
-":vmap <silent> <C-C> "+y
+" ctrl-c to yank selection into paste buffer/clipboard
 
-"nnoremap <silent> <C-c> "+y<LeftRelease>
+" copy/yank selection
+":vmap <silent> <C-c> "+y
 "vnoremap <silent> <C-c> "+y<LeftRelease>
 " y`] to goto end of block, or even better
 " gv<Esc> leave cursor at last pos
-nnoremap <silent> <C-c> "+ygv<Esc>
 vnoremap <silent> <C-c> "+ygv<Esc>
 
-nnoremap <silent> <C-x> "+d<LeftRelease>
+" cut selection
 vnoremap <silent> <C-x> "+d<LeftRelease>
 
-inoremap <silent> <C-v> <C-r>+
+" insert/paste
+" this removes the <C-v> literal input mode
+"inoremap <silent> <C-v> <C-r>+
+" use <C-q> instead
+inoremap <silent> <C-q> <C-r>+
+
+" change default to paste before (at) cursor
+" instead of after cursor
+vnoremap <silent> p P
+nnoremap <silent> p P
+vnoremap <silent> P p
+nnoremap <silent> P p
+
+" set paste mode, paste, set nopaste mode
+function! WrapForTmux(s)
+  if !exists('$TMUX')
+    return a:s
+  endif
+  let tmux_start = "\<Esc>Ptmux;"
+  let tmux_end = "\<Esc>\\"
+  return tmux_start . substitute(a:s, "\<Esc>", "\<Esc>\<Esc>", 'g') . tmux_end
+endfunction
+
+let &t_SI .= WrapForTmux("\<Esc>[?2004h")
+let &t_EI .= WrapForTmux("\<Esc>[?2004l")
+
+function! XTermPasteBegin()
+  set pastetoggle=<Esc>[201~
+  set paste
+  return ""
+endfunction
+
+inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
+" ---------------
 
 " or when you release the mouse button ...
 ":noremap <silent> <LeftRelease> "+y<LeftRelease>
@@ -1203,22 +1237,22 @@ noremap <C-a> 0
 noremap <C-e> $
 
 " close all windows and write then quit
-inoremap <C-X>w     <Esc>:wqa<cr>
-vnoremap <C-X>w     <Esc>:wqa<cr>
-nnoremap <C-X>w          :wqa<cr>
+" no imap for this
+vnoremap <C-x>w     <Esc>:wqa<cr>
+nnoremap <C-x>w          :wqa<cr>
 
-inoremap <C-X><C-w> <Esc>:wqa<cr>
-vnoremap <C-X><C-w> <Esc>:wqa<cr>
-nnoremap <C-X><C-w>      :wqa<cr>
+" no imap for this
+vnoremap <C-x><C-w> <Esc>:wqa<cr>
+nnoremap <C-x><C-w>      :wqa<cr>
 
 " close all windows and confirm then quit
-inoremap <C-X>c     <Esc>:conf qa<cr>
-vnoremap <C-X>c     <Esc>:conf qa<cr>
-nnoremap <C-X>c          :conf qa<cr>
+" no imap for this
+vnoremap <C-x>c     <Esc>:conf qa<cr>
+nnoremap <C-x>c          :conf qa<cr>
 
-inoremap <C-X><C-c> <Esc>:conf qa<cr>
-vnoremap <C-X><C-c> <Esc>:conf qa<cr>
-nnoremap <C-X><C-c>      :conf qa<cr>
+" no imap for this
+vnoremap <C-x><C-c> <Esc>:conf qa<cr>
+nnoremap <C-x><C-c>      :conf qa<cr>
 
 " no imap for this
 vnoremap <Leader>xc  <Esc>:conf qa<cr>
