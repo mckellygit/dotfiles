@@ -1131,7 +1131,8 @@ hi cursorline cterm=None ctermbg=239
 if 0 " quickfix quit/close
 
 " :q in qf to also quit
-autocmd BufReadPost quickfix cmap <silent> <buffer> q<CR> qa<CR>
+"autocmd BufReadPost quickfix cmap    <silent> <buffer> q<CR> conf qa<CR>
+"autocmd BufReadPost quickfix cabbrev          <buffer> q conf qa
 
 else " quickfix quit/close
 
@@ -1263,14 +1264,28 @@ nnoremap <Leader>xc       :conf qa<cr>
 vnoremap <Leader>ax  <Esc>:conf qa<cr>
 nnoremap <Leader>ax       :conf qa<cr>
 
-" for vimdiff make :q quit both
+" vimdiff (also as a git difftool)
+"  git config --global diff.tool vimdiff
+"  git config --global difftool.trustExitCode true
+"  git config --global mergetool.trustExitCode true
+" cycle to next file compare:
+"  \df
+"  n[ext]
+" quit tool:
+"  \xc
+"  exit
 " and some better colors
 if &diff
-  cmap    <silent> q<CR>  qa<CR>
-  cmap    <silent> q!<CR> qa!<CR>
-  noremap <C-l>  :diffupdate<CR><C-l>
-  map     <silent> <Leader>dn ]c
-  map     <silent> <Leader>dp [c
+  "cmap    <silent> q<CR>  qa<CR>
+  "cmap    <silent> q!<CR> qa!<CR>
+  cabbrev n    qa
+  cabbrev next qa
+  cabbrev exit cquit
+  noremap <silent> <Leader>df :qa<CR>
+  noremap <silent> <Leader>xc :cquit<CR>
+  noremap          <C-l>      :diffupdate<CR><C-l>
+  noremap <silent> <Leader>dn ]c
+  noremap <silent> <Leader>dp [c
   "hi DiffAdd    ctermfg=233 ctermbg=LightGreen guifg=#003300 guibg=#DDFFDD gui=none cterm=none
   "hi DiffChange ctermbg=white  guibg=#ececec gui=none   cterm=none
   "hi DiffText   ctermfg=233  ctermbg=yellow  guifg=#000033 guibg=#DDDDFF gui=none cterm=none
