@@ -30,6 +30,8 @@ Plugin 'VundleVim/Vundle.vim'
 "
 " required utils for EnhancedJumps plugin
 Plugin 'inkarkat/vim-ingo-library'
+" more paste options
+Plugin 'inkarkat/vim-UnconditionalPaste'
 "
 " mother of auto-completion
 "Plugin 'Valloric/YouCompleteMe'
@@ -430,10 +432,11 @@ inoremap <silent> <C-q> <C-r>+
 " change default to paste before (at) cursor
 " instead of after cursor
 " good for words but can be strange for lines
-vnoremap <silent> p P
-nnoremap <silent> p P
-vnoremap <silent> P p
-nnoremap <silent> P p
+" skipping now - see unconditional-paste plugin
+"vnoremap <silent> p P
+"nnoremap <silent> p P
+"vnoremap <silent> P p
+"nnoremap <silent> P p
 
 " set paste mode, paste, set nopaste mode
 function! WrapForTmux(s)
@@ -1068,6 +1071,23 @@ noremap <silent> <Leader>of :FSHere<cr>
 let fsnonewfiles=1
 " fswitch ---------------
 
+" unconditional-paste ---
+nmap <Leader>Pc <Plug>UnconditionalPasteCharBefore
+nmap <Leader>pc <Plug>UnconditionalPasteCharAfter
+nmap <Leader>Pj <Plug>UnconditionalPasteJustJoinedBefore
+nmap <Leader>pj <Plug>UnconditionalPasteJustJoinedAfter
+nmap <Leader>Pl <Plug>UnconditionalPasteLineBefore
+nmap <Leader>pl <Plug>UnconditionalPasteLineAfter
+nmap <Leader>Pb <Plug>UnconditionalPasteBlockBefore
+nmap <Leader>pb <Plug>UnconditionalPasteBlockAfter
+nmap <Leader>Pi <Plug>UnconditionalPasteIndentedBefore
+nmap <Leader>pi <Plug>UnconditionalPasteIndentedAfter
+nmap <Leader>Pm <Plug>UnconditionalPasteMoreIndentBefore
+nmap <Leader>pm <Plug>UnconditionalPasteMoreIndentAfter
+nmap <Leader>Pl <Plug>UnconditionalPasteLessIndentBefore
+nmap <Leader>pl <Plug>UnconditionalPasteLessIndentAfter
+" unconditional-paste ---
+
 "================================================================
 
 " limit quickfix height ...
@@ -1263,6 +1283,9 @@ nnoremap <Leader>xc       :conf qa<cr>
 " no imap for this
 vnoremap <Leader>ax  <Esc>:conf qa<cr>
 nnoremap <Leader>ax       :conf qa<cr>
+
+" :exit to quit all
+cabbrev exit conf qa<cr>
 
 " vimdiff (also as a git difftool)
 "  git config --global diff.tool vimdiff
