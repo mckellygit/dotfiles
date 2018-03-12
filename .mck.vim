@@ -109,6 +109,12 @@ Plugin 'itchyny/lightline.vim'
 "Plugin 'farmergreg/vim-lastplace'
 Plugin 'mckellyln/vim-lastplace'
 "
+" conque-gdb plugin
+"Plugin 'Conque-GDB'
+"
+" process utility
+"Plugin 'Shougo/vimproc.vim'
+"
 " run cmd in background and output to quickfix ...
 " :AsyncRun gcc % -c %< for example
 "Plugin 'skywind3000/asyncrun.vim'
