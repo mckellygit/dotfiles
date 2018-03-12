@@ -1076,8 +1076,13 @@ nmap <Leader>Pc <Plug>UnconditionalPasteCharBefore
 nmap <Leader>pc <Plug>UnconditionalPasteCharAfter
 nmap <Leader>Pj <Plug>UnconditionalPasteJustJoinedBefore
 nmap <Leader>pj <Plug>UnconditionalPasteJustJoinedAfter
-nmap <Leader>Pl <Plug>UnconditionalPasteLineBefore
-nmap <Leader>pl <Plug>UnconditionalPasteLineAfter
+"
+" change l to i to match current indentation ...
+"nmap <Leader>Pl <Plug>UnconditionalPasteLineBefore
+"nmap <Leader>pl <Plug>UnconditionalPasteLineAfter
+nmap <Leader>Pl <Plug>UnconditionalPasteIndentedBefore
+nmap <Leader>pl <Plug>UnconditionalPasteIndentedAfter
+"
 nmap <Leader>Pb <Plug>UnconditionalPasteBlockBefore
 nmap <Leader>pb <Plug>UnconditionalPasteBlockAfter
 nmap <Leader>Pi <Plug>UnconditionalPasteIndentedBefore
@@ -1334,8 +1339,18 @@ set noshowmode
 " spawn new shell
 noremap <silent> <Leader>zs :terminal ++close ++curwin<CR>
 
-" undo all changes
-noremap <Leader>uu :earlier 999999<CR>:u<CR>
+" undo all changes - instead of just :e! ...
+"noremap <Leader>uu :earlier 999999<CR>:u<CR>
+function! UndoAll()
+  echo 'Undo all changes? (y/n): '
+  let ans=nr2char(getchar())
+  if ans ==# 'y' || ans ==# 'Y'
+    execute 'silent! earlier 999999'
+  else
+    redraw!
+  endif
+endfunction
+noremap <Leader>uu :call UndoAll()<CR>
 
 " toggle search highlight
 noremap <Leader>hl :set hlsearch! hlsearch?<CR>
@@ -1345,6 +1360,8 @@ hi Search ctermbg=58
 " 'cc' already used for quickfix close
 " **careful** as 'xc' is for quit all ...
 noremap <Leader>cx :echo<CR>
+" maybe also execute "keepjumps normal" ""
+" or redraw!
 
 " tab open
 noremap <Leader>to :tabnew<CR>
