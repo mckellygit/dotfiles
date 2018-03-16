@@ -1500,3 +1500,8 @@ endif
 
 " -----------------------------
 
+" vim+gdb debugging, requires gdb v7.12+
+" :help terminal-debug
+packadd termdebug
+":Termdebug a.out
+
