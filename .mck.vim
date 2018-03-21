@@ -1352,9 +1352,8 @@ function! UndoAll()
   let ans=nr2char(getchar())
   if ans ==# 'y' || ans ==# 'Y'
     execute 'silent! earlier 999999'
-  else
-    redraw!
   endif
+  redraw!
 endfunction
 noremap <Leader>uu :call UndoAll()<CR>
 
