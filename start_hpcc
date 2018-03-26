@@ -21,7 +21,7 @@ else
     # sudo /etc/init.d/dafilesrv start 
     for comp in mydfuserver myeclagent myeclccserver myeclscheduler myesp myroxie mysasha mythor
     do
-        sudo setsid /etc/init.d/hpcc-init -c $comp start > /tmp/${tag}.start.$comp 2>&1 &
+        sudo HPCC_DEVELOPER=1 /etc/init.d/hpcc-init -c $comp start > /tmp/${tag}.start.$comp 2>&1 &
     done
     wait
  

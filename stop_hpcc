@@ -60,9 +60,9 @@ if [ $rc0 -eq 0 ] ; then
         if [ $rc -eq 0 ] ; then
             for comp in mythor mysasha myroxie myesp myeclscheduler myeclccserver myeclagent mydfuserver
             do
-                sudo setsid /etc/init.d/hpcc-init -c $comp stop > /tmp/${tag}.stop.$comp 2>&1 &
+                sudo HPCC_DEVELOPER=1 /etc/init.d/hpcc-init -c $comp stop > /tmp/${tag}.stop.$comp 2>&1 &
             done
-            sudo setsid /etc/init.d/dafilesrv stop > /tmp/${tag}.stop.dafilesrv 2>&1 &
+            sudo HPCC_DEVELOPER=1 /etc/init.d/dafilesrv stop > /tmp/${tag}.stop.dafilesrv 2>&1 &
             wait
       
             cat /tmp/${tag}.stop.*
