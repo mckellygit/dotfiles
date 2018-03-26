@@ -12,9 +12,9 @@ if [ -z "$SSH_CLIENT" ] && [ -z "$SSH_TTY" ] ; then
   pgrep parcellite > /dev/null 2>&1
   rc=$?
   if [[ $rc -ne 0 ]] ; then
-    nohup parcellite -n > /dev/null 2>&1 &
+    setsid parcellite -n </dev/null >/dev/null 2>&1 &
   fi
-# nohup redshift > /dev/null 2>&1 &
+# setsid redshift </dev/null >/dev/null 2>&1 &
 fi
 
 # bump stacksize 
