@@ -1,0 +1,145 @@
+#!/bin/sh
+
+usage()
+{
+cat << EOF
+
+  usage: $0 [-d build-dir] [-n | -f] [-c]
+
+  Updates exes and libs in /opt/HPCCsystems from build dir
+  Updates rpath in exes and libs after copying
+
+  OPTIONS:
+    -h       Show this message
+    -d <dir> Specify build dir (Debug | Release | RelWithDebInfo)
+             note this is optional as it automatically looks for these in the current dir
+    -n       Skip modifying rpath in exes and libs copied
+    -f       Force modifying rpath in exes and libs even if didn't copy
+    -c       clean logs and cores
+
+EOF
+}
+
+dir=""
+do_clean=""
+mod_rpath=1
+while getopts “:hnfcd:” OPTION
+do
+    case $OPTION in
+        h)
+            usage
+            exit 1
+            ;;
+        n)
+            if [ $mod_rpath -eq 1 ] ; then
+                mod_rpath=0
+            else
+                echo "Error modify path already set"
+                exit 1
+            fi
+            ;;
+        f)
+            if [ $mod_rpath -eq 1 ] ; then
+                mod_rpath=2
+            else
+                echo "Error modify path already set"
+                exit 1
+            fi
+            ;;
+        c)
+            do_clean="-c"
+            ;;
+        d)
+            dir=$OPTARG
+            ;;
+    esac
+done
+
+if [ -z "$dir" ] ; then
+    if [ -x Debug ] && [ ! -x Release ] && [ ! -x RelWithDebInfo ] ; then
+        dir=Debug
+    elif [ -x Release ] && [ ! -x Debug ] && [ ! -x RelWithDebInfo ] ; then
+        dir=Release
+    elif [ -x RelWithDebInfo ] && [ ! -x Debug ] && [ ! -x Release ] ; then
+        dir=RelWithDebInfo
+    fi
+fi
+
+echo "dir: $dir"
+
+if [ -z "$dir" ] ; then
+    echo "Error, need -d dir (Debug|Release|RelWithDebInfo)"
+    exit 1
+fi
+
+if [ ! -x $dir ] ; then
+    echo "Error, <$dir> not found"
+    exit 1
+fi
+
+stop_hpcc ${do_clean}
+
+modified=0
+output=$(sudo rsync --info=name1 -ai --update --existing $dir/libs/ /opt/HPCCSystems/lib)
+#echo "output = $output"
+if [ -n "$output" -a "$output" != ".d..t...... ./" ] ; then
+    modified=1
+fi
+output=$(sudo rsync --info=name1 -ai --update --existing $dir/libs/ /opt/HPCCSystems/plugins)
+#echo "output = $output"
+if [ -n "$output" -a "$output" != ".d..t...... ./" ] ; then
+    modified=1
+fi
+output=$(sudo rsync --info=name1 -ai --update --existing $dir/bin/  /opt/HPCCSystems/bin)
+#echo "output = $output"
+if [ -n "$output" -a "$output" != ".d..t...... ./" ] ; then
+    modified=1
+fi
+output=$(sudo rsync --info=name1 -ai --update --existing $dir/bin/  /opt/HPCCSystems/sbin)
+#echo "output = $output"
+if [ -n "$output" -a "$output" != ".d..t...... ./" ] ; then
+    modified=1
+fi
+
+#echo "rpath fixup: $mod_rpath"
+echo "modified?: $modified"
+
+# to update rpath in all exes and libs ...
+
+if [ $mod_rpath -eq 0 ] ; then
+    if [ $modified -eq 1 ] ; then
+        echo "NOTE! skipping rpath fixup as requested with \"-n\" arg"
+    fi
+    exit 0
+fi
+if [ $modified -eq 0 -a $mod_rpath -eq 1 ] ; then
+    exit 0
+fi
+
+echo "rpath fixup ..."
+
+odir=${PWD}
+
+for bdir in \
+/opt/HPCCSystems/lib \
+/opt/HPCCSystems/plugins \
+/opt/HPCCSystems/bin \
+/opt/HPCCSystems/sbin
+do
+#   echo "bdir: $bdir"
+    cd $bdir
+    ls -1 | while read file
+    do
+#       echo "file: $file"
+        (readelf -d $file | grep rpath | grep -q $dir) 2> /dev/null
+        rc=$?
+#       echo "rc: $rc"
+        if [ $rc -eq 0 ] ; then
+            patchelf --force-rpath --set-rpath '/opt/HPCCSystems/lib:/opt/HPCCSystems/plugins/lib:' $file
+        fi
+    done
+    cd $odir
+done
+
+exit 0
+

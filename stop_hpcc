@@ -1,0 +1,81 @@
+#!/bin/bash
+
+usage()
+{
+cat << EOF
+
+  usage: $0 [-c]
+
+  Stops all HPCC components
+
+  OPTIONS:
+    -h       Show this message
+    -c       clean logs and cores
+
+EOF
+}
+
+do_clean=0
+while getopts “:hc” OPTION
+do
+    case $OPTION in
+        h)
+            usage
+            exit 1
+            ;;
+        c)
+            do_clean=1
+            ;;
+    esac
+done
+
+pgrep -u hpcc >/dev/null 
+rc0=$?
+
+if [ $rc0 -eq 0 ] ; then
+    # Stopping mythor
+    # Stopping mysasha
+    # Stopping myroxie
+    # Stopping myesp
+    # Stopping myeclscheduler
+    # Stopping myeclccserver
+    # Stopping myeclagent
+    # Stopping mydfuserver
+    # Stopping mydali
+    # Stopping mydafilesrv
+
+    grep -q cfggenpre /opt/HPCCSystems/etc/init.d/hpcc_common >/dev/null 2>&1
+    rc=$?
+
+    if [ $rc -ne 0 ] ; then
+        sudo /etc/init.d/hpcc-init stop
+        echo "------"
+        sudo /etc/init.d/dafilesrv stop
+      
+        exit
+    else
+        tag=$$
+        trap "rm -f /tmp/${tag}.stop.*" SIGINT SIGTERM SIGQUIT
+        echo "fast stop ..."
+        if [ $rc -eq 0 ] ; then
+            for comp in mythor mysasha myroxie myesp myeclscheduler myeclccserver myeclagent mydfuserver
+            do
+                sudo setsid /etc/init.d/hpcc-init -c $comp stop > /tmp/${tag}.stop.$comp 2>&1 &
+            done
+            sudo setsid /etc/init.d/dafilesrv stop > /tmp/${tag}.stop.dafilesrv 2>&1 &
+            wait
+      
+            cat /tmp/${tag}.stop.*
+            rm -f /tmp/${tag}.stop.*
+      
+            sudo /etc/init.d/hpcc-init -c mydali stop
+        fi
+    fi
+fi
+
+if [ ${do_clean} -eq 1 ] ; then
+    echo "About to remove all hpcc logs and cores ..."
+    sudo find /var/log/HPCCSystems/ -name "*.log" -and \( -not -name "hpcc-init.log" \) -exec rm {} \;
+    sudo find /var/lib/HPCCSystems/ -name "core.*" -exec rm {} \;
+fi
+

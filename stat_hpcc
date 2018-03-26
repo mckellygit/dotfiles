@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# sudo service hpcc-init status
+
+sudo /etc/init.d/hpcc-init status
+

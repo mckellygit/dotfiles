@@ -1,0 +1,30 @@
+#!/bin/bash
+
+grep -q cfggenpre /opt/HPCCSystems/etc/init.d/hpcc_common >/dev/null 2>&1
+rc=$?
+
+if [ $rc -ne 0 ] ; then
+
+    sudo /etc/init.d/dafilesrv start
+    echo "------"
+    sudo /etc/init.d/hpcc-init start
+
+    exit
+else
+    tag=$$
+    trap "rm -f /tmp/${tag}.start.*" SIGINT SIGTERM SIGQUIT
+    echo "fast start ..."
+   
+    sudo /etc/init.d/hpcc-init -c mydali start
+  
+    # NB: thor starts dafilesrv as a dependency
+    # sudo /etc/init.d/dafilesrv start 
+    for comp in mydfuserver myeclagent myeclccserver myeclscheduler myesp myroxie mysasha mythor
+    do
+        sudo setsid /etc/init.d/hpcc-init -c $comp start > /tmp/${tag}.start.$comp 2>&1 &
+    done
+    wait
+ 
+    cat /tmp/${tag}.start.*
+    rm -f /tmp/${tag}.start.*
+fi
