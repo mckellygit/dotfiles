@@ -135,7 +135,7 @@ do
         rc=$?
 #       echo "rc: $rc"
         if [ $rc -eq 0 ] ; then
-            patchelf --force-rpath --set-rpath '/opt/HPCCSystems/lib:/opt/HPCCSystems/plugins/lib:' $file
+            patchelf --force-rpath --set-rpath '/opt/HPCCSystems/lib:/opt/HPCCSystems/plugins:/opt/HPCCSystems/lib/external' $file
         fi
     done
     cd $odir
