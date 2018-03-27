@@ -90,6 +90,12 @@ output=$(sudo rsync --info=name1 -ai --update --existing $dir/libs/ /opt/HPCCSys
 if [ -n "$output" -a "$output" != ".d..t...... ./" ] ; then
     modified=1
 fi
+# libantlr3c.so goes in lib/external dir from a build sub dir ...
+output=$(sudo rsync --info=name1 -ai --update --existing $dir/../esp/services/ws_sql/antlr3c/lib/libantlr3c.so /opt/HPCCSystems/lib/external/libantlr3c.so)
+#echo "output = $output"
+if [ -n "$output" -a "$output" != ".d..t...... ./" ] ; then
+    modified=1
+fi
 output=$(sudo rsync --info=name1 -ai --update --existing $dir/bin/  /opt/HPCCSystems/bin)
 #echo "output = $output"
 if [ -n "$output" -a "$output" != ".d..t...... ./" ] ; then
