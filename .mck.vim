@@ -117,7 +117,7 @@ Plugin 'mckellyln/vim-lastplace'
 "
 " run cmd in background and output to quickfix ...
 " :AsyncRun gcc % -c %< for example
-"Plugin 'skywind3000/asyncrun.vim'
+Plugin 'skywind3000/asyncrun.vim'
 "
 "" All of your Plugins must be added before the following line
 call vundle#end()         " required
@@ -324,6 +324,11 @@ if &diff
   let b:loaded_lastplace_plugin = 1
 endif
 " lastplace -----------
+
+" asyncrun -----------
+" open quickfix (10 lines) when cmd ends
+let g:asyncrun_open = 10 
+" asyncrun -----------
 
 " improves color highlighing with dark terminals
 set background=dark
