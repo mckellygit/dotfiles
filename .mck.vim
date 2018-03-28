@@ -1321,16 +1321,20 @@ cabbrev exit conf qa<cr>
 "  exit
 " and some better colors
 if &diff
-  "if using vim-alias plugin:
+  "if using cmdalias/vim-alias plugin:
   "aug diff_alias
   "  au!
-  "  au VimEnter * :Alias q qa
+  "  au VimEnter * :Alias q    qa
+  "  au VimEnter * :Alias n    qa
+  "  au VimEnter * :Alias next qa
+  "  au VimEnter * :Alias exit cquit
   "aug END
-  " -----------
+  " ---
   cnoreabbrev q    qa
   cnoreabbrev n    qa
   cnoreabbrev next qa
   cnoreabbrev exit cquit
+  " -----------
   noremap <silent> <Leader>df :qa<CR>
   noremap <silent> <Leader>xc :cquit<CR>
   noremap          <C-l>      :diffupdate<CR><C-l>
