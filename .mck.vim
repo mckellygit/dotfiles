@@ -1460,6 +1460,9 @@ endfunction
 function! MyGitStatus()
   if &filetype ==# 'qf'
     return
+  elseif &diff
+    let b:mckgitstatus = "diff"
+    return
   elseif !&buflisted
     return
   endif
