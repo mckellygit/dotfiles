@@ -119,6 +119,10 @@ Plugin 'mckellyln/vim-lastplace'
 " :AsyncRun gcc % -c %< for example
 Plugin 'skywind3000/asyncrun.vim'
 "
+" cmd alias
+"Plugin 'cmdalias.vim'
+"Plugin 'Konfekt/vim-alias'
+"
 "" All of your Plugins must be added before the following line
 call vundle#end()         " required
 filetype plugin indent on " required
@@ -1317,11 +1321,16 @@ cabbrev exit conf qa<cr>
 "  exit
 " and some better colors
 if &diff
-  "cmap    <silent> q<CR>  qa<CR>
-  "cmap    <silent> q!<CR> qa!<CR>
-  cabbrev n    qa
-  cabbrev next qa
-  cabbrev exit cquit
+  "if using vim-alias plugin:
+  "aug diff_alias
+  "  au!
+  "  au VimEnter * :Alias q qa
+  "aug END
+  " -----------
+  cnoreabbrev q    qa
+  cnoreabbrev n    qa
+  cnoreabbrev next qa
+  cnoreabbrev exit cquit
   noremap <silent> <Leader>df :qa<CR>
   noremap <silent> <Leader>xc :cquit<CR>
   noremap          <C-l>      :diffupdate<CR><C-l>
