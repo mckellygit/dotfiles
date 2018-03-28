@@ -188,6 +188,8 @@ endfunction
 function! MyLightlineGitbranch()
   if &filetype ==# 'qf'
     return ''
+  elseif &diff
+    return "diff"
   elseif !&buflisted
     return ''
   else
