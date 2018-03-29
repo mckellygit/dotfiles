@@ -80,27 +80,47 @@ fi
 stop_hpcc ${do_clean}
 
 modified=0
+
 output=$(sudo rsync --info=name1 -ai --update --existing $dir/libs/ /opt/HPCCSystems/lib)
 #echo "output = $output"
 if [ -n "$output" -a "$output" != ".d..t...... ./" ] ; then
     modified=1
 fi
+
 output=$(sudo rsync --info=name1 -ai --update --existing $dir/libs/ /opt/HPCCSystems/plugins)
 #echo "output = $output"
 if [ -n "$output" -a "$output" != ".d..t...... ./" ] ; then
     modified=1
 fi
+
 # libantlr3c.so goes in lib/external dir from a build sub dir ...
-output=$(sudo rsync --info=name1 -ai --update --existing $dir/../esp/services/ws_sql/antlr3c/lib/libantlr3c.so /opt/HPCCSystems/lib/external/libantlr3c.so)
-#echo "output = $output"
-if [ -n "$output" -a "$output" != ".d..t...... ./" ] ; then
-    modified=1
+# could be in:
+#   ../esp/services/ws_sql/antlr3c/lib
+# or
+#   ../oss/esp/services/ws_sql/antlr3c/lib
+# if this is an LN build ...
+if   [ -x $dir/../esp/services/ws_sql/antlr3c/lib/libantlr3c.so ] ; then
+    antlrdir=$dir/../esp/services/ws_sql/antlr3c/lib/libantlr3c.so
+elif [ -x $dir/../oss/esp/services/ws_sql/antlr3c/lib/libantlr3c.so ] ; then
+    antlrdir=$dir/../oss/esp/services/ws_sql/antlr3c/lib/libantlr3c.so
+else
+    antlrdir=""
+    echo "WARNING: ws_sql/antlr3c dir not found ..."
 fi
+if [ -n "$antlrdir" ] ; then
+    output=$(sudo rsync --info=name1 -ai --update --existing $antlrdir /opt/HPCCSystems/lib/external/libantlr3c.so)
+#   echo "output = $output"
+    if [ -n "$output" -a "$output" != ".d..t...... ./" ] ; then
+        modified=1
+    fi
+fi
+
 output=$(sudo rsync --info=name1 -ai --update --existing $dir/bin/  /opt/HPCCSystems/bin)
 #echo "output = $output"
 if [ -n "$output" -a "$output" != ".d..t...... ./" ] ; then
     modified=1
 fi
+
 output=$(sudo rsync --info=name1 -ai --update --existing $dir/bin/  /opt/HPCCSystems/sbin)
 #echo "output = $output"
 if [ -n "$output" -a "$output" != ".d..t...... ./" ] ; then
