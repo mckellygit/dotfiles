@@ -123,6 +123,11 @@ Plugin 'skywind3000/asyncrun.vim'
 "Plugin 'cmdalias.vim'
 "Plugin 'Konfekt/vim-alias'
 "
+" grayout #ifdefs
+"Plugin 'mphe/grayout.vim'
+" older plugin
+"Plugin 'vim-scripts/ifdef-highlighting'
+"
 "" All of your Plugins must be added before the following line
 call vundle#end()         " required
 filetype plugin indent on " required
@@ -1324,12 +1329,14 @@ if &diff
   "if using cmdalias/vim-alias plugin:
   "aug diff_alias
   "  au!
+  "  au VimEnter * :Alias q!   qa!
   "  au VimEnter * :Alias q    qa
   "  au VimEnter * :Alias n    qa
   "  au VimEnter * :Alias next qa
   "  au VimEnter * :Alias exit cquit
   "aug END
   " ---
+  cnoreabbrev q!   qa!
   cnoreabbrev q    qa
   cnoreabbrev n    qa
   cnoreabbrev next qa
