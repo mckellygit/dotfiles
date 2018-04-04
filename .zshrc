@@ -124,6 +124,7 @@ alias hpcc_regression='./ecl-test run -e=embedded,3rdparty'
 
 export MANPATH=${MANPATH}:/usr/share/bcc/man
 
+# also look at ~/.selected_editor file
 export VISUAL=vim
 export EDITOR=vim
 
