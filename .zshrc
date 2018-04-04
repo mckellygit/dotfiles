@@ -124,6 +124,9 @@ alias hpcc_regression='./ecl-test run -e=embedded,3rdparty'
 
 export MANPATH=${MANPATH}:/usr/share/bcc/man
 
+export VISUAL=vim
+export EDITOR=vim
+
 # fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export FZF_DEFAULT_OPTS="--extended --cycle --reverse"
