@@ -1375,10 +1375,15 @@ noremap <silent> <Leader>zs :terminal ++close ++curwin<CR>
 " undo all changes - instead of just :e! ...
 "noremap <Leader>uu :earlier 999999<CR>:u<CR>
 function! UndoAll()
-  echo 'Undo all changes? (y/n): '
-  let ans=nr2char(getchar())
-  if ans ==# 'y' || ans ==# 'Y'
-    execute 'silent! earlier 999999'
+  if &mod !=# 0
+    echo 'Undo all changes? (y/n): '
+    let ans=nr2char(getchar())
+    if ans ==# 'y' || ans ==# 'Y'
+      execute 'silent! earlier 999999'
+    endif
+  else
+    echo 'No changes to undo'
+    sleep 500m
   endif
   redraw!
 endfunction
