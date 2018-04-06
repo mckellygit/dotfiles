@@ -1,5 +1,10 @@
 #!/usr/bin/python
 
+# assuming there is a compile_commands.json file present -
+# compdb -p . list > co.json
+# mv co.json compile_commands.json
+# rc -J .
+
 # -*- coding: utf-8 -*-
 import re
 import sys
