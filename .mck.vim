@@ -1325,6 +1325,27 @@ cabbrev exit conf qa<cr>
 "  \xc
 "  exit
 " and some better colors
+
+function! s:diffx()
+  let anymod = 0
+  let bufcount = bufnr("$")
+  let currbufnr = 1
+  while currbufnr <= bufcount
+    if(bufexists(currbufnr))
+      let bufmod = getbufvar(currbufnr, "&mod")
+      "let dbgmsg = "diffx: bufnr = " . currbufnr . " &mod = " . bufmod
+      "echomsg dbgmsg
+      let anymod += bufmod
+    endif
+    let currbufnr += 1
+  endwhile
+  if anymod ==# 0
+    execute ":qa!"
+  else
+    execute ":wq"
+  endif
+endfunction
+
 if &diff
   "if using cmdalias/vim-alias plugin:
   "aug diff_alias
@@ -1342,6 +1363,8 @@ if &diff
   cnoreabbrev next qa
   cnoreabbrev exit cquit
   " -----------
+  " if no mods, then :x is like :q ...
+  cnoremap         x          :call <SID>diffx()<CR>
   noremap <silent> <Leader>df :qa<CR>
   noremap <silent> <Leader>xc :cquit<CR>
   noremap          <C-l>      :diffupdate<CR><C-l>
@@ -1404,9 +1427,13 @@ noremap <Leader>cx :echo<CR>
 noremap <Leader>to :tabnew<CR>
 " tab close (same as window close)
 noremap <Leader>tc :conf q<cr>
+" tab keep current and close all others
+noremap <Leader>tk :tabonly<cr>
 
 " window close (same as tab close)
 noremap <Leader>wc :conf q<cr>
+" window keep current and close all others
+noremap <Leader>wk :only<cr>
 
 " next tab
 noremap <Leader>tn :tabnext<CR>
