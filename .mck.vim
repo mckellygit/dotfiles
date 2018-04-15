@@ -1333,16 +1333,26 @@ function! s:diffx()
   while currbufnr <= bufcount
     if(bufexists(currbufnr))
       let bufmod = getbufvar(currbufnr, "&mod")
-      "let dbgmsg = "diffx: bufnr = " . currbufnr . " &mod = " . bufmod
+      "let dbgmsg = "diffx: bufnr = " . currbufnr . " &bufmod = " . bufmod
       "echomsg dbgmsg
       let anymod += bufmod
     endif
     let currbufnr += 1
   endwhile
   if anymod ==# 0
-    execute ":qa"
+    silent execute ":qa"
   else
-    execute ":wq"
+    "let dbgmsg = "diffx: &mod = " . &mod
+    "echomsg dbgmsg
+    if &mod ==# 0
+      silent execute ":conf q"
+    else
+      silent execute ":wq"
+    endif
+    "cunmap x ?
+    redraw!
+    "let dbgmsg = "diffx: &diff = " . &diff
+    "echomsg dbgmsg
   endif
 endfunction
 
@@ -1364,12 +1374,12 @@ if &diff
   cnoreabbrev exit cquit
   " -----------
   " if no mods, then :x is like :q ...
-  cnoremap         x          :call <SID>diffx()<CR>
-  noremap <silent> <Leader>df :qa<CR>
-  noremap <silent> <Leader>xc :cquit<CR>
-  noremap          <C-l>      :diffupdate<CR><C-l>
-  noremap <silent> <Leader>dn ]c
-  noremap <silent> <Leader>dp [c
+  cnoremap <silent> x          :call <SID>diffx()<CR>
+  noremap  <silent> <Leader>df :qa<CR>
+  noremap  <silent> <Leader>xc :cquit<CR>
+  noremap           <C-l>      :diffupdate<CR><C-l>
+  noremap  <silent> <Leader>dn ]c
+  noremap  <silent> <Leader>dp [c
   "hi DiffAdd    ctermfg=233 ctermbg=LightGreen guifg=#003300 guibg=#DDFFDD gui=none cterm=none
   "hi DiffChange ctermbg=white  guibg=#ececec gui=none   cterm=none
   "hi DiffText   ctermfg=233  ctermbg=yellow  guifg=#000033 guibg=#DDDDFF gui=none cterm=none
