@@ -1375,7 +1375,6 @@ if &diff
   " -----------
   " if no mods, then :x is like :q ...
   cnoreabbrev <expr> <silent> x (getcmdtype() == ':' && getcmdline() =~ '\s*x\s*') ? 'call Xdiff()' : 'x'
-  " or perhaps regex getcmdline() =~ '^x$' ?
   noremap  <silent> <Leader>df :qa<CR>
   noremap  <silent> <Leader>xc :cquit<CR>
   noremap           <C-l>      :diffupdate<CR><C-l>
