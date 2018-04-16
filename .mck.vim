@@ -1326,7 +1326,15 @@ cabbrev exit conf qa<cr>
 "  exit
 " and some better colors
 
-function! s:diffx()
+function Xdiff1()
+  let typ = getcmdtype()
+  if typ !=# ':'
+    return "x"
+  endif
+  let pos = getcmdpos()
+  if pos !=# 1
+    return "x"
+  endif
   let anymod = 0
   let bufcount = bufnr("$")
   let currbufnr = 1
@@ -1340,20 +1348,21 @@ function! s:diffx()
     let currbufnr += 1
   endwhile
   if anymod ==# 0
-    silent execute ":qa"
+    return "qa"
   else
     "let dbgmsg = "diffx: &mod = " . &mod
     "echomsg dbgmsg
     if &mod ==# 0
-      silent execute ":conf q"
+      return "conf q"
     else
-      silent execute ":wq"
+      return "wq"
     endif
     "cunmap x ?
     redraw!
     "let dbgmsg = "diffx: &diff = " . &diff
     "echomsg dbgmsg
   endif
+  return
 endfunction
 
 if &diff
@@ -1374,7 +1383,7 @@ if &diff
   cnoreabbrev exit cquit
   " -----------
   " if no mods, then :x is like :q ...
-  cnoremap <silent> x          :call <SID>diffx()<CR>
+  cnoremap           <expr> x   Xdiff1()
   noremap  <silent> <Leader>df :qa<CR>
   noremap  <silent> <Leader>xc :cquit<CR>
   noremap           <C-l>      :diffupdate<CR><C-l>
