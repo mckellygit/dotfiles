@@ -1367,11 +1367,16 @@ if &diff
   "  au VimEnter * :Alias exit cquit
   "aug END
   " ---
-  cnoreabbrev q!   qa!
-  cnoreabbrev q    qa
-  cnoreabbrev n    qa
-  cnoreabbrev next qa
-  cnoreabbrev exit cquit
+  "cnoreabbrev q!   qa!
+  cnoreabbrev <expr> <silent> q! (getcmdtype() == ':' && getcmdline() =~ '\s*q!\s*') ? 'qa!' : 'q!'
+  "cnoreabbrev q    qa
+  cnoreabbrev <expr> <silent> q  (getcmdtype() == ':' && getcmdline() =~ '\s*q\s*')  ? 'qa' : 'q'
+  "cnoreabbrev n    qa
+  cnoreabbrev <expr> <silent> n  (getcmdtype() == ':' && getcmdline() =~ '\s*n\s*')  ? 'qa' : 'n'
+  "cnoreabbrev next qa
+  cnoreabbrev <expr> <silent> next (getcmdtype() == ':' && getcmdline() =~ '\s*next\s*') ? 'qa' : 'next'
+  "cnoreabbrev exit cquit
+  cnoreabbrev <expr> <silent> exit (getcmdtype() == ':' && getcmdline() =~ '\s*exit\s*') ? 'cquit' : 'exit'
   " -----------
   " if no mods, then :x is like :q ...
   cnoreabbrev <expr> <silent> x (getcmdtype() == ':' && getcmdline() =~ '\s*x\s*') ? 'call Xdiff()' : 'x'
