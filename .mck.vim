@@ -1311,8 +1311,9 @@ nnoremap <Leader>xc       :conf qa<cr>
 vnoremap <Leader>ax  <Esc>:conf qa<cr>
 nnoremap <Leader>ax       :conf qa<cr>
 
-" :exit to quit all
-cabbrev exit conf qa<cr>
+" :exit to quit all windows
+"cabbrev exit conf qa
+cnoreabbrev <expr> <silent> exit (getcmdtype() == ':' && getcmdline() =~ '\s*exit\s*') ? 'conf qa' : 'exit'
 
 " vimdiff (also as a git difftool)
 "  git config --global diff.tool vimdiff
