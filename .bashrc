@@ -8,6 +8,13 @@ case $- in
       *) return;;
 esac
 
+# Enable bracketed paste: printf "\e[?2004h"
+# Wait for paste to start: you’ll see \e[200~ on STDIN.
+# Wait for paste to stop: you’ll see \e[201~ on STDIN.
+# Disable bracketed paste: printf "\e[?2004l"
+# or see .inputrc file:
+# set enable-bracketed-paste on
+
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
