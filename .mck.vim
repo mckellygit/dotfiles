@@ -33,6 +33,9 @@ Plugin 'inkarkat/vim-ingo-library'
 " more paste options
 Plugin 'inkarkat/vim-UnconditionalPaste'
 "
+" bracketed paste mode ?
+"Plugin 'ConradIrwin/vim-bracketed-paste'
+"
 " mother of auto-completion
 "Plugin 'Valloric/YouCompleteMe'
 "

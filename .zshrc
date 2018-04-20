@@ -18,6 +18,13 @@ zstyle ':completion:*' verbose false
 
 zmodload zsh/complist
 
+# Enable bracketed paste: printf "\e[?2004h"
+# Wait for paste to start: you’ll see \e[200~ on STDIN.
+# Wait for paste to stop: you’ll see \e[201~ on STDIN.
+# Disable bracketed paste: printf "\e[?2004l"
+# To disable bracketed paste
+# unset zle_bracketed_paste
+
 random_title=$[$RANDOM%100]
 precmd () { print -Pn "\e]2;%n@%M | %~ $random_title\a" }
 
