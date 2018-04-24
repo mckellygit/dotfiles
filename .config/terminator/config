@@ -35,7 +35,7 @@
     background_image = None
     background_type = transparent
 #   cursor_color = "#6a6863"
-    cursor_color = "#687e36"
+    cursor_color = "#73684C"
     font = Liberation Mono 11
 #   foreground_color = "#fba61b"
     foreground_color = "#fbb51b"
