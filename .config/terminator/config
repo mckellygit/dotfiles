@@ -6,8 +6,8 @@
   title_use_system_font = False
 [keybindings]
 # these were Ctrl-Page Up/Down and are disabled for tmux to use
-  next_tab = 
-  prev_tab = 
+  next_tab = ""
+  prev_tab = ""
 [layouts]
   [[default]]
     [[[child0]]]
@@ -34,6 +34,7 @@
     background_darkness = 0.96
     background_image = None
     background_type = transparent
+    cursor_color = "#6a6863"
     font = Liberation Mono 11
 #   foreground_color = "#fba61b"
     foreground_color = "#fbb51b"
