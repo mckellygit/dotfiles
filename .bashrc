@@ -63,17 +63,19 @@ if [ -n "$force_color_prompt" ]; then
     fi
 fi
 
+# change \w to ${PWD:(-11)} to prevent really long prompts ...
+
 if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]${PWD:(-11)}\[\033[00m\]\$ '
 else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:${PWD:(-11)}\$ '
 fi
 unset color_prompt force_color_prompt
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
 xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h:${PWD:(-11)}\a\]$PS1"
     ;;
 *)
     ;;
@@ -102,6 +104,11 @@ alias l='ls -CF'
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+# PROMPT_DIRTRIM=3
+# PROMPT_COMMAND='echo -ne "\033]0;${HOSTNAME}:${PWD}\007"'
+# PROMPT_COMMAND='echo -ne "\033]0;${HOSTNAME}:$(echo $PWD | tail -c 11)\007"'
+PROMPT_COMMAND='echo -ne "\033]0;${HOSTNAME}:${PWD:(-11)}\007"'
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like
@@ -132,6 +139,9 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
-[ -r /home/$LOGNAME/.byobu/prompt ] && . /home/$LOGNAME/.byobu/prompt   #byobu-prompt#
+
+# this changes PS1 ...
+# [ -r ~/.byobu/prompt ] && . ~/.byobu/prompt   #byobu-prompt#
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
