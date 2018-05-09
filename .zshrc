@@ -26,7 +26,9 @@ zmodload zsh/complist
 # unset zle_bracketed_paste
 
 random_title=$[$RANDOM%100]
-precmd () { print -Pn "\e]2;%n@%M | %~ $random_title\a" }
+# precmd () { print -Pn "\e]2;%n@%M.$random_title\a" }
+# precmd () { print -Pn "\e]2;%n@%M" }
+precmd () { print -Pn "\e]0;%M:%12<..<%~%<<%%\a" }
 
 # skip SHARE_HISTORY
 setopt APPEND_HISTORY INC_APPEND_HISTORY
@@ -90,9 +92,9 @@ export PATH
 function collapse_pwd {
     echo $(pwd | sed -e "s,^$HOME,~,")
 }
-PS1='%n@%m:%~%% '
+PS1='%n@%m:%12<..<%~%<<%% '
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] ; then
-    PS1='ssh-%n@%m:%~%% '
+    PS1='ssh-%n@%m:%12<..<%~%<<%% '
 fi
 
 export MANPATH=${MANPATH}:/usr/share/bcc/man
@@ -109,9 +111,9 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
-#alias rdpclient='rdesktop -g 1280x820 -d RISK -u $LOGNAME -p password -a 16 -k en-us -K -r clipboard:CLIPBOARD <host> &|'
-#alias rdpclient='rdesktop -g 1580x932 -d RISK -u $LOGNAME -p password -a 16 -k en-us -K -r clipboard:CLIPBOARD <host> &|'
  alias rdpclient='rdesktop -g 1580x932 -d RISK -u $LOGNAME -p password -a 24 -k en-us -K -r clipboard:CLIPBOARD <host> &|'
+# used to use -a 16
+# other sizes: 1280x820, 1540x836
 
 alias gitsubrecur='git submodule update --init --recursive'
 
