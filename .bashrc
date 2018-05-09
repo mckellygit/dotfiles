@@ -105,6 +105,7 @@ alias l='ls -CF'
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
+# PROMPT_COMMAND='echo -ne "\033]0; ${PWD##*/}\007"'
 # PROMPT_DIRTRIM=3
 # PROMPT_COMMAND='echo -ne "\033]0;${HOSTNAME}:${PWD}\007"'
 # PROMPT_COMMAND='echo -ne "\033]0;${HOSTNAME}:$(echo $PWD | tail -c 11)\007"'
