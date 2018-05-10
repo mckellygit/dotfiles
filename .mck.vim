@@ -189,6 +189,8 @@ let g:lightline = {
 function! MyLightlineMode()
   if &filetype ==# 'qf'
     return ''
+  elseif &buftype ==# 'terminal'
+    return ''
   elseif !&buflisted
     return ''
   else
@@ -201,7 +203,9 @@ function! MyLightlineGitbranch()
   if &filetype ==# 'qf'
     return ''
   elseif &diff
-    return "diff"
+    return 'diff'
+  elseif &buftype ==# 'terminal'
+    return 'term'
   elseif !&buflisted
     return ''
   else
@@ -222,6 +226,8 @@ endfunction
 function! MyLightlineFilename()
   if &filetype ==# 'qf'
     return 'qf'
+  elseif &buftype ==# 'terminal'
+    return ''
   elseif !&buflisted
     return 'ac'
   else
@@ -233,6 +239,8 @@ endfunction
 " no modified for qf
 function! MyLightlineModified()
   if &filetype ==# 'qf'
+    return ''
+  elseif &buftype ==# 'terminal'
     return ''
   elseif !&buflisted
     return ''
@@ -434,7 +442,8 @@ set mouse=a
 "set clipboard^=unnamedplus
 set clipboard^=unnamed,unnamedplus
 
-set timeoutlen=1000 ttimeoutlen=0
+"set timeoutlen=1000 ttimeoutlen=0
+set notimeout ttimeout timeoutlen=100
 
 " ctrl-c to yank selection into paste buffer/clipboard
 
@@ -1412,7 +1421,8 @@ set noshowmode
 :let g:netrw_dirhistmax = 0
 
 " spawn new shell
-noremap <silent> <Leader>zs :terminal ++close ++curwin<CR>
+noremap <silent> <Leader>zs :terminal ++close ++kill=term ++curwin<CR>
+noremap <silent> <Leader>zt :tabnew <Esc>:terminal ++close ++kill=term ++curwin<CR>
 
 " undo all changes - instead of just :e! ...
 "noremap <Leader>uu :earlier 999999<CR>:u<CR>
@@ -1466,6 +1476,8 @@ execute "set <M-,>=\e,"
 execute "set <M-;>=\e;"
 
 " Alt .(>)|' next tab
+tnoremap         <Esc>. <C-w>:tabnext<CR>
+tnoremap         <Esc>' <C-w>:tabnext<CR>
 nnoremap <silent> <M-.>      :tabnext<CR>
 vnoremap <silent> <M-.> <Esc>:tabnext<CR>
 inoremap <silent> <M-.> <Esc>:tabnext<CR>
@@ -1473,7 +1485,10 @@ nnoremap <silent> <M-'>      :tabnext<CR>
 vnoremap <silent> <M-'> <Esc>:tabnext<CR>
 inoremap <silent> <M-'> <Esc>:tabnext<CR>
 " Alt ,(<)|; prev tab
+tnoremap         <Esc>, <C-w>:tabprevious<CR>
+tnoremap         <Esc>; <C-w>:tabprevious<CR>
 nnoremap <silent> <M-,>      :tabprevious<CR>
+tnoremap          <M-,> <C-w>:tabprevious<CR>
 vnoremap <silent> <M-,> <Esc>:tabprevious<CR>
 inoremap <silent> <M-,> <Esc>:tabprevious<CR>
 nnoremap <silent> <M-;>      :tabprevious<CR>
