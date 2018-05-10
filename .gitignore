@@ -22,6 +22,7 @@
 **/testing/regress/run
 **/testing/regress/run_loop
 **/testing/regress/run_perf
+**/testing/regress/.eclcc
 GRTAGS
 GPATH
 GTAGS
