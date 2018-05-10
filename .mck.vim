@@ -1277,10 +1277,21 @@ function! s:QuitIfOnlyWindow() abort
     endif
 endfunction
 
+function! s:CloseAllTerminalsOnQuit() abort
+    for i in range(1, bufnr("$"))
+        let l:buftype = getbufvar(i, "&buftype")
+        if l:buftype ==# "terminal"
+            silent execute ":bw! " . i
+        endif
+    endfor
+    return
+endfunction
+
 " autoclose last open location/quickfix/help windows on a tab
 if has('autocmd')
     aug AutoCloseAllQF
         au!
+        autocmd QuitPre  *        call s:CloseAllTerminalsOnQuit()
         autocmd WinEnter * nested call s:QuitIfOnlyWindow()
     aug END
 endif
@@ -1476,24 +1487,23 @@ execute "set <M-,>=\e,"
 execute "set <M-;>=\e;"
 
 " Alt .(>)|' next tab
-tnoremap         <Esc>. <C-w>:tabnext<CR>
-tnoremap         <Esc>' <C-w>:tabnext<CR>
-nnoremap <silent> <M-.>      :tabnext<CR>
-vnoremap <silent> <M-.> <Esc>:tabnext<CR>
-inoremap <silent> <M-.> <Esc>:tabnext<CR>
-nnoremap <silent> <M-'>      :tabnext<CR>
-vnoremap <silent> <M-'> <Esc>:tabnext<CR>
-inoremap <silent> <M-'> <Esc>:tabnext<CR>
+tnoremap <silent> <Esc>. <C-w>:tabnext<CR>
+tnoremap <silent> <Esc>' <C-w>:tabnext<CR>
+nnoremap <silent> <M-.>       :tabnext<CR>
+vnoremap <silent> <M-.>  <Esc>:tabnext<CR>
+inoremap <silent> <M-.>  <Esc>:tabnext<CR>
+nnoremap <silent> <M-'>       :tabnext<CR>
+vnoremap <silent> <M-'>  <Esc>:tabnext<CR>
+inoremap <silent> <M-'>  <Esc>:tabnext<CR>
 " Alt ,(<)|; prev tab
-tnoremap         <Esc>, <C-w>:tabprevious<CR>
-tnoremap         <Esc>; <C-w>:tabprevious<CR>
-nnoremap <silent> <M-,>      :tabprevious<CR>
-tnoremap          <M-,> <C-w>:tabprevious<CR>
-vnoremap <silent> <M-,> <Esc>:tabprevious<CR>
-inoremap <silent> <M-,> <Esc>:tabprevious<CR>
-nnoremap <silent> <M-;>      :tabprevious<CR>
-vnoremap <silent> <M-;> <Esc>:tabprevious<CR>
-inoremap <silent> <M-;> <Esc>:tabprevious<CR>
+tnoremap <silent> <Esc>, <C-w>:tabprevious<CR>
+tnoremap <silent> <Esc>; <C-w>:tabprevious<CR>
+nnoremap <silent> <M-,>       :tabprevious<CR>
+vnoremap <silent> <M-,>  <Esc>:tabprevious<CR>
+inoremap <silent> <M-,>  <Esc>:tabprevious<CR>
+nnoremap <silent> <M-;>       :tabprevious<CR>
+vnoremap <silent> <M-;>  <Esc>:tabprevious<CR>
+inoremap <silent> <M-;>  <Esc>:tabprevious<CR>
 
 " -----------------------------
 
