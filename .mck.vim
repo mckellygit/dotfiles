@@ -1150,12 +1150,10 @@ endfunction
 au BufEnter * call MyWindow()
 function! MyWindow()
   " if the window is quickfix go on
-  if &buftype=="quickfix" || &buftype=="terminal"
+  if &buftype=="quickfix"
     " if this window is last on screen quit without warning
     if winnr('$') < 2
-      " use quit! to end any terminals
-      "quit
-      quit!
+      quit
     else
       " qf highlight on
       "hi QuickFixLine cterm=None ctermbg=60
