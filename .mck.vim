@@ -148,6 +148,12 @@ filetype plugin indent on " required
 "" Put your non-Plugin stuff after this line
 "" vundle ------------------------------
 
+function! s:LogIt(message)
+  silent execute '!echo "'
+        \ . strftime('%T', localtime()) . ' - ' . a:message . '"'
+        \ '>> /tmp/vimdbg.log'
+endfunction
+
 " ack ------------
 " use ag (silver-searcher) instead of ack
 if executable('ag')
@@ -365,6 +371,8 @@ endif
 "let g:solarized_termcolors=256
 "colorscheme solarized
 colorscheme deus
+
+set bufhidden=wipe
 
 "set ttyfast
 
@@ -1277,21 +1285,10 @@ function! s:QuitIfOnlyWindow() abort
     endif
 endfunction
 
-function! s:CloseAllTerminalsOnQuit() abort
-    for i in range(1, bufnr("$"))
-        let l:buftype = getbufvar(i, "&buftype")
-        if l:buftype ==# "terminal"
-            silent execute ":bw! " . i
-        endif
-    endfor
-    return
-endfunction
-
 " autoclose last open location/quickfix/help windows on a tab
 if has('autocmd')
     aug AutoCloseAllQF
         au!
-        autocmd QuitPre  *        call s:CloseAllTerminalsOnQuit()
         autocmd WinEnter * nested call s:QuitIfOnlyWindow()
     aug END
 endif
@@ -1336,6 +1333,7 @@ nnoremap <Leader>ax       :conf qa<cr>
 
 " :exit to quit all windows
 "cabbrev exit conf qa
+cnoreabbrev <expr> <silent> exi  (getcmdtype() == ':' && getcmdline() =~ '\s*exi\s*')  ? 'conf qa' : 'exi'
 cnoreabbrev <expr> <silent> exit (getcmdtype() == ':' && getcmdline() =~ '\s*exit\s*') ? 'conf qa' : 'exit'
 
 " vimdiff (also as a git difftool)
@@ -1504,14 +1502,6 @@ inoremap <silent> <M-,>  <Esc>:tabprevious<CR>
 nnoremap <silent> <M-;>       :tabprevious<CR>
 vnoremap <silent> <M-;>  <Esc>:tabprevious<CR>
 inoremap <silent> <M-;>  <Esc>:tabprevious<CR>
-
-" -----------------------------
-
-function! s:log(message)
-  silent execute '!echo "'
-        \ . strftime('%T', localtime()) . ' - ' . a:message . '"'
-        \ '>> /tmp/vim$$.log'
-endfunction
 
 " -----------------------------
 
