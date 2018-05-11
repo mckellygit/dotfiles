@@ -131,6 +131,9 @@ Plugin 'skywind3000/asyncrun.vim'
 " older plugin
 "Plugin 'vim-scripts/ifdef-highlighting'
 "
+" tab/buffer
+"Plugin 'ap/vim-buftabline'
+"
 "" All of your Plugins must be added before the following line
 call vundle#end()         " required
 filetype plugin indent on " required
@@ -1483,6 +1486,12 @@ execute "set <M-'>=\e'"
 
 execute "set <M-,>=\e,"
 execute "set <M-;>=\e;"
+
+function! s:TermQuit()
+  quit!
+endfunction
+
+tnoremap <silent> <C-d> <C-w>:call <SID>TermQuit()<CR>
 
 " Alt .(>)|' next tab
 tnoremap <silent> <Esc>. <C-w>:tabnext<CR>
