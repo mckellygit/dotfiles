@@ -1115,7 +1115,7 @@ noremap <silent> <Leader>cc :ccl\|lcl<CR>:echo<CR>
 
 " fswitch ---------------
 " Switch to the other .c*/.h* file in the current window >
-noremap <silent> <Leader>of :FSHere<cr>
+noremap <silent> <Leader>of :FSHere<CR>
 " do not create new files
 let fsnonewfiles=1
 " fswitch ---------------
@@ -1314,31 +1314,32 @@ noremap <C-e> $
 
 " close all windows and write then quit
 " no imap for this
-vnoremap <C-x>w     <Esc>:wqa<cr>
-nnoremap <C-x>w          :wqa<cr>
+vnoremap <C-x>w     <Esc>:wqa<CR>
+nnoremap <C-x>w          :wqa<CR>
 
-" does not seem to work
 " no imap for this
-"vnoremap <C-x><C-w> <Esc>:wqa<cr>
-"nnoremap <C-x><C-w>      :wqa<cr>
+vnoremap <C-x><C-w> <Esc>:wqa<CR>
+nnoremap <C-x><C-w>      :wqa<CR>
 
 " close all windows and confirm then quit
 " no imap for this
-vnoremap <C-x>c     <Esc>:conf qa<cr>
-nnoremap <C-x>c          :conf qa<cr>
+vnoremap <C-x>c     <Esc>:conf qa<CR>
+nnoremap <C-x>c          :conf qa<CR>
 
-" does not seem to work
+" need to remap <C-c> for this to work ...
+nnoremap <silent> <C-c> <Nop>
+" (<C-c> previously remapped in visual mode above)
 " no imap for this
-"vnoremap <C-x><C-c> <Esc>:conf qa<cr>
-"nnoremap <C-x><C-c>      :conf qa<cr>
-
-" no imap for this
-vnoremap <Leader>xc  <Esc>:conf qa<cr>
-nnoremap <Leader>xc       :conf qa<cr>
+vnoremap <C-x><C-c> <Esc>:conf qa<CR>
+nnoremap <C-x><C-c>      :conf qa<CR>
 
 " no imap for this
-vnoremap <Leader>ax  <Esc>:conf qa<cr>
-nnoremap <Leader>ax       :conf qa<cr>
+vnoremap <Leader>xc  <Esc>:conf qa<CR>
+nnoremap <Leader>xc       :conf qa<CR>
+
+" no imap for this
+vnoremap <Leader>ax  <Esc>:conf qa<CR>
+nnoremap <Leader>ax       :conf qa<CR>
 
 " :exit to quit all windows
 "cabbrev exit conf qa
@@ -1473,14 +1474,14 @@ noremap <Leader>cx :echo<CR>
 " tab open
 noremap <Leader>to :tabnew<CR>
 " tab close (same as window close)
-noremap <Leader>tc :conf q<cr>
+noremap <Leader>tc :conf q<CR>
 " tab keep current and close all others
-noremap <Leader>tk :tabonly<cr>
+noremap <Leader>tk :tabonly<CR>
 
 " window close (same as tab close)
-noremap <Leader>wc :conf q<cr>
+noremap <Leader>wc :conf q<CR>
 " window keep current and close all others
-noremap <Leader>wk :only<cr>
+noremap <Leader>wk :only<CR>
 
 " next tab
 noremap <Leader>tn :tabnext<CR>
