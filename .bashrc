@@ -64,18 +64,19 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 # change \w to ${PWD:(-11)} to prevent really long prompts ...
+# change \w to ${pwd2} to prevent really long prompts ...
 
 if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]${PWD:(-11)}\[\033[00m\]\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]${pwd2}\[\033[00m\]\$ '
 else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:${PWD:(-11)}\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:${pwd2}\$ '
 fi
 unset color_prompt force_color_prompt
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
 xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h:${PWD:(-11)}\a\]$PS1"
+    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h:${pwd2}\a\]$PS1"
     ;;
 *)
     ;;
@@ -109,7 +110,8 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # PROMPT_DIRTRIM=3
 # PROMPT_COMMAND='echo -ne "\033]0;${HOSTNAME}:${PWD}\007"'
 # PROMPT_COMMAND='echo -ne "\033]0;${HOSTNAME}:$(echo $PWD | tail -c 11)\007"'
-PROMPT_COMMAND='echo -ne "\033]0;${HOSTNAME}:${PWD:(-11)}\007"'
+# PROMPT_COMMAND='echo -ne "\033]0;${HOSTNAME}:${PWD:(-11)}\007"'
+PROMPT_COMMAND='pwd2=${PWD/#$HOME/\~}; if [ ${#pwd2} -gt 11 ] ; then pwd2=..${pwd2:(-10)} ; fi ; echo -ne "\033]0;${HOSTNAME}:${pwd2}\007"'
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like
