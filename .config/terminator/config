@@ -30,7 +30,8 @@
 [profiles]
   [[default]]
     antialias = True
-    background_color = "#2e2e2e"
+#   background_color = "#2e2e2e"
+    background_color = "#252525"
     background_darkness = 0.96
     background_image = None
     background_type = transparent
@@ -38,7 +39,8 @@
     cursor_color = "#73684C"
     font = Liberation Mono 11
 #   foreground_color = "#fba61b"
-    foreground_color = "#fbb51b"
+#   foreground_color = "#fbb51b"
+    foreground_color = "#ffc6a1"
     palette = "#000000:#cc0000:#4e9a06:#c4a000:#3465a4:#75507b:#06989a:#d3d7cf:#555753:#ef2929:#8ae234:#fce94f:#729fcf:#ad7fa8:#34e2e2:#eeeeec"
     scroll_on_output = False
     scrollback_lines = 8000
