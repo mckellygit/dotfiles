@@ -375,7 +375,9 @@ endif
 "colorscheme solarized
 colorscheme deus
 
-set bufhidden=wipe
+" do not use delete/wipe with qf/ll ...
+set hidden
+set bufhidden=hide
 
 "set ttyfast
 
