@@ -454,7 +454,9 @@ set mouse=a
 set clipboard^=unnamed,unnamedplus
 
 "set timeoutlen=1000 ttimeoutlen=0
-set notimeout ttimeout timeoutlen=100
+"set notimeout ttimeout timeoutlen=100
+set timeout timeoutlen=500
+set ttimeout ttimeoutlen=500
 
 " ctrl-c to yank selection into paste buffer/clipboard
 
@@ -1313,18 +1315,20 @@ noremap <C-e> $
 vnoremap <C-x>w     <Esc>:wqa<cr>
 nnoremap <C-x>w          :wqa<cr>
 
+" does not seem to work
 " no imap for this
-vnoremap <C-x><C-w> <Esc>:wqa<cr>
-nnoremap <C-x><C-w>      :wqa<cr>
+"vnoremap <C-x><C-w> <Esc>:wqa<cr>
+"nnoremap <C-x><C-w>      :wqa<cr>
 
 " close all windows and confirm then quit
 " no imap for this
 vnoremap <C-x>c     <Esc>:conf qa<cr>
 nnoremap <C-x>c          :conf qa<cr>
 
+" does not seem to work
 " no imap for this
-vnoremap <C-x><C-c> <Esc>:conf qa<cr>
-nnoremap <C-x><C-c>      :conf qa<cr>
+"vnoremap <C-x><C-c> <Esc>:conf qa<cr>
+"nnoremap <C-x><C-c>      :conf qa<cr>
 
 " no imap for this
 vnoremap <Leader>xc  <Esc>:conf qa<cr>
