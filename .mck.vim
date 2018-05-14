@@ -1327,7 +1327,7 @@ vnoremap <C-x>c     <Esc>:conf qa<CR>
 nnoremap <C-x>c          :conf qa<CR>
 
 " need to remap <C-c> for this to work ...
-nnoremap <silent> <C-c> <Nop>
+nnoremap <C-c> <C-c>
 " (<C-c> previously remapped in visual mode above)
 " no imap for this
 vnoremap <C-x><C-c> <Esc>:conf qa<CR>
