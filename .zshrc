@@ -103,10 +103,10 @@ autoload -U colors && colors
 
 #PS1='%n@%m:%12<..<%~%<<%% '
 #PS1="%{$fg[green]%}%n@%m%{$reset_color%}:%{$fg[yellow]%}%12<..<%~%<<%{$reset_color%}%% "
- PS1="%F{012}%n@%m%{$reset_color%}:%F{214}%12<..<%~%<<%{$reset_color%}%% "
+ PS1="%F{100}%n@%m%{$reset_color%}:%F{150}%12<..<%~%<<%{$reset_color%}%% "
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] ; then
 #   PS1="%{$fg[red]%}ssh%{$reset_color%}-%{$fg[green]%}%n@%m%{$reset_color%}:%{$fg[yellow]%}%12<..<%~%<<%{$reset_color%}%% "
-    PS1="%F{001}ssh%{$reset_color%}-%F{012}%n@%m%{$reset_color%}:%F{214}%12<..<%~%<<%{$reset_color%}%% "
+    PS1="%F{007}ssh%{$reset_color%}-%F{100}%n@%m%{$reset_color%}:%F{150}%12<..<%~%<<%{$reset_color%}%% "
 fi
 
 export MANPATH=${MANPATH}:/usr/share/bcc/man
