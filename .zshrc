@@ -51,6 +51,10 @@ bindkey '^e' end-of-line
 bindkey -M menuselect '^[[Z' reverse-menu-complete
 bindkey '^I' expand-or-complete-prefix
 
+# prompt styles (prompt -l to list) ...
+# autoload -U promptinit && promptinit
+
+# ctrl-d ...
 # set -o ignoreeof
 
 export KEYTIMEOUT=3
@@ -93,9 +97,14 @@ export PATH
 function collapse_pwd {
     echo $(pwd | sed -e "s,^$HOME,~,")
 }
-PS1='%n@%m:%12<..<%~%<<%% '
+
+# needed for prompt colors ...
+autoload -U colors && colors
+
+#PS1='%n@%m:%12<..<%~%<<%% '
+PS1="%{$fg[green]%}%n@%m%{$reset_color%}:%{$fg[yellow]%}%12<..<%~%<<%{$reset_color%}%% "
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] ; then
-    PS1='ssh-%n@%m:%12<..<%~%<<%% '
+    PS1="%{$fg[red]%}ssh%{$reset_color%}-%{$fg[green]%}%n@%m%{$reset_color%}:%{$fg[yellow]%}%12<..<%~%<<%{$reset_color%}%% "
 fi
 
 export MANPATH=${MANPATH}:/usr/share/bcc/man
