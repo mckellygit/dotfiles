@@ -13,7 +13,7 @@ if [ $rc -ne 0 ] ; then
     exit
 else
     tag=$$
-    trap "rm -f /tmp/${tag}.start.*" SIGINT SIGTERM SIGQUIT
+    trap "rm -f /tmp/${tag}.start.* 2>/dev/null; exit" SIGINT SIGTERM SIGQUIT
    
     sudo /etc/init.d/hpcc-init -c mydali start
   

@@ -57,7 +57,7 @@ if [ $rc0 -eq 0 ] ; then
         exit
     else
         tag=$$
-        trap "rm -f /tmp/${tag}.stop.*" SIGINT SIGTERM SIGQUIT
+        trap "rm -f /tmp/${tag}.stop.* 2>/dev/null; exit" SIGINT SIGTERM SIGQUIT
         if [ $rc -eq 0 ] ; then
             for comp in mythor mysasha myroxie myesp myeclscheduler myeclccserver myeclagent mydfuserver
             do
