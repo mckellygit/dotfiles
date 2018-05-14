@@ -1439,9 +1439,17 @@ set noshowmode
 " dont save to ~/.vim/.netrwhist
 :let g:netrw_dirhistmax = 0
 
-" spawn new shell
-noremap <silent> <Leader>zs :terminal ++close ++kill=term ++curwin<CR>
-noremap <silent> <Leader>zt :tabnew <Esc>:terminal ++close ++kill=term ++curwin<CR>
+" -----------
+
+" terminal in cur tab
+noremap <silent> <Leader>zs :terminal ++close ++norestore ++kill=term ++curwin<CR>
+" terminal in new tab
+noremap <silent> <Leader>zt :tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR>
+" <C-w><N> or <C-\><C-n> to get into normal mode
+" a or i get back into terminal mode
+nnoremap <expr> <silent> <C-\><C-n> (&buftype == 'terminal') ? 'i' : '\<Nop>'
+
+" -----------
 
 " undo all changes - instead of just :e! ...
 "noremap <Leader>uu :earlier 999999<CR>:u<CR>
