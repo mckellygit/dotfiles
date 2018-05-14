@@ -1447,7 +1447,7 @@ noremap <silent> <Leader>zs :terminal ++close ++norestore ++kill=term ++curwin<C
 noremap <silent> <Leader>zt :tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR>
 " <C-w><N> or <C-\><C-n> to get into normal mode
 " a or i get back into terminal mode
-nnoremap <expr> <silent> <C-\><C-n> (&buftype == 'terminal') ? 'i' : '\<Nop>'
+nnoremap <expr> <silent> <C-\><C-n> (&buftype == 'terminal') ? 'i' : '<C-\><C-n>'
 
 " -----------
 
