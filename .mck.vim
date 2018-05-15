@@ -457,8 +457,8 @@ set clipboard^=unnamed,unnamedplus
 
 "set timeoutlen=1000 ttimeoutlen=0
 "set notimeout ttimeout timeoutlen=100
-set timeout timeoutlen=500
-set ttimeout ttimeoutlen=500
+set timeout timeoutlen=700
+set ttimeout ttimeoutlen=700
 
 " ctrl-c to yank selection into paste buffer/clipboard
 
@@ -1312,39 +1312,75 @@ noremap <C-a> 0
 " (but its been remapped to <C-j>)
 noremap <C-e> $
 
+function! s:EndTerminalsThenQuit(cmd) abort
+    for i in range(1, bufnr('$'))
+        if buflisted(i) && getbufvar(i, '&buftype') ==# 'terminal'
+            execute "silent! :bwipe! " . i
+        endif
+    endfor
+    if maparg('qa', 'c', 1) != ''
+        execute "silent! :cuna qa"
+    endif
+    if maparg('wqa', 'c', 1) != ''
+        execute "silent! :cuna wqa"
+    endif
+    execute a:cmd
+endfunction
+
+function! s:EndTerminalsThenQA() abort
+    for i in range(1, bufnr('$'))
+        if getbufvar(i, '&buftype') ==# 'terminal'
+            execute "silent! bwipe! " . i
+        endif
+    endfor
+    if maparg('qa', 'c', 1) != ''
+        execute "silent! cuna qa"
+    endif
+    if maparg('wqa', 'c', 1) != ''
+        execute "silent! cuna wqa"
+    endif
+    execute "conf qa"
+endfunction
+
 " close all windows and write then quit
 " no imap for this
-vnoremap <C-x>w     <Esc>:wqa<CR>
-nnoremap <C-x>w          :wqa<CR>
+vnoremap <C-x>w     <Esc>:call <SID>EndTerminalsThenQuit(":wqa")<CR>
+nnoremap <C-x>w          :call <SID>EndTerminalsThenQuit(":wqa")<CR>
 
 " no imap for this
-vnoremap <C-x><C-w> <Esc>:wqa<CR>
-nnoremap <C-x><C-w>      :wqa<CR>
+vnoremap <C-x><C-w> <Esc>:call <SID>EndTerminalsThenQuit(":wqa")<CR>
+nnoremap <C-x><C-w>      :call <SID>EndTerminalsThenQuit(":wqa")<CR>
 
 " close all windows and confirm then quit
 " no imap for this
-vnoremap <C-x>c     <Esc>:conf qa<CR>
-nnoremap <C-x>c          :conf qa<CR>
+vnoremap <C-x>c     <Esc>:call <SID>EndTerminalsThenQuit(":conf qa")<CR>
+nnoremap <C-x>c          :call <SID>EndTerminalsThenQuit(":conf qa")<CR>
 
 " need to remap <C-c> for this to work ...
 nnoremap <C-c> <C-c>
 " (<C-c> previously remapped in visual mode above)
 " no imap for this
-vnoremap <C-x><C-c> <Esc>:conf qa<CR>
-nnoremap <C-x><C-c>      :conf qa<CR>
+vnoremap <C-x><C-c> <Esc>:call <SID>EndTerminalsThenQuit(":conf qa")<CR>
+nnoremap <C-x><C-c>      :call <SID>EndTerminalsThenQuit(":conf qa")<CR>
 
 " no imap for this
-vnoremap <Leader>xc  <Esc>:conf qa<CR>
-nnoremap <Leader>xc       :conf qa<CR>
+vnoremap <Leader>xc  <Esc>:call <SID>EndTerminalsThenQuit(":conf qa")<CR>
+nnoremap <Leader>xc       :call <SID>EndTerminalsThenQuit(":conf qa")<CR>
 
 " no imap for this
-vnoremap <Leader>ax  <Esc>:conf qa<CR>
-nnoremap <Leader>ax       :conf qa<CR>
+vnoremap <Leader>ax  <Esc>:call <SID>EndTerminalsThenQuit(":conf qa")<CR>
+nnoremap <Leader>ax       :call <SID>EndTerminalsThenQuit(":conf qa")<CR>
 
 " :exit to quit all windows
 "cabbrev exit conf qa
-cnoreabbrev <expr> <silent> exi  (getcmdtype() == ':' && getcmdline() =~ '\s*exi\s*')  ? 'conf qa' : 'exi'
-cnoreabbrev <expr> <silent> exit (getcmdtype() == ':' && getcmdline() =~ '\s*exit\s*') ? 'conf qa' : 'exit'
+cnoreabbrev <expr> <silent> exi (getcmdtype() == ':' && getcmdline() =~ '\s*exi\s*')  ? ':call <SID>EndTerminalsThenQA()' : 'exi'
+cnoreabbrev <expr> <silent> exit (getcmdtype() == ':' && getcmdline() =~ '\s*exit\s*') ? ':call <SID>EndTerminalsThenQA()' : 'exit'
+cnoreabbrev <expr> <silent> qa (getcmdtype() == ':' && getcmdline() =~ '\s*qa\s*')  ? ':call <SID>EndTerminalsThenQA()' : 'qa'
+cnoreabbrev <expr> <silent> qal (getcmdtype() == ':' && getcmdline() =~ '\s*qal\s*')  ? ':call <SID>EndTerminalsThenQA()' : 'qal '
+cnoreabbrev <expr> <silent> qall (getcmdtype() == ':' && getcmdline() =~ '\s*qall\s*')  ? ':call <SID>EndTerminalsThenQA()' : 'qall'
+cnoreabbrev <expr> <silent> quita (getcmdtype() == ':' && getcmdline() =~ '\s*quita\s*')  ? ':call <SID>EndTerminalsThenQA()' : 'quita'
+cnoreabbrev <expr> <silent> quital (getcmdtype() == ':' && getcmdline() =~ '\s*quital\s*')  ? ':call <SID>EndTerminalsThenQA()' : 'quital'
+cnoreabbrev <expr> <silent> quitall (getcmdtype() == ':' && getcmdline() =~ '\s*quitall\s*')  ? ':call <SID>EndTerminalsThenQA()' : 'quitall'
 
 " vimdiff (also as a git difftool)
 "  git config --global diff.tool vimdiff
@@ -1444,6 +1480,7 @@ set noshowmode
 " terminal in cur tab
 noremap <silent> <Leader>zs :terminal ++close ++norestore ++kill=term ++curwin<CR>
 " terminal in new tab
+noremap <silent> zt <Nop>
 noremap <silent> <Leader>zt :tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR>
 " <C-w><N> or <C-\><C-n> to get into normal mode
 " a or i get back into terminal mode
@@ -1503,7 +1540,7 @@ execute "set <M-,>=\e,"
 execute "set <M-;>=\e;"
 
 function! s:TermQuit()
-  quit!
+  bwipe!
 endfunction
 
 tnoremap <silent> <C-d> <C-w>:call <SID>TermQuit()<CR>
