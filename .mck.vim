@@ -1202,13 +1202,7 @@ hi cursorline cterm=None ctermbg=239
 
 " -----------------------------
 
-if 0 " quickfix quit/close
-
-" :q in qf to also quit
-"autocmd BufReadPost quickfix cmap    <silent> <buffer> q<CR> conf qa<CR>
-"autocmd BufReadPost quickfix cabbrev          <buffer> q conf qa
-
-else " quickfix quit/close
+if 1 " quickfix quit/close
 
 " quit Vim if only quickfix or preview/help windows remain
 " (this is prob not needed if autocomplete window is closed
@@ -1312,75 +1306,96 @@ noremap <C-a> 0
 " (but its been remapped to <C-j>)
 noremap <C-e> $
 
-function! s:EndTerminalsThenQuit(cmd) abort
+function! s:SkipTerminalsQuit(cmd) abort
+    if a:cmd ==# ':wqa'
+        let ncmd = ':wq'
+    elseif a:cmd ==# ':qa'
+        let ncmd = ':q'
+    elseif a:cmd ==# ':conf qa'
+        let ncmd = ':conf q'
+    endif
+    let e1 = 1
     for i in range(1, bufnr('$'))
-        if buflisted(i) && getbufvar(i, '&buftype') ==# 'terminal'
-            execute "silent! :bwipe! " . i
+        if buflisted(i)
+            if getbufvar(i, '&buftype') !=# 'terminal'
+                execute "silent! " . ncmd
+            else
+                let e1 = 0
+            endif
         endif
     endfor
-    if maparg('qa', 'c', 1) != ''
-        execute "silent! :cuna qa"
+    if e1 ==# 1
+        quit!
     endif
-    if maparg('wqa', 'c', 1) != ''
-        execute "silent! :cuna wqa"
-    endif
-    execute a:cmd
 endfunction
 
-function! s:EndTerminalsThenQA() abort
+function! s:SkipTerminalsQ2() abort
+    let e1 = 1
     for i in range(1, bufnr('$'))
-        if getbufvar(i, '&buftype') ==# 'terminal'
-            execute "silent! bwipe! " . i
+        if buflisted(i)
+            if getbufvar(i, '&buftype') !=# 'terminal'
+                execute "silent! " . "conf q"
+            else
+                let e1 = 0
+            endif
         endif
     endfor
-    if maparg('qa', 'c', 1) != ''
-        execute "silent! cuna qa"
+    if e1 ==# 1
+        quit!
     endif
-    if maparg('wqa', 'c', 1) != ''
-        execute "silent! cuna wqa"
-    endif
-    execute "conf qa"
+endfunction
+
+function! s:EndTerminalsQA() abort
+    for i in range(1, bufnr('$'))
+        if buflisted(i)
+            if getbufvar(i, '&buftype') ==# 'terminal'
+                execute "silent! bwipe! " . i
+            endif
+        endif
+    endfor
+    call <SID>SkipTerminalsQ2()
+    quit
 endfunction
 
 " close all windows and write then quit
 " no imap for this
-vnoremap <C-x>w     <Esc>:call <SID>EndTerminalsThenQuit(":wqa")<CR>
-nnoremap <C-x>w          :call <SID>EndTerminalsThenQuit(":wqa")<CR>
+vnoremap <C-x>w     <Esc>:call <SID>SkipTerminalsQuit(":wqa")<CR>
+nnoremap <C-x>w          :call <SID>SkipTerminalsQuit(":wqa")<CR>
 
 " no imap for this
-vnoremap <C-x><C-w> <Esc>:call <SID>EndTerminalsThenQuit(":wqa")<CR>
-nnoremap <C-x><C-w>      :call <SID>EndTerminalsThenQuit(":wqa")<CR>
+vnoremap <C-x><C-w> <Esc>:call <SID>SkipTerminalsQuit(":wqa")<CR>
+nnoremap <C-x><C-w>      :call <SID>SkipTerminalsQuit(":wqa")<CR>
 
 " close all windows and confirm then quit
 " no imap for this
-vnoremap <C-x>c     <Esc>:call <SID>EndTerminalsThenQuit(":conf qa")<CR>
-nnoremap <C-x>c          :call <SID>EndTerminalsThenQuit(":conf qa")<CR>
+vnoremap <C-x>c     <Esc>:call <SID>SkipTerminalsQuit(":conf qa")<CR>
+nnoremap <C-x>c          :call <SID>SkipTerminalsQuit(":conf qa")<CR>
 
 " need to remap <C-c> for this to work ...
 nnoremap <C-c> <C-c>
 " (<C-c> previously remapped in visual mode above)
 " no imap for this
-vnoremap <C-x><C-c> <Esc>:call <SID>EndTerminalsThenQuit(":conf qa")<CR>
-nnoremap <C-x><C-c>      :call <SID>EndTerminalsThenQuit(":conf qa")<CR>
+vnoremap <C-x><C-c> <Esc>:call <SID>SkipTerminalsQuit(":conf qa")<CR>
+nnoremap <C-x><C-c>      :call <SID>SkipTerminalsQuit(":conf qa")<CR>
 
 " no imap for this
-vnoremap <Leader>xc  <Esc>:call <SID>EndTerminalsThenQuit(":conf qa")<CR>
-nnoremap <Leader>xc       :call <SID>EndTerminalsThenQuit(":conf qa")<CR>
+vnoremap <Leader>xc  <Esc>:call <SID>SkipTerminalsQuit(":conf qa")<CR>
+nnoremap <Leader>xc       :call <SID>SkipTerminalsQuit(":conf qa")<CR>
 
 " no imap for this
-vnoremap <Leader>ax  <Esc>:call <SID>EndTerminalsThenQuit(":conf qa")<CR>
-nnoremap <Leader>ax       :call <SID>EndTerminalsThenQuit(":conf qa")<CR>
+vnoremap <Leader>ax  <Esc>:call <SID>SkipTerminalsQuit(":conf qa")<CR>
+nnoremap <Leader>ax       :call <SID>SkipTerminalsQuit(":conf qa")<CR>
 
 " :exit to quit all windows
 "cabbrev exit conf qa
-cnoreabbrev <expr> <silent> exi (getcmdtype() == ':' && getcmdline() =~ '\s*exi\s*')  ? ':call <SID>EndTerminalsThenQA()' : 'exi'
-cnoreabbrev <expr> <silent> exit (getcmdtype() == ':' && getcmdline() =~ '\s*exit\s*') ? ':call <SID>EndTerminalsThenQA()' : 'exit'
-cnoreabbrev <expr> <silent> qa (getcmdtype() == ':' && getcmdline() =~ '\s*qa\s*')  ? ':call <SID>EndTerminalsThenQA()' : 'qa'
-cnoreabbrev <expr> <silent> qal (getcmdtype() == ':' && getcmdline() =~ '\s*qal\s*')  ? ':call <SID>EndTerminalsThenQA()' : 'qal '
-cnoreabbrev <expr> <silent> qall (getcmdtype() == ':' && getcmdline() =~ '\s*qall\s*')  ? ':call <SID>EndTerminalsThenQA()' : 'qall'
-cnoreabbrev <expr> <silent> quita (getcmdtype() == ':' && getcmdline() =~ '\s*quita\s*')  ? ':call <SID>EndTerminalsThenQA()' : 'quita'
-cnoreabbrev <expr> <silent> quital (getcmdtype() == ':' && getcmdline() =~ '\s*quital\s*')  ? ':call <SID>EndTerminalsThenQA()' : 'quital'
-cnoreabbrev <expr> <silent> quitall (getcmdtype() == ':' && getcmdline() =~ '\s*quitall\s*')  ? ':call <SID>EndTerminalsThenQA()' : 'quitall'
+cnoreabbrev <expr> <silent> exi (getcmdtype() == ':' && getcmdline() =~ '\s*exi\s*')  ? ':call <SID>EndTerminalsQA()' : 'exi'
+cnoreabbrev <expr> <silent> exit (getcmdtype() == ':' && getcmdline() =~ '\s*exit\s*') ? ':call <SID>EndTerminalsQA()' : 'exit'
+cnoreabbrev <expr> <silent> qa (getcmdtype() == ':' && getcmdline() =~ '\s*qa\s*')  ? ':call <SID>SkipTerminalsQ2()' : 'qa'
+cnoreabbrev <expr> <silent> qal (getcmdtype() == ':' && getcmdline() =~ '\s*qal\s*')  ? ':call <SID>SkipTerminalsQ2()' : 'qal '
+cnoreabbrev <expr> <silent> qall (getcmdtype() == ':' && getcmdline() =~ '\s*qall\s*')  ? ':call <SID>SkipTerminalsQ2()' : 'qall'
+cnoreabbrev <expr> <silent> quita (getcmdtype() == ':' && getcmdline() =~ '\s*quita\s*')  ? ':call <SID>SkipTerminalsQ2()' : 'quita'
+cnoreabbrev <expr> <silent> quital (getcmdtype() == ':' && getcmdline() =~ '\s*quital\s*')  ? ':call <SID>SkipTerminalsQ2()' : 'quital'
+cnoreabbrev <expr> <silent> quitall (getcmdtype() == ':' && getcmdline() =~ '\s*quitall\s*')  ? ':call <SID>SkipTerminalsQ2()' : 'quitall'
 
 " vimdiff (also as a git difftool)
 "  git config --global diff.tool vimdiff
@@ -1444,6 +1459,9 @@ if &diff
   "cnoreabbrev next qa
   cnoreabbrev <expr> <silent> next (getcmdtype() == ':' && getcmdline() =~ '\s*next\s*') ? 'qa' : 'next'
   "cnoreabbrev exit cquit
+  cuna exi
+  cnoreabbrev <expr> <silent> exi (getcmdtype() == ':' && getcmdline() =~ '\s*exi\s*') ? 'cquit' : 'exi'
+  cuna exit
   cnoreabbrev <expr> <silent> exit (getcmdtype() == ':' && getcmdline() =~ '\s*exit\s*') ? 'cquit' : 'exit'
   " -----------
   " if no mods, then :x is like :q ...
@@ -1540,7 +1558,20 @@ execute "set <M-,>=\e,"
 execute "set <M-;>=\e;"
 
 function! s:TermQuit()
-  bwipe!
+    let okwin = 0
+    for i in range(1, bufnr('$'))
+        if buflisted(i)
+            if getbufvar(i, '&buftype') ==# 'terminal'
+                let okwin = 1
+            elseif bufnr("%") !=# i
+                let okwin = 1
+            endif
+        endif
+    endfor
+    bwipe!
+    if okwin ==# 0
+        quit!
+    endif
 endfunction
 
 tnoremap <silent> <C-d> <C-w>:call <SID>TermQuit()<CR>
