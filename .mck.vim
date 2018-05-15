@@ -156,6 +156,9 @@ function! s:LogIt(message)
         \ . strftime('%T', localtime()) . ' - ' . a:message . '"'
         \ '>> /tmp/vimdbg.log'
 endfunction
+" example:
+"   let msg = 'buf ' . i
+"   call <SID>LogIt(msg)
 
 " ack ------------
 " use ag (silver-searcher) instead of ack
@@ -1314,40 +1317,40 @@ function! s:SkipTerminalsQuit(cmd) abort
     elseif a:cmd ==# ':conf qa'
         let ncmd = ':conf q'
     endif
-    let e1 = 1
+    let l:doquit = 1
     for i in range(1, bufnr('$'))
-        if buflisted(i)
+        if bufexists(i) && buflisted(i)
             if getbufvar(i, '&buftype') !=# 'terminal'
                 execute "silent! " . ncmd
             else
-                let e1 = 0
+                let l:doquit = 0
             endif
         endif
     endfor
-    if e1 ==# 1
+    if l:doquit ==# 1
         quit!
     endif
 endfunction
 
 function! s:SkipTerminalsQ2() abort
-    let e1 = 1
+    let l:doquit = 1
     for i in range(1, bufnr('$'))
-        if buflisted(i)
+        if bufexists(i) && buflisted(i)
             if getbufvar(i, '&buftype') !=# 'terminal'
                 execute "silent! " . "conf q"
             else
-                let e1 = 0
+                let l:doquit = 0
             endif
         endif
     endfor
-    if e1 ==# 1
+    if l:doquit ==# 1
         quit!
     endif
 endfunction
 
 function! s:EndTerminalsQA() abort
     for i in range(1, bufnr('$'))
-        if buflisted(i)
+        if bufexists(i) && buflisted(i)
             if getbufvar(i, '&buftype') ==# 'terminal'
                 execute "silent! bwipe! " . i
             endif
@@ -1504,6 +1507,8 @@ noremap <silent> <Leader>zt :tabnew <Esc>:terminal ++close ++norestore ++kill=te
 " a or i get back into terminal mode
 nnoremap <expr> <silent> <C-\><C-n> (&buftype == 'terminal') ? 'i' : '<C-\><C-n>'
 
+au BufWinEnter * if &buftype == 'terminal' | call GitGutterSignsDisable() | endif
+
 " -----------
 
 " undo all changes - instead of just :e! ...
@@ -1558,18 +1563,23 @@ execute "set <M-,>=\e,"
 execute "set <M-;>=\e;"
 
 function! s:TermQuit()
-    bwipe!
-    let okwin = 0
+    let skipquit = 0
     for i in range(1, bufnr('$'))
-        if buflisted(i)
-            if getbufvar(i, '&buftype') ==# 'terminal'
-                let okwin = 1
-            elseif bufnr("%") !=# i
-                let okwin = 1
+        if bufexists(i) && buflisted(i)
+            if bufnr("%") !=# i
+                " if not curr buffer
+                if getbufvar(i, '&buftype') ==# 'terminal'
+                    " other terminal(s)
+                    let skipquit = 1
+                elseif bufwinnr(i) !=# -1
+                    " not hidden buffers
+                    let skipquit = 1
+                endif
             endif
         endif
     endfor
-    if okwin ==# 0
+    bwipe!
+    if skipquit ==# 0
         quit!
     endif
 endfunction
