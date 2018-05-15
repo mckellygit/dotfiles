@@ -1320,7 +1320,7 @@ function! s:SkipTerminalsQuitCmd(cmd) abort
                 else
                     if l:bmod ==# 0
                         echo "buffer: " . b.bufnr . " modified"
-                        lt l:bmod = 1
+                        let l:bmod = 1
                     endif
                     let l:doquit = 0
                 endif
@@ -1347,7 +1347,7 @@ function! s:SkipTerminalsConfQA() abort
                 else
                     if l:bmod ==# 0
                         echo "buffer: " . b.bufnr . " modified"
-                        lt l:bmod = 1
+                        let l:bmod = 1
                     endif
                     let l:doquit = 0
                 endif
