@@ -1310,20 +1310,22 @@ noremap <C-a> 0
 noremap <C-e> $
 
 function! s:SkipTerminalsQuitCmd(cmd) abort
+    let l:bmod = 0
     let l:doquit = 1
-    for b in range(1, bufnr('$'))
-        if bufexists(b) && buflisted(b)
-            if getbufvar(b, '&buftype') !=# 'terminal'
-                if getbufvar(b, '&mod') ==# 0
-                    execute "silent! :bd " . b
+    for b in getbufinfo()
+        if b.listed
+            if getbufvar(b.bufnr, '&buftype') !=# 'terminal'
+                if !b.changed
+                    execute "silent! :bd " . b.bufnr
                 else
-                    echo "buffer: " . b . " modified"
+                    if l:bmod ==# 0
+                        echo "buffer: " . b.bufnr . " modified"
+                        lt l:bmod = 1
+                    endif
                     let l:doquit = 0
-                    break
                 endif
             else
                 let l:doquit = 0
-                break
             endif
         endif
     endfor
@@ -1335,20 +1337,22 @@ function! s:SkipTerminalsQuitCmd(cmd) abort
 endfunction
 
 function! s:SkipTerminalsConfQA() abort
+    let l:bmod = 0
     let l:doquit = 1
-    for b in range(1, bufnr('$'))
-        if bufexists(b) && buflisted(b)
-            if getbufvar(b, '&buftype') !=# 'terminal'
-                if getbufvar(b, '&mod') ==# 0
-                    execute "silent! :bd " . b
+    for b in getbufinfo()
+        if b.listed
+            if getbufvar(b.bufnr, '&buftype') !=# 'terminal'
+                if !b.changed
+                    execute "silent! :bd " . b.bufnr
                 else
-                    echo "buffer: " . b . " modified"
+                    if l:bmod ==# 0
+                        echo "buffer: " . b.bufnr . " modified"
+                        lt l:bmod = 1
+                    endif
                     let l:doquit = 0
-                    break
                 endif
             else
                 let l:doquit = 0
-                break
             endif
         endif
     endfor
