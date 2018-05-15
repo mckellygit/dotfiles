@@ -1558,6 +1558,7 @@ execute "set <M-,>=\e,"
 execute "set <M-;>=\e;"
 
 function! s:TermQuit()
+    bwipe!
     let okwin = 0
     for i in range(1, bufnr('$'))
         if buflisted(i)
@@ -1568,7 +1569,6 @@ function! s:TermQuit()
             endif
         endif
     endfor
-    bwipe!
     if okwin ==# 0
         quit!
     endif
