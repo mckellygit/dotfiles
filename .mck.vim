@@ -1517,7 +1517,7 @@ noremap <silent> <Leader>zt :tabnew <Esc>:terminal ++close ++norestore ++kill=te
 " a or i get back into terminal mode
 nnoremap <expr> <silent> <C-\><C-n> (&buftype == 'terminal') ? 'i' : '<C-\><C-n>'
 
-au BufWinEnter * if &buftype == 'terminal' | set signcolumn=no | endif
+au TerminalOpen * set signcolumn=no
 
 " -----------
 
