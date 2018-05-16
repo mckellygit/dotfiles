@@ -382,6 +382,8 @@ colorscheme deus
 set hidden
 set bufhidden=hide
 
+set confirm
+
 "set ttyfast
 
 "set iskeyword for word separators ...
