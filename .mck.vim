@@ -888,15 +888,15 @@ if has("autocmd")
 
   " Enable editing of gzipped files
   " set binary mode before reading the file
-  autocmd BufReadPre,FileReadPre	*.gz,*.bz2 set bin
-  autocmd BufReadPost,FileReadPost	*.gz call GZIP_read("gunzip")
-  autocmd BufReadPost,FileReadPost	*.bz2 call GZIP_read("bunzip2")
-  autocmd BufWritePost,FileWritePost	*.gz call GZIP_write("gzip")
-  autocmd BufWritePost,FileWritePost	*.bz2 call GZIP_write("bzip2")
-  autocmd FileAppendPre			*.gz call GZIP_appre("gunzip")
-  autocmd FileAppendPre			*.bz2 call GZIP_appre("bunzip2")
-  autocmd FileAppendPost		*.gz call GZIP_write("gzip")
-  autocmd FileAppendPost		*.bz2 call GZIP_write("bzip2")
+  autocmd BufReadPre,FileReadPre   *.gz,*.bz2 set bin
+  autocmd BufReadPost,FileReadPost *.gz call GZIP_read("gunzip")
+  autocmd BufReadPost,FileReadPost *.bz2 call GZIP_read("bunzip2")
+  autocmd BufWritePost,FileWritePost *.gz call GZIP_write("gzip")
+  autocmd BufWritePost,FileWritePost *.bz2 call GZIP_write("bzip2")
+  autocmd FileAppendPre  *.gz call GZIP_appre("gunzip")
+  autocmd FileAppendPre  *.bz2 call GZIP_appre("bunzip2")
+  autocmd FileAppendPost *.gz call GZIP_write("gzip")
+  autocmd FileAppendPost *.bz2 call GZIP_write("bzip2")
 
   " After reading compressed file: Uncompress text in buffer with "cmd"
   fun! GZIP_read(cmd)
