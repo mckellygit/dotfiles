@@ -1,5 +1,6 @@
 -I.
 -I../build
+-I../buildln
 -Icommon/deftype
 -Icommon/dllserver
 -Icommon/environment
