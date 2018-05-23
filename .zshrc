@@ -138,10 +138,10 @@ alias Qt='~/qtcreator-3.5.1/bin/qtcreator &|'
 # add --shell.prompt=<cluster-name> to get prompt label ...
 alias radssh='python -m radssh.shell $@'
 
-alias thor_regression='./ecl-test run --target thor -e=embedded,3rdparty'
+alias thor_regression='./ecl-test run --timeout -1 --target thor -e=embedded,3rdparty'
 alias hthor_regression='./ecl-test run --target hthor -e=embedded,3rdparty'
 alias roxie_regression='./ecl-test run --target roxie -e=embedded,3rdparty'
-alias hpcc_regression='./ecl-test run -e=embedded,3rdparty'
+alias hpcc_regression='./ecl-test run --timeout -1 -e=embedded,3rdparty'
 
 export MANPATH=${MANPATH}:/usr/share/bcc/man
 
