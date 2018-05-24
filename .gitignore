@@ -31,3 +31,4 @@ GTAGS
 .clang_complete
 .lvimrc
 .vscode/
+.*.swp
