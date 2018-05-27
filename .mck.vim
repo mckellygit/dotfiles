@@ -201,8 +201,8 @@ let g:lightline = {
 function! MyLightlineMode()
   if &filetype ==# 'qf'
     return ''
-  elseif &buftype ==# 'terminal'
-    return ''
+  "elseif &buftype ==# 'terminal'
+  "  return ''
   elseif !&buflisted
     return ''
   else
@@ -217,7 +217,7 @@ function! MyLightlineGitbranch()
   elseif &diff
     return 'diff'
   elseif &buftype ==# 'terminal'
-    return 'term'
+    return ''
   elseif !&buflisted
     return ''
   else
