@@ -389,8 +389,10 @@ set confirm
 "set iskeyword for word separators ...
 "current default is:
 "iskeyword=@,48-57,_,192-255,#
-"tmux uses " ='`;|[](){},/?\\\""
-set iskeyword=@,48-57,_,192-255,@-@,<,>,-,+,*,%,$,!,~,.,:,#,^
+"tmux uses " ='`;|[](){},/?\\\":"
+"skip . and : and - as its too confusing with C/C++ code
+"set iskeyword=@,48-57,_,192-255,@-@,<,>,-,+,*,%,$,!,~,.,:,#,^
+set iskeyword=@,48-57,_,192-255,@-@,<,>,-,+,*,%,$,!,~,#,^
 
 " -----------------------------
 
@@ -1367,23 +1369,27 @@ endfunction
 
 " close all windows and write then quit
 " no imap for this
-vnoremap <C-x>w     <Esc>:call <SID>SkipTerminalsQuitCmd(":wqa")<CR>
-nnoremap <C-x>w          :call <SID>SkipTerminalsQuitCmd(":wqa")<CR>
+" <C-x> used in visual mode already
+"vnoremap <C-x>w     <Esc>:call <SID>SkipTerminalsQuitCmd(":wqa")<CR>
+"nnoremap <C-x>w          :call <SID>SkipTerminalsQuitCmd(":wqa")<CR>
 
 " no imap for this
-vnoremap <C-x><C-w> <Esc>:call <SID>SkipTerminalsQuitCmd(":wqa")<CR>
+" <C-x> used in visual mode already
+"vnoremap <C-x><C-w> <Esc>:call <SID>SkipTerminalsQuitCmd(":wqa")<CR>
 nnoremap <C-x><C-w>      :call <SID>SkipTerminalsQuitCmd(":wqa")<CR>
 
 " close all windows and confirm then quit
 " no imap for this
-vnoremap <C-x>c     <Esc>:call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
-nnoremap <C-x>c          :call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
+" <C-x> used in visual mode already
+"vnoremap <C-x>c     <Esc>:call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
+"nnoremap <C-x>c          :call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
 
 " need to remap <C-c> for this to work ...
 nnoremap <C-c> <C-c>
 " (<C-c> previously remapped in visual mode above)
 " no imap for this
-vnoremap <C-x><C-c> <Esc>:call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
+" <C-x> used in visual mode already
+""vnoremap <C-x><C-c> <Esc>:call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
 nnoremap <C-x><C-c>      :call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
 
 " no imap for this
