@@ -357,6 +357,12 @@ if &diff
 endif
 " lastplace -----------
 
+" polygot -----------
+" needed to get around error in polygot/tmux.vim
+" and that is deprecated anyway (defaults in vim 8.0+)
+let g:polyglot_disabled = ['tmux']
+" polygot -----------
+
 " asyncrun -----------
 " open quickfix (10 lines) when cmd ends
 let g:asyncrun_open = 10 
@@ -391,9 +397,8 @@ set confirm
 "iskeyword=@,48-57,_,192-255,#
 "tmux uses " ='`;|[](){},/?\\\":"
 "skip . and : and - as its too confusing with C/C++ code
-"cannot get - to skip as polygot tmux.vim has an issue
 "set iskeyword=@,48-57,_,192-255,@-@,<,>,-,+,*,%,$,!,~,.,:,#,^
-set iskeyword=@,48-57,_,192-255,@-@,<,>,-,+,*,%,$,!,~,#,^
+set iskeyword=@,48-57,_,192-255,@-@,<,>,+,*,%,$,!,~,#,^
 
 " -----------------------------
 
