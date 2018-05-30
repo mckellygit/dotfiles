@@ -391,6 +391,7 @@ set confirm
 "iskeyword=@,48-57,_,192-255,#
 "tmux uses " ='`;|[](){},/?\\\":"
 "skip . and : and - as its too confusing with C/C++ code
+"cannot get - to skip as polygot tmux.vim has an issue
 "set iskeyword=@,48-57,_,192-255,@-@,<,>,-,+,*,%,$,!,~,.,:,#,^
 set iskeyword=@,48-57,_,192-255,@-@,<,>,-,+,*,%,$,!,~,#,^
 
