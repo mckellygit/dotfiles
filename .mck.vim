@@ -79,6 +79,9 @@ Plugin 'airblade/vim-gitgutter'
 "Plugin 'tpope/vim-fugitive'
 Plugin 'mckellyln/vim-fugitive'
 "
+" gitk like repo viewer
+Plugin 'gregsexton/gitv'
+"
 " fzf for fuzzy listing/searching
 "Plugin 'junegunn/fzf' " (not needed because its in ~/.fzf already)
 Plugin 'junegunn/fzf.vim'
@@ -330,6 +333,28 @@ nmap <silent> -          <Plug>FileBeagleOpenCurrentBufferDir
 autocmd BufReadPost quickfix nnoremap <buffer> <Leader>fb <Nop>
 autocmd BufReadPost quickfix nnoremap <buffer> - -
 " FileBeagle ----------
+
+" fugitive -----------
+autocmd FileType fugitiveblame nmap <buffer> <Leader><Tab> O
+autocmd FileType fugitiveblame nmap <buffer> <C-t> O
+autocmd FileType git           nmap <buffer> <Leader><Tab> O
+autocmd FileType git           nmap <buffer> <C-t> O
+autocmd FileReadCmd fugitive://**//[0-3]/**          nmap <buffer> <Leader><Tab> O
+autocmd FileReadCmd fugitive://**//[0-3]/**          nmap <buffer> <C-t> O
+autocmd BufReadCmd  fugitive://**//[0-3]/**          nmap <buffer> <Leader><Tab> O
+autocmd BufReadCmd  fugitive://**//[0-3]/**          nmap <buffer> <C-t> O
+autocmd BufWriteCmd fugitive://**//[0-3]/**          nmap <buffer> <Leader><Tab> O
+autocmd BufWriteCmd fugitive://**//[0-3]/**          nmap <buffer> <C-t> O
+autocmd BufReadCmd  fugitive://**//[0-9a-f][0-9a-f]* nmap <buffer> <Leader><Tab> O
+autocmd BufReadCmd  fugitive://**//[0-9a-f][0-9a-f]* nmap <buffer> <C-t> O
+autocmd FileReadCmd fugitive://**//[0-9a-f][0-9a-f]* nmap <buffer> <Leader><Tab> O
+autocmd FileReadCmd fugitive://**//[0-9a-f][0-9a-f]* nmap <buffer> <C-t> O
+autocmd BufReadCmd  index{,.lock}
+    \ if FugitiveIsGitDir(expand('<amatch>:p:h')) |
+    \     nmap <buffer> <Leader><Tab> O |
+    \     nmap <buffer> <C-t> O |
+    \ endif
+" fugitive -----------
 
 " gitgutter -----------
 let g:gitgutter_enabled = 1
