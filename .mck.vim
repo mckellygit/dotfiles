@@ -76,8 +76,7 @@ Plugin 'mckellyln/vim-filebeagle'
 " gitgutter
 Plugin 'airblade/vim-gitgutter'
 " fugitive for more git utils (**modified++)
-"Plugin 'tpope/vim-fugitive'
-Plugin 'mckellyln/vim-fugitive'
+Plugin 'tpope/vim-fugitive'
 "
 " gitk like repo viewer
 Plugin 'gregsexton/gitv'
