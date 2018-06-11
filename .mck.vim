@@ -1350,7 +1350,7 @@ function! s:SkipTerminalsQuitCmd(cmd) abort
         if b.listed
             if getbufvar(b.bufnr, '&buftype') !=# 'terminal'
                 if !b.changed
-                    execute "silent! :bd " . b.bufnr
+                    execute "silent! bd " . b.bufnr
                 else
                     if l:bmod ==# 0
                         echo "buffer: " . b.bufnr . " modified"
@@ -1364,7 +1364,8 @@ function! s:SkipTerminalsQuitCmd(cmd) abort
         endif
     endfor
     if l:doquit ==# 1
-        quit!
+        "quit!
+        execute "qa!"
     else
         execute a:cmd
     endif
@@ -1377,7 +1378,7 @@ function! s:SkipTerminalsConfQA() abort
         if b.listed
             if getbufvar(b.bufnr, '&buftype') !=# 'terminal'
                 if !b.changed
-                    execute "silent! :bd " . b.bufnr
+                    execute "silent! bd " . b.bufnr
                 else
                     if l:bmod ==# 0
                         echo "buffer: " . b.bufnr . " modified"
@@ -1391,7 +1392,8 @@ function! s:SkipTerminalsConfQA() abort
         endif
     endfor
     if l:doquit ==# 1
-        quit!
+        "quit!
+        execute "qa!"
     else
         execute "conf qa"
     endif
@@ -1478,14 +1480,14 @@ function Xdiff()
     let currbufnr += 1
   endwhile
   if anymod ==# 0
-    execute "silent! :qa"
+    execute "silent! qa"
   else
     "let dbgmsg = "diffx: &mod = " . &mod
     "echomsg dbgmsg
     if &mod ==# 0
-      execute "silent! :conf q"
+      execute "silent! conf q"
     else
-      execute "silent! :wq"
+      execute "silent! wq"
     endif
     redraw!
     "let dbgmsg = "diffx: &diff = " . &diff
@@ -1603,6 +1605,13 @@ noremap <Leader>wk :only<CR>
 noremap <Leader>tn :tabnext<CR>
 " prev tab
 noremap <Leader>tp :tabprevious<CR>
+
+" toggle fold
+noremap <Leader>ff za
+" open fold
+noremap <Leader>fo zo
+" close fold
+noremap <Leader>fc zc
 
 execute "set <M-.>=\e."
 execute "set <M-'>=\e'"
