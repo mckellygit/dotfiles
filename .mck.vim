@@ -1402,35 +1402,35 @@ endfunction
 " close all windows and write then quit
 " no imap for this
 " <C-x> used in visual mode already
-"vnoremap <C-x>w     <Esc>:call <SID>SkipTerminalsQuitCmd(":wqa")<CR>
-"nnoremap <C-x>w          :call <SID>SkipTerminalsQuitCmd(":wqa")<CR>
+"vnoremap <silent> <C-x>w     <Esc>:call <SID>SkipTerminalsQuitCmd(":wqa")<CR>
+"nnoremap <silent> <C-x>w          :call <SID>SkipTerminalsQuitCmd(":wqa")<CR>
 
 " no imap for this
 " <C-x> used in visual mode already
-"vnoremap <C-x><C-w> <Esc>:call <SID>SkipTerminalsQuitCmd(":wqa")<CR>
-nnoremap <C-x><C-w>      :call <SID>SkipTerminalsQuitCmd(":wqa")<CR>
+"vnoremap <silent> <C-x><C-w> <Esc>:call <SID>SkipTerminalsQuitCmd(":wqa")<CR>
+nnoremap <silent> <C-x><C-w>      :call <SID>SkipTerminalsQuitCmd(":wqa")<CR>
 
 " close all windows and confirm then quit
 " no imap for this
 " <C-x> used in visual mode already
-"vnoremap <C-x>c     <Esc>:call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
-"nnoremap <C-x>c          :call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
+"vnoremap <silent> <C-x>c     <Esc>:call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
+"nnoremap <silent> <C-x>c          :call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
 
 " need to remap <C-c> for this to work ...
 nnoremap <C-c> <C-c>
 " (<C-c> previously remapped in visual mode above)
 " no imap for this
 " <C-x> used in visual mode already
-""vnoremap <C-x><C-c> <Esc>:call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
-nnoremap <C-x><C-c>      :call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
+""vnoremap <silent> <C-x><C-c> <Esc>:call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
+nnoremap <silent> <C-x><C-c>      :call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
 
 " no imap for this
-vnoremap <Leader>xc  <Esc>:call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
-nnoremap <Leader>xc       :call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
+vnoremap <silent> <Leader>xc  <Esc>:call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
+nnoremap <silent> <Leader>xc       :call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
 
 " no imap for this
-vnoremap <Leader>ax  <Esc>:call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
-nnoremap <Leader>ax       :call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
+vnoremap <silent> <Leader>ax  <Esc>:call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
+nnoremap <silent> <Leader>ax       :call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
 
 function! s:EndTerminalsConfQA() abort
     for b in range(1, bufnr('$'))
@@ -1444,15 +1444,15 @@ function! s:EndTerminalsConfQA() abort
 endfunction
 
 " :exit to quit all windows
-cnoreabbrev <expr> <silent> exi (getcmdtype() == ':' && getcmdline() =~ '\s*exi\s*')  ? ':call <SID>EndTerminalsConfQA()' : 'exi'
-cnoreabbrev <expr> <silent> exit (getcmdtype() == ':' && getcmdline() =~ '\s*exit\s*') ? ':call <SID>EndTerminalsConfQA()' : 'exit'
+cnoreabbrev <silent> <expr> exi (getcmdtype() == ':' && getcmdline() =~ '\s*exi\s*')  ? ':call <SID>EndTerminalsConfQA()' : 'exi'
+cnoreabbrev <silent> <expr> exit (getcmdtype() == ':' && getcmdline() =~ '\s*exit\s*') ? ':call <SID>EndTerminalsConfQA()' : 'exit'
 
-cnoreabbrev <expr> <silent> qa (getcmdtype() == ':' && getcmdline() =~ '\s*qa\s*')  ? ':call <SID>SkipTerminalsConfQA()' : 'qa'
-cnoreabbrev <expr> <silent> qal (getcmdtype() == ':' && getcmdline() =~ '\s*qal\s*')  ? ':call <SID>SkipTerminalsConfQA()' : 'qal '
-cnoreabbrev <expr> <silent> qall (getcmdtype() == ':' && getcmdline() =~ '\s*qall\s*')  ? ':call <SID>SkipTerminalsConfQA()' : 'qall'
-cnoreabbrev <expr> <silent> quita (getcmdtype() == ':' && getcmdline() =~ '\s*quita\s*')  ? ':call <SID>SkipTerminalsConfQA()' : 'quita'
-cnoreabbrev <expr> <silent> quital (getcmdtype() == ':' && getcmdline() =~ '\s*quital\s*')  ? ':call <SID>SkipTerminalsConfQA()' : 'quital'
-cnoreabbrev <expr> <silent> quitall (getcmdtype() == ':' && getcmdline() =~ '\s*quitall\s*')  ? ':call <SID>SkipTerminalsConfQA()' : 'quitall'
+cnoreabbrev <silent> <expr> qa (getcmdtype() == ':' && getcmdline() =~ '\s*qa\s*')  ? ':call <SID>SkipTerminalsConfQA()' : 'qa'
+cnoreabbrev <silent> <expr> qal (getcmdtype() == ':' && getcmdline() =~ '\s*qal\s*')  ? ':call <SID>SkipTerminalsConfQA()' : 'qal '
+cnoreabbrev <silent> <expr> qall (getcmdtype() == ':' && getcmdline() =~ '\s*qall\s*')  ? ':call <SID>SkipTerminalsConfQA()' : 'qall'
+cnoreabbrev <silent> <expr> quita (getcmdtype() == ':' && getcmdline() =~ '\s*quita\s*')  ? ':call <SID>SkipTerminalsConfQA()' : 'quita'
+cnoreabbrev <silent> <expr> quital (getcmdtype() == ':' && getcmdline() =~ '\s*quital\s*')  ? ':call <SID>SkipTerminalsConfQA()' : 'quital'
+cnoreabbrev <silent> <expr> quitall (getcmdtype() == ':' && getcmdline() =~ '\s*quitall\s*')  ? ':call <SID>SkipTerminalsConfQA()' : 'quitall'
 
 " vimdiff (also as a git difftool)
 "  git config --global diff.tool vimdiff
@@ -1507,17 +1507,17 @@ if &diff
   "  au VimEnter * :Alias exit cquit
   "aug END
   " ---
-  cnoreabbrev <expr> <silent> q! (getcmdtype() == ':' && getcmdline() =~ '\s*q!\s*') ? 'qa!' : 'q!'
-  cnoreabbrev <expr> <silent> q  (getcmdtype() == ':' && getcmdline() =~ '\s*q\s*')  ? 'qa' : 'q'
-  cnoreabbrev <expr> <silent> n  (getcmdtype() == ':' && getcmdline() =~ '\s*n\s*')  ? 'qa' : 'n'
-  cnoreabbrev <expr> <silent> next (getcmdtype() == ':' && getcmdline() =~ '\s*next\s*') ? 'qa' : 'next'
+  cnoreabbrev <silent> <expr> q! (getcmdtype() == ':' && getcmdline() =~ '\s*q!\s*') ? 'qa!' : 'q!'
+  cnoreabbrev <silent> <expr> q  (getcmdtype() == ':' && getcmdline() =~ '\s*q\s*')  ? 'qa' : 'q'
+  cnoreabbrev <silent> <expr> n  (getcmdtype() == ':' && getcmdline() =~ '\s*n\s*')  ? 'qa' : 'n'
+  cnoreabbrev <silent> <expr> next (getcmdtype() == ':' && getcmdline() =~ '\s*next\s*') ? 'qa' : 'next'
   cuna exi
-  cnoreabbrev <expr> <silent> exi (getcmdtype() == ':' && getcmdline() =~ '\s*exi\s*') ? 'cquit' : 'exi'
+  cnoreabbrev <silent> <expr> exi (getcmdtype() == ':' && getcmdline() =~ '\s*exi\s*') ? 'cquit' : 'exi'
   cuna exit
-  cnoreabbrev <expr> <silent> exit (getcmdtype() == ':' && getcmdline() =~ '\s*exit\s*') ? 'cquit' : 'exit'
+  cnoreabbrev <silent> <expr> exit (getcmdtype() == ':' && getcmdline() =~ '\s*exit\s*') ? 'cquit' : 'exit'
   " -----------
   " if no mods, then :x is like :q ...
-  cnoreabbrev <expr> <silent> x (getcmdtype() == ':' && getcmdline() =~ '\s*x\s*') ? 'call Xdiff()' : 'x'
+  cnoreabbrev <silent> <expr> x (getcmdtype() == ':' && getcmdline() =~ '\s*x\s*') ? 'call Xdiff()' : 'x'
 
   noremap  <silent> <Leader>df :qa<CR>
   noremap  <silent> <Leader>xc :cquit<CR>
@@ -1555,7 +1555,7 @@ noremap <silent> zt <Nop>
 noremap <silent> <Leader>zt :tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR>
 " <C-w><N> or <C-\><C-n> to get into normal mode
 " a or i get back into terminal mode
-nnoremap <expr> <silent> <C-\><C-n> (&buftype == 'terminal') ? 'i' : '<C-\><C-n>'
+nnoremap <silent> <expr> <C-\><C-n> (&buftype == 'terminal') ? 'i' : '<C-\><C-n>'
 
 au TerminalOpen * set signcolumn=no
 
