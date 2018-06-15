@@ -422,7 +422,7 @@ set confirm
 "tmux uses " ='`;|[](){},/?\\\":"
 "skip . and : and - as its too confusing with C/C++ code
 "set iskeyword=@,48-57,_,192-255,@-@,<,>,-,+,*,%,$,!,~,.,:,#,^
-set iskeyword=@,48-57,_,192-255,@-@,<,>,+,*,%,$,!,~,#,^
+set iskeyword=@,48-57,_,192-255,@-@,<,>,*,%,$,!,~,#,^
 
 " -----------------------------
 
@@ -1761,6 +1761,14 @@ else
 endif
 
 " -----------------------------
+
+" enable bracketed paste in terminal mode
+if &term =~ "screen"
+  let &t_BE = "\e[?2004h"
+  let &t_BD = "\e[?2004l"
+  exec "set t_PS=\e[200~"
+  exec "set t_PE=\e[201~"
+endif
 
 " vim+gdb debugging, requires gdb v7.12+
 " :help terminal-debug
