@@ -1280,7 +1280,7 @@ endfunction
 " s:QuitIfOnlyWindow() {{{2
 function! s:QuitIfOnlyWindow() abort
     let l:buftype = getbufvar(winbufnr(winnr()), "&buftype")
-    if l:buftype != "quickfix" && l:buftype != "help"
+    if l:buftype != "quickfix" && l:buftype != "help" && l:buftype != "nofile"
         return
     endif
 
