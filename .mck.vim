@@ -1651,6 +1651,10 @@ endfunction
 
 tnoremap <silent> <C-d> <C-w>:call <SID>TermQuit()<CR>
 
+" to enter normal mode, like tmux
+tnoremap <silent> <C-Up>   <C-\><C-n>
+tnoremap <silent> <PageUp> <C-\><C-n>
+
 " Alt .(>)|' next tab
 tnoremap <silent> <Esc>. <C-w>:tabnext<CR>
 tnoremap <silent> <Esc>' <C-w>:tabnext<CR>
@@ -1763,11 +1767,24 @@ endif
 " -----------------------------
 
 " enable bracketed paste in terminal mode
-if &term =~ "screen"
+if &term =~ "^screen"
   let &t_BE = "\e[?2004h"
   let &t_BD = "\e[?2004l"
   exec "set t_PS=\e[200~"
   exec "set t_PE=\e[201~"
+  " tmux will send xterm-style keys when its xterm-keys option is on
+  exec "set <xUp>=\e[1;*A"
+  exec "set <xDown>=\e[1;*B"
+  exec "set <xRight>=\e[1;*C"
+  exec "set <xLeft>=\e[1;*D"
+  " not needed
+  "map  <Esc>[B <Down>
+  "map  [1;5A   <C-Up>
+  "map  [1;5B   <C-Down>
+  "map  [1;2D   <S-Left>
+  "map  [1;2C   <S-Right>
+  "cmap [1;2D   <S-Left>
+  "cmap [1;2C   <S-Right>
 endif
 
 " vim+gdb debugging, requires gdb v7.12+
