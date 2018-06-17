@@ -504,7 +504,10 @@ set ttimeout ttimeoutlen=700
 "vnoremap <silent> <C-c> "+y<LeftRelease>
 " y`] to goto end of block, or even better
 " gv<Esc> leave cursor at last pos
-vnoremap <silent> <C-c> "+ygv<Esc>
+"vnoremap <silent> <C-c> "+ygv<Esc>
+" leave normal mode with <C-c>/yank, like tmux
+vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"+ygv<Esc>i' : '"+ygv<Esc>'
+vnoremap <silent> <expr> y     (&buftype == 'terminal') ? 'yi' : 'y'
 
 " cut selection
 vnoremap <silent> <C-x> "+d<LeftRelease>
