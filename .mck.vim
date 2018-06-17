@@ -1555,7 +1555,13 @@ noremap <silent> zt <Nop>
 noremap <silent> <Leader>zt :tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR>
 " <C-w><N> or <C-\><C-n> to get into normal mode
 " a or i get back into terminal mode
+" or <C-\><C-n> to toggle
 nnoremap <silent> <expr> <C-\><C-n> (&buftype == 'terminal') ? 'i' : '<C-\><C-n>'
+" or <Return>, like tmux
+nnoremap <silent> <expr> <Return> (&buftype == 'terminal') ? 'i' : '<Return>'
+" to enter normal mode, like tmux
+tnoremap <silent> <C-Up>   <C-\><C-n>
+tnoremap <silent> <PageUp> <C-\><C-n>
 
 au TerminalOpen * set signcolumn=no
 
@@ -1613,12 +1619,6 @@ noremap <Leader>fo zo
 " close fold
 noremap <Leader>fc zc
 
-execute "set <M-.>=\e."
-execute "set <M-'>=\e'"
-
-execute "set <M-,>=\e,"
-execute "set <M-;>=\e;"
-
 function! s:TermQuit()
     let skipquit = 0
     for b in getbufinfo()
@@ -1651,11 +1651,18 @@ endfunction
 
 tnoremap <silent> <C-d> <C-w>:call <SID>TermQuit()<CR>
 
-" to enter normal mode, like tmux
-tnoremap <silent> <C-Up>   <C-\><C-n>
-tnoremap <silent> <PageUp> <C-\><C-n>
+execute "set <M-.>=\e."
+execute "set <M-'>=\e'"
 
-" Alt .(>)|' next tab
+execute "set <M-,>=\e,"
+execute "set <M-;>=\e;"
+
+" next tab
+nnoremap <silent> <M-Right>      :tabnext<CR>
+tnoremap <silent> <M-Right> <C-w>:tabnext<CR>
+vnoremap <silent> <M-Right> <Esc>:tabnext<CR>
+inoremap <silent> <M-Right> <Esc>:tabnext<CR>
+" Alt .(>)|'
 tnoremap <silent> <Esc>. <C-w>:tabnext<CR>
 tnoremap <silent> <Esc>' <C-w>:tabnext<CR>
 nnoremap <silent> <M-.>       :tabnext<CR>
@@ -1664,7 +1671,13 @@ inoremap <silent> <M-.>  <Esc>:tabnext<CR>
 nnoremap <silent> <M-'>       :tabnext<CR>
 vnoremap <silent> <M-'>  <Esc>:tabnext<CR>
 inoremap <silent> <M-'>  <Esc>:tabnext<CR>
-" Alt ,(<)|; prev tab
+
+" prev tab
+nnoremap <silent> <M-Left>      :tabprevious<CR>
+tnoremap <silent> <M-Left> <C-w>:tabprevious<CR>
+vnoremap <silent> <M-Left> <Esc>:tabprevious<CR>
+inoremap <silent> <M-Left> <Esc>:tabprevious<CR>
+" Alt ,(<)|;
 tnoremap <silent> <Esc>, <C-w>:tabprevious<CR>
 tnoremap <silent> <Esc>; <C-w>:tabprevious<CR>
 nnoremap <silent> <M-,>       :tabprevious<CR>
