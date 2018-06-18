@@ -8,6 +8,11 @@ bindkey -v
 # The following lines were added by compinstall
 zstyle :compinstall filename '/home/$LOGNAME/.zshrc'
 
+# so vim terminal TERM is set properly (xterm by default)
+if [[ -n "$VIM_TERMINAL" ]] && [[ -n "$TMUX_PANE" ]] ; then
+  export TERM=screen-256color
+fi
+
 autoload -Uz compinit
 compinit
 # End of lines added by compinstall
