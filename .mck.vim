@@ -376,7 +376,7 @@ nmap <silent> <Leader>gg :call gitgutter#process_buffer(bufnr(''), 0)<CR>
 " gitv -----------
 let g:Gitv_OpenHorizontal = 1
 let g:Gitv_WrapLines = 0
-let g:Gitv_WipeAllOnClose = 1
+let g:Gitv_WipeAllOnClose = 0
 " gitv -----------
 
 " QFEnter -------------
