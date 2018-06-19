@@ -373,6 +373,12 @@ nmap <Leader>gp <Plug>GitGutterPrevHunk
 nmap <silent> <Leader>gg :call gitgutter#process_buffer(bufnr(''), 0)<CR>
 " gitgutter -----------
 
+" gitv -----------
+let g:Gitv_OpenHorizontal = 1
+let g:Gitv_WrapLines = 0
+let g:Gitv_WipeAllOnClose = 1
+" gitv -----------
+
 " QFEnter -------------
 " add C-t to open in new tab to be consistent with fzf
 let g:qfenter_keymap = {}
@@ -416,6 +422,8 @@ colorscheme deus
 " do not use delete/wipe with qf/ll ...
 set hidden
 set bufhidden=hide
+
+set lazyredraw
 
 set confirm
 
