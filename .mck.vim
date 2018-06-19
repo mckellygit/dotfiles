@@ -1626,6 +1626,14 @@ noremap <Leader>ff za
 noremap <Leader>fo zo
 " close fold
 noremap <Leader>fc zc
+" next fold
+noremap <Leader>fn zj
+" prev fold
+noremap <Leader>fp zk
+" open all folds
+noremap <Leader>fO zR
+" close all folds
+noremap <Leader>fC zM
 
 function! s:TermQuit()
     let skipquit = 0
