@@ -292,6 +292,11 @@ let s:palette.tabline.tabsel = [ [ '#d0d0d0', '#5f8787', 252, 66, 'bold' ] ]
 unlet s:palette
 " lightline ----------
 
+" rooter ----------
+" echo cwd: status
+let g:rooter_silent_chdir = 0
+" rooter ----------
+
 " vinegar ------------
 " vinegar open/close
 "nmap <Leader>vo -
@@ -1599,16 +1604,16 @@ noremap <Leader>cx :echo<CR>
 " or redraw!
 
 " tab open
-noremap <Leader>to :tabnew<CR>
+noremap <silent> <Leader>to :tabnew<CR>
 " tab close (same as window close)
-noremap <Leader>tc :conf q<CR>
+noremap <silent> <Leader>tc :conf q<CR>
 " tab keep current and close all others
-noremap <Leader>tk :tabonly<CR>
+noremap <silent> <Leader>tk :tabonly<CR>
 
 " window close (same as tab close)
-noremap <Leader>wc :conf q<CR>
+noremap <silent> <Leader>wc :conf q<CR>
 " window keep current and close all others
-noremap <Leader>wk :only<CR>
+noremap <silent> <Leader>wk :only<CR>
 
 " next tab
 noremap <Leader>tn :tabnext<CR>
@@ -1746,7 +1751,7 @@ function! MyGitStatus()
   endif
   let l:bufnm = bufnr("%")
   let l:found = has_key(g:tablist, l:bufnm)
-  "let l:msg = "MyGitStatus " . l:bufnm . " " . l:fname . " " . l:found
+  "let l:msg = "MyGitStatus " . l:bufnm . " " . l:found
   "echomsg l:msg
   if l:found ==# 0
     let l:timer = timer_start(g:gitinfo_interval, 'MyGSStart', {'repeat': -1})
@@ -1776,7 +1781,8 @@ endfunction
 if &diff
   let b:mckgitstatus = "diff"
 else
-  autocmd BufReadPost,BufNewFile,FileReadPost * call MyGitStatus()
+ "autocmd BufReadPost,BufNewFile,FileReadPost,TabEnter * call MyGitStatus()
+  autocmd BufWinEnter * call MyGitStatus()
   autocmd BufUnload * call MyGitLeave()
 endif
 
@@ -1802,6 +1808,18 @@ if &term =~ "^screen"
   "cmap [1;2D   <S-Left>
   "cmap [1;2C   <S-Right>
 endif
+
+" -----------------------------
+
+" fugitive Gstatus does not work from empty tabnew ...
+function! s:GitStatusXX()
+  execute "pedit .git/index"
+  redraw!
+  wincmd P
+endfunction
+cnoreabbrev <silent> <expr> Gstatus (getcmdtype() == ':' && getcmdline() =~ '\s*Gstatus\s*')  ? ':call <SID>GitStatusXX()' : 'Gstatus'
+
+" -----------------------------
 
 " vim+gdb debugging, requires gdb v7.12+
 " :help terminal-debug
