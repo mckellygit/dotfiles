@@ -1159,9 +1159,9 @@ nmap <C-]> :call rtags#JumpTo(g:SAME_WINDOW)<CR>
 " C-o to go back
 " C-t to go back (not implemented)
 " nmap <C-t> :call rtags#JumpBack()<CR>:echo<CR>
-" \cc to close quickfix
-noremap <silent> <Leader>cc :ccl\|lcl<CR>:echo<CR>
-"noremap <silent> <Leader>cc :windo lcl\|ccl<CR>:echo<CR>
+" \cc to close quickfix, listview, preview
+noremap <silent> <Leader>cc :ccl\|lcl\|pcl<CR>:echo<CR>
+"noremap <silent> <Leader>cc :windo lcl\|ccl\|pcl<CR>:echo<CR>
 "
 " also had to make changes to python run() command
 " rtags -----------------
