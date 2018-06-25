@@ -1164,7 +1164,8 @@ noremap <silent> <Leader>cc :ccl\|lcl\|pcl<CR>:echo<CR>
 "noremap <silent> <Leader>cc :windo lcl\|ccl\|pcl<CR>:echo<CR>
 "
 " auto-reindex on file save ...
-autocmd FileWritePost,FileAppendPost,BufWritePost * call rtags#ReindexFile()
+" but shouldn't rdm automatically pick up changes ?
+autocmd FileWritePost,FileAppendPost *.{c,h,cpp,hpp,ipp} call rtags#ReindexFile()
 "
 " also had to make changes to python run() command
 " rtags -----------------
