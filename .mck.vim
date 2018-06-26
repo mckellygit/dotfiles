@@ -1751,6 +1751,15 @@ function! MyGSStart(timer)
   if l:jstat == "run"
     "echo "git status cmd running ..."
   else
+    " skip if buffer starts with fugitive:// ...
+    let l:fname = expand('%:p:h')
+    if l:fname[0:10] ==# 'fugitive://'
+      "echomsg "MyGSStart: match to fugitive://"
+      call timer_stop(a:timer)
+      let b:mckgitstatus = "git:<fugitive>"
+      call lightline#update()
+      return
+    endif
     if filereadable(expand(g:gitinfo_script))
       let l:command = '/bin/sh -c ' . '"' . g:gitinfo_script . ' ' . expand('%:p:h') . '"'
       "echomsg "starting job " . l:command
@@ -1771,7 +1780,7 @@ function! MyGitStatus()
   endif
   let l:bufnm = bufnr("%")
   let l:found = has_key(g:tablist, l:bufnm)
-  "let l:msg = "MyGitStatus " . l:bufnm . " " . l:found
+  "let l:msg = "MyGitStatus " . l:bufnm . " " . l:found . " dir: " . expand('%:p:h')
   "echomsg l:msg
   if l:found ==# 0
     let l:timer = timer_start(g:gitinfo_interval, 'MyGSStart', {'repeat': -1})
