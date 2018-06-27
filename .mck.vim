@@ -432,10 +432,10 @@ set confirm
 "set iskeyword for word separators ...
 "current default is:
 "iskeyword=@,48-57,_,192-255,#
-"tmux uses " ='`;|[](){},/?\\\":"
-"skip . and : and - as its too confusing with C/C++ code
+"tmux uses " ='`;|[](){},/?\\\""
+"(different than tmux due to vim c/c++ devel)
 "set iskeyword=@,48-57,_,192-255,@-@,<,>,-,+,*,%,$,!,~,.,:,#,^
-set iskeyword=@,48-57,_,192-255,@-@,<,>,*,%,$,!,~,#,^
+set iskeyword=@,48-57,_,192-255,@-@,$,!,#
 
 " -----------------------------
 
