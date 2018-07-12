@@ -396,6 +396,12 @@ endif
 " needed to get around error in polygot/tmux.vim
 " and that is deprecated anyway (defaults in vim 8.0+)
 let g:polyglot_disabled = ['tmux']
+let g:cpp_class_scope_highlight = 1
+let g:cpp_member_variable_highlight = 1
+let g:cpp_class_decl_highlight = 1
+let g:cpp_experimental_simple_template_highlight = 1
+" set syntax highlighting for tpp/ipp files also
+autocmd BufNewFile,BufRead *.{ipp,tpp} set filetype=cpp
 " polygot -----------
 
 " asyncrun -----------
@@ -1165,7 +1171,7 @@ noremap <silent> <Leader>cc :ccl\|lcl\|pcl<CR>:echo<CR>
 "
 " auto-reindex on file save ...
 " but shouldn't rdm automatically pick up changes ?
-autocmd BufWritePost,FileWritePost,FileAppendPost *.{c,h,C,cc,cpp,hpp,ipp} call rtags#ReindexFile()
+autocmd BufWritePost,FileWritePost,FileAppendPost *.{c,h,C,cc,cpp,hpp,ipp,tpp} call rtags#ReindexFile()
 "
 " also had to make changes to python run() command
 " rtags -----------------
