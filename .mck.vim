@@ -395,11 +395,12 @@ endif
 " polygot -----------
 " needed to get around error in polygot/tmux.vim
 " and that is deprecated anyway (defaults in vim 8.0+)
-let g:polyglot_disabled = ['tmux']
+let g:polyglot_disabled = ['tmux', 'c/c++']
 let g:cpp_class_scope_highlight = 1
 let g:cpp_member_variable_highlight = 1
 let g:cpp_class_decl_highlight = 1
-let g:cpp_experimental_simple_template_highlight = 1
+" seems to mess up some #ifdef's
+"let g:cpp_experimental_simple_template_highlight = 1
 " set syntax highlighting for tpp/ipp files also
 autocmd BufNewFile,BufRead *.{ipp,tpp} set filetype=cpp
 " polygot -----------
