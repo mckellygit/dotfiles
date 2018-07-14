@@ -586,6 +586,9 @@ vnoremap <silent> <3-LeftMouse> <Esc>lBvE
 nnoremap <silent> <4-LeftMouse> <Nop>
 vnoremap <silent> <4-LeftMouse> <Nop>
 
+" highlight word under cursor
+nnoremap <silent> <Leader>ww viw
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -1189,6 +1192,8 @@ nmap <Leader>Pc <Plug>UnconditionalPasteCharBefore
 nmap <Leader>pc <Plug>UnconditionalPasteCharAfter
 nmap <Leader>Pj <Plug>UnconditionalPasteJustJoinedBefore
 nmap <Leader>pj <Plug>UnconditionalPasteJustJoinedAfter
+"
+nmap <Leader>pp <Plug>UnconditionalPasteCharBefore
 "
 " change l to i to match current indentation ...
 "nmap <Leader>Pl <Plug>UnconditionalPasteLineBefore
