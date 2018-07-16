@@ -587,7 +587,7 @@ nnoremap <silent> <4-LeftMouse> <Nop>
 vnoremap <silent> <4-LeftMouse> <Nop>
 
 " highlight word under cursor
-nnoremap <silent> <Leader>ww viw
+nnoremap <silent> <Leader>ws viw
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
