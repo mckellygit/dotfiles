@@ -98,9 +98,30 @@ fi
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 # some more ls aliases
-alias ll='ls -alF'
+#alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
+
+alias ll='ls -ltr'
+alias lla='ls -latr'
+alias rm='rm -i'
+#if [ ! -f /etc/redhat-release ] ; then
+#  alias dmesg='dmesg -T'
+#fi
+alias dmesg='dmesg -keux'
+alias vdiff='vimdiff'
+alias more='less'
+alias tailrdm='tail -f /tmp/rdm.log'
+
+# export NCPUS=`cat /proc/cpuinfo | grep processor | wc -l`
+# numcpus=$(getconf _NPROCESSORS_ONLN 2>/dev/null)
+numcpus=$(nproc 2> /dev/null)
+if [ -z "$numcpus" ] ; then
+  export NCPUS=1
+else
+  export NCPUS=$numcpus
+fi
+alias make='make -j$NCPUS'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert

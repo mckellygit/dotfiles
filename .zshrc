@@ -76,7 +76,8 @@ alias more='less'
 alias tailrdm='tail -f /tmp/rdm.log'
 
 # export NCPUS=`cat /proc/cpuinfo | grep processor | wc -l`
-numcpus=$(getconf _NPROCESSORS_ONLN 2>/dev/null)
+# numcpus=$(getconf _NPROCESSORS_ONLN 2>/dev/null)
+numcpus=$(nproc 2> /dev/null)
 if [ -z "$numcpus" ] ; then
   export NCPUS=1
 else
