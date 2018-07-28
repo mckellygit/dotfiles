@@ -1272,9 +1272,11 @@ hi QuickFixLine cterm=None
 hi cursorline cterm=None ctermbg=239
 
 " let vim use terminal background ...
-if !has("gui_running")
-  hi Normal ctermbg=none
-endif
+" good if want to use tmux and have active window 
+" different background color than others
+"if !has("gui_running")
+"  hi Normal ctermbg=none
+"endif
 
 " -----------------------------
 
