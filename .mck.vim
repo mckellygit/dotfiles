@@ -1271,6 +1271,11 @@ endfunction
 hi QuickFixLine cterm=None
 hi cursorline cterm=None ctermbg=239
 
+" let vim use terminal background ...
+if !has("gui_running")
+  hi Normal ctermbg=none
+endif
+
 " -----------------------------
 
 if 1 " quickfix quit/close
