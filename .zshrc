@@ -90,9 +90,12 @@ ulimit -c unlimited
 ulimit -s unlimited
 
 # MPI
-#path+=(~/mpich/bin)
-#path+=(~/mvapich2.1rc1/bin)
-path+=(~/openmpi/bin)
+export MYMPI=mpich
+#export MYMPI=openmpi
+#export MYMPI=mvapich
+
+path+=(~/${MYMPI}/bin)
+export MANPATH=${MANPATH}:~/${MYMPIi}/share/man
 
 path+=(~/bin)
 path+=(~/go/bin)
