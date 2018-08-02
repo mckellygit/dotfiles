@@ -22,6 +22,7 @@ zmodload -i zsh/complist
 zstyle ':completion:*' menu select
 zstyle ':completion:*' show-completer true
 zstyle ':completion:*' verbose false
+eval "$(dircolors)"
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
 # Enable bracketed paste: printf "\e[?2004h"
