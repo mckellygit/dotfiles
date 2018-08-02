@@ -42,6 +42,9 @@ precmd () { if [[ -n "$SSH_CLIENT" ]] ; then print -Pn "\e]0;ssh-%M:%12<..<%~%<<
 setopt APPEND_HISTORY INC_APPEND_HISTORY
 setopt HIST_IGNORE_DUPS HIST_IGNORE_ALL_DUPS HIST_EXPIRE_DUPS_FIRST HIST_SAVE_NO_DUPS HIST_FIND_NO_DUPS
 
+# to show .dirs in tab completion ...
+setopt globdots
+
 h() { if [ -z "$*" ]; then history 1; else history 1 | egrep "$@"; fi; }
 
 # to get up-arrow to put cursor at end of line instead of beginning ...
