@@ -17,11 +17,12 @@ autoload -Uz compinit
 compinit
 # End of lines added by compinstall
 
+zmodload -i zsh/complist
+
 zstyle ':completion:*' menu select
 zstyle ':completion:*' show-completer true
 zstyle ':completion:*' verbose false
-
-zmodload zsh/complist
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
 # Enable bracketed paste: printf "\e[?2004h"
 # Wait for paste to start: you’ll see \e[200~ on STDIN.
@@ -133,7 +134,7 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
- alias rdpclient='rdesktop -g 1580x932 -d RISK -u $LOGNAME -p password -a 24 -k en-us -K -r clipboard:CLIPBOARD <host> &|'
+ alias rdpclient='rdesktop -g 1580x932 -d <domain> -u $LOGNAME -p password -a 24 -k en-us -K -r clipboard:CLIPBOARD <host> &|'
 # used to use -a 16
 # other sizes: 1280x820, 1540x836
 
