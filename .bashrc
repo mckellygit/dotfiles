@@ -112,6 +112,7 @@ alias dmesg='dmesg -keux'
 alias vdiff='vimdiff'
 alias more='less'
 alias tailrdm='tail -f /tmp/rdm.log'
+alias difff='diff'
 
 # export NCPUS=`cat /proc/cpuinfo | grep processor | wc -l`
 # numcpus=$(getconf _NPROCESSORS_ONLN 2>/dev/null)
