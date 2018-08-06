@@ -402,7 +402,7 @@ let g:cpp_class_decl_highlight = 1
 " seems to mess up some #ifdef's
 "let g:cpp_experimental_simple_template_highlight = 1
 " set syntax highlighting for tpp/ipp files also
-autocmd BufNewFile,BufRead *.{ipp,tpp} set filetype=cpp
+autocmd BufNewFile,BufRead *.{ipp,tpp,esp,ecm} set filetype=cpp
 " polygot -----------
 
 " asyncrun -----------
@@ -1739,6 +1739,13 @@ inoremap <silent> <M-,>  <Esc>:tabprevious<CR>
 nnoremap <silent> <M-;>       :tabprevious<CR>
 vnoremap <silent> <M-;>  <Esc>:tabprevious<CR>
 inoremap <silent> <M-;>  <Esc>:tabprevious<CR>
+
+" try to open file under cursor
+nnoremap <silent> <Leader>gf gf
+vnoremap <silent> <Leader>gf <Esc>gf
+" try to open file under cursor in new tab
+nnoremap <silent> <Leader>gt <C-w>gf
+vnoremap <silent> <Leader>gt <Esc><C-w>gf
 
 " -----------------------------
 
