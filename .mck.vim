@@ -1594,6 +1594,10 @@ noremap <silent> <Leader>zs :terminal ++close ++norestore ++kill=term ++curwin<C
 " terminal in new tab
 noremap <silent> zt <Nop>
 noremap <silent> <Leader>zt :tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR>
+" terminal in new tab when already in a terminal
+tnoremap <silent> <C-x>t <C-w>:tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR>
+" window in new tab when already in a terminal
+tnoremap <silent> <C-x>v <C-w>:tabnew<CR>
 " <C-w><N> or <C-\><C-n> to get into normal mode
 " a or i get back into terminal mode
 " or <C-\><C-n> to toggle
