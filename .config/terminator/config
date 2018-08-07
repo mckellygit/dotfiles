@@ -11,6 +11,9 @@
 # these were Alt-Left/Right and are disabled for vim to use
   go_left = <Super>Left
   go_right = <Super>Right
+# these were Shft-Ctrl-n/p
+  go_next = <Shift><Super>n
+  go_prev = <Shift><Super>p
 [layouts]
   [[default]]
     [[[child0]]]
