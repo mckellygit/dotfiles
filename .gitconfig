@@ -15,6 +15,7 @@
 	undo = "!f() { git reset --hard $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
 	dt = difftool
 	difff = diff
+	dif = diff
 	last = log -l HEAD
 	unstage = reset HEAD --
 	visual = !gitk
