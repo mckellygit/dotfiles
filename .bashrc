@@ -114,6 +114,8 @@ alias more='less'
 alias tailrdm='tail -f /tmp/rdm.log'
 alias difff='diff'
 
+alias radssh='python -m radssh.shell $@'
+
 # export NCPUS=`cat /proc/cpuinfo | grep processor | wc -l`
 # numcpus=$(getconf _NPROCESSORS_ONLN 2>/dev/null)
 numcpus=$(nproc 2> /dev/null)
