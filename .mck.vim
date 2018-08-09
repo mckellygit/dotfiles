@@ -391,6 +391,7 @@ autocmd FileType GV xmap <buffer> <Leader><Tab> O
 autocmd FileType GV xmap <buffer> <C-t> O
 autocmd FileType GV xmap <buffer> <Return> O
 autocmd FileType GV xmap <buffer> <Space> O
+autocmd FileType GV setlocal cursorline
 " gv -----------
 
 " QFEnter -------------
@@ -1259,7 +1260,7 @@ function! MyWindow()
       "hi QuickFixLine cterm=None ctermbg=60
       setlocal cursorline
     endif
-  else
+  elseif &filetype !=# 'GV'
     " qf highlight off
     "hi QuickFixLine cterm=None ctermbg=239
     setlocal nocursorline
@@ -1272,7 +1273,7 @@ function! MyWindow2()
     " qf highlight on
     "hi QuickFixLine cterm=None ctermbg=60
     setlocal cursorline
-  else
+  elseif &filetype !=# 'GV'
     " qf highlight off
     "hi QuickFixLine cterm=None ctermbg=239
     setlocal nocursorline
