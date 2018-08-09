@@ -71,15 +71,18 @@ Plugin 'mckellyln/vim-filebeagle'
 "Plugin 'scrooloose/nerdtree'
 "Plugin 'jistr/vim-nerdtree-tabs'
 "
-" git w/NERDtree
-"Plugin 'Xuyuanp/nerdtree-git-plugin'
-" gitgutter
-Plugin 'airblade/vim-gitgutter'
-" fugitive for more git utils (**modified++)
+" fugitive for more git utils
 Plugin 'tpope/vim-fugitive'
 "
+" git w/NERDtree
+"Plugin 'Xuyuanp/nerdtree-git-plugin'
+"
+" gitgutter
+Plugin 'airblade/vim-gitgutter'
+"
 " gitk like repo viewer
-Plugin 'gregsexton/gitv'
+"Plugin 'gregsexton/gitv'
+Plugin 'junegunn/gv.vim'
 "
 " fzf for fuzzy listing/searching
 "Plugin 'junegunn/fzf' " (not needed because its in ~/.fzf already)
@@ -378,6 +381,11 @@ let g:Gitv_OpenHorizontal = 1
 let g:Gitv_WrapLines = 0
 let g:Gitv_WipeAllOnClose = 0
 " gitv -----------
+
+" gv -----------
+autocmd FileType GV nmap <buffer> <Leader><Tab> O
+autocmd FileType GV nmap <buffer> <C-t> O
+" gv -----------
 
 " QFEnter -------------
 " add C-t to open in new tab to be consistent with fzf
