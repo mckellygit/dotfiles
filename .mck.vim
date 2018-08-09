@@ -385,6 +385,12 @@ let g:Gitv_WipeAllOnClose = 0
 " gv -----------
 autocmd FileType GV nmap <buffer> <Leader><Tab> O
 autocmd FileType GV nmap <buffer> <C-t> O
+autocmd FileType GV nmap <buffer> <Return> O
+autocmd FileType GV nmap <buffer> <Space> O
+autocmd FileType GV xmap <buffer> <Leader><Tab> O
+autocmd FileType GV xmap <buffer> <C-t> O
+autocmd FileType GV xmap <buffer> <Return> O
+autocmd FileType GV xmap <buffer> <Space> O
 " gv -----------
 
 " QFEnter -------------
