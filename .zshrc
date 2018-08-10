@@ -25,6 +25,10 @@ zstyle ':completion:*' verbose false
 eval "$(dircolors)"
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
+# costs, but refreshes cmd cache automatically
+# zstyle ":completion:*:commands" rehash 1
+# or could just run hash -rf ...
+
 # Enable bracketed paste: printf "\e[?2004h"
 # Wait for paste to start: you’ll see \e[200~ on STDIN.
 # Wait for paste to stop: you’ll see \e[201~ on STDIN.
