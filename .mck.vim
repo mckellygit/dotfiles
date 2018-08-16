@@ -510,6 +510,9 @@ set history=20
 " show the cursor position all the time
 set ruler		
 
+" do not wrap on search but echo warning at top/bottom instead
+set nowrapscan
+
 " -------- mouse / cut - paste - clipboard --------
 
 " to disable mouse in visual mode
