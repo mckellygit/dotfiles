@@ -1611,11 +1611,11 @@ set noshowmode
 noremap <silent> <Leader>zs :terminal ++close ++norestore ++kill=term ++curwin<CR>
 " terminal in new tab
 noremap <silent> zt <Nop>
-noremap <silent> <Leader>zt :tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR>
+noremap <silent> <Leader>zt :$tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR>
 " terminal in new tab when already in a terminal
-tnoremap <silent> <C-x>t <C-w>:tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR>
+tnoremap <silent> <C-x>t <C-w>:$tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR>
 " window in new tab when already in a terminal
-tnoremap <silent> <C-x>v <C-w>:tabnew<CR>
+tnoremap <silent> <C-x>v <C-w>:$tabnew<CR>
 " <C-w><N> or <C-\><C-n> to get into normal mode
 " a or i get back into terminal mode
 " or <C-\><C-n> to toggle
@@ -1659,7 +1659,7 @@ noremap <Leader>cx :echo<CR>
 " or redraw!
 
 " tab open
-noremap <silent> <Leader>to :tabnew<CR>
+noremap <silent> <Leader>to :$tabnew<CR>
 " tab close (same as window close)
 noremap <silent> <Leader>tc :conf q<CR>
 " tab keep current and close all others
