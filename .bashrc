@@ -108,7 +108,7 @@ alias rm='rm -i'
 #if [ ! -f /etc/redhat-release ] ; then
 #  alias dmesg='dmesg -T'
 #fi
-alias dmesg='dmesg -keux'
+alias dmesg='dmesg -kuxT'
 alias vdiff='vimdiff'
 alias more='less'
 alias tailrdm='tail -f /tmp/rdm.log'
@@ -146,14 +146,6 @@ if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
 
-# from .zshrc so that radssh finds these ...
-alias dmesg='dmesg -keux'
-alias egrep='egrep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias grep='grep --color=auto'
-alias ll='ls -ltr'
-alias ls='ls --color=auto'
-alias rm='rm -i'
 # --------------------------
 
 # enable programmable completion features (you don't need to enable

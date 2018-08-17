@@ -79,7 +79,7 @@ alias rm='rm -i'
 #if [ ! -f /etc/redhat-release ] ; then
 #  alias dmesg='dmesg -T'
 #fi
-alias dmesg='dmesg -keux'
+alias dmesg='dmesg -kuxT'
 alias vdiff='vimdiff'
 alias more='less'
 alias tailrdm='tail -f /tmp/rdm.log'
