@@ -449,6 +449,10 @@ set lazyredraw
 
 set confirm
 
+set ignorecase
+set smartcase
+set shortmess-=s
+
 "set ttyfast
 
 "set iskeyword for word separators ...
