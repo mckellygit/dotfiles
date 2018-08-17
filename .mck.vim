@@ -452,6 +452,7 @@ set confirm
 set ignorecase
 set smartcase
 set shortmess-=s
+" and dont forget <Leader>hl for hlsearch toggle
 
 "set ttyfast
 
