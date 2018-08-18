@@ -449,6 +449,8 @@ set lazyredraw
 
 set confirm
 
+" search options
+set wrapscan
 set ignorecase
 set smartcase
 set shortmess-=s
@@ -514,9 +516,6 @@ set viminfo='20,\"20,f20
 set history=20	
 " show the cursor position all the time
 set ruler		
-
-" wrap on search
-set wrapscan
 
 " -------- mouse / cut - paste - clipboard --------
 
@@ -1235,6 +1234,15 @@ nmap <Leader>pm <Plug>UnconditionalPasteMoreIndentAfter
 nmap <Leader>Pl <Plug>UnconditionalPasteLessIndentBefore
 nmap <Leader>pl <Plug>UnconditionalPasteLessIndentAfter
 " unconditional-paste ---
+
+" search normally
+nnoremap <Leader>sn :set hlsearch<CR>/
+" search buffer with results in loc list
+nnoremap <Leader>sb :LAckWindow!<Space>
+" search globally with results in loc list
+nnoremap <Leader>sg :LAck!<Space>
+
+let g:ackhighlight = 1
 
 "================================================================
 
