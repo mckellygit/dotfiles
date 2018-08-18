@@ -1238,12 +1238,41 @@ nmap <Leader>Pl <Plug>UnconditionalPasteLessIndentBefore
 nmap <Leader>pl <Plug>UnconditionalPasteLessIndentAfter
 " unconditional-paste ---
 
+"================================================================
+
+function MySearch(meth) abort
+  if (a:meth == 0)
+    let promptstr = 'buf:/'
+    let cmdstr = 'LAckWindow!'
+  elseif (a:meth == 1)
+    let promptstr = 'gbl:/'
+    let cmdstr = 'LAck!'
+  else
+    redraw!
+    return
+  endif
+  call inputsave()
+  let string = input(promptstr)
+  call inputrestore()
+  if (len(string) == 0)
+    redraw!
+    return
+  endif
+  let saved_shellpipe = &shellpipe
+  let &shellpipe = '>'
+  try
+    execute cmdstr shellescape(string, 1)
+  finally
+    let &shellpipe = saved_shellpipe
+  endtry
+endfunction
+
 " search normally
 nnoremap <Leader>sn :set hlsearch<CR>/
 " search buffer with results in loc list
-nnoremap <Leader>sb :LAckWindow!<Space>
+nnoremap <silent> <Leader>sb :call MySearch(0)<CR>
 " search globally with results in loc list
-nnoremap <Leader>sg :LAck!<Space>
+nnoremap <silent> <Leader>sg :call MySearch(1)<CR>
 
 let g:ackhighlight = 1
 
