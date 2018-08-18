@@ -392,6 +392,9 @@ autocmd FileType GV xmap <buffer> <C-t> O
 autocmd FileType GV xmap <buffer> <Return> O
 autocmd FileType GV xmap <buffer> <Space> O
 autocmd FileType GV setlocal cursorline
+" start with folds open
+autocmd FileType GV set foldlevelstart=1
+
 " gv -----------
 
 " QFEnter -------------
