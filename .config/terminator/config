@@ -8,6 +8,9 @@
 # these were Ctrl-Page Up/Down and are disabled for tmux to use
   next_tab = ""
   prev_tab = ""
+# these were Alt-Up/Down and are disabled for tmux to use
+  go_up = <Super>Up
+  go_down = <Super>Down
 # these were Alt-Left/Right and are disabled for vim to use
   go_left = <Super>Left
   go_right = <Super>Right
