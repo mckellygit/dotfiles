@@ -250,6 +250,10 @@ function! MyLightlineFilename()
   else
     let filename = expand('%:t') !=# '' ? expand('%:t') : '[No Name]'
     return filename
+    "let filename = expand('%:p') !=# '' ? expand('%:p') : '[No Name]'
+    "let threshold = winwidth(0) - 100
+    "let threshold = 40
+    "return len(filename) < threshold ? filename : '<'.filename[len(filename)-threshold:]
   endif
 endfunction
 
