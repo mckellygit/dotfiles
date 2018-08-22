@@ -74,6 +74,9 @@ Plugin 'mckellyln/vim-filebeagle'
 " fugitive for more git utils
 Plugin 'tpope/vim-fugitive'
 "
+" dispatch make/etc utils
+Plugin 'tpope/vim-dispatch'
+"
 " git w/NERDtree
 "Plugin 'Xuyuanp/nerdtree-git-plugin'
 "
@@ -170,6 +173,7 @@ endfunction
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
   " let g:ackprg = 'ag --nogroup --nocolor --column'
+  let g:ack_use_dispatch = 1
 endif
 " ack ------------
 
