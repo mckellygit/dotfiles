@@ -171,7 +171,7 @@ endfunction
 " ack ------------
 " use ag (silver-searcher) instead of ack
 if executable('ag')
-  let g:ackprg = 'ag --vimgrep'
+  let g:ackprg = 'ag --vimgrep --hidden'
   " let g:ackprg = 'ag --nogroup --nocolor --column'
   let g:ack_use_dispatch = 1
 endif
