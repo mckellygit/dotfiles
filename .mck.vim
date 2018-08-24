@@ -1786,6 +1786,10 @@ nnoremap <silent> <M-Right>      :tabnext<CR>
 tnoremap <silent> <M-Right> <C-w>:tabnext<CR>
 vnoremap <silent> <M-Right> <Esc>:tabnext<CR>
 inoremap <silent> <M-Right> <Esc>:tabnext<CR>
+nnoremap <silent> <C-S-Right>      :tabnext<CR>
+tnoremap <silent> <C-S-Right> <C-w>:tabnext<CR>
+vnoremap <silent> <C-S-Right> <Esc>:tabnext<CR>
+inoremap <silent> <C-S-Right> <Esc>:tabnext<CR>
 " Alt .(>)|'
 tnoremap <silent> <Esc>. <C-w>:tabnext<CR>
 tnoremap <silent> <Esc>' <C-w>:tabnext<CR>
@@ -1801,6 +1805,10 @@ nnoremap <silent> <M-Left>      :tabprevious<CR>
 tnoremap <silent> <M-Left> <C-w>:tabprevious<CR>
 vnoremap <silent> <M-Left> <Esc>:tabprevious<CR>
 inoremap <silent> <M-Left> <Esc>:tabprevious<CR>
+nnoremap <silent> <C-S-Left>      :tabprevious<CR>
+tnoremap <silent> <C-S-Left> <C-w>:tabprevious<CR>
+vnoremap <silent> <C-S-Left> <Esc>:tabprevious<CR>
+inoremap <silent> <C-S-Left> <Esc>:tabprevious<CR>
 " Alt ,(<)|;
 tnoremap <silent> <Esc>, <C-w>:tabprevious<CR>
 tnoremap <silent> <Esc>; <C-w>:tabprevious<CR>

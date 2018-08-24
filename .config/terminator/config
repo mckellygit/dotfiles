@@ -17,6 +17,8 @@
 # these were Shft-Ctrl-n/p
   go_next = <Shift><Super>n
   go_prev = <Shift><Super>p
+  resize_left = <Shift><Super>Left
+  resize_right = <Shift><Super>Right
 [layouts]
   [[default]]
     [[[child0]]]
