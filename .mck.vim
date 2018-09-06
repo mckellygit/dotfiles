@@ -600,6 +600,7 @@ function! XTermPasteBegin()
 endfunction
 
 inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
+
 " ---------------
 
 " or when you release the mouse button ...
@@ -740,6 +741,9 @@ endfunction
 " C-/ to center line in screen
 nnoremap <silent> <C-_> :call <SID>GoToMID(0)<CR>
 vnoremap <silent> <C-_> :call <SID>GoToMID(1)<CR>
+
+noremap <silent> <Leader>ct :call <SID>GoToMID(0)<CR>
+noremap <silent> <Leader>cz zz
 
 " ---------
 
@@ -1709,7 +1713,7 @@ hi Search ctermbg=58
 " **careful** as 'xc' is for quit all ...
 noremap <Leader>cx :echo<CR>
 " maybe also execute "keepjumps normal" ""
-" or redraw!
+" or :redraw!
 
 " tab open
 noremap <silent> <Leader>to :$tabnew<CR>

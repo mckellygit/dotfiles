@@ -203,3 +203,23 @@ export FZF_DEFAULT_OPTS='
 #  fi
 #fi
 
+alias getkey='ssh -A keyphemeral@10.173.48.129'
+
+if [ -z "$SSH_AUTH_SOCK" ] ; then
+  eval `ssh-agent -s`
+  if [ -f ~/.ssh/id_rsa ] ; then
+    ssh-add ~/.ssh/id_rsa
+  fi
+  # this needs to be done daily ...
+  # for access to dataland for example
+  ping -W 1 -q -c 1 10.173.48.129 >/dev/null 2>&1
+  rc=$?
+  if [ $rc -eq 0 ] ; then
+    ssh -A keyphemeral@10.173.48.129
+  fi
+  # for access to cloud (via public IP jumpbox)
+  if [ -f ~/.ssh/hpcc-key.pem ] ; then
+    ssh-add ~/.ssh/hpcc-key.pem
+  fi
+fi
+
