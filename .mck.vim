@@ -1233,6 +1233,8 @@ nmap <Leader>Pj <Plug>UnconditionalPasteJustJoinedBefore
 nmap <Leader>pj <Plug>UnconditionalPasteJustJoinedAfter
 "
 nmap <Leader>pp <Plug>UnconditionalPasteCharBefore
+nmap <Leader>p0 <Plug>UnconditionalPasteCharBefore
+nmap <Leader>p1 <Plug>UnconditionalPasteCharAfter
 "
 " change l to i to match current indentation ...
 "nmap <Leader>Pl <Plug>UnconditionalPasteLineBefore
