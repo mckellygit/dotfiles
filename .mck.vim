@@ -1832,6 +1832,9 @@ vnoremap <silent> <Leader>gf <Esc>gf
 nnoremap <silent> <Leader>gt <C-w>gf
 vnoremap <silent> <Leader>gt <Esc><C-w>gf
 
+" convenience
+cnoreabbrev <silent> hsplit split
+
 " -----------------------------
 
 " Interval timer job for git status
