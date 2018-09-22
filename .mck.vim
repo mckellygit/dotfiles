@@ -545,9 +545,6 @@ set mouse=a
 "set clipboard^=unnamedplus
 set clipboard^=unnamed,unnamedplus
 
-" if using parcellite - dont sync clipboards or
-" dont use both unnamed and unnamedplus above
-
 "set timeoutlen=1000 ttimeoutlen=0
 "set notimeout ttimeout timeoutlen=100
 set timeout timeoutlen=700
