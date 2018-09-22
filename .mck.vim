@@ -543,7 +543,10 @@ set mouse=a
 
 " use shift + left click to get back to previous (mouse=~a)
 
-" use both clipboard (unnamed) and primary (unnamedplus)
+" use both
+" clipboard '+' (XA_SECONDARY:unnamedplus)
+" and
+" primary '*' (XA_PRIMARY:unnamed)
 "set clipboard^=unnamed
 "set clipboard^=unnamedplus
 set clipboard^=unnamed,unnamedplus
