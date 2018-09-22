@@ -467,6 +467,9 @@ set smartcase
 set shortmess-=s
 " and dont forget <Leader>hl for hlsearch toggle
 
+" get paste confirmation on < 3 lines ...
+set report=0
+
 "set ttyfast
 
 "set iskeyword for word separators ...
@@ -560,7 +563,8 @@ set ttimeout ttimeoutlen=700
 "vnoremap <silent> <C-c> "+ygv<Esc>
 " leave normal mode with <C-c>/yank, like tmux
 vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"+ygv<Esc>i' : '"+ygv<Esc>'
-vnoremap <silent> <expr> y     (&buftype == 'terminal') ? 'yi' : 'y'
+vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"+ygv<Esc>i' : '"+ygv<Esc>'
+"vnoremap <silent> <expr> y     (&buftype == 'terminal') ? 'yi' : 'y'
 
 " cut selection
 vnoremap <silent> <C-x> "+d<LeftRelease>
