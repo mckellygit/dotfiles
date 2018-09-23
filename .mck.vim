@@ -570,7 +570,8 @@ vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"+ygv<Esc>i' : '"+ygv
 "vnoremap <silent> <expr> y     (&buftype == 'terminal') ? 'yi' : 'y'
 
 " cut selection
-vnoremap <silent> <C-x> "+d<LeftRelease>
+"vnoremap <silent> <C-x> "+d<LeftRelease>
+vnoremap <silent> <C-x> "+d
 
 " insert/paste
 " this removes the <C-v> literal input mode
