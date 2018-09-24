@@ -565,13 +565,18 @@ set ttimeout ttimeoutlen=700
 " gv<Esc> leave cursor at last pos
 "vnoremap <silent> <C-c> "+ygv<Esc>
 " leave normal mode with <C-c>/yank, like tmux
-vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"+ygv<Esc>i' : '"+ygv<Esc>'
-vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"+ygv<Esc>i' : '"+ygv<Esc>'
+"vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"+ygv<Esc>i' : '"+ygv<Esc>'
+"vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"+ygv<Esc>i' : '"+ygv<Esc>'
+" if X11 Forwarding is not on/allowed then perhaps vim copy to + and * does not work over ssh ?
+vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"+ygv<Esc>i <Bar> :call system("xsel -i -b", @y)<CR>' : '"+ygv<Esc> <Bar> :call system("xsel -i -b", @y)<CR>'
+vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"+ygv<Esc>i <Bar> :call system("xsel -i -b", @y)<CR>' : '"+ygv<Esc> <Bar> :call system("xsel -i -b", @y)<CR>'
 "vnoremap <silent> <expr> y     (&buftype == 'terminal') ? 'yi' : 'y'
 
 " cut selection
 "vnoremap <silent> <C-x> "+d<LeftRelease>
-vnoremap <silent> <C-x> "+d
+"vnoremap <silent> <C-x> "+d
+" if X11 Forwarding is not on/allowed then perhaps vim copy to + and * does not work over ssh ?
+vnoremap <silent> <C-x> "+d <Bar> :call system("xsel -i -b", @y)<CR>
 
 " insert/paste
 " this removes the <C-v> literal input mode
