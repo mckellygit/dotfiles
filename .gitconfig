@@ -23,6 +23,8 @@
     merge-signed = !git merge --signoff
     pull-s = !git pull --signoff
     pull-signed = !git pull --signoff
+    br-name = "!git rev-parse --abbrev-ref HEAD"
+    ff-upd = "!f() { git merge --signoff --ff-only "origin/$(git br-name)"; }; f"
     del-loc-br = "!f() { git branch -D "$@"; }; f"
     del-rem-br = "!f() { git push origin --delete "$@"; }; f"
     del-all-br = "!f() { git push origin --delete "$@"; git branch -D "$@"; }; f"
