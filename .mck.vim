@@ -554,7 +554,8 @@ set clipboard^=unnamed,unnamedplus
 "set timeoutlen=1000 ttimeoutlen=0
 "set notimeout ttimeout timeoutlen=100
 set timeout timeoutlen=700
-set ttimeout ttimeoutlen=700
+"set ttimeout ttimeoutlen=700
+set nottimeout
 
 " ctrl-c to yank selection into paste buffer/clipboard
 
@@ -568,21 +569,23 @@ set ttimeout ttimeoutlen=700
 "vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"+ygv<Esc>i' : '"+ygv<Esc>'
 "vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"+ygv<Esc>i' : '"+ygv<Esc>'
 " if X11 Forwarding is not on/allowed then perhaps vim copy to + and * does not work over ssh ?
-vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"+y <Bar> :call system("xsel -i -b", @c)<CR> <Bar> gv<Esc>i' : '"+y <Bar> :call system("xsel -i -b", @c)<CR> <Bar> gv<Esc>'
-vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"+y <Bar> :call system("xsel -i -b", @c)<CR> <Bar> gv<Esc>i' : '"+y <Bar> :call system("xsel -i -b", @c)<CR> <Bar> gv<Esc>'
+vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '""y <Bar> :call system("xsel -i -b", @")<CR> <Bar> gv<Esc>i' : '""y <Bar> :call system("xsel -i -b", @")<CR> <Bar> gv<Esc>'
+vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '""y <Bar> :call system("xsel -i -b", @")<CR> <Bar> gv<Esc>i' : '""y <Bar> :call system("xsel -i -b", @")<CR> <Bar> gv<Esc>'
 "vnoremap <silent> <expr> y     (&buftype == 'terminal') ? 'yi' : 'y'
 
 " cut selection
 "vnoremap <silent> <C-x> "+d<LeftRelease>
 "vnoremap <silent> <C-x> "+d
 " if X11 Forwarding is not on/allowed then perhaps vim copy to + and * does not work over ssh ?
-vnoremap <silent> <C-x> "+d <Bar> :call system("xsel -i -b", @c)<CR>
+vnoremap <silent> <C-x> ""d <Bar> :call system("xsel -i -b", @")<CR>
 
 " insert/paste
 " this removes the <C-v> literal input mode
 "inoremap <silent> <C-v> <C-r>+
 " use <C-q> instead
-inoremap <silent> <C-q> <C-r>+
+"inoremap <silent> <C-q> <C-r>+
+" <C-q> does not seem to get through ...
+inoremap <silent> <M-p> <C-r>"
 
 " change default to paste before (at) cursor
 " instead of after cursor
