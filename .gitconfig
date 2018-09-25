@@ -21,6 +21,8 @@
 	visual = !gitk
     merge-s = !git merge --signoff
     merge-signed = !git merge --signoff
+    pull-s = !git pull --signoff
+    pull-signed = !git pull --signoff
     del-loc-br = "!f() { git branch -D "$@"; }; f"
     del-rem-br = "!f() { git push origin --delete "$@"; }; f"
     del-all-br = "!f() { git push origin --delete "$@"; git branch -D "$@"; }; f"
