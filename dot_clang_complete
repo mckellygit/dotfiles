@@ -1,6 +1,6 @@
 -I.
 -I../build
--I../buildln
+-I../build/generated
 -Icommon/deftype
 -Icommon/dllserver
 -Icommon/environment
@@ -41,6 +41,7 @@
 -Iesp/bindings/SOAP/client
 -Iesp/bindings/SOAP/Platform
 -Iesp/bindings/SOAP/ws_ecl_client
+-Iesp/bindings/SOAP/xpp
 -Iesp/clients
 -Iesp/clients/LoggingClient
 -Iesp/eclwatch
@@ -145,3 +146,4 @@
 -Itools/hidl
 -Itools/swapnode
 -I/usr/include/apr-1.0
+-I../buildln
