@@ -29,6 +29,7 @@
     del-rem-br = "!f() { git push origin --delete "$@"; }; f"
     del-all-br = "!f() { git push origin --delete "$@"; git branch -D "$@"; }; f"
     alias = "!git config --get-regexp ^alias. | sed 's/^alias.//'"
+    stat = !git status
 [diff]
 	compactionHeuristic = true
 	tool = vimdiff
