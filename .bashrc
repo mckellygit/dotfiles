@@ -113,6 +113,7 @@ alias vdiff='vimdiff'
 alias more='less'
 alias tailrdm='tail -f /tmp/rdm.log'
 alias difff='diff'
+alias vigv='vim -c GV'
 
 alias radssh='python -m radssh.shell $@'
 
