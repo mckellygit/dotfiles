@@ -1,1 +1,2 @@
 let g:clang_compilation_database = '~/lnrs/wip/build'
+let g:clang_root = '~/lnrs/wip/HPCC-Platform'
