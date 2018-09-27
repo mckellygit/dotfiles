@@ -87,6 +87,7 @@ alias difff='diff'
 alias vigv='vim -c GV'
 alias sync-hpcc='sync_hpcc'
 alias stop-hpcc='stop_hpcc'
+alias stat-hpcc='stat_hpcc'
 alias start-hpcc='start_hpcc'
 
 # export NCPUS=`cat /proc/cpuinfo | grep processor | wc -l`
