@@ -114,6 +114,9 @@ alias more='less'
 alias tailrdm='tail -f /tmp/rdm.log'
 alias difff='diff'
 alias vigv='vim -c GV'
+alias sync-hpcc='sync_hpcc'
+alias stop-hpcc='stop_hpcc'
+alias start-hpcc='start_hpcc'
 
 alias radssh='python -m radssh.shell $@'
 
