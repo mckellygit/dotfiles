@@ -1672,6 +1672,36 @@ if &diff
   highlight DiffText   cterm=bold ctermfg=10 ctermbg=88 gui=none guifg=bg guibg=Red
 endif
 
+" if want vimdiff to exit when files are equal
+autocmd VimEnter * call Diffstart()
+
+" if start vimdiff file1 -c 'vert diffsplit file2'
+" then dont get '2 files to edit' msg at exit ...
+" but shell alias for arguments ($1 $2) doesnt like
+" when $2 is a dir ...
+
+function! Diffstart()
+  if !&diff
+    return
+  endif
+  execute "normal 1G"
+  try
+     execute ":foldc!"
+  catch
+     return
+  endtry
+  execute "normal zj"
+  let l0=line('.')
+  if (l0 != 1)
+    return
+  endif
+  execute "normal j"
+  let l1=line('.')
+  if (l1 == 1)
+    call Xdiff()
+  endif
+endfunction
+
 set noshowmode
 
 " persistent undo between sessions ...
