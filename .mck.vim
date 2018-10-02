@@ -342,8 +342,9 @@ let g:rooter_silent_chdir = 0
 
 " FileBeagle ----------
 let g:filebeagle_suppress_keymaps = 1
-nmap <silent> <Leader>fb <Plug>FileBeagleOpenCurrentWorkingDir
-nmap <silent> -          <Plug>FileBeagleOpenCurrentBufferDir
+nmap <silent> <Leader>fB <Plug>FileBeagleOpenCurrentWorkingDir
+nmap <silent> <Leader>fb <Plug>FileBeagleOpenCurrentBufferDir
+"nmap <silent> -          <Plug>FileBeagleOpenCurrentBufferDir
 " unmap these in qf
 autocmd BufReadPost quickfix nnoremap <buffer> <Leader>fb <Nop>
 autocmd BufReadPost quickfix nnoremap <buffer> - -
