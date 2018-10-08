@@ -70,6 +70,9 @@ bindkey '^I' expand-or-complete-prefix
 
 # ctrl-d ...
 # set -o ignoreeof
+# like cmd &! to stay running after exit ...
+setopt NO_HUP
+#setopt NO_CHECK_JOBS
 
 export KEYTIMEOUT=3
 
