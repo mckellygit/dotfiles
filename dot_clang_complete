@@ -125,6 +125,7 @@
 -Isystem/security/securesocket
 -Isystem/security/shared
 -Isystem/security/zcrypt
+-Isystem/security/cryptohelper
 -Isystem/win32
 -Isystem/xmllib
 -Itesting/unittests
