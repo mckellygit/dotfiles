@@ -1,0 +1,7 @@
+#!/bin/bash
+
+read -r -p "really ? [(y)/n] " response
+response=${response,,} # tolower
+if [[ $response =~ ^(yes|y| ) ]] || [[ -z $response ]]; then
+    sudo make install
+fi
