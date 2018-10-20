@@ -406,6 +406,21 @@ autocmd FileType GV set foldlevelstart=1
 autocmd FileType GV nmap <buffer> o <Nop>
 "autocmd FileType GV cnoreabbrev <silent> <expr> q! (getcmdtype() == ':' && getcmdline() =~ '\s*q!\s*') ? 'qa!' : 'q!'
 
+function! TabCloseRightQuit(bang)
+  let cur=tabpagenr()
+  while cur < tabpagenr('$')
+    exe 'tabclose' . a:bang . ' ' . (cur + 1)
+  endwhile
+  execute "qa!"
+endfunction
+command! -bang Tabcloserightquit call TabCloseRightQuit('<bang>')
+
+function! TabCloseLeft(bang)
+  while tabpagenr() > 1
+    exe 'tabclose' . a:bang . ' 1'
+  endwhile
+endfunction
+command! -bang Tabcloseleft call TabCloseLeft('<bang>')
 " gv -----------
 
 " QFEnter -------------
