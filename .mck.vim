@@ -403,6 +403,7 @@ autocmd FileType GV xmap <buffer> <Space> O
 autocmd FileType GV setlocal cursorline
 " start with folds open
 autocmd FileType GV set foldlevelstart=1
+autocmd FileType GV nmap <buffer> o <Nop>
 "autocmd FileType GV cnoreabbrev <silent> <expr> q! (getcmdtype() == ':' && getcmdline() =~ '\s*q!\s*') ? 'qa!' : 'q!'
 
 " gv -----------
