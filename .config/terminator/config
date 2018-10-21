@@ -2,6 +2,7 @@
   enabled_plugins = LaunchpadCodeURLHandler, APTURLHandler, LaunchpadBugURLHandler
   handle_size = 2
   title_font = Liberation Mono 13
+  title_transmit_bg_color = "#d85f00"
   title_transmit_fg_color = "#f6f3ea"
   title_use_system_font = False
 [keybindings]
