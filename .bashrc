@@ -171,3 +171,6 @@ fi
 
 alias getnewkeys='ssh -A keyphemeral@10.173.48.129'
 
+# needed to have gdb stop with ^C ...
+stty ixany
+
