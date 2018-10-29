@@ -177,5 +177,6 @@ stty werase undef > /dev/null 2>&1
 
 # do these in .inputrc
 #bind "\C-p": backward-kill-word
+#bind "\e[3;5~": backward-kill-word
 #bind "\C-n": nop
 
