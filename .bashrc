@@ -172,5 +172,10 @@ fi
 alias getnewkeys='ssh -A keyphemeral@10.173.48.129'
 
 # needed to have gdb stop with ^C ...
-stty ixany
+stty ixany > /dev/null 2>&1
+stty werase undef > /dev/null 2>&1
+
+# do these in .inputrc
+#bind "\C-p": backward-kill-word
+#bind "\C-n": nop
 

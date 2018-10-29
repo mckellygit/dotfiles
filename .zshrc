@@ -64,6 +64,9 @@ bindkey '^a' beginning-of-line
 bindkey '^e' end-of-line
 bindkey -M menuselect '^[[Z' reverse-menu-complete
 bindkey '^I' expand-or-complete-prefix
+#bindkey '^P' backward-kill-word
+# Ctrl-DEL
+bindkey '\e[3;5~' backward-kill-word
 
 # prompt styles (prompt -l to list) ...
 # autoload -U promptinit && promptinit
@@ -214,5 +217,6 @@ export FZF_DEFAULT_OPTS='
 alias getnewkeys='ssh -A keyphemeral@10.173.48.129'
 
 # needed to have gdb stop with ^C ...
-stty ixany
+stty ixany > /dev/null 2>&1
+stty werase undef > /dev/null 2>&1
 
