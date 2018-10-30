@@ -179,4 +179,6 @@ stty werase undef > /dev/null 2>&1
 #bind "\C-p": backward-kill-word
 #bind "\e[3;5~": backward-kill-word
 #bind "\C-n": nop
+#bind "\e[1;5D": vi-prev-word
+#bind "\e[1;5C": vi-next-word
 

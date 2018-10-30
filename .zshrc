@@ -3,7 +3,9 @@ HISTFILE=~/.histfile
 HISTSIZE=2000
 SAVEHIST=2000
 unsetopt beep
+# Esc to get into vi edit mode
 bindkey -v
+
 # End of lines configured by zsh-newuser-install
 # The following lines were added by compinstall
 zstyle :compinstall filename '/home/$LOGNAME/.zshrc'
@@ -67,6 +69,10 @@ bindkey '^I' expand-or-complete-prefix
 #bindkey '^P' backward-kill-word
 # Ctrl-DEL
 bindkey '\e[3;5~' backward-kill-word
+# Ctrl-Left
+bindkey '\e[1;5D' backward-word
+# Ctrl-Right
+bindkey '\e[1;5C' forward-word
 
 # prompt styles (prompt -l to list) ...
 # autoload -U promptinit && promptinit
@@ -77,7 +83,7 @@ bindkey '\e[3;5~' backward-kill-word
 setopt NO_HUP
 #setopt NO_CHECK_JOBS
 
-export KEYTIMEOUT=3
+export KEYTIMEOUT=1
 
 alias ll='ls -ltr'
 alias lla='ls -latr'

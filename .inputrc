@@ -4,3 +4,5 @@ set enable-bracketed-paste on
 #"\C-p": backward-kill-word
 "\e[3;5~": backward-kill-word
 "\C-n": nop
+"\e[1;5D": vi-prev-word
+"\e[1;5C": vi-next-word
