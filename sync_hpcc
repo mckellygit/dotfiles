@@ -20,6 +20,32 @@ cat << EOF
 EOF
 }
 
+modified=0
+
+# These all go in /opt/HPCCSystems/componentfiles/cl/include:
+
+a=""
+a=$a"$(sudo rsync -i --update ../HPCC-Platform/system/jlib/jscm.hpp /opt/HPCCSystems/componentfiles/cl/include)"
+a=$a"$(sudo rsync -i --update ../HPCC-Platform/system/include/platform.h /opt/HPCCSystems/componentfiles/cl/include)"
+a=$a"$(sudo rsync -i --update ../HPCC-Platform/system/include/rtlconst.hpp /opt/HPCCSystems/componentfiles/cl/include)"
+
+a=$a"$(sudo rsync -i --update ../HPCC-Platform/rtl/include/eclhelper_base.hpp /opt/HPCCSystems/componentfiles/cl/include)"
+a=$a"$(sudo rsync -i --update ../HPCC-Platform/rtl/include/eclhelper.hpp /opt/HPCCSystems/componentfiles/cl/include)"
+
+a=$a"$(sudo rsync -i --update ../HPCC-Platform/rtl/eclrtl/rtlbcd.hpp /opt/HPCCSystems/componentfiles/cl/include)"
+a=$a"$(sudo rsync -i --update ../HPCC-Platform/rtl/eclrtl/eclinclude4.hpp /opt/HPCCSystems/componentfiles/cl/include)"
+a=$a"$(sudo rsync -i --update ../HPCC-Platform/rtl/eclrtl/eclrtl.hpp /opt/HPCCSystems/componentfiles/cl/include)"
+a=$a"$(sudo rsync -i --update ../HPCC-Platform/rtl/eclrtl/eclrtl_imp.hpp /opt/HPCCSystems/componentfiles/cl/include)"
+a=$a"$(sudo rsync -i --update ../HPCC-Platform/rtl/eclrtl/rtldistr.hpp /opt/HPCCSystems/componentfiles/cl/include)"
+a=$a"$(sudo rsync -i --update ../HPCC-Platform/rtl/eclrtl/rtlds_imp.hpp /opt/HPCCSystems/componentfiles/cl/include)"
+a=$a"$(sudo rsync -i --update ../HPCC-Platform/rtl/eclrtl/rtlfield.hpp /opt/HPCCSystems/componentfiles/cl/include)"
+a=$a"$(sudo rsync -i --update ../HPCC-Platform/rtl/eclrtl/rtlkey.hpp /opt/HPCCSystems/componentfiles/cl/include)"
+a=$a"$(sudo rsync -i --update ../HPCC-Platform/rtl/eclrtl/rtlrecord.hpp /opt/HPCCSystems/componentfiles/cl/include)"
+
+if [ -n "${a}" ] ; then
+    modified=1
+fi
+
 dir=""
 do_clean=""
 mod_rpath=1
@@ -78,8 +104,6 @@ if [ ! -x $dir ] ; then
 fi
 
 stop_hpcc ${do_clean}
-
-modified=0
 
 output=$(sudo rsync --info=name1 -ai --update --existing $dir/libs/ /opt/HPCCSystems/lib)
 #echo "output = $output"
@@ -161,6 +185,7 @@ do
         rc=$?
 #       echo "rc: $rc"
         if [ $rc -eq 0 ] ; then
+            #patchelf --force-rpath --set-rpath '/opt/HPCCSystems/lib:/opt/HPCCSystems/plugins:/opt/HPCCSystems/lib/external:/usr/local/lib' $file
             patchelf --force-rpath --set-rpath '/opt/HPCCSystems/lib:/opt/HPCCSystems/plugins:/opt/HPCCSystems/lib/external' $file
         fi
     done
