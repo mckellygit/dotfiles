@@ -25,22 +25,26 @@ modified=0
 # These all go in /opt/HPCCSystems/componentfiles/cl/include:
 
 a=""
-a=$a"$(sudo rsync -i --update ../HPCC-Platform/system/jlib/jscm.hpp /opt/HPCCSystems/componentfiles/cl/include)"
-a=$a"$(sudo rsync -i --update ../HPCC-Platform/system/include/platform.h /opt/HPCCSystems/componentfiles/cl/include)"
-a=$a"$(sudo rsync -i --update ../HPCC-Platform/system/include/rtlconst.hpp /opt/HPCCSystems/componentfiles/cl/include)"
-
-a=$a"$(sudo rsync -i --update ../HPCC-Platform/rtl/include/eclhelper_base.hpp /opt/HPCCSystems/componentfiles/cl/include)"
-a=$a"$(sudo rsync -i --update ../HPCC-Platform/rtl/include/eclhelper.hpp /opt/HPCCSystems/componentfiles/cl/include)"
-
-a=$a"$(sudo rsync -i --update ../HPCC-Platform/rtl/eclrtl/rtlbcd.hpp /opt/HPCCSystems/componentfiles/cl/include)"
-a=$a"$(sudo rsync -i --update ../HPCC-Platform/rtl/eclrtl/eclinclude4.hpp /opt/HPCCSystems/componentfiles/cl/include)"
-a=$a"$(sudo rsync -i --update ../HPCC-Platform/rtl/eclrtl/eclrtl.hpp /opt/HPCCSystems/componentfiles/cl/include)"
-a=$a"$(sudo rsync -i --update ../HPCC-Platform/rtl/eclrtl/eclrtl_imp.hpp /opt/HPCCSystems/componentfiles/cl/include)"
-a=$a"$(sudo rsync -i --update ../HPCC-Platform/rtl/eclrtl/rtldistr.hpp /opt/HPCCSystems/componentfiles/cl/include)"
-a=$a"$(sudo rsync -i --update ../HPCC-Platform/rtl/eclrtl/rtlds_imp.hpp /opt/HPCCSystems/componentfiles/cl/include)"
-a=$a"$(sudo rsync -i --update ../HPCC-Platform/rtl/eclrtl/rtlfield.hpp /opt/HPCCSystems/componentfiles/cl/include)"
-a=$a"$(sudo rsync -i --update ../HPCC-Platform/rtl/eclrtl/rtlkey.hpp /opt/HPCCSystems/componentfiles/cl/include)"
-a=$a"$(sudo rsync -i --update ../HPCC-Platform/rtl/eclrtl/rtlrecord.hpp /opt/HPCCSystems/componentfiles/cl/include)"
+for f in \
+../HPCC-Platform/system/jlib/jscm.hpp \
+../HPCC-Platform/system/include/platform.h \
+../HPCC-Platform/system/include/rtlconst.hpp \
+../HPCC-Platform/rtl/include/eclhelper_base.hpp \
+../HPCC-Platform/rtl/include/eclhelper.hpp \
+../HPCC-Platform/rtl/eclrtl/rtlbcd.hpp \
+../HPCC-Platform/rtl/eclrtl/eclinclude4.hpp \
+../HPCC-Platform/rtl/eclrtl/eclrtl.hpp \
+../HPCC-Platform/rtl/eclrtl/eclrtl_imp.hpp \
+../HPCC-Platform/rtl/eclrtl/rtldistr.hpp \
+../HPCC-Platform/rtl/eclrtl/rtlds_imp.hpp \
+../HPCC-Platform/rtl/eclrtl/rtlfield.hpp \
+../HPCC-Platform/rtl/eclrtl/rtlkey.hpp \
+../HPCC-Platform/rtl/eclrtl/rtlrecord.hpp
+do
+    if [ -f ${f} ] ; then
+        a=$a"$(sudo rsync -i --update ${f} /opt/HPCCSystems/componentfiles/cl/include)"
+    fi
+done
 
 if [ -n "${a}" ] ; then
     modified=1
