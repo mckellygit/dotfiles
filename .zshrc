@@ -38,11 +38,14 @@ zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 # To disable bracketed paste
 # unset zle_bracketed_paste
 
+setopt PROMPT_SUBST
+setopt PROMPTSUBST
+
 random_title=$[$RANDOM%100]
 # precmd () { print -Pn "\e]2;%n@%M.$random_title\a" }
 # precmd () { print -Pn "\e]2;%n@%M" }
 # precmd () { print -Pn "\e]0;%M:%12<..<%~%<<%%\a" }
-precmd () { if [[ -n "$SSH_CLIENT" ]] ; then print -Pn "\e]0;ssh-%M:%12<..<%~%<<%%\a"; else ; print -Pn "\e]0;%M:%12<..<%~%<<%%\a" ; fi }
+precmd () { if [[ -n "$SSH_CLIENT" ]] ; then PS1='%F{007}ssh%f-%F{100}%n@%m%f:%F{150}%12<..<%~%<<%f%% '; print -Pn '\e]0;ssh-%M:%12<..<%~%<<%\a'; else ; PS1='%F{100}%n@%m%f:%F{150}%12<..<%~%<<%f%% '; print -Pn '\e]0;%M:%12<..<%~%<<%\a' ; fi }
 
 # skip SHARE_HISTORY
 setopt APPEND_HISTORY INC_APPEND_HISTORY
@@ -141,10 +144,10 @@ autoload -U colors && colors
 # use %f instead of %{$reset_color%} to fix a problem with zsh autocomplete
 #PS1='%n@%m:%12<..<%~%<<%% '
 #PS1="%{$fg[green]%}%n@%m%f:%{$fg[yellow]%}%12<..<%~%<<%f%% "
- PS1="%F{100}%n@%m%f:%F{150}%12<..<%~%<<%f%% "
+ PS1='%F{100}%n@%m%f:%F{150}%12<..<%~%<<%f%% '
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] ; then
 #   PS1="%{$fg[red]%}ssh%f-%{$fg[green]%}%n@%m%f:%{$fg[yellow]%}%12<..<%~%<<%f%% "
-    PS1="%F{007}ssh%f-%F{100}%n@%m%f:%F{150}%12<..<%~%<<%f%% "
+    PS1='%F{007}ssh%f-%F{100}%n@%m%f:%F{150}%12<..<%~%<<%f%% '
 fi
 
 export MANPATH=${MANPATH}:/usr/share/bcc/man
