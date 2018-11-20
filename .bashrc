@@ -140,7 +140,7 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # PROMPT_COMMAND='echo -ne "\033]0;${HOSTNAME}:${PWD}\007"'
 # PROMPT_COMMAND='echo -ne "\033]0;${HOSTNAME}:$(echo $PWD | tail -c 11)\007"'
 # PROMPT_COMMAND='echo -ne "\033]0;${HOSTNAME}:${PWD:(-11)}\007"'
-PROMPT_COMMAND='pwd2=${PWD/#$HOME/\~}; if [ ${#pwd2} -gt 11 ] ; then pwd2=..${pwd2:(-10)} ; fi ; echo -ne "\033]0;${HOSTNAME}:${pwd2}\007"'
+PROMPT_COMMAND='pwd2=${PWD/#$HOME/\~}; if [ ${#pwd2} -gt 11 ] ; then pwd2=..${pwd2:(-10)} ; fi ; if [[ -n "$TMUX_PANE" ]] ; then tmux set-window-option automatic-rename on; fi ; echo -ne "\033]0;${HOSTNAME}:${pwd2}\007"'
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like
