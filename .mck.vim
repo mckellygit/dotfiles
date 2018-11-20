@@ -597,6 +597,9 @@ vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '""y <Bar> :call syste
 " if X11 Forwarding is not on/allowed then perhaps vim copy to + and * does not work over ssh ?
 vnoremap <silent> <C-x> ""d <Bar> :call system("xsel -i -b", @")<CR>
 
+" <C-v> to toggle block-mode instead of on or cancel visual-mode
+xnoremap <silent> <expr> <C-v> (visualmode() == 'V') ? mode()=="\<C-v>" ? "V" : "\<C-v>" : mode()=="\<C-v>" ? "v" : "\<C-v>"
+
 " insert/paste
 " this removes the <C-v> literal input mode
 "inoremap <silent> <C-v> <C-r>+
