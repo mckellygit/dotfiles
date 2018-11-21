@@ -587,18 +587,51 @@ set nottimeout
 "vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"+ygv<Esc>i' : '"+ygv<Esc>'
 "vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"+ygv<Esc>i' : '"+ygv<Esc>'
 " if X11 Forwarding is not on/allowed then perhaps vim copy to + and * does not work over ssh ?
-vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '""y <Bar> :call system("xsel -i -b", @")<CR> <Bar> gv<Esc>i' : '""y <Bar> :call system("xsel -i -b", @")<CR> <Bar> gv<Esc>'
-vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '""y <Bar> :call system("xsel -i -b", @")<CR> <Bar> gv<Esc>i' : '""y <Bar> :call system("xsel -i -b", @")<CR> <Bar> gv<Esc>'
+vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '""y <Bar> :<C-u>call system("xsel -i -b", @")<CR> <Bar> gv<Esc>i' : '""y <Bar> :<C-u>call system("xsel -i -b", @")<CR> <Bar> gv<Esc>'
+vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '""y <Bar> :<C-u>call system("xsel -i -b", @")<CR> <Bar> gv<Esc>i' : '""y <Bar> :<C-u>call system("xsel -i -b", @")<CR> <Bar> gv<Esc>'
 "vnoremap <silent> <expr> y     (&buftype == 'terminal') ? 'yi' : 'y'
 
 " cut selection
 "vnoremap <silent> <C-x> "+d<LeftRelease>
 "vnoremap <silent> <C-x> "+d
 " if X11 Forwarding is not on/allowed then perhaps vim copy to + and * does not work over ssh ?
-vnoremap <silent> <C-x> ""d <Bar> :call system("xsel -i -b", @")<CR>
+vnoremap <silent> <C-x> ""d <Bar> :<C-u>call system("xsel -i -b", @")<CR>
 
 " <C-v> to toggle block-mode instead of on or cancel visual-mode
-xnoremap <silent> <expr> <C-v> (visualmode() == 'V') ? mode()=="\<C-v>" ? "V" : "\<C-v>" : mode()=="\<C-v>" ? "v" : "\<C-v>"
+"xnoremap <silent> <expr> <C-v> mode()=="\<C-v>" ? "v" : "\<C-v>"
+xnoremap <silent> <C-v> :<C-u>call MyVisV()<CR>
+function! MyVisV()
+    let w:m = visualmode()
+    if w:m ==# 'v'
+        let w:v = 'v'
+        exe "normal! gv" . "\<C-v>"
+    elseif w:m ==# 'V'
+        let w:v = 'V'
+        exe "normal! gv" . "\<C-v>"
+    elseif exists('w:v')
+        if w:v ==# 'v'
+            exe "normal! gvv"
+        elseif w:v ==# 'V'
+            exe "normal! gvV"
+        else
+            exe "normal! gv"
+        endif
+    else
+        " exit block-mode like v,V do
+        exe "normal! gv" . "\<Esc>"
+        " or could no-op it
+        "exe "normal! gv"
+    endif
+endfunction
+
+" q to exit visual-mode and clear previous w:v state
+"xnoremap <silent> q <Esc>
+xnoremap <silent> q :<C-u>call MyVisQ()<CR>
+function! MyVisQ()
+    if exists('w:v')
+        unlet w:v
+    endif
+endfunction
 
 " insert/paste
 " this removes the <C-v> literal input mode
@@ -682,8 +715,8 @@ set tabstop=4
 " Don't use Ex mode, use Q for formatting
 " map Q gq
 " No, use Q for recording (@ for playback)
-noremap <silent> Q q
-noremap <silent> q <Nop>
+nnoremap <silent> Q q
+nnoremap <silent> q <Nop>
 
 " Make p in Visual mode replace the selected text with the "" register.
 "vnoremap p <Esc>:let current_reg = @"<CR>gvdi<C-R>=current_reg<CR><Esc>
@@ -777,7 +810,7 @@ endfunction
 
 " C-/ to center line in screen
 nnoremap <silent> <C-_> :call <SID>GoToMID(0)<CR>
-vnoremap <silent> <C-_> :call <SID>GoToMID(1)<CR>
+vnoremap <silent> <C-_> :<C-u>call <SID>GoToMID(1)<CR>
 
 noremap <silent> <Leader>ct :call <SID>GoToMID(0)<CR>
 noremap <silent> <Leader>cz zz
@@ -1490,8 +1523,8 @@ endif " quickfix quit/close
 
 " -----------------------------
 
-" disable : in visual mode
-vmap <silent> : <Nop>
+" disable : in visual mode (can still use <C-w>:)
+vnoremap <silent> : <Nop>
 
 noremap <C-a> 0
 " ctrl-e was scroll down one line so we lose that
@@ -1580,11 +1613,11 @@ nnoremap <C-c> <C-c>
 nnoremap <silent> <C-x><C-c>      :call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
 
 " no imap for this
-vnoremap <silent> <Leader>xc  <Esc>:call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
+vnoremap <silent> <Leader>xc  <Esc>:<C-u>call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
 nnoremap <silent> <Leader>xc       :call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
 
 " no imap for this
-vnoremap <silent> <Leader>ax  <Esc>:call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
+vnoremap <silent> <Leader>ax  <Esc>:<C-u>call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
 nnoremap <silent> <Leader>ax       :call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
 
 function! s:EndTerminalsConfQA() abort
