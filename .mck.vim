@@ -598,9 +598,10 @@ vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '""y <Bar> :<C-u>call 
 vnoremap <silent> <C-x> ""d <Bar> :<C-u>call system("xsel -i -b", @")<CR>
 
 " <C-v> to toggle block-mode instead of on or cancel visual-mode
+" simple and almost there -
 "xnoremap <silent> <expr> <C-v> mode()=="\<C-v>" ? "v" : "\<C-v>"
-xnoremap <silent> <C-v> :<C-u>call MyVisV()<CR>
-function! MyVisV()
+xnoremap <silent> <C-v> :<C-u>call MyVisCv()<CR>
+function! MyVisCv()
     let w:m = visualmode()
     if w:m ==# 'v'
         let w:v = 'v'
@@ -616,12 +617,24 @@ function! MyVisV()
         else
             exe "normal! gv"
         endif
-    else
-        " exit block-mode like v,V do
-        exe "normal! gv" . "\<Esc>"
-        " or could no-op it
-        "exe "normal! gv"
+        unlet w:v
     endif
+endfunction
+
+xnoremap <silent> v :<C-u>call MyVisV1()<CR>
+function! MyVisV1()
+    if exists('w:v')
+        unlet w:v
+    endif
+    exe "normal! gvv"
+endfunction
+
+xnoremap <silent> V :<C-u>call MyVisV2()<CR>
+function! MyVisV2()
+    if exists('w:v')
+        unlet w:v
+    endif
+    exe "normal! gvV"
 endfunction
 
 " q to exit visual-mode and clear previous w:v state
