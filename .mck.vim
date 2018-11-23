@@ -600,50 +600,91 @@ vnoremap <silent> <C-x> ""d <Bar> :<C-u>call system("xsel -i -b", @")<CR>
 " <C-v> to toggle block-mode instead of on or cancel visual-mode
 " simple and almost there -
 "xnoremap <silent> <expr> <C-v> mode()=="\<C-v>" ? "v" : "\<C-v>"
+
+let w:vc = 'u'
+let w:vp = 'u'
+nnoremap <silent> <C-v> :<C-u>call MyVisCvN()<CR>
+function! MyVisCvN()
+    let w:vc = 'x'
+    let w:vp = 'u'
+    exe "normal! \<C-v>"
+endfunction
+
 xnoremap <silent> <C-v> :<C-u>call MyVisCv()<CR>
 function! MyVisCv()
-    let w:m = visualmode()
-    if w:m ==# 'v'
-        let w:v = 'v'
+    if w:vc ==# 'v'
+        let w:vp = w:vc
+        let w:vc = 'x'
         exe "normal! gv" . "\<C-v>"
-    elseif w:m ==# 'V'
-        let w:v = 'V'
+    elseif w:vc ==# 'V'
+        let w:vp = w:vc
+        let w:vc = 'x'
         exe "normal! gv" . "\<C-v>"
-    elseif exists('w:v')
-        if w:v ==# 'v'
+    elseif w:vc ==# 'x'
+        if w:vp ==# 'v'
+            let w:vp = w:vc
+            let w:vc = 'v'
             exe "normal! gvv"
-        elseif w:v ==# 'V'
+        elseif w:vp ==# 'V'
+            let w:vp = w:vc
+            let w:vc = 'V'
             exe "normal! gvV"
         else
-            exe "normal! gv"
+            " no-op
+            "exe "normal! gv"
+            let w:vc = 'v'
+            exe "normal! gvv"
         endif
-        unlet w:v
+    else
+        echoerr "MyVisCv: invalid state: " . w:vc . " : " . w:vp
     endif
+endfunction
+
+nnoremap <silent> v :<C-u>call MyVisV1N()<CR>
+function! MyVisV1N()
+    let w:vc = 'v'
+    let w:vp = 'u'
+    exe "normal! v"
 endfunction
 
 xnoremap <silent> v :<C-u>call MyVisV1()<CR>
 function! MyVisV1()
-    if exists('w:v')
-        unlet w:v
+    if w:vc ==# 'v'
+        " no-op
+        exe "normal! gv"
+    else
+        let w:vp = w:vc
+        let w:vc = 'v'
+        exe "normal! gvv"
     endif
-    exe "normal! gvv"
+endfunction
+
+nnoremap <silent> V :<C-u>call MyVisV2N()<CR>
+function! MyVisV2N()
+    let w:vc = 'V'
+    let w:vp = 'u'
+    exe "normal! V"
 endfunction
 
 xnoremap <silent> V :<C-u>call MyVisV2()<CR>
 function! MyVisV2()
-    if exists('w:v')
-        unlet w:v
+    if w:vc ==# 'V'
+        " no-op
+        exe "normal! gv"
+    else
+        let w:vp = w:vc
+        let w:vc = 'V'
+        exe "normal! gvV"
     endif
-    exe "normal! gvV"
 endfunction
 
-" q to exit visual-mode and clear previous w:v state
+" q to exit visual-mode and clear previous w:v* states
 "xnoremap <silent> q <Esc>
 xnoremap <silent> q :<C-u>call MyVisQ()<CR>
 function! MyVisQ()
-    if exists('w:v')
-        unlet w:v
-    endif
+    let w:vc = 'u'
+    let w:vp = 'u'
+    exe "normal! gv" . "\<Esc>"
 endfunction
 
 " insert/paste
