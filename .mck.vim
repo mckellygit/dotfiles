@@ -636,7 +636,8 @@ function! MyVisCv()
             exe "normal! gvv"
         endif
     else
-        echoerr "MyVisCv: invalid state: " . w:vc . " : " . w:vp
+        let w:vc = 'x'
+        exe "normal! gv" . "\<C-v>"
     endif
 endfunction
 
