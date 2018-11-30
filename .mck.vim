@@ -488,6 +488,8 @@ set shortmess-=s
 " get paste confirmation on < 3 lines ...
 set report=0
 
+"set keymodel=startsel
+
 "set ttyfast
 
 "set iskeyword for word separators ...
@@ -737,15 +739,27 @@ inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
 " (parcellite -n > dev/null 2>&1) &
 " so that clipboard is pushed/pulled to/from all other apps
 
-" TripleClick for next larger entity, not whole line
-nnoremap <silent> <2-LeftMouse> lbve
-vnoremap <silent> <2-LeftMouse> <Esc>lbve
-nnoremap <silent> <3-LeftMouse> lBvE
-vnoremap <silent> <3-LeftMouse> <Esc>lBvE
+" DoubleClick for word (lbve)
+nnoremap <silent> <2-LeftMouse> viw
+vnoremap <silent> <2-LeftMouse> <Esc>viw
+" TripleClick for next larger entity, not whole line (lBvE)
+nnoremap <silent> <3-LeftMouse> viW
+vnoremap <silent> <3-LeftMouse> <Esc>viW
+" QuadrupleClick too confusing
 nnoremap <silent> <4-LeftMouse> <Nop>
 vnoremap <silent> <4-LeftMouse> <Nop>
 
-" highlight word under cursor
+" disable searching tags file for symbol under cursor
+" and select words under cursor instead (lBvE)
+nnoremap <silent> <C-LeftMouse> <LeftMouse>viW
+vnoremap <silent> <C-LeftMouse> <Esc><LeftMouse>viW
+" whole line
+"nnoremap <silent> <M-LeftMouse> <LeftMouse>V
+"vnoremap <silent> <M-LeftMouse> <Esc><LeftMouse>V
+nnoremap <silent> <M-LeftMouse> <Nop>
+vnoremap <silent> <M-LeftMouse> <Nop>
+
+" highlight word under cursor (lbve)
 nnoremap <silent> <Leader>ws viw
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
