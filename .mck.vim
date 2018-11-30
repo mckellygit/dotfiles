@@ -756,8 +756,12 @@ vnoremap <silent> <C-LeftMouse> <Esc><LeftMouse>viW
 " whole line
 "nnoremap <silent> <M-LeftMouse> <LeftMouse>V
 "vnoremap <silent> <M-LeftMouse> <Esc><LeftMouse>V
-nnoremap <silent> <M-LeftMouse> <Nop>
-vnoremap <silent> <M-LeftMouse> <Nop>
+" same as C-
+nnoremap <silent> <M-LeftMouse> <LeftMouse>viW
+vnoremap <silent> <M-LeftMouse> <Esc><LeftMouse>viW
+" no-op
+"nnoremap <silent> <M-LeftMouse> <Nop>
+"vnoremap <silent> <M-LeftMouse> <Nop>
 
 " highlight word under cursor (lbve)
 nnoremap <silent> <Leader>ws viw
