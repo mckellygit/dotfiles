@@ -182,3 +182,26 @@ stty werase undef > /dev/null 2>&1
 #bind "\e[1;5D": vi-prev-word
 #bind "\e[1;5C": vi-next-word
 
+# get TERM from source ...
+if [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTY" ]] ; then
+    if [[ -n "$LC_MONETARY" ]] ; then
+        rstring=$LC_MONETARY
+        # strip leading whitespace
+        rstring="${rstring#"${rstring%%[![:space:]]*}"}"
+        # strip trailing whitespace
+        rstring="${rstring%"${rstring##*[![:space:]]}"}"
+        # first token
+        tstring=${rstring% *}
+        # rest of string
+        rstring=${rstring##* }
+        if [[ -n "$tstring" ]] && [[ "$TERM" == "linux" ]] ; then
+            export TERM=$tstring
+        fi
+        if [[ -n "$rstring" ]] ; then
+            export LC_MONETARY=$rstring
+        else
+            unset LC_MONETARY
+        fi
+    fi
+fi
+
