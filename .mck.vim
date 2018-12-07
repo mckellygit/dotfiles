@@ -301,6 +301,14 @@ let s:palette = g:lightline#colorscheme#wombat#palette
 let s:palette.tabline.left   = [ [ '#d0d0d0', '#585858', 252, 240  ] ]
 let s:palette.tabline.tabsel = [ [ '#d0d0d0', '#5f8787', 252, 66, 'bold' ] ]
 unlet s:palette
+
+function! SetCursorLineFromLightline() abort
+  let palette = lightline#palette()
+  let colors = palette.normal.middle[0]
+  execute printf(
+        \ 'highlight CursorLine guifg=%s guibg=%s ctermfg=%s ctermbg=%s',
+        \ colors[0], colors[1], colors[2], colors[3])
+endfunction
 " lightline ----------
 
 " rooter ----------
@@ -1839,6 +1847,24 @@ set noshowmode
 
 " dont save to ~/.vim/.netrwhist
 :let g:netrw_dirhistmax = 0
+
+" -----------
+
+" :x to save (if modified) and go to next (w/o prompting) or exit
+function s:NextOrQuit() abort
+    if argidx() + 1 == argc()
+        if &mod != 0
+            write
+        endif
+        exit
+    else
+        if &mod != 0
+            write
+        endif
+        next
+    endif
+endfunction
+cnoreabbrev <silent> <expr> x (getcmdtype() == ':' && getcmdline() =~ '\s*x\s*')  ? ':call <SID>NextOrQuit()' : 'x'
 
 " -----------
 
