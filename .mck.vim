@@ -1852,21 +1852,14 @@ set noshowmode
 
 " :x to save (if modified) and go to next (w/o prompting) or exit
 function s:NextOrQuit() abort
-    if argidx() + 1 == argc()
-        if &mod != 0
-            write
-        endif
-        exit
-    else
-        if &mod != 0
-            write
-        endif
-        try
-            next
-        catch
-            exit
-        endtry
-    endif
+  update
+  try
+    next
+  catch /E163:/
+    exit
+  catch /E165:/
+    exit
+  endtry
 endfunction
 cnoreabbrev <silent> <expr> x (getcmdtype() == ':' && getcmdline() =~ '\s*x\s*')  ? ':call <SID>NextOrQuit()' : 'x'
 
