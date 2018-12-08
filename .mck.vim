@@ -1861,7 +1861,11 @@ function s:NextOrQuit() abort
         if &mod != 0
             write
         endif
-        next
+        try
+            next
+        catch
+            exit
+        endtry
     endif
 endfunction
 cnoreabbrev <silent> <expr> x (getcmdtype() == ':' && getcmdline() =~ '\s*x\s*')  ? ':call <SID>NextOrQuit()' : 'x'
