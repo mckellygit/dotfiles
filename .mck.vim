@@ -773,6 +773,7 @@ vnoremap <silent> <M-LeftMouse> <Esc><LeftMouse>viW
 
 " highlight word under cursor (lbve)
 nnoremap <silent> <Leader>ws viw
+vnoremap <silent> <Leader>ws <Esc>viw
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
@@ -1862,6 +1863,8 @@ function s:NextOrQuit() abort
   endtry
 endfunction
 cnoreabbrev <silent> <expr> x (getcmdtype() == ':' && getcmdline() =~ '\s*x\s*')  ? ':call <SID>NextOrQuit()' : 'x'
+
+" could also look into autowrite for :n to write (if modified) ...
 
 " -----------
 
