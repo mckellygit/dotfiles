@@ -183,6 +183,15 @@ stty werase undef > /dev/null 2>&1
 #bind "\e[1;5D": vi-prev-word
 #bind "\e[1;5C": vi-next-word
 
+# set TERM on remote hosts ...
+alias ssh='TERM=xterm-256color ssh'
+# but not for me here ...
+if [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTY" ]] ; then
+    if [[ "$TERM" == "xterm-256color" ]] ; then
+        export TERM=screen-256color
+    fi
+fi
+
 # get TERM from source ...
 if [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTY" ]] ; then
     if [[ -n "$LC_MONETARY" ]] ; then
