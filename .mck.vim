@@ -1812,7 +1812,7 @@ if &diff
 endif
 
 " if want vimdiff to exit when files are equal
-autocmd VimEnter * call Diffstart()
+"autocmd VimEnter * call Diffstart()
 
 " if start vimdiff file1 -c 'vert diffsplit file2'
 " then dont get '2 files to edit' msg at exit ...
@@ -1862,7 +1862,9 @@ function s:NextOrQuit() abort
     exit
   endtry
 endfunction
-cnoreabbrev <silent> <expr> x (getcmdtype() == ':' && getcmdline() =~ '\s*x\s*')  ? ':call <SID>NextOrQuit()' : 'x'
+if !&diff
+  cnoreabbrev <silent> <expr> x (getcmdtype() == ':' && getcmdline() =~ '\s*x\s*')  ? ':call <SID>NextOrQuit()' : 'x'
+endif
 
 " could also look into autowrite for :n to write (if modified) ...
 
