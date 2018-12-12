@@ -230,14 +230,17 @@ alias getnewkeys='ssh -A keyphemeral@10.173.48.129'
 stty ixany > /dev/null 2>&1
 stty werase undef > /dev/null 2>&1
 
-# set TERM on remote hosts ...
-alias ssh='TERM=xterm-256color ssh'
-# but not for me here ...
-if [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTY" ]] ; then
-    if [[ "$TERM" == "xterm-256color" ]] ; then
-        export TERM=screen-256color
-    fi
-fi
+# not needed -
+# genesis /etc/profile.d/fix_term.sh forces TERM=linux
+# do get around that ssh host bash ...
+## set TERM on remote hosts ...
+#alias ssh='TERM=xterm-256color ssh'
+## but not for me here ...
+#if [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTY" ]] ; then
+#    if [[ "$TERM" == "xterm-256color" ]] ; then
+#        export TERM=screen-256color
+#    fi
+#fi
 
 # get TERM from source ...
 if [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTY" ]] ; then
