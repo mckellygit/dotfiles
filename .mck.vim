@@ -142,6 +142,9 @@ Plugin 'skywind3000/asyncrun.vim'
 " tab/buffer
 "Plugin 'ap/vim-buftabline'
 "
+" start screen
+Plugin 'mhinz/vim-startify'
+"
 "" All of your Plugins must be added before the following line
 call vundle#end()         " required
 filetype plugin indent on " required
@@ -461,6 +464,15 @@ autocmd BufNewFile,BufRead *.{ipp,tpp,esp,ecm} set filetype=cpp
 " open quickfix (10 lines) when cmd ends
 let g:asyncrun_open = 10 
 " asyncrun -----------
+
+" startify -----------
+let g:startify_lists = [
+    \ { 'type': 'files',     'header': ['   MRU']            },
+    \ { 'type': 'sessions',  'header': ['   Sessions']       },
+    \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
+    \ { 'type': 'commands',  'header': ['   Commands']       },
+    \ ]
+" startify -----------
 
 " improves color highlighing with dark terminals
 set background=dark
