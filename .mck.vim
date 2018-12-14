@@ -775,6 +775,12 @@ vnoremap <silent> <M-LeftMouse> <Esc><LeftMouse>viW
 nnoremap <silent> <Leader>ws viw
 vnoremap <silent> <Leader>ws <Esc>viw
 
+" search for word under cursor
+nnoremap <silent> <Leader>wf *
+" search for visual selection
+" if register is regex with literal metachars then :let @/=escape(@", '.*\\$^')
+vnoremap <silent> <Leader>wf y <Bar> <Esc>:let @/=@"<CR> <Bar> 2n
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

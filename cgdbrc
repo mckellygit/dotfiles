@@ -1,0 +1,8 @@
+set cgdbmodekey=<Insert>
+map <C-k> <Up>
+map <C-j> <Down>
+map <C-p> <Up>
+map <C-n> <Down>
+imap <C-p> <Insert>s<Up>
+imap <C-k> <Insert>s<Up>
+imap <C-j> <Down>
