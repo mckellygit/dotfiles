@@ -1454,6 +1454,7 @@ function MySearch(meth) abort
   endtry
 endfunction
 
+" use :let @/="" to clear out search pattern
 " search normally
 nnoremap <Leader>sn :set hlsearch<CR>/
 " search buffer with results in loc list
