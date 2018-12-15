@@ -791,7 +791,8 @@ vnoremap <silent> <Leader>ws <Esc>viw
 nnoremap <silent> <Leader>wf *
 " search for visual selection
 " if register is regex with literal metachars then :let @/=escape(@", '.*\\$^')
-vnoremap <silent> <Leader>wf y <Bar> <Esc>:let @/=@"<CR> <Bar> 2n
+"vnoremap <silent> <Leader>wf y <Bar> <Esc>:let @/=@"<CR> <Bar> 2n
+vnoremap <silent> <Leader>wf y<Esc>/<C-r>"<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
@@ -1457,7 +1458,8 @@ endfunction
 " use :let @/="" to clear out search pattern
 nnoremap <silent> <Leader>sc :let@/=""<CR>
 " search normally
-nnoremap <Leader>sn :set hlsearch<CR>/
+nnoremap <Leader>sn :let@/=""<CR>:set hlsearch<CR>/
+vnoremap <Leader>sn y<Esc>:let@/=""<CR>:set hlsearch<CR>/<C-r>"
 " search buffer with results in loc list
 nnoremap <silent> <Leader>sb :call MySearch(0)<CR>
 " search globally with results in loc list
