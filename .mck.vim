@@ -1931,7 +1931,7 @@ endfunction
 noremap <Leader>uu :call UndoAll()<CR>
 
 " toggle search highlight
-noremap <silent> <Leader>hl :set hlsearch! hlsearch?<CR>
+noremap <silent> <Leader>hl :set hlsearch! hlsearch?<CR>:redraw!<CR>
 hi Search ctermbg=58
 
 " clear cmd window (or just <C-l> to redraw)
