@@ -2,7 +2,12 @@ $include /etc/inputrc
 # bash v4.4 with readline v7.0 supports bracketed paste
 set enable-bracketed-paste on
 #"\C-p": backward-kill-word
+# C-DEL
 "\e[3;5~": backward-kill-word
+# C-S-DEL
+"\e[3;6~": backward-kill-word
+# M-DEL
+"\e[3;3~": backward-kill-word
 "\C-n": nop
 "\e[1;5D": vi-prev-word
 "\e[1;5C": vi-next-word

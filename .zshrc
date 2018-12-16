@@ -72,6 +72,10 @@ bindkey '^I' expand-or-complete-prefix
 #bindkey '^P' backward-kill-word
 # Ctrl-DEL
 bindkey '\e[3;5~' backward-kill-word
+# Ctrl-Shift-DEL
+bindkey '\e[3;6~' backward-kill-word
+# Alt-DEL
+bindkey '\e[3;3~' backward-kill-word
 # Ctrl-Left
 bindkey '\e[1;5D' backward-word
 # Ctrl-Right
