@@ -594,8 +594,10 @@ set clipboard^=unnamed,unnamedplus
 "set timeoutlen=1000 ttimeoutlen=0
 "set notimeout ttimeout timeoutlen=100
 set timeout timeoutlen=700
-"set ttimeout ttimeoutlen=700
-set nottimeout
+set ttimeout ttimeoutlen=2
+"set nottimeout
+
+"set esckeys
 
 " ctrl-c to yank selection into paste buffer/clipboard
 
