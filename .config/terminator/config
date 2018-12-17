@@ -22,6 +22,7 @@
   resize_right = <Shift><Super>Right
 # from ctrlbs plugin
   kill_word = <Control>BackSpace
+  esc_bslash = <Control>Insert
 [layouts]
   [[default]]
     [[[child0]]]

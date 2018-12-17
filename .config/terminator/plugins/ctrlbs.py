@@ -10,4 +10,8 @@ available = AVAILABLE = []
 def key_kill_word(self):
     self.vte.feed_child('\x1b\x7f')
 
+def key_esc_bslash(self):
+    self.vte.feed_child('\x1b\x5c')
+
 setattr(Terminal, 'key_kill_word', key_kill_word)
+setattr(Terminal, 'key_esc_bslash', key_esc_bslash)
