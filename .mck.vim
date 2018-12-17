@@ -599,6 +599,11 @@ set ttimeout ttimeoutlen=2
 
 "set esckeys
 
+" if we remap these we can use <C-\> in tmux ...
+"tnoremap <C-^> <C-\>
+"inoremap <C-^> <C-\>
+"cnoremap <C-^> <C-\>
+
 " ctrl-c to yank selection into paste buffer/clipboard
 
 " copy/yank selection
