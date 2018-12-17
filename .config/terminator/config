@@ -20,6 +20,8 @@
   go_prev = <Shift><Super>p
   resize_left = <Shift><Super>Left
   resize_right = <Shift><Super>Right
+# from ctrlbs plugin
+  kill_word = <Control>BackSpace
 [layouts]
   [[default]]
     [[[child0]]]
