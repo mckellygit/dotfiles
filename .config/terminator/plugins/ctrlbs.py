@@ -7,11 +7,11 @@ from terminatorlib.terminal import Terminal
 # monkey patch on startup.
 available = AVAILABLE = []
 
-def key_kill_word(self):
+def key_esc_delete(self):
     self.vte.feed_child('\x1b\x7f')
 
-def key_esc_bslash(self):
-    self.vte.feed_child('\x1b\x5c')
+def key_esc_one(self):
+    self.vte.feed_child('\x1b\x31')
 
-setattr(Terminal, 'key_kill_word', key_kill_word)
-setattr(Terminal, 'key_esc_bslash', key_esc_bslash)
+setattr(Terminal, 'key_esc_delete', key_esc_delete)
+setattr(Terminal, 'key_esc_one', key_esc_one)
