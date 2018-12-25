@@ -1,0 +1,17 @@
+#!/bin/sh -e
+
+sess=$(tmux list-sessions | head -n 1 | awk '{print $2}')
+
+if [ ! -f /dev/shm/tmux${sess}.spc ] ; then 
+    #echo -e "\e[1;35m+\e[0m"
+    printf "+\n"
+else 
+    add=$(cat /dev/shm/tmux${sess}.spc)
+    if [ $add -eq 1 ] ; then
+        #echo -e "\e[1;35m+\e[0m"
+        printf "+\n"
+    else
+        printf "\-\n"
+    fi
+fi
+

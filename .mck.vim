@@ -604,6 +604,12 @@ tnoremap <C-^> <C-\>
 inoremap <C-^> <C-\>
 cnoremap <C-^> <C-\>
 
+" s/S is confusing, use cl/cc instead
+nnoremap s <Nop>
+vnoremap s <Nop>
+nnoremap S <Nop>
+vnoremap S <Nop>
+
 " ctrl-c to yank selection into paste buffer/clipboard
 
 " copy/yank selection
