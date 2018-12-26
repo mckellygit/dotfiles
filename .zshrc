@@ -41,6 +41,9 @@ zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 setopt PROMPT_SUBST
 setopt PROMPTSUBST
 
+# word separators
+# WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
+
 random_title=$[$RANDOM%100]
 # precmd () { print -Pn "\e]2;%n@%M.$random_title\a" }
 # precmd () { print -Pn "\e]2;%n@%M" }
