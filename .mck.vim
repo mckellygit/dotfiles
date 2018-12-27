@@ -491,7 +491,7 @@ endif
 colorscheme deus
 
 " do not use delete/wipe with qf/ll ...
-set hidden
+set nohidden
 set bufhidden=hide
 
 set lazyredraw
