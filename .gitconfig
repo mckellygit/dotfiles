@@ -31,6 +31,7 @@
     del-all-br = "!f() { git push origin --delete "$@"; git branch -D "$@"; }; f"
     alias = "!git config --get-regexp ^alias. | sed 's/^alias.//'"
     stat = !git status
+    st = !git status
     smu = !git submodule update --init --recursive
 [diff]
 	compactionHeuristic = true

@@ -1,5 +1,5 @@
 #
-set cgdbmodekey=<C-w>
+set cgdbmodekey=<C-y>
 # ----
 map <C-k> <Up>
 map <C-j> <Down>
@@ -7,7 +7,9 @@ map <C-p> <Up>
 map <C-n> <Down>
 map <C-b> <C-u>
 map <C-f> <C-d>
-map <C-w> sq
+map <C-w>w      sq
+map <C-w><C-w>  sq
+map <C-w><Down> sq
 # map q sq
 # <C-Up>
 map <Esc>[1;5A <Up>
@@ -16,14 +18,18 @@ map <Esc>[1;5B <Down>
 map <Esc>[1;5C <Right>
 map <Esc>[1;5D <Left>
 # ----
-imap <C-p> <C-w>s<Up>
-imap <C-k> <C-w>s<Up>
+imap <C-w>w     <C-y>
+imap <C-w><C-w> <C-y>
+imap <C-w><Up>  <C-y>
+# ----
+imap <C-p> <C-y>s<Up>
+imap <C-k> <C-y>s<Up>
 imap <C-j> <Down>
 # <C-Up>
-imap <Esc>[1;5A <C-w>s<Up>
+imap <Esc>[1;5A <C-y>s<Up>
 # <C-Down>
 imap <Esc>[1;5B <Down>
-imap <C-b> <C-w>s<C-u>
-imap <C-f> <C-w>s<C-d>
+imap <C-b> <C-y>s<C-u>
+imap <C-f> <C-y>s<C-d>
 # ----
 set tabstop=4
