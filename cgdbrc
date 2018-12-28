@@ -1,8 +1,22 @@
-set cgdbmodekey=<Insert>
+set cgdbmodekey=<C-w>
 map <C-k> <Up>
 map <C-j> <Down>
 map <C-p> <Up>
 map <C-n> <Down>
-imap <C-p> <Insert>s<Up>
-imap <C-k> <Insert>s<Up>
+map <C-w> sq
+#map q sq
+# <C-Up>
+map <Esc>[1;5A <Up>
+# <C-Down>
+map <Esc>[1;5B <Down>
+map <Esc>[1;5C <Right>
+map <Esc>[1;5D <Left>
+imap <C-p> <C-w>s<Up>
+imap <C-k> <C-w>s<Up>
 imap <C-j> <Down>
+# <C-Up>
+imap <Esc>[1;5A <C-w>s<Up>
+# <C-Down>
+imap <Esc>[1;5B <Down>
+#
+set tabstop=4
