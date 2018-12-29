@@ -33,3 +33,4 @@ imap <C-b> <C-y>s<C-u>
 imap <C-f> <C-y>s<C-d>
 # ----
 set tabstop=4
+highlight StatusLine cterm=reverse,dim ctermfg=Black ctermbg=LightGray
