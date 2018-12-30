@@ -10,7 +10,9 @@ map <C-f> <C-d>
 map <C-w>w      sq
 map <C-w><C-w>  sq
 map <C-w><Down> sq
-# map q sq
+map q           sq
+map \fb o
+map \fB o
 # <C-Up>
 map <Esc>[1;5A <Up>
 # <C-Down>
