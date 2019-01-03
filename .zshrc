@@ -112,6 +112,7 @@ alias sync-hpcc='sync_hpcc'
 alias stop-hpcc='stop_hpcc'
 alias stat-hpcc='stat_hpcc'
 alias start-hpcc='start_hpcc'
+alias kill-hpcc='kill_hpcc'
 
 # export NCPUS=`cat /proc/cpuinfo | grep processor | wc -l`
 # numcpus=$(getconf _NPROCESSORS_ONLN 2>/dev/null)

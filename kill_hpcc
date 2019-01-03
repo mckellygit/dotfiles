@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sudo pkill $@ -u hpcc ; sleep 1 ; pgrep -u hpcc -l
+
