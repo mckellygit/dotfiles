@@ -504,6 +504,7 @@ set ignorecase
 set smartcase
 set shortmess-=s
 " and dont forget <Leader>hl for hlsearch toggle
+" and we set WarningMsg highlight color below for wrap warning
 
 " get paste confirmation on < 3 lines ...
 set report=0
@@ -1537,6 +1538,11 @@ endfunction
 "hi QuickFixLine cterm=None ctermbg=60
 hi QuickFixLine cterm=None
 hi cursorline cterm=None ctermbg=239
+
+" make these easier to notice
+hi ErrorMsg cterm=none ctermfg=White ctermbg=Red gui=none guifg=White guibg=Red
+" mostly for search wrap
+hi WarningMsg cterm=none ctermfg=White ctermbg=Red gui=none guifg=White guibg=Red
 
 " let vim use terminal background ...
 " good if want to use tmux and have active window 

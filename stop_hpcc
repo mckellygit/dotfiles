@@ -29,8 +29,12 @@ do
     esac
 done
 
-pgrep -u hpcc >/dev/null 
-rc0=$?
+pcnt=$(pgrep -u hpcc -l 2>/dev/null | grep -v bash | wc -l)
+if [ $pcnt -gt 0 ] ; then
+    rc0=0
+else
+    rc0=1
+fi
 
 if [ $rc0 -eq 0 ] ; then
     # Stopping mythor
@@ -79,4 +83,6 @@ if [ ${do_clean} -eq 1 ] ; then
     sudo find /var/log/HPCCSystems/ -name "*.log" -and \( -not -name "hpcc-init.log" \) -exec rm {} \;
     sudo find /var/lib/HPCCSystems/ -name "core.*" -exec rm {} \;
 fi
+
+pgrep -u hpcc -l
 
