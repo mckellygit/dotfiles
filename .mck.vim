@@ -512,6 +512,8 @@ set shortmess-=s
 " if set nowrapscan then get -
 " E384: search hit TOP without match for: <search-exp>
 " E385: search hit BOTTOM without match for: <search-exp>
+" could also get -
+" E486: Pattern not found: <search-exp>
 " catch /^Vim\%((\a\+)\)\=:E385/
 
 " hack to pause a little on search wraps ...
@@ -519,24 +521,43 @@ set nows
 
 nnoremap <buffer> <silent> n :call Searchn()<CR>
 function Searchn() abort
+  let l:stext=@/
   nunmap <buffer> n
   try
     exe "normal n"
   catch /E384:/
     echohl WarningMsg
-    echo "search hit TOP, continuing at BOTTOM"
+    echo "E384: search hit TOP without match for: " . l:stext
     echohl None
-    sleep 200m
     set ws
-    exe "normal n"
+    try
+      exe "normal n"
+      sleep 200m
+    catch /E486:/
+      echo ' '
+      redraw
+      echohl WarningMsg
+      echo "E486: Pattern not found: " . l:stext
+      echohl None
+      sleep 200m
+    endtry
     set nows
   catch /E385:/
     echohl WarningMsg
-    echo "search hit BOTTOM, continuing at TOP"
+    echo "E385: search hit BOTTOM without match for: " . l:stext
     echohl None
-    sleep 200m
     set ws
-    exe "normal n"
+    try
+      exe "normal n"
+      sleep 200m
+    catch /E486:/
+      echo ' '
+      redraw
+      echohl WarningMsg
+      echo "E486: Pattern not found: " . l:stext
+      echohl None
+      sleep 200m
+    endtry
     set nows
   endtry
   nnoremap <buffer> <silent> n :call Searchn()<CR>
@@ -544,24 +565,43 @@ endfunction
 
 nnoremap <buffer> <silent> N :call SearchN()<CR>
 function SearchN() abort
+  let l:stext=@/
   nunmap <buffer> N
   try
     exe "normal N"
   catch /E384:/
     echohl WarningMsg
-    echo "search hit TOP, continuing at BOTTOM"
+    echo "E384: search hit TOP without match for: " . l:stext
     echohl None
-    sleep 200m
     set ws
-    exe "normal N"
+    try
+      exe "normal N"
+      sleep 200m
+    catch /E486:/
+      echo ' '
+      redraw
+      echohl WarningMsg
+      echo "E486: Pattern not found: " . l:stext
+      echohl None
+      sleep 200m
+    endtry
     set nows
   catch /E385:/
     echohl WarningMsg
-    echo "search hit BOTTOM, continuing at TOP"
+    echo "E385: search hit BOTTOM without match for: " . l:stext
     echohl None
-    sleep 200m
     set ws
-    exe "normal N"
+    try
+      exe "normal N"
+      sleep 200m
+    catch /E486:/
+      echo ' '
+      redraw
+      echohl WarningMsg
+      echo "E486: Pattern not found: " . l:stext
+      echohl None
+      sleep 200m
+    endtry
     set nows
   endtry
   nnoremap <buffer> <silent> N :call SearchN()<CR>
