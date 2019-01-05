@@ -506,6 +506,67 @@ set shortmess-=s
 " and dont forget <Leader>hl for hlsearch toggle
 " and we set WarningMsg highlight color below for wrap warning
 
+" if added changes to search.c to ui_delay() after give_warning()
+"set matchtime=3
+
+" if set nowrapscan then get -
+" E384: search hit TOP without match for: <search-exp>
+" E385: search hit BOTTOM without match for: <search-exp>
+" catch /^Vim\%((\a\+)\)\=:E385/
+
+" hack to pause a little on search wraps ...
+set nows
+
+nnoremap <buffer> <silent> n :call Searchn()<CR>
+function Searchn() abort
+  nunmap <buffer> n
+  try
+    exe "normal n"
+  catch /E384:/
+    echohl WarningMsg
+    echo "search hit TOP, continuing at BOTTOM"
+    echohl None
+    sleep 200m
+    set ws
+    exe "normal n"
+    set nows
+  catch /E385:/
+    echohl WarningMsg
+    echo "search hit BOTTOM, continuing at TOP"
+    echohl None
+    sleep 200m
+    set ws
+    exe "normal n"
+    set nows
+  endtry
+  nnoremap <buffer> <silent> n :call Searchn()<CR>
+endfunction
+
+nnoremap <buffer> <silent> N :call SearchN()<CR>
+function SearchN() abort
+  nunmap <buffer> N
+  try
+    exe "normal N"
+  catch /E384:/
+    echohl WarningMsg
+    echo "search hit TOP, continuing at BOTTOM"
+    echohl None
+    sleep 200m
+    set ws
+    exe "normal N"
+    set nows
+  catch /E385:/
+    echohl WarningMsg
+    echo "search hit BOTTOM, continuing at TOP"
+    echohl None
+    sleep 200m
+    set ws
+    exe "normal N"
+    set nows
+  endtry
+  nnoremap <buffer> <silent> N :call SearchN()<CR>
+endfunction
+
 " get paste confirmation on < 3 lines ...
 set report=0
 
