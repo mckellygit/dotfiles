@@ -517,19 +517,19 @@ set shortmess-=s
 " catch /^Vim\%((\a\+)\)\=:E385/
 
 " hack to pause a little on search wraps ...
-set nows
 
 nnoremap <buffer> <silent> n :call Searchn()<CR>
 function Searchn() abort
   let l:stext=@/
   nunmap <buffer> n
+  set nows
   try
     exe "normal n"
     redraw!
   catch /E384:/
-    echohl WarningMsg
-    echo "E384: search hit TOP without match for: " . l:stext
-    echohl None
+"   echohl WarningMsg
+"   echo "E384: search hit TOP without match for: " . l:stext
+"   echohl None
     set ws
     try
       exe "normal n"
@@ -542,11 +542,10 @@ function Searchn() abort
       echohl None
       sleep 200m
     endtry
-    set nows
   catch /E385:/
-    echohl WarningMsg
-    echo "E385: search hit BOTTOM without match for: " . l:stext
-    echohl None
+"   echohl WarningMsg
+"   echo "E385: search hit BOTTOM without match for: " . l:stext
+"   echohl None
     set ws
     try
       exe "normal n"
@@ -559,22 +558,23 @@ function Searchn() abort
       echohl None
       sleep 200m
     endtry
-    set nows
   endtry
   nnoremap <buffer> <silent> n :call Searchn()<CR>
+  set ws
 endfunction
 
 nnoremap <buffer> <silent> N :call SearchN()<CR>
 function SearchN() abort
   let l:stext=@/
   nunmap <buffer> N
+  set nows
   try
     exe "normal N"
     redraw!
   catch /E384:/
-    echohl WarningMsg
-    echo "E384: search hit TOP without match for: " . l:stext
-    echohl None
+"   echohl WarningMsg
+"   echo "E384: search hit TOP without match for: " . l:stext
+"   echohl None
     set ws
     try
       exe "normal N"
@@ -587,11 +587,10 @@ function SearchN() abort
       echohl None
       sleep 200m
     endtry
-    set nows
   catch /E385:/
-    echohl WarningMsg
-    echo "E385: search hit BOTTOM without match for: " . l:stext
-    echohl None
+"   echohl WarningMsg
+"   echo "E385: search hit BOTTOM without match for: " . l:stext
+"   echohl None
     set ws
     try
       exe "normal N"
@@ -604,9 +603,9 @@ function SearchN() abort
       echohl None
       sleep 200m
     endtry
-    set nows
   endtry
   nnoremap <buffer> <silent> N :call SearchN()<CR>
+  set ws
 endfunction
 
 " get paste confirmation on < 3 lines ...
