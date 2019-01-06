@@ -525,6 +525,7 @@ function Searchn() abort
   nunmap <buffer> n
   try
     exe "normal n"
+    redraw!
   catch /E384:/
     echohl WarningMsg
     echo "E384: search hit TOP without match for: " . l:stext
@@ -569,6 +570,7 @@ function SearchN() abort
   nunmap <buffer> N
   try
     exe "normal N"
+    redraw!
   catch /E384:/
     echohl WarningMsg
     echo "E384: search hit TOP without match for: " . l:stext
