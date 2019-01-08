@@ -312,6 +312,10 @@ function! SetCursorLineFromLightline() abort
         \ 'highlight CursorLine guifg=%s guibg=%s ctermfg=%s ctermbg=%s',
         \ colors[0], colors[1], colors[2], colors[3])
 endfunction
+
+" vim issue that :badd does not update tabline properly
+" https://github.com/vim/vim/issues/3770
+au BufAdd * let &tabline = &tabline
 " lightline ----------
 
 " rooter ----------
