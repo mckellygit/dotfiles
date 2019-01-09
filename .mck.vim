@@ -317,7 +317,9 @@ endfunction
 " https://github.com/vim/vim/issues/3770
 au BufAdd * let &tabline = &tabline
 " can do this if vim is 8.1.706 or later:
-" au BufAdd * redrawtabline
+"au BufAdd * redrawtabline
+" to check if redrawtabline exists before using:
+"if exists(":redtawtabline") == 2
 " lightline ----------
 
 " rooter ----------
@@ -531,7 +533,7 @@ function Searchn() abort
   set nows
   try
     exe "normal n"
-    redraw!
+    redrawstatus!
   catch /E384:/
 "   echohl WarningMsg
 "   echo "E384: search hit TOP without match for: " . l:stext
@@ -576,7 +578,7 @@ function SearchN() abort
   set nows
   try
     exe "normal N"
-    redraw!
+    redrawstatus!
   catch /E384:/
 "   echohl WarningMsg
 "   echo "E384: search hit TOP without match for: " . l:stext
