@@ -316,6 +316,8 @@ endfunction
 " vim issue that :badd does not update tabline properly
 " https://github.com/vim/vim/issues/3770
 au BufAdd * let &tabline = &tabline
+" can do this if vim is 8.1.706 or later:
+" au BufAdd * redrawtabline
 " lightline ----------
 
 " rooter ----------
