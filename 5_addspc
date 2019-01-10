@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
-sess=$(tmux list-sessions | head -n 1 | awk '{print $2}')
+sess=$(tmux list-sessions | head -n 1 | awk -F: '{print $1}')
 
 if [ ! -f /dev/shm/tmux${sess}.spc ] ; then 
     add=1
