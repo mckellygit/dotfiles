@@ -11,6 +11,8 @@
 	whitespace = error
 [credential]
 	helper = cache --timeout=9600
+[checkout]
+	defaultRemote = upstream
 [alias]
 	undo = "!f() { git reset --hard $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
 	dt = difftool
