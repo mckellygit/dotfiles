@@ -542,6 +542,7 @@ function Searchn() abort
     try
       exe "normal n"
       sleep 200m
+      redraw!
     catch /E486:/
       echo ' '
       redraw
@@ -558,6 +559,7 @@ function Searchn() abort
     try
       exe "normal n"
       sleep 200m
+      redraw!
     catch /E486:/
       echo ' '
       redraw
@@ -587,6 +589,7 @@ function SearchN() abort
     try
       exe "normal N"
       sleep 200m
+      redraw!
     catch /E486:/
       echo ' '
       redraw
@@ -603,6 +606,7 @@ function SearchN() abort
     try
       exe "normal N"
       sleep 200m
+      redraw!
     catch /E486:/
       echo ' '
       redraw
