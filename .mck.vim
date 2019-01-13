@@ -533,7 +533,7 @@ function Searchn() abort
   set nows
   try
     exe "normal n"
-    redrawstatus!
+    redraw!
   catch /E384:/
 "   echohl WarningMsg
 "   echo "E384: search hit TOP without match for: " . l:stext
@@ -580,7 +580,7 @@ function SearchN() abort
   set nows
   try
     exe "normal N"
-    redrawstatus!
+    redraw!
   catch /E384:/
 "   echohl WarningMsg
 "   echo "E384: search hit TOP without match for: " . l:stext
