@@ -1531,9 +1531,10 @@ nmap <Leader>pc <Plug>UnconditionalPasteCharAfter
 nmap <Leader>Pj <Plug>UnconditionalPasteJustJoinedBefore
 nmap <Leader>pj <Plug>UnconditionalPasteJustJoinedAfter
 "
-" could make <C-y> <Plug>UnconditionalPasteCharBefore
-nmap <C-y> <Plug>UnconditionalPasteCharBefore
-"nmap <C-y> <Nop>
+" should we use <C-y> for paste ?
+"nmap <C-y> <Plug>UnconditionalPasteCharBefore
+nmap <C-y> <Nop>
+
 nmap <Leader>pp <Plug>UnconditionalPasteCharBefore
 nmap <Leader>p0 <Plug>UnconditionalPasteCharBefore
 nmap <Leader>p1 <Plug>UnconditionalPasteCharAfter
