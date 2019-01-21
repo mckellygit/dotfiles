@@ -737,15 +737,17 @@ vnoremap S <Nop>
 "vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"+ygv<Esc>i' : '"+ygv<Esc>'
 "vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"+ygv<Esc>i' : '"+ygv<Esc>'
 " if X11 Forwarding is not on/allowed then perhaps vim copy to + and * does not work over ssh ?
-vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '""y <Bar> :<C-u>call system("xsel -i -b -t 5000", @")<CR> <Bar> gv<Esc>i' : '""y <Bar> :<C-u>call system("xsel -i -b -t 5000", @")<CR> <Bar> gv<Esc>'
-vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '""y <Bar> :<C-u>call system("xsel -i -b -t 5000", @")<CR> <Bar> gv<Esc>i' : '""y <Bar> :<C-u>call system("xsel -i -b -t 5000", @")<CR> <Bar> gv<Esc>'
-"vnoremap <silent> <expr> y     (&buftype == 'terminal') ? 'yi' : 'y'
+"vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '""y <Bar> :<C-u>call system("xsel -i -b -t 5000", @")<CR> <Bar> gv<Esc>i' : '""y <Bar> :<C-u>call system("xsel -i -b -t 5000", @")<CR> <Bar> gv<Esc>'
+"vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '""y <Bar> :<C-u>call system("xsel -i -b -t 5000", @")<CR> <Bar> gv<Esc>i' : '""y <Bar> :<C-u>call system("xsel -i -b -t 5000", @")<CR> <Bar> gv<Esc>'
+vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '""ygv<Esc>i' : '""ygv<Esc>'
+vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '""ygv<Esc>i' : '""ygv<Esc>'
 
 " cut selection
 "vnoremap <silent> <C-x> "+d<LeftRelease>
 "vnoremap <silent> <C-x> "+d
 " if X11 Forwarding is not on/allowed then perhaps vim copy to + and * does not work over ssh ?
-vnoremap <silent> <C-x> ""d <Bar> :<C-u>call system("xsel -i -b -t 5000", @")<CR>
+"vnoremap <silent> <C-x> ""d <Bar> :<C-u>call system("xsel -i -b -t 5000", @")<CR>
+vnoremap <silent> <C-x> ""d
 
 " <C-v> to toggle block-mode instead of on or cancel visual-mode
 " simple and almost there -
