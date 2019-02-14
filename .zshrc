@@ -173,9 +173,11 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
- alias rdpclient='rdesktop -g 1580x932 -d <domain> -u $LOGNAME -p password -a 24 -k en-us -K -r clipboard:CLIPBOARD <host> &|'
+ alias rdpclient='padsp rdesktop -g 1580x932 -d <domain> -u $LOGNAME -p password -a 24 -k en-us -K -r clipboard:CLIPBOARD <host> &|'
 # used to use -a 16
 # other sizes: 1280x820, 1540x836
+# padsp for getting sound to work but no mic support
+ alias xfreerdp='/opt/freerdp-nightly/bin/xfreerdp +clipboard /size:1580x932 /sound:sys:alsa /microphone:sys:alsa /d:<domain> /u:$LOGNAME /sec:tls /v:<host> > /dev/null 2>&1 &|'
 
 alias gitsubrecur='git submodule update --init --recursive'
 
