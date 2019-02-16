@@ -179,7 +179,7 @@ alias rdpclient='padsp rdesktop -g 1580x932 -d <domain> -u $LOGNAME -p password 
 # padsp for getting sound to work but no mic support
 alias xfreerdp='/opt/freerdp-nightly/bin/xfreerdp +clipboard /size:1580x932 /sound /microphone /d:<domain> /u:$LOGNAME /sec:tls /v:<host> > /dev/null 2>&1 &|'
 # could also use /sound:sys:alsa /microphone:sys:alsa
-# other sizes: 1520x824
+# other sizes: 1528x832
 
 alias gitsubrecur='git submodule update --init --recursive'
 
