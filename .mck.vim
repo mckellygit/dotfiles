@@ -145,6 +145,9 @@ Plugin 'skywind3000/asyncrun.vim'
 " start screen
 Plugin 'mhinz/vim-startify'
 "
+" search + highlight
+Plugin 'PeterRincker/vim-searchlight'
+"
 "" All of your Plugins must be added before the following line
 call vundle#end()         " required
 filetype plugin indent on " required
@@ -481,6 +484,17 @@ let g:startify_lists = [
     \ { 'type': 'commands',  'header': ['   Commands']       },
     \ ]
 " startify -----------
+
+" searchlight --------
+" off by default <Leader>hl to enable
+set nohlsearch
+"let g:searchlight_disable_on_startup = 1
+":Searchlight!
+" change color of current word
+highlight link Searchlight Incsearch
+nnoremap <silent> * *:1Searchlight<CR>
+nnoremap <silent> # #:1Searchlight<CR>
+" searchlight --------
 
 " improves color highlighing with dark terminals
 set background=dark
