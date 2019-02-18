@@ -693,10 +693,11 @@ set fileformat=unix
 set bs=2		" allow backspacing over everything in ins mode
 set noai		" always set autoindenting off
 set nobackup    " do not keep a backup file
-" read/write a .viminfo file, don't store more than 20 reg
+" read/write .viminfo file, don't store more than 20 reg
 set viminfo='20,\"20,f20 
 " keep 20 lines of command line history
 set history=20	
+" :help 'viminfo' (with quotes) for more info
 " show the cursor position all the time
 set ruler		
 
@@ -1601,10 +1602,10 @@ function MySearch(meth) abort
 endfunction
 
 " use :let @/="" to clear out search pattern
-nnoremap <silent> <Leader>sc :let@/=""<CR>
+nnoremap <silent> <Leader>sx :let @/=""<CR>:echo ""<CR>
 " search normally
-nnoremap <Leader>sn :let@/=""<CR>:set hlsearch<CR>/
-vnoremap <Leader>sn y<Esc>:let@/=""<CR>:set hlsearch<CR>/<C-r>"
+nnoremap <Leader>sn :let @/=""<CR>:set hlsearch<CR>/
+vnoremap <Leader>sn y<Esc>:let @/=""<CR>:set hlsearch<CR>/<C-r>"
 " search buffer with results in loc list
 nnoremap <silent> <Leader>sb :call MySearch(0)<CR>
 " search globally with results in loc list
