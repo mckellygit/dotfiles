@@ -543,6 +543,9 @@ set shortmess-=s
 nnoremap <buffer> <silent> n :call Searchn()<CR>
 function Searchn() abort
   let l:stext=@/
+  if (len(l:stext) == 0)
+    return
+  endif
   nunmap <buffer> n
   set nows
   try
@@ -590,6 +593,9 @@ endfunction
 nnoremap <buffer> <silent> N :call SearchN()<CR>
 function SearchN() abort
   let l:stext=@/
+  if (len(l:stext) == 0)
+    return
+  endif
   nunmap <buffer> N
   set nows
   try
