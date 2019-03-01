@@ -949,6 +949,15 @@ nnoremap <silent> <Leader>wf *
 "vnoremap <silent> <Leader>wf y <Bar> <Esc>:let @/=@"<CR> <Bar> 2n
 vnoremap <silent> <Leader>wf y<Esc>/<C-r>"<CR>
 
+" change word with yanked/selected word
+" "_dw deletes word without putting it into reg
+" nnoremap <silent> <Leader>cw lb"_dwP
+" but this can trim trailing space(s) ...
+" restore " and + registers back to orig selected word
+" (parcellite etc. may auto copy + to * ...)
+nnoremap <silent> <Leader>cw lbcw<C-r>0<Esc>:let @"=@0<CR>:let @+=@0<CR>
+vnoremap <silent> <Leader>cw <Esc>lbcw<C-r>0<Esc>:let @"=@0<CR>:let @+=@0<CR>
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
