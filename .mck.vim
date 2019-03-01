@@ -949,6 +949,13 @@ vnoremap <silent> <Leader>wy <Esc>viwy`]
 nnoremap <silent> <Leader>yw viwy`]
 vnoremap <silent> <Leader>yw <Esc>viwy`]
 
+" delete word under cursor w/o overwriting " reg
+nnoremap <silent> <Leader>wd lb"_dw
+vnoremap <silent> <Leader>wd <Esc>lb"_dw
+" to match vim dw ...
+nnoremap <silent> <Leader>dw lb"_dw
+vnoremap <silent> <Leader>dw <Esc>lb"_dw
+
 " search for word under cursor
 nnoremap <silent> <Leader>wf *
 " search for visual selection
