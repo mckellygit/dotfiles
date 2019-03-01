@@ -2,3 +2,9 @@ set commit-graph true
 set mouse true
 set mouse-scroll-rows 1
 set tabwidth 4
+# Hotkey to edit current file
+#map DiffView E   ":@tmux new-window vi ${repo-workdir}/${file}<Enter>"
+#map StatusView E ":@tmux new-window vi ${repo-workdir}/${file}<Enter>"
+map DiffView E   ":!vi ${repo-workdir}/${file}<Enter>"
+map StatusView E ":!vi ${repo-workdir}/${file}<Enter>"
+# E map in CommitView is too confusing as there can be several files etc.

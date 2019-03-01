@@ -165,6 +165,10 @@ filetype plugin indent on " required
 "" Put your non-Plugin stuff after this line
 "" vundle ------------------------------
 
+" use :Silentrun <cmd> to run <cmd> without prompting:
+" Press ENTER or type command to continue
+command! -nargs=1 Silentrun execute ':silent !' . <q-args> | execute ':redraw!'
+
 function! s:LogIt(message)
   silent execute '!echo "'
         \ . strftime('%T', localtime()) . ' - ' . a:message . '"'
