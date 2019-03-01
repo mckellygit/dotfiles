@@ -942,6 +942,13 @@ vnoremap <silent> <M-LeftMouse> <Esc><LeftMouse>viW
 nnoremap <silent> <Leader>ws viw
 vnoremap <silent> <Leader>ws <Esc>viw
 
+" yank/select word under cursor
+nnoremap <silent> <Leader>wy viwy`]
+vnoremap <silent> <Leader>wy <Esc>viwy`]
+" to match vim yw ...
+nnoremap <silent> <Leader>yw viwy`]
+vnoremap <silent> <Leader>yw <Esc>viwy`]
+
 " search for word under cursor
 nnoremap <silent> <Leader>wf *
 " search for visual selection
@@ -955,6 +962,10 @@ vnoremap <silent> <Leader>wf y<Esc>/<C-r>"<CR>
 " but this can trim trailing space(s) ...
 " restore " and + registers back to orig selected word
 " (parcellite etc. may auto copy + to * ...)
+" wc is already window close, use we (word exchange)
+nnoremap <silent> <Leader>we lbcw<C-r>0<Esc>:let @"=@0<CR>:let @+=@0<CR>
+vnoremap <silent> <Leader>we <Esc>lbcw<C-r>0<Esc>:let @"=@0<CR>:let @+=@0<CR>
+" to match vim cw ...
 nnoremap <silent> <Leader>cw lbcw<C-r>0<Esc>:let @"=@0<CR>:let @+=@0<CR>
 vnoremap <silent> <Leader>cw <Esc>lbcw<C-r>0<Esc>:let @"=@0<CR>:let @+=@0<CR>
 
