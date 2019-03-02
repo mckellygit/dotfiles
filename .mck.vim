@@ -969,12 +969,13 @@ vnoremap <silent> <Leader>wf y<Esc>/<C-r>"<CR>
 " but this can trim trailing space(s) ...
 " restore " and + registers back to orig selected word
 " (parcellite etc. may auto copy + to * ...)
+" optional - add lb to get back to beginning of word ?
 " wc is already window close, use we (word exchange)
-nnoremap <silent> <Leader>we lbcw<C-r>0<Esc>:let @"=@0<CR>:let @+=@0<CR>
-vnoremap <silent> <Leader>we <Esc>lbcw<C-r>0<Esc>:let @"=@0<CR>:let @+=@0<CR>
+nnoremap <silent> <Leader>we lbcw<C-r>0<Esc>lb:let @"=@0<CR>:let @+=@0<CR>
+vnoremap <silent> <Leader>we <Esc>lbcw<C-r>0<Esc>lb:let @"=@0<CR>:let @+=@0<CR>
 " to match vim cw ...
-nnoremap <silent> <Leader>cw lbcw<C-r>0<Esc>:let @"=@0<CR>:let @+=@0<CR>
-vnoremap <silent> <Leader>cw <Esc>lbcw<C-r>0<Esc>:let @"=@0<CR>:let @+=@0<CR>
+nnoremap <silent> <Leader>cw lbcw<C-r>0<Esc>lb:let @"=@0<CR>:let @+=@0<CR>
+vnoremap <silent> <Leader>cw <Esc>lbcw<C-r>0<Esc>lb:let @"=@0<CR>:let @+=@0<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
