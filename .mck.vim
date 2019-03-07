@@ -147,6 +147,7 @@ Plugin 'mhinz/vim-startify'
 "
 " search + highlight
 Plugin 'PeterRincker/vim-searchlight'
+" TODO also look into: qxxxb/vim-searchhi
 "
 "" All of your Plugins must be added before the following line
 call vundle#end()         " required
@@ -499,6 +500,10 @@ highlight link Searchlight Incsearch
 nnoremap <silent> * *:1Searchlight<CR>
 nnoremap <silent> # #:1Searchlight<CR>
 " searchlight --------
+
+" searchhi -----------
+" qxxxb/vim-searchhi options here
+" searchhi -----------
 
 " improves color highlighing with dark terminals
 set background=dark
