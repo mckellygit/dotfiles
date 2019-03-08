@@ -12,12 +12,14 @@
 
 # shell.prompt=RadSSH $
 # shell.console=color
+# shell.console=formatters.ansi256
+
 ### To see last few lines of output of in-flight jobs when pressing Ctrl-C
 ### set this parameter to the number of lines to retain. Can be very memory
 ### intensive.
 # stalled_job_buffer=0
 
-# max_threads=120
+max_threads=500
 ### Automatically save log files into date/time-stamped local directory
 # logdir=session_%Y%m%d_%H%M%S
 logdir=~/radssh/sessions/session_%Y%m%d_%H%M%S
@@ -92,4 +94,7 @@ commands.restricted=reboot,shutdown,halt,poweroff,telinit
 
 ### Should RadSSH initially send auth_none request (needed for OpenSSH 4.3 banner)
 # try_auth_none=off
+
+# add some usefule default paths ... (requires setpath.py plugin)
+plugins.setpath.dirs=/sbin:/usr/sbin
 
