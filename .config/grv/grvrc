@@ -4,8 +4,8 @@ set mouse-scroll-rows 1
 set tabwidth 4
 set input-prompt-after-command false
 # Hotkey to edit current file
-#map DiffView E   ":@tmux new-window vi ${repo-workdir}/${file}<Enter>"
-#map StatusView E ":@tmux new-window vi ${repo-workdir}/${file}<Enter>"
-map DiffView E   ":!vi ${repo-workdir}/${file}<Enter>"
-map StatusView E ":!vi ${repo-workdir}/${file}<Enter>"
+#map DiffView E   ":@tmux new-window vi ${repo-workdir}/${diff-view-file}<Enter>"
+#map StatusView E ":@tmux new-window vi ${repo-workdir}/${diff-view-file}<Enter>"
+map DiffView E   ":!vi ${repo-workdir}/${diff-view-file}<Enter>"
+map StatusView E ":!vi ${repo-workdir}/${diff-view-file}<Enter>"
 # E map in CommitView is too confusing as there can be several files etc.
