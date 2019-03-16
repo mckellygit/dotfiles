@@ -1020,6 +1020,16 @@ set scrolloff=0
 
 " ---------
 
+" map H, L to horizontal scroll
+" (cannot use <C-Left>, <C-Right> as those are for word movement)
+" (NOTE: only applies when wrap is off)
+nnoremap <silent> H zh
+nnoremap <silent> L zl
+vnoremap <silent> H zh
+vnoremap <silent> L zl
+
+" ---------
+
 function! NoremapNormalCmd(key, preserve_omni, ...)
   let cmd = ''
   let icmd = ''
@@ -2025,6 +2035,14 @@ if &diff
   highlight DiffDelete cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
   highlight DiffChange cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
   highlight DiffText   cterm=bold ctermfg=10 ctermbg=88 gui=none guifg=bg guibg=Red
+
+  " vimdiff default has wrap off (as screen width is cut in half)
+  " set sidescroll to help navigate when wrap is off ...
+  set sidescroll=1
+  " use zh/H and zl/L to scroll horizontal without moving cursor ...
+  " or force wrap on in all windows ...
+  "au VimEnter * if &diff | execute 'windo set wrap' | endif
+  " but this can mess up alignment of long lines
 endif
 
 " if want vimdiff to exit when files are equal
