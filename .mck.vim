@@ -2052,6 +2052,11 @@ if &diff
   " and Bram said a fix is not planned ...
 endif
 
+" patience diff algo ...
+if has("patch-8.1.0360")
+  set diffopt+=internal,algorithm:patience
+endif
+
 " if want vimdiff to exit when files are equal
 "autocmd VimEnter * call Diffstart()
 
@@ -2088,7 +2093,7 @@ set noshowmode
 "set undodir=~/.vim/undodir
 
 " dont save to ~/.vim/.netrwhist
-:let g:netrw_dirhistmax = 0
+let g:netrw_dirhistmax = 0
 
 " -----------
 
