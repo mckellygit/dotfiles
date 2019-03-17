@@ -1029,9 +1029,9 @@ au BufEnter,WinEnter,WinNew,VimResized *,*.* let &scrolljump=winheight('%')/2
 " (cannot use <C-Left>, <C-Right> as those are for word movement)
 " (NOTE: only applies when wrap is off)
 nnoremap <silent> H zhh
-nnoremap <silent> L zll
+nnoremap <silent> L lzl
 vnoremap <silent> H zhh
-vnoremap <silent> L zll
+vnoremap <silent> L lzl
 
 " ---------
 
@@ -2045,7 +2045,7 @@ if &diff
   " vimdiff default has wrap off (as screen width is cut in half)
   " set sidescroll to help navigate when wrap is off ...
   set sidescroll=1
-  " use zhh/H and zll/L to scroll horizontal without moving cursor ...
+  " use zhh/H and lzl/L to scroll horizontal without moving cursor ...
   " or force wrap on in all windows ...
   "au VimEnter * if &diff | execute 'windo set wrap' | endif
   " but this can mess up alignment of long lines
