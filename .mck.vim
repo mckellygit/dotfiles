@@ -2043,12 +2043,13 @@ if &diff
   highlight DiffText   cterm=bold ctermfg=10 ctermbg=88 gui=none guifg=bg guibg=Red
 
   " vimdiff default has wrap off (as screen width is cut in half)
-  " set sidescroll to help navigate when wrap is off ...
+  " set sidescroll=1 to help navigate smoothly when wrap is off
   set sidescroll=1
-  " use zhh/H and lzl/L to scroll horizontal without moving cursor ...
+  " use zhh/H and lzl/L to scroll horizontal without moving cursor
   " or force wrap on in all windows ...
   "au VimEnter * if &diff | execute 'windo set wrap' | endif
   " but this can mess up alignment of long lines
+  " and Bram said a fix is not planned ...
 endif
 
 " if want vimdiff to exit when files are equal
