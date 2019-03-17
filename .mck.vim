@@ -1020,6 +1020,11 @@ set scrolloff=0
 
 " ---------
 
+" TODO not sure what is best
+"set scrolljump=10
+" half window height ...
+au BufEnter,WinEnter,WinNew,VimResized *,*.* let &scrolljump=winheight('%')/2
+
 " map H, L to horizontal scroll
 " (cannot use <C-Left>, <C-Right> as those are for word movement)
 " (NOTE: only applies when wrap is off)
@@ -1603,7 +1608,8 @@ nmap <Leader>pj <Plug>UnconditionalPasteJustJoinedAfter
 "
 " should we use <C-y> for paste ?
 "nmap <C-y> <Plug>UnconditionalPasteCharBefore
-nmap <C-y> <Nop>
+nnoremap <C-y> <Nop>
+vnoremap <C-y> <Nop>
 
 nmap <Leader>pp <Plug>UnconditionalPasteCharBefore
 nmap <Leader>p0 <Plug>UnconditionalPasteCharBefore
