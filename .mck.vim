@@ -529,6 +529,10 @@ set lazyredraw
 
 set confirm
 
+" does this make sense ?
+nnoremap q <Esc>
+vnoremap q <Esc>
+
 " search options
 set wrapscan
 set ignorecase
