@@ -1676,6 +1676,10 @@ nnoremap <silent> <Leader>sg :call MySearch(1)<CR>
 
 let g:ackhighlight = 1
 
+" open :grep output in qf ...
+autocmd QuickFixCmdPost *grep* cwindow
+set grepprg=ag\ --vimgrep\ --hidden
+
 "================================================================
 
 " limit quickfix height ...
