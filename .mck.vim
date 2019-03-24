@@ -97,6 +97,7 @@ Plugin 'mileszs/ack.vim'
 Plugin 'ajmwagar/vim-deus'
 "Plugin 'beigebrucewayne/Turtles'
 "Plugin 'altercation/vim-colors-solarized'
+"Plugin 'rafi/awesome-vim-colorschemes'
 " one for all colors
 "Plugin 'flazz/vim-colorschemes'
 "
