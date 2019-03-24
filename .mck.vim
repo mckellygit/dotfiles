@@ -95,9 +95,9 @@ Plugin 'mileszs/ack.vim'
 "
 " colorscheme
 Plugin 'ajmwagar/vim-deus'
-"Plugin 'beigebrucewayne/Turtles'
 "Plugin 'altercation/vim-colors-solarized'
 "Plugin 'rafi/awesome-vim-colorschemes'
+Plugin 'morhetz/gruvbox'
 " one for all colors
 "Plugin 'flazz/vim-colorschemes'
 "
@@ -506,6 +506,10 @@ nnoremap <silent> # #:1Searchlight<CR>
 " qxxxb/vim-searchhi options here
 " searchhi -----------
 
+" gruvbox -----------
+let g:gruvbox_contrast_dark = 'medium'
+" gruvbox -----------
+
 " improves color highlighing with dark terminals
 set background=dark
 " tmux default term set to screen-256color
@@ -520,7 +524,8 @@ endif
 
 "let g:solarized_termcolors=256
 "colorscheme solarized
-colorscheme deus
+"colorscheme deus
+colorscheme gruvbox
 
 " do not use delete/wipe with qf/ll ...
 set nohidden
@@ -967,11 +972,11 @@ nnoremap <silent> <Leader>dw lb"_dw
 vnoremap <silent> <Leader>dw <Esc>lb"_dw
 
 " search for word under cursor
-nnoremap <silent> <Leader>wf *
+nnoremap <silent> <Leader>wf :set hlsearch<CR>*
 " search for visual selection
 " if register is regex with literal metachars then :let @/=escape(@", '.*\\$^')
 "vnoremap <silent> <Leader>wf y <Bar> <Esc>:let @/=@"<CR> <Bar> 2n
-vnoremap <silent> <Leader>wf y<Esc>/<C-r>"<CR>
+vnoremap <silent> <Leader>wf y<Esc>:set hlsearch<CR>/<C-r>"<CR>
 
 " change word with yanked/selected word
 " "_dw deletes word without putting it into reg
