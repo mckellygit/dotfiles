@@ -93,6 +93,12 @@ Plugin 'junegunn/fzf.vim'
 " ack (with ag (silver-searcher))
 Plugin 'mileszs/ack.vim'
 "
+" search/replace across multiple files
+" (also can use :Ack + :cdo ...)
+"Plugin 'dkprice/vim-easygrep'
+" with regex patterns ...
+" Plugin 'othree/eregex.vim'
+"
 " colorscheme
 Plugin 'ajmwagar/vim-deus'
 "Plugin 'altercation/vim-colors-solarized'
@@ -187,6 +193,10 @@ if executable('ag')
   " let g:ackprg = 'ag --nogroup --nocolor --column'
   let g:ack_use_dispatch = 1
 endif
+" example: (cdo/cfdo ldo/lfdo [!])
+" :Ack foo
+" :cdo s/foo/bar/g | update
+" Also look into Plugin 'dkprice/vim-easygrep'
 " ack ------------
 
 " airline ---------
@@ -986,11 +996,11 @@ vnoremap <silent> <Leader>wf y<Esc>:set hlsearch<CR>/<C-r>"<CR>
 " (parcellite etc. may auto copy + to * ...)
 " optional - add lb to get back to beginning of word ?
 " wc is already window close, use we (word exchange)
-nnoremap <silent> <Leader>we lbcw<C-r>0<Esc>lb:let @"=@0<CR>:let @+=@0<CR>
-vnoremap <silent> <Leader>we <Esc>lbcw<C-r>0<Esc>lb:let @"=@0<CR>:let @+=@0<CR>
+nnoremap <silent> <Leader>we :let @0=@+<CR>lbcw<C-r>0<Esc>lb:let @"=@0<CR>:let @+=@0<CR>
+vnoremap <silent> <Leader>we <Esc>:let @0=@+<CR>lbcw<C-r>0<Esc>lb:let @"=@0<CR>:let @+=@0<CR>
 " to match vim cw ...
-nnoremap <silent> <Leader>cw lbcw<C-r>0<Esc>lb:let @"=@0<CR>:let @+=@0<CR>
-vnoremap <silent> <Leader>cw <Esc>lbcw<C-r>0<Esc>lb:let @"=@0<CR>:let @+=@0<CR>
+nnoremap <silent> <Leader>cw :let @0=@+<CR>lbcw<C-r>0<Esc>lb:let @"=@0<CR>:let @+=@0<CR>
+vnoremap <silent> <Leader>cw <Esc>:let @0=@+<CR>lbcw<C-r>0<Esc>lb:let @"=@0<CR>:let @+=@0<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
