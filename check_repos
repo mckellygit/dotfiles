@@ -1,0 +1,17 @@
+#!/bin/bash
+
+cd ~/Downloads
+for d in parcellite xclip FlameGraph ethq byobu perf-tools xsel tmux vim rtags cgdb universal-ctags
+do
+    echo "checking $d ..."
+    cd $d
+    rc=$?
+    if [[ $rc -eq 0 ]] ; then
+        git remote -v
+        git pull
+        git smu
+        cd ..
+    fi
+done
+cd vim_bundles
+./update.sh

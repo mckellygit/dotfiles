@@ -127,10 +127,15 @@ fi
 # or
 #   ../oss/esp/services/ws_sql/antlr3c/lib
 # if this is an LN build ...
-if   [ -x $dir/../esp/services/ws_sql/antlr3c/lib/libantlr3c.so ] ; then
+# with 7.2+ it has moved to a new dir ...
+if      [ -x $dir/../esp/services/ws_sql/antlr3c/lib/libantlr3c.so ] ; then
     antlrdir=$dir/../esp/services/ws_sql/antlr3c/lib/libantlr3c.so
-elif [ -x $dir/../oss/esp/services/ws_sql/antlr3c/lib/libantlr3c.so ] ; then
+elif    [ -x $dir/../oss/esp/services/ws_sql/antlr3c/lib/libantlr3c.so ] ; then
     antlrdir=$dir/../oss/esp/services/ws_sql/antlr3c/lib/libantlr3c.so
+elif    [ -x $dir/../esp/services/ws_sql/libantlr3c-3.4/.libs/libantlr3c.so ] ; then
+    antlrdir=$dir/../esp/services/ws_sql/libantlr3c-3.4/.libs/libantlr3c.so
+elif    [ -x $dir/../oss/esp/services/ws_sql/libantlr3c-3.4/.libs/libantlr3c.so ] ; then
+    antlrdir=$dir/../oss/esp/services/ws_sql/libantlr3c-3.4/.libs/libantlr3c.so
 else
     antlrdir=""
     echo "WARNING: ws_sql/antlr3c dir not found ..."
