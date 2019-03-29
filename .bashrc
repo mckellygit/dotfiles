@@ -219,3 +219,8 @@ if [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTY" ]] ; then
     fi
 fi
 
+if [[ -z "$GRUVBOX" ]] && [[ -n "$TMUX" ]] && [[ -f ~/.gruvbox_256palette.sh ]] ; then
+    export GRUVBOX=1
+    source ~/.gruvbox_256palette.sh
+fi
+
