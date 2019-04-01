@@ -12,3 +12,4 @@ define btfull
   thread apply all bt full
   dont-repeat
 end
+handle SIGINT stop
