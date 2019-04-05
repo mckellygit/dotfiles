@@ -11,6 +11,8 @@ do
         git pull
         git smu
         cd ..
+        echo " --- "
+        echo ""
     fi
 done
 cd vim_bundles
