@@ -11,7 +11,10 @@
 
 OVERALL=0
 rifs=`printf ': \t'`
+# for bash to ignore any non-existant files ...
+# shopt -s nullglob
 for FILE in /proc/[0-9]*/status ;do
+    [ -f "$FILE" ] || continue
     SUM=0
     while IFS="$rifs" read FIELD VALUE ;do
         case $FIELD in
