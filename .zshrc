@@ -96,7 +96,7 @@ setopt NO_HUP
 export KEYTIMEOUT=1
 
 alias ll='ls -ltr'
-alias lla='ls -latr'
+alias lla='ls -lAtr'
 alias rm='rm -i'
 #if [ ! -f /etc/redhat-release ] ; then
 #  alias dmesg='dmesg -T'

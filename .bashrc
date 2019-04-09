@@ -103,7 +103,7 @@ alias la='ls -A'
 alias l='ls -CF'
 
 alias ll='ls -ltr'
-alias lla='ls -latr'
+alias lla='ls -lAtr'
 alias rm='rm -i'
 #if [ ! -f /etc/redhat-release ] ; then
 #  alias dmesg='dmesg -T'
