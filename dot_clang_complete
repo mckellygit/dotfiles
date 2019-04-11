@@ -1,6 +1,11 @@
 -I.
 -I../build
 -I../build/generated
+-Ifs/dafilesrv
+-Ifs/dafsclient
+-Ifs/dafscontrol
+-Ifs/dafsserver
+-Ifs/dafsstream
 -Icommon/deftype
 -Icommon/dllserver
 -Icommon/environment

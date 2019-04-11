@@ -146,6 +146,11 @@
 -Isystem/mysql
 -Isystem/openclient
 -I../build
+-I../HPCC-Platform/fs/dafilesrv
+-I../HPCC-Platform/fs/dafsclient
+-I../HPCC-Platform/fs/dafscontrol
+-I../HPCC-Platform/fs/dafsserver
+-I../HPCC-Platform/fs/dafsstream
 -I../HPCC-Platform/common/deftype
 -I../HPCC-Platform/common/dllserver
 -I../HPCC-Platform/common/environment
