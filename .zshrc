@@ -177,7 +177,8 @@ alias rdpclient='padsp rdesktop -g 1580x932 -d <domain> -u $LOGNAME -p password 
 # used to use -a 16
 # other sizes: 1280x820, 1540x836
 # padsp for getting sound to work but no mic support
-alias freerdp='xfreerdp +clipboard /size:1580x932 /sound /microphone +unmap-buttons /d:<domain> /u:$LOGNAME /sec:tls /v:<host> > /dev/null 2>&1 &|'
+# remove -grab-keyboard to use Ctrl-Alt-Del to change passwd ...
+alias freerdp='xfreerdp +clipboard /size:1580x932 /sound /microphone +unmap-buttons -grab-keyboard /d:<domain> /u:$LOGNAME /sec:tls /v:<host> > /dev/null 2>&1 &|'
 # could also use /sound:sys:alsa /microphone:sys:alsa
 # other sizes: 1528x832
 
