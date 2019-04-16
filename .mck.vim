@@ -517,7 +517,7 @@ nnoremap <silent> # #:1Searchlight<CR>
 " searchhi -----------
 
 " gruvbox -----------
-let g:gruvbox_contrast_dark = 'medium'
+let g:gruvbox_contrast_dark = 'soft'
 " gruvbox -----------
 
 " improves color highlighing with dark terminals
@@ -966,6 +966,11 @@ vnoremap <silent> <M-LeftMouse> <Esc><LeftMouse>viW
 " highlight word under cursor (lbve)
 nnoremap <silent> <Leader>ws viw
 vnoremap <silent> <Leader>ws <Esc>viw
+
+" add : to iskeyword for these to match tmux ...
+" (but W and E use WORDS ie do not use iskeyword)
+nnoremap <silent> <Leader>wS viW
+vnoremap <silent> <Leader>wS <Esc>viW
 
 " yank/select word under cursor
 nnoremap <silent> <Leader>wy viwy`]
