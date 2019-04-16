@@ -967,10 +967,13 @@ vnoremap <silent> <M-LeftMouse> <Esc><LeftMouse>viW
 nnoremap <silent> <Leader>ws viw
 vnoremap <silent> <Leader>ws <Esc>viw
 
-" add : to iskeyword for these to match tmux ...
-" (but W and E use WORDS ie do not use iskeyword)
+" highlight WORD (lBvE) (does not use iskeyword)
 nnoremap <silent> <Leader>wS viW
 vnoremap <silent> <Leader>wS <Esc>viW
+
+" to grab file path (ie w / and w/o :)
+nnoremap <silent> <Leader>wp :call GetPath()<CR>
+vnoremap <silent> <Leader>wp <Esc>:call GetPath()<CR>
 
 " yank/select word under cursor
 nnoremap <silent> <Leader>wy viwy`]
@@ -1700,6 +1703,17 @@ let g:ackhighlight = 1
 " open :grep output in qf ...
 autocmd QuickFixCmdPost *grep* cwindow
 set grepprg=ag\ --vimgrep\ --hidden
+
+"================================================================
+
+" to grab a file path (ie /path/to/file.ext:345) ...
+function GetPath() abort
+  let l:oldiskeyword = &iskeyword
+  setlocal iskeyword-=:
+  setlocal iskeyword+=/,.
+  execute 'normal viw'
+  let &iskeyword = l:oldiskeyword
+endfunction
 
 "================================================================
 
