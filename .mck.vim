@@ -991,10 +991,12 @@ vnoremap <silent> <Leader>dw <Esc>lb"_dw
 
 " search for word under cursor
 nnoremap <silent> <Leader>wf :set hlsearch<CR>*
+nnoremap <silent> <Leader>wF :set hlsearch<CR>#
 " search for visual selection
 " if register is regex with literal metachars then :let @/=escape(@", '.*\\$^')
 "vnoremap <silent> <Leader>wf y <Bar> <Esc>:let @/=@"<CR> <Bar> 2n
 vnoremap <silent> <Leader>wf y<Esc>:set hlsearch<CR>/<C-r>"<CR>
+vnoremap <silent> <Leader>wF y<Esc>:set hlsearch<CR>?<C-r>"<CR>
 
 " change word with yanked/selected word
 " "_dw deletes word without putting it into reg
@@ -2202,6 +2204,9 @@ noremap <Leader>uu :call UndoAll()<CR>
 " toggle search highlight
 noremap <silent> <Leader>hl :set hlsearch! hlsearch?<CR>:redraw!<CR>
 hi Search ctermbg=58
+
+" q to turn off hlsearch ?
+noremap <silent> q :set nohlsearch<CR>:redraw!<CR>
 
 " clear cmd window (or just <C-l> to redraw)
 " 'cc' already used for quickfix close
