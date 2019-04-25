@@ -10,6 +10,13 @@ bindkey -v
 # The following lines were added by compinstall
 zstyle :compinstall filename '/home/$LOGNAME/.zshrc'
 
+# if we are xterm then try xterm-256color
+if [ -n "$TERM" ] ; then
+    if [ "$TERM" = "xterm" ] ; then
+        export TERM=xterm-256color
+    fi
+fi
+
 # so vim terminal TERM is set properly (xterm by default)
 if [[ -n "$VIM_TERMINAL" ]] && [[ -n "$TMUX_PANE" ]] ; then
   export TERM=screen-256color

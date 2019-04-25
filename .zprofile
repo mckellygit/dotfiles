@@ -22,6 +22,13 @@ fi
 # bump stacksize 
 ulimit -s unlimited
 
+# if we are xterm then try xterm-256color
+if [ -n "$TERM" ] ; then
+    if [ "$TERM" = "xterm" ] ; then
+        export TERM=xterm-256color
+    fi
+fi
+
 # start rdm (this is done in vim now)
 # rdm --log-file /tmp/rdm.log --daemon
 #

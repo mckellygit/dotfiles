@@ -21,6 +21,13 @@ if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
 fi
 
+# if we are xterm then try xterm-256color
+if [ -n "$TERM" ] ; then
+    if [ "$TERM" = "xterm" ] ; then
+        export TERM=xterm-256color
+    fi
+fi
+
 # source .zprofile if it exists and I'm a zsh
 # because graphical login sources .profile but
 # not .zprofile ...
