@@ -947,14 +947,15 @@ vnoremap <silent> <4-LeftMouse> <Nop>
 
 " disable searching tags file for symbol under cursor
 " and select words under cursor instead (lBvE)
-nnoremap <silent> <C-LeftMouse> <LeftMouse>viW
-vnoremap <silent> <C-LeftMouse> <Esc><LeftMouse>viW
+" (was viW)
+nnoremap <silent> <C-LeftMouse> <LeftMouse>:call GetPath()<CR>
+vnoremap <silent> <C-LeftMouse> <Esc><LeftMouse>:call GetPath()<CR>
 " whole line
 "nnoremap <silent> <M-LeftMouse> <LeftMouse>V
 "vnoremap <silent> <M-LeftMouse> <Esc><LeftMouse>V
-" same as C-
-nnoremap <silent> <M-LeftMouse> <LeftMouse>viW
-vnoremap <silent> <M-LeftMouse> <Esc><LeftMouse>viW
+" same as C- (was viW)
+nnoremap <silent> <M-LeftMouse> <LeftMouse>:call GetPath()<CR>
+vnoremap <silent> <M-LeftMouse> <Esc><LeftMouse>:call GetPath()<CR>
 " no-op
 "nnoremap <silent> <M-LeftMouse> <Nop>
 "vnoremap <silent> <M-LeftMouse> <Nop>
