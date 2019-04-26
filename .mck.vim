@@ -545,10 +545,6 @@ set lazyredraw
 
 set confirm
 
-" does this make sense ?
-nnoremap q <Esc>
-vnoremap q <Esc>
-
 " search options
 set wrapscan
 set ignorecase
@@ -1033,9 +1029,14 @@ set tabstop=4
 
 " Don't use Ex mode, use Q for formatting
 " map Q gq
-" No, use Q for recording (@ for playback)
+" No, use Q (instead of q) for recording (@ for playback)
+" Qx to record to register x
+" enter keys/cmds ...
+" Q to end recording
+" @x to playback
 nnoremap <silent> Q q
 nnoremap <silent> q <Nop>
+" NOTE: q may be mapped to something else later on ...
 
 " Make p in Visual mode replace the selected text with the "" register.
 "vnoremap p <Esc>:let current_reg = @"<CR>gvdi<C-R>=current_reg<CR><Esc>
@@ -2207,6 +2208,9 @@ hi Search ctermbg=58
 
 " q to turn off hlsearch ?
 noremap <silent> q :set nohlsearch<CR>:redraw!<CR>
+
+" does this make sense ? (q to cancel select/visual)
+vnoremap <silent> q <Esc>
 
 " clear cmd window (or just <C-l> to redraw)
 " 'cc' already used for quickfix close
