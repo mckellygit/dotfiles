@@ -23,6 +23,9 @@
 # from ctrlbs plugin
   esc_delete = <Control>BackSpace
   esc_one = <Control>Insert
+  esc_two = <Control><Shift>BackSpace
+# Ctrl-Shft-\
+  esc_thr = <Control>bar
 [layouts]
   [[default]]
     [[[child0]]]
