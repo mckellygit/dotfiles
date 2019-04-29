@@ -25,7 +25,11 @@
   esc_one = <Control>Insert
   esc_two = <Control><Shift>BackSpace
 # Ctrl-Shft-\
-  esc_thr = <Control>bar
+# esc_thr = <Control>bar
+# Ctrl-=
+  esc_thr = <Control>equal
+# Ctrl-Shft-space
+  esc_four = <Control><Shift>space
 [layouts]
   [[default]]
     [[[child0]]]

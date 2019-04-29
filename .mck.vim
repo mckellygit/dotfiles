@@ -761,9 +761,9 @@ set ttimeout ttimeoutlen=2
 "set esckeys
 
 " if we remap these we can use <C-\> in tmux ...
-tnoremap <C-^> <C-\>
-inoremap <C-^> <C-\>
-cnoremap <C-^> <C-\>
+"tnoremap <C-^> <C-\>
+"inoremap <C-^> <C-\>
+"cnoremap <C-^> <C-\>
 
 " s/S is confusing, use cl/cc instead
 nnoremap s <Nop>
@@ -2441,7 +2441,7 @@ endif
 " -----------------------------
 
 " enable bracketed paste in terminal mode
-if &term =~ "^screen"
+if &term =~ "^screen" || &term =~ "^tmux"
   let &t_BE = "\e[?2004h"
   let &t_BD = "\e[?2004l"
   exec "set t_PS=\e[200~"

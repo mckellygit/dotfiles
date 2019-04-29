@@ -19,7 +19,11 @@ def key_esc_two(self):
 def key_esc_thr(self):
     self.vte.feed_child('\x1b\x33')
 
+def key_esc_four(self):
+    self.vte.feed_child('\x1b\x34')
+
 setattr(Terminal, 'key_esc_delete', key_esc_delete)
 setattr(Terminal, 'key_esc_one', key_esc_one)
 setattr(Terminal, 'key_esc_two', key_esc_two)
 setattr(Terminal, 'key_esc_thr', key_esc_thr)
+setattr(Terminal, 'key_esc_four', key_esc_four)
