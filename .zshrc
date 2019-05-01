@@ -146,9 +146,12 @@ export MANPATH=${MANPATH}:~/${MYMPIi}/share/man
 path+=(~/bin)
 path+=(~/go/bin)
 path+=(/usr/local/go/bin)
+path+=(/usr/share/bcc/tools)
 export PATH
 
 #export GOPATH=$HOME
+
+export MANPATH=${MANPATH}:/usr/share/bcc/man
 
 function collapse_pwd {
     echo $(pwd | sed -e "s,^$HOME,~,")
@@ -165,8 +168,6 @@ if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] ; then
 #   PS1="%{$fg[red]%}ssh%f-%{$fg[green]%}%n@%m%f:%{$fg[yellow]%}%12<..<%~%<<%f%% "
     PS1='%F{007}ssh%f-%F{100}%n@%m%f:%F{150}%12<..<%~%<<%f%% '
 fi
-
-export MANPATH=${MANPATH}:/usr/share/bcc/man
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
