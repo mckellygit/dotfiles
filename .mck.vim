@@ -100,10 +100,11 @@ Plugin 'mileszs/ack.vim'
 " Plugin 'othree/eregex.vim'
 "
 " colorscheme
-Plugin 'ajmwagar/vim-deus'
+"Plugin 'ajmwagar/vim-deus'
+Plugin 'mckellyln/vim-deus'
+Plugin 'morhetz/gruvbox'
 "Plugin 'altercation/vim-colors-solarized'
 "Plugin 'rafi/awesome-vim-colorschemes'
-Plugin 'morhetz/gruvbox'
 " one for all colors
 "Plugin 'flazz/vim-colorschemes'
 "
@@ -534,8 +535,8 @@ endif
 
 "let g:solarized_termcolors=256
 "colorscheme solarized
-"colorscheme deus
-colorscheme gruvbox
+colorscheme deus
+"colorscheme gruvbox
 
 " do not use delete/wipe with qf/ll ...
 set nohidden
