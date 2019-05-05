@@ -149,7 +149,8 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # PROMPT_COMMAND='echo -ne "\033]0;${HOSTNAME}:${PWD}\007"'
 # PROMPT_COMMAND='echo -ne "\033]0;${HOSTNAME}:$(echo $PWD | tail -c 11)\007"'
 # PROMPT_COMMAND='echo -ne "\033]0;${HOSTNAME}:${PWD:(-11)}\007"'
-PROMPT_COMMAND='pwd2=${PWD/#$HOME/\~}; if [ ${#pwd2} -gt 11 ] ; then pwd2=..${pwd2:(-10)} ; fi ; if [[ -n "$TMUX_PANE" ]] ; then tmux set-window-option automatic-rename on; fi ; echo -ne "\033]0;${HOSTNAME}:${pwd2}\007"'
+# dont print hostname in tmux if not ssh (remote)
+PROMPT_COMMAND='pwd2=${PWD/#$HOME/\~} ; if [ ${#pwd2} -gt 11 ] ; then pwd2=..${pwd2:(-10)} ; fi ; if [[ -n "$TMUX_PANE" ]] ; then tmux set-window-option automatic-rename on ; fi ; if [[ -n "$SSH_CLIENT" ]] ; then echo -ne "\033]0;ssh-${HOSTNAME}:${pwd2}\007" ; else echo -ne "\033]0;${pwd2}\007" ; fi'
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like
