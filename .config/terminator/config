@@ -52,6 +52,10 @@
 [profiles]
   [[default]]
     antialias = True
+    show_titlebar = True
+#   Terminal bell (light bulb)
+    icon_bell = True
+    alternate_screen_scroll = True
 #   background_color = "#2e2e2e"
     background_color = "#252525"
     background_darkness = 0.96

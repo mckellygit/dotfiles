@@ -546,6 +546,11 @@ set lazyredraw
 
 set confirm
 
+" do not change terminal window title ...
+set notitle
+" visual/audio bell (terminator light bulb) off ...
+set belloff=error,backspace,esc
+
 " search options
 set wrapscan
 set ignorecase
