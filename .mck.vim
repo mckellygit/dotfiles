@@ -1090,41 +1090,51 @@ function! NoremapNormalCmd(key, preserve_omni, ...)
 endfunction
 
 " Cursor moves by screen lines
- call NoremapNormalCmd("<Up>",   1, "gk")
- call NoremapNormalCmd("<Down>", 1, "gj")
- call NoremapNormalCmd("<Home>", 0, "g<Home>")
- call NoremapNormalCmd("<End>",  0, "g<End>")
+call NoremapNormalCmd("<Up>",   1, "gk")
+call NoremapNormalCmd("<Down>", 1, "gj")
+call NoremapNormalCmd("<Home>", 0, "g<Home>")
+call NoremapNormalCmd("<End>",  0, "g<End>")
 
- call NoremapNormalCmd("<C-j>",    0, "1<C-D>")
- call NoremapNormalCmd("<C-Down>", 0, "1<C-D>")
+call NoremapNormalCmd("<C-j>",    0, "1<C-D>")
+call NoremapNormalCmd("<C-Down>", 0, "1<C-D>")
 
- call NoremapNormalCmd("<C-k>",    0, "1<C-U>")
- call NoremapNormalCmd("<C-Up>",   0, "1<C-U>")
+call NoremapNormalCmd("<C-k>",    0, "1<C-U>")
+call NoremapNormalCmd("<C-Up>",   0, "1<C-U>")
 
- call NoremapNormalCmd("<ScrollWheelDown>", 0, "5<C-D>")
- call NoremapNormalCmd("<ScrollWheelUp>",   0, "5<C-U>")
+call NoremapNormalCmd("<ScrollWheelDown>", 0, "5<C-D>")
+call NoremapNormalCmd("<ScrollWheelUp>",   0, "5<C-U>")
 
- function! MapScrollKeys()
-   let half = winheight(0) / 2
-   if (half < 1)
-     half = 1
-   endif
-   let full = half + half
-   let fullup = full . "<C-U>"
-   let fulldn = full . "<C-D>"
-   let halfup = half . "<C-U>"
-   let halfdn = half . "<C-D>"
-   call NoremapNormalCmd("<C-f>",        0, halfdn)
-   call NoremapNormalCmd("<C-b>",        0, halfup)
-   call NoremapNormalCmd("<PageDown>",   0, fulldn)
-   call NoremapNormalCmd("<PageUp>",     0, fullup)
-   call NoremapNormalCmd("<C-PageDown>", 0, halfdn)
-   call NoremapNormalCmd("<C-PageUp>",   0, halfup)
- endfunction
+function! MapScrollKeys()
+  let half = winheight(0) / 2
+  if (half < 1)
+    half = 1
+  endif
+  let full = half + half
+  let fullup = full . "<C-U>"
+  let fulldn = full . "<C-D>"
+  let halfup = half . "<C-U>"
+  let halfdn = half . "<C-D>"
+  call NoremapNormalCmd("<C-f>",        0, halfdn)
+  call NoremapNormalCmd("<C-b>",        0, halfup)
+  call NoremapNormalCmd("<PageDown>",   0, fulldn)
+  call NoremapNormalCmd("<PageUp>",     0, fullup)
+  call NoremapNormalCmd("<C-PageDown>", 0, halfdn)
+  call NoremapNormalCmd("<C-PageUp>",   0, halfup)
+endfunction
 
- call MapScrollKeys()
+call MapScrollKeys()
 
- autocmd VimResized * call MapScrollKeys()
+autocmd VimResized * call MapScrollKeys()
+
+" tmux uses these to navigate panes
+noremap <S-Down>  <Nop>
+noremap <S-Up>    <Nop>
+noremap <S-Left>  <Nop>
+noremap <S-Right> <Nop>
+
+" X uses these to scroll
+noremap <S-PageDown> <Nop>
+noremap <S-PageUp>   <Nop>
 
 " ---------
 
