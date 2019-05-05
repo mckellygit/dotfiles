@@ -2484,3 +2484,13 @@ cnoreabbrev <silent> <expr> Gstatus (getcmdtype() == ':' && getcmdline() =~ '\s*
 packadd termdebug
 ":Termdebug a.out
 
+" -----------------------------
+
+" To filter a quickfix/location list:
+" :Cfilter[!] /{pat}/
+" :Lfilter[!] /{pat}/
+
+packadd cfilter
+
+" -----------------------------
+
