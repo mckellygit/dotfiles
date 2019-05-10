@@ -1059,9 +1059,11 @@ set scrolloff=0
 " ---------
 
 " TODO not sure what is best
-"set scrolljump=10
-" half window height ...
-au BufEnter,WinEnter,WinNew,VimResized *,*.* let &scrolljump=winheight('%')/2
+" half window height (was winheight('%')/2, but -50 is 50%)
+au BufEnter,WinEnter,WinNew,VimResized * let &scrolljump=-50
+" disable when in insert mode ...
+au InsertEnter * let &scrolljump=1
+au InsertLeave * let &scrolljump=-50
 
 " map H, L to horizontal scroll
 " (cannot use <C-Left>, <C-Right> as those are for word movement)
