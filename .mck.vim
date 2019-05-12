@@ -478,7 +478,8 @@ endif
 " polygot -----------
 " needed to get around error in polygot/tmux.vim
 " and that is deprecated anyway (defaults in vim 8.0+)
-let g:polyglot_disabled = ['tmux', 'c/c++']
+" .cap files are for me usually from tcpdump and not ruby ...
+let g:polyglot_disabled = ['tmux', 'c/c++', 'ruby']
 let g:cpp_class_scope_highlight = 1
 let g:cpp_member_variable_highlight = 1
 let g:cpp_class_decl_highlight = 1
@@ -754,9 +755,10 @@ set mouse=a
 " clipboard '+' (XA_CLIPBOARD:unnamedplus)
 " and
 " primary '*' (XA_PRIMARY:unnamed)
+" should we use " or + or * reg ?
 "set clipboard^=unnamed
 "set clipboard^=unnamedplus
-set clipboard^=unnamed,unnamedplus
+set clipboard^=unnamedplus
 
 "set timeoutlen=1000 ttimeoutlen=0
 "set notimeout ttimeout timeoutlen=100
@@ -791,15 +793,17 @@ vnoremap S <Nop>
 " if X11 Forwarding is not on/allowed then perhaps vim copy to + and * does not work over ssh ?
 "vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '""y <Bar> :<C-u>call system("xsel -i -b -t 5000", @")<CR> <Bar> gv<Esc>i' : '""y <Bar> :<C-u>call system("xsel -i -b -t 5000", @")<CR> <Bar> gv<Esc>'
 "vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '""y <Bar> :<C-u>call system("xsel -i -b -t 5000", @")<CR> <Bar> gv<Esc>i' : '""y <Bar> :<C-u>call system("xsel -i -b -t 5000", @")<CR> <Bar> gv<Esc>'
-vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '""ygv<Esc>i' : '""ygv<Esc>'
-vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '""ygv<Esc>i' : '""ygv<Esc>'
+" should we use " or + or * reg ? And what with clipboard setting ?
+vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"+ygv<Esc>i' : '"+ygv<Esc>'
+vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"+ygv<Esc>i' : '"+ygv<Esc>'
 
 " cut selection
 "vnoremap <silent> <C-x> "+d<LeftRelease>
 "vnoremap <silent> <C-x> "+d
 " if X11 Forwarding is not on/allowed then perhaps vim copy to + and * does not work over ssh ?
 "vnoremap <silent> <C-x> ""d <Bar> :<C-u>call system("xsel -i -b -t 5000", @")<CR>
-vnoremap <silent> <C-x> ""d
+" should we use " or + or * reg ? And what with clipboard setting ?
+vnoremap <silent> <C-x> "+d
 
 " <C-v> to toggle block-mode instead of on or cancel visual-mode
 " simple and almost there -
@@ -908,6 +912,23 @@ inoremap <silent> <M-p> <C-r>"
 "nnoremap <silent> p P
 "vnoremap <silent> P p
 "nnoremap <silent> P p
+
+" Make p in Visual mode replace the selected text with the " register.
+"vnoremap p <Esc>:let current_reg = @"<CR>gvdi<C-R>=current_reg<CR><Esc>
+
+" to disable scrolljump when pasting at last row ...
+" not sure to use nmap or nnoremap ?
+" not sure to use " or + or * register ?
+function! MyPasteNoJump() abort
+  nmap <silent> <buffer> p p
+  let &scrolljump=1
+  execute "normal \"+p"
+  "execute "normal p"
+  let &scrolljump=-50
+  nmap <silent> <buffer> p :call MyPasteNoJump()<CR>
+endfunction
+nmap <silent> <buffer> p :call MyPasteNoJump()<CR>
+vmap <silent> <buffer> p <Esc>p
 
 " set paste mode, paste, set nopaste mode
 function! WrapForTmux(s)
@@ -1044,9 +1065,6 @@ set tabstop=4
 nnoremap <silent> Q q
 nnoremap <silent> q <Nop>
 " NOTE: q may be mapped to something else later on ...
-
-" Make p in Visual mode replace the selected text with the "" register.
-"vnoremap p <Esc>:let current_reg = @"<CR>gvdi<C-R>=current_reg<CR><Esc>
 
 " for block select beyond shorter line lengths
 set virtualedit=block
@@ -2230,6 +2248,10 @@ noremap <silent> q :set nohlsearch<CR>:redraw!<CR>
 
 " does this make sense ? (q to cancel select/visual)
 vnoremap <silent> q <Esc>
+
+" to match normal mode
+vnoremap <silent> <C-o> <Esc><C-o>
+vnoremap <silent> <C-i> <Esc><C-i>
 
 " clear cmd window (or just <C-l> to redraw)
 " 'cc' already used for quickfix close
