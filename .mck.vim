@@ -1671,6 +1671,7 @@ let fsnonewfiles=1
 " unconditional-paste ---
 nmap <Leader>Pc <Plug>UnconditionalPasteCharBefore
 nmap <Leader>pc <Plug>UnconditionalPasteCharAfter
+
 nmap <Leader>Pj <Plug>UnconditionalPasteJustJoinedBefore
 nmap <Leader>pj <Plug>UnconditionalPasteJustJoinedAfter
 "
@@ -1684,19 +1685,26 @@ nmap <Leader>p0 <Plug>UnconditionalPasteCharBefore
 nmap <Leader>p1 <Plug>UnconditionalPasteCharAfter
 "
 " change l to i to match current indentation ...
-"nmap <Leader>Pl <Plug>UnconditionalPasteLineBefore
-"nmap <Leader>pl <Plug>UnconditionalPasteLineAfter
-nmap <Leader>Pl <Plug>UnconditionalPasteIndentedBefore
-nmap <Leader>pl <Plug>UnconditionalPasteIndentedAfter
+"nmap <Leader>Pl <Plug>UnconditionalPasteIndentedBefore
+"nmap <Leader>pl <Plug>UnconditionalPasteIndentedAfter
+nmap <Leader>Pl <Plug>UnconditionalPasteLineBefore
+nmap <Leader>pl <Plug>UnconditionalPasteLineAfter
 "
 nmap <Leader>Pb <Plug>UnconditionalPasteBlockBefore
 nmap <Leader>pb <Plug>UnconditionalPasteBlockAfter
+
 nmap <Leader>Pi <Plug>UnconditionalPasteIndentedBefore
 nmap <Leader>pi <Plug>UnconditionalPasteIndentedAfter
-nmap <Leader>Pm <Plug>UnconditionalPasteMoreIndentBefore
-nmap <Leader>pm <Plug>UnconditionalPasteMoreIndentAfter
-nmap <Leader>Pl <Plug>UnconditionalPasteLessIndentBefore
-nmap <Leader>pl <Plug>UnconditionalPasteLessIndentAfter
+
+" use . for more (>) and , for less (<)
+nmap <Leader>P. <Plug>UnconditionalPasteMoreIndentBefore
+nmap <Leader>p. <Plug>UnconditionalPasteMoreIndentAfter
+nmap <Leader>P, <Plug>UnconditionalPasteLessIndentBefore
+nmap <Leader>p, <Plug>UnconditionalPasteLessIndentAfter
+
+" slightly confusing and has some delay ...
+"nmap <Leader>P> <Plug>UnconditionalPasteShiftedBefore
+"nmap <Leader>p> <Plug>UnconditionalPasteShiftedAfter
 " unconditional-paste ---
 
 "================================================================
