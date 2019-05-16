@@ -927,7 +927,8 @@ function! MyPasteNoJump() abort
   let &scrolljump=-50
   nmap <silent> <buffer> p :call MyPasteNoJump()<CR>
 endfunction
-nmap <silent> <buffer> p :call MyPasteNoJump()<CR>
+" to match UnconditionalPaste, dont modify p
+"nmap <silent> <buffer> p :call MyPasteNoJump()<CR>
 vmap <silent> <buffer> p <Esc>p
 
 " set paste mode, paste, set nopaste mode
