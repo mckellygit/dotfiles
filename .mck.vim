@@ -2225,7 +2225,8 @@ nnoremap <silent> <expr> <C-\><C-n> (&buftype == 'terminal') ? 'i' : '<C-\><C-n>
 nnoremap <silent> <expr> <Return> (&buftype == 'terminal') ? 'i' : '<Return>'
 " to enter normal mode, like tmux
 tnoremap <silent> <C-Up>   <C-\><C-n>
-tnoremap <silent> <PageUp> <C-\><C-n>
+" there is no alternate screen so this removes PageUp from less/more/etc.
+"tnoremap <silent> <PageUp> <C-\><C-n>
 
 au TerminalOpen * set signcolumn=no
 
