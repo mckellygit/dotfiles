@@ -114,7 +114,8 @@ Plugin 'embear/vim-localvimrc'
 " polygot syntax highlighting for many file types
 Plugin 'sheerun/vim-polyglot'
 " enhanced c++ syntax
-Plugin 'octol/vim-cpp-enhanced-highlight'
+"Plugin 'octol/vim-cpp-enhanced-highlight'
+Plugin 'bfrg/vim-cpp-modern'
 "
 " statusline
 Plugin 'itchyny/lightline.vim'
@@ -488,6 +489,10 @@ let g:cpp_class_decl_highlight = 1
 " set syntax highlighting for tpp/ipp files also
 autocmd BufNewFile,BufRead *.{ipp,tpp,esp,ecm} set filetype=cpp
 " polygot -----------
+
+" vim-cpp-modern -----------
+let c_no_curly_error = 1
+" vim-cpp-modern -----------
 
 " asyncrun -----------
 " open quickfix (10 lines) when cmd ends
