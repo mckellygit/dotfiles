@@ -49,6 +49,9 @@ Plugin 'airblade/vim-rooter'
 "Plugin 'lyuts/vim-rtags'
 Plugin 'mckellyln/vim-rtags'
 "
+" echodoc function completion
+"Plugin Shougo/echodoc.vim
+"
 " qf/loclist window in all windows/tabs (**modified++)
 "Plugin 'yssl/QFEnter'
 Plugin 'mckellyln/QFEnter'
@@ -526,6 +529,10 @@ nnoremap <silent> # #:1Searchlight<CR>
 " gruvbox -----------
 let g:gruvbox_contrast_dark = 'medium'
 " gruvbox -----------
+
+" echodoc -----------
+let g:echodoc#enable_at_startup = 1
+" echodoc -----------
 
 " improves color highlighing with dark terminals
 set background=dark
