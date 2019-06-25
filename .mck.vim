@@ -50,7 +50,7 @@ Plugin 'airblade/vim-rooter'
 Plugin 'mckellyln/vim-rtags'
 "
 " echodoc function completion
-"Plugin Shougo/echodoc.vim
+"Plugin 'Shougo/echodoc.vim'
 "
 " qf/loclist window in all windows/tabs (**modified++)
 "Plugin 'yssl/QFEnter'
@@ -103,8 +103,7 @@ Plugin 'mileszs/ack.vim'
 " Plugin 'othree/eregex.vim'
 "
 " colorscheme
-"Plugin 'ajmwagar/vim-deus'
-Plugin 'mckellyln/vim-deus'
+Plugin 'ajmwagar/vim-deus'
 Plugin 'morhetz/gruvbox'
 "Plugin 'altercation/vim-colors-solarized'
 "Plugin 'rafi/awesome-vim-colorschemes'
@@ -697,7 +696,8 @@ set report=0
 "tmux uses " ='`;|[](){},/?\\\""
 "(different than tmux due to vim c/c++ devel)
 "set iskeyword=@,48-57,_,192-255,@-@,<,>,-,+,*,%,$,!,~,.,:,#,^
-set iskeyword=@,48-57,_,192-255,@-@,$,!,#
+"drop ! to help with searching word under cursor ...
+set iskeyword=@,48-57,_,192-255,@-@,$,#
 
 " -----------------------------
 
