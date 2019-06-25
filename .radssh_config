@@ -42,6 +42,7 @@ output_mode=ordered
 # quota.time=0
 # quota.lines=0
 # quota.bytes=0
+character_encoding=latin-1
 
 ### Connection & Authentication Options
 ### Username defaults to $SSH_USER (or $USER) if not set here
