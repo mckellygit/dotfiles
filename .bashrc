@@ -118,6 +118,7 @@ alias rm='rm -i'
 alias dmesg='dmesg -kuxT'
 alias vdiff='vimdiff'
 alias more='less'
+alias lc='less-color'
 alias tailrdm='tail -f /tmp/rdm.log'
 alias difff='diff'
 # gv.vim uses noremap so need to override q, x here

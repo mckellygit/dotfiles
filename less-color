@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# also look at lesspipe
+# pip install pygments
+
+export LESSOPEN='|pygmentize -f terminal -g %s'
+export LESS=-R
+less $@
+
