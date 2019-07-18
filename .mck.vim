@@ -343,6 +343,8 @@ au BufAdd * let &tabline = &tabline
 "au BufAdd * redrawtabline
 " to check if redrawtabline exists before using:
 "if exists(":redtawtabline") == 2
+" also saw this-
+"set tabline=%!lightline#tabline()
 " lightline ----------
 
 " rooter ----------
