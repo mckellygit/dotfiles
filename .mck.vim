@@ -160,6 +160,9 @@ Plugin 'mhinz/vim-startify'
 Plugin 'PeterRincker/vim-searchlight'
 " TODO also look into: qxxxb/vim-searchhi
 "
+" fade inactive buffers
+Plugin 'TaDaa/vimade'
+"
 "" All of your Plugins must be added before the following line
 call vundle#end()         " required
 filetype plugin indent on " required
@@ -535,6 +538,12 @@ let g:gruvbox_contrast_dark = 'medium'
 let g:echodoc#enable_at_startup = 1
 " echodoc -----------
 
+" vimade -----------
+let g:vimade = {}
+let g:vimade.fadelevel = 0.6
+let g:vimade.checkinterval = 120
+" vimade -----------
+
 " improves color highlighing with dark terminals
 set background=dark
 " tmux default term set to screen-256color
@@ -564,6 +573,13 @@ set confirm
 set notitle
 " visual/audio bell (terminator light bulb) off ...
 set belloff=error,backspace,esc
+
+" issue with mouse in vim when beyond 220 cols ...
+if has("mouse_sgr")
+  set ttymouse=sgr
+else
+  set ttymouse=xterm2
+end
 
 " search options
 set wrapscan
