@@ -8,3 +8,6 @@ fi
 
 git branch --set-upstream-to=origin/${branch} ${branch}
 
+# to unset:
+#   git branch --unset-upstream [<branchname>]
+
