@@ -2263,7 +2263,7 @@ au TerminalOpen * set signcolumn=no
 " -----------
 
 " fugitive Gblame + deus 'not commited' default (Ignore) too dark
-hi! link Ignore deusPurple
+"hi! link Ignore deusPurple
 
 " -----------
 
