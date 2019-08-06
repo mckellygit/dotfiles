@@ -2262,6 +2262,11 @@ au TerminalOpen * set signcolumn=no
 
 " -----------
 
+" fugitive Gblame + deus 'not commited' default (Ignore) too dark
+hi! link Ignore deusPurple
+
+" -----------
+
 " undo all changes - instead of just :e! ...
 "noremap <Leader>uu :earlier 999999<CR>:u<CR>
 function! UndoAll()
