@@ -115,6 +115,32 @@ if [ -n "$output" -a "$output" != ".d..t...... ./" ] ; then
     modified=1
 fi
 
+# -----------------
+# tbb libs:
+# [oss]/system/tbb_sm/linux_intel64_*_release
+if   [ -x $dir/../system/tbb_sm ] ; then
+    tbbdir="$(ls -1d 2>/dev/null $dir/../system/tbb_sm/linux_intel64_*_release)"
+elif [ -x $dir/../oss/system/tbb_sm ] ; then
+    tbbdir="$(ls -1d 2>/dev/null $dir/../oss/system/tbb_sm/linux_intel64_*_release)"
+fi
+
+if [ -n "$tbbdir" ] ; then
+    tbblib="$(basename $(ls -1 2>/dev/null $tbbdir/libtbb.so.*))"
+#   echo "tbb: $tbbdir/$tbblib"
+    output=$(sudo rsync --info=name1 -ai --update --existing $tbbdir/$tbblib /opt/HPCCSystems/lib/$tbblib)
+#   echo "output = $output"
+    if [ -n "$output" -a "$output" != ".d..t...... ./" ] ; then
+        modified=1
+    fi
+
+    output=$(sudo rsync --info=name1 -ai --update --existing $tbbdir/libtbb.so /opt/HPCCSystems/lib/libtbb.so)
+#   echo "output = $output"
+    if [ -n "$output" -a "$output" != ".d..t...... ./" ] ; then
+        modified=1
+    fi
+fi
+# -----------------
+
 output=$(sudo rsync --info=name1 -ai --update --existing $dir/libs/ /opt/HPCCSystems/plugins)
 #echo "output = $output"
 if [ -n "$output" -a "$output" != ".d..t...... ./" ] ; then
@@ -187,7 +213,7 @@ for bdir in \
 do
 #   echo "bdir: $bdir"
     cd $bdir
-    ls -1 | while read file
+    ls -1 2>/dev/null | while read file
     do
 #       echo "file: $file"
         (readelf -d $file | grep rpath | grep -q $dir) 2> /dev/null
