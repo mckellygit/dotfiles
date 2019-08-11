@@ -124,6 +124,17 @@ alias stat-hpcc='stat_hpcc'
 alias start-hpcc='start_hpcc'
 alias kill-hpcc='kill_hpcc'
 
+# dont disappear on a non-exiting command ...
+# also note use of command
+# bash does this automatically
+exec() {
+    which "$1" >/dev/null 2>&1
+    rc=$?
+    if [ $rc -eq 0 ] ; then
+        builtin exec "$@"
+    fi
+}
+
 # export NCPUS=`cat /proc/cpuinfo | grep processor | wc -l`
 # numcpus=$(getconf _NPROCESSORS_ONLN 2>/dev/null)
 numcpus=$(nproc 2> /dev/null)
