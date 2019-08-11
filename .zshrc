@@ -132,6 +132,8 @@ exec() {
     rc=$?
     if [ $rc -eq 0 ] ; then
         builtin exec "$@"
+    else
+        "$@"
     fi
 }
 
