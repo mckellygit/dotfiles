@@ -2264,6 +2264,8 @@ au TerminalOpen * set signcolumn=no
 
 " fugitive Gblame + deus 'not commited' default (Ignore) too dark
 "hi! link Ignore deusPurple
+" use green to match other vundle update comments
+hi! link Ignore deusGreen
 
 " -----------
 
