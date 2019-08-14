@@ -1052,6 +1052,9 @@ nnoremap <silent> <Leader>wF :set hlsearch<CR>#
 "vnoremap <silent> <Leader>wf y <Bar> <Esc>:let @/=@"<CR> <Bar> 2n
 vnoremap <silent> <Leader>wf y<Esc>:set hlsearch<CR>/<C-r>"<CR>
 vnoremap <silent> <Leader>wF y<Esc>:set hlsearch<CR>?<C-r>"<CR>
+" and the *, # ...
+vnoremap <silent> * y<Esc>:set hlsearch<CR>/<C-r>"<CR>
+vnoremap <silent> # y<Esc>:set hlsearch<CR>?<C-r>"<CR>
 
 " change word with yanked/selected word
 " "_dw deletes word without putting it into reg
