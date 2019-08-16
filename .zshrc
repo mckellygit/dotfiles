@@ -65,6 +65,8 @@ setopt HIST_IGNORE_DUPS HIST_IGNORE_ALL_DUPS HIST_EXPIRE_DUPS_FIRST HIST_SAVE_NO
 
 # to show .dirs in tab completion ...
 setopt globdots
+# to allow rm f* e* to work when no f* found ...
+setopt -o cshnullglob
 
 h() { if [ -z "$*" ]; then history 1; else history 1 | egrep "$@"; fi; }
 
