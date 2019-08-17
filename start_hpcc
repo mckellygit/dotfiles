@@ -14,11 +14,19 @@ if [ $rc -ne 0 ] ; then
 else
     tag=$$
     trap "rm -f /tmp/${tag}.start.* 2>/dev/null; exit" SIGINT SIGTERM SIGQUIT
-   
+
     sudo /etc/init.d/hpcc-init -c mydali start
+
+    # NB: Thor starts dafilesrv as a dependency.
+    #     BUT dafilesrv does a configgen --validate without a flock
+    #     (and this creates many /tmp/<component> temp dirs)
+    #     so we need to do it separately and before the others.
+    #     Would be good if deployment/deploy/* getTempPath() created a
+    #     unique tmp dir each time to avoid such dir collisions.
+    #     The -validateonly option creates/rm dirs as root,
+    #     but the -id -od -c option creates/rms dirs as user.
+    sudo /etc/init.d/dafilesrv start
   
-    # NB: thor starts dafilesrv as a dependency
-    # sudo /etc/init.d/dafilesrv start 
     for comp in mydfuserver myeclagent myeclccserver myeclscheduler myesp myroxie mysasha mythor
     do
         sudo /etc/init.d/hpcc-init -c $comp start > /tmp/${tag}.start.$comp 2>&1 &
