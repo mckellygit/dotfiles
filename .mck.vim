@@ -1070,6 +1070,10 @@ vnoremap <silent> <Leader>we <Esc>:let @0=@+<CR>lbcw<C-r>0<Esc>lb:let @"=@0<CR>:
 nnoremap <silent> <Leader>cw :let @0=@+<CR>lbcw<C-r>0<Esc>lb:let @"=@0<CR>:let @+=@0<CR>
 vnoremap <silent> <Leader>cw <Esc>:let @0=@+<CR>lbcw<C-r>0<Esc>lb:let @"=@0<CR>:let @+=@0<CR>
 
+" cw move to beginning of word first
+nnoremap <silent> cw bcw
+vnoremap <silent> cw <Esc>bcw
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
