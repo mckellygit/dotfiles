@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Exec=xmodmap /home/kellma02/.Xmodmap
+Exec=/home/kellma02/bin/xmodmap.fix &
 Hidden=false
 NoDisplay=false
 X-GNOME-Autostart-enabled=true
