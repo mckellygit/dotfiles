@@ -116,7 +116,7 @@ alias dmesg='dmesg -kuxT'
 alias vdiff='vimdiff'
 alias more='less'
 alias lc='less-color'
-alias tailrdm='tail -f /tmp/rdm.log'
+alias tailrdm='tail -f /tmp/rdm-$LOGNAME.log'
 alias difff='diff'
 # gv.vim uses noremap so need to override q, x here
 alias vigv='vim -R -c GV -c ":nnoremap <buffer> q <Nop>" -c ":cnoreabbrev <buffer> q Tabcloserightquit" -c ":cnoreabbrev <buffer> q! Tabcloserightquit" -c ":nnoremap <buffer> x <Nop>" -c ":cnoreabbrev <buffer> x Tabcloserightquit" -c ":redraw!"'
