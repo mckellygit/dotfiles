@@ -102,6 +102,10 @@ Plugin 'mileszs/ack.vim'
 " with regex patterns ...
 " Plugin 'othree/eregex.vim'
 "
+" TODO also look into: ferret
+" for quickfix multi-file search/replace
+"Plugin 'wincent/ferret'
+"
 " colorscheme
 Plugin 'ajmwagar/vim-deus'
 Plugin 'morhetz/gruvbox'
