@@ -1,0 +1,58 @@
+cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWITH_SSE2=ON -DWITH_CUPS=off -DWITH_WAYLAND=off -DWITH_ALSA=off -DWITH_PULSE=on -DCMAKE_INSTALL_PREFIX:PATH=/usr/local ../
+
+
+diff --git a/include/freerdp/input.h b/include/freerdp/input.h
+index cbca343d2..f82b1aab1 100644
+--- a/include/freerdp/input.h
++++ b/include/freerdp/input.h
+@@ -41,8 +41,8 @@ typedef struct rdp_input rdpInput;
+ #define PTR_FLAGS_MOVE			0x0800
+ #define PTR_FLAGS_DOWN			0x8000
+ #define PTR_FLAGS_BUTTON1		0x1000 /* left */
+-#define PTR_FLAGS_BUTTON2		0x2000 /* right */
+-#define PTR_FLAGS_BUTTON3		0x4000 /* middle */
++#define PTR_FLAGS_BUTTON3		0x2000 /* right */
++#define PTR_FLAGS_BUTTON2		0x4000 /* middle */
+ #define WheelRotationMask		0x01FF
+ 
+ /* Extended Pointer Flags */
+diff --git a/winpr/include/winpr/input.h b/winpr/include/winpr/input.h
+index 36918847f..e0c3d358a 100644
+--- a/winpr/include/winpr/input.h
++++ b/winpr/include/winpr/input.h
+@@ -397,7 +397,7 @@
+ #define KBD4_T1A		VK_OEM_4		/* NE */
+ #define KBD4_T1B		VK_OEM_6		/* NE */
+ #define KBD4_T1C		VK_RETURN
+-#define KBD4_T1D		VK_LCONTROL
++#define KBD4_T1D		VK_CAPITAL
+ #define KBD4_T1E		VK_KEY_A
+ #define KBD4_T1F		VK_KEY_S
+ #define KBD4_T20		VK_KEY_D
+@@ -426,7 +426,7 @@
+ #define KBD4_T37		VK_MULTIPLY
+ #define KBD4_T38		VK_LMENU
+ #define KBD4_T39		VK_SPACE
+-#define KBD4_T3A		VK_CAPITAL
++#define KBD4_T3A		VK_LCONTROL
+ #define KBD4_T3B		VK_F1
+ #define KBD4_T3C		VK_F2
+ #define KBD4_T3D		VK_F3
+@@ -572,7 +572,7 @@
+ #define KBD7_T1A		VK_OEM_4		/* NE */
+ #define KBD7_T1B		VK_OEM_6		/* NE */
+ #define KBD7_T1C		VK_RETURN
+-#define KBD7_T1D		VK_LCONTROL
++#define KBD7_T1D		VK_CAPITAL
+ #define KBD7_T1E		VK_KEY_A
+ #define KBD7_T1F		VK_KEY_S
+ #define KBD7_T20		VK_KEY_D
+@@ -601,7 +601,7 @@
+ #define KBD7_T37		VK_MULTIPLY
+ #define KBD7_T38		VK_LMENU
+ #define KBD7_T39		VK_SPACE
+-#define KBD7_T3A		VK_CAPITAL
++#define KBD7_T3A		VK_LCONTROL
+ #define KBD7_T3B		VK_F1
+ #define KBD7_T3C		VK_F2
+ #define KBD7_T3D		VK_F3
