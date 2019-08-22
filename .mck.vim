@@ -1432,6 +1432,20 @@ endif " disable old scroll functions
 
 " ------ scroll ------
 
+" move lines or selected text up/down
+
+nnoremap <C-S-j> :m .+1<CR>==
+nnoremap <C-S-k> :m .-2<CR>==
+inoremap <C-S-j> <Esc>:m .+1<CR>==gi
+inoremap <C-S-k> <Esc>:m .-2<CR>==gi
+vnoremap <C-S-j> :m '>+1<CR>gv=gv
+vnoremap <C-S-k> :m '<-2<CR>gv=gv
+
+"nnoremap ,<Up>   :<C-u>silent! move-2<CR>==
+"nnoremap ,<Down> :<C-u>silent! move+<CR>==
+"xnoremap ,<Up>   :<C-u>silent! '<,'>move-2<CR>gv=gv
+"xnoremap ,<Down> :<C-u>silent! '<,'>move'>+<CR>gv=gv
+
 " -----------------------------
 
 " Only do this part when compiled with support for autocommands.
