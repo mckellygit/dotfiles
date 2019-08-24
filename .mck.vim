@@ -1048,9 +1048,13 @@ vnoremap <silent> <Leader>wd <Esc>lb"_dw
 nnoremap <silent> <Leader>dw lb"_dw
 vnoremap <silent> <Leader>dw <Esc>lb"_dw
 
-" search for word under cursor
+" search for word under cursor (without copying selection)
 nnoremap <silent> <Leader>wf :set hlsearch<CR>*
 nnoremap <silent> <Leader>wF :set hlsearch<CR>#
+" search for word under curor (copying selection)
+nnoremap <silent> <Leader>wg viwy`]:set hlsearch<CR>*
+nnoremap <silent> <Leader>wG viwy`]:set hlsearch<CR>#
+
 " search for visual selection
 " if register is regex with literal metachars then :let @/=escape(@", '.*\\$^')
 "vnoremap <silent> <Leader>wf y <Bar> <Esc>:let @/=@"<CR> <Bar> 2n
