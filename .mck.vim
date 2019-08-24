@@ -1082,6 +1082,13 @@ vnoremap <silent> <Leader>cw <Esc>:let @0=@+<CR>lbcw<C-r>0<Esc>lb:let @"=@0<CR>:
 nnoremap <silent> cw lbcw
 vnoremap <silent> cw <Esc>lbcw
 
+" -------------------
+" Terminator plugin (and tmux) ctrl-insert maps to <Esc>1 for paste (ie like C-v / C-S-v)
+nnoremap <silent> <Esc>1 P
+" ctrl-del to delete to previous word (ie like readline)
+nnoremap <silent> <Esc>[3;5~ d<C-Left>
+" -------------------
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
