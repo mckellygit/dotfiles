@@ -1085,8 +1085,10 @@ vnoremap <silent> cw <Esc>lbcw
 " -------------------
 " Terminator plugin (and tmux) ctrl-insert maps to <Esc>1 for paste (ie like C-v / C-S-v)
 nnoremap <silent> <Esc>1 P
-" ctrl-del to delete to previous word (ie like readline)
+" ctrl-del to delete to previous word (ie like readline backward-kill-word)
 nnoremap <silent> <Esc>[3;5~ d<C-Left>
+" this also deletes all of word under cursor ...
+"nnoremap <silent> <Esc>[3;5~ BdW
 " -------------------
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
