@@ -3,3 +3,4 @@
 # /etc/resolvconf/resolv.conf.d/head
 #
 options timeout:1 retries:1
+nameserver 1.1.1.1

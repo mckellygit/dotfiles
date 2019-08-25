@@ -15,7 +15,7 @@
 #DNSMASQ_OPTS="--conf-file=/etc/dnsmasq.alt"
 
 # Whether or not to run the dnsmasq daemon; set to 0 to disable.
-ENABLED=1
+ENABLED=0
 
 # By default search this drop directory for configuration options.
 # Libvirt leaves a file here to make the system dnsmasq play nice.
