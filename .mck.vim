@@ -1072,15 +1072,22 @@ vnoremap <silent> # y<Esc>:set hlsearch<CR>?<C-r>"<CR>
 " (parcellite etc. may auto copy + to * ...)
 " optional - add lb to get back to beginning of word ?
 " wc is already window close, use we (word exchange)
+" what about wx ?
 nnoremap <silent> <Leader>we :let @0=@+<CR>lbcw<C-r>0<Esc>lb:let @"=@0<CR>:let @+=@0<CR>
 vnoremap <silent> <Leader>we <Esc>:let @0=@+<CR>lbcw<C-r>0<Esc>lb:let @"=@0<CR>:let @+=@0<CR>
-" to match vim cw ...
-nnoremap <silent> <Leader>cw :let @0=@+<CR>lbcw<C-r>0<Esc>lb:let @"=@0<CR>:let @+=@0<CR>
-vnoremap <silent> <Leader>cw <Esc>:let @0=@+<CR>lbcw<C-r>0<Esc>lb:let @"=@0<CR>:let @+=@0<CR>
 
-" cw move to beginning of word first
+" replace text at cursor pos with clipboard (not from beg of word like \we above)
+nnoremap <silent> <Leader>wr :let @0=@+<CR>cw<C-r>0<Esc>:let @"=@0<CR>:let @+=@0<CR>
+vnoremap <silent> <Leader>wr <Esc>:let @0=@+<CR>cw<C-r>0<Esc>:let @"=@0<CR>:let @+=@0<CR>
+
+" move to beginning of word before changing
+" NOTE: different than vi ; use ce to change from cursor pos to end of word
 nnoremap <silent> cw lbcw
 vnoremap <silent> cw <Esc>lbcw
+
+" move to beginning of word before exchanging with clipboard (like \we above)
+"nnoremap <silent> <Leader>cw :let @0=@+<CR>lbcw<C-r>0<Esc>lb:let @"=@0<CR>:let @+=@0<CR>
+"vnoremap <silent> <Leader>cw <Esc>:let @0=@+<CR>lbcw<C-r>0<Esc>lb:let @"=@0<CR>:let @+=@0<CR>
 
 " -------------------
 " Terminator plugin (and tmux) ctrl-insert maps to <Esc>1 for paste (ie like C-v / C-S-v)
