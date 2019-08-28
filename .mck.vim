@@ -794,6 +794,7 @@ set mouse=a
 "set clipboard^=unnamedplus
 set clipboard^=unnamedplus
 
+" need enough time for mapped / <Leader> key sequences
 "set timeoutlen=1000 ttimeoutlen=0
 "set notimeout ttimeout timeoutlen=100
 set timeout timeoutlen=700
@@ -1332,30 +1333,30 @@ function! s:scrollDN(num, curr_mode)
   call <SID>RtrnToOrig(before_scr_line, a:curr_mode)
 endfunction
 
-"nnoremap <silent> <C-J>            :call <SID>scrollUP(1,0)<CR>
-"nnoremap <silent> <C-Down>         :call <SID>scrollUP(1,0)<CR>
-"vnoremap <silent> <C-J>      <Esc> :call <SID>scrollUP(1,1)<CR>
-"vnoremap <silent> <C-Down>   <Esc> :call <SID>scrollUP(1,1)<CR>
+"nnoremap <silent> <C-J>           :call <SID>scrollUP(1,0)<CR>
+"nnoremap <silent> <C-Down>        :call <SID>scrollUP(1,0)<CR>
+"vnoremap <silent> <C-J>      <Esc>:call <SID>scrollUP(1,1)<CR>
+"vnoremap <silent> <C-Down>   <Esc>:call <SID>scrollUP(1,1)<CR>
 
-"nnoremap <silent> <C-K>            :call <SID>scrollDN(1,0)<CR>
-"nnoremap <silent> <C-Up>           :call <SID>scrollDN(1,0)<CR>
-"vnoremap <silent> <C-K>      <Esc> :call <SID>scrollDN(1,1)<CR>
-"vnoremap <silent> <C-Up>     <Esc> :call <SID>scrollDN(1,1)<CR>
+"nnoremap <silent> <C-K>           :call <SID>scrollDN(1,0)<CR>
+"nnoremap <silent> <C-Up>          :call <SID>scrollDN(1,0)<CR>
+"vnoremap <silent> <C-K>      <Esc>:call <SID>scrollDN(1,1)<CR>
+"vnoremap <silent> <C-Up>     <Esc>:call <SID>scrollDN(1,1)<CR>
 
-"nnoremap <silent> <C-F>            :call <SID>scrollUP(-1,0)<CR>
-"vnoremap <silent> <C-F>      <Esc> :call <SID>scrollUP(-1,1)<CR>
+"nnoremap <silent> <C-F>           :call <SID>scrollUP(-1,0)<CR>
+"vnoremap <silent> <C-F>      <Esc>:call <SID>scrollUP(-1,1)<CR>
 
-"nnoremap <silent> <C-B>            :call <SID>scrollDN(-1,0)<CR>
-"vnoremap <silent> <C-B>      <Esc> :call <SID>scrollDN(-1,1)<CR>
+"nnoremap <silent> <C-B>           :call <SID>scrollDN(-1,0)<CR>
+"vnoremap <silent> <C-B>      <Esc>:call <SID>scrollDN(-1,1)<CR>
 
-"nnoremap <silent> <PageDown>       :call <SID>scrollUP(-2,0)<CR>
-"vnoremap <silent> <PageDown> <Esc> :call <SID>scrollUP(-2,1)<CR>
+"nnoremap <silent> <PageDown>      :call <SID>scrollUP(-2,0)<CR>
+"vnoremap <silent> <PageDown> <Esc>:call <SID>scrollUP(-2,1)<CR>
 "inoremap <silent> <PageDown> <C-\><C-o><PageDown>
 
 " C-PageDown
 
-"nnoremap <silent> <PageUp>         :call <SID>scrollDN(-2,0)<CR>
-"vnoremap <silent> <PageUp>   <Esc> :call <SID>scrollDN(-2,1)<CR>
+"nnoremap <silent> <PageUp>        :call <SID>scrollDN(-2,0)<CR>
+"vnoremap <silent> <PageUp>   <Esc>:call <SID>scrollDN(-2,1)<CR>
 "inoremap <silent> <PageUp>   <C-\><C-o><PageUp>
 
 " C-PageUp
@@ -1370,29 +1371,29 @@ function! s:Saving_scrollV(cmd)
 endfunction
 
 " move and scroll
-"nnoremap <silent> <C-J>            :call <SID>Saving_scrollV("1<C-V><C-D>")<CR>
-"nnoremap <silent> <C-Down>         :call <SID>Saving_scrollV("1<C-V><C-D>")<CR>
-"vnoremap <silent> <C-J>      <Esc> :call <SID>Saving_scrollV("gv1<C-V><C-D>")<CR>
-"vnoremap <silent> <C-Down>   <Esc> :call <SID>Saving_scrollV("gv1<C-V><C-D>")<CR>
+"nnoremap <silent> <C-J>           :call <SID>Saving_scrollV("1<C-V><C-D>")<CR>
+"nnoremap <silent> <C-Down>        :call <SID>Saving_scrollV("1<C-V><C-D>")<CR>
+"vnoremap <silent> <C-J>      <Esc>:call <SID>Saving_scrollV("gv1<C-V><C-D>")<CR>
+"vnoremap <silent> <C-Down>   <Esc>:call <SID>Saving_scrollV("gv1<C-V><C-D>")<CR>
 
-"nnoremap <silent> <C-K>            :call <SID>Saving_scrollV("1<C-V><C-U>")<CR>
-"nnoremap <silent> <C-Up>           :call <SID>Saving_scrollV("1<C-V><C-U>")<CR>
-"vnoremap <silent> <C-K>      <Esc> :call <SID>Saving_scrollV("gv1<C-V><C-U>")<CR>
-"vnoremap <silent> <C-Up>     <Esc> :call <SID>Saving_scrollV("gv1<C-V><C-U>")<CR>
+"nnoremap <silent> <C-K>           :call <SID>Saving_scrollV("1<C-V><C-U>")<CR>
+"nnoremap <silent> <C-Up>          :call <SID>Saving_scrollV("1<C-V><C-U>")<CR>
+"vnoremap <silent> <C-K>      <Esc>:call <SID>Saving_scrollV("gv1<C-V><C-U>")<CR>
+"vnoremap <silent> <C-Up>     <Esc>:call <SID>Saving_scrollV("gv1<C-V><C-U>")<CR>
 
-"nnoremap <silent> <C-F>            :call <SID>Saving_scrollV("<C-V><C-D>")<CR>
-"vnoremap <silent> <C-F>      <Esc> :call <SID>Saving_scrollV("gv<C-V><C-D>")<CR>
+"nnoremap <silent> <C-F>           :call <SID>Saving_scrollV("<C-V><C-D>")<CR>
+"vnoremap <silent> <C-F>      <Esc>:call <SID>Saving_scrollV("gv<C-V><C-D>")<CR>
 
-"nnoremap <silent> <C-B>            :call <SID>Saving_scrollV("<C-V><C-U>")<CR>
-"vnoremap <silent> <C-B>      <Esc> :call <SID>Saving_scrollV("gv<C-V><C-U>")<CR>
+"nnoremap <silent> <C-B>           :call <SID>Saving_scrollV("<C-V><C-U>")<CR>
+"vnoremap <silent> <C-B>      <Esc>:call <SID>Saving_scrollV("gv<C-V><C-U>")<CR>
 
-"nnoremap <silent> <PageDown>       :call <SID>Saving_scrollV("<C-V><C-D>")<CR>
-"vnoremap <silent> <PageDown> <Esc> :call <SID>Saving_scrollV("gv<C-V><C-D>")<CR>
+"nnoremap <silent> <PageDown>      :call <SID>Saving_scrollV("<C-V><C-D>")<CR>
+"vnoremap <silent> <PageDown> <Esc>:call <SID>Saving_scrollV("gv<C-V><C-D>")<CR>
 
 " C-PageDown
 
-"nnoremap <silent> <PageUp>         :call <SID>Saving_scrollV("<C-V><C-U>")<CR>
-"vnoremap <silent> <PageUp>   <Esc> :call <SID>Saving_scrollV("gv<C-V><C-U>")<CR>
+"nnoremap <silent> <PageUp>        :call <SID>Saving_scrollV("<C-V><C-U>")<CR>
+"vnoremap <silent> <PageUp>   <Esc>:call <SID>Saving_scrollV("gv<C-V><C-U>")<CR>
 
 " C-PageUp
 
@@ -1439,14 +1440,14 @@ endfunction
 " mouse scroll not to go past end
 " noremap <silent> <ScrollWheelUp>   H5k
 " noremap <silent> <ScrollWheelDown> L5j
-"nnoremap <silent> <ScrollWheelUp>         :call <SID>scrollDN(5,0)<CR>
-"nnoremap <silent> <ScrollWheelDown>       :call <SID>scrollUP(5,0)<CR>
-"vnoremap <silent> <ScrollWheelUp>         :call <SID>scrollDN(5,1)<CR>
-"vnoremap <silent> <ScrollWheelDown>       :call <SID>scrollUP(5,1)<CR>
-"nnoremap <silent> <ScrollWheelUp>         :call <SID>Saving_scrollV("5<C-V><C-U>")<CR>
-"nnoremap <silent> <ScrollWheelDown>       :call <SID>Saving_scrollV("5<C-V><C-D>")<CR>
-"vnoremap <silent> <ScrollWheelUp>   <Esc> :call <SID>Saving_scrollV("gv5<C-V><C-U>")<CR>
-"vnoremap <silent> <ScrollWheelDown> <Esc> :call <SID>Saving_scrollV("gv5<C-V><C-D>")<CR>
+"nnoremap <silent> <ScrollWheelUp>        :call <SID>scrollDN(5,0)<CR>
+"nnoremap <silent> <ScrollWheelDown>      :call <SID>scrollUP(5,0)<CR>
+"vnoremap <silent> <ScrollWheelUp>        :call <SID>scrollDN(5,1)<CR>
+"vnoremap <silent> <ScrollWheelDown>      :call <SID>scrollUP(5,1)<CR>
+"nnoremap <silent> <ScrollWheelUp>        :call <SID>Saving_scrollV("5<C-V><C-U>")<CR>
+"nnoremap <silent> <ScrollWheelDown>      :call <SID>Saving_scrollV("5<C-V><C-D>")<CR>
+"vnoremap <silent> <ScrollWheelUp>   <Esc>:call <SID>Saving_scrollV("gv5<C-V><C-U>")<CR>
+"vnoremap <silent> <ScrollWheelDown> <Esc>:call <SID>Saving_scrollV("gv5<C-V><C-D>")<CR>
 
 endif " disable old scroll functions
 
@@ -1454,12 +1455,24 @@ endif " disable old scroll functions
 
 " move lines or selected text up/down
 
-nnoremap <C-S-j> :m .+1<CR>==
-nnoremap <C-S-k> :m .-2<CR>==
-inoremap <C-S-j> <Esc>:m .+1<CR>==gi
-inoremap <C-S-k> <Esc>:m .-2<CR>==gi
-vnoremap <C-S-j> :m '>+1<CR>gv=gv
-vnoremap <C-S-k> :m '<-2<CR>gv=gv
+" wanted C-S-j,k but that is not different than C-j,k
+" <Esc>j,k is Alt-j,k
+" NOTE: some of these mapping start with <Esc> and keys pressed
+"       quickly enough could be incorrectly interpreted as a mapping
+" TODO: look into Terminator plugin for these sequences ...
+nnoremap <C-S-Down> :m .+1<CR>==
+nnoremap <C-S-Up>   :m .-2<CR>==
+inoremap <C-S-Down> <Esc>:m .+1<CR>==gi
+inoremap <C-S-Up>   <Esc>:m .-2<CR>==gi
+vnoremap <C-S-Down> :m '>+1<CR>gv=gv
+vnoremap <C-S-Up>   :m '<-2<CR>gv=gv
+
+"nnoremap <M-j> :m .+1<CR>==
+"nnoremap <M-k> :m .-2<CR>==
+"inoremap <M-j> <Esc>:m .+1<CR>==gi
+"inoremap <M-k> <Esc>:m .-2<CR>==gi
+"vnoremap <M-j> :m '>+1<CR>gv=gv
+"vnoremap <M-k> :m '<-2<CR>gv=gv
 
 "nnoremap ,<Up>   :<C-u>silent! move-2<CR>==
 "nnoremap ,<Down> :<C-u>silent! move+<CR>==
@@ -2416,6 +2429,10 @@ endfunction
 
 tnoremap <silent> <C-d> <C-w>:call <SID>TermQuit()<CR>
 
+" NOTE: some of these mapping start with <Esc> and keys pressed
+"       quickly enough could be incorrectly interpreted as a mapping
+" TODO: look into Terminator plugin for these sequences ...
+
 execute "set <M-.>=\e."
 execute "set <M-'>=\e'"
 
@@ -2431,15 +2448,11 @@ nnoremap <silent> <C-S-Right>      :tabnext<CR>
 tnoremap <silent> <C-S-Right> <C-w>:tabnext<CR>
 vnoremap <silent> <C-S-Right> <Esc>:tabnext<CR>
 inoremap <silent> <C-S-Right> <Esc>:tabnext<CR>
-" Alt .(>)|'
+" Alt-. (>)
 tnoremap <silent> <Esc>. <C-w>:tabnext<CR>
-tnoremap <silent> <Esc>' <C-w>:tabnext<CR>
 nnoremap <silent> <M-.>       :tabnext<CR>
 vnoremap <silent> <M-.>  <Esc>:tabnext<CR>
 inoremap <silent> <M-.>  <Esc>:tabnext<CR>
-nnoremap <silent> <M-'>       :tabnext<CR>
-vnoremap <silent> <M-'>  <Esc>:tabnext<CR>
-inoremap <silent> <M-'>  <Esc>:tabnext<CR>
 
 " prev tab
 nnoremap <silent> <M-Left>      :tabprevious<CR>
@@ -2450,15 +2463,11 @@ nnoremap <silent> <C-S-Left>      :tabprevious<CR>
 tnoremap <silent> <C-S-Left> <C-w>:tabprevious<CR>
 vnoremap <silent> <C-S-Left> <Esc>:tabprevious<CR>
 inoremap <silent> <C-S-Left> <Esc>:tabprevious<CR>
-" Alt ,(<)|;
+" Alt-, (<)
 tnoremap <silent> <Esc>, <C-w>:tabprevious<CR>
-tnoremap <silent> <Esc>; <C-w>:tabprevious<CR>
 nnoremap <silent> <M-,>       :tabprevious<CR>
 vnoremap <silent> <M-,>  <Esc>:tabprevious<CR>
 inoremap <silent> <M-,>  <Esc>:tabprevious<CR>
-nnoremap <silent> <M-;>       :tabprevious<CR>
-vnoremap <silent> <M-;>  <Esc>:tabprevious<CR>
-inoremap <silent> <M-;>  <Esc>:tabprevious<CR>
 
 " try to open file under cursor
 nnoremap <silent> <Leader>gf gf
