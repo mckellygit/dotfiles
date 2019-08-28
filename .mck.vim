@@ -1457,15 +1457,16 @@ endif " disable old scroll functions
 
 " wanted C-S-j,k but that is not different than C-j,k
 " <Esc>j,k is Alt-j,k
-" NOTE: some of these mapping start with <Esc> and keys pressed
+" <Esc>[1;3A is <M-Up> (Alt-Up)
+" NOTE: some of these mappings start with <Esc> and keys pressed
 "       quickly enough could be incorrectly interpreted as a mapping
 " TODO: look into Terminator plugin for these sequences ...
-nnoremap <C-S-Down> :m .+1<CR>==
-nnoremap <C-S-Up>   :m .-2<CR>==
-inoremap <C-S-Down> <Esc>:m .+1<CR>==gi
-inoremap <C-S-Up>   <Esc>:m .-2<CR>==gi
-vnoremap <C-S-Down> :m '>+1<CR>gv=gv
-vnoremap <C-S-Up>   :m '<-2<CR>gv=gv
+"nnoremap <M-Down> :m .+1<CR>==
+"nnoremap <M-Up> :m .-2<CR>==
+"inoremap <M-Down> <Esc>:m .+1<CR>==gi
+"inoremap <M-Up> <Esc>:m .-2<CR>==gi
+"vnoremap <M-Down> :m '>+1<CR>gv=gv
+"vnoremap <M-Up> :m '<-2<CR>gv=gv
 
 "nnoremap <M-j> :m .+1<CR>==
 "nnoremap <M-k> :m .-2<CR>==
@@ -1478,6 +1479,19 @@ vnoremap <C-S-Up>   :m '<-2<CR>gv=gv
 "nnoremap ,<Down> :<C-u>silent! move+<CR>==
 "xnoremap ,<Up>   :<C-u>silent! '<,'>move-2<CR>gv=gv
 "xnoremap ,<Down> :<C-u>silent! '<,'>move'>+<CR>gv=gv
+
+"function! MoveLineAndInsert(n)       " -x=up x lines; +x=down x lines
+"    let n_move = (a:n < 0 ? a:n-1 : '+'.a:n)
+"    let pos = getcurpos()
+"    try         " maybe out of range
+"        exe ':move'.n_move
+"        call setpos('.', [0,pos[1]+a:n,pos[2],0])
+"    finally
+"        startinsert
+"    endtry
+"endfunction
+"inoremap <C-S-Up> <Esc>`^:silent! call MoveLineAndInsert(-1)<CR>
+"inoremap <C-S-Down> <Esc>`^:silent! call MoveLineAndInsert(+1)<CR>
 
 " -----------------------------
 
@@ -2429,7 +2443,7 @@ endfunction
 
 tnoremap <silent> <C-d> <C-w>:call <SID>TermQuit()<CR>
 
-" NOTE: some of these mapping start with <Esc> and keys pressed
+" NOTE: some of these mappings start with <Esc> and keys pressed
 "       quickly enough could be incorrectly interpreted as a mapping
 " TODO: look into Terminator plugin for these sequences ...
 
