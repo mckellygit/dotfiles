@@ -13,6 +13,10 @@ done <<< "$list"
 
 # --------------
 
+# NOTE:
+# these are done at login (autostart) and after resume (/lib/systemd/system/sleep)
+# with a xmodmap script
+
 # for a left-handed Enter -
 
 # turn control_L into Mode_switch
