@@ -1,3 +1,4 @@
+# see also /etc/pm/sleep.d/99_xmodmap for resume|thaw
 [Desktop Entry]
 Type=Application
 Exec=/home/kellma02/bin/xmodmap.fix &
