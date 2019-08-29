@@ -4,7 +4,7 @@
 # run script at resume|thaw (post)
 
 USERID=<user>
-SCRIPT="/home/<user>/bin/xmodmap.fix"
+SCRIPT="/home/$USERID/bin/xmodmap.fix"
 
 case "$1" in
   pre)
