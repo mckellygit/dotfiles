@@ -1,15 +1,15 @@
 #!/bin/bash
 
-# /etc/pm/sleep.d/99_xmodmap
-# run script at resume|thaw ...
+# /lib/systemd/system-sleep/post
+# run script at resume|thaw (post)
 
-USERID=<user-id>
-SCRIPT="/home/<user-id>/bin/xmodmap.fix"
+USERID=<user>
+SCRIPT="/home/<user>/bin/xmodmap.fix"
 
 case "$1" in
-  suspend|hibernate)
+  pre)
      ;;
-  resume|thaw)
+  post)
     export DISPLAY=":0"
     export XAUTHORITY="/home/$USERID/.Xauthority"
     su $USERID -c "$SCRIPT"

@@ -1,7 +1,7 @@
-# see also /etc/pm/sleep.d/99_xmodmap for resume|thaw
+# see also /lib/systemd/system-sleep/xmodmap_post for resume|thaw (post)
 [Desktop Entry]
 Type=Application
-Exec=/home/kellma02/bin/xmodmap.fix &
+Exec=/home/<user>/bin/xmodmap.fix &
 Hidden=false
 NoDisplay=false
 X-GNOME-Autostart-enabled=true

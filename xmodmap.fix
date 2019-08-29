@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # this goes in autostart, but see also:
-# /etc/pm/sleep.d/99_xmodmap
-# run script at resume|thaw ...
+# /lib/systemd/system-sleep/xmodmap_post
+# run script at resume|thaw (post)
 
 sleep 5
 xmodmap ~/.Xmodmap
