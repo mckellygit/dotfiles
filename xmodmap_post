@@ -12,7 +12,7 @@ case "$1" in
   post)
     export DISPLAY=":0"
     export XAUTHORITY="/home/$USERID/.Xauthority"
-    su $USERID -c "$SCRIPT"
+    su $USERID -c "$SCRIPT &"
      ;;
   *) exit $NA
      ;;  
