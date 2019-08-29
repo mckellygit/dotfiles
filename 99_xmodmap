@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# /etc/pm/sleep.d/99_xmodmap
+# run script at resume|thaw ...
+
+USERID=<user-id>
+SCRIPT="/home/<user-id>/bin/xmodmap.fix"
+
+case "$1" in
+  suspend|hibernate)
+     ;;
+  resume|thaw)
+    export DISPLAY=":0"
+    export XAUTHORITY="/home/$USERID/.Xauthority"
+    su $USERID -c "$SCRIPT"
+     ;;
+  *) exit $NA
+     ;;  
+esac
+
