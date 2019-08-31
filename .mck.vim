@@ -1023,15 +1023,19 @@ vnoremap <silent> <M-LeftMouse> <Esc><LeftMouse>:call GetPath()<CR>
 "nnoremap <silent> <M-LeftMouse> <Nop>
 "vnoremap <silent> <M-LeftMouse> <Nop>
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Word commands
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 " highlight word under cursor (lbve)
 nnoremap <silent> <Leader>ws viw
 vnoremap <silent> <Leader>ws <Esc>viw
 
-" highlight WORD (lBvE) (does not use iskeyword)
+" highlight WORD under cursor (lBvE) (does not use iskeyword)
 nnoremap <silent> <Leader>wS viW
 vnoremap <silent> <Leader>wS <Esc>viW
 
-" to grab file path (ie w / and w/o :)
+" grab file path (ie w / and w/o :)
 nnoremap <silent> <Leader>wp :call GetPath()<CR>
 vnoremap <silent> <Leader>wp <Esc>:call GetPath()<CR>
 
@@ -1041,13 +1045,6 @@ vnoremap <silent> <Leader>wy <Esc>viwy`]
 " to match vim yw ...
 nnoremap <silent> <Leader>yw viwy`]
 vnoremap <silent> <Leader>yw <Esc>viwy`]
-
-" delete word under cursor w/o overwriting " reg
-nnoremap <silent> <Leader>wd lb"_dw
-vnoremap <silent> <Leader>wd <Esc>lb"_dw
-" to match vim dw ...
-nnoremap <silent> <Leader>dw lb"_dw
-vnoremap <silent> <Leader>dw <Esc>lb"_dw
 
 " search for word under cursor (without copying selection)
 nnoremap <silent> <Leader>wf :set hlsearch<CR>*
@@ -1061,6 +1058,10 @@ nnoremap <silent> <Leader>wG viwy`]:set hlsearch<CR>#
 "vnoremap <silent> <Leader>wf y <Bar> <Esc>:let @/=@"<CR> <Bar> 2n
 vnoremap <silent> <Leader>wf y<Esc>:set hlsearch<CR>/<C-r>"<CR>
 vnoremap <silent> <Leader>wF y<Esc>:set hlsearch<CR>?<C-r>"<CR>
+" to match normal mode ...
+vnoremap <silent> <Leader>wg y<Esc>:set hlsearch<CR>/<C-r>"<CR>
+vnoremap <silent> <Leader>wG y<Esc>:set hlsearch<CR>?<C-r>"<CR>
+
 " and the *, # ...
 vnoremap <silent> * y<Esc>:set hlsearch<CR>/<C-r>"<CR>
 vnoremap <silent> # y<Esc>:set hlsearch<CR>?<C-r>"<CR>
@@ -1072,23 +1073,31 @@ vnoremap <silent> # y<Esc>:set hlsearch<CR>?<C-r>"<CR>
 " restore " and + registers back to orig selected word
 " (parcellite etc. may auto copy + to * ...)
 " optional - add lb to get back to beginning of word ?
-" wc is already window close, use we (word exchange)
-" what about wx ?
-nnoremap <silent> <Leader>we :let @0=@+<CR>lbcw<C-r>0<Esc>lb:let @"=@0<CR>:let @+=@0<CR>
-vnoremap <silent> <Leader>we <Esc>:let @0=@+<CR>lbcw<C-r>0<Esc>lb:let @"=@0<CR>:let @+=@0<CR>
+" wc is already window close, use wx (word exchange)
 
-" replace text at cursor pos with clipboard (not from beg of word like \we above)
+" exchange whole word (from beg) with clipboard
+nnoremap <silent> <Leader>wx :let @0=@+<CR>lbcw<C-r>0<Esc>lb:let @"=@0<CR>:let @+=@0<CR>
+vnoremap <silent> <Leader>wx <Esc>:let @0=@+<CR>lbcw<C-r>0<Esc>lb:let @"=@0<CR>:let @+=@0<CR>
+
+" replace at cursor pos with clipboard (not from beg of word like \we above)
 nnoremap <silent> <Leader>wr :let @0=@+<CR>cw<C-r>0<Esc>:let @"=@0<CR>:let @+=@0<CR>
 vnoremap <silent> <Leader>wr <Esc>:let @0=@+<CR>cw<C-r>0<Esc>:let @"=@0<CR>:let @+=@0<CR>
 
-" move to beginning of word before changing
-" NOTE: different than vi ; use ce to change from cursor pos to end of word
-nnoremap <silent> cw lbcw
-vnoremap <silent> cw <Esc>lbcw
+" zap (delete) whole word under cursor w/o overwriting " reg
+nnoremap <silent> <Leader>wz lb"_dw
+vnoremap <silent> <Leader>wz <Esc>lb"_dw
 
-" move to beginning of word before exchanging with clipboard (like \we above)
-"nnoremap <silent> <Leader>cw :let @0=@+<CR>lbcw<C-r>0<Esc>lb:let @"=@0<CR>:let @+=@0<CR>
-"vnoremap <silent> <Leader>cw <Esc>:let @0=@+<CR>lbcw<C-r>0<Esc>lb:let @"=@0<CR>:let @+=@0<CR>
+" change word starting at cursor, like vi
+nnoremap <silent> <Leader>we ce
+vnoremap <silent> <Leader>we <Esc>ce
+
+" delete word starting at cursor, like vi
+nnoremap <silent> <Leader>wd dw
+vnoremap <silent> <Leader>wd <Esc>dw
+
+" new whole word (from beg) [cannot use wc]
+nnoremap <silent> <Leader>wn lbcw
+vnoremap <silent> <Leader>wn <Esc>lbcw
 
 " -------------------
 " Terminator plugin (and tmux) ctrl-insert maps to <Esc>1 for paste (ie like C-v / C-S-v)
