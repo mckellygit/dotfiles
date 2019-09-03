@@ -1076,16 +1076,22 @@ vnoremap <silent> # y<Esc>:set hlsearch<CR>?<C-r>"<CR>
 " wc is already window close, use wx (word exchange)
 
 " exchange whole word (from beg) with clipboard
-nnoremap <silent> <Leader>wx :let @0=@+<CR>lbcw<C-r>0<Esc>lb:let @"=@0<CR>:let @+=@0<CR>
-vnoremap <silent> <Leader>wx <Esc>:let @0=@+<CR>lbcw<C-r>0<Esc>lb:let @"=@0<CR>:let @+=@0<CR>
+nnoremap <silent> <Leader>wx :let @0=@+<CR>ciw<C-r>0<Esc>:let @"=@0<CR>:let @+=@0<CR>
+vnoremap <silent> <Leader>wx <Esc>:let @0=@+<CR>ciw<C-r>0<Esc>:let @"=@0<CR>:let @+=@0<CR>
 
 " replace at cursor pos with clipboard (not from beg of word like \we above)
 nnoremap <silent> <Leader>wr :let @0=@+<CR>cw<C-r>0<Esc>:let @"=@0<CR>:let @+=@0<CR>
 vnoremap <silent> <Leader>wr <Esc>:let @0=@+<CR>cw<C-r>0<Esc>:let @"=@0<CR>:let @+=@0<CR>
 
 " zap (delete) whole word under cursor w/o overwriting " reg
-nnoremap <silent> <Leader>wz lb"_dw
-vnoremap <silent> <Leader>wz <Esc>lb"_dw
+"nnoremap <silent> <Leader>wz lb"_dw
+"nnoremap <silent> <Leader>wz lb"_dW
+nnoremap <silent> <Leader>wz "_daw
+vnoremap <silent> <Leader>wz <Esc>"_daw
+
+" zap with saving to reg and clipboard
+nnoremap <silent> <Leader>wZ daw:let @0=@"<CR>:let @+=@0<CR>
+vnoremap <silent> <Leader>wZ <Esc>daw:let @0=@"<CR>:let @+=@0<CR>
 
 " change word starting at cursor, like vi
 nnoremap <silent> <Leader>we ce
@@ -1096,16 +1102,34 @@ nnoremap <silent> <Leader>wd dw
 vnoremap <silent> <Leader>wd <Esc>dw
 
 " new whole word (from beg) [cannot use wc]
-nnoremap <silent> <Leader>wn lbcw
-vnoremap <silent> <Leader>wn <Esc>lbcw
+nnoremap <silent> <Leader>wn ciw
+vnoremap <silent> <Leader>wn <Esc>ciw
 
-" -------------------
 " Terminator plugin (and tmux) ctrl-insert maps to <Esc>1 for paste (ie like C-v / C-S-v)
 nnoremap <silent> <Esc>1 P
+
+" -------------------
 " ctrl-del to delete to previous word (ie like readline backward-kill-word)
-nnoremap <silent> <Esc>[3;5~ d<C-Left>
-" this also deletes all of word under cursor ...
+"nnoremap <silent> <Esc>[3;5~ d<C-Left>
 "nnoremap <silent> <Esc>[3;5~ BdW
+"nnoremap <silent> <Esc>[3;5~ B"_daw
+" this also deletes all of word under cursor ...
+"nnoremap <silent> <Esc>[3;5~ b"_daw
+
+" delete from cursor to beg of word, to match shell backward-kill-word ...
+nnoremap <silent> <Esc>[3;5~ "_db
+vnoremap <silent> <Esc>[3;5~ <Esc>"_dbv
+inoremap <silent> <Esc>[3;5~ <Esc>"_dbi
+
+" shift-del to delete whole word under cursor
+nnoremap <silent> <Esc>[3;2~ "_daw
+vnoremap <silent> <Esc>[3;2~ <Esc>"_dawv
+inoremap <silent> <Esc>[3;2~ <Esc>"_dawi
+
+" if shift-BS is ever recognized ...
+nnoremap <silent> <S-BS> X
+vnoremap <silent> <S-BS> <Esc>Xv
+inoremap <silent> <S-BS> <Esc>Xi
 " -------------------
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

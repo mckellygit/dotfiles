@@ -11,3 +11,5 @@ set enable-bracketed-paste on
 "\C-n": nop
 "\e[1;5D": vi-prev-word
 "\e[1;5C": vi-next-word
+# S-DEL
+"\e[3;2~": kill-word
