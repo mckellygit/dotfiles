@@ -70,6 +70,9 @@ setopt -o cshnullglob
 
 h() { if [ -z "$*" ]; then history 1; else history 1 | egrep "$@"; fi; }
 
+autoload -U select-word-style
+select-word-style bash
+
 # to get up-arrow to put cursor at end of line instead of beginning ...
 autoload -Uz up-line-or-beginning-search
 autoload -Uz down-line-or-beginning-search
@@ -106,7 +109,10 @@ zle -N tcsh-backward-delete-word
 #bindkey "\e[3;5~" tcsh-backward-delete-word
 
 # Shift-DEL
-bindkey "\e[3;2~" delete-word
+autoload delete-whole-word-match
+zle -N delete-whole-word-match
+bindkey "\e[3;2~" delete-whole-word-match
+#bindkey "\e[3;2~" delete-word
 function my-delete-word() {
   zle delete-word
 }
