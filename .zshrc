@@ -86,15 +86,15 @@ bindkey '^I' expand-or-complete-prefix
 
 #bindkey '^P' backward-kill-word
 # Ctrl-DEL
-bindkey '\e[3;5~' backward-kill-word
+bindkey "\e[3;5~" backward-kill-word
 # Ctrl-Shift-DEL
-bindkey '\e[3;6~' backward-kill-word
+bindkey "\e[3;6~" backward-kill-word
 # Alt-DEL
-bindkey '\e[3;3~' backward-kill-word
+bindkey "\e[3;3~" backward-kill-word
 # Ctrl-Left
-bindkey '\e[1;5D' backward-word
+bindkey "\e[1;5D" backward-word
 # Ctrl-Right
-bindkey '\e[1;5C' forward-word
+bindkey "\e[1;5C" forward-word
 
 # to delete word at cursor and then backwards ...
 function tcsh-backward-delete-word() {
@@ -103,15 +103,15 @@ function tcsh-backward-delete-word() {
   zle backward-delete-word
 }
 zle -N tcsh-backward-delete-word
-#bindkey '\e[3;5~' tcsh-backward-delete-word
+#bindkey "\e[3;5~" tcsh-backward-delete-word
 
 # Shift-DEL
-bindkey '\e[3;2~' delete-word
+bindkey "\e[3;2~" delete-word
 function my-delete-word() {
   zle delete-word
 }
 zle -N my-delete-word
-#bindkey '\e[3;2~' my-delete-word
+#bindkey "\e[3;2~" my-delete-word
 
 # prompt styles (prompt -l to list) ...
 # autoload -U promptinit && promptinit
