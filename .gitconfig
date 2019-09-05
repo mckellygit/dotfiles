@@ -45,3 +45,5 @@
 	trustExitCode = true
 [mergetool]
 	trustExitCode = true
+[fetch]
+	prune = true
