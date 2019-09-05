@@ -109,10 +109,15 @@ zle -N tcsh-backward-delete-word
 #bindkey "\e[3;5~" tcsh-backward-delete-word
 
 # Shift-DEL
-autoload delete-whole-word-match
-zle -N delete-whole-word-match
-bindkey "\e[3;2~" delete-whole-word-match
+#autoload delete-whole-word-match
+#zle -N delete-whole-word-match
+#bindkey "\e[3;2~" delete-whole-word-match
+
 #bindkey "\e[3;2~" delete-word
+
+# use kill-word to match bash style
+bindkey "\e[3;2~" kill-word
+
 function my-delete-word() {
   zle delete-word
 }
