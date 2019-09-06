@@ -115,8 +115,8 @@ bindkey "\e[3;6~" my-delete-word
 # Alt-DEL - whole word
 bindkey "\e[3;3~" my-delete-word
 
-# remove ctrl-w ?
-bindkey -r "^w"
+bindkey "^w"  backward-kill-word
+bindkey "\ed" kill-word
 
 # --------------------
 

@@ -1114,14 +1114,23 @@ nnoremap <silent> <Esc>1 P
 " ctrl-del to delete from cursor to beg of word, to match backward-kill-word ...
 "nnoremap <silent> <Esc>[3;5~ "_d<C-Left>
 "nnoremap <silent> <Esc>[3;5~ "_db
-nnoremap <silent> <Esc>[3;5~ B"_dW
-vnoremap <silent> <Esc>[3;5~ <Esc>B"_dWv
-inoremap <silent> <Esc>[3;5~ <Esc>B"_dWi
+nnoremap <silent> <Esc>[3;5~ "_db
+vnoremap <silent> <Esc>[3;5~ <Esc>"_dbv
+inoremap <silent> <Esc>[3;5~ <Esc>"_dbi
+nnoremap <silent> <C-w> "_db
+vnoremap <silent> <C-w> <Esc>"_dbv
+inoremap <silent> <C-w> <Esc>"_dbi
 
 " shift-del to delete from curor to end of word, to match kill-word ...
 nnoremap <silent> <Esc>[3;2~ "_dw
 vnoremap <silent> <Esc>[3;2~ "_dwv
 inoremap <silent> <Esc>[3;2~ "_dwi
+nnoremap <silent> <Esc>d "_dw
+vnoremap <silent> <Esc>d "_dwv
+inoremap <silent> <Esc>d "_dwi
+nnoremap <silent> <M-d>  "_dw
+vnoremap <silent> <M-d>  "_dwv
+inoremap <silent> <M-d>  "_dwi
 
 " ctrl-shift-del to delete whole word under cursor
 nnoremap <silent> <Esc>[3;6~ "_daw

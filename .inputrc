@@ -19,5 +19,5 @@ set enable-bracketed-paste on
 # M-DEL - want whole-word and space
 "\e[3;3~": backward-kill-word
 #
-# remove ctrl-w ?
-"\C-w": nop
+"\C-w": backward-kill-word
+"\e-d": kill-word
