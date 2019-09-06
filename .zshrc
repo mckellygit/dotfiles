@@ -87,42 +87,38 @@ bindkey '^e' end-of-line
 bindkey -M menuselect '^[[Z' reverse-menu-complete
 bindkey '^I' expand-or-complete-prefix
 
-#bindkey '^P' backward-kill-word
-# Ctrl-DEL
-bindkey "\e[3;5~" backward-kill-word
-# Ctrl-Shift-DEL
-bindkey "\e[3;6~" backward-kill-word
-# Alt-DEL
-bindkey "\e[3;3~" backward-kill-word
+# --------------------
+
 # Ctrl-Left
 bindkey "\e[1;5D" backward-word
 # Ctrl-Right
 bindkey "\e[1;5C" forward-word
 
-# to delete word at cursor and then backwards ...
-function tcsh-backward-delete-word() {
-  local WORDCHARS="${WORDCHARS:s#/#}"
-  zle delete-word
-  zle backward-delete-word
-}
-zle -N tcsh-backward-delete-word
-#bindkey "\e[3;5~" tcsh-backward-delete-word
+#bindkey '^P' backward-kill-word
+# Ctrl-DEL - backward
+bindkey "\e[3;5~" backward-kill-word
 
-# Shift-DEL
-#autoload delete-whole-word-match
-#zle -N delete-whole-word-match
-#bindkey "\e[3;2~" delete-whole-word-match
-
-#bindkey "\e[3;2~" delete-word
-
-# use kill-word to match bash style
+# Shift-DEL - forward
 bindkey "\e[3;2~" kill-word
 
+# Ctrl-Shift-DEL - whole word
+autoload delete-whole-word-match
+zle -N delete-whole-word-match
 function my-delete-word() {
-  zle delete-word
+# local WORDCHARS="${WORDCHARS:s#/#}"
+  zle delete-whole-word-match
+  zle delete-char
 }
 zle -N my-delete-word
-#bindkey "\e[3;2~" my-delete-word
+bindkey "\e[3;6~" my-delete-word
+
+# Alt-DEL - whole word
+bindkey "\e[3;3~" my-delete-word
+
+# remove ctrl-w ?
+bindkey -r "^w"
+
+# --------------------
 
 # prompt styles (prompt -l to list) ...
 # autoload -U promptinit && promptinit

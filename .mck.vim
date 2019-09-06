@@ -1110,27 +1110,37 @@ vnoremap <silent> <Leader>wn <Esc>ciw
 nnoremap <silent> <Esc>1 P
 
 " -------------------
-" ctrl-del to delete to previous word (ie like readline backward-kill-word)
-"nnoremap <silent> <Esc>[3;5~ d<C-Left>
-"nnoremap <silent> <Esc>[3;5~ BdW
-"nnoremap <silent> <Esc>[3;5~ B"_daw
-" this also deletes all of word under cursor ...
-"nnoremap <silent> <Esc>[3;5~ b"_daw
 
-" delete from cursor to beg of word, to match shell backward-kill-word ...
-nnoremap <silent> <Esc>[3;5~ "_db
-vnoremap <silent> <Esc>[3;5~ <Esc>"_dbv
-inoremap <silent> <Esc>[3;5~ <Esc>"_dbi
+" ctrl-del to delete from cursor to beg of word, to match backward-kill-word ...
+"nnoremap <silent> <Esc>[3;5~ "_d<C-Left>
+"nnoremap <silent> <Esc>[3;5~ "_db
+nnoremap <silent> <Esc>[3;5~ B"_dW
+vnoremap <silent> <Esc>[3;5~ <Esc>B"_dWv
+inoremap <silent> <Esc>[3;5~ <Esc>B"_dWi
 
-" shift-del to delete whole word under cursor
-nnoremap <silent> <Esc>[3;2~ "_daw
-vnoremap <silent> <Esc>[3;2~ <Esc>"_dawv
-inoremap <silent> <Esc>[3;2~ <Esc>"_dawi
+" shift-del to delete from curor to end of word, to match kill-word ...
+nnoremap <silent> <Esc>[3;2~ "_dw
+vnoremap <silent> <Esc>[3;2~ "_dwv
+inoremap <silent> <Esc>[3;2~ "_dwi
 
-" if shift-BS is ever recognized ...
+" ctrl-shift-del to delete whole word under cursor
+nnoremap <silent> <Esc>[3;6~ "_daw
+vnoremap <silent> <Esc>[3;6~ <Esc>"_dawv
+inoremap <silent> <Esc>[3;6~ <Esc>"_dawi
+
+" alt-del to delete whole word under cursor
+nnoremap <silent> <Esc>[3;3~ "_daw
+vnoremap <silent> <Esc>[3;3~ <Esc>"_dawv
+inoremap <silent> <Esc>[3;3~ <Esc>"_dawi
+nnoremap <silent> <M-DEL> "_daw
+vnoremap <silent> <M-DEL> <Esc>"_dawv
+inoremap <silent> <M-DEL> <Esc>"_dawi
+
+" TODO: if shift-BS is ever recognized ...
 nnoremap <silent> <S-BS> X
 vnoremap <silent> <S-BS> <Esc>Xv
 inoremap <silent> <S-BS> <Esc>Xi
+
 " -------------------
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
