@@ -431,8 +431,8 @@ if exists('&signcolumn')  " Vim 7.4.2201
 else
   let g:gitgutter_sign_column_always = 1
 endif
-nmap <Leader>gn <Plug>GitGutterNextHunk
-nmap <Leader>gp <Plug>GitGutterPrevHunk
+nmap <Leader>gn <Plug>(GitGutterNextHunk)
+nmap <Leader>gp <Plug>(GitGutterPrevHunk)
 nmap <silent> <Leader>gg :call gitgutter#process_buffer(bufnr(''), 0)<CR>
 " gitgutter -----------
 
