@@ -1116,20 +1116,13 @@ nnoremap <silent> <Esc>1 P
 nnoremap <silent> <Esc>[3;5~ "_db
 vnoremap <silent> <Esc>[3;5~ <Esc>"_dbv
 inoremap <silent> <Esc>[3;5~ <Esc>"_dbi
-nnoremap <silent> <C-w> "_db
-vnoremap <silent> <C-w> <Esc>"_dbv
-inoremap <silent> <C-w> <Esc>"_dbi
+" cannot use ctrl-w as that is for window nav
 
 " shift-del to delete from curor to end of word, to match kill-word ...
 nnoremap <silent> <Esc>[3;2~ "_dw
 vnoremap <silent> <Esc>[3;2~ "_dwv
 inoremap <silent> <Esc>[3;2~ "_dwi
-nnoremap <silent> <Esc>d "_dw
-vnoremap <silent> <Esc>d "_dwv
-inoremap <silent> <Esc>d "_dwi
-nnoremap <silent> <M-d>  "_dw
-vnoremap <silent> <M-d>  "_dwv
-inoremap <silent> <M-d>  "_dwi
+" also skip alt-d
 
 " ctrl-shift-del to delete whole word under cursor
 "nnoremap <silent> <Esc>[3;6~ B"_dW
