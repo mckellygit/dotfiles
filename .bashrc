@@ -130,6 +130,7 @@ alias start-hpcc='start_hpcc'
 alias kill-hpcc='kill_hpcc'
 
 alias radssh='python -m radssh.shell $@'
+#alias radssh='python ~/radssh/plugins/shell1.py $@'
 
 # export NCPUS=`cat /proc/cpuinfo | grep processor | wc -l`
 # numcpus=$(getconf _NPROCESSORS_ONLN 2>/dev/null)

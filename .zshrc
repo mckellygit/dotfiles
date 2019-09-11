@@ -246,6 +246,7 @@ alias Qt='~/qtcreator-3.5.1/bin/qtcreator &|'
 
 # add --shell.prompt=<cluster-name> to get prompt label ...
 alias radssh='python -m radssh.shell $@'
+#alias radssh='python ~/radssh/plugins/shell1.py $@'
 
 alias thor_regression='./ecl-test run --timeout -1 --target thor -e=embedded,3rdparty'
 alias hthor_regression='./ecl-test run --target hthor -e=embedded,3rdparty'

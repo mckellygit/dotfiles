@@ -19,6 +19,9 @@
 ### intensive.
 # stalled_job_buffer=0
 
+# jump method:
+# radssh jump:jumphost/10.173.104.{1..100}
+
 max_threads=500
 ### Automatically save log files into date/time-stamped local directory
 # logdir=session_%Y%m%d_%H%M%S
@@ -42,7 +45,8 @@ output_mode=ordered
 # quota.time=0
 # quota.lines=0
 # quota.bytes=0
-character_encoding=latin-1
+character_encoding=UTF-8
+#character_encoding=latin-1
 
 ### Connection & Authentication Options
 ### Username defaults to $SSH_USER (or $USER) if not set here
