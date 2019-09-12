@@ -2406,9 +2406,12 @@ nnoremap <silent> <expr> <C-\><C-n> (&buftype == 'terminal') ? 'i' : '<C-\><C-n>
 " or <Return>, like tmux
 nnoremap <silent> <expr> <Return> (&buftype == 'terminal') ? 'i' : '<Return>'
 " to enter normal mode, like tmux
-tnoremap <silent> <C-Up>   <C-\><C-n>
-" there is no alternate screen so this removes PageUp from less/more/etc.
+" there is no alternate screen so this removes these from less/more/etc.
+"tnoremap <silent> <C-Up>   <C-\><C-n>
 "tnoremap <silent> <PageUp> <C-\><C-n>
+" ctrl-x-] like tmux enter copy-mode-vi (ctrl-s-])
+tnoremap <silent> <C-x>]   <C-\><C-n>
+nnoremap <silent> <expr> <C-x>] (&buftype == 'terminal') ? 'i' : '<C-x>]'
 
 au TerminalOpen * set signcolumn=no
 
