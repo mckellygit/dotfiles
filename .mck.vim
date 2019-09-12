@@ -222,16 +222,17 @@ let g:lightline = {
     \ 'colorscheme': 'wombat',
     \ 'active': {
     \   'left': [ [ 'mymode', 'paste' ], 
-    \             [ 'gitbranch', 'myfilename', 'mymodified' ] ]
+    \             [ 'gitbranch', 'myfilename', 'mymodified', 'mycolonkeyword' ] ]
     \ },
     \ 'inactive': {
-    \   'left': [ [ 'gitbranch', 'myfilename', 'mymodified' ] ]
+    \   'left': [ [ 'gitbranch', 'myfilename', 'mymodified', 'mycolonkeyword' ] ]
     \ },
     \ 'component_function': {
     \   'mymode': 'MyLightlineMode',
     \   'gitbranch': 'MyLightlineGitbranch',
     \   'myfilename': 'MyLightlineFilename',
     \   'mymodified': 'MyLightlineModified',
+    \   'mycolonkeyword': 'MyLightlineColonKeyword',
     \ },
     \ 'tab_component_function': {
     \   'filename': 'MyLightlineTabFilename',
@@ -303,7 +304,7 @@ function! MyLightlineModified()
   elseif !&buflisted
     return ''
   else
-    return &modified ? '+' : ''
+    return &modified ? '+' : '-'
   endif
 endfunction
 
@@ -327,6 +328,22 @@ function! MyLightlineTabModified(n)
   let tab_modified = lightline#tab#modified(a:n)
   call settabvar(a:n, 'lightline_tab_modified', tab_modified)
   return tab_modified
+endfunction
+
+function! MyLightlineColonKeyword()
+  if &filetype ==# 'qf'
+    return ''
+  "elseif &buftype ==# 'terminal'
+  "  return ''
+  elseif !&buflisted
+    return ''
+  else
+    if (g:rtagsUseColonKeyword == 1)
+      return 'rt:'
+    else
+      return 'rt-'
+    endif
+  endif
 endfunction
 
 " modify tab active/inactive colors
@@ -1808,6 +1825,19 @@ noremap <silent> <Leader>cc :ccl\|lcl\|pcl<CR>:echo<CR>
 let g:rtagsAutoReindexOnWrite=1
 "
 " also had to make changes to python run() command
+function RtagsToggleColonKeyword() abort
+  if (g:rtagsUseColonKeyword == 0)
+    let g:rtagsUseColonKeyword = 1
+    let l:rtagskeywordmsg = '[vim-rtags] use colon is enabled'
+  else
+    let g:rtagsUseColonKeyword = 0
+    let l:rtagskeywordmsg = '[vim-rtags] use colon is disabled'
+  endif
+  echohl | echo l:rtagskeywordmsg | echohl None
+  sleep 500m
+  redraw!
+endfunction
+noremap <silent> <Leader>rx :call RtagsToggleColonKeyword()<CR>
 " rtags -----------------
 
 " fswitch ---------------
