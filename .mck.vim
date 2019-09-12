@@ -333,8 +333,8 @@ endfunction
 function! MyLightlineColonKeyword()
   if &filetype ==# 'qf'
     return ''
-  "elseif &buftype ==# 'terminal'
-  "  return ''
+  elseif &buftype ==# 'terminal'
+    return ''
   elseif !&buflisted
     return ''
   else
@@ -1125,6 +1125,10 @@ vnoremap <silent> <Leader>wn <Esc>ciw
 
 " Terminator plugin (and tmux) ctrl-insert maps to <Esc>1 for paste (ie like C-v / C-S-v)
 nnoremap <silent> <Esc>1 P
+vnoremap <silent> <Esc>1 <Esc>P
+inoremap <silent> <Esc>1 <Esc>P
+cnoremap <Esc>1 <C-r>+
+tnoremap <Esc>1 <C-w>"+
 
 " -------------------
 
