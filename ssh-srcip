@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [ -z "$SSH_CLIENT" ] ; then
+  exit 1
+fi
+
+echo $SSH_CLIENT | awk '{print $1}'
+
+exit 0
+

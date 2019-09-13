@@ -294,6 +294,17 @@ export FZF_DEFAULT_OPTS='
 
 alias getnewkeys='ssh -A keyphemeral@10.173.48.129'
 
+sship()
+{
+  if [ -n "$SSH_CLIENT" ] ; then
+    echo $SSH_CLIENT | awk '{print $1}'
+  fi
+}
+#alias ssh-srcip=sship
+if [ -n "$SSH_CLIENT" ] ; then
+  export SSHIP=$(echo $SSH_CLIENT | awk '{print $1}')
+fi
+
 # needed to have gdb stop with ^C ...
 stty ixany > /dev/null 2>&1
 stty werase undef > /dev/null 2>&1

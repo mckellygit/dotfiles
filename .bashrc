@@ -142,6 +142,17 @@ else
 fi
 alias make='make -j$NCPUS'
 
+sship()
+{
+  if [ -n "$SSH_CLIENT" ] ; then
+    echo $SSH_CLIENT | awk '{print $1}'
+  fi
+}
+#alias ssh-srcip=sship
+if [ -n "$SSH_CLIENT" ] ; then
+  export SSHIP=$(echo $SSH_CLIENT | awk '{print $1}')
+fi
+
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
