@@ -139,8 +139,16 @@ alias rm='rm -i'
 #fi
 alias dmesg='dmesg -kuxT'
 alias vdiff='vimdiff'
-alias more='less'
+
+#alias more='less'
+# there is also moar
+alias more='moar'
 alias lc='less-color'
+alias less-c='less-color'
+alias less='/usr/local/share/vim/vim81/macros/less.sh'
+alias cat='ccat'
+alias smesg='vless /var/log/syslog'
+
 alias tailrdm='tail -f /tmp/rdm-$LOGNAME.log'
 alias difff='diff'
 # gv.vim uses noremap so need to override q, x here
