@@ -5,5 +5,5 @@
 
 export LESSOPEN='|pygmentize -f terminal -g %s'
 export LESS=-R
-less $@
+\less $@
 

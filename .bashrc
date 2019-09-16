@@ -123,9 +123,11 @@ alias vdiff='vimdiff'
 alias more='moar'
 alias lc='less-color'
 alias less-c='less-color'
-alias less='/usr/local/share/vim/vim81/macros/less.sh'
+alias less='less-color'
+alias vless='less.sh'
+#export PAGER=vless
 alias cat='ccat'
-alias smesg='less /var/log/syslog'
+alias smesg='vless /var/log/syslog'
 
 alias tailrdm='tail -f /tmp/rdm-$LOGNAME.log'
 alias difff='diff'

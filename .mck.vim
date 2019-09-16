@@ -167,6 +167,9 @@ Plugin 'PeterRincker/vim-searchlight'
 " fade inactive buffers
 Plugin 'TaDaa/vimade'
 "
+" ansi esc sequences
+Plugin 'powerman/vim-plugin-AnsiEsc'
+"
 "" All of your Plugins must be added before the following line
 call vundle#end()         " required
 filetype plugin indent on " required
@@ -1889,6 +1892,13 @@ nmap <Leader>p, <Plug>UnconditionalPasteLessIndentAfter
 "nmap <Leader>P> <Plug>UnconditionalPasteShiftedBefore
 "nmap <Leader>p> <Plug>UnconditionalPasteShiftedAfter
 " unconditional-paste ---
+
+" ansiesc ----------
+let g:no_ansiesc_menu = 1
+"let g:no_cecutil_maps = 1
+"let g:ansiNone="hi gui=NONE cterm=NONE fg=red bg=black ctermfg=7"
+"autocmd BufReadPost * AnsiEsc
+" ansiesc ----------
 
 "================================================================
 
