@@ -168,7 +168,8 @@ Plugin 'PeterRincker/vim-searchlight'
 Plugin 'TaDaa/vimade'
 "
 " ansi esc sequences
-Plugin 'powerman/vim-plugin-AnsiEsc'
+"Plugin 'powerman/vim-plugin-AnsiEsc'
+Plugin 'chrisbra/Colorizer'
 "
 "" All of your Plugins must be added before the following line
 call vundle#end()         " required
@@ -1894,11 +1895,33 @@ nmap <Leader>p, <Plug>UnconditionalPasteLessIndentAfter
 " unconditional-paste ---
 
 " ansiesc ----------
-let g:no_ansiesc_menu = 1
+"let g:no_ansiesc_menu = 1
 "let g:no_cecutil_maps = 1
 "let g:ansiNone="hi gui=NONE cterm=NONE fg=red bg=black ctermfg=7"
-"autocmd BufReadPost * AnsiEsc
+"autocmd BufNewFile,BufRead * AnsiEsc
 " ansiesc ----------
+
+" colorizer --------
+"let g:colorizer_auto_color = 1
+"let g:colorizer_syntax = 1
+let g:colorizer_vimcolors_disable = 1
+let g:colorizer_vimhighlight_disable = 1
+let g:colorizer_colornames_disable = 1
+"autocmd BufNewFile,BufRead * ColorHighlight!
+nnoremap <silent> <Leader>cC :ColorToggle!<CR>
+" colorizer --------
+
+" less as a pager --
+function LessInitFunc() abort
+" if want screen to remain at exit
+  set t_te=
+  call lightline#disable()
+  set noshowmode
+  set noshowmatch
+" set laststatus=1
+  hi StatusLine ctermbg=black ctermfg=green
+endfunction
+" less as a pager --
 
 "================================================================
 

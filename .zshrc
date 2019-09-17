@@ -147,7 +147,7 @@ alias lc='less-color'
 alias less-c='less-color'
 alias less='less-color'
 alias vless='less.sh'
-#export PAGER=vless
+#export PAGER=less.sh
 alias cat='ccat'
 alias smesg='vless /var/log/syslog'
 
