@@ -19,6 +19,7 @@
 	vdiff = difftool
 	difff = diff
 	dif = diff
+	dvim = "!f() { git --no-pager diff "$@" | vless; }; f"
 	last = log -l HEAD
 	unstage = reset HEAD --
 	visual = !gitk

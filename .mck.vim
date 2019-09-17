@@ -1913,8 +1913,9 @@ nnoremap <silent> <Leader>cC :ColorToggle!<CR>
 
 " less as a pager --
 function LessInitFunc() abort
+  noremap <silent> <Leader>wc :set t_te=<CR>:conf q<CR>
 " if want screen to remain at exit
-  set t_te=
+" set t_te=
   call lightline#disable()
   set noshowmode
   set noshowmatch
