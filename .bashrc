@@ -118,14 +118,12 @@ alias rm='rm -i'
 alias dmesg='dmesg -kuxT'
 alias vdiff='vimdiff'
 
-#alias more='less'
+alias more='less -RX'
 # there is also moar
-alias more='moar'
-alias lc='less-color'
-alias less-c='less-color'
-alias less='less-color'
-alias vless='less.sh'
-#export PAGER=less.sh
+#alias more='moar'
+alias less-pyg='less-pyg'
+alias less='less -RX'
+#export PAGER='less -RX'
 alias cat='ccat'
 alias smesg='vless /var/log/syslog'
 
