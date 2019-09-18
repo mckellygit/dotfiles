@@ -1921,6 +1921,8 @@ function LessInitFunc() abort
   set noshowmatch
 " set laststatus=1
   hi StatusLine ctermbg=black ctermfg=green
+" start at top
+  exe 'normal! gg'
 endfunction
 " less as a pager --
 
