@@ -4,7 +4,7 @@ usage()
 {
 cat << EOF
 
-  usage: $0 [-d build-dir] [-n | -f] [-c]
+  usage: $0 [-d build-dir] [-n | -f] [-c] [-k]
 
   Updates exes and libs in /opt/HPCCsystems from build dir
   Updates rpath in exes and libs after copying
@@ -16,6 +16,7 @@ cat << EOF
     -n       Skip modifying rpath in exes and libs copied
     -f       Force modifying rpath in exes and libs even if didn't copy
     -c       clean logs and cores
+    -k       kill all hpcc processes
 
 EOF
 }
@@ -52,8 +53,9 @@ fi
 
 dir=""
 do_clean=""
+do_kill=""
 mod_rpath=1
-while getopts “:hnfcd:” OPTION
+while getopts “:hnfckd:” OPTION
 do
     case $OPTION in
         h)
@@ -78,6 +80,9 @@ do
             ;;
         c)
             do_clean="-c"
+            ;;
+        k)
+            do_kill="-k"
             ;;
         d)
             dir=$OPTARG
@@ -107,7 +112,7 @@ if [ ! -x $dir ] ; then
     exit 1
 fi
 
-stop_hpcc ${do_clean}
+stop_hpcc ${do_clean} ${do_kill}
 
 output=$(sudo rsync --info=name1 -ai --update --existing $dir/libs/ /opt/HPCCSystems/lib)
 #echo "output = $output"

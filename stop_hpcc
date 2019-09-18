@@ -4,19 +4,21 @@ usage()
 {
 cat << EOF
 
-  usage: $0 [-c]
+  usage: $0 [-c] [-k]
 
   Stops all HPCC components
 
   OPTIONS:
     -h       Show this message
     -c       clean logs and cores
+    -k       kill all hpcc processes
 
 EOF
 }
 
 do_clean=0
-while getopts “:hc” OPTION
+do_kill=0
+while getopts “:hck” OPTION
 do
     case $OPTION in
         h)
@@ -25,6 +27,9 @@ do
             ;;
         c)
             do_clean=1
+            ;;
+        k)
+            do_kill=1
             ;;
     esac
 done
@@ -75,6 +80,13 @@ if [ $rc0 -eq 0 ] ; then
       
             sudo /etc/init.d/hpcc-init -c mydali stop
         fi
+    fi
+fi
+
+if [ $rc0 -eq 0 ] ; then
+    if [ ${do_kill} -eq 1 ] ; then
+        echo "About to kill all hpcc processes ..."
+        sudo pkill -u hpcc
     fi
 fi
 

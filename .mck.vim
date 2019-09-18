@@ -1907,6 +1907,12 @@ nmap <Leader>p, <Plug>UnconditionalPasteLessIndentAfter
 let g:colorizer_vimcolors_disable = 1
 let g:colorizer_vimhighlight_disable = 1
 let g:colorizer_colornames_disable = 1
+let g:colorizer_taskwarrior_disable = 1
+let g:colorizer_hsla_disable = 1
+let g:colorizer_hex_disable = 1
+let g:colorizer_rgb_disable = 1
+let g:colorizer_rgba_disable = 1
+let g:colorizer_vimhighl_dump_disable = 1
 "autocmd BufNewFile,BufRead * ColorHighlight!
 nnoremap <silent> <Leader>cC :ColorToggle!<CR>
 " colorizer --------
