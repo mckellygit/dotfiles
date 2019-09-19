@@ -2768,3 +2768,9 @@ packadd cfilter
 
 " -----------------------------
 
+" when editing a file that is already edited with
+" another Vim instance, go to that Vim instance
+packadd! editexisting
+
+" -----------------------------
+
