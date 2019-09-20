@@ -615,6 +615,9 @@ set shortmess-=s
 " and dont forget <Leader>hl for hlsearch toggle
 " and we set WarningMsg highlight color below for wrap warning
 
+" toggle line wrap
+nnoremap <silent> <Leader>lw :set nowrap! nowrap?<CR>:redraw!<CR>
+
 " if added changes to search.c to ui_delay() after give_warning()
 "set matchtime=3
 
