@@ -20,6 +20,7 @@
 	difff = diff
 	dif = diff
 	dvim = "!f() { git --no-pager diff "$@" | vless; }; f"
+	dbat = "!f() { git --no-pager diff "$@" | bat; }; f"
 	last = log -l HEAD
 	unstage = reset HEAD --
 	visual = !gitk

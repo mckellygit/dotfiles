@@ -146,8 +146,10 @@ alias more='less -RX'
 alias less-pyg='less-pyg'
 alias less='less -RX'
 #export PAGER='less -RX'
+export PAGER='bat -p'
 #alias cat='ccat'
 #alias cat='mckless -EXR:'
+alias cat='bat --plain --paging=never'
 alias smesg='vless /var/log/syslog'
 
 alias tailrdm='tail -f /tmp/rdm-$LOGNAME.log'
@@ -357,4 +359,26 @@ if [[ -z "$GRUVBOX" ]] && [[ -n "$TMUX" ]] && [[ -f ~/.gruvbox_256palette.sh ]] 
     export GRUVBOX=1
     source ~/.gruvbox_256palette.sh
 fi
+
+# zsh-suggestions
+source ~/Downloads/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+export ZSH_AUTOSUGGEST_MANUAL_REBIND=1
+export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+export ZSH_AUTOSUGGEST_USE_ASYNC=1
+
+# autosuggest-accept: Accepts the current suggestion.
+# autosuggest-execute: Accepts and executes the current suggestion.
+# autosuggest-clear: Clears the current suggestion.
+# autosuggest-fetch: Fetches a suggestion (works even when suggestions are disabled).
+# autosuggest-disable: Disables suggestions.
+# autosuggest-enable: Re-enables suggestions.
+# autosuggest-toggle: Toggles between enabled/disabled suggestions.
+# For example, this would bind ctrl + space to accept the current suggestion.
+# bindkey '^ ' autosuggest-accept
+
+# end - already bound to accept (also Alt-Space)
+bindkey '^\' autosuggest-accept
+# ctrl-Enter to execute
+bindkey '^\n' autosuggest-execute
 
