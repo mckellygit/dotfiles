@@ -1922,6 +1922,9 @@ nnoremap <silent> <Leader>cC :ColorToggle!<CR>
 
 " less as a pager --
 function LessInitFunc() abort
+  set mouse-=a
+  noremap <silent> v <Nop>
+  noremap <silent> V <Nop>
   noremap <silent> <Leader>wc :set t_te=<CR>:conf q<CR>
 " if want screen to remain at exit
 " set t_te=

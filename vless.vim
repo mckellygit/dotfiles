@@ -219,7 +219,7 @@ cunmap <CR>
 noremap q :q<CR>
 
 " Switch to editing (switch off less mode)
-map v :silent call <SID>End()<CR>
+"map v :silent call <SID>End()<CR>
 fun! s:End()
   set ma
   if exists('s:lz')
