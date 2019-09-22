@@ -1932,7 +1932,7 @@ function LessInitFunc() abort
   set noshowmode
   set noshowmatch
 " set laststatus=1
-  hi StatusLine ctermbg=black ctermfg=green
+  hi StatusLine ctermbg=237 ctermfg=2
 " start at top
   exe 'normal! gg'
 endfunction
@@ -2718,6 +2718,8 @@ endfunction
 
 if &diff
   let b:mckgitstatus = "diff"
+elseif exists("g:vless")
+  let b:mckgitstatus = "less"
 else
  "autocmd BufReadPost,BufNewFile,FileReadPost,TabEnter * call MyGitStatus()
   autocmd BufWinEnter * call MyGitStatus()
