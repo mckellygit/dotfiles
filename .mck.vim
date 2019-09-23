@@ -2716,6 +2716,9 @@ function! MyGitLeave()
   endif
 endfunction
 
+" sh syntax highlights parens oddly
+let g:sh_no_error = 1
+
 if &diff
   let b:mckgitstatus = "diff"
 elseif exists("g:vless")
