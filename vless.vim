@@ -58,11 +58,14 @@ if exists('*LessInitFunc')
 endif
 
 " Used after each command: put cursor at end and display position
+" skip :file<CR> to display position - this is already in statusline
 if &wrap
-  noremap <silent> <SID>L L0:redraw<CR>:file<CR>
+  "noremap <silent> <SID>L L0:redraw<CR>:file<CR>
+  noremap <silent> <SID>L L0:redraw<CR>
   au VimEnter * normal! L0
 else
-  noremap <silent> <SID>L Lg0:redraw<CR>:file<CR>
+  "noremap <silent> <SID>L Lg0:redraw<CR>:file<CR>
+  noremap <silent> <SID>L Lg0:redraw<CR>
   au VimEnter * normal! Lg0
 endif
 

@@ -1923,15 +1923,17 @@ nnoremap <silent> <Leader>cC :ColorToggle!<CR>
 " less as a pager --
 function LessInitFunc() abort
   set mouse-=a
+  noremap <silent> i <Nop>
   noremap <silent> v <Nop>
   noremap <silent> V <Nop>
   noremap <silent> <Leader>wc :set t_te=<CR>:conf q<CR>
-" if want screen to remain at exit
+" if want screen to remain at exit (<Leader>wc does this)
 " set t_te=
   call lightline#disable()
   set noshowmode
   set noshowmatch
 " set laststatus=1
+  set statusline=%f\%=[\ %L\ ][\ %3.3p%%\ ]
   hi StatusLine ctermbg=237 ctermfg=2
 " start at top
   exe 'normal! gg'
