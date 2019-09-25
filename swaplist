@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Get current swap usage for all running processes
 # Felix Hauri 2016-08-05
@@ -8,6 +8,14 @@
 # Pipe the output to "sort -nk3" to get sorted output
 # Modified by Marc Methot 2014-09-18
 # removed the need for sudo
+
+tsz=0
+slines=$(cat /proc/swaps | tail -n +2)
+while read -r fn ty sz usd pri
+do
+    tsz=$((tsz+sz))
+done <<< "$slines"
+printf "Total swap space: %18u KB\n" $tsz
 
 OVERALL=0
 rifs=`printf ': \t'`
