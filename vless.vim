@@ -129,8 +129,14 @@ map F :e<CR>G<SID>L:sleep 1<CR>F
 noremap <script> d <C-D><SID>L
 map <C-D> d
 
+" make cursor invisible
+set t_ve=
+" dont scroll past end
+set scrolloff=10000
 " Scroll one line forward
-noremap <script> <CR> <C-E><SID>L
+"noremap <script> <CR> <C-E><SID>L
+" dont scroll past end
+noremap <script> <expr> <CR> (line('.') == line('$')) ? '' : '<C-E><SID>L'
 map <C-N> <CR>
 map e <CR>
 map <C-E> <CR>
