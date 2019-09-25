@@ -467,15 +467,30 @@ let g:Gitv_WipeAllOnClose = 0
 autocmd FileType GV nmap <buffer> <Leader><Tab> O
 autocmd FileType GV nmap <buffer> <C-t> O
 autocmd FileType GV nmap <buffer> <Return> O
-autocmd FileType GV nmap <buffer> <Space> O
+"autocmd FileType GV nmap <buffer> o <Nop>
+autocmd FileType GV nmap <buffer> o O
+"autocmd FileType GV nmap <buffer> <Space> O
+autocmd FileType GV nmap <buffer> <Space> <Down>
+autocmd FileType GV nmap <buffer> u <Up>
+autocmd FileType GV nmap <buffer> d <Down>
 autocmd FileType GV xmap <buffer> <Leader><Tab> O
 autocmd FileType GV xmap <buffer> <C-t> O
 autocmd FileType GV xmap <buffer> <Return> O
-autocmd FileType GV xmap <buffer> <Space> O
+"autocmd FileType GV xmap <buffer> o <Nop>
+autocmd FileType GV xmap <buffer> o O
+"autocmd FileType GV xmap <buffer> <Space> O
+autocmd FileType GV xmap <buffer> <Space> <Down>
+autocmd FileType GV xmap <buffer> u <Up>
+autocmd FileType GV xmap <buffer> d <Down>
+
 autocmd FileType GV setlocal cursorline
+
 " start with folds open
 autocmd FileType GV set foldlevelstart=1
-autocmd FileType GV nmap <buffer> o <Nop>
+
+" can we map q to quit ?
+autocmd FileType GV nmap <silent> <buffer> Q :qa!<CR>
+
 "autocmd FileType GV cnoreabbrev <silent> <expr> q! (getcmdtype() == ':' && getcmdline() =~ '\s*q!\s*') ? 'qa!' : 'q!'
 
 function! TabCloseRightQuit(bang)
@@ -1200,7 +1215,7 @@ set tabstop=4
 " Q to end recording
 " @x to playback
 nnoremap <silent> Q q
-nnoremap <silent> q <Nop>
+nmap <silent> q <Nop>
 " NOTE: q may be mapped to something else later on ...
 
 " for block select beyond shorter line lengths
@@ -2496,10 +2511,10 @@ noremap <silent> <Leader>hl :set hlsearch! hlsearch?<CR>:redraw!<CR>
 hi Search ctermbg=58
 
 " q to turn off hlsearch ?
-noremap <silent> q :set nohlsearch<CR>:redraw!<CR>
+nnoremap <silent> q :set nohlsearch<CR>:redraw!<CR>
 
 " does this make sense ? (q to cancel select/visual)
-vnoremap <silent> q <Esc>
+"vnoremap <unique> <silent> q <Esc>
 
 " to match normal mode
 vnoremap <silent> <C-o> <Esc><C-o>
