@@ -1941,6 +1941,13 @@ function LessInitFunc() abort
   noremap <silent> i <Nop>
   noremap <silent> v <Nop>
   noremap <silent> V <Nop>
+  noremap <silent> l <Nop>
+  noremap <silent> W <Nop>
+  noremap <silent> <Left> <Nop>
+  noremap <silent> <Right> <Nop>
+  noremap <silent> <C-Left> <Nop>
+  noremap <silent> <C-Right> <Nop>
+  noremap <silent> <C-a> <Nop>
   noremap <silent> <Leader>wc :set t_te=<CR>:conf q<CR>
 " if want screen to remain at exit (<Leader>wc does this)
 " set t_te=
