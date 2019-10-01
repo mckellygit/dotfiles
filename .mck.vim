@@ -890,7 +890,7 @@ nnoremap <silent> <C-v> :<C-u>call MyVisCvN()<CR>
 function! MyVisCvN()
     let w:vc = 'x'
     let w:vp = 'u'
-    exe "normal! \<C-v>"
+    exe "silent! normal! \<C-v>"
 endfunction
 
 xnoremap <silent> <C-v> :<C-u>call MyVisCv()<CR>
@@ -898,29 +898,29 @@ function! MyVisCv()
     if w:vc ==# 'v'
         let w:vp = w:vc
         let w:vc = 'x'
-        exe "normal! gv" . "\<C-v>"
+        exe "silent! normal! gv" . "\<C-v>"
     elseif w:vc ==# 'V'
         let w:vp = w:vc
         let w:vc = 'x'
-        exe "normal! gv" . "\<C-v>"
+        exe "silent! normal! gv" . "\<C-v>"
     elseif w:vc ==# 'x'
         if w:vp ==# 'v'
             let w:vp = w:vc
             let w:vc = 'v'
-            exe "normal! gvv"
+            exe "silent! normal! gvv"
         elseif w:vp ==# 'V'
             let w:vp = w:vc
             let w:vc = 'V'
-            exe "normal! gvV"
+            exe "silent! normal! gvV"
         else
             " no-op
-            "exe "normal! gv"
+            "exe "silent! normal! gv"
             let w:vc = 'v'
-            exe "normal! gvv"
+            exe "silent! normal! gvv"
         endif
     else
         let w:vc = 'x'
-        exe "normal! gv" . "\<C-v>"
+        exe "silent! normal! gv" . "\<C-v>"
     endif
 endfunction
 
@@ -928,18 +928,18 @@ nnoremap <silent> v :<C-u>call MyVisV1N()<CR>
 function! MyVisV1N()
     let w:vc = 'v'
     let w:vp = 'u'
-    exe "normal! v"
+    exe "silent! normal! v"
 endfunction
 
 xnoremap <silent> v :<C-u>call MyVisV1()<CR>
 function! MyVisV1()
     if w:vc ==# 'v'
         " no-op
-        exe "normal! gv"
+        exe "silent! normal! gv"
     else
         let w:vp = w:vc
         let w:vc = 'v'
-        exe "normal! gvv"
+        exe "silent! normal! gvv"
     endif
 endfunction
 
@@ -947,18 +947,18 @@ nnoremap <silent> V :<C-u>call MyVisV2N()<CR>
 function! MyVisV2N()
     let w:vc = 'V'
     let w:vp = 'u'
-    exe "normal! V"
+    exe "silent! normal! V"
 endfunction
 
 xnoremap <silent> V :<C-u>call MyVisV2()<CR>
 function! MyVisV2()
     if w:vc ==# 'V'
         " no-op
-        exe "normal! gv"
+        exe "silent! normal! gv"
     else
         let w:vp = w:vc
         let w:vc = 'V'
-        exe "normal! gvV"
+        exe "silent! normal! gvV"
     endif
 endfunction
 
@@ -968,7 +968,7 @@ xnoremap <silent> q :<C-u>call MyVisQ()<CR>
 function! MyVisQ()
     let w:vc = 'u'
     let w:vp = 'u'
-    exe "normal! gv" . "\<Esc>"
+    exe "silent! normal! gv" . "\<Esc>"
 endfunction
 
 " insert/paste
@@ -997,7 +997,7 @@ inoremap <silent> <M-p> <C-r>"
 function! MyPasteNoJump() abort
   nmap <silent> <buffer> p p
   let &scrolljump=1
-  execute "normal \"+p"
+  execute "silent! normal \"+p"
   "execute "normal p"
   let &scrolljump=-50
   nmap <silent> <buffer> p :call MyPasteNoJump()<CR>
@@ -1238,10 +1238,14 @@ au InsertLeave * let &scrolljump=-50
 " map H, L to horizontal scroll
 " (cannot use <C-Left>, <C-Right> as those are for word movement)
 " (NOTE: only applies when wrap is off)
-nnoremap <silent> H zhh
-nnoremap <silent> L lzl
-vnoremap <silent> H zhh
-vnoremap <silent> L lzl
+"nnoremap <silent> H zhh
+"nnoremap <silent> L lzl
+"vnoremap <silent> H zhh
+"vnoremap <silent> L lzl
+nnoremap <silent> <M-Left>  zhh
+nnoremap <silent> <M-Right> lzl
+vnoremap <silent> <M-Left>  zhh
+vnoremap <silent> <M-Right> lzl
 
 " ---------
 
@@ -1939,15 +1943,6 @@ nnoremap <silent> <Leader>cC :ColorToggle!<CR>
 function LessInitFunc() abort
   set mouse-=a
   noremap <silent> i <Nop>
-  noremap <silent> v <Nop>
-  noremap <silent> V <Nop>
-  noremap <silent> l <Nop>
-  noremap <silent> W <Nop>
-  noremap <silent> <Left> <Nop>
-  noremap <silent> <Right> <Nop>
-  noremap <silent> <C-Left> <Nop>
-  noremap <silent> <C-Right> <Nop>
-  noremap <silent> <C-a> <Nop>
   noremap <silent> <Leader>wc :set t_te=<CR>:conf q<CR>
 " if want screen to remain at exit (<Leader>wc does this)
 " set t_te=
@@ -2602,41 +2597,41 @@ tnoremap <silent> <C-d> <C-w>:call <SID>TermQuit()<CR>
 "       quickly enough could be incorrectly interpreted as a mapping
 " TODO: look into Terminator plugin for these sequences ...
 
-execute "set <M-.>=\e."
-execute "set <M-'>=\e'"
+"execute "set <M-.>=\e."
+"execute "set <M-'>=\e'"
 
-execute "set <M-,>=\e,"
-execute "set <M-;>=\e;"
+"execute "set <M-,>=\e,"
+"execute "set <M-;>=\e;"
 
 " next tab
-nnoremap <silent> <M-Right>      :tabnext<CR>
-tnoremap <silent> <M-Right> <C-w>:tabnext<CR>
-vnoremap <silent> <M-Right> <Esc>:tabnext<CR>
-inoremap <silent> <M-Right> <Esc>:tabnext<CR>
+"nnoremap <silent> <M-Right>      :tabnext<CR>
+"tnoremap <silent> <M-Right> <C-w>:tabnext<CR>
+"vnoremap <silent> <M-Right> <Esc>:tabnext<CR>
+"inoremap <silent> <M-Right> <Esc>:tabnext<CR>
 nnoremap <silent> <C-S-Right>      :tabnext<CR>
 tnoremap <silent> <C-S-Right> <C-w>:tabnext<CR>
 vnoremap <silent> <C-S-Right> <Esc>:tabnext<CR>
 inoremap <silent> <C-S-Right> <Esc>:tabnext<CR>
 " Alt-. (>)
-tnoremap <silent> <Esc>. <C-w>:tabnext<CR>
-nnoremap <silent> <M-.>       :tabnext<CR>
-vnoremap <silent> <M-.>  <Esc>:tabnext<CR>
-inoremap <silent> <M-.>  <Esc>:tabnext<CR>
+"tnoremap <silent> <Esc>. <C-w>:tabnext<CR>
+"nnoremap <silent> <M-.>       :tabnext<CR>
+"vnoremap <silent> <M-.>  <Esc>:tabnext<CR>
+"inoremap <silent> <M-.>  <Esc>:tabnext<CR>
 
 " prev tab
-nnoremap <silent> <M-Left>      :tabprevious<CR>
-tnoremap <silent> <M-Left> <C-w>:tabprevious<CR>
-vnoremap <silent> <M-Left> <Esc>:tabprevious<CR>
-inoremap <silent> <M-Left> <Esc>:tabprevious<CR>
+"nnoremap <silent> <M-Left>      :tabprevious<CR>
+"tnoremap <silent> <M-Left> <C-w>:tabprevious<CR>
+"vnoremap <silent> <M-Left> <Esc>:tabprevious<CR>
+"inoremap <silent> <M-Left> <Esc>:tabprevious<CR>
 nnoremap <silent> <C-S-Left>      :tabprevious<CR>
 tnoremap <silent> <C-S-Left> <C-w>:tabprevious<CR>
 vnoremap <silent> <C-S-Left> <Esc>:tabprevious<CR>
 inoremap <silent> <C-S-Left> <Esc>:tabprevious<CR>
 " Alt-, (<)
-tnoremap <silent> <Esc>, <C-w>:tabprevious<CR>
-nnoremap <silent> <M-,>       :tabprevious<CR>
-vnoremap <silent> <M-,>  <Esc>:tabprevious<CR>
-inoremap <silent> <M-,>  <Esc>:tabprevious<CR>
+"tnoremap <silent> <Esc>, <C-w>:tabprevious<CR>
+"nnoremap <silent> <M-,>       :tabprevious<CR>
+"vnoremap <silent> <M-,>  <Esc>:tabprevious<CR>
+"inoremap <silent> <M-,>  <Esc>:tabprevious<CR>
 
 " try to open file under cursor
 nnoremap <silent> <Leader>gf gf

@@ -62,12 +62,14 @@ endif
 " add M to always move cursor back to middle
 if &wrap
   "noremap <silent> <SID>L L0:redraw<CR>:file<CR>
-  noremap <silent> <SID>L L0M:redraw<CR>
-  au VimEnter * silent! normal! L0
+  nnoremap <silent> <expr> <SID>L (line('.') == line('$')) ? 'M0:set so=9999<CR>:redraw<CR>:set so=0<CR>M' : 'M0'
+  vnoremap <silent> <expr> <SID>L (line('.') == line('$')) ? 'M:set so=9999<CR>:redraw<CR>:set so=0<CR>M' : 'M'
+  au VimEnter * silent! normal! M0
 else
   "noremap <silent> <SID>L Lg0:redraw<CR>:file<CR>
-  noremap <silent> <SID>L Lg0M:redraw<CR>
-  au VimEnter * silent! normal! Lg0
+  nnoremap <silent> <expr> <SID>L (line('.') == line('$')) ? 'Mg:set so=9999<CR>:redraw<CR>:set so=0<CR>M' : 'Mg'
+  vnoremap <silent> <expr> <SID>L (line('.') == line('$')) ? 'Mg:set so=9999<CR>:redraw<CR>:set so=0<CR>M' : 'Mg'
+  au VimEnter * silent! normal! Mg0
 endif
 
 " When reading from stdin don't consider the file modified.
@@ -77,7 +79,7 @@ au VimEnter * set nomod
 set noma
 
 " Give help
-noremap h :call <SID>Help()<CR>
+noremap <Leader>hh :call <SID>Help()<CR>
 "map H h
 fun! s:Help()
   echo "<Space>   One page forward          b         One page backward"
@@ -89,19 +91,20 @@ fun! s:Help()
   echo "/pattern  Search for pattern        ?pattern  Search backward for pattern"
   echo "n         next pattern match        N         Previous pattern match"
   if &foldmethod != "manual"
-  echo "\n"
+    echo "\n"
     echo "zR        open all folds            zm        increase fold level"
   endif
   echo "\n"
   echo ":n<Enter> Next file                 :p<Enter> Previous file"
   echo "\n"
-  echo "q         Quit                      v         Edit file"
+  echo "q         Quit"
+  "echo "q         Quit                      v         Edit file"
   let i = input("Hit Enter to continue")
 endfun
 
 " Scroll one page forward
 noremap <silent> <script> <Space> :call <SID>NextPage()<CR><SID>L
-map <C-V> <Space>
+"map <C-V> <Space>
 map f <Space>
 map <C-F> <Space>
 map <PageDown> <Space>
@@ -122,7 +125,9 @@ fun! s:NextPage()
     next
     1
   else
+    set so=9999
     exe "silent normal! \<C-F>"
+    set so=0
   endif
 endfun
 
@@ -136,39 +141,40 @@ map <C-D> d
 " make cursor invisible - but doesnt always reset after quit
 "set t_ve=
 " dont scroll past end
-set scrolloff=10000
+"set so=10000
 set nostartofline
 " Scroll one line forward
 "noremap <script> <CR> <C-E><SID>L
 " dont scroll past end
-noremap <script> <expr> <CR> (line('.') == line('$')) ? '' : '<C-E><SID>L'
+noremap <silent> <script> <expr> <CR> (line('.') == line('$')) ? 'M' : '<SID>L'
 map <C-N> <CR>
-map e <CR>
-map <C-E> <CR>
-map j <CR>
+"map e <CR>
+"map <C-E> <CR>
+"map j <CR>
 map <C-J> <CR>
-map <Down> <CR>
+"map <Down> <CR>
 
 " Scroll one page backward
-noremap <script> b <C-B><SID>L
-map <C-B> b
-map <PageUp> b
-map <kPageUp> b
-map <S-Up> b
-map w b
-map <Esc>v b
+noremap <script> <C-b> <C-B><SID>L
+"map <C-B> b
+map <PageUp> <C-b>
+map <kPageUp> <C-b>
+map <S-Up> <C-b>
+"map w b
+"map w <Nop>
+"map <Esc>v b
 
 " Scroll half a page backward
 noremap <script> u <C-U><SID>L
 noremap <script> <C-U> <C-U><SID>L
 
 " Scroll one line backward
-noremap <script> k <C-Y><SID>L
-map y k
-map <C-Y> k
-map <C-P> k
-map <C-K> k
-map <Up> k
+noremap <script> <C-k> <C-Y><SID>L
+"map y k
+map <C-Y> <C-k>
+map <C-P> <C-k>
+map <C-K> <C-k>
+"map <Up> k
 
 " Redraw
 noremap <script> r <C-L><SID>L
@@ -194,12 +200,12 @@ noremap <script> % %<SID>L
 map p %
 
 " Search
-noremap <script> / H$:call <SID>Forward()<CR>/
-if &wrap
-  noremap <script> ? H0:call <SID>Backward()<CR>?
-else
-  noremap <script> ? Hg0:call <SID>Backward()<CR>?
-endif
+"noremap <script> / H$:call <SID>Forward()<CR>/
+"if &wrap
+"  noremap <script> ? H0:call <SID>Backward()<CR>?
+"else
+"  noremap <script> ? Hg0:call <SID>Backward()<CR>?
+"endif
 
 fun! s:Forward()
   " Searching forward
@@ -223,11 +229,11 @@ fun! s:Backward()
   cnoremap <silent> <script> <CR> <CR>:cunmap <lt>CR><CR>zt<SID>L
 endfun
 
-call s:Forward()
-cunmap <CR>
+"call s:Forward()
+"cunmap <CR>
 
 " Quitting
-noremap q :q<CR>
+nnoremap q :q<CR>
 
 " Switch to editing (switch off less mode)
 "map v :silent call <SID>End()<CR>

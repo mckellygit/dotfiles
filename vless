@@ -8,9 +8,9 @@ if test -t 1; then
       echo "Missing filename" 1>&2
       exit
     fi
-    vim --cmd 'let no_plugin_maps = 1' --cmd 'set rtp^=$HOME/.vim/vless' --cmd 'let g:vless = 1' -c 'runtime! vless.vim' -c 'noremap <C-v> <Nop>' -c 'noremap <Esc>v <Nop>' -c ':ColorHighlight!' -
+    vim --cmd 'let no_plugin_maps = 1' --cmd 'set rtp^=$HOME/.vim/vless' --cmd 'let g:vless = 1' -c 'runtime! vless.vim' -c ':ColorHighlight!' -
   else
-    vim --cmd 'let no_plugin_maps = 1' --cmd 'set rtp^=$HOME/.vim/vless' --cmd 'let g:vless = 1' -c 'runtime! vless.vim' -c 'noremap <C-v> <Nop>' -c 'noremap <Esc>v <Nop>' -c ':ColorHighlight!' "$@"
+    vim --cmd 'let no_plugin_maps = 1' --cmd 'set rtp^=$HOME/.vim/vless' --cmd 'let g:vless = 1' -c 'runtime! vless.vim' -c ':ColorHighlight!' "$@"
   fi
 else
   # Output is not a terminal, cat arguments or stdin
