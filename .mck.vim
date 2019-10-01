@@ -490,6 +490,7 @@ autocmd FileType GV set foldlevelstart=1
 
 " can we map q to quit ?
 autocmd FileType GV nmap <silent> <buffer> Q :qa!<CR>
+autocmd FileType GV nmap <silent> <buffer> <Leader>wc :qa!<CR>
 
 "autocmd FileType GV cnoreabbrev <silent> <expr> q! (getcmdtype() == ':' && getcmdline() =~ '\s*q!\s*') ? 'qa!' : 'q!'
 
