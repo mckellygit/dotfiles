@@ -425,22 +425,38 @@ autocmd BufReadPost quickfix nnoremap <buffer> - -
 " fugitive -----------
 autocmd FileType fugitiveblame nmap <buffer> <Leader><Tab> O
 autocmd FileType fugitiveblame nmap <buffer> <C-t> O
+autocmd FileType fugitiveblame nmap <buffer> <Space> <C-f>
+autocmd FileType fugitiveblame nmap <buffer> u <C-b>
 autocmd FileType git           nmap <buffer> <Leader><Tab> O
 autocmd FileType git           nmap <buffer> <C-t> O
+autocmd FileType git           nmap <buffer> <Space> <C-f>
+autocmd FileType git           nmap <buffer> u <C-b>
 autocmd FileReadCmd fugitive://**//[0-3]/**          nmap <buffer> <Leader><Tab> O
 autocmd FileReadCmd fugitive://**//[0-3]/**          nmap <buffer> <C-t> O
+autocmd FileReadCmd fugitive://**//[0-3]/**          nmap <buffer> <Space> <C-f>
+autocmd FileReadCmd fugitive://**//[0-3]/**          nmap <buffer> u <C-b>
 autocmd BufReadCmd  fugitive://**//[0-3]/**          nmap <buffer> <Leader><Tab> O
 autocmd BufReadCmd  fugitive://**//[0-3]/**          nmap <buffer> <C-t> O
+autocmd BufReadCmd  fugitive://**//[0-3]/**          nmap <buffer> <Space> <C-f>
+autocmd BufReadCmd  fugitive://**//[0-3]/**          nmap <buffer> u <C-b>
 autocmd BufWriteCmd fugitive://**//[0-3]/**          nmap <buffer> <Leader><Tab> O
 autocmd BufWriteCmd fugitive://**//[0-3]/**          nmap <buffer> <C-t> O
+autocmd BufWriteCmd fugitive://**//[0-3]/**          nmap <buffer> <Space> <C-f>
+autocmd BufWriteCmd fugitive://**//[0-3]/**          nmap <buffer> u <C-b>
 autocmd BufReadCmd  fugitive://**//[0-9a-f][0-9a-f]* nmap <buffer> <Leader><Tab> O
 autocmd BufReadCmd  fugitive://**//[0-9a-f][0-9a-f]* nmap <buffer> <C-t> O
+autocmd BufReadCmd  fugitive://**//[0-9a-f][0-9a-f]* nmap <buffer> <Space> <C-f>
+autocmd BufReadCmd  fugitive://**//[0-9a-f][0-9a-f]* nmap <buffer> u <C-u>
 autocmd FileReadCmd fugitive://**//[0-9a-f][0-9a-f]* nmap <buffer> <Leader><Tab> O
 autocmd FileReadCmd fugitive://**//[0-9a-f][0-9a-f]* nmap <buffer> <C-t> O
+autocmd FileReadCmd fugitive://**//[0-9a-f][0-9a-f]* nmap <buffer> <Space> <C-f>
+autocmd FileReadCmd fugitive://**//[0-9a-f][0-9a-f]* nmap <buffer> u <C-b>
 autocmd BufReadCmd  index{,.lock}
     \ if FugitiveIsGitDir(expand('<amatch>:p:h')) |
     \     nmap <buffer> <Leader><Tab> O |
     \     nmap <buffer> <C-t> O |
+    \     nmap <buffer> <Space> <C-f> |
+    \     nmap <buffer> u <C-b> |
     \ endif
 " fugitive -----------
 
