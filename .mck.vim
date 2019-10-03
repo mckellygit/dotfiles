@@ -1270,6 +1270,9 @@ vnoremap <silent> <M-Right> lzl
 
 " ---------
 
+noremap <silent> <expr> <C-U> (line('.') == line('w$')) ? 'M' : '<C-U>'
+noremap <silent> <expr> <C-D> (line('.') == line('w0')) ? 'M' : '<C-D>'
+
 function! NoremapNormalCmd(key, preserve_omni, ...)
   let cmd = ''
   let icmd = ''
