@@ -176,18 +176,18 @@ map <kPageDown> <C-F>
 "noremap <script> d <C-D><SID>LM
 "map <C-D> d
 "map d <Space>
-call NoremapNormalCmd("<Space>",    0, "15<C-D>M")
-call NoremapNormalCmd("d",    0, "15<C-D>M")
+call NoremapNormalCmd("<Space>", 0, "15<C-D>:set scroll=0\rM")
+call NoremapNormalCmd("d",       0, "15<C-D>:set scroll=0\rM")
 
 " ---------
 
 " Scroll one line forward
 "noremap <script> <CR> <C-E><SID>L
 " dont scroll past end
-call NoremapNormalCmd("<CR>",    0, "1<C-D>")
+call NoremapNormalCmd("<CR>",     0, "1<C-D>:set scroll=0\r")
 
-call NoremapNormalCmd("<C-j>",    0, "1<C-D>")
-call NoremapNormalCmd("<C-Down>", 0, "1<C-D>")
+call NoremapNormalCmd("<C-j>",    0, "1<C-D>:set scroll=0\r")
+call NoremapNormalCmd("<C-Down>", 0, "1<C-D>:set scroll=0\r")
 
 map <C-N> <CR>
 "map e <CR>
@@ -214,18 +214,15 @@ map <S-Up> <C-b>
 " Scroll half a page backward
 "noremap <script> u <C-B><SID>L
 "noremap <script> <C-U> <C-U><SID>LM
-"call NoremapNormalCmd("u",    0, "<C-B>M")
-call NoremapNormalCmd("u",    0, "15<C-U>M")
+"call NoremapNormalCmd("u", 0, "<C-B>M")
+call NoremapNormalCmd("u", 0, "15<C-U>:set scroll=0\rM")
 
 " ---------
 
 " Scroll one line backward
 "noremap <script> <C-k> <C-Y><SID>Lgk
-"nmap <silent> <C-K>           :call <SID>Saving_scrollV("1<C-V><C-U>")<CR>
-"nmap <silent> <C-Up>          :call <SID>Saving_scrollV("1<C-V><C-U>")<CR>
-"nmap <silent> <C-K>           :call <SID>scrollDN(1,0)<CR>
-call NoremapNormalCmd("<C-k>",    0, "1<C-U>")
-call NoremapNormalCmd("<C-Up>",   0, "1<C-U>")
+call NoremapNormalCmd("<C-k>",  0, "1<C-U>:set scroll=0\r")
+call NoremapNormalCmd("<C-Up>", 0, "1<C-U>:set scroll=0\r")
 
 "map y k
 "map <C-Y> <C-k>

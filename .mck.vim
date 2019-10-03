@@ -13,6 +13,10 @@
 " This must be first, because it changes other options as a side effect.
 set nocompatible
 
+" to [silently] remap unless a mapping already exits ...
+"silent! nnoremap <unique> lhs rhs
+"if empty(maparg('lhs', 'old-rhs')) | nnoremap lhs new-rhs | endif
+
 "" vundle ------------------------------
 filetype off              " required
 "" set the runtime path to include Vundle and initialize
@@ -1288,14 +1292,14 @@ call NoremapNormalCmd("<Down>", 1, "gj")
 call NoremapNormalCmd("<Home>", 0, "g<Home>")
 call NoremapNormalCmd("<End>",  0, "g<End>")
 
-call NoremapNormalCmd("<C-j>",    0, "1<C-D>")
-call NoremapNormalCmd("<C-Down>", 0, "1<C-D>")
+call NoremapNormalCmd("<C-j>",    0, "1<C-D>:set scroll=0\r")
+call NoremapNormalCmd("<C-Down>", 0, "1<C-D>:set scroll=0\r")
 
-call NoremapNormalCmd("<C-k>",    0, "1<C-U>")
-call NoremapNormalCmd("<C-Up>",   0, "1<C-U>")
+call NoremapNormalCmd("<C-k>",    0, "1<C-U>:set scroll=0\r")
+call NoremapNormalCmd("<C-Up>",   0, "1<C-U>:set scroll=0\r")
 
-call NoremapNormalCmd("<ScrollWheelDown>", 0, "5<C-D>")
-call NoremapNormalCmd("<ScrollWheelUp>",   0, "5<C-U>")
+call NoremapNormalCmd("<ScrollWheelDown>", 0, "5<C-D>:set scroll=0\r")
+call NoremapNormalCmd("<ScrollWheelUp>",   0, "5<C-U>:set scroll=0\r")
 
 function! MapScrollKeys()
   let half = winheight(0) / 2
@@ -1303,10 +1307,10 @@ function! MapScrollKeys()
     half = 1
   endif
   let full = half + half
-  let fullup = full . "<C-U>"
-  let fulldn = full . "<C-D>"
-  let halfup = half . "<C-U>"
-  let halfdn = half . "<C-D>"
+  let fullup = full . "<C-U>:set scroll=0\r"
+  let fulldn = full . "<C-D>:set scroll=0\r"
+  let halfup = half . "<C-U>:set scroll=0\r"
+  let halfdn = half . "<C-D>:set scroll=0\r"
   call NoremapNormalCmd("<C-f>",        0, halfdn)
   call NoremapNormalCmd("<C-b>",        0, halfup)
   call NoremapNormalCmd("<PageDown>",   0, fulldn)
