@@ -1307,16 +1307,16 @@ function! MapScrollKeys()
     half = 1
   endif
   let full = half + half
-  let fullup = full . "<C-U>:set scroll=0\r"
-  let fulldn = full . "<C-D>:set scroll=0\r"
-  let halfup = half . "<C-U>:set scroll=0\r"
-  let halfdn = half . "<C-D>:set scroll=0\r"
-  call NoremapNormalCmd("<C-f>",        0, halfdn)
-  call NoremapNormalCmd("<C-b>",        0, halfup)
-  call NoremapNormalCmd("<PageDown>",   0, fulldn)
-  call NoremapNormalCmd("<PageUp>",     0, fullup)
-  call NoremapNormalCmd("<C-PageDown>", 0, halfdn)
-  call NoremapNormalCmd("<C-PageUp>",   0, halfup)
+  let fullup = "(line('.') == line('w$')) ? 'M' : '" . full . "<C-U>:set scroll=0\r'"
+  let fulldn = "(line('.') == line('w0')) ? 'M' : '" . full . "<C-D>:set scroll=0\r'"
+  let halfup = "(line('.') == line('w$')) ? 'M' : '" . half . "<C-U>:set scroll=0\r'"
+  let halfdn = "(line('.') == line('w0')) ? 'M' : '" . half . "<C-D>:set scroll=0\r'"
+  call NoremapNormalCmd("<expr> <C-f>",        0, halfdn)
+  call NoremapNormalCmd("<expr> <C-b>",        0, halfup)
+  call NoremapNormalCmd("<expr> <PageDown>",   0, fulldn)
+  call NoremapNormalCmd("<expr> <PageUp>",     0, fullup)
+  call NoremapNormalCmd("<expr> <C-PageDown>", 0, halfdn)
+  call NoremapNormalCmd("<expr> <C-PageUp>",   0, halfup)
 endfunction
 
 call MapScrollKeys()
