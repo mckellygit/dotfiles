@@ -2314,15 +2314,15 @@ function! s:EndTerminalsConfQA() abort
 endfunction
 
 " :exit to quit all windows
-cnoreabbrev <silent> <expr> exi (getcmdtype() == ':' && getcmdline() =~ '\s*exi\s*')  ? ':call <SID>EndTerminalsConfQA()' : 'exi'
-cnoreabbrev <silent> <expr> exit (getcmdtype() == ':' && getcmdline() =~ '\s*exit\s*') ? ':call <SID>EndTerminalsConfQA()' : 'exit'
+cnoreabbrev <silent> <expr> exi (getcmdtype() == ':' && getcmdline() =~ '\s*exi\s*')  ? 'call <SID>EndTerminalsConfQA()' : 'exi'
+cnoreabbrev <silent> <expr> exit (getcmdtype() == ':' && getcmdline() =~ '\s*exit\s*') ? 'call <SID>EndTerminalsConfQA()' : 'exit'
 
-cnoreabbrev <silent> <expr> qa (getcmdtype() == ':' && getcmdline() =~ '\s*qa\s*')  ? ':call <SID>SkipTerminalsConfQA()' : 'qa'
-cnoreabbrev <silent> <expr> qal (getcmdtype() == ':' && getcmdline() =~ '\s*qal\s*')  ? ':call <SID>SkipTerminalsConfQA()' : 'qal '
-cnoreabbrev <silent> <expr> qall (getcmdtype() == ':' && getcmdline() =~ '\s*qall\s*')  ? ':call <SID>SkipTerminalsConfQA()' : 'qall'
-cnoreabbrev <silent> <expr> quita (getcmdtype() == ':' && getcmdline() =~ '\s*quita\s*')  ? ':call <SID>SkipTerminalsConfQA()' : 'quita'
-cnoreabbrev <silent> <expr> quital (getcmdtype() == ':' && getcmdline() =~ '\s*quital\s*')  ? ':call <SID>SkipTerminalsConfQA()' : 'quital'
-cnoreabbrev <silent> <expr> quitall (getcmdtype() == ':' && getcmdline() =~ '\s*quitall\s*')  ? ':call <SID>SkipTerminalsConfQA()' : 'quitall'
+cnoreabbrev <silent> <expr> qa (getcmdtype() == ':' && getcmdline() =~ '\s*qa\s*')  ? 'call <SID>SkipTerminalsConfQA()' : 'qa'
+cnoreabbrev <silent> <expr> qal (getcmdtype() == ':' && getcmdline() =~ '\s*qal\s*')  ? 'call <SID>SkipTerminalsConfQA()' : 'qal '
+cnoreabbrev <silent> <expr> qall (getcmdtype() == ':' && getcmdline() =~ '\s*qall\s*')  ? 'call <SID>SkipTerminalsConfQA()' : 'qall'
+cnoreabbrev <silent> <expr> quita (getcmdtype() == ':' && getcmdline() =~ '\s*quita\s*')  ? 'call <SID>SkipTerminalsConfQA()' : 'quita'
+cnoreabbrev <silent> <expr> quital (getcmdtype() == ':' && getcmdline() =~ '\s*quital\s*')  ? 'call <SID>SkipTerminalsConfQA()' : 'quital'
+cnoreabbrev <silent> <expr> quitall (getcmdtype() == ':' && getcmdline() =~ '\s*quitall\s*')  ? 'call <SID>SkipTerminalsConfQA()' : 'quitall'
 
 " vimdiff (also as a git difftool)
 "  git config --global diff.tool vimdiff
@@ -2474,7 +2474,7 @@ function s:NextOrQuit() abort
   endtry
 endfunction
 if !&diff
-  cnoreabbrev <silent> <expr> x (getcmdtype() == ':' && getcmdline() =~ '\s*x\s*')  ? ':call <SID>NextOrQuit()' : 'x'
+  cnoreabbrev <silent> <expr> x (getcmdtype() == ':' && getcmdline() =~ '\s*x\s*')  ? 'call <SID>NextOrQuit()' : 'x'
 endif
 
 " could also look into autowrite for :n to write (if modified) ...
@@ -2803,7 +2803,7 @@ function! s:GitStatusXX()
   redraw!
   wincmd P
 endfunction
-cnoreabbrev <silent> <expr> Gstatus (getcmdtype() == ':' && getcmdline() =~ '\s*Gstatus\s*')  ? ':call <SID>GitStatusXX()' : 'Gstatus'
+cnoreabbrev <silent> <expr> Gstatus (getcmdtype() == ':' && getcmdline() =~ '\s*Gstatus\s*')  ? 'call <SID>GitStatusXX()' : 'Gstatus'
 
 " -----------------------------
 

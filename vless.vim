@@ -157,6 +157,9 @@ endif
 " When reading from stdin don't consider the file modified.
 au VimEnter * set nomod
 
+" force for each addl file
+au BufReadPost * :ColorHighlight!<CR>
+
 " ---------
 
 " Scroll one page forward
@@ -164,9 +167,10 @@ au VimEnter * set nomod
 "map <C-V> <Space>
 "map f <Space>
 "map <C-F> <Space>
-noremap <silent> <script> <C-F> :call <SID>NextPage()<CR><SID>L
-map <PageDown> <C-F>
-map <kPageDown> <C-F>
+"noremap <silent> <script> <C-F> :call <SID>NextPage()<CR><SID>L
+"noremap <C-F> <C-D>
+"map <PageDown> <C-F>
+"map <kPageDown> <C-F>
 "map <S-Down> <Space>
 "map <Esc><Space> <Space>
 
@@ -176,8 +180,8 @@ map <kPageDown> <C-F>
 "noremap <script> d <C-D><SID>LM
 "map <C-D> d
 "map d <Space>
-call NoremapNormalCmd("<Space>", 0, "15<C-D>:set scroll=0\rM")
-call NoremapNormalCmd("d",       0, "15<C-D>:set scroll=0\rM")
+call NoremapNormalCmd("<expr> <Space>", 0, "(line('.') == line('w0')) ? 'M' : '15<C-D>:set scroll=0\r'")
+call NoremapNormalCmd("<expr> d",       0, "(line('.') == line('w0')) ? 'M' : '15<C-D>:set scroll=0\r'")
 
 " ---------
 
@@ -185,9 +189,8 @@ call NoremapNormalCmd("d",       0, "15<C-D>:set scroll=0\rM")
 "noremap <script> <CR> <C-E><SID>L
 " dont scroll past end
 call NoremapNormalCmd("<CR>",     0, "1<C-D>:set scroll=0\r")
-
-call NoremapNormalCmd("<C-j>",    0, "1<C-D>:set scroll=0\r")
-call NoremapNormalCmd("<C-Down>", 0, "1<C-D>:set scroll=0\r")
+"call NoremapNormalCmd("<C-j>",    0, "1<C-D>:set scroll=0\r")
+"call NoremapNormalCmd("<C-Down>", 0, "1<C-D>:set scroll=0\r")
 
 map <C-N> <CR>
 "map e <CR>
@@ -200,11 +203,12 @@ map <C-N> <CR>
 " ---------
 
 " Scroll one page backward
-noremap <script> <C-b> <C-B><SID>LM
+"noremap <script> <C-b> <C-B><SID>LM
+"noremap <C-B> <C-U>
 "map <C-B> b
-map <PageUp> <C-b>
-map <kPageUp> <C-b>
-map <S-Up> <C-b>
+"map <PageUp> <C-B>
+"map <kPageUp> <C-B>
+"map <S-Up> <C-B>
 "map w b
 "map w <Nop>
 "map <Esc>v b
@@ -215,14 +219,14 @@ map <S-Up> <C-b>
 "noremap <script> u <C-B><SID>L
 "noremap <script> <C-U> <C-U><SID>LM
 "call NoremapNormalCmd("u", 0, "<C-B>M")
-call NoremapNormalCmd("u", 0, "15<C-U>:set scroll=0\rM")
+call NoremapNormalCmd("<expr> u", 0, "(line('.') == line('w$')) ? 'M' : '15<C-U>:set scroll=0\r'")
 
 " ---------
 
 " Scroll one line backward
 "noremap <script> <C-k> <C-Y><SID>Lgk
-call NoremapNormalCmd("<C-k>",  0, "1<C-U>:set scroll=0\r")
-call NoremapNormalCmd("<C-Up>", 0, "1<C-U>:set scroll=0\r")
+"call NoremapNormalCmd("<C-k>",  0, "1<C-U>:set scroll=0\r")
+"call NoremapNormalCmd("<C-Up>", 0, "1<C-U>:set scroll=0\r")
 
 "map y k
 "map <C-Y> <C-k>
@@ -311,7 +315,18 @@ endfun
 
 " ---------
 
-" Quitting
-nnoremap q :q<CR>
+" Quitting / Next file
+fun! QuitVless()
+  if argidx() + 1 >= argc()
+    " Don't quit at the end of the last file
+    quit
+  endif
+  next
+endfun
+"nnoremap q :q<CR>
+nnoremap q :call QuitVless()<CR>
+cnoreabbrev <silent> <expr> q (getcmdtype() == ':' && getcmdline() =~ '^\<q\>$') ? 'call QuitVless()' : 'q'
+cnoremap q! FXIT
+cnoreabbrev <silent> <expr> FXIT (getcmdtype() == ':' && getcmdline() =~ '\<FXIT\>') ? 'qa!' : 'q!'
 
 " vim: sw=2
