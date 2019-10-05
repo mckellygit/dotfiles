@@ -151,7 +151,7 @@ Plugin 'skywind3000/asyncrun.vim'
 "
 " cmd alias
 "Plugin 'cmdalias.vim'
-"Plugin 'Konfekt/vim-alias'
+Plugin 'Konfekt/vim-alias'
 "
 " grayout #ifdefs
 "Plugin 'mphe/grayout.vim'

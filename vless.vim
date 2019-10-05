@@ -326,11 +326,16 @@ fun! QuitVless()
   endif
   next
 endfun
+
 nnoremap Q :qa!<CR>
 nnoremap q :call QuitVless()<CR>
-cnoreabbrev <silent> <expr> q (getcmdtype() == ':' && getcmdline() =~ '\s*\<q\>\s*$') ? 'silent! call QuitVless()' : 'q'
 
+"cnoreabbrev <silent> <expr> q (getcmdtype() == ':' && getcmdline() =~ '\s*\<q\>\s*$') ? 'silent! call QuitVless()' : 'q'
+:Alias q call\ QuitVless()
+":Alias q! call\ QuitVless()
 " if want q! to exit ...
+"because q! includes q which has an alias above, add it explicitly
+:Alias q! q!
 "cnoremap q! FXIT
 "cnoreabbrev <silent> <expr> FXIT (getcmdtype() == ':' && getcmdline() =~ '\s*\<FXIT\>\s*$') ? 'qa!' : 'q!'
 
