@@ -159,6 +159,7 @@ au VimEnter * set nomod
 
 " force for each addl file
 au BufReadPost * :ColorHighlight!<CR>
+au BufRead * exe 'normal! '
 
 " ---------
 
@@ -323,10 +324,12 @@ fun! QuitVless()
   endif
   next
 endfun
-"nnoremap q :q<CR>
+nnoremap Q :qa!<CR>
 nnoremap q :call QuitVless()<CR>
-cnoreabbrev <silent> <expr> q (getcmdtype() == ':' && getcmdline() =~ '^\<q\>$') ? 'call QuitVless()' : 'q'
-cnoremap q! FXIT
-cnoreabbrev <silent> <expr> FXIT (getcmdtype() == ':' && getcmdline() =~ '\<FXIT\>') ? 'qa!' : 'q!'
+cnoreabbrev <silent> <expr> q (getcmdtype() == ':' && getcmdline() =~ '\s*\<q\>\s*$') ? 'silent! call QuitVless()' : 'q'
+
+" if want q! to exit ...
+"cnoremap q! FXIT
+"cnoreabbrev <silent> <expr> FXIT (getcmdtype() == ':' && getcmdline() =~ '\s*\<FXIT\>\s*$') ? 'qa!' : 'q!'
 
 " vim: sw=2
