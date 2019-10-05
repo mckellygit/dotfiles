@@ -65,7 +65,8 @@ set lz
 set nostartofline
 " Can't modify the text
 set noma
-map K <Nop>
+noremap <silent> K <Nop>
+noremap <silent> i <Nop>
 
 " ---------
 
@@ -157,9 +158,10 @@ endif
 " When reading from stdin don't consider the file modified.
 au VimEnter * set nomod
 
-" force for each addl file
+" force Colorizer for each addl file
 au BufReadPost * :ColorHighlight!<CR>
-au BufRead * exe 'normal! '
+" start at top and clear cmdline
+au BufRead * exe 'normal! gg'
 
 " ---------
 
@@ -331,5 +333,8 @@ cnoreabbrev <silent> <expr> q (getcmdtype() == ':' && getcmdline() =~ '\s*\<q\>\
 " if want q! to exit ...
 "cnoremap q! FXIT
 "cnoreabbrev <silent> <expr> FXIT (getcmdtype() == ':' && getcmdline() =~ '\s*\<FXIT\>\s*$') ? 'qa!' : 'q!'
+
+" <Leader>wc - if want screen to remain at exit ...
+noremap <silent> <expr> <Leader>wc (argidx()+1 == argc()) ? ':set t_te=<CR>:call QuitVless()<CR>' : ':call QuitVless()<CR>'
 
 " vim: sw=2
