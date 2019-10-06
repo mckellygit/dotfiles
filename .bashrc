@@ -256,3 +256,10 @@ if [[ -z "$GRUVBOX" ]] && [[ -n "$TMUX" ]] && [[ -f ~/.gruvbox_256palette.sh ]] 
     source ~/.gruvbox_256palette.sh
 fi
 
+# git autocomplete ...
+if [[ -f /etc/bash_completion.d/git ]] ; then
+    source /etc/bash_completion.d/git
+elif [[ -f /usr/share/bash-completion/completions/git ]] ; then
+    source /usr/share/bash-completion/completions/git
+fi
+

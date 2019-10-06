@@ -178,8 +178,8 @@ au VimEnter * set nomod
 "noremap <script> d <C-D><SID>LM
 "map <C-D> d
 "map d <Space>
-call NoremapNormalCmd("<expr> <Space>", 0, "(line('.') == line('w0')) ? 'M' : '15<C-D>:set scroll=0\r'")
-call NoremapNormalCmd("<expr> d",       0, "(line('.') == line('w0')) ? 'M' : '15<C-D>:set scroll=0\r'")
+call NoremapNormalCmd("<expr> <Space>", 0, "(line('.') == line('w0')) ? 'M' : '<C-D>:set scroll=0\r'")
+call NoremapNormalCmd("<expr> d",       0, "(line('.') == line('w0')) ? 'M' : '<C-D>:set scroll=0\r'")
 
 " ---------
 
@@ -217,7 +217,7 @@ map <C-N> <CR>
 "noremap <script> u <C-B><SID>L
 "noremap <script> <C-U> <C-U><SID>LM
 "call NoremapNormalCmd("u", 0, "<C-B>M")
-call NoremapNormalCmd("<expr> u", 0, "(line('.') == line('w$')) ? 'M' : '15<C-U>:set scroll=0\r'")
+call NoremapNormalCmd("<expr> u", 0, "(line('.') == line('w$')) ? 'M' : '<C-U>:set scroll=0\r'")
 
 " ---------
 
