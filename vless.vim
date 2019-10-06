@@ -145,23 +145,18 @@ endfun
 " add M to always move cursor back to middle
 if &wrap
   "noremap <silent> <SID>L L0:redraw<CR>:file<CR>
-  nnoremap <silent> <expr> <SID>L (line('.') == line('$')) ? 'M0:set so=9999<CR>:redraw<CR>:set so=0<CR>M' : '0'
-  vnoremap <silent> <expr> <SID>L (line('.') == line('$')) ? 'M:set so=9999<CR>:redraw<CR>:set so=0<CR>M' : ''
-  au VimEnter * silent! normal! M0
+" nnoremap <silent> <expr> <SID>L (line('.') == line('$')) ? 'M0:set so=9999<CR>:redraw<CR>:set so=0<CR>M' : '0'
+" vnoremap <silent> <expr> <SID>L (line('.') == line('$')) ? 'M:set so=9999<CR>:redraw<CR>:set so=0<CR>M' : ''
+  au VimEnter * silent! normal! ggM0
 else
   "noremap <silent> <SID>L Lg0:redraw<CR>:file<CR>
-  nnoremap <silent> <expr> <SID>L (line('.') == line('$')) ? 'Mg0:set so=9999<CR>:redraw<CR>:set so=0<CR>M' : 'g0'
-  vnoremap <silent> <expr> <SID>L (line('.') == line('$')) ? 'Mg:set so=9999<CR>:redraw<CR>:set so=0<CR>M' : 'g'
-  au VimEnter * silent! normal! Mg0
+" nnoremap <silent> <expr> <SID>L (line('.') == line('$')) ? 'Mg0:set so=9999<CR>:redraw<CR>:set so=0<CR>M' : 'g0'
+" vnoremap <silent> <expr> <SID>L (line('.') == line('$')) ? 'Mg:set so=9999<CR>:redraw<CR>:set so=0<CR>M' : 'g'
+  au VimEnter * silent! normal! ggMg0
 endif
 
 " When reading from stdin don't consider the file modified.
 au VimEnter * set nomod
-
-" force Colorizer for each addl file
-au BufReadPost * :ColorHighlight!<CR>
-" start at top and clear cmdline
-au BufRead * exe 'normal! gg'
 
 " ---------
 
@@ -255,30 +250,31 @@ endif
 " ---------
 
 " Redraw
-noremap <script> r <C-L><SID>L
-noremap <script> <C-R> <C-L><SID>L
-noremap <script> R <C-L><SID>L
+"noremap <script> r <C-L><SID>L
+"noremap <script> <C-R> <C-L><SID>L
+"noremap <script> R <C-L><SID>L
 
 " ---------
 
 " Start of file
 "noremap <script> g gg<SID>L
-map < gg<SID>L
-map <Esc>< gg<SID>L
-map <Home> gg<SID>L
-map <kHome> gg<SID>L
+map < gg
+"map <Esc>< gg<SID>L
+map <Home> gg
+map <kHome> gg
 
 " End of file
-noremap <script> G G<SID>L9999j
+"noremap <script> G G<SID>L9999j
 map > G
-map <Esc>> G
+"map <Esc>> G
 map <End> G
 map <kEnd> G
 
 " ---------
 
 " Go to percentage
-noremap <script> % %<SID>L
+"noremap <script> % %<SID>L
+noremap <script> % %M
 map P %
 
 " ---------
@@ -325,10 +321,17 @@ fun! QuitVless()
     quit
   endif
   next
+  if &wrap
+    silent! normal! ggM0
+  else
+    silent! normal! ggMg0
+  endif
+  :ColorHighlight!<CR>
+  redraw!
 endfun
 
-nnoremap Q :qa!<CR>
-nnoremap q :call QuitVless()<CR>
+nnoremap <silent> Q :qa!<CR>
+nnoremap <silent> q :call QuitVless()<CR>
 
 "cnoreabbrev <silent> <expr> q (getcmdtype() == ':' && getcmdline() =~ '\s*\<q\>\s*$') ? 'silent! call QuitVless()' : 'q'
 :Alias q call\ QuitVless()
