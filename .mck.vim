@@ -1025,7 +1025,7 @@ function! MyPasteNoJump() abort
 endfunction
 " to match UnconditionalPaste, dont modify p
 "nmap <silent> <buffer> p :call MyPasteNoJump()<CR>
-vmap <silent> <buffer> p <Esc>p
+vmap <silent> <buffer> p <C-\><C-n>p
 
 " set paste mode, paste, set nopaste mode
 function! WrapForTmux(s)
@@ -1061,10 +1061,10 @@ inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
 
 " DoubleClick for word (lbve)
 nnoremap <silent> <2-LeftMouse> viw
-vnoremap <silent> <2-LeftMouse> <Esc>viw
+vnoremap <silent> <2-LeftMouse> iw
 " TripleClick for next larger entity, not whole line (lBvE)
 nnoremap <silent> <3-LeftMouse> viW
-vnoremap <silent> <3-LeftMouse> <Esc>viW
+vnoremap <silent> <3-LeftMouse> iW
 " QuadrupleClick too confusing
 nnoremap <silent> <4-LeftMouse> <Nop>
 vnoremap <silent> <4-LeftMouse> <Nop>
@@ -1073,13 +1073,13 @@ vnoremap <silent> <4-LeftMouse> <Nop>
 " and select words under cursor instead (lBvE)
 " (was viW)
 nnoremap <silent> <C-LeftMouse> <LeftMouse>:call GetPath()<CR>
-vnoremap <silent> <C-LeftMouse> <Esc><LeftMouse>:call GetPath()<CR>
+vnoremap <silent> <C-LeftMouse> <C-\><C-n><LeftMouse>:call GetPath()<CR>
 " whole line
 "nnoremap <silent> <M-LeftMouse> <LeftMouse>V
 "vnoremap <silent> <M-LeftMouse> <Esc><LeftMouse>V
 " same as C- (was viW)
 nnoremap <silent> <M-LeftMouse> <LeftMouse>:call GetPath()<CR>
-vnoremap <silent> <M-LeftMouse> <Esc><LeftMouse>:call GetPath()<CR>
+vnoremap <silent> <M-LeftMouse> <C-\><C-n><LeftMouse>:call GetPath()<CR>
 " no-op
 "nnoremap <silent> <M-LeftMouse> <Nop>
 "vnoremap <silent> <M-LeftMouse> <Nop>
@@ -1090,22 +1090,22 @@ vnoremap <silent> <M-LeftMouse> <Esc><LeftMouse>:call GetPath()<CR>
 
 " highlight word under cursor (lbve)
 nnoremap <silent> <Leader>ws viw
-vnoremap <silent> <Leader>ws <Esc>viw
+vnoremap <silent> <Leader>ws iw
 
 " highlight WORD under cursor (lBvE) (does not use iskeyword)
 nnoremap <silent> <Leader>wS viW
-vnoremap <silent> <Leader>wS <Esc>viW
+vnoremap <silent> <Leader>wS iW
 
 " grab file path (ie w / and w/o :)
 nnoremap <silent> <Leader>wp :call GetPath()<CR>
-vnoremap <silent> <Leader>wp <Esc>:call GetPath()<CR>
+vnoremap <silent> <Leader>wp <C-\><C-n>:call GetPath()<CR>
 
 " yank/select word under cursor
 nnoremap <silent> <Leader>wy viwy`]
-vnoremap <silent> <Leader>wy <Esc>viwy`]
+vnoremap <silent> <Leader>wy iwy`]
 " to match vim yw ...
 nnoremap <silent> <Leader>yw viwy`]
-vnoremap <silent> <Leader>yw <Esc>viwy`]
+vnoremap <silent> <Leader>yw iwy`]
 
 " search for word under cursor (without copying selection)
 nnoremap <silent> <Leader>wf :set hlsearch<CR>*
@@ -1117,15 +1117,15 @@ nnoremap <silent> <Leader>wG viwy`]:set hlsearch<CR>#
 " search for visual selection
 " if register is regex with literal metachars then :let @/=escape(@", '.*\\$^')
 "vnoremap <silent> <Leader>wf y <Bar> <Esc>:let @/=@"<CR> <Bar> 2n
-vnoremap <silent> <Leader>wf y<Esc>:set hlsearch<CR>/<C-r>"<CR>
-vnoremap <silent> <Leader>wF y<Esc>:set hlsearch<CR>?<C-r>"<CR>
+vnoremap <silent> <Leader>wf y<C-\><C-n>:set hlsearch<CR>/<C-r>"<CR>
+vnoremap <silent> <Leader>wF y<C-\><C-n>:set hlsearch<CR>?<C-r>"<CR>
 " to match normal mode ...
-vnoremap <silent> <Leader>wg y<Esc>:set hlsearch<CR>/<C-r>"<CR>
-vnoremap <silent> <Leader>wG y<Esc>:set hlsearch<CR>?<C-r>"<CR>
+vnoremap <silent> <Leader>wg y<C-\><C-n>:set hlsearch<CR>/<C-r>"<CR>
+vnoremap <silent> <Leader>wG y<C-\><C-n>:set hlsearch<CR>?<C-r>"<CR>
 
 " and the *, # ...
-vnoremap <silent> * y<Esc>:set hlsearch<CR>/<C-r>"<CR>
-vnoremap <silent> # y<Esc>:set hlsearch<CR>?<C-r>"<CR>
+vnoremap <silent> * y<C-\><C-n>:set hlsearch<CR>/<C-r>"<CR>
+vnoremap <silent> # y<C-\><C-n>:set hlsearch<CR>?<C-r>"<CR>
 
 " change word with yanked/selected word
 " "_dw deletes word without putting it into reg
@@ -1138,33 +1138,33 @@ vnoremap <silent> # y<Esc>:set hlsearch<CR>?<C-r>"<CR>
 
 " exchange whole word (from beg) with clipboard
 nnoremap <silent> <Leader>wx :let @0=@+<CR>ciw<C-r>0<Esc>:let @"=@0<CR>:let @+=@0<CR>
-vnoremap <silent> <Leader>wx <Esc>:let @0=@+<CR>ciw<C-r>0<Esc>:let @"=@0<CR>:let @+=@0<CR>
+vnoremap <silent> <Leader>wx <C-\><C-n>:let @0=@+<CR>ciw<C-r>0<Esc>:let @"=@0<CR>:let @+=@0<CR>
 
 " replace at cursor pos with clipboard (not from beg of word like \we above)
 nnoremap <silent> <Leader>wr :let @0=@+<CR>cw<C-r>0<Esc>:let @"=@0<CR>:let @+=@0<CR>
-vnoremap <silent> <Leader>wr <Esc>:let @0=@+<CR>cw<C-r>0<Esc>:let @"=@0<CR>:let @+=@0<CR>
+vnoremap <silent> <Leader>wr <C-\><C-n>:let @0=@+<CR>cw<C-r>0<Esc>:let @"=@0<CR>:let @+=@0<CR>
 
 " zap (delete) whole word under cursor w/o overwriting " reg
 "nnoremap <silent> <Leader>wz lb"_dw
 "nnoremap <silent> <Leader>wz lb"_dW
 nnoremap <silent> <Leader>wz "_daw
-vnoremap <silent> <Leader>wz <Esc>"_daw
+vnoremap <silent> <Leader>wz <C-\><C-n>"_daw
 
 " zap with saving to reg and clipboard
 nnoremap <silent> <Leader>wZ daw:let @0=@"<CR>:let @+=@0<CR>
-vnoremap <silent> <Leader>wZ <Esc>daw:let @0=@"<CR>:let @+=@0<CR>
+vnoremap <silent> <Leader>wZ <C-\><C-n>daw:let @0=@"<CR>:let @+=@0<CR>
 
 " change word starting at cursor, like vi
 nnoremap <silent> <Leader>we ce
-vnoremap <silent> <Leader>we <Esc>ce
+vnoremap <silent> <Leader>we <C-\><C-n>ce
 
 " delete word starting at cursor, like vi
 nnoremap <silent> <Leader>wd dw
-vnoremap <silent> <Leader>wd <Esc>dw
+vnoremap <silent> <Leader>wd <C-\><C-n>dw
 
 " new whole word (from beg) [cannot use wc]
 nnoremap <silent> <Leader>wn ciw
-vnoremap <silent> <Leader>wn <Esc>ciw
+vnoremap <silent> <Leader>wn <C-\><C-n>ciw
 
 " Terminator plugin (and tmux) ctrl-insert maps to <Esc>1 for paste (ie like C-v / C-S-v)
 nnoremap <silent> <Esc>1 P
@@ -1270,8 +1270,12 @@ vnoremap <silent> <M-Right> lzl
 
 " ---------
 
-noremap <silent> <expr> <C-U> (line('.') == line('w$')) ? 'M' : '<C-U>'
-noremap <silent> <expr> <C-D> (line('.') == line('w0')) ? 'M' : '<C-D>'
+nnoremap <silent> <expr> <C-D> (line('.') == line('w0')) ? 'M' : '<C-D>'
+vnoremap <silent> <expr> <C-D> (line('.') == line('w0')) ? 'M' : '<C-D>'
+imap <silent> <C-D> <Nop>
+nnoremap <silent> <expr> <C-U> (line('.') == line('w$')) ? 'M' : '<C-U>'
+vnoremap <silent> <expr> <C-U> (line('.') == line('w$')) ? 'M' : '<C-U>'
+imap <silent> <C-U> <Nop>
 
 function! NoremapNormalCmd(key, preserve_omni, ...)
   let cmd = ''
@@ -1289,42 +1293,135 @@ function! NoremapNormalCmd(key, preserve_omni, ...)
   endif
 endfunction
 
+" ---------
+
+" N<C-D> and N<C-U> idiotically change the scroll setting
+function! s:Saving_scrollV(cmd)
+  let save_scroll = &scroll
+  execute "keepjumps normal" a:cmd
+  let &scroll = save_scroll
+endfunction
+
+function! s:Saving_scrollVDn1(cmd)
+  if (line('.') == line("w0"))
+    execute "keepjumps normal! M"
+    return
+  endif
+  let save_scroll = &scroll
+  execute "keepjumps normal" . g:half . a:cmd
+  let &scroll = save_scroll
+endfunction
+
+function! s:Saving_scrollVUp1(cmd)
+  if (line('.') == line("w$"))
+    execute "keepjumps normal! M"
+    return
+  endif
+  let save_scroll = &scroll
+  execute "keepjumps normal" . g:half . a:cmd
+  let &scroll = save_scroll
+endfunction
+
+function! s:Saving_scrollVDn2(cmd)
+  if (line('.') == line("w0"))
+    execute "keepjumps normal! M"
+    return
+  endif
+  let save_scroll = &scroll
+  execute "keepjumps normal" . g:full . a:cmd
+  let &scroll = save_scroll
+endfunction
+
+function! s:Saving_scrollVUp2(cmd)
+  if (line('.') == line("w$"))
+    execute "keepjumps normal! M"
+    return
+  endif
+  let save_scroll = &scroll
+  execute "keepjumps normal" . g:full . a:cmd
+  let &scroll = save_scroll
+endfunction
+
+" ---------
+
 " Cursor moves by screen lines
-call NoremapNormalCmd("<Up>",   1, "gk")
-call NoremapNormalCmd("<Down>", 1, "gj")
-call NoremapNormalCmd("<Home>", 0, "g<Home>")
-call NoremapNormalCmd("<End>",  0, "g<End>")
+nnoremap <silent> <Up>   gk
+vnoremap <silent> <Up>   gk
+inoremap <silent> <Up>   <C-\><C-o>gk
 
-call NoremapNormalCmd("<C-j>",    0, "1<C-D>:set scroll=0\r")
-call NoremapNormalCmd("<C-Down>", 0, "1<C-D>:set scroll=0\r")
+nnoremap <silent> <Down> gj
+vnoremap <silent> <Down> gj
+inoremap <silent> <Down> <C-\><C-o>gj
 
-call NoremapNormalCmd("<C-k>",    0, "1<C-U>:set scroll=0\r")
-call NoremapNormalCmd("<C-Up>",   0, "1<C-U>:set scroll=0\r")
+nnoremap <silent> <Home> g<Home>
+vnoremap <silent> <Home> g<Home>
+inoremap <silent> <Home> <C-\><C-o>g<Home>
 
-call NoremapNormalCmd("<ScrollWheelDown>", 0, "5<C-D>:set scroll=0\r")
-call NoremapNormalCmd("<ScrollWheelUp>",   0, "5<C-U>:set scroll=0\r")
+nnoremap <silent> <End>  g<End>
+vnoremap <silent> <End>  g<End>
+inoremap <silent> <End>  <C-\><C-o>g<End>
+
+" ---------
+
+"call NoremapNormalCmd("<C-j>",    0, "1<C-D>")
+"call NoremapNormalCmd("<C-Down>", 0, "1<C-D>")
+nnoremap <silent> <C-j>              :call <SID>Saving_scrollV("1<C-V><C-D>")<CR>
+nnoremap <silent> <C-Down>           :call <SID>Saving_scrollV("1<C-V><C-D>")<CR>
+vnoremap <silent> <C-j>    <C-\><C-n>:call <SID>Saving_scrollV("gv1<C-V><C-D>")<CR>
+vnoremap <silent> <C-Down> <C-\><C-n>:call <SID>Saving_scrollV("gv1<C-V><C-D>")<CR>
+inoremap <silent> <expr> <C-j>       pumvisible() ? '<C-j>'    : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <C-Down>    pumvisible() ? '<C-Down>' : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-D>")<CR>'
+
+"call NoremapNormalCmd("<C-k>",    0, "1<C-U>")
+"call NoremapNormalCmd("<C-Up>",   0, "1<C-U>")
+nnoremap <silent> <C-k>              :call <SID>Saving_scrollV("1<C-V><C-U>")<CR>
+nnoremap <silent> <C-Up>             :call <SID>Saving_scrollV("1<C-V><C-U>")<CR>
+vnoremap <silent> <C-k>    <C-\><C-n>:call <SID>Saving_scrollV("gv1<C-V><C-U>")<CR>
+vnoremap <silent> <C-Up>   <C-\><C-n>:call <SID>Saving_scrollV("gv1<C-V><C-U>")<CR>
+inoremap <silent> <expr> <C-k>       pumvisible() ? '<C-k>'  : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <C-Up>      pumvisible() ? '<C-Up>' : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-U>")<CR>'
+
+nnoremap <silent> <ScrollWheelDown>           :call <SID>Saving_scrollV("5<C-V><C-D>")<CR>
+vnoremap <silent> <ScrollWheelDown> <C-\><C-n>:call <SID>Saving_scrollV("gv5<C-V><C-D>")<CR>
+inoremap <silent> <expr> <ScrollWheelDown>    pumvisible() ? '<ScrollWhellDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("5<C-V><C-D>")<CR>'
+
+nnoremap <silent> <ScrollWheelUp>             :call <SID>Saving_scrollV("5<C-V><C-U>")<CR>
+vnoremap <silent> <ScrollWheelUp>   <C-\><C-n>:call <SID>Saving_scrollV("gv5<C-V><C-U>")<CR>
+inoremap <silent> <expr> <ScrollWheelUp>      pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("5<C-V><C-U>")<CR>'
 
 function! MapScrollKeys()
-  let half = winheight(0) / 2
-  if (half < 1)
-    half = 1
+  let g:half = winheight(0) / 2
+  if (g:half < 1)
+    g:half = 1
   endif
-  let full = half + half
-  let fullup = "(line('.') == line('w$')) ? 'M' : '" . full . "<C-U>:set scroll=0\r'"
-  let fulldn = "(line('.') == line('w0')) ? 'M' : '" . full . "<C-D>:set scroll=0\r'"
-  let halfup = "(line('.') == line('w$')) ? 'M' : '" . half . "<C-U>:set scroll=0\r'"
-  let halfdn = "(line('.') == line('w0')) ? 'M' : '" . half . "<C-D>:set scroll=0\r'"
-  call NoremapNormalCmd("<expr> <C-f>",        0, halfdn)
-  call NoremapNormalCmd("<expr> <C-b>",        0, halfup)
-  call NoremapNormalCmd("<expr> <PageDown>",   0, fulldn)
-  call NoremapNormalCmd("<expr> <PageUp>",     0, fullup)
-  call NoremapNormalCmd("<expr> <C-PageDown>", 0, halfdn)
-  call NoremapNormalCmd("<expr> <C-PageUp>",   0, halfup)
+  let g:full = g:half + g:half
+  nnoremap <silent> <C-f>                  :call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>
+  vnoremap <silent> <C-f>        <C-\><C-n>:call <SID>Saving_scrollVDn1("gv<C-V><C-D>")<CR>
+  inoremap <silent> <expr> <C-f>           pumvisible() ? '<C-f>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
+  nnoremap <silent> <C-b>                  :call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>
+  vnoremap <silent> <C-b>        <C-\><C-n>:call <SID>Saving_scrollVUp1("gv<C-V><C-U>")<CR>
+  inoremap <silent> <expr> <C-b>           pumvisible() ? '<C-b>' : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
+
+  nnoremap <silent> <C-PageDown>           :call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>
+  vnoremap <silent> <C-PageDown> <C-\><C-n>:call <SID>Saving_scrollVDn1("gv<C-V><C-D>")<CR>
+  inoremap <silent> <expr> <C-PageDown>    pumvisible() ? '<C-PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
+  nnoremap <silent> <C-PageUp>             :call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>
+  vnoremap <silent> <C-PageUp>   <C-\><C-n>:call <SID>Saving_scrollVUp1("gv<C-V><C-U>")<CR>
+  inoremap <silent> <expr> <C-PageUp>      pumvisible() ? '<C-PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
+
+  nnoremap <silent> <PageDown>             :call <SID>Saving_scrollVDn2("<C-V><C-D>")<CR>
+  vnoremap <silent> <PageDown>   <C-\><C-n>:call <SID>Saving_scrollVDn2("gv<C-V><C-D>")<CR>
+  inoremap <silent> <expr> <PageDown>      pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn2("<C-V><C-D>")<CR>'
+  nnoremap <silent> <PageUp>               :call <SID>Saving_scrollVUp2("<C-V><C-U>")<CR>
+  vnoremap <silent> <PageUp>     <C-\><C-n>:call <SID>Saving_scrollVUp2("gv<C-V><C-U>")<CR>
+  inoremap <silent> <expr> <PageUp>        pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp2("<C-V><C-U>")<CR>'
 endfunction
 
 call MapScrollKeys()
 
 autocmd VimResized * call MapScrollKeys()
+
+" ---------
 
 " tmux uses these to navigate panes
 noremap <S-Down>  <Nop>
@@ -1361,11 +1458,14 @@ function! s:GoToMID(curr_mode)
 endfunction
 
 " C-/ to center line in screen
-nnoremap <silent> <C-_> :call <SID>GoToMID(0)<CR>
-vnoremap <silent> <C-_> :<C-u>call <SID>GoToMID(1)<CR>
+nnoremap <silent> <C-_>           :call <SID>GoToMID(0)<CR>
+vnoremap <silent> <C-_> <C-\><C-n>:call <SID>GoToMID(1)<CR>
 
-noremap <silent> <Leader>ct :call <SID>GoToMID(0)<CR>
-noremap <silent> <Leader>cz zz
+nnoremap <silent> <Leader>ct           :call <SID>GoToMID(0)<CR>
+vnoremap <silent> <Leader>ct <C-\><C-n>:call <SID>GoToMID(1)<CR>
+
+nnoremap <silent> <Leader>cz zz
+vnoremap <silent> <Leader>cz zz
 
 " ---------
 
@@ -1479,13 +1579,6 @@ endfunction
 " C-PageUp
 
 " ---------
-
-" N<C-D> and N<C-U> idiotically change the scroll setting
-function! s:Saving_scrollV(cmd)
-  let save_scroll = &scroll
-  execute "keepjumps normal" a:cmd
-  let &scroll = save_scroll
-endfunction
 
 " move and scroll
 "nnoremap <silent> <C-J>           :call <SID>Saving_scrollV("1<C-V><C-D>")<CR>
