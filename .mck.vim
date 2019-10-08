@@ -1270,31 +1270,6 @@ vnoremap <silent> <M-Right> lzl
 
 " ---------
 
-nnoremap <silent> <expr> <C-D> (line('.') == line('w0')) ? 'M' : '<C-D>'
-vnoremap <silent> <expr> <C-D> (line('.') == line('w0')) ? 'M' : '<C-D>'
-imap <silent> <C-D> <Nop>
-nnoremap <silent> <expr> <C-U> (line('.') == line('w$')) ? 'M' : '<C-U>'
-vnoremap <silent> <expr> <C-U> (line('.') == line('w$')) ? 'M' : '<C-U>'
-imap <silent> <C-U> <Nop>
-
-function! NoremapNormalCmd(key, preserve_omni, ...)
-  let cmd = ''
-  let icmd = ''
-  for x in a:000
-    let cmd .= x
-    let icmd .= "<C-\\><C-O>" . x
-  endfor
-  execute ":nnoremap <silent> " . a:key . " " . cmd
-  execute ":vnoremap <silent> " . a:key . " " . cmd
-  if a:preserve_omni
-    execute ":inoremap <silent> <expr> " . a:key . " pumvisible() ? \"" . a:key . "\" : \"" . icmd . "\""
-  else
-    execute ":inoremap <silent> " . a:key . " " . icmd
-  endif
-endfunction
-
-" ---------
-
 " N<C-D> and N<C-U> idiotically change the scroll setting
 function! s:Saving_scrollV(cmd)
   let save_scroll = &scroll
@@ -1340,6 +1315,33 @@ function! s:Saving_scrollVUp2(cmd)
   let save_scroll = &scroll
   execute "keepjumps normal" . g:full . a:cmd
   let &scroll = save_scroll
+endfunction
+
+" ---------
+
+nnoremap <silent> <expr> <C-D> (line('.') == line('w0')) ? 'M' : '<C-D>'
+vnoremap <silent> <expr> <C-D> (line('.') == line('w0')) ? 'M' : '<C-D>'
+inoremap <silent> <expr> <C-D> pumvisible() ? '<C-D>' : '<C-\><C-o>:call <SID>Saving_scrollV("<C-V><C-D>")<CR>'
+nnoremap <silent> <expr> <C-U> (line('.') == line('w$')) ? 'M' : '<C-U>'
+vnoremap <silent> <expr> <C-U> (line('.') == line('w$')) ? 'M' : '<C-U>'
+inoremap <silent> <expr> <C-U> pumvisible() ? '<C-U>' : '<C-\><C-o>:call <SID>Saving_scrollV("<C-V><C-U>")<CR>'
+
+" ---------
+
+function! NoremapNormalCmd(key, preserve_omni, ...)
+  let cmd = ''
+  let icmd = ''
+  for x in a:000
+    let cmd .= x
+    let icmd .= "<C-\\><C-O>" . x
+  endfor
+  execute ":nnoremap <silent> " . a:key . " " . cmd
+  execute ":vnoremap <silent> " . a:key . " " . cmd
+  if a:preserve_omni
+    execute ":inoremap <silent> <expr> " . a:key . " pumvisible() ? \"" . a:key . "\" : \"" . icmd . "\""
+  else
+    execute ":inoremap <silent> " . a:key . " " . icmd
+  endif
 endfunction
 
 " ---------
