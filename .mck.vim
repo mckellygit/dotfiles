@@ -875,6 +875,8 @@ vnoremap s <Nop>
 nnoremap S <Nop>
 vnoremap S <Nop>
 
+vnoremap i <Nop>
+
 " ctrl-c to yank selection into paste buffer/clipboard
 
 " copy/yank selection
@@ -1366,30 +1368,28 @@ inoremap <silent> <End>  <C-\><C-o>g<End>
 " ---------
 
 "call NoremapNormalCmd("<C-j>",    0, "1<C-D>")
-"call NoremapNormalCmd("<C-Down>", 0, "1<C-D>")
-nnoremap <silent> <C-j>              :call <SID>Saving_scrollV("1<C-V><C-D>")<CR>
-nnoremap <silent> <C-Down>           :call <SID>Saving_scrollV("1<C-V><C-D>")<CR>
-vnoremap <silent> <C-j>    <C-\><C-n>:call <SID>Saving_scrollV("gv1<C-V><C-D>")<CR>
-vnoremap <silent> <C-Down> <C-\><C-n>:call <SID>Saving_scrollV("gv1<C-V><C-D>")<CR>
-inoremap <silent> <expr> <C-j>       pumvisible() ? '<C-j>'    : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-D>")<CR>'
-inoremap <silent> <expr> <C-Down>    pumvisible() ? '<C-Down>' : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-D>")<CR>'
+nnoremap <silent>        <C-j>              :call <SID>Saving_scrollV("1<C-V><C-D>")<CR>
+nnoremap <silent>        <C-Down>           :call <SID>Saving_scrollV("1<C-V><C-D>")<CR>
+vnoremap <silent>        <C-j>    <C-\><C-n>:call <SID>Saving_scrollV("gv1<C-V><C-D>")<CR>
+vnoremap <silent>        <C-Down> <C-\><C-n>:call <SID>Saving_scrollV("gv1<C-V><C-D>")<CR>
+inoremap <silent> <expr> <C-j>              pumvisible() ? '<C-j>'    : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <C-Down>           pumvisible() ? '<C-Down>' : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-D>")<CR>'
 
 "call NoremapNormalCmd("<C-k>",    0, "1<C-U>")
-"call NoremapNormalCmd("<C-Up>",   0, "1<C-U>")
-nnoremap <silent> <C-k>              :call <SID>Saving_scrollV("1<C-V><C-U>")<CR>
-nnoremap <silent> <C-Up>             :call <SID>Saving_scrollV("1<C-V><C-U>")<CR>
-vnoremap <silent> <C-k>    <C-\><C-n>:call <SID>Saving_scrollV("gv1<C-V><C-U>")<CR>
-vnoremap <silent> <C-Up>   <C-\><C-n>:call <SID>Saving_scrollV("gv1<C-V><C-U>")<CR>
-inoremap <silent> <expr> <C-k>       pumvisible() ? '<C-k>'  : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-U>")<CR>'
-inoremap <silent> <expr> <C-Up>      pumvisible() ? '<C-Up>' : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-U>")<CR>'
+nnoremap <silent>        <C-k>              :call <SID>Saving_scrollV("1<C-V><C-U>")<CR>
+nnoremap <silent>        <C-Up>             :call <SID>Saving_scrollV("1<C-V><C-U>")<CR>
+vnoremap <silent>        <C-k>    <C-\><C-n>:call <SID>Saving_scrollV("gv1<C-V><C-U>")<CR>
+vnoremap <silent>        <C-Up>   <C-\><C-n>:call <SID>Saving_scrollV("gv1<C-V><C-U>")<CR>
+inoremap <silent> <expr> <C-k>              pumvisible() ? '<C-k>'  : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <C-Up>             pumvisible() ? '<C-Up>' : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-U>")<CR>'
 
-nnoremap <silent> <ScrollWheelDown>           :call <SID>Saving_scrollV("5<C-V><C-D>")<CR>
-vnoremap <silent> <ScrollWheelDown> <C-\><C-n>:call <SID>Saving_scrollV("gv5<C-V><C-D>")<CR>
-inoremap <silent> <expr> <ScrollWheelDown>    pumvisible() ? '<ScrollWhellDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("5<C-V><C-D>")<CR>'
+nnoremap <silent>        <ScrollWheelDown>           :call <SID>Saving_scrollV("5<C-V><C-D>")<CR>
+vnoremap <silent>        <ScrollWheelDown> <C-\><C-n>:call <SID>Saving_scrollV("gv5<C-V><C-D>")<CR>
+inoremap <silent> <expr> <ScrollWheelDown>           pumvisible() ? '<ScrollWhellDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("5<C-V><C-D>")<CR>'
 
-nnoremap <silent> <ScrollWheelUp>             :call <SID>Saving_scrollV("5<C-V><C-U>")<CR>
-vnoremap <silent> <ScrollWheelUp>   <C-\><C-n>:call <SID>Saving_scrollV("gv5<C-V><C-U>")<CR>
-inoremap <silent> <expr> <ScrollWheelUp>      pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("5<C-V><C-U>")<CR>'
+nnoremap <silent>        <ScrollWheelUp>             :call <SID>Saving_scrollV("5<C-V><C-U>")<CR>
+vnoremap <silent>        <ScrollWheelUp>   <C-\><C-n>:call <SID>Saving_scrollV("gv5<C-V><C-U>")<CR>
+inoremap <silent> <expr> <ScrollWheelUp>             pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("5<C-V><C-U>")<CR>'
 
 function! MapScrollKeys()
   let g:half = winheight(0) / 2
@@ -1397,26 +1397,26 @@ function! MapScrollKeys()
     g:half = 1
   endif
   let g:full = g:half + g:half
-  nnoremap <silent> <C-f>                  :call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>
-  vnoremap <silent> <C-f>        <C-\><C-n>:call <SID>Saving_scrollVDn1("gv<C-V><C-D>")<CR>
-  inoremap <silent> <expr> <C-f>           pumvisible() ? '<C-f>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
-  nnoremap <silent> <C-b>                  :call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>
-  vnoremap <silent> <C-b>        <C-\><C-n>:call <SID>Saving_scrollVUp1("gv<C-V><C-U>")<CR>
-  inoremap <silent> <expr> <C-b>           pumvisible() ? '<C-b>' : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
 
-  nnoremap <silent> <C-PageDown>           :call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>
-  vnoremap <silent> <C-PageDown> <C-\><C-n>:call <SID>Saving_scrollVDn1("gv<C-V><C-D>")<CR>
-  inoremap <silent> <expr> <C-PageDown>    pumvisible() ? '<C-PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
-  nnoremap <silent> <C-PageUp>             :call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>
-  vnoremap <silent> <C-PageUp>   <C-\><C-n>:call <SID>Saving_scrollVUp1("gv<C-V><C-U>")<CR>
-  inoremap <silent> <expr> <C-PageUp>      pumvisible() ? '<C-PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
+  "nnoremap <silent> <C-f>                  :call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>
+  "vnoremap <silent> <C-f>        <C-\><C-n>:call <SID>Saving_scrollVDn1("gv<C-V><C-D>")<CR>
+  noremap  <silent> <expr> <C-f> (line('.') == line('w0')) ? 'M' : '<C-D>'
+  inoremap <silent> <expr> <C-f> pumvisible() ? '<C-f>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
 
-  nnoremap <silent> <PageDown>             :call <SID>Saving_scrollVDn2("<C-V><C-D>")<CR>
-  vnoremap <silent> <PageDown>   <C-\><C-n>:call <SID>Saving_scrollVDn2("gv<C-V><C-D>")<CR>
-  inoremap <silent> <expr> <PageDown>      pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn2("<C-V><C-D>")<CR>'
-  nnoremap <silent> <PageUp>               :call <SID>Saving_scrollVUp2("<C-V><C-U>")<CR>
-  vnoremap <silent> <PageUp>     <C-\><C-n>:call <SID>Saving_scrollVUp2("gv<C-V><C-U>")<CR>
-  inoremap <silent> <expr> <PageUp>        pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp2("<C-V><C-U>")<CR>'
+  "nnoremap <silent> <C-b>                  :call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>
+  "vnoremap <silent> <C-b>        <C-\><C-n>:call <SID>Saving_scrollVUp1("gv<C-V><C-U>")<CR>
+  noremap  <silent> <expr> <C-b> (line('.') == line('w$')) ? 'M' : '<C-U>'
+  inoremap <silent> <expr> <C-b> pumvisible() ? '<C-b>' : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
+
+  noremap  <silent> <expr> <C-PageDown> (line('.') == line('w0')) ? 'M' : '<C-D>'
+  inoremap <silent> <expr> <C-PageDown> pumvisible() ? '<C-PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
+  noremap  <silent> <expr> <C-PageUp>   (line('.') == line('w$')) ? 'M' : '<C-U>'
+  inoremap <silent> <expr> <C-PageUp>   pumvisible() ? '<C-PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
+
+  noremap  <silent> <expr> <PageDown>   (line('.') == line('w0')) ? 'M' : '<C-D><C-D>'
+  inoremap <silent> <expr> <PageDown>   pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn2("<C-V><C-D>")<CR>'
+  noremap  <silent> <expr> <PageUp>     (line('.') == line('w$')) ? 'M' : '<C-U><C-U>'
+  inoremap <silent> <expr> <PageUp>     pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp2("<C-V><C-U>")<CR>'
 endfunction
 
 call MapScrollKeys()
@@ -2629,11 +2629,11 @@ hi Search ctermbg=58
 nnoremap <silent> q :set nohlsearch<CR>:redraw!<CR>
 
 " does this make sense ? (q to cancel select/visual)
-"vnoremap <unique> <silent> q <Esc>
+"vnoremap <unique> <silent> q <C-\><C-n>
 
 " to match normal mode
-vnoremap <silent> <C-o> <Esc><C-o>
-vnoremap <silent> <C-i> <Esc><C-i>
+vnoremap <silent> <C-o> <C-\><C-n><C-o>
+vnoremap <silent> <C-i> <C-\><C-n><C-i>
 
 " clear cmd window (or just <C-l> to redraw)
 " 'cc' already used for quickfix close
