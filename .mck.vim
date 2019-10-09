@@ -1969,7 +1969,8 @@ nmap <C-]> :call rtags#JumpTo(g:SAME_WINDOW)<CR>
 " C-t to go back (not implemented)
 " nmap <C-t> :call rtags#JumpBack()<CR>:echo<CR>
 " \cc to close quickfix, listview, preview
-noremap <silent> <Leader>cc :ccl\|lcl\|pcl<CR>:echo<CR>
+nnoremap <silent> <Leader>cc           :ccl\|lcl\|pcl<CR>:echo<CR>
+vnoremap <silent> <Leader>cc <C-\><C-n>:ccl\|lcl\|pcl<CR>:echo<CR>
 "noremap <silent> <Leader>cc :windo lcl\|ccl\|pcl<CR>:echo<CR>
 "
 " auto-reindex on file save ...
@@ -1991,12 +1992,14 @@ function RtagsToggleColonKeyword() abort
   sleep 500m
   redraw!
 endfunction
-noremap <silent> <Leader>rx :call RtagsToggleColonKeyword()<CR>
+nnoremap <silent> <Leader>rx           :call RtagsToggleColonKeyword()<CR>
+vnoremap <silent> <Leader>rx <C-\><C-n>:call RtagsToggleColonKeyword()<CR>
 " rtags -----------------
 
 " fswitch ---------------
 " Switch to the other .c*/.h* file in the current window >
-noremap <silent> <Leader>of :FSHere<CR>
+nnoremap <silent> <Leader>of           :FSHere<CR>
+vnoremap <silent> <Leader>of <C-\><C-n>:FSHere<CR>
 " do not create new files
 let fsnonewfiles=1
 " fswitch ---------------
@@ -2386,15 +2389,15 @@ nnoremap <C-c> <C-c>
 " no imap for this
 " <C-x> used in visual mode already
 ""vnoremap <silent> <C-x><C-c> <Esc>:call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
-nnoremap <silent> <C-x><C-c>      :call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
+nnoremap <silent> <C-x><C-c>            :call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
 
 " no imap for this
-vnoremap <silent> <Leader>xc  <Esc>:<C-u>call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
-nnoremap <silent> <Leader>xc       :call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
+vnoremap <silent> <Leader>xc  <C-\><C-n>:<C-u>call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
+nnoremap <silent> <Leader>xc            :call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
 
 " no imap for this
-vnoremap <silent> <Leader>ax  <Esc>:<C-u>call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
-nnoremap <silent> <Leader>ax       :call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
+vnoremap <silent> <Leader>ax  <C-\><C-n>:<C-u>call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
+nnoremap <silent> <Leader>ax            :call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
 
 function! s:EndTerminalsConfQA() abort
     for b in range(1, bufnr('$'))
@@ -2483,9 +2486,12 @@ if &diff
   " if no mods, then :x is like :q ...
   cnoreabbrev <silent> <expr> x (getcmdtype() == ':' && getcmdline() =~ '\s*x\s*') ? 'call Xdiff()' : 'x'
 
-  noremap  <silent> <Leader>df :qa<CR>
-  noremap  <silent> <Leader>xc :cquit<CR>
-  noremap           <C-l>      :diffupdate<CR><C-l>
+  nnoremap  <silent> <Leader>df           :qa<CR>
+  vnoremap  <silent> <Leader>df <C-\><C-n>:qa<CR>
+  nnoremap  <silent> <Leader>xc           :cquit<CR>
+  vnoremap  <silent> <Leader>xc <C-\><C-n>:cquit<CR>
+  nnoremap           <C-l>                :diffupdate<CR><C-l>
+  vnoremap           <C-l>      <C-\><C-n>:diffupdate<CR><C-l>
   noremap  <silent> <Leader>dn ]c
   noremap  <silent> <Leader>dp [c
   "hi DiffAdd    ctermfg=233 ctermbg=LightGreen guifg=#003300 guibg=#DDFFDD gui=none cterm=none
@@ -2576,10 +2582,12 @@ endif
 " -----------
 
 " terminal in cur tab
-noremap <silent> <Leader>zs :terminal ++close ++norestore ++kill=term ++curwin<CR>
+nnoremap <silent> <Leader>zs           :terminal ++close ++norestore ++kill=term ++curwin<CR>
+vnoremap <silent> <Leader>zs <C-\><C-n>:terminal ++close ++norestore ++kill=term ++curwin<CR>
 " terminal in new tab
 noremap <silent> zt <Nop>
-noremap <silent> <Leader>zt :$tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR>
+nnoremap <silent> <Leader>zt           :$tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR>
+vnoremap <silent> <Leader>zt <C-\><C-n>:$tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR>
 " terminal in new tab when already in a terminal
 tnoremap <silent> <C-x>t <C-w>:$tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR>
 " window in new tab when already in a terminal
@@ -2624,10 +2632,11 @@ function! UndoAll()
   endif
   redraw!
 endfunction
-noremap <Leader>uu :call UndoAll()<CR>
+nnoremap <Leader>uu           :call UndoAll()<CR>
+vnoremap <Leader>uu <C-\><C-n>:call UndoAll()<CR>
 
 " toggle search highlight
-noremap <silent> <Leader>hl :set hlsearch! hlsearch?<CR>:redraw!<CR>
+nnoremap <silent> <Leader>hl :set hlsearch! hlsearch?<CR>:redraw!<CR>
 hi Search ctermbg=58
 
 " q to turn off hlsearch ?
@@ -2643,26 +2652,34 @@ vnoremap <silent> <C-i> <C-\><C-n><C-i>
 " clear cmd window (or just <C-l> to redraw)
 " 'cc' already used for quickfix close
 " **careful** as 'xc' is for quit all ...
-noremap <Leader>cx :echo<CR>
+nnoremap <Leader>cx           :echo<CR>
+vnoremap <Leader>cx <C-\><C-n>:echo<CR>
 " maybe also execute "keepjumps normal" ""
 " or :redraw!
 
 " tab open
-noremap <silent> <Leader>to :$tabnew<CR>
+nnoremap <silent> <Leader>to           :$tabnew<CR>
+vnoremap <silent> <Leader>to <C-\><C-n>:$tabnew<CR>
 " tab close (same as window close)
-noremap <silent> <Leader>tc :conf q<CR>
+nnoremap <silent> <Leader>tc           :conf q<CR>
+vnoremap <silent> <Leader>tc <C-\><C-n>:conf q<CR>
 " tab keep current and close all others
-noremap <silent> <Leader>tk :tabonly<CR>
+nnoremap <silent> <Leader>tk           :tabonly<CR>
+vnoremap <silent> <Leader>tk <C-\><C-n>:tabonly<CR>
 
 " window close (same as tab close)
-noremap <silent> <Leader>wc :conf q<CR>
+nnoremap <silent> <Leader>wc           :conf q<CR>
+vnoremap <silent> <Leader>wc <C-\><C-n>:conf q<CR>
 " window keep current and close all others
-noremap <silent> <Leader>wk :only<CR>
+nnoremap <silent> <Leader>wk           :only<CR>
+vnoremap <silent> <Leader>wk <C-\><C-n>:only<CR>
 
 " next tab
-noremap <Leader>tn :tabnext<CR>
+nnoremap <Leader>tn           :tabnext<CR>
+vnoremap <Leader>tn <C-\><C-n>:tabnext<CR>
 " prev tab
-noremap <Leader>tp :tabprevious<CR>
+nnoremap <Leader>tp           :tabprevious<CR>
+vnoremap <Leader>tp <C-\><C-n>:tabprevious<CR>
 
 " toggle fold
 noremap <Leader>ff za
