@@ -1464,15 +1464,16 @@ function! s:GoToMID(curr_mode)
   endif
 endfunction
 
-" C-/ to center line in screen
-nnoremap <silent> <C-_>           :call <SID>GoToMID(0)<CR>
-vnoremap <silent> <C-_> <C-\><C-n>:call <SID>GoToMID(1)<CR>
+" go to center line of screen (M)
+"nnoremap <silent> <C-_>           :call <SID>GoToMID(0)<CR>
+"vnoremap <silent> <C-_> <C-\><C-n>:call <SID>GoToMID(1)<CR>
+"nnoremap <silent> <Leader>ct           :call <SID>GoToMID(0)<CR>
+"vnoremap <silent> <Leader>ct <C-\><C-n>:call <SID>GoToMID(1)<CR>
+noremap <silent> <Leader>ct M
 
-nnoremap <silent> <Leader>ct           :call <SID>GoToMID(0)<CR>
-vnoremap <silent> <Leader>ct <C-\><C-n>:call <SID>GoToMID(1)<CR>
-
-nnoremap <silent> <Leader>cz zz
-vnoremap <silent> <Leader>cz zz
+" <C-/> (sends C-_) move current line to center of screen
+noremap <silent> <C-_> zz
+noremap <silent> <Leader>cz zz
 
 " ---------
 
@@ -1680,10 +1681,10 @@ endif " disable old scroll functions
 " TODO: look into Terminator plugin for these sequences ...
 nnoremap <M-Down> :m .+1<CR>==
 nnoremap <M-Up>   :m .-2<CR>==
-inoremap <M-Down> <Esc>:m .+1<CR>==gi
-inoremap <M-Up>   <Esc>:m .-2<CR>==gi
 vnoremap <M-Down> :m '>+1<CR>gv=gv
 vnoremap <M-Up>   :m '<-2<CR>gv=gv
+inoremap <M-Down> <Esc>:m .+1<CR>==gi
+inoremap <M-Up>   <Esc>:m .-2<CR>==gi
 
 "nnoremap <M-j> :m .+1<CR>==
 "nnoremap <M-k> :m .-2<CR>==
