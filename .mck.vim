@@ -1464,14 +1464,12 @@ function! s:GoToMID(curr_mode)
   endif
 endfunction
 
-" go to center line of screen (M)
-"nnoremap <silent> <C-_>           :call <SID>GoToMID(0)<CR>
-"vnoremap <silent> <C-_> <C-\><C-n>:call <SID>GoToMID(1)<CR>
-"nnoremap <silent> <Leader>ct           :call <SID>GoToMID(0)<CR>
-"vnoremap <silent> <Leader>ct <C-\><C-n>:call <SID>GoToMID(1)<CR>
-noremap <silent> <Leader>ct M
+" go to center line of screen (like M but screen lines)
+"noremap <silent> <Leader>ct M
+nnoremap <silent> <Leader>ct           :call <SID>GoToMID(0)<CR>
+vnoremap <silent> <Leader>ct <C-\><C-n>:call <SID>GoToMID(1)<CR>
 
-" <C-/> (sends C-_) move current line to center of screen
+" <C-/> (sends C-_) move current line to center of screen (not ideal with wrap and long lines)
 noremap <silent> <C-_> zz
 noremap <silent> <Leader>cz zz
 
