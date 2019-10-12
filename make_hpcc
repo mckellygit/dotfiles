@@ -1,0 +1,10 @@
+#!/bin/bash
+
+stop_hpcc -k $@
+make
+rc=$?
+if [[ $rc -ne 0 ]] ; then
+  exit 1
+fi
+sync_hpcc $@
+start_hpcc

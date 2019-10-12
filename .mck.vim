@@ -1356,19 +1356,19 @@ endfunction
 " Cursor moves by screen lines
 nnoremap <silent> <Up>   gk
 vnoremap <silent> <Up>   gk
-inoremap <silent> <Up>   <C-\><C-o>gk
+inoremap <silent> <expr> <Up>   pumvisible() ? '<Up>'   : '<C-\><C-o>gk'
 
 nnoremap <silent> <Down> gj
 vnoremap <silent> <Down> gj
-inoremap <silent> <Down> <C-\><C-o>gj
+inoremap <silent> <expr> <Down> pumvisible() ? '<Down>' : '<C-\><C-o>gj'
 
 nnoremap <silent> <Home> g<Home>
 vnoremap <silent> <Home> g<Home>
-inoremap <silent> <Home> <C-\><C-o>g<Home>
+inoremap <silent> <expr> <Home> pumvisible() ? '<Home>' : '<C-\><C-o>g<Home>'
 
 nnoremap <silent> <End>  g<End>
 vnoremap <silent> <End>  g<End>
-inoremap <silent> <End>  <C-\><C-o>g<End>
+inoremap <silent> <expr> <End>  pumvisible() ? '<End>'  : '<C-\><C-o>g<End>'
 
 " ---------
 

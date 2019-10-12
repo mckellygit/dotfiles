@@ -139,6 +139,7 @@ alias stop-hpcc='stop_hpcc'
 alias stat-hpcc='stat_hpcc'
 alias start-hpcc='start_hpcc'
 alias kill-hpcc='kill_hpcc'
+alias make-hpcc='make_hpcc'
 
 alias radssh='python -m radssh.shell $@'
 #alias radssh='python ~/radssh/plugins/shell1.py $@'
