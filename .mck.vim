@@ -2907,13 +2907,13 @@ endif
 
 " -----------------------------
 
-" fugitive Gstatus does not work from empty tabnew ...
+" fugitive Gstatus used to not work from an empty tabnew ...
 function! s:GitStatusXX()
   execute "pedit .git/index"
   redraw!
   wincmd P
 endfunction
-cnoreabbrev <silent> <expr> Gstatus (getcmdtype() == ':' && getcmdline() =~ '\s*Gstatus\s*')  ? 'call <SID>GitStatusXX()' : 'Gstatus'
+cnoreabbrev <silent> <expr> GstatusXX (getcmdtype() == ':' && getcmdline() =~ '\s*GstatusXX\s*')  ? 'call <SID>GitStatusXX()' : 'GstatusXX'
 
 " -----------------------------
 
