@@ -260,14 +260,14 @@ endif
 "noremap <script> g gg<SID>L
 map < gg
 "map <Esc>< gg<SID>L
-map <Home> gg
+map <Home> 0
 map <kHome> gg
 
 " End of file
 "noremap <script> G G<SID>L9999j
 map > G
 "map <Esc>> G
-map <End> G
+map <End> $
 map <kEnd> G
 
 " ---------
