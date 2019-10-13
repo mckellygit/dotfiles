@@ -258,16 +258,22 @@ endif
 
 " Start of file
 "noremap <script> g gg<SID>L
-map < gg
+"map < gg
 "map <Esc>< gg<SID>L
-map <Home> 0
+"map <Home> 0
+noremap <silent> <Home> g<Home>
+" terminator <C-Home> mapped to <Esc>5
+map <Esc>5 gg
 map <kHome> gg
 
 " End of file
 "noremap <script> G G<SID>L9999j
-map > G
+"map > G
 "map <Esc>> G
-map <End> $
+"map <End> $
+noremap <silent> <End> g<End>
+" terminator <C-End> mapped to <Esc>6
+map <Esc>6 G
 map <kEnd> G
 
 " ---------

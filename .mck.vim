@@ -651,6 +651,12 @@ set shortmess-=s
 " and dont forget <Leader>hl for hlsearch toggle
 " and we set WarningMsg highlight color below for wrap warning
 
+" to match vless and tmux
+" terminator <C-Home> mapped to <Esc>5
+noremap <silent> <Esc>5 gg
+" terminator <C-End> mapped to <Esc>6
+noremap <silent> <Esc>6 G
+
 " toggle line wrap
 nnoremap <silent> <Leader>lw :set nowrap! nowrap?<CR>:redraw!<CR>
 
@@ -1354,20 +1360,16 @@ endfunction
 " ---------
 
 " Cursor moves by screen lines
-nnoremap <silent> <Up>   gk
-vnoremap <silent> <Up>   gk
+noremap <silent> <Up>   gk
 inoremap <silent> <expr> <Up>   pumvisible() ? '<Up>'   : '<C-\><C-o>gk'
 
-nnoremap <silent> <Down> gj
-vnoremap <silent> <Down> gj
+noremap <silent> <Down> gj
 inoremap <silent> <expr> <Down> pumvisible() ? '<Down>' : '<C-\><C-o>gj'
 
-nnoremap <silent> <Home> g<Home>
-vnoremap <silent> <Home> g<Home>
+noremap <silent> <Home> g<Home>
 inoremap <silent> <expr> <Home> pumvisible() ? '<Home>' : '<C-\><C-o>g<Home>'
 
-nnoremap <silent> <End>  g<End>
-vnoremap <silent> <End>  g<End>
+noremap <silent> <End>  g<End>
 inoremap <silent> <expr> <End>  pumvisible() ? '<End>'  : '<C-\><C-o>g<End>'
 
 " ---------

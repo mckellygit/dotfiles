@@ -30,6 +30,10 @@
   esc_thr = <Control>equal
 # Ctrl-Shft-space
   esc_four = <Control><Shift>space
+# Ctrl-Home
+  esc_five = <Control>Home
+# Ctrl-End
+  esc_six = <Control>End
 [layouts]
   [[default]]
     [[[child0]]]
