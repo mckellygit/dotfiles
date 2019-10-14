@@ -52,6 +52,9 @@ character_encoding=UTF-8
 ### Username defaults to $SSH_USER (or $USER) if not set here
 ### username=root
 ### Supplemental authentication file for more keys and/or passwords
+### Use python -m radssh.pkcs <pw> to generate encrypted password
+### Add output to auth file as:
+### PKCSOAEP|*|<output from pkcs cmd ...>
 # authfile=~/.radssh_auth
 
 ### Network Tweaks
