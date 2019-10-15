@@ -60,9 +60,9 @@
 #   Terminal bell (light bulb)
     icon_bell = True
     alternate_screen_scroll = True
-#   background_color = "#2e2e2e"
+    background_color = "#2e2e2e"
 #   background_color = "#252525"
-    background_color = "#393232"
+#   background_color = "#393232"
     background_darkness = 0.96
     background_image = None
     background_type = transparent
