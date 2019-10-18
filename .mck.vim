@@ -106,7 +106,7 @@ Plugin 'mileszs/ack.vim'
 " with regex patterns ...
 " Plugin 'othree/eregex.vim'
 "
-" TODO also look into: ferret
+" TODO: also look into ferret
 " for quickfix multi-file search/replace
 "Plugin 'wincent/ferret'
 "
@@ -166,7 +166,7 @@ Plugin 'mhinz/vim-startify'
 "
 " search + highlight
 Plugin 'PeterRincker/vim-searchlight'
-" TODO also look into: qxxxb/vim-searchhi
+" TODO: also look into: qxxxb/vim-searchhi
 "
 " fade inactive buffers
 Plugin 'TaDaa/vimade'
@@ -1081,13 +1081,14 @@ vnoremap <silent> <4-LeftMouse> <Nop>
 " and select words under cursor instead (lBvE)
 " (was viW)
 nnoremap <silent> <C-LeftMouse> <LeftMouse>:call GetPath()<CR>
-vnoremap <silent> <C-LeftMouse> <C-\><C-n><LeftMouse>:call GetPath()<CR>
+vnoremap <silent> <C-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath()<CR>
 " whole line
 "nnoremap <silent> <M-LeftMouse> <LeftMouse>V
 "vnoremap <silent> <M-LeftMouse> <Esc><LeftMouse>V
 " same as C- (was viW)
+" TODO: perhaps M- should copy/yank and return to normal mode ?
 nnoremap <silent> <M-LeftMouse> <LeftMouse>:call GetPath()<CR>
-vnoremap <silent> <M-LeftMouse> <C-\><C-n><LeftMouse>:call GetPath()<CR>
+vnoremap <silent> <M-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath()<CR>
 " no-op
 "nnoremap <silent> <M-LeftMouse> <Nop>
 "vnoremap <silent> <M-LeftMouse> <Nop>
@@ -1257,7 +1258,7 @@ set scrolloff=0
 
 " ---------
 
-" TODO not sure what is best
+" TODO: not sure what is best
 " half window height (was winheight('%')/2, but -50 is 50%)
 au BufEnter,WinEnter,WinNew,VimResized * let &scrolljump=-50
 " disable when in insert mode ...
@@ -2131,7 +2132,7 @@ function GetPath() abort
   let l:oldiskeyword = &iskeyword
   setlocal iskeyword-=:
   setlocal iskeyword+=/,.
-  execute 'normal viw'
+  execute 'normal! viw'
   let &iskeyword = l:oldiskeyword
 endfunction
 
