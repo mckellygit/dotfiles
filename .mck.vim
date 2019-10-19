@@ -169,7 +169,8 @@ Plugin 'PeterRincker/vim-searchlight'
 " TODO: also look into: qxxxb/vim-searchhi
 "
 " fade inactive buffers
-Plugin 'TaDaa/vimade'
+" NOTE: disable for now - causes rtags popup to take forever ...
+"Plugin 'TaDaa/vimade'
 "
 " ansi esc sequences
 "Plugin 'powerman/vim-plugin-AnsiEsc'
@@ -346,7 +347,7 @@ function! MyLightlineColonKeyword()
   elseif !&buflisted
     return ''
   else
-    if (g:rtagsUseColonKeyword == 1)
+    if exists("g:rtagsUseColonKeyword") && (g:rtagsUseColonKeyword == 1)
       return 'rt:'
     else
       return 'rt-'
