@@ -9,6 +9,8 @@
 # these were Ctrl-Page Up/Down and are disabled for tmux to use
   next_tab = ""
   prev_tab = ""
+# full_screen was F11 - sometimes back from screenlock gets into fullscreen ...
+  full_screen = ""
 # these were Alt-Up/Down and are disabled for tmux to use
   go_up = <Super>Up
   go_down = <Super>Down

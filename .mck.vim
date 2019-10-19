@@ -2018,9 +2018,13 @@ nmap <Leader>pj <Plug>UnconditionalPasteJustJoinedAfter
 nnoremap <C-y> <Nop>
 vnoremap <C-y> <Nop>
 
+" also Pc
 nmap <Leader>pp <Plug>UnconditionalPasteCharBefore
 nmap <Leader>p0 <Plug>UnconditionalPasteCharBefore
+" also pc
 nmap <Leader>p1 <Plug>UnconditionalPasteCharAfter
+
+nmap <Leader>pe $<Plug>UnconditionalPasteCharAfter
 "
 " change l to i to match current indentation ...
 "nmap <Leader>Pl <Plug>UnconditionalPasteIndentedBefore
