@@ -30,6 +30,8 @@ rfkill block bluetooth
 
 # set default cpufreq governor
 # (add intel_pstate=disable to kernel grub cmdline)
+# this does not seem to work -
 cpupower frequency-set --governor schedutil
+# try adding a systemd service ...
 
 exit 0
