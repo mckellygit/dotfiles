@@ -35,4 +35,4 @@ for FILE in /proc/[0-9]*/status ;do
         printf "PID: %9d  swapped: %11d KB (%s)\n" $PID $SUM "$PROGNAME"
     OVERALL=$((OVERALL+SUM))
 done
-printf "Total swapped memory: %14u KB\n" $OVERALL
+printf "Total memory swapped: %14u KB\n" $OVERALL
