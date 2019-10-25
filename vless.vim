@@ -348,7 +348,12 @@ nnoremap <silent> q :call QuitVless()<CR>
 "cnoremap q! FXIT
 "cnoreabbrev <silent> <expr> FXIT (getcmdtype() == ':' && getcmdline() =~ '\s*\<FXIT\>\s*$') ? 'qa!' : 'q!'
 
+:Alias n call\ QuitVless()
+:Alias x call\ QuitVless()
+
 " <Leader>wc - if want screen to remain at exit ...
-noremap <silent> <expr> <Leader>wc (argidx()+1 == argc()) ? ':set t_te=<CR>:call QuitVless()<CR>' : ':call QuitVless()<CR>'
+" skip for now - messes up tmux alternate screen
+"noremap <silent> <expr> <Leader>wc (argidx()+1 == argc()) ? ':set t_te=<CR>:call QuitVless()<CR>' : ':call QuitVless()<CR>'
+noremap <silent> <Leader>wc :call QuitVless()<CR>
 
 " vim: sw=2
