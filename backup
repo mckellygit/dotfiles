@@ -12,6 +12,7 @@ done
 
 list_repo_info
 
+cp -p ~/Downloads/repo_info.lst ~/misc
 dpkg -l > ~/misc/dpkg.list
 apt list --installed > ~/misc/apt.list
 
