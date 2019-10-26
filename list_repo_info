@@ -1,0 +1,19 @@
+#!/bin/bash
+
+cd ~/Downloads || exit
+
+rm -f repo_info.lst
+
+list=$(ls -1d */.git | awk -F / '{print $1}')
+
+while read -r dir
+do
+  if [ -n "${dir}" ] ; then
+      cd ${dir} || continue
+      pwd >> ../repo_info.lst
+      git remote -v >> ../repo_info.lst
+      git branch >> ../repo_info.lst
+      echo " " >> ../repo_info.lst
+      cd ..
+  fi
+done <<< "$list"
