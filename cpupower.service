@@ -1,0 +1,11 @@
+# /etc/systemd/system/cpupower.service
+
+[Unit]
+Description=CPU schedutil
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/cpupower -c all frequency-set -g schedutil
+
+[Install]
+WantedBy=multi-user.target
