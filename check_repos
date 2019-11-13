@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cd ~/Downloads
-for d in parcellite xclip FlameGraph ethq byobu perf-tools xsel tmux vim rtags cgdb universal-ctags
+for d in parcellite xclip FlameGraph ethq byobu perf-tools xsel tmux vim rtags cgdb
 do
     echo "checking $d ..."
     cd $d
