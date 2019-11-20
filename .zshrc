@@ -105,9 +105,9 @@ autoload delete-whole-word-match
 zle -N delete-whole-word-match
 function my-delete-word() {
 # local WORDCHARS="${WORDCHARS:s#/#}"
-  zle backward-kill-word
-# zle backward-word
-# zle kill-word
+# zle backward-kill-word
+  zle backward-word
+  zle kill-word
 # zle vi-backward-delete-char
 }
 zle -N my-delete-word
