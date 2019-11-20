@@ -101,15 +101,18 @@ bindkey "\e[3;5~" backward-kill-word
 # Shift-DEL - forward
 bindkey "\e[3;2~" kill-word
 
-# Ctrl-Shift-DEL - whole word
 autoload delete-whole-word-match
 zle -N delete-whole-word-match
 function my-delete-word() {
 # local WORDCHARS="${WORDCHARS:s#/#}"
-  zle delete-whole-word-match
-  zle delete-char
+  zle backward-kill-word
+# zle backward-word
+# zle kill-word
+# zle vi-backward-delete-char
 }
 zle -N my-delete-word
+
+# Ctrl-Shift-DEL - whole word
 bindkey "\e[3;6~" my-delete-word
 
 # Alt-DEL - whole word
