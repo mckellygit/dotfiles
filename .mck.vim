@@ -511,7 +511,7 @@ autocmd FileType GV set foldlevelstart=1
 
 " can we map q to quit ?
 autocmd FileType GV nmap <silent> <buffer> Q :qa!<CR>
-autocmd FileType GV nmap <silent> <buffer> <Leader>wc :qa!<CR>
+autocmd FileType GV nmap <silent> <buffer> <Leader>wc :call <SID>QuitIfOnlyNoNameLeft()<CR>
 
 "autocmd FileType GV cnoreabbrev <silent> <expr> q! (getcmdtype() == ':' && getcmdline() =~ '\s*q!\s*') ? 'qa!' : 'q!'
 
@@ -2372,6 +2372,28 @@ function! s:SkipTerminalsConfQA() abort
         execute "qa!"
     else
         execute "conf qa"
+    endif
+endfunction
+
+function! s:QuitIfOnlyNoNameLeft() abort
+    let l:doquit = 1
+    for b in getbufinfo()
+        if b.listed
+            if b.bufnr != bufnr('%')
+                let bname = bufname(b.bufnr)
+                " echomsg 'bname = ' . bname
+                " a [No Name] buffer ...
+                if bname !=# ''
+                    let l:doquit = 0
+                    break
+                endif
+            endif
+        endif
+    endfor
+    if l:doquit ==# 1
+        execute "qa!"
+    else
+        execute "tabclose!"
     endif
 endfunction
 
