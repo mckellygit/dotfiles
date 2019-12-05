@@ -1434,6 +1434,15 @@ autocmd VimResized * call MapScrollKeys()
 
 " ---------
 
+" Insert back to Normal mode after 10 sec if no input/movement ...
+set updatetime=10000
+function! IdleToNormalMode()
+  call feedkeys("\<Esc>", "t")
+endfunction
+autocmd CursorHoldI * call IdleToNormalMode()
+
+" ---------
+
 " tmux uses these to navigate panes
 noremap <S-Down>  <Nop>
 noremap <S-Up>    <Nop>
