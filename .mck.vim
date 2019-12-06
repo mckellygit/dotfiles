@@ -1852,6 +1852,7 @@ endif " has("autocmd")
 " vim-clang ----------
 " put preview window at bottom
 set splitbelow
+set splitright
 let g:clang_cpp_options = '-std=c++11 -DNDEBUG -Wno-inconsistent-missing-override'
 " put this in the local .lvimrc now ...
 "let g:clang_compilation_database = '~/lnrs/wip/buildln/compile_commands.json'
