@@ -67,6 +67,8 @@ set nostartofline
 set noma
 noremap <silent> K <Nop>
 noremap <silent> i <Nop>
+" no intro banner
+set shortmess+=I
 
 " ---------
 

@@ -19,9 +19,9 @@
 	vdiff = difftool
 	difff = dless
 	dif = dless
-    dles = dless
-    dless = "!f() { git --no-pager diff "$@" --color=always | less -R; }; f"
-#   git diff does not use alternate screen, no matter what PAGER, GIT_PAGER, etc. are
+	dles = dless
+	dless = "!f() { git --no-pager diff "$@" --color=always | less -R; }; f"
+#	git diff does not use alternate screen, no matter what PAGER, GIT_PAGER, etc. are
 	dvim  = "!f() { git --no-pager diff "$@" | vless; }; f"
 	dbat  = "!f() { git --no-pager diff "$@" | bat; }; f"
 	last = log -l HEAD
