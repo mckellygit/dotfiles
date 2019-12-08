@@ -279,7 +279,11 @@ function! MyLightlineGitbranch()
     "return branch ==# '' ? '' : 'git:<' . branch . '>'
     "---
     if exists('b:mckgitstatus')
-      return b:mckgitstatus
+      if winwidth(0) < 90
+        return b:mckgitstatus[-16:]
+      else
+        return b:mckgitstatus
+      endif
     else
       return "git:<???>"
     endif
@@ -296,7 +300,11 @@ function! MyLightlineFilename()
     return 'ac'
   else
     let filename = expand('%:t') !=# '' ? expand('%:t') : '[No Name]'
-    return filename
+    if winwidth(0) < 90
+      return filename[-16:]
+    else
+      return filename
+    endif
     "let filename = expand('%:p') !=# '' ? expand('%:p') : '[No Name]'
     "let threshold = winwidth(0) - 100
     "let threshold = 40
