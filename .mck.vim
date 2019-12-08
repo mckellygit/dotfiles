@@ -537,6 +537,7 @@ command! -bang Tabcloseleft call TabCloseLeft('<bang>')
 let g:qfenter_keymap = {}
 let g:qfenter_keymap.topen = ['<Leader><Tab>', '<C-t>']
 nnoremap <silent> <Leader>fs :Files<CR>
+let g:qf_loclist_window_bottom = 0
 " QFEnter -------------
 
 " lastplace -----------
@@ -2321,6 +2322,28 @@ endif " quickfix quit/close
 
 " -----------------------------
 
+" move current window into a tab
+function WinToTab()
+    "there is only one window
+    if tabpagenr('$') == 1 && winnr('$') == 1
+        return
+    endif
+    let l:tabswap = 0
+    let l:nw = s:NextNormalWindow()
+    if winnr() < l:nw
+        let l:tabswap = 1
+    endif
+    lcl
+    execute "normal \<C-w>T"
+    " try to put it before/after to match prev window loc
+    if l:tabswap == 1
+        tabm -
+    endif
+endfunc
+nnoremap <silent> <unique> <Leader>tw :call WinToTab()<CR>
+
+" -----------------------------
+
 " disable : in visual mode (can still use <C-w>:)
 vnoremap <silent> : <Nop>
 
@@ -2818,6 +2841,12 @@ vnoremap <silent> <Leader>gt <Esc><C-w>gf
 
 " convenience
 cnoreabbrev <silent> hsplit split
+
+" moving between windows, somtimes hard to let go of ctrl before arrow ...
+nnoremap <silent> <C-w><C-Left>  <C-w><Left>
+nnoremap <silent> <C-w><C-Right> <C-w><Right>
+nnoremap <silent> <C-w><C-Up>    <C-w><Up>
+nnoremap <silent> <C-w><C-Down>  <C-w><Down>
 
 " -----------------------------
 
