@@ -2837,8 +2837,8 @@ inoremap <silent> <C-S-Left> <Esc>:tabprevious<CR>
 " or to navigate tabs ...
 nnoremap <silent> <C-w><C-Left>  :tabprevious<CR>
 nnoremap <silent> <C-w><C-Right> :tabnext<CR>
-nnoremap <silent> <C-w><C-Up>    <Nop>
-nnoremap <silent> <C-w><C-Down>  <Nop>
+nnoremap <silent> <C-w><C-Up>    <C-w><Up>
+nnoremap <silent> <C-w><C-Down>  <C-w><Down>
 
 " -----------------------------
 
