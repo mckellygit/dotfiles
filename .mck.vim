@@ -2832,6 +2832,16 @@ inoremap <silent> <C-S-Left> <Esc>:tabprevious<CR>
 "vnoremap <silent> <M-,>  <Esc>:tabprevious<CR>
 "inoremap <silent> <M-,>  <Esc>:tabprevious<CR>
 
+" moving between windows, somtimes hard to let go of ctrl before arrow ...
+" these could map to same cmds: <C-w><C-Left> -> <C-w><Left>
+" or to navigate tabs ...
+nnoremap <silent> <C-w><C-Left>  :tabprevious<CR>
+nnoremap <silent> <C-w><C-Right> :tabnext<CR>
+nnoremap <silent> <C-w><C-Up>    <Nop>
+nnoremap <silent> <C-w><C-Down>  <Nop>
+
+" -----------------------------
+
 " try to open file under cursor
 nnoremap <silent> <Leader>gf gf
 vnoremap <silent> <Leader>gf <Esc>gf
@@ -2841,12 +2851,6 @@ vnoremap <silent> <Leader>gt <Esc><C-w>gf
 
 " convenience
 cnoreabbrev <silent> hsplit split
-
-" moving between windows, somtimes hard to let go of ctrl before arrow ...
-nnoremap <silent> <C-w><C-Left>  <C-w><Left>
-nnoremap <silent> <C-w><C-Right> <C-w><Right>
-nnoremap <silent> <C-w><C-Up>    <C-w><Up>
-nnoremap <silent> <C-w><C-Down>  <C-w><Down>
 
 " -----------------------------
 
