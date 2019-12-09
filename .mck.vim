@@ -230,11 +230,12 @@ endif
 let g:lightline = {
     \ 'colorscheme': 'wombat',
     \ 'active': {
-    \   'left': [ [ 'mymode', 'paste' ], 
+    \   'left': [ [ 'mymode', 'paste' ],
     \             [ 'gitbranch', 'myfilename', 'mymodified', 'mycolonkeyword' ] ]
     \ },
     \ 'inactive': {
-    \   'left': [ [ 'gitbranch', 'myfilename', 'mymodified', 'mycolonkeyword' ] ]
+    \   'left': [ [ 'mymode', 'paste' ],
+    \             [ 'gitbranch', 'myfilename', 'mymodified', 'mycolonkeyword' ] ]
     \ },
     \ 'component_function': {
     \   'mymode': 'MyLightlineMode',
@@ -2870,8 +2871,9 @@ vnoremap <silent> <Leader>gf <Esc>gf
 nnoremap <silent> <Leader>gt <C-w>gf
 vnoremap <silent> <Leader>gt <Esc><C-w>gf
 
-" convenience
+" convenience, so there is [v,h]split, [v,h]new
 cnoreabbrev <silent> hsplit split
+cnoreabbrev <silent> hnew   new
 
 " -----------------------------
 
