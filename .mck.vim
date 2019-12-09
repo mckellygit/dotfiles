@@ -247,6 +247,19 @@ let g:lightline = {
     \   'filename': 'MyLightlineTabFilename',
     \   'modified': 'MyLightlineTabModified',
     \ },
+    \ 'mode_map': {
+        \ 'n'     : 'Nm',
+        \ 'i'     : 'In',
+        \ 'R'     : 'Re',
+        \ 'v'     : 'Vi',
+        \ 'V'     : 'Vl',
+        \ "\<C-v>": 'Vb',
+        \ 'c'     : 'Co',
+        \ 's'     : 'Se',
+        \ 'S'     : 'Sl',
+        \ "\<C-s>": 'Sb',
+        \ 't'     : 'Te',
+        \ },
     \ }
 
 " no mode for qf
