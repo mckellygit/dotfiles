@@ -2872,8 +2872,9 @@ nnoremap <silent> <Leader>gt <C-w>gf
 vnoremap <silent> <Leader>gt <Esc><C-w>gf
 
 " convenience, so there is [v,h]split, [v,h]new
-cnoreabbrev <silent> hsplit split
-cnoreabbrev <silent> hnew   new
+cnoreabbrev <silent> <expr> hsplit (getcmdtype() == ':' && getcmdline() =~ '\s*hsplit\s*')  ? 'split' : 'hsplit'
+cnoreabbrev <silent> <expr> hnew   (getcmdtype() == ':' && getcmdline() =~ '\s*hnew\s*')    ? 'new'   : 'hnew'
+" TODO: look into vim-alias ...
 
 " -----------------------------
 
