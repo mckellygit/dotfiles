@@ -13,6 +13,13 @@
 	helper = cache --timeout=9600
 [checkout]
 	defaultRemote = upstream
+[color "diff"]
+	old = red
+	new = green
+	meta = cyan
+	frag = yellow
+	commit = blue
+	hunk = magenta
 [alias]
 	undo = "!f() { git reset --hard $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
 	dt = difftool
