@@ -43,6 +43,7 @@ fi
 
 if [ $rc0 -eq 0 ] ; then
     # Stopping mythor
+    # Stopping mytoposerver
     # Stopping mysasha
     # Stopping myroxie
     # Stopping myesp
@@ -68,7 +69,7 @@ if [ $rc0 -eq 0 ] ; then
         tag=$$
         trap "rm -f /tmp/${tag}.stop.* 2>/dev/null; exit" SIGINT SIGTERM SIGQUIT
         if [ $rc -eq 0 ] ; then
-            for comp in mythor mysasha myroxie myesp myeclscheduler myeclccserver myeclagent mydfuserver
+            for comp in mythor mytoposerver mysasha myroxie myesp myeclscheduler myeclccserver myeclagent mydfuserver
             do
                 sudo /etc/init.d/hpcc-init -c $comp stop > /tmp/${tag}.stop.$comp 2>&1 &
             done

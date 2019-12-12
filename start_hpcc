@@ -27,7 +27,7 @@ else
     #     but the -id -od -c option creates/rms dirs as user.
     sudo /etc/init.d/dafilesrv start
   
-    for comp in mydfuserver myeclagent myeclccserver myeclscheduler myesp myroxie mysasha mythor
+    for comp in mydfuserver myeclagent myeclccserver myeclscheduler myesp myroxie mysasha mytoposerver mythor
     do
         sudo /etc/init.d/hpcc-init -c $comp start > /tmp/${tag}.start.$comp 2>&1 &
     done

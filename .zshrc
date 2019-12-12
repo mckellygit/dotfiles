@@ -128,6 +128,31 @@ bindkey "\ed" kill-word
 
 # ctrl-d ...
 # set -o ignoreeof
+
+# bash like ctrl d
+#bindkey "^d"  bash-ctrl-d
+#bash-ctrl-d() {
+#  if [[ $CURSOR == 0 && -z $BUFFER ]]
+#  then
+#    [[ -z $IGNOREEOF || $IGNOREEOF == 0 ]] && exit
+##   if [[ $LASTWIDGET == bash-ctrl-d ]]
+##   then
+#      (( IGNOREEOF-- ))
+##   else
+##     (( __BASH_IGNORE_EOF = IGNOREEOF-1 ))
+##   fi
+#    zle send-break
+#  else
+#    zle delete-char-or-list
+#    IGNOREEOF=1
+#  fi
+#}
+#export IGNOREEOF=1
+#setopt ignoreeof
+#autoload -U send-break
+#autoload -U delete-char-or-list
+#zle -N bash-ctrl-d
+
 # like cmd &! (or cmd &|) to stay running after exit ...
 setopt NO_HUP
 #setopt NO_CHECK_JOBS

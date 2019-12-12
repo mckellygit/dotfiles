@@ -49,6 +49,9 @@ if [ -n "$TERM" ] ; then
     fi
 fi
 
+# 2x ctrl-d to exit ...
+# export IGNOREEOF=1
+
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
     xterm-color|*-256color) color_prompt=yes;;
