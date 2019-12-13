@@ -50,7 +50,7 @@ if [ -n "$TERM" ] ; then
 fi
 
 # 2x ctrl-d to exit ...
-# export IGNOREEOF=1
+export IGNOREEOF=1
 
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
