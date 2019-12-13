@@ -63,6 +63,10 @@ precmd () { if [[ -n "$SSH_CLIENT" ]] ; then PS1='%F{007}ssh%f-%F{100}%n@%m%f:%F
 setopt APPEND_HISTORY INC_APPEND_HISTORY
 setopt HIST_IGNORE_DUPS HIST_IGNORE_ALL_DUPS HIST_EXPIRE_DUPS_FIRST HIST_SAVE_NO_DUPS HIST_FIND_NO_DUPS
 
+setopt HIST_IGNORE_SPACE
+# save cmds to history that start with leading space(s)
+# unsetopt HIST_IGNORE_SPACE
+
 # to show .dirs in tab completion ...
 setopt globdots
 # to allow rm f* e* to work when no f* found ...

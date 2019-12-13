@@ -15,8 +15,8 @@ esac
 # or see .inputrc file:
 # set enable-bracketed-paste on
 
-# don't put duplicate lines or lines starting with space in the history.
-# See bash(1) for more options
+# don't put duplicate lines in the history (ignoredups).
+# See bash(1) for more options - skipping ignorespace (ignoreboth)
 HISTCONTROL=ignoreboth
 
 # append to the history file, don't overwrite it
