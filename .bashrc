@@ -14,6 +14,8 @@ esac
 # Disable bracketed paste: printf "\e[?2004l"
 # or see .inputrc file:
 # set enable-bracketed-paste on
+# or:
+bind 'set enable-bracketed-paste on'
 
 # don't put duplicate lines in the history (ignoredups).
 # See bash(1) for more options - skipping ignorespace (ignoreboth)

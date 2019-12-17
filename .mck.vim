@@ -2978,17 +2978,17 @@ elseif exists("g:vless")
 else
  "autocmd BufReadPost,BufNewFile,FileReadPost,TabEnter * call MyGitStatus()
   autocmd BufWinEnter * call MyGitStatus()
-  autocmd BufUnload * call MyGitLeave()
+  autocmd BufUnload   * call MyGitLeave()
 endif
 
 " -----------------------------
 
 " enable bracketed paste in terminal mode
 if &term =~ "^screen" || &term =~ "^tmux"
-  let &t_BE = "\e[?2004h"
-  let &t_BD = "\e[?2004l"
-  exec "set t_PS=\e[200~"
-  exec "set t_PE=\e[201~"
+  let &t_BE="\<Esc>[?2004h"
+  let &t_BD="\<Esc>[?2004l"
+  let &t_PS="\<Esc>[200~"
+  let &t_PE="\<Esc>[201~"
   " tmux will send xterm-style keys when its xterm-keys option is on
   exec "set <xUp>=\e[1;*A"
   exec "set <xDown>=\e[1;*B"
