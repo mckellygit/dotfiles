@@ -876,14 +876,13 @@ set mouse=a
 
 " use shift + left click to get back to previous (mouse=~a)
 
-" use both
 " clipboard '+' (XA_CLIPBOARD:unnamedplus)
-" and
-" primary '*' (XA_PRIMARY:unnamed)
+" primary   '*' (XA_PRIMARY:unnamed)
 " should we use " or + or * reg ?
+" NOTE: using both seems to mess things up, rely on parcellite etc. to sync
 "set clipboard^=unnamed
 "set clipboard^=unnamedplus
-set clipboard^=unnamed,unnamedplus
+set clipboard^=unnamed
 
 " need enough time for mapped / <Leader> key sequences
 "set timeoutlen=1000 ttimeoutlen=0
@@ -922,8 +921,8 @@ vnoremap i <Nop>
 "vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '""y <Bar> :<C-u>call system("xsel -i -b -t 5000", @")<CR> <Bar> gv<Esc>i' : '""y <Bar> :<C-u>call system("xsel -i -b -t 5000", @")<CR> <Bar> gv<Esc>'
 "vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '""y <Bar> :<C-u>call system("xsel -i -b -t 5000", @")<CR> <Bar> gv<Esc>i' : '""y <Bar> :<C-u>call system("xsel -i -b -t 5000", @")<CR> <Bar> gv<Esc>'
 " should we use " or + or * reg ? And what with clipboard setting ?
-vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"+ygv<Esc>i' : '"+ygv<Esc>'
-vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"+ygv<Esc>i' : '"+ygv<Esc>'
+vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"*ygv<Esc>i' : '"*ygv<Esc>'
+vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"*ygv<Esc>i' : '"*ygv<Esc>'
 
 " cut selection
 "vnoremap <silent> <C-x> "+d<LeftRelease>
@@ -931,7 +930,7 @@ vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"+ygv<Esc>i' : '"+ygv
 " if X11 Forwarding is not on/allowed then perhaps vim copy to + and * does not work over ssh ?
 "vnoremap <silent> <C-x> ""d <Bar> :<C-u>call system("xsel -i -b -t 5000", @")<CR>
 " should we use " or + or * reg ? And what with clipboard setting ?
-vnoremap <silent> <C-x> "+d
+vnoremap <silent> <C-x> "*d
 
 " <C-v> to toggle block-mode instead of on or cancel visual-mode
 " simple and almost there -
@@ -1050,7 +1049,7 @@ inoremap <silent> <M-p> <C-r>"
 function! MyPasteNoJump() abort
   nmap <silent> <buffer> p p
   let &scrolljump=1
-  execute "silent! normal \"+p"
+  execute "silent! normal \"*p"
   "execute "normal p"
   let &scrolljump=-50
   nmap <silent> <buffer> p :call MyPasteNoJump()<CR>
@@ -1173,12 +1172,12 @@ noremap x "_x
 " wc is already window close, use wx (word exchange)
 
 " exchange whole word (from beg) with clipboard
-nnoremap <silent> <Leader>wx :let @0=@+<CR>ciw<C-r>0<Esc>:let @"=@0<CR>:let @+=@0<CR>
-vnoremap <silent> <Leader>wx <C-\><C-n>:let @0=@+<CR>ciw<C-r>0<Esc>:let @"=@0<CR>:let @+=@0<CR>
+nnoremap <silent> <Leader>wx :let @0=@*<CR>ciw<C-r>0<Esc>:let @"=@0<CR>:let @*=@0<CR>
+vnoremap <silent> <Leader>wx <C-\><C-n>:let @0=@*<CR>ciw<C-r>0<Esc>:let @"=@0<CR>:let @*=@0<CR>
 
 " replace at cursor pos with clipboard (not from beg of word like \we above)
-nnoremap <silent> <Leader>wr :let @0=@+<CR>cw<C-r>0<Esc>:let @"=@0<CR>:let @+=@0<CR>
-vnoremap <silent> <Leader>wr <C-\><C-n>:let @0=@+<CR>cw<C-r>0<Esc>:let @"=@0<CR>:let @+=@0<CR>
+nnoremap <silent> <Leader>wr :let @0=@*<CR>cw<C-r>0<Esc>:let @"=@0<CR>:let @*=@0<CR>
+vnoremap <silent> <Leader>wr <C-\><C-n>:let @0=@*<CR>cw<C-r>0<Esc>:let @"=@0<CR>:let @*=@0<CR>
 
 " zap (delete) whole word under cursor w/o overwriting " reg
 "nnoremap <silent> <Leader>wz lb"_dw
@@ -1187,8 +1186,8 @@ nnoremap <silent> <Leader>wz "_daw
 vnoremap <silent> <Leader>wz <C-\><C-n>"_daw
 
 " zap with saving to reg and clipboard
-nnoremap <silent> <Leader>wZ daw:let @0=@"<CR>:let @+=@0<CR>
-vnoremap <silent> <Leader>wZ <C-\><C-n>daw:let @0=@"<CR>:let @+=@0<CR>
+nnoremap <silent> <Leader>wZ daw:let @0=@"<CR>:let @*=@0<CR>
+vnoremap <silent> <Leader>wZ <C-\><C-n>daw:let @0=@"<CR>:let @*=@0<CR>
 
 " change word starting at cursor, like vi
 nnoremap <silent> <Leader>we ce
@@ -1206,8 +1205,8 @@ vnoremap <silent> <Leader>wn <C-\><C-n>ciw
 nnoremap <silent> <Esc>1 P
 vnoremap <silent> <Esc>1 <Esc>P
 inoremap <silent> <Esc>1 <Esc>P
-cnoremap <Esc>1 <C-r>+
-tnoremap <Esc>1 <C-w>"+
+cnoremap <Esc>1 <C-r>*
+tnoremap <Esc>1 <C-w>"*
 
 " -------------------
 
@@ -1303,6 +1302,11 @@ nnoremap <silent> <M-Left>  zhh
 nnoremap <silent> <M-Right> lzl
 vnoremap <silent> <M-Left>  zhh
 vnoremap <silent> <M-Right> lzl
+
+" use w, not W - but should skip ()&,[]{}'"+-/:;
+nnoremap <silent> <C-Right> w
+" use b, not B - but should skip ()&,[]{}'"+-/:;
+nnoremap <silent> <C-Left>  b
 
 " ---------
 
