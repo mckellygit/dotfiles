@@ -883,7 +883,7 @@ set mouse=a
 " should we use " or + or * reg ?
 "set clipboard^=unnamed
 "set clipboard^=unnamedplus
-set clipboard^=unnamedplus
+set clipboard^=unnamed,unnamedplus
 
 " need enough time for mapped / <Leader> key sequences
 "set timeoutlen=1000 ttimeoutlen=0
@@ -1159,6 +1159,9 @@ vnoremap <silent> <Leader>wG y<C-\><C-n>:set hlsearch<CR>?<C-r>"<CR>
 " and the *, # ...
 vnoremap <silent> * y<C-\><C-n>:set hlsearch<CR>/<C-r>"<CR>
 vnoremap <silent> # y<C-\><C-n>:set hlsearch<CR>?<C-r>"<CR>
+
+" dont replace clipboard selection with deleted char (x)
+noremap x "_x
 
 " change word with yanked/selected word
 " "_dw deletes word without putting it into reg
