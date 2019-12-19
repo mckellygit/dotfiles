@@ -1159,8 +1159,14 @@ vnoremap <silent> <Leader>wG y<C-\><C-n>:set hlsearch<CR>?<C-r>"<CR>
 vnoremap <silent> * y<C-\><C-n>:set hlsearch<CR>/<C-r>"<CR>
 vnoremap <silent> # y<C-\><C-n>:set hlsearch<CR>?<C-r>"<CR>
 
-" dont replace clipboard selection with deleted char (x)
+" dont replace clipboard selection with deleted char (x,X)
 noremap x "_x
+noremap X "_X
+" do we want the same for delete-word ?
+"noremap dw "_dw
+"noremap db "_db
+"noremap dW "_dW
+"noremap dB "_dB
 
 " change word with yanked/selected word
 " "_dw deletes word without putting it into reg
@@ -1173,19 +1179,21 @@ noremap x "_x
 
 " exchange whole word (from beg) with clipboard
 nnoremap <silent> <Leader>wx :let @0=@*<CR>ciw<C-r>0<Esc>:let @"=@0<CR>:let @*=@0<CR>
-vnoremap <silent> <Leader>wx <C-\><C-n>:let @0=@*<CR>ciw<C-r>0<Esc>:let @"=@0<CR>:let @*=@0<CR>
+" vis-mode of this doesnt really make sense
+"vnoremap <silent> <Leader>wx <C-\><C-n>:let @0=@*<CR>ciw<C-r>0<Esc>:let @"=@0<CR>:let @*=@0<CR>
 
 " replace at cursor pos with clipboard (not from beg of word like \we above)
 nnoremap <silent> <Leader>wr :let @0=@*<CR>cw<C-r>0<Esc>:let @"=@0<CR>:let @*=@0<CR>
-vnoremap <silent> <Leader>wr <C-\><C-n>:let @0=@*<CR>cw<C-r>0<Esc>:let @"=@0<CR>:let @*=@0<CR>
+" vis-mode of this doesnt really make sense
+"vnoremap <silent> <Leader>wr <C-\><C-n>:let @0=@*<CR>cw<C-r>0<Esc>:let @"=@0<CR>:let @*=@0<CR>
 
-" zap (delete) whole word under cursor w/o overwriting " reg
+" zap (delete) whole word under cursor but w/o saving deleted word to clipboard
 "nnoremap <silent> <Leader>wz lb"_dw
 "nnoremap <silent> <Leader>wz lb"_dW
 nnoremap <silent> <Leader>wz "_daw
 vnoremap <silent> <Leader>wz <C-\><C-n>"_daw
 
-" zap with saving to reg and clipboard
+" zap whole word w/ saving deleted word to clipboard
 nnoremap <silent> <Leader>wZ daw:let @0=@"<CR>:let @*=@0<CR>
 vnoremap <silent> <Leader>wZ <C-\><C-n>daw:let @0=@"<CR>:let @*=@0<CR>
 
@@ -1193,13 +1201,22 @@ vnoremap <silent> <Leader>wZ <C-\><C-n>daw:let @0=@"<CR>:let @*=@0<CR>
 nnoremap <silent> <Leader>we ce
 vnoremap <silent> <Leader>we <C-\><C-n>ce
 
-" delete word starting at cursor, like vi
-nnoremap <silent> <Leader>wd dw
-vnoremap <silent> <Leader>wd <C-\><C-n>dw
+" delete word at cursor pos, like vi, but w/o saving deleted word to clipboard
+nnoremap <silent> <Leader>wd "_dw
+vnoremap <silent> <Leader>wd <C-\><C-n>"_dw
+
+" delete word at cursor pos, but w/ saving deleted word to clipboard
+nnoremap <silent> <Leader>wD dw:let @0=@"<CR>:let @*=@0<CR>
+vnoremap <silent> <Leader>wD <C-\><C-n>dw:let @0=@"<CR>:let @*=@0<CR>
 
 " new whole word (from beg) [cannot use wc]
 nnoremap <silent> <Leader>wn ciw
 vnoremap <silent> <Leader>wn <C-\><C-n>ciw
+
+" like D (del from cursor pos to end of line) but w/o saving what was deleted to clipboard
+nnoremap <silent> <Leader>D "_D
+" like visual-mode D (del whole selection) but w/o saving what was deleted to clipboard (what was selected was already saved)
+vnoremap <silent> <Leader>D "_x
 
 " Terminator plugin (and tmux) ctrl-insert maps to <Esc>1 for paste (ie like C-v / C-S-v)
 nnoremap <silent> <Esc>1 P
