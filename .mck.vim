@@ -558,7 +558,8 @@ command! -bang Tabcloseleft call TabCloseLeft('<bang>')
 " add C-t to open in new tab to be consistent with fzf
 let g:qfenter_keymap = {}
 let g:qfenter_keymap.topen = ['<Leader><Tab>', '<C-t>']
-nnoremap <silent> <Leader>fs :Files<CR>
+" add \fz mapping also
+nnoremap <silent> <Leader>fz :Files<CR>
 let g:qf_loclist_window_bottom = 0
 " QFEnter -------------
 
