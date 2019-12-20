@@ -2045,12 +2045,12 @@ let g:rtagsAutoReindexOnWrite=1
 function RtagsToggleColonKeyword() abort
   if (g:rtagsUseColonKeyword == 0)
     let g:rtagsUseColonKeyword = 1
-    let l:rtagskeywordmsg = '[vim-rtags] use colon is enabled'
+    let l:rtagskeywordmsg = '[vim-rtags] use symbol colon is enabled'
   else
     let g:rtagsUseColonKeyword = 0
-    let l:rtagskeywordmsg = '[vim-rtags] use colon is disabled'
+    let l:rtagskeywordmsg = '[vim-rtags] use symbol colon is disabled'
   endif
-  echohl | echo l:rtagskeywordmsg | echohl None
+  echohl DiffChange | echo l:rtagskeywordmsg | echohl None
   sleep 500m
   redraw!
 endfunction
