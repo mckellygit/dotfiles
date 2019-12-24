@@ -532,8 +532,9 @@ autocmd FileType GV setlocal cursorline
 autocmd FileType GV set foldlevelstart=1
 
 " can we map q to quit ?
-autocmd FileType GV nmap <silent> <buffer> Q :qa!<CR>
+autocmd FileType GV nmap <silent> <buffer> qq :qa!<CR>
 autocmd FileType GV nmap <silent> <buffer> <Leader>wc :call <SID>QuitIfOnlyNoNameLeft()<CR>
+autocmd FileType GV nmap <silent> <buffer> <Leader>wq :call <SID>QuitIfOnlyNoNameLeft()<CR>
 
 "autocmd FileType GV cnoreabbrev <silent> <expr> q! (getcmdtype() == ':' && getcmdline() =~ '\s*q!\s*') ? 'qa!' : 'q!'
 
@@ -544,14 +545,14 @@ function! TabCloseRightQuit(bang)
   endwhile
   execute "qa!"
 endfunction
-command! -bang Tabcloserightquit call TabCloseRightQuit('<bang>')
+command! -bang Tabcloserightquit silent! call TabCloseRightQuit('<bang>')
 
 function! TabCloseLeft(bang)
   while tabpagenr() > 1
     exe 'tabclose' . a:bang . ' 1'
   endwhile
 endfunction
-command! -bang Tabcloseleft call TabCloseLeft('<bang>')
+command! -bang Tabcloseleft silent! call TabCloseLeft('<bang>')
 " gv -----------
 
 " QFEnter -------------
@@ -2361,7 +2362,7 @@ endfunction
 if has('autocmd')
     aug AutoCloseAllQF
         au!
-        autocmd WinEnter * nested call s:QuitIfOnlyWindow()
+        autocmd WinEnter * nested silent! call s:QuitIfOnlyWindow()
     aug END
 endif
 
@@ -2781,6 +2782,8 @@ vnoremap <silent> <Leader>tk <C-\><C-n>:tabonly<CR>
 " window close (same as tab close)
 nnoremap <silent> <Leader>wc           :conf q<CR>
 vnoremap <silent> <Leader>wc <C-\><C-n>:conf q<CR>
+nnoremap <silent> <Leader>wq           :conf q<CR>
+vnoremap <silent> <Leader>wq <C-\><C-n>:conf q<CR>
 " window keep current and close all others
 nnoremap <silent> <Leader>wk           :only<CR>
 vnoremap <silent> <Leader>wk <C-\><C-n>:only<CR>
@@ -3002,8 +3005,8 @@ elseif exists("g:vless")
   let b:mckgitstatus = "less"
 else
  "autocmd BufReadPost,BufNewFile,FileReadPost,TabEnter * call MyGitStatus()
-  autocmd BufWinEnter * call MyGitStatus()
-  autocmd BufUnload   * call MyGitLeave()
+  autocmd BufWinEnter * silent! call MyGitStatus()
+  autocmd BufUnload   * silent! call MyGitLeave()
 endif
 
 " -----------------------------
