@@ -2088,25 +2088,29 @@ nmap <Leader>p0 <Plug>UnconditionalPasteCharBefore
 " also pc
 nmap <Leader>p1 <Plug>UnconditionalPasteCharAfter
 
+" at end of line
 nmap <Leader>pe $<Plug>UnconditionalPasteCharAfter
-"
+" at beg of line
+nmap <Leader>pa 0<Plug>UnconditionalPasteCharBefore
+
 " change l to i to match current indentation ...
 "nmap <Leader>Pl <Plug>UnconditionalPasteIndentedBefore
 "nmap <Leader>pl <Plug>UnconditionalPasteIndentedAfter
-nmap <Leader>Pl <Plug>UnconditionalPasteLineBefore
 nmap <Leader>pl <Plug>UnconditionalPasteLineAfter
+nmap <Leader>pL <Plug>UnconditionalPasteLineBefore
 "
-nmap <Leader>Pb <Plug>UnconditionalPasteBlockBefore
 nmap <Leader>pb <Plug>UnconditionalPasteBlockAfter
+nmap <Leader>pB <Plug>UnconditionalPasteBlockBefore
 
-nmap <Leader>Pi <Plug>UnconditionalPasteIndentedBefore
 nmap <Leader>pi <Plug>UnconditionalPasteIndentedAfter
+nmap <Leader>pI <Plug>UnconditionalPasteIndentedBefore
 
 " use . for more (>) and , for less (<)
-nmap <Leader>P. <Plug>UnconditionalPasteMoreIndentBefore
 nmap <Leader>p. <Plug>UnconditionalPasteMoreIndentAfter
-nmap <Leader>P, <Plug>UnconditionalPasteLessIndentBefore
+nmap <Leader>p> <Plug>UnconditionalPasteMoreIndentBefore
+
 nmap <Leader>p, <Plug>UnconditionalPasteLessIndentAfter
+nmap <Leader>p< <Plug>UnconditionalPasteLessIndentBefore
 
 " slightly confusing and has some delay ...
 "nmap <Leader>P> <Plug>UnconditionalPasteShiftedBefore
