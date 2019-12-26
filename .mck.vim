@@ -2729,6 +2729,10 @@ au TerminalOpen * set signcolumn=no
 " use green to match other vundle update comments
 hi! link Ignore deusGreen
 
+" seems a little more visible than white against reverse red bg ...
+hi! ErrorMsg ctermfg=black
+hi! WarningMsg ctermfg=black
+
 " -----------
 
 " undo all changes - instead of just :e! ...
