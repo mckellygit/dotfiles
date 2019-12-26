@@ -531,7 +531,6 @@ autocmd FileType GV setlocal cursorline
 " start with folds open
 autocmd FileType GV set foldlevelstart=1
 
-" can we map q to quit ?
 autocmd FileType GV nmap <silent> <buffer> qq :qa!<CR>
 autocmd FileType GV nmap <silent> <buffer> <Leader>wc :call <SID>QuitIfOnlyNoNameLeft()<CR>
 autocmd FileType GV nmap <silent> <buffer> <Leader>wq :call <SID>QuitIfOnlyNoNameLeft()<CR>
@@ -2036,6 +2035,9 @@ nmap <C-]> :call rtags#JumpTo(g:SAME_WINDOW)<CR>
 nnoremap <silent> <Leader>cc           :ccl\|lcl\|pcl<CR>:echo<CR>
 vnoremap <silent> <Leader>cc <C-\><C-n>:ccl\|lcl\|pcl<CR>:echo<CR>
 "noremap <silent> <Leader>cc :windo lcl\|ccl\|pcl<CR>:echo<CR>
+" qq to also close location list
+autocmd BufReadPost quickfix nnoremap <silent> <buffer> qq :ccl\|lcl\|pcl<CR>:echo<CR>
+" TODO: should qq from regular window also close these ?
 "
 " auto-reindex on file save ...
 " but shouldn't rdm automatically pick up changes ?
