@@ -77,6 +77,8 @@ h() { if [ -z "$*" ]; then history 1; else history 1 | egrep "$@"; fi; }
 autoload -U select-word-style
 select-word-style bash
 
+zstyle ':zle:*' skip-whitespace-first true
+
 # to get up-arrow to put cursor at end of line instead of beginning ...
 autoload -Uz up-line-or-beginning-search
 autoload -Uz down-line-or-beginning-search
@@ -401,6 +403,11 @@ export ZSH_AUTOSUGGEST_MANUAL_REBIND=1
 export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 export ZSH_AUTOSUGGEST_USE_ASYNC=1
 
+#ZSH_AUTOSUGGEST_ACCEPT_WIDGETS=("${(@)ZSH_AUTOSUGGEST_ACCEPT_WIDGETS:#vi-forward-blank-word}")
+ZSH_AUTOSUGGEST_ACCEPT_WIDGETS=(forward-char vi-forward-char end-of-line vi-end-of-line)
+
+ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS=(forward-word emacs-forward-word vi-forward-word vi-forward-word-end vi-forward-blank-word vi-forward-blank-word-end vi-find-next-char vi-find-next-char-skip)
+
 # autosuggest-accept: Accepts the current suggestion.
 # autosuggest-execute: Accepts and executes the current suggestion.
 # autosuggest-clear: Clears the current suggestion.
@@ -412,7 +419,7 @@ export ZSH_AUTOSUGGEST_USE_ASYNC=1
 # bindkey '^ ' autosuggest-accept
 
 # end - already bound to accept (also Alt-Space)
-bindkey '^\' autosuggest-accept
+bindkey '^\' forward-word
 # ctrl-Enter to execute
 bindkey '^\n' autosuggest-execute
 
