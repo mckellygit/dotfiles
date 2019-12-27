@@ -93,6 +93,11 @@ bindkey '^e' end-of-line
 bindkey -M menuselect '^[[Z' reverse-menu-complete
 bindkey '^I' expand-or-complete-prefix
 
+# Home
+bindkey "\e[1~" beginning-of-line
+# End
+bindkey "\e[4~" end-of-line
+
 # --------------------
 
 # Ctrl-Left
@@ -138,6 +143,27 @@ zle -N my-delete-word
 bindkey "\e[3;6~" my-delete-word
 # Alt-DEL - whole word
 bindkey "\e[3;3~" my-delete-word
+
+# DEL - delete current char, but also if at end then del backward char
+function my-delete-char() {
+# local WORDCHARS="${WORDCHARS:s#/#}"
+  pos1=$CURSOR
+  len1=$#BUFFER
+  zle delete-char
+  pos2=$CURSOR
+  len2=$#BUFFER
+  if [[ pos1 -eq pos2 && len1 -eq len2 ]] ; then
+    zle vi-backward-delete-char
+  fi
+}
+zle -N my-delete-char
+bindkey "\e[3~" my-delete-char
+
+# Ins - no-op
+function noop() {
+}
+zle -N noop
+bindkey "\e[2~" noop
 
 # --------------------
 
