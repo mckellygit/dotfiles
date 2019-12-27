@@ -100,32 +100,44 @@ bindkey "\e[1;5D" backward-word
 # Ctrl-Right
 bindkey "\e[1;5C" forward-word
 
-#bindkey '^P' backward-kill-word
 # Ctrl-DEL - backward
 bindkey "\e[3;5~" backward-kill-word
+#bindkey '^P' backward-kill-word
+bindkey "^w"  backward-kill-word
 
-# Shift-DEL - forward
-bindkey "\e[3;2~" kill-word
+# Alt-d
+bindkey "\ed" kill-word
 
 autoload delete-whole-word-match
 zle -N delete-whole-word-match
+
+function my-kill-word() {
+# local WORDCHARS="${WORDCHARS:s#/#}"
+  pos1=$CURSOR
+  len1=$#BUFFER
+  zle kill-word
+  pos2=$CURSOR
+  len2=$#BUFFER
+  if [[ pos1 -eq pos2 && len1 -eq len2 ]] ; then
+    zle backward-kill-word
+  fi
+}
+zle -N my-kill-word
+# Shift-DEL - del current word, but also if at end del backward word
+bindkey "\e[3;2~" my-kill-word
+# same for ^x
+bindkey "^x" my-kill-word
+
 function my-delete-word() {
 # local WORDCHARS="${WORDCHARS:s#/#}"
-# zle backward-kill-word
-  zle backward-word
-  zle kill-word
-# zle vi-backward-delete-char
+  zle forward-word
+  zle backward-kill-word
 }
 zle -N my-delete-word
-
 # Ctrl-Shift-DEL - whole word
 bindkey "\e[3;6~" my-delete-word
-
 # Alt-DEL - whole word
 bindkey "\e[3;3~" my-delete-word
-
-bindkey "^w"  backward-kill-word
-bindkey "\ed" kill-word
 
 # --------------------
 
@@ -420,6 +432,6 @@ ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS=(forward-word emacs-forward-word vi-forwa
 
 # end - already bound to accept (also Alt-Space)
 bindkey '^\' forward-word
-# ctrl-Enter to execute
+# ctrl-Enter to execute - TODO: perhaps wish it was a no-op unless at end of cmd ...
 bindkey '^\n' autosuggest-execute
 
