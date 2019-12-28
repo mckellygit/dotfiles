@@ -7,12 +7,16 @@ set enable-bracketed-paste on
 "\e[1;5D": vi-prev-word
 "\e[1;5C": vi-next-word
 #
-#"\C-p": backward-kill-word
-# C-DEL - backward
-"\e[3;5~": backward-kill-word
+# Home
+"\e[1~": beginning-of-line
+# End
+"\e[4~": end-of-line
 #
-# S-DEL - forward
-"\e[3;2~": kill-word
+# S-DEL - backward kill word
+"\e[3;2~": backward-kill-word
+#
+# C-DEL - kill word - want to continue backwards ...
+"\e[3;5~": kill-word
 #
 # C-S-DEL - want whole-word and space
 "\e[3;6~": backward-kill-word
@@ -20,4 +24,14 @@ set enable-bracketed-paste on
 "\e[3;3~": backward-kill-word
 #
 "\C-w": backward-kill-word
+#"\C-p": backward-kill-word
+
+# Alt-d kill word
 "\e-d": kill-word
+#
+# DEL
+"\e[3~": delete-char
+#
+# INS - essentially a no-op ...
+"\e[2~": redraw-current-line
+#
