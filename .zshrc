@@ -105,16 +105,13 @@ bindkey "\e[1;5D" backward-word
 # Ctrl-Right
 bindkey "\e[1;5C" forward-word
 
-# Ctrl-DEL - backward
-bindkey "\e[3;5~" backward-kill-word
-#bindkey '^P' backward-kill-word
+# Shift-DEL - backward kill word
+bindkey "\e[3;2~" backward-kill-word
 bindkey "^w"  backward-kill-word
+#bindkey '^P' backward-kill-word
 
-# Alt-d
+# Alt-d kill word
 bindkey "\ed" kill-word
-
-autoload delete-whole-word-match
-zle -N delete-whole-word-match
 
 function my-kill-word() {
 # local WORDCHARS="${WORDCHARS:s#/#}"
@@ -123,15 +120,19 @@ function my-kill-word() {
   zle kill-word
   pos2=$CURSOR
   len2=$#BUFFER
-  if [[ pos1 -eq pos2 && len1 -eq len2 ]] ; then
+  if [[ pos1 -eq pos2 && pos2 -eq len2 && len1 -eq ((len2+1)) ]] ; then
+    if [[ $BUFFER[len1] == "" ]] ; then
+      zle backward-kill-word
+    fi
+  elif [[ pos1 -eq pos2 && len1 -eq len2 ]] ; then
     zle backward-kill-word
   fi
 }
 zle -N my-kill-word
-# Shift-DEL - del current word, but also if at end del backward word
-bindkey "\e[3;2~" my-kill-word
+# Ctrl-DEL - del current word, but also if at end del backward word
+bindkey "\e[3;5~" my-kill-word
 # same for ^x
-bindkey "^x" my-kill-word
+#bindkey "^x" my-kill-word
 
 function my-delete-word() {
 # local WORDCHARS="${WORDCHARS:s#/#}"
@@ -143,6 +144,10 @@ zle -N my-delete-word
 bindkey "\e[3;6~" my-delete-word
 # Alt-DEL - whole word
 bindkey "\e[3;3~" my-delete-word
+
+# seems to do the same thing as my-delete-word
+autoload delete-whole-word-match
+zle -N delete-whole-word-match
 
 # DEL - delete current char, but also if at end then del backward char
 function my-delete-char() {
