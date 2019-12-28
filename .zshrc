@@ -45,6 +45,9 @@ zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 # To disable bracketed paste
 # unset zle_bracketed_paste
 
+# prompt styles (prompt -l to list) ...
+# autoload -U promptinit && promptinit
+
 setopt PROMPT_SUBST
 setopt PROMPTSUBST
 
@@ -74,9 +77,11 @@ setopt -o cshnullglob
 
 h() { if [ -z "$*" ]; then history 1; else history 1 | egrep "$@"; fi; }
 
+# --------------------
+
 autoload -U select-word-style
 select-word-style bash
-
+# perhaps same thing as above
 zstyle ':zle:*' skip-whitespace-first true
 
 # to get up-arrow to put cursor at end of line instead of beginning ...
@@ -98,21 +103,32 @@ bindkey "\e[1~" beginning-of-line
 # End
 bindkey "\e[4~" end-of-line
 
-# --------------------
-
 # Ctrl-Left
 bindkey "\e[1;5D" backward-word
 # Ctrl-Right
 bindkey "\e[1;5C" forward-word
+
+# Alt-d kill word
+bindkey "\ed" kill-word
+
+# --------------------
+
+# Ins - no-op
+function noop() {
+}
+zle -N noop
+bindkey "\e[2~" noop
+
+# -------
 
 # Shift-DEL - backward kill word
 bindkey "\e[3;2~" backward-kill-word
 bindkey "^w"  backward-kill-word
 #bindkey '^P' backward-kill-word
 
-# Alt-d kill word
-bindkey "\ed" kill-word
+# -------
 
+# del current word, but also if at end del backward word
 function my-kill-word() {
 # local WORDCHARS="${WORDCHARS:s#/#}"
   pos1=$CURSOR
@@ -129,27 +145,40 @@ function my-kill-word() {
   fi
 }
 zle -N my-kill-word
+
+# could use WORDCHARS above or this to select words ...
+#zstyle ':zle:my-kill-word' word-style space
+
 # Ctrl-DEL - del current word, but also if at end del backward word
 bindkey "\e[3;5~" my-kill-word
 # same for ^x
 #bindkey "^x" my-kill-word
 
+# -------
+
+# del current WHOLE word, but also if at end del backward word
 function my-delete-word() {
 # local WORDCHARS="${WORDCHARS:s#/#}"
   zle forward-word
   zle backward-kill-word
 }
 zle -N my-delete-word
-# Ctrl-Shift-DEL - whole word
+
+# could use WORDCHARS above or this to select words ...
+#zstyle ':zle:my-delete-word' word-style space
+
+# Ctrl-Shift-DEL - del current WHOLE word, but also if at end del backward word
 bindkey "\e[3;6~" my-delete-word
-# Alt-DEL - whole word
+# same for Alt-DEL
 bindkey "\e[3;3~" my-delete-word
 
 # seems to do the same thing as my-delete-word
 autoload delete-whole-word-match
 zle -N delete-whole-word-match
 
-# DEL - delete current char, but also if at end then del backward char
+# -------
+
+# delete current char, but also if at end then del backward char
 function my-delete-char() {
 # local WORDCHARS="${WORDCHARS:s#/#}"
   pos1=$CURSOR
@@ -162,18 +191,10 @@ function my-delete-char() {
   fi
 }
 zle -N my-delete-char
+# DEL - delete current char, but also if at end then del backward char
 bindkey "\e[3~" my-delete-char
 
-# Ins - no-op
-function noop() {
-}
-zle -N noop
-bindkey "\e[2~" noop
-
 # --------------------
-
-# prompt styles (prompt -l to list) ...
-# autoload -U promptinit && promptinit
 
 # ctrl-d ...
 # set -o ignoreeof
@@ -200,11 +221,15 @@ function bash-ctrl-d() {
 zle -N bash-ctrl-d
 bindkey "^d" bash-ctrl-d
 
+# --------------------
+
 # like cmd &! (or cmd &|) to stay running after exit ...
 setopt NO_HUP
 #setopt NO_CHECK_JOBS
 
 export KEYTIMEOUT=1
+
+# --------------------
 
 alias ll='ls -ltr'
 alias lla='ls -lAtr'
@@ -439,6 +464,8 @@ if [[ -z "$GRUVBOX" ]] && [[ -n "$TMUX" ]] && [[ -f ~/.gruvbox_256palette.sh ]] 
     source ~/.gruvbox_256palette.sh
 fi
 
+# --------------------
+
 # zsh-suggestions
 source ~/Downloads/zsh-autosuggestions/zsh-autosuggestions.zsh
 
@@ -465,4 +492,6 @@ ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS=(forward-word emacs-forward-word vi-forwa
 bindkey '^\' forward-word
 # ctrl-Enter to execute - TODO: perhaps wish it was a no-op unless at end of cmd ...
 bindkey '^\n' autosuggest-execute
+
+# --------------------
 
