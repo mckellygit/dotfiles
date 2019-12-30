@@ -77,6 +77,9 @@ setopt -o cshnullglob
 
 h() { if [ -z "$*" ]; then history 1; else history 1 | egrep "$@"; fi; }
 
+# to not eat the space before | or & ...
+export ZLE_REMOVE_SUFFIX_CHARS=""
+
 # --------------------
 
 autoload -U select-word-style
