@@ -2000,12 +2000,14 @@ let g:localvimrc_persistent = 1
 " start rdm daemon
 " run rc -J /path/to/compile_commands.json
 "
+" -------------------------------------
 "\ri	Symbol info
-"\rj	Follow location
+"\rj	Follow location (jump to)
 "\rJ	Follow declaration location
-"\rS	Follow location (open in horizontal split)
+"\rH	Follow location (open in horizontal split)
 "\rV	Follow location (open in vertical split)
-"\rT	Follow location open in a new tab
+"\rT	Follow location (open in new tab)
+"\rt	Follow location (if not in same file then open in new tab)
 "\rp	Jump to parent
 "\rc	Find subclasses
 "\rC	Find superclasses
@@ -2018,7 +2020,10 @@ let g:localvimrc_persistent = 1
 "\rw	Rename symbol under cursor
 "\rv	Find virtuals
 "\rd	Diagnose file for warnings and errors
-"\rb	Jump to previous location
+"\rb	Jump to prev location
+"\r,	Jump to prev location (<)
+"\r.	Jump to next location (>)
+" -------------------------------------
 "
 let g:rtagsUseLocationList=1
 " dont start rdm if from sudo
