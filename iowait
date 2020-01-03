@@ -1,0 +1,28 @@
+#!/bin/bash
+
+while true
+do
+    while read cpu u n s i iow iq siq a1 a2 a3 a4 a5 a6 a7
+    do 
+        #echo $cpu $u $n $s $i $iow $iq $siq
+
+        total=$u
+        total=$((total + s))
+        total=$((total + i))
+        total=$((total + iow))
+        total=$((total + iq))  # perhaps optional to add to total
+        total=$((total + siq)) # perhaps optional to add to total
+
+        pctcpu=$((total - i))
+        pctcpu=$((pctcpu / total))
+        pctcpu=$((pctcpu * 100))
+
+        pctiow=$((total - iow))
+        pctiow=$((pctiow / total))
+        pctiow=$((pctiow * 100))
+
+        echo "%cpu: $pctcpu	%iow: $pctiow"
+
+    done < <(cat /proc/stat | grep 'cpu ')
+    sleep 0.5
+done
