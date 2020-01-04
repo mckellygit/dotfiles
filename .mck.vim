@@ -2411,6 +2411,10 @@ noremap <C-a> 0
 " (but its been remapped to <C-j>)
 noremap <C-e> $
 
+" cmdline movement
+cnoremap <C-a> <Home>
+cnoremap <C-e> <End>
+
 function! s:SkipTerminalsQuitCmd(cmd) abort
     let l:bmod = 0
     let l:doquit = 1
