@@ -84,18 +84,25 @@ if [ $rc0 -eq 0 ] ; then
     fi
 fi
 
-if [ $rc0 -eq 0 ] ; then
-    if [ ${do_kill} -eq 1 ] ; then
-        echo "About to kill all hpcc processes ..."
-        sudo pkill -u hpcc
-        sudo rm -f /var/lock/HPCCSystems/JLIBMUTEX_JLIBMUTEX_DASERVER
-    fi
+if [ ${do_kill} -eq 1 ] ; then
+    echo "About to kill all hpcc processes ..."
+    sudo pkill -u hpcc
+    sudo rm -f /var/lock/HPCCSystems/JLIBMUTEX_JLIBMUTEX_DASERVER
 fi
 
 if [ ${do_clean} -eq 1 ] ; then
     echo "About to remove all hpcc logs and cores ..."
     sudo find /var/log/HPCCSystems/ -name "*.log" -and \( -not -name "hpcc-init.log" \) -exec rm {} \;
     sudo find /var/lib/HPCCSystems/ -name "core.*" -exec rm {} \;
+fi
+
+if [ ${do_kill} -eq 1 ] ; then
+    sleep 1
+    pcnt=$(pgrep -u hpcc -l 2>/dev/null | grep -v bash | wc -l)
+    if [ $pcnt -gt 0 ] ; then
+        echo "About to kill -9 all hpcc processes ..."
+        sudo pkill -9 -u hpcc
+    fi
 fi
 
 pgrep -u hpcc -l

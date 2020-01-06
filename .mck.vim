@@ -2642,6 +2642,14 @@ if &diff
   "au VimEnter * if &diff | execute 'windo set wrap' | endif
   " but this can mess up alignment of long lines
   " and Bram said a fix is not planned ...
+
+  " mck - TODO: seems weird these dont work in diff ...
+  unmap <C-d>
+  unmap <C-u>
+  unmap <C-f>
+  unmap <C-b>
+  inoremap <C-f> <C-\><C-o><C-f>
+  inoremap <C-b> <C-\><C-o><C-b>
 endif
 
 " patience diff algo ...
