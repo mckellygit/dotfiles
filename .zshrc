@@ -106,6 +106,11 @@ bindkey "\e[1~" beginning-of-line
 # End
 bindkey "\e[4~" end-of-line
 
+# Ctrl-Home
+bindkey "\e5" beginning-of-line
+# Ctrl-End
+bindkey "\e6" end-of-line
+
 # Ctrl-Left
 bindkey "\e[1;5D" backward-word
 # Ctrl-Right
@@ -491,9 +496,13 @@ ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS=(forward-word emacs-forward-word vi-forwa
 # For example, this would bind ctrl + space to accept the current suggestion.
 # bindkey '^ ' autosuggest-accept
 
-# end - already bound to accept (also Alt-Space)
+# End - already acts like autosuggest-accept (also Alt-Space)
+# Ctrl-End is already mapped above to end of line which acts like autosuggest-accept
+
+# partial-accept - next word of suggestion ...
 bindkey '^\' forward-word
-# ctrl-Enter to execute - TODO: perhaps wish it was a no-op unless at end of cmd ...
+
+# Ctrl-Enter to execute - TODO: perhaps wish it was a no-op unless at end of cmd ...
 bindkey '^\n' autosuggest-execute
 
 # --------------------
