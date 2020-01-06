@@ -2609,6 +2609,11 @@ if &diff
   cnoreabbrev <silent> <expr> exi (getcmdtype() == ':' && getcmdline() =~ '\s*exi\s*') ? 'cquit' : 'exi'
   cuna exit
   cnoreabbrev <silent> <expr> exit (getcmdtype() == ':' && getcmdline() =~ '\s*exit\s*') ? 'cquit' : 'exit'
+  aug diff_alias
+      au!
+      au VimEnter * :Alias qa  cquit
+      au VimEnter * :Alias qa! cquit
+  aug END
   " -----------
   " if no mods, then :x is like :q ...
   cnoreabbrev <silent> <expr> x (getcmdtype() == ':' && getcmdline() =~ '\s*x\s*') ? 'call Xdiff()' : 'x'
