@@ -503,7 +503,10 @@ ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS=(forward-word emacs-forward-word vi-forwa
 bindkey '^\' forward-word
 
 # Ctrl-Enter to execute - TODO: perhaps wish it was a no-op unless at end of cmd ...
-bindkey '^\n' autosuggest-execute
+#bindkey '^\n' autosuggest-execute
+# skip - safer to use Alt-Enter ...
+# Alt-Enter to execute - TODO: perhaps wish it was a no-op unless at end of cmd ...
+bindkey "\e\n" autosuggest-execute
 
 # --------------------
 

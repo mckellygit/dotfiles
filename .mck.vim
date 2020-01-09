@@ -1163,7 +1163,16 @@ vnoremap <silent> # y<C-\><C-n>:set hlsearch<CR>?<C-r>"<CR>
 " dont replace clipboard selection with deleted char (x,X)
 noremap x "_x
 noremap X "_X
-" do we want the same for delete-word ?
+" same for delete
+noremap <DEL> "_x
+" but miss the xp swap chars, this works but adds an annoying (timeoutlen) delay to the single typed x
+"noremap xp xp
+"noremap Xp Xp
+" add a new swap char mapping that doesn't start with x ...
+noremap sc xp
+noremap Sc Xp
+
+" do we want the same for delete-word ?  Probably not ...
 "noremap dw "_dw
 "noremap db "_db
 "noremap dW "_dW
