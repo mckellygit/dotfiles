@@ -271,6 +271,7 @@ alias stat-hpcc='stat_hpcc'
 alias start-hpcc='start_hpcc'
 alias kill-hpcc='kill_hpcc'
 alias make-hpcc='make_hpcc'
+alias make-sync='make_sync'
 
 # dont disappear on a non-exiting command ...
 # also note use of command
