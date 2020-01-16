@@ -1081,6 +1081,12 @@ endfunction
 let &t_SI .= WrapForTmux("\<Esc>[?2004h")
 let &t_EI .= WrapForTmux("\<Esc>[?2004l")
 
+" tmux:
+"   set -ga terminal-overrides '*:Ss=\E[%p1%d q:Se=\E[ q'
+" vim:
+"   let &t_SI = "\e[5 q"
+"   let &t_EI = "\e[2 q"
+
 function! XTermPasteBegin()
   set pastetoggle=<Esc>[201~
   set paste
