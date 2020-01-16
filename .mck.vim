@@ -921,9 +921,16 @@ vnoremap i <Nop>
 " if X11 Forwarding is not on/allowed then perhaps vim copy to + and * does not work over ssh ?
 "vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '""y <Bar> :<C-u>call system("xsel -i -b -t 5000", @")<CR> <Bar> gv<Esc>i' : '""y <Bar> :<C-u>call system("xsel -i -b -t 5000", @")<CR> <Bar> gv<Esc>'
 "vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '""y <Bar> :<C-u>call system("xsel -i -b -t 5000", @")<CR> <Bar> gv<Esc>i' : '""y <Bar> :<C-u>call system("xsel -i -b -t 5000", @")<CR> <Bar> gv<Esc>'
+
 " should we use " or + or * reg ? And what with clipboard setting ?
-vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"*ygv<Esc>i' : '"*ygv<Esc>'
-vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"*ygv<Esc>i' : '"*ygv<Esc>'
+" NOTE: substitute() is to remove trailing newline char if present which can happen in visual-line mode (V) ...
+" perhaps let @* = substitute(@a, "\\_s\\+$", "", "") or let @* = substitute(@a, "\\\\n\\+$", "", "")
+
+"vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"*ygv<Esc>i' : '"*ygv<Esc>'
+vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"aygv<Esc>:let @* = substitute(@a, "\\_s\\+$", "", "")<CR>i' : '"aygv<Esc>:let @* = substitute(@a, "\\_s\\+$", "", "")<CR>'
+
+"vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"*ygv<Esc>i' : '"*ygv<Esc>'
+vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"aygv<Esc>:let @* = substitute(@a, "\\_s\\+$", "", "")<CR>i' : '"aygv<Esc>:let @* = substitute(@a, "\\_s\\+$", "", "")<CR>'
 
 " cut selection
 "vnoremap <silent> <C-x> "+d<LeftRelease>
@@ -2657,7 +2664,7 @@ if &diff
   " but this can mess up alignment of long lines
   " and Bram said a fix is not planned ...
 
-  " mck - TODO: seems weird these dont work in diff ...
+  " TODO: seems weird these dont work in diff ...
   unmap <C-d>
   unmap <C-u>
   unmap <C-f>
@@ -2714,6 +2721,7 @@ let g:netrw_dirhistmax = 0
 " :x to save (if modified) and go to next (w/o prompting) or exit
 function s:NextOrQuit() abort
   update
+  " TODO: is it possible to check if buf has changed and prompt to save now instead of after all files ?
   try
     next
   catch /E163:/
@@ -2724,6 +2732,7 @@ function s:NextOrQuit() abort
 endfunction
 if !&diff
   cnoreabbrev <silent> <expr> x (getcmdtype() == ':' && getcmdline() =~ '\s*x\s*')  ? 'call <SID>NextOrQuit()' : 'x'
+  noremap <silent> <Leader>nf :call <SID>NextOrQuit()<CR>
 endif
 
 " could also look into autowrite for :n to write (if modified) ...
