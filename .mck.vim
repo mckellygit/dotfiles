@@ -880,10 +880,11 @@ set mouse=a
 " clipboard '+' (XA_CLIPBOARD:unnamedplus)
 " primary   '*' (XA_PRIMARY:unnamed)
 " should we use " or + or * reg ?
-" NOTE: using both seems to mess things up, rely on parcellite etc. to sync
+" NOTE: using both seems to mess things up,
+"       parcellite/diodon/clipit/copyq etc. could sync
 "set clipboard^=unnamed
-set clipboard^=unnamedplus
-"set clipboard^=unnamed
+"set clipboard^=unnamedplus
+set clipboard^=unnamed
 
 " need enough time for mapped / <Leader> key sequences
 "set timeoutlen=1000 ttimeoutlen=0
@@ -924,23 +925,36 @@ vnoremap i <Nop>
 
 " should we use " or + or * reg ? And what with clipboard setting ?
 " NOTE: substitute() is to remove trailing newline char if present which can happen in visual-line mode (V) ...
-" perhaps let @+ = substitute(@a, "\\_s\\+$", "", "") or let @+ = substitute(@a, "\\\\n\\+$", "", "")
+" perhaps let @* = substitute(@a, "\\_s\\+$", "", "") (trailing tabs, spaces, nl, etc.) substitute(@a, "\\n\\+$", "", "") (just trailing nl)
+" perhaps also this works :call setreg('*', '', 'c')
 
-"vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"+ygv<Esc>i' : '"+ygv<Esc>'
-vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"aygv<Esc>:let @+ = substitute(@a, "\\_s\\+$", "", "")<CR>i' : '"aygv<Esc>:let @+ = substitute(@a, "\\_s\\+$", "", "")<CR>'
-"vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<CR>:let @+=@a<CR> <bar> gv<Esc>i' : '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<CR>:let @+=@a<CR> <bar> gv<Esc>'
+"vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"*ygv<Esc>i' : '"*ygv<Esc>'
+"vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<CR>:let @*=@a<CR> <bar> gv<Esc>i' : '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<CR>:let @*=@a<CR> <bar> gv<Esc>'
+vnoremap <silent> <expr> <C-c> (getregtype("*") ==# "V") ? '"*ygv<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*ygv<Esc>:let @z=getregtype("*")<CR>' <bar> (&buftype == 'terminal') ? 'i' : ''
 
-"vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"+ygv<Esc>i' : '"+ygv<Esc>'
-vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"aygv<Esc>:let @+ = substitute(@a, "\\_s\\+$", "", "")<CR>i' : '"aygv<Esc>:let @+ = substitute(@a, "\\_s\\+$", "", "")<CR>'
-"vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<CR>:let @+=@a<CR> <bar> gv<Esc>i' : '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<CR>:let @+=@a<CR> <bar> gv<Esc>'
+"vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"*ygv<Esc>i' : '"*ygv<Esc>'
+"vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<CR>:let @*=@a<CR> <bar> gv<Esc>i' : '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<CR>:let @*=@a<CR> <bar> gv<Esc>'
+vnoremap <silent> <expr> y     (getregtype("*") ==# "V") ? '"*ygv<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*ygv<Esc>:let @z=getregtype("*")<CR>' <bar> (&buftype == 'terminal') ? 'i' : ''
 
 " cut selection
-"vnoremap <silent> <C-x> "+d<LeftRelease>
-"vnoremap <silent> <C-x> "+d
+"vnoremap <silent> <C-x> "*d<LeftRelease>
+"vnoremap <silent> <C-x> "*d
 " if X11 Forwarding is not on/allowed then perhaps vim copy to + and * does not work over ssh ?
 "vnoremap <silent> <C-x> ""d <Bar> :<C-u>call system("xsel -i -b -t 5000", @")<CR>
 " should we use " or + or * reg ? And what with clipboard setting ?
-vnoremap <silent> <C-x> "+d
+
+" do the same for x, d, <C-x> cut/del selection ...
+"vnoremap <silent> <C-x> "*d
+vnoremap <silent> <expr> x     (getregtype("*") ==# "V") ? '"*x<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>'
+vnoremap <silent> <expr> d     (getregtype("*") ==# "V") ? '"*d<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>'
+vnoremap <silent> <expr> <C-x> (getregtype("*") ==# "V") ? '"*d<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>'
+vnoremap <silent> <expr> <DEL> (getregtype("*") ==# "V") ? '"*d<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>'
+
+nnoremap <silent> <expr> p (@z ==# 'V') ? 'A<CR><Esc>p_' : 'p'
+nnoremap <silent> <expr> P (@z ==# 'V') ? 'kA<CR><Esc>P_' : 'P'
+
+nnoremap <silent> yy yy:let @z='V'<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>
+nnoremap <silent> dd dd:let @z='V'<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>
 
 " <C-v> to toggle block-mode instead of on or cancel visual-mode
 " simple and almost there -
@@ -1056,14 +1070,14 @@ inoremap <silent> <M-p> <C-r>"
 " to disable scrolljump when pasting at last row ...
 " not sure to use nmap or nnoremap ?
 " not sure to use " or + or * register ?
-function! MyPasteNoJump() abort
-  nmap <silent> <buffer> p p
-  let &scrolljump=1
-  execute "silent! normal \"+p"
-  "execute "normal p"
-  let &scrolljump=-50
-  nmap <silent> <buffer> p :call MyPasteNoJump()<CR>
-endfunction
+"function! MyPasteNoJump() abort
+"  nmap <silent> <buffer> p p
+"  let &scrolljump=1
+"  execute "silent! normal \"*p"
+"  "execute "normal p"
+"  let &scrolljump=-50
+"  nmap <silent> <buffer> p :call MyPasteNoJump()<CR>
+"endfunction
 " to match UnconditionalPaste, dont modify p
 "nmap <silent> <buffer> p :call MyPasteNoJump()<CR>
 vmap <silent> <buffer> p <C-\><C-n>p
@@ -1101,10 +1115,6 @@ inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
 ":noremap <silent> <LeftRelease> "+y<LeftRelease>
 
 " if mouse not supported try vim-extended or gvim -v
-
-" run cmd:
-" (parcellite -n > dev/null 2>&1) &
-" so that clipboard is pushed/pulled to/from all other apps
 
 " DoubleClick for word (lbve)
 nnoremap <silent> <2-LeftMouse> viw
@@ -1176,10 +1186,10 @@ vnoremap <silent> * y<C-\><C-n>:set hlsearch<CR>/<C-r>"<CR>
 vnoremap <silent> # y<C-\><C-n>:set hlsearch<CR>?<C-r>"<CR>
 
 " dont replace clipboard selection with deleted char (x,X)
-noremap x "_x
-noremap X "_X
+nnoremap x "_x
+nnoremap X "_X
 " same for delete
-noremap <DEL> "_x
+nnoremap <DEL> "_x
 " but miss the xp swap chars, this works but adds an annoying (timeoutlen) delay to the single typed x
 "noremap xp xp
 "noremap Xp Xp
@@ -1198,19 +1208,20 @@ noremap Sc Xp
 " nnoremap <silent> <Leader>cw lb"_dwP
 " but this can trim trailing space(s) ...
 " restore " and + registers back to orig selected word
-" (parcellite etc. may auto copy + to * ...)
+" (parcellite etc. may copy + to *)
+" or diodon/clipit/copyq if configured to sync ...
 " optional - add lb to get back to beginning of word ?
 " wc is already window close, use wx (word exchange)
 
 " exchange whole word (from beg) with clipboard
-nnoremap <silent> <Leader>wx :let @0=@+<CR>ciw<C-r>0<Esc>:let @"=@0<CR>:let @+=@0<CR>
+nnoremap <silent> <Leader>wx :let @0=@*<CR>ciw<C-r>0<Esc>:let @"=@0<CR>:let @*=@0<CR>
 " vis-mode of this doesnt really make sense
-"vnoremap <silent> <Leader>wx <C-\><C-n>:let @0=@+<CR>ciw<C-r>0<Esc>:let @"=@0<CR>:let @+=@0<CR>
+"vnoremap <silent> <Leader>wx <C-\><C-n>:let @0=@*<CR>ciw<C-r>0<Esc>:let @"=@0<CR>:let @*=@0<CR>
 
 " replace at cursor pos with clipboard (not from beg of word like \we above)
-nnoremap <silent> <Leader>wr :let @0=@+<CR>cw<C-r>0<Esc>:let @"=@0<CR>:let @+=@0<CR>
+nnoremap <silent> <Leader>wr :let @0=@*<CR>cw<C-r>0<Esc>:let @"=@0<CR>:let @*=@0<CR>
 " vis-mode of this doesnt really make sense
-"vnoremap <silent> <Leader>wr <C-\><C-n>:let @0=@+<CR>cw<C-r>0<Esc>:let @"=@0<CR>:let @+=@0<CR>
+"vnoremap <silent> <Leader>wr <C-\><C-n>:let @0=@*<CR>cw<C-r>0<Esc>:let @"=@0<CR>:let @*=@0<CR>
 
 " zap (delete) whole word under cursor but w/o saving deleted word to clipboard
 "nnoremap <silent> <Leader>wz lb"_dw
@@ -1219,8 +1230,8 @@ nnoremap <silent> <Leader>wz "_daw
 vnoremap <silent> <Leader>wz <C-\><C-n>"_daw
 
 " zap whole word w/ saving deleted word to clipboard
-nnoremap <silent> <Leader>wZ daw:let @0=@"<CR>:let @+=@0<CR>
-vnoremap <silent> <Leader>wZ <C-\><C-n>daw:let @0=@"<CR>:let @+=@0<CR>
+nnoremap <silent> <Leader>wZ daw:let @0=@"<CR>:let @*=@0<CR>
+vnoremap <silent> <Leader>wZ <C-\><C-n>daw:let @0=@"<CR>:let @*=@0<CR>
 
 " change word starting at cursor, like vi
 nnoremap <silent> <Leader>we ce
@@ -1231,8 +1242,8 @@ nnoremap <silent> <Leader>wd "_dw
 vnoremap <silent> <Leader>wd <C-\><C-n>"_dw
 
 " delete word at cursor pos, but w/ saving deleted word to clipboard
-nnoremap <silent> <Leader>wD dw:let @0=@"<CR>:let @+=@0<CR>
-vnoremap <silent> <Leader>wD <C-\><C-n>dw:let @0=@"<CR>:let @+=@0<CR>
+nnoremap <silent> <Leader>wD dw:let @0=@"<CR>:let @*=@0<CR>
+vnoremap <silent> <Leader>wD <C-\><C-n>dw:let @0=@"<CR>:let @*=@0<CR>
 
 " new whole word (from beg) [cannot use wc]
 nnoremap <silent> <Leader>wn ciw
@@ -1247,8 +1258,8 @@ vnoremap <silent> <Leader>D "_x
 nnoremap <silent> <Esc>1 P
 vnoremap <silent> <Esc>1 <Esc>P
 inoremap <silent> <Esc>1 <Esc>P
-cnoremap <Esc>1 <C-r>+
-tnoremap <Esc>1 <C-w>"+
+cnoremap <Esc>1 <C-r>*
+tnoremap <Esc>1 <C-w>"*
 
 " -------------------
 
@@ -2448,7 +2459,7 @@ function! s:SkipTerminalsQuitCmd(cmd) abort
                 if !b.changed
                     execute "silent! bd " . b.bufnr
                 else
-                    if l:bmod ==# 0
+                    if l:bmod == 0
                         echo "buffer: " . b.bufnr . " modified"
                         let l:bmod = 1
                     endif
@@ -2459,7 +2470,7 @@ function! s:SkipTerminalsQuitCmd(cmd) abort
             endif
         endif
     endfor
-    if l:doquit ==# 1
+    if l:doquit == 1
         "quit!
         execute "qa!"
     else
@@ -2476,7 +2487,7 @@ function! s:SkipTerminalsConfQA() abort
                 if !b.changed
                     execute "silent! bd " . b.bufnr
                 else
-                    if l:bmod ==# 0
+                    if l:bmod == 0
                         echo "buffer: " . b.bufnr . " modified"
                         let l:bmod = 1
                     endif
@@ -2487,7 +2498,7 @@ function! s:SkipTerminalsConfQA() abort
             endif
         endif
     endfor
-    if l:doquit ==# 1
+    if l:doquit == 1
         "quit!
         execute "qa!"
     else
@@ -2510,7 +2521,7 @@ function! s:QuitIfOnlyNoNameLeft() abort
             endif
         endif
     endfor
-    if l:doquit ==# 1
+    if l:doquit == 1
         execute "qa!"
     else
         execute "tabclose!"
@@ -2597,12 +2608,12 @@ function Xdiff()
     endif
     let currbufnr += 1
   endwhile
-  if anymod ==# 0
+  if anymod == 0
     execute "silent! qa"
   else
     "let dbgmsg = "diffx: &mod = " . &mod
     "echomsg dbgmsg
-    if &mod ==# 0
+    if &mod == 0
       execute "silent! conf q"
     else
       execute "silent! wq"
@@ -2886,7 +2897,7 @@ function! s:TermQuit()
             endif
         endif
     endfor
-    if skipquit ==# 0
+    if skipquit == 0
         quit!
     endif
     "if tabpagenr('$') == 1
@@ -3029,7 +3040,7 @@ function! MyGitStatus()
   let l:found = has_key(g:tablist, l:bufnm)
   "let l:msg = "MyGitStatus " . l:bufnm . " " . l:found . " dir: " . expand('%:p:h')
   "echomsg l:msg
-  if l:found ==# 0
+  if l:found == 0
     let l:timer = timer_start(g:gitinfo_interval, 'MyGSStart', {'repeat': -1})
     "let g:tablist[l:bufnm] = l:timer
     call extend(g:tablist, {l:bufnm : l:timer})
@@ -3041,7 +3052,7 @@ function! MyGitLeave()
   let l:found = has_key(g:tablist, l:bufnm)
   "let l:msg = "MyGitLeave " . l:bufnm . " " . l:found
   "echomsg l:msg
-  if l:found ==# 1
+  if l:found == 1
     "let l:msg = "MyGitLeave removing " . l:bufnm
     "echomsg l:msg
     let l:timer = get(g:tablist, l:bufnm, "-1")
