@@ -924,17 +924,19 @@ vnoremap i <Nop>
 "vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '""y <Bar> :<C-u>call system("xsel -i -b -t 5000", @")<CR> <Bar> gv<Esc>i' : '""y <Bar> :<C-u>call system("xsel -i -b -t 5000", @")<CR> <Bar> gv<Esc>'
 
 " should we use " or + or * reg ? And what with clipboard setting ?
-" NOTE: substitute() is to remove trailing newline char if present which can happen in visual-line mode (V) ...
-" perhaps let @* = substitute(@a, "\\_s\\+$", "", "") (trailing tabs, spaces, nl, etc.) substitute(@a, "\\n\\+$", "", "") (just trailing nl)
-" perhaps also this works :call setreg('*', '', 'c')
+
+" NOTE: substitute() to remove trailing nl char if present which can happen in visual-line mode (v/V/c/l) ...
+" perhaps let @* = substitute(@a, "\\_s\\+$", "", "") (trailing tabs, spaces, nl, etc.) or substitute(@a, "\\n\\+$", "", "") (just trailing nl)
+" perhaps also this works :call setreg('*', '', 'c') ?
+" NOTE: == may be case-INSENSITIVE, as its not ==#
 
 "vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"*ygv<Esc>i' : '"*ygv<Esc>'
 "vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<CR>:let @*=@a<CR> <bar> gv<Esc>i' : '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<CR>:let @*=@a<CR> <bar> gv<Esc>'
-vnoremap <silent> <expr> <C-c> (getregtype("*") ==# "V") ? '"*ygv<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*ygv<Esc>:let @z=getregtype("*")<CR>' <bar> (&buftype == 'terminal') ? 'i' : ''
+vnoremap <silent> <expr> <C-c> ("vcl" =~ getregtype("*")) ? '"*ygv<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*ygv<Esc>:let @z=getregtype("*")<CR>' <bar> (&buftype == 'terminal') ? 'i' : ''
 
 "vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"*ygv<Esc>i' : '"*ygv<Esc>'
 "vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<CR>:let @*=@a<CR> <bar> gv<Esc>i' : '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<CR>:let @*=@a<CR> <bar> gv<Esc>'
-vnoremap <silent> <expr> y     (getregtype("*") ==# "V") ? '"*ygv<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*ygv<Esc>:let @z=getregtype("*")<CR>' <bar> (&buftype == 'terminal') ? 'i' : ''
+vnoremap <silent> <expr> y     ("vcl" =~ getregtype("*")) ? '"*ygv<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*ygv<Esc>:let @z=getregtype("*")<CR>' <bar> (&buftype == 'terminal') ? 'i' : ''
 
 " cut selection
 "vnoremap <silent> <C-x> "*d<LeftRelease>
@@ -945,13 +947,13 @@ vnoremap <silent> <expr> y     (getregtype("*") ==# "V") ? '"*ygv<Esc>:let @z=ge
 
 " do the same for x, d, <C-x> cut/del selection ...
 "vnoremap <silent> <C-x> "*d
-vnoremap <silent> <expr> x     (getregtype("*") ==# "V") ? '"*x<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>'
-vnoremap <silent> <expr> d     (getregtype("*") ==# "V") ? '"*d<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>'
-vnoremap <silent> <expr> <C-x> (getregtype("*") ==# "V") ? '"*d<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>'
-vnoremap <silent> <expr> <DEL> (getregtype("*") ==# "V") ? '"*d<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>'
+vnoremap <silent> <expr> x     ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>'
+vnoremap <silent> <expr> d     ("vcl" =~ getregtype("*")) ? '"*d<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>'
+vnoremap <silent> <expr> <C-x> ("vcl" =~ getregtype("*")) ? '"*d<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>'
+vnoremap <silent> <expr> <DEL> ("vcl" =~ getregtype("*")) ? '"*d<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>'
 
-nnoremap <silent> <expr> p (@z ==# 'V') ? 'A<CR><Esc>p_' : 'p'
-nnoremap <silent> <expr> P (@z ==# 'V') ? 'kA<CR><Esc>P_' : 'P'
+nnoremap <silent> <expr> p (@z ==# 'V') ? 'A<CR><Esc>p_' : (@z ==# 'l') ? 'A<CR><Esc>p_' : 'p'
+nnoremap <silent> <expr> P (@z ==# 'V') ? 'kA<CR><Esc>P_' : (@z ==# 'l') ? 'kA<CR><Esc>P_' : 'P'
 
 nnoremap <silent> yy yy:let @z='V'<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>
 nnoremap <silent> dd dd:let @z='V'<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>
