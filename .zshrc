@@ -501,12 +501,14 @@ ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS=(forward-word emacs-forward-word vi-forwa
 # Ctrl-End is already mapped above to end of line which acts like autosuggest-accept
 
 # partial-accept - next word of suggestion ...
-bindkey '^\' forward-word
+#bindkey '^\' forward-word
+bindkey '^\' autosuggest-accept
 
 # Ctrl-Enter to execute suggestion
 #bindkey '^\n' autosuggest-execute
 # make it a no-op for safety
-bindkey '^\n' noop
+#bindkey '^\n' noop
+bindkey '^\n' forward-word
 # safer to use Alt-Enter ...
 # Alt-Enter to execute - TODO: perhaps wish it was a no-op unless at end of cmd ...
 bindkey "\e\n" autosuggest-execute
