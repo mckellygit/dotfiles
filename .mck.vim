@@ -656,6 +656,9 @@ set lazyredraw
 
 set confirm
 
+" remove prev visual mark
+delmarks v
+
 " do not change terminal window title ...
 set notitle
 " visual/audio bell (terminator light bulb) off ...
@@ -908,9 +911,8 @@ vnoremap S <Nop>
 
 vnoremap i <Nop>
 
-" ctrl-c to yank selection into paste buffer/clipboard
+" ----------- yank / cut / paste -----------
 
-" copy/yank selection
 ":vmap <silent> <C-c> "+y
 "vnoremap <silent> <C-c> "+y<LeftRelease>
 " y`] to goto end of block, or even better
@@ -930,13 +932,60 @@ vnoremap i <Nop>
 " perhaps also this works :call setreg('*', '', 'c') ?
 " NOTE: == may be case-INSENSITIVE, as its not ==#
 
+" ----------------------
+" explicit force load */named clipboard ...
+function! ForceLoadNammedReg() abort
+    call system("xsel -i --rmlastnl --sc 0 -p", @*)
+endfunction
+nnoremap <silent> <Leader>lr :<C-U>call ForceLoadNammedReg()<CR>
+" ----------------------
+
+" ----------------------
+" swap reg with prev ...
+nnoremap <silent> <Leader>sr :let @y=@* <bar> :let @*=@x <bar> :let @x=@y <bar> echohl DiffText <bar> echo "--- registers swapped ---" <bar> echohl None <bar> sleep 551m <bar> redraw!<CR>
+" ----------------------
+
+function! YankIt(cmd) abort
+    if "vcl" =~ getregtype("*")
+        exe "silent! normal! gv\"" . a:cmd . "gv\<Esc>"
+        let @z = getregtype("*")
+        let @* = substitute(@*, "\\n\\+$", "", "")
+    else
+        exe "silent! normal! gv\"" . a:cmd . "gv\<Esc>"
+        let @z = getregtype("*")
+    endif
+    let @x=@y " prev in reg x ...
+    let @y=@*
+    if &buftype == "terminal"
+        exe "silent! normal! i"
+    else
+        exe "silent! normal! `v"
+    endif
+    delmarks v
+endfunction
+
+function! CutIt(cmd) abort
+    if "vcl" =~ getregtype("*")
+        exe "silent! normal! gv\"" . a:cmd . "\<Esc>"
+        let @z = getregtype("*")
+        let @* = substitute(@*, "\\n\\+$", "", "")
+    else
+        exe "silent! normal! gv\"" . a:cmd . "\<Esc>"
+        let @z = getregtype("*")
+    endif
+    let @x=@y " prev in reg x ...
+    let @y=@*
+endfunction
+
 "vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"*ygv<Esc>i' : '"*ygv<Esc>'
 "vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<CR>:let @*=@a<CR> <bar> gv<Esc>i' : '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<CR>:let @*=@a<CR> <bar> gv<Esc>'
-vnoremap <silent> <expr> <C-c> ("vcl" =~ getregtype("*")) ? '"*ygv<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*ygv<Esc>:let @z=getregtype("*")<CR>' <bar> (&buftype == 'terminal') ? 'i' : ''
+"vnoremap <silent> <expr> <C-c> ("vcl" =~ getregtype("*")) ? '"*ygv<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*ygv<Esc>:let @z=getregtype("*")<CR>' <bar> (&buftype == 'terminal') ? 'i' : ''
+vnoremap <silent> <C-c> :<C-U>call YankIt("*y")<CR>
 
 "vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"*ygv<Esc>i' : '"*ygv<Esc>'
 "vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<CR>:let @*=@a<CR> <bar> gv<Esc>i' : '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<CR>:let @*=@a<CR> <bar> gv<Esc>'
-vnoremap <silent> <expr> y     ("vcl" =~ getregtype("*")) ? '"*ygv<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*ygv<Esc>:let @z=getregtype("*")<CR>' <bar> (&buftype == 'terminal') ? 'i' : ''
+"vnoremap <silent> <expr> y     ("vcl" =~ getregtype("*")) ? '"*ygv<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*ygv<Esc>:let @z=getregtype("*")<CR>' <bar> (&buftype == 'terminal') ? 'i' : ''
+vnoremap <silent> y     :<C-U>call YankIt("*y")<CR>
 
 " cut selection
 "vnoremap <silent> <C-x> "*d<LeftRelease>
@@ -947,16 +996,22 @@ vnoremap <silent> <expr> y     ("vcl" =~ getregtype("*")) ? '"*ygv<Esc>:let @z=g
 
 " do the same for x, d, <C-x> cut/del selection ...
 "vnoremap <silent> <C-x> "*d
-vnoremap <silent> <expr> x     ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>'
-vnoremap <silent> <expr> d     ("vcl" =~ getregtype("*")) ? '"*d<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>'
-vnoremap <silent> <expr> <C-x> ("vcl" =~ getregtype("*")) ? '"*d<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>'
-vnoremap <silent> <expr> <DEL> ("vcl" =~ getregtype("*")) ? '"*d<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>'
+"vnoremap <silent> <expr> x     ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>'
+"vnoremap <silent> <expr> <C-x> ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>'
+"vnoremap <silent> <expr> d     ("vcl" =~ getregtype("*")) ? '"*d<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*d<Esc>:let @z=getregtype("*")<CR>'
+"vnoremap <silent> <expr> <DEL> ("vcl" =~ getregtype("*")) ? '"*d<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*d<Esc>:let @z=getregtype("*")<CR>'
+vnoremap <silent> x     :<C-U>call CutIt("*x")<CR>
+vnoremap <silent> <C-x> :<C-U>call CutIt("*x")<CR>
+vnoremap <silent> d     :<C-U>call CutIt("*d")<CR>
+vnoremap <silent> <DEL> :<C-U>call CutIt("*d")<CR>
 
 nnoremap <silent> <expr> p (@z ==# 'V') ? 'A<CR><Esc>p_' : (@z ==# 'l') ? 'A<CR><Esc>p_' : 'p'
 nnoremap <silent> <expr> P (@z ==# 'V') ? 'kA<CR><Esc>P_' : (@z ==# 'l') ? 'kA<CR><Esc>P_' : 'P'
 
-nnoremap <silent> yy yy:let @z='V'<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>
-nnoremap <silent> dd dd:let @z='V'<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>
+nnoremap <silent> yy yy:let @z='V' <bar> :let @* = substitute(@*, "\\n\\+$", "", "") <bar> :let @x=@y <bar> :let @y=@*<CR>
+nnoremap <silent> dd dd:let @z='V' <bar> :let @* = substitute(@*, "\\n\\+$", "", "") <bar> :let @x=@y <bar> :let @y=@*<CR>
+
+" ----------- yank / cut / paste -----------
 
 " <C-v> to toggle block-mode instead of on or cancel visual-mode
 " simple and almost there -
@@ -1149,23 +1204,23 @@ vnoremap <silent> <M-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath()<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " highlight word under cursor (lbve)
-nnoremap <silent> <Leader>ws viw
-vnoremap <silent> <Leader>ws iw
+nnoremap <silent> <Leader>ws mvviw
+vnoremap <silent> <Leader>ws mviw
 
 " highlight WORD under cursor (lBvE) (does not use iskeyword)
-nnoremap <silent> <Leader>wS viW
-vnoremap <silent> <Leader>wS iW
+nnoremap <silent> <Leader>wS mvviW
+vnoremap <silent> <Leader>wS mviW
 
 " grab file path (ie w / and w/o :)
-nnoremap <silent> <Leader>wp :call GetPath()<CR>
-vnoremap <silent> <Leader>wp <C-\><C-n>:call GetPath()<CR>
+nnoremap <silent> <Leader>wp mv:call GetPath()<CR>
+vnoremap <silent> <Leader>wp mv<C-\><C-n>:call GetPath()<CR>
 
 " yank/select word under cursor
-nnoremap <silent> <Leader>wy viwy`]
-vnoremap <silent> <Leader>wy iwy`]
+nnoremap <silent> <Leader>wy mvviwy`]
+vnoremap <silent> <Leader>wy mviwy`]
 " to match vim yw ...
-nnoremap <silent> <Leader>yw viwy`]
-vnoremap <silent> <Leader>yw iwy`]
+nnoremap <silent> <Leader>yw mvviwy`]
+vnoremap <silent> <Leader>yw mviwy`]
 
 " search for word under cursor (without copying selection)
 nnoremap <silent> <Leader>wf :set hlsearch<CR>*
@@ -1519,10 +1574,14 @@ autocmd VimResized * call MapScrollKeys()
 
 " ---------
 
-" Insert back to Normal mode after 10 sec if no input/movement ...
+" if in Insert mode with no input/movement for 10 sec then revert to Normal mode ...
 set updatetime=10000
 function! IdleToNormalMode()
-  call feedkeys("\<Esc>", "t")
+    let mymode = mode()
+    if mymode ==# 'i' || mymode ==# 'R'
+        call feedkeys("\<Esc>", "m")
+        echo "returned from insert mode ..."
+    endif
 endfunction
 autocmd CursorHoldI * call IdleToNormalMode()
 
@@ -2074,11 +2133,11 @@ nmap <C-]> :call rtags#JumpTo(g:SAME_WINDOW)<CR>
 " C-t to go back (not implemented)
 " nmap <C-t> :call rtags#JumpBack()<CR>:echo<CR>
 " \cc to close quickfix, listview, preview
-nnoremap <silent> <Leader>cc           :ccl\|lcl\|pcl<CR>:echo<CR>
-vnoremap <silent> <Leader>cc <C-\><C-n>:ccl\|lcl\|pcl<CR>:echo<CR>
+nnoremap <silent> <Leader>cc           :ccl\|lcl\|pcl\|:echo<CR>
+vnoremap <silent> <Leader>cc <C-\><C-n>:ccl\|lcl\|pcl\|:echo<CR>
 "noremap <silent> <Leader>cc :windo lcl\|ccl\|pcl<CR>:echo<CR>
 " qq to also close location list
-autocmd BufReadPost quickfix nnoremap <silent> <buffer> qq :ccl\|lcl\|pcl<CR>:echo<CR>
+autocmd BufReadPost quickfix nnoremap <silent> <buffer> qq :ccl\|lcl\|pcl\|:echo<CR>
 " TODO: should qq from regular window also close these ?
 "
 " auto-reindex on file save ...
@@ -2818,12 +2877,18 @@ endfunction
 nnoremap <Leader>uu           :call UndoAll()<CR>
 vnoremap <Leader>uu <C-\><C-n>:call UndoAll()<CR>
 
+" TODO: u is close to i and so remap to U ?
+nnoremap <silent> U u
+nmap <silent> u <Nop>
+vnoremap <silent> U u
+vmap <silent> u <Nop>
+
 " toggle search highlight
-nnoremap <silent> <Leader>hl :set hlsearch! hlsearch?<CR>:redraw!<CR>
+nnoremap <silent> <Leader>hl :set hlsearch! hlsearch?<bar>:redraw!<CR>
 hi Search ctermbg=58
 
 " q to turn off hlsearch ?
-nnoremap <silent> q :set nohlsearch<CR>:redraw!<CR>
+nnoremap <silent> q :set nohlsearch<bar>:redraw!<CR>
 
 " does this make sense ? (q to cancel select/visual)
 "vnoremap <unique> <silent> q <C-\><C-n>
@@ -2974,6 +3039,13 @@ vnoremap <silent> <Leader>gt <Esc><C-w>gf
 cnoreabbrev <silent> <expr> hsplit (getcmdtype() == ':' && getcmdline() =~ '\s*hsplit\s*')  ? 'split' : 'hsplit'
 cnoreabbrev <silent> <expr> hnew   (getcmdtype() == ':' && getcmdline() =~ '\s*hnew\s*')    ? 'new'   : 'hnew'
 " TODO: look into vim-alias ...
+
+" split line vertical
+nnoremap <silent> <Leader>sV :vsplit<CR>
+" split line horizontal
+nnoremap <silent> <Leader>sH :split<CR>
+" split into new tab - but same file buffer
+nnoremap <silent> <Leader>sT :tab split<CR>
 
 " -----------------------------
 
