@@ -14,10 +14,14 @@
 [checkout]
 	defaultRemote = upstream
 [color "diff"]
-	old = red
-	new = green
-	meta = cyan
-	frag = yellow
+#	old = red
+	old = 208
+#	new = green
+	new = 142
+#	meta = cyan
+	meta = 38 bold
+#	frag = yellow
+	frag = 185 bold
 	commit = blue
 	hunk = magenta
 [pager]
