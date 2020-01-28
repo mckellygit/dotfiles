@@ -947,19 +947,17 @@ nnoremap <silent> <Leader>sr :let @y=@* <bar> :let @*=@x <bar> :let @x=@y <bar> 
 
 function! YankIt(cmd) abort
     if "vcl" =~ getregtype("*")
-        exe "silent! normal! gv\"" . a:cmd . "gv\<Esc>"
+        exe "silent! normal! gv\"" . a:cmd . "\<Esc>"
         let @z = getregtype("*")
         let @* = substitute(@*, "\\n\\+$", "", "")
     else
-        exe "silent! normal! gv\"" . a:cmd . "gv\<Esc>"
+        exe "silent! normal! gv\"" . a:cmd . "\<Esc>"
         let @z = getregtype("*")
     endif
     let @x=@y " prev in reg x ...
     let @y=@*
     if &buftype == "terminal"
         exe "silent! normal! i"
-    else
-        exe "silent! normal! `v"
     endif
     delmarks v
 endfunction
@@ -980,12 +978,14 @@ endfunction
 "vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"*ygv<Esc>i' : '"*ygv<Esc>'
 "vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<CR>:let @*=@a<CR> <bar> gv<Esc>i' : '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<CR>:let @*=@a<CR> <bar> gv<Esc>'
 "vnoremap <silent> <expr> <C-c> ("vcl" =~ getregtype("*")) ? '"*ygv<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*ygv<Esc>:let @z=getregtype("*")<CR>' <bar> (&buftype == 'terminal') ? 'i' : ''
-vnoremap <silent> <C-c> :<C-U>call YankIt("*y")<CR>
+vnoremap <silent> <expr> <C-c> ("vcl" =~ getregtype("*")) ? '"*y<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*y<Esc>:let @z=getregtype("*")<CR>' <bar> let @x=@y <bar> let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
+"vnoremap <silent> <C-c> :<C-U>call YankIt("*y")<CR>
 
 "vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"*ygv<Esc>i' : '"*ygv<Esc>'
 "vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<CR>:let @*=@a<CR> <bar> gv<Esc>i' : '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<CR>:let @*=@a<CR> <bar> gv<Esc>'
 "vnoremap <silent> <expr> y     ("vcl" =~ getregtype("*")) ? '"*ygv<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*ygv<Esc>:let @z=getregtype("*")<CR>' <bar> (&buftype == 'terminal') ? 'i' : ''
-vnoremap <silent> y     :<C-U>call YankIt("*y")<CR>
+vnoremap <silent> <expr> y     ("vcl" =~ getregtype("*")) ? '"*y<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*y<Esc>:let @z=getregtype("*")<CR>' <bar> let @x=@y <bar> let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
+"vnoremap <silent> y     :<C-U>call YankIt("*y")<CR>
 
 " cut selection
 "vnoremap <silent> <C-x> "*d<LeftRelease>
@@ -1000,10 +1000,14 @@ vnoremap <silent> y     :<C-U>call YankIt("*y")<CR>
 "vnoremap <silent> <expr> <C-x> ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>'
 "vnoremap <silent> <expr> d     ("vcl" =~ getregtype("*")) ? '"*d<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*d<Esc>:let @z=getregtype("*")<CR>'
 "vnoremap <silent> <expr> <DEL> ("vcl" =~ getregtype("*")) ? '"*d<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*d<Esc>:let @z=getregtype("*")<CR>'
-vnoremap <silent> x     :<C-U>call CutIt("*x")<CR>
-vnoremap <silent> <C-x> :<C-U>call CutIt("*x")<CR>
-vnoremap <silent> d     :<C-U>call CutIt("*d")<CR>
-vnoremap <silent> <DEL> :<C-U>call CutIt("*d")<CR>
+vnoremap <silent> <expr> x     ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>' <bar> let @x=@y <bar> let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
+vnoremap <silent> <expr> <C-x> ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>' <bar> let @x=@y <bar> let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
+vnoremap <silent> <expr> d     ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>' <bar> let @x=@y <bar> let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
+vnoremap <silent> <expr> <DEL> ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>' <bar> let @x=@y <bar> let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
+"vnoremap <silent> x     :<C-U>call CutIt("*x")<CR>
+"vnoremap <silent> <C-x> :<C-U>call CutIt("*x")<CR>
+"vnoremap <silent> d     :<C-U>call CutIt("*d")<CR>
+"vnoremap <silent> <DEL> :<C-U>call CutIt("*d")<CR>
 
 nnoremap <silent> <expr> p (@z ==# 'V') ? 'A<CR><Esc>p_' : (@z ==# 'l') ? 'A<CR><Esc>p_' : 'p'
 nnoremap <silent> <expr> P (@z ==# 'V') ? 'kA<CR><Esc>P_' : (@z ==# 'l') ? 'kA<CR><Esc>P_' : 'P'
@@ -1174,11 +1178,11 @@ inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
 " if mouse not supported try vim-extended or gvim -v
 
 " DoubleClick for word (lbve)
-nnoremap <silent> <2-LeftMouse> viw
-vnoremap <silent> <2-LeftMouse> iw
+nnoremap <silent> <2-LeftMouse> mvviw
+vnoremap <silent> <2-LeftMouse> mviw
 " TripleClick for next larger entity, not whole line (lBvE)
-nnoremap <silent> <3-LeftMouse> viW
-vnoremap <silent> <3-LeftMouse> iW
+nnoremap <silent> <3-LeftMouse> mvviW
+vnoremap <silent> <3-LeftMouse> mviW
 " QuadrupleClick too confusing
 nnoremap <silent> <4-LeftMouse> <Nop>
 vnoremap <silent> <4-LeftMouse> <Nop>
@@ -2305,7 +2309,7 @@ function GetPath() abort
   let l:oldiskeyword = &iskeyword
   setlocal iskeyword-=:
   setlocal iskeyword+=/,.
-  execute 'normal! viw'
+  execute 'normal! mvviw'
   let &iskeyword = l:oldiskeyword
 endfunction
 

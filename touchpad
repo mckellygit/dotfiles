@@ -1,0 +1,26 @@
+#!/bin/bash 
+
+if [ $# -eq 0 ] ; then
+  echo "Error, missing 0|1 arg"
+  exit
+fi
+
+arg=$1
+
+if [[ ${arg} == "0" ]] ; then
+    synclient TouchpadOff=1
+else
+    synclient TouchpadOff=0
+fi
+
+# does not seem to always work
+#list=$(xinput list | grep -i 'Touchpad' | awk -F= '{ print $2}' | awk '{print $1}')
+#
+#while read -r item
+#do
+#  if [ -n "${item}" ] ; then
+#    echo "xinput set-prop $item \"Device Enabled\" $arg"
+#    xinput set-prop ${item} "Device Enabled" ${arg}
+#  fi
+#done <<< "$list"
+
