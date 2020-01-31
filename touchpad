@@ -7,20 +7,20 @@ fi
 
 arg=$1
 
-if [[ ${arg} == "0" ]] ; then
-    synclient TouchpadOff=1
-else
-    synclient TouchpadOff=0
-fi
+# for some unknown reason changing the Synaptics setting reverts other changes, so skip it
+list=$(xinput list | grep -i 'Touchpad' | grep -v Synaptics | awk -F= '{ print $2}' | awk '{print $1}')
 
-# does not seem to always work
-#list=$(xinput list | grep -i 'Touchpad' | awk -F= '{ print $2}' | awk '{print $1}')
-#
-#while read -r item
-#do
-#  if [ -n "${item}" ] ; then
-#    echo "xinput set-prop $item \"Device Enabled\" $arg"
-#    xinput set-prop ${item} "Device Enabled" ${arg}
-#  fi
-#done <<< "$list"
+while read -r item
+do
+  if [ -n "${item}" ] ; then
+#   echo "xinput set-prop $item \"Device Enabled\" $arg"
+    xinput set-prop ${item} "Device Enabled" ${arg}
+  fi
+done <<< "$list"
 
+# older method that doesnt seem to work
+#if [[ ${arg} == "0" ]] ; then
+#    synclient TouchpadOff=1
+#else
+#    synclient TouchpadOff=0
+#fi
