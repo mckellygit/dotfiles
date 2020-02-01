@@ -2883,10 +2883,12 @@ endfunction
 nnoremap <Leader>uu           :call UndoAll()<CR>
 vnoremap <Leader>uu <C-\><C-n>:call UndoAll()<CR>
 
-" TODO: u is close to i and so remap to U or uu ?
+" TODO: u is close to i so remap t to uu and/or U ?
 nnoremap <silent> uu u
+nnoremap <silent> U  u
 nmap <silent> u <Nop>
 vnoremap <silent> uu u
+vnoremap <silent> U  u
 vmap <silent> u <Nop>
 
 " toggle search highlight
