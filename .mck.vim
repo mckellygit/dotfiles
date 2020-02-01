@@ -1114,7 +1114,8 @@ endfunction
 " use <C-q> instead
 "inoremap <silent> <C-q> <C-r>+
 " <C-q> does not seem to get through ...
-inoremap <silent> <M-p> <C-r>"
+" NOTE: does not work as a map as expected because it is interpreted as <Esc>p ...
+"inoremap <silent> <M-p> <C-r>*
 
 " change default to paste before (at) cursor
 " instead of after cursor
@@ -1318,7 +1319,8 @@ vnoremap <silent> <Leader>D "_x
 " Terminator plugin (and tmux) ctrl-insert maps to <Esc>1 for paste (ie like C-v / C-S-v)
 nnoremap <silent> <Esc>1 P
 vnoremap <silent> <Esc>1 <Esc>P
-inoremap <silent> <Esc>1 <Esc>P
+inoremap <silent> <Esc>1 <C-r>*
+" or <C-o>p ?
 cnoremap <Esc>1 <C-r>*
 tnoremap <Esc>1 <C-w>"*
 
