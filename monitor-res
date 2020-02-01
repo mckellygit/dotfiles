@@ -1,0 +1,13 @@
+#!/bin/bash
+
+res=$(xrandr --prop | grep ' connected' | grep primary | awk '{print $4}' | awk -F+ '{print $1}')
+
+if [[ "${res}" == "1920x1080" ]] ; then
+    echo "1920x1080"
+else
+    echo ${res}
+fi
+
+# sudo apt-get install -y hwinfo
+# hwinfo --monitor --short
+

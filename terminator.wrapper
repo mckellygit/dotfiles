@@ -1,0 +1,10 @@
+#!/bin/bash
+
+res=$(monitor-res 2> /dev/null)
+
+if [[ "${res}" == "1920x1080" ]] ; then
+    exec terminator -l laptop -p laptop $@
+else
+    exec terminator $@
+fi
+
