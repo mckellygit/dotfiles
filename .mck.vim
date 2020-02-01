@@ -1288,12 +1288,12 @@ nnoremap <silent> <Leader>wr :let @0=@*<CR>cw<C-r>0<Esc>:let @"=@0<CR>:let @*=@0
 " zap (delete) whole word under cursor but w/o saving deleted word to clipboard
 "nnoremap <silent> <Leader>wz lb"_dw
 "nnoremap <silent> <Leader>wz lb"_dW
-nnoremap <silent> <Leader>wz "_daw
-vnoremap <silent> <Leader>wz <C-\><C-n>"_daw
+nnoremap <silent> <Leader>wz "_diw
+vnoremap <silent> <Leader>wz <C-\><C-n>"_diw
 
 " zap whole word w/ saving deleted word to clipboard
-nnoremap <silent> <Leader>wZ daw:let @0=@"<CR>:let @*=@0<CR>
-vnoremap <silent> <Leader>wZ <C-\><C-n>daw:let @0=@"<CR>:let @*=@0<CR>
+nnoremap <silent> <Leader>wZ diw:let @0=@"<CR>:let @*=@0<CR>
+vnoremap <silent> <Leader>wZ <C-\><C-n>diw:let @0=@"<CR>:let @*=@0<CR>
 
 " change word starting at cursor, like vi
 nnoremap <silent> <Leader>we ce
@@ -1341,17 +1341,17 @@ inoremap <silent> <Esc>[3;2~ "_dwi
 
 " ctrl-shift-del to delete whole word under cursor
 "nnoremap <silent> <Esc>[3;6~ B"_dW
-nnoremap <silent> <Esc>[3;6~ "_daw
-vnoremap <silent> <Esc>[3;6~ <Esc>"_dawv
-inoremap <silent> <Esc>[3;6~ <Esc>"_dawi
+nnoremap <silent> <Esc>[3;6~ "_diw
+vnoremap <silent> <Esc>[3;6~ <Esc>"_diwv
+inoremap <silent> <Esc>[3;6~ <Esc>"_diwi
 
 " alt-del to delete whole word under cursor
-nnoremap <silent> <Esc>[3;3~ "_daw
-vnoremap <silent> <Esc>[3;3~ <Esc>"_dawv
-inoremap <silent> <Esc>[3;3~ <Esc>"_dawi
-nnoremap <silent> <M-DEL> "_daw
-vnoremap <silent> <M-DEL> <Esc>"_dawv
-inoremap <silent> <M-DEL> <Esc>"_dawi
+nnoremap <silent> <Esc>[3;3~ "_diw
+vnoremap <silent> <Esc>[3;3~ <Esc>"_diwv
+inoremap <silent> <Esc>[3;3~ <Esc>"_diwi
+nnoremap <silent> <M-DEL> "_diw
+vnoremap <silent> <M-DEL> <Esc>"_diwv
+inoremap <silent> <M-DEL> <Esc>"_diwi
 
 " TODO: if shift-BS is ever recognized ...
 nnoremap <silent> <S-BS> X
