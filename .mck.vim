@@ -2310,7 +2310,7 @@ set grepprg=ag\ --vimgrep\ --hidden
 function GetPath() abort
   let l:oldiskeyword = &iskeyword
   setlocal iskeyword-=:
-  setlocal iskeyword+=/,.
+  setlocal iskeyword+=/,.,-
   execute 'normal! mvviw'
   let &iskeyword = l:oldiskeyword
 endfunction

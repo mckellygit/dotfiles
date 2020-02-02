@@ -3,12 +3,12 @@
 vim:
 -----------------------------
 words
-    $dog$ #dog# @dog@ !dog!
+    $dog$ #dog# @dog@
 
 separators
     [dog] {dog} (dog) ;dog; "dog" ,dog, |dog| =dog= `dog` 'dog' ?dog? /dog/ \dog\
 
-    :dog: -dog- +dog+ .dog. <dog> *dog* ^dog^ %dog% ~dog~
+    :dog: -dog- +dog+ .dog. <dog> *dog* ^dog^ %dog% ~dog~ !dog!
 
 
 tmux:
