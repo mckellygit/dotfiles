@@ -909,7 +909,8 @@ vnoremap s <Nop>
 nnoremap S <Nop>
 vnoremap S <Nop>
 
-vnoremap i <Nop>
+" dont do this, it messes up viw ...
+"vnoremap i <Nop>
 
 " ----------- yank / cut / paste -----------
 
