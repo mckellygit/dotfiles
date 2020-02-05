@@ -1179,10 +1179,10 @@ inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
 
 " if mouse not supported try vim-extended or gvim -v
 
-" DoubleClick for word (lbve)
+" DoubleClick for word (lbvhe)
 nnoremap <silent> <2-LeftMouse> mvviw
 vnoremap <silent> <2-LeftMouse> mviw
-" TripleClick for next larger entity, not whole line (lBvE)
+" TripleClick for next larger entity, not whole line (lBvhE)
 nnoremap <silent> <3-LeftMouse> mvviW
 vnoremap <silent> <3-LeftMouse> mviW
 " QuadrupleClick too confusing
@@ -1190,7 +1190,7 @@ nnoremap <silent> <4-LeftMouse> <Nop>
 vnoremap <silent> <4-LeftMouse> <Nop>
 
 " disable searching tags file for symbol under cursor
-" and select words under cursor instead (lBvE)
+" and select words under cursor instead (lBvhE)
 " (was viW)
 nnoremap <silent> <C-LeftMouse> <LeftMouse>:call GetPath()<CR>
 vnoremap <silent> <C-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath()<CR>
@@ -1209,11 +1209,11 @@ vnoremap <silent> <M-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath()<CR>
 " => Word commands
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" highlight word under cursor (lbve)
+" highlight word under cursor (lbvhe)
 nnoremap <silent> <Leader>ws mvviw
 vnoremap <silent> <Leader>ws mviw
 
-" highlight WORD under cursor (lBvE) (does not use iskeyword)
+" highlight WORD under cursor (lBvhE) (does not use iskeyword)
 nnoremap <silent> <Leader>wS mvviW
 vnoremap <silent> <Leader>wS mviW
 
