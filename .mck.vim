@@ -2374,6 +2374,9 @@ endfunction
 hi QuickFixLine cterm=None
 hi cursorline cterm=None ctermbg=239
 
+" makes for a nice transparent selection ...
+hi Visual cterm=None ctermbg=243
+
 " make these easier to notice
 hi ErrorMsg cterm=none ctermfg=White ctermbg=Red gui=none guifg=White guibg=Red
 " mostly for search wrap
