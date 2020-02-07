@@ -688,7 +688,7 @@ noremap <silent> <Esc>5 gg
 noremap <silent> <Esc>6 G
 
 " toggle line wrap
-nnoremap <silent> <Leader>lw :set nowrap! nowrap?<CR>:redraw!<CR>
+nnoremap <silent> <Leader>lw :set nowrap! nowrap?<bar>:redraw!<CR>
 
 " if added changes to search.c to ui_delay() after give_warning()
 "set matchtime=3
@@ -979,14 +979,14 @@ function! CutIt(cmd) abort
 endfunction
 
 "vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"*ygv<Esc>i' : '"*ygv<Esc>'
-"vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<CR>:let @*=@a<CR> <bar> gv<Esc>i' : '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<CR>:let @*=@a<CR> <bar> gv<Esc>'
-"vnoremap <silent> <expr> <C-c> ("vcl" =~ getregtype("*")) ? '"*ygv<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*ygv<Esc>:let @z=getregtype("*")<CR>' <bar> (&buftype == 'terminal') ? 'i' : ''
+"vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<bar>:let @*=@a<CR> <bar> gv<Esc>i' : '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<bar>:let @*=@a<CR> <bar> gv<Esc>'
+"vnoremap <silent> <expr> <C-c> ("vcl" =~ getregtype("*")) ? '"*ygv<Esc>:let @z=getregtype("*")<bar>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*ygv<Esc>:let @z=getregtype("*")<CR>' <bar> (&buftype == 'terminal') ? 'i' : ''
 vnoremap <silent> <expr> <C-c> ("vcl" =~ getregtype("*")) ? '"*y<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*y<Esc>:let @z=getregtype("*")<CR>' <bar> let @x=@y <bar> let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
 "vnoremap <silent> <C-c> :<C-U>call YankIt("*y")<CR>
 
 "vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"*ygv<Esc>i' : '"*ygv<Esc>'
-"vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<CR>:let @*=@a<CR> <bar> gv<Esc>i' : '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<CR>:let @*=@a<CR> <bar> gv<Esc>'
-"vnoremap <silent> <expr> y     ("vcl" =~ getregtype("*")) ? '"*ygv<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*ygv<Esc>:let @z=getregtype("*")<CR>' <bar> (&buftype == 'terminal') ? 'i' : ''
+"vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<bar>:let @*=@a<CR> <bar> gv<Esc>i' : '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<bar>:let @*=@a<CR> <bar> gv<Esc>'
+"vnoremap <silent> <expr> y     ("vcl" =~ getregtype("*")) ? '"*ygv<Esc>:let @z=getregtype("*")<bar>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*ygv<Esc>:let @z=getregtype("*")<CR>' <bar> (&buftype == 'terminal') ? 'i' : ''
 vnoremap <silent> <expr> y     ("vcl" =~ getregtype("*")) ? '"*y<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*y<Esc>:let @z=getregtype("*")<CR>' <bar> let @x=@y <bar> let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
 "vnoremap <silent> y     :<C-U>call YankIt("*y")<CR>
 
@@ -999,10 +999,10 @@ vnoremap <silent> <expr> y     ("vcl" =~ getregtype("*")) ? '"*y<Esc>:let @z=get
 
 " do the same for x, d, <C-x> cut/del selection ...
 "vnoremap <silent> <C-x> "*d
-"vnoremap <silent> <expr> x     ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>'
-"vnoremap <silent> <expr> <C-x> ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>'
-"vnoremap <silent> <expr> d     ("vcl" =~ getregtype("*")) ? '"*d<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*d<Esc>:let @z=getregtype("*")<CR>'
-"vnoremap <silent> <expr> <DEL> ("vcl" =~ getregtype("*")) ? '"*d<Esc>:let @z=getregtype("*")<CR>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*d<Esc>:let @z=getregtype("*")<CR>'
+"vnoremap <silent> <expr> x     ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*")<bar>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>'
+"vnoremap <silent> <expr> <C-x> ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*")<bar>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>'
+"vnoremap <silent> <expr> d     ("vcl" =~ getregtype("*")) ? '"*d<Esc>:let @z=getregtype("*")<bar>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*d<Esc>:let @z=getregtype("*")<CR>'
+"vnoremap <silent> <expr> <DEL> ("vcl" =~ getregtype("*")) ? '"*d<Esc>:let @z=getregtype("*")<bar>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*d<Esc>:let @z=getregtype("*")<CR>'
 vnoremap <silent> <expr> x     ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>' <bar> let @x=@y <bar> let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
 vnoremap <silent> <expr> <C-x> ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>' <bar> let @x=@y <bar> let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
 vnoremap <silent> <expr> d     ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>' <bar> let @x=@y <bar> let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
@@ -1279,14 +1279,14 @@ noremap Sc Xp
 " wc is already window close, use wx (word exchange)
 
 " exchange whole word (from beg) with clipboard
-nnoremap <silent> <Leader>wx :let @0=@*<CR>ciw<C-r>0<Esc>:let @"=@0<CR>:let @*=@0<CR>
+nnoremap <silent> <Leader>wx :let @0=@*<CR>ciw<C-r>0<Esc>:let @"=@0<bar>:let @*=@0<CR>
 " vis-mode of this doesnt really make sense
-"vnoremap <silent> <Leader>wx <C-\><C-n>:let @0=@*<CR>ciw<C-r>0<Esc>:let @"=@0<CR>:let @*=@0<CR>
+"vnoremap <silent> <Leader>wx <C-\><C-n>:let @0=@*<CR>ciw<C-r>0<Esc>:let @"=@0<bar>:let @*=@0<CR>
 
 " replace at cursor pos with clipboard (not from beg of word like \we above)
-nnoremap <silent> <Leader>wr :let @0=@*<CR>cw<C-r>0<Esc>:let @"=@0<CR>:let @*=@0<CR>
+nnoremap <silent> <Leader>wr :let @0=@*<CR>cw<C-r>0<Esc>:let @"=@0<bar>:let @*=@0<CR>
 " vis-mode of this doesnt really make sense
-"vnoremap <silent> <Leader>wr <C-\><C-n>:let @0=@*<CR>cw<C-r>0<Esc>:let @"=@0<CR>:let @*=@0<CR>
+"vnoremap <silent> <Leader>wr <C-\><C-n>:let @0=@*<CR>cw<C-r>0<Esc>:let @"=@0<bar>:let @*=@0<CR>
 
 " zap (delete) whole word under cursor but w/o saving deleted word to clipboard
 "nnoremap <silent> <Leader>wz lb"_dw
@@ -1295,8 +1295,8 @@ nnoremap <silent> <Leader>wz "_diw
 vnoremap <silent> <Leader>wz <C-\><C-n>"_diw
 
 " zap whole word w/ saving deleted word to clipboard
-nnoremap <silent> <Leader>wZ diw:let @0=@"<CR>:let @*=@0<CR>
-vnoremap <silent> <Leader>wZ <C-\><C-n>diw:let @0=@"<CR>:let @*=@0<CR>
+nnoremap <silent> <Leader>wZ diw:let @0=@"<bar>:let @*=@0<CR>
+vnoremap <silent> <Leader>wZ <C-\><C-n>diw:let @0=@"<bar>:let @*=@0<CR>
 
 " change word starting at cursor, like vi
 nnoremap <silent> <Leader>we ce
@@ -1307,8 +1307,8 @@ nnoremap <silent> <Leader>wd "_dw
 vnoremap <silent> <Leader>wd <C-\><C-n>"_dw
 
 " delete word at cursor pos, but w/ saving deleted word to clipboard
-nnoremap <silent> <Leader>wD dw:let @0=@"<CR>:let @*=@0<CR>
-vnoremap <silent> <Leader>wD <C-\><C-n>dw:let @0=@"<CR>:let @*=@0<CR>
+nnoremap <silent> <Leader>wD dw:let @0=@"<bar>:let @*=@0<CR>
+vnoremap <silent> <Leader>wD <C-\><C-n>dw:let @0=@"<bar>:let @*=@0<CR>
 
 " new whole word (from beg) [cannot use wc]
 nnoremap <silent> <Leader>wn ciw
@@ -1781,8 +1781,8 @@ endfunction
 
 " ---------
 
-"noremap <C-j> @="1\<lt>C-D>"<CR>:set scroll=0<CR>
-"noremap <C-k> @="1\<lt>C-U>"<CR>:set scroll=0<CR>
+"noremap <C-j> @="1\<lt>C-D>"<bar>:set scroll=0<CR>
+"noremap <C-k> @="1\<lt>C-U>"<bar>:set scroll=0<CR>
 
 "noremap <PageUp>   39<C-U>:set scroll=0<CR>
 "noremap <PageDown> 39<C-D>:set scroll=0<CR>
@@ -2043,8 +2043,8 @@ let g:localvimrc_persistent = 1
 "nmap <C-]> :GtagsCursor<CR>
 " C-o to go back
 " \cc to close quickfix
-"noremap <silent> <Leader>cc :ccl\|lcl<CR>:echo<CR>
-"noremap <silent> <Leader>cc :windo lcl\|ccl<CR>:echo<CR>
+"noremap <silent> <Leader>cc :ccl\|lcl<bar>:echo<CR>
+"noremap <silent> <Leader>cc :windo lcl\|ccl<bar>:echo<CR>
 " gtags -----------------
 
 " gtags-cscope -----------
@@ -2096,8 +2096,8 @@ let g:localvimrc_persistent = 1
 "" probably also need - cs add ./GTAGS
 "endif
 " \cc to close quickfix
-"noremap <silent> <Leader>cc :ccl\|lcl<CR>:echo<CR>
-"noremap <silent> <Leader>cc :windo lcl\|ccl<CR>:echo<CR>
+"noremap <silent> <Leader>cc :ccl\|lcl<bar>:echo<CR>
+"noremap <silent> <Leader>cc :windo lcl\|ccl<bar>:echo<CR>
 " cscope -----------
 
 " rtags -----------------
@@ -2140,11 +2140,11 @@ endif
 nmap <C-]> :call rtags#JumpTo(g:SAME_WINDOW)<CR>
 " C-o to go back
 " C-t to go back (not implemented)
-" nmap <C-t> :call rtags#JumpBack()<CR>:echo<CR>
+" nmap <C-t> :call rtags#JumpBack()<bar>:echo<CR>
 " \cc to close quickfix, listview, preview
 nnoremap <silent> <Leader>cc           :ccl\|lcl\|pcl\|:echo<CR>
 vnoremap <silent> <Leader>cc <C-\><C-n>:ccl\|lcl\|pcl\|:echo<CR>
-"noremap <silent> <Leader>cc :windo lcl\|ccl\|pcl<CR>:echo<CR>
+"noremap <silent> <Leader>cc :windo lcl\|ccl\|pcl<bar>:echo<CR>
 " qq to also close location list
 autocmd BufReadPost quickfix nnoremap <silent> <buffer> qq :ccl\|lcl\|pcl\|:echo<CR>
 " TODO: should qq from regular window also close these ?
@@ -2292,10 +2292,10 @@ function MySearch(meth) abort
 endfunction
 
 " use :let @/="" to clear out search pattern
-nnoremap <silent> <Leader>sx :let @/=""<CR>:echo ""<CR>
+nnoremap <silent> <Leader>sx :let @/=""<bar>:echo ""<CR>
 " search normally
-nnoremap <Leader>sn :let @/=""<CR>:set hlsearch<CR>/
-vnoremap <Leader>sn y<Esc>:let @/=""<CR>:set hlsearch<CR>/<C-r>"
+nnoremap <Leader>sn :let @/=""<bar>:set hlsearch<CR>/
+vnoremap <Leader>sn y<Esc>:let @/=""<bar>:set hlsearch<CR>/<C-r>"
 " search buffer with results in loc list
 nnoremap <silent> <Leader>sb :call MySearch(0)<CR>
 " search globally with results in loc list
@@ -2872,7 +2872,7 @@ hi! WarningMsg ctermfg=black
 " -----------
 
 " undo all changes - instead of just :e! ...
-"noremap <Leader>uu :earlier 999999<CR>:u<CR>
+"noremap <Leader>uu :earlier 999999<bar>:u<CR>
 function! UndoAll()
   if &mod !=# 0
     echo 'Undo all changes? (y/n): '
