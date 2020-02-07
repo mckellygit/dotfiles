@@ -582,6 +582,8 @@ let g:cpp_class_decl_highlight = 1
 "let g:cpp_experimental_simple_template_highlight = 1
 " set syntax highlighting for tpp/ipp files also
 autocmd BufNewFile,BufRead *.{ipp,tpp,esp,ecm} set filetype=cpp
+" TODO: ecl syntax
+autocmd BufNewFile,BufRead *.{ecl} set filetype=ecl
 " polygot -----------
 
 " vim-cpp-modern -----------
@@ -2329,7 +2331,7 @@ function! AdjustWindowHeight(minheight, maxheight)
     let l_len = strlen(getline(l)) + 0.0
     let line_width = l_len/w_width
     let n_lines += float2nr(ceil(line_width))
-    let l += 2
+    let l += 1
   endw
   exe max([min([n_lines, a:maxheight]), a:minheight]) . "wincmd _"
 endfunction
