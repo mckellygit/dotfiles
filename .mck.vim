@@ -1240,15 +1240,15 @@ nnoremap <silent> <Leader>wG viwy`]:set hlsearch<CR>#
 " search for visual selection
 " if register is regex with literal metachars then :let @/=escape(@", '.*\\$^')
 "vnoremap <silent> <Leader>wf y <Bar> <Esc>:let @/=@"<CR> <Bar> 2n
-vnoremap <silent> <Leader>wf y<C-\><C-n>:set hlsearch<CR>/<C-r>"<CR>
-vnoremap <silent> <Leader>wF y<C-\><C-n>:set hlsearch<CR>?<C-r>"<CR>
+vnoremap <silent> <Leader>wf y<C-\><C-n>:set hlsearch<bar>/<C-r>"<CR>
+vnoremap <silent> <Leader>wF y<C-\><C-n>:set hlsearch<bar>?<C-r>"<CR>
 " to match normal mode ...
-vnoremap <silent> <Leader>wg y<C-\><C-n>:set hlsearch<CR>/<C-r>"<CR>
-vnoremap <silent> <Leader>wG y<C-\><C-n>:set hlsearch<CR>?<C-r>"<CR>
+vnoremap <silent> <Leader>wg y<C-\><C-n>:set hlsearch<bar>/<C-r>"<CR>
+vnoremap <silent> <Leader>wG y<C-\><C-n>:set hlsearch<bar>?<C-r>"<CR>
 
 " and the *, # ...
-vnoremap <silent> * y<C-\><C-n>:set hlsearch<CR>/<C-r>"<CR>
-vnoremap <silent> # y<C-\><C-n>:set hlsearch<CR>?<C-r>"<CR>
+vnoremap <silent> * y<C-\><C-n>:set hlsearch<bar>/<C-r>"<CR>
+vnoremap <silent> # y<C-\><C-n>:set hlsearch<bar>?<C-r>"<CR>
 
 " dont replace clipboard selection with deleted char (x,X)
 nnoremap x "_x
@@ -1279,11 +1279,13 @@ noremap Sc Xp
 " wc is already window close, use wx (word exchange)
 
 " exchange whole word (from beg) with clipboard
+" (need embedded <CR> instead of <bar> here)
 nnoremap <silent> <Leader>wx :let @0=@*<CR>ciw<C-r>0<Esc>:let @"=@0<bar>:let @*=@0<CR>
 " vis-mode of this doesnt really make sense
 "vnoremap <silent> <Leader>wx <C-\><C-n>:let @0=@*<CR>ciw<C-r>0<Esc>:let @"=@0<bar>:let @*=@0<CR>
 
 " replace at cursor pos with clipboard (not from beg of word like \we above)
+" (need embedded <CR> instead of <bar> here)
 nnoremap <silent> <Leader>wr :let @0=@*<CR>cw<C-r>0<Esc>:let @"=@0<bar>:let @*=@0<CR>
 " vis-mode of this doesnt really make sense
 "vnoremap <silent> <Leader>wr <C-\><C-n>:let @0=@*<CR>cw<C-r>0<Esc>:let @"=@0<bar>:let @*=@0<CR>
