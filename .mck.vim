@@ -2045,8 +2045,8 @@ let g:localvimrc_persistent = 1
 "nmap <C-]> :GtagsCursor<CR>
 " C-o to go back
 " \cc to close quickfix
-"noremap <silent> <Leader>cc :ccl\|lcl<bar>:echo<CR>
-"noremap <silent> <Leader>cc :windo lcl\|ccl<bar>:echo<CR>
+"noremap <silent> <Leader>cc :ccl<bar>lcl<bar>:echo<CR>
+"noremap <silent> <Leader>cc :windo lcl<bar>ccl<bar>:echo<CR>
 " gtags -----------------
 
 " gtags-cscope -----------
@@ -2098,8 +2098,8 @@ let g:localvimrc_persistent = 1
 "" probably also need - cs add ./GTAGS
 "endif
 " \cc to close quickfix
-"noremap <silent> <Leader>cc :ccl\|lcl<bar>:echo<CR>
-"noremap <silent> <Leader>cc :windo lcl\|ccl<bar>:echo<CR>
+"noremap <silent> <Leader>cc :ccl<bar>lcl<bar>:echo<CR>
+"noremap <silent> <Leader>cc :windo lcl<bar>ccl<bar>:echo<CR>
 " cscope -----------
 
 " rtags -----------------
@@ -2144,11 +2144,11 @@ nmap <C-]> :call rtags#JumpTo(g:SAME_WINDOW)<CR>
 " C-t to go back (not implemented)
 " nmap <C-t> :call rtags#JumpBack()<bar>:echo<CR>
 " \cc to close quickfix, listview, preview
-nnoremap <silent> <Leader>cc           :ccl\|lcl\|pcl\|:echo<CR>
-vnoremap <silent> <Leader>cc <C-\><C-n>:ccl\|lcl\|pcl\|:echo<CR>
-"noremap <silent> <Leader>cc :windo lcl\|ccl\|pcl<bar>:echo<CR>
+nnoremap <silent> <Leader>cc           :ccl<bar>lcl<bar>pcl<bar>:echo<CR>
+vnoremap <silent> <Leader>cc <C-\><C-n>:ccl<bar>lcl<bar>pcl<bar>:echo<CR>
+"noremap <silent> <Leader>cc :windo lcl<bar>ccl<bar>pcl<bar>:echo<CR>
 " qq to also close location list
-autocmd BufReadPost quickfix nnoremap <silent> <buffer> qq :ccl\|lcl\|pcl\|:echo<CR>
+autocmd BufReadPost quickfix nnoremap <silent> <buffer> qq :ccl<bar>lcl<bar>pcl<bar>:echo<CR>
 " TODO: should qq from regular window also close these ?
 "
 " auto-reindex on file save ...
