@@ -690,6 +690,9 @@ noremap <silent> <Esc>6 G
 " toggle line wrap
 nnoremap <silent> <Leader>lw :set nowrap! nowrap?<bar>:redraw!<CR>
 
+" show registers (x is next on stack)
+nnoremap <silent> <Leader>rg :reg *,x<CR>
+
 " if added changes to search.c to ui_delay() after give_warning()
 "set matchtime=3
 
