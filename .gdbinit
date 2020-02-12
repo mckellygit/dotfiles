@@ -13,3 +13,7 @@ define btfull
   dont-repeat
 end
 handle SIGINT stop
+dir .
+dir ~/lnrs/wip/build/generated
+dir ~/lnrs/wip/HPCC-Platform
+dir ~/lnrs/wip/LN
