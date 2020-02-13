@@ -952,30 +952,36 @@ nnoremap <silent> <Leader>sr :let @y=@* <bar> :let @*=@x <bar> :let @x=@y <bar> 
 " ----------------------
 
 function! YankIt(cmd) abort
-    if "vcl" =~ getregtype("*")
-        exe "silent! normal! gv\"" . a:cmd . "\<Esc>"
-        let @z = getregtype("*")
+    let @z = getregtype("*")
+    exe "silent! normal! gv\"" . a:cmd . "\<Esc>"
+    if "vcl" =~ @z
         let @* = substitute(@*, "\\n\\+$", "", "")
-    else
-        exe "silent! normal! gv\"" . a:cmd . "\<Esc>"
-        let @z = getregtype("*")
     endif
     let @x=@y " prev in reg x ...
     let @y=@*
-    if &buftype == "terminal"
-        exe "silent! normal! i"
-    endif
     delmarks v
+    if &buftype == "terminal"
+        echo "yanked ..."
+        sleep 651m
+        redraw!
+    " TODO: should we go back to live terminal mode ?
+    "   exe "silent! normal! i"
+    endif
 endfunction
 
 function! CutIt(cmd) abort
-    if "vcl" =~ getregtype("*")
-        exe "silent! normal! gv\"" . a:cmd . "\<Esc>"
-        let @z = getregtype("*")
+    if &buftype == "terminal"
+        " cannot cut from readonly buffer ...
+        exe "silent! normal! gv\""
+        echo "readonly buffer ..."
+        sleep 651m
+        redraw!
+        return
+    endif
+    let @z = getregtype("*")
+    exe "silent! normal! gv\"" . a:cmd . "\<Esc>"
+    if "vcl" =~ @z
         let @* = substitute(@*, "\\n\\+$", "", "")
-    else
-        exe "silent! normal! gv\"" . a:cmd . "\<Esc>"
-        let @z = getregtype("*")
     endif
     let @x=@y " prev in reg x ...
     let @y=@*
@@ -984,14 +990,16 @@ endfunction
 "vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"*ygv<Esc>i' : '"*ygv<Esc>'
 "vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<bar>:let @*=@a<CR> <bar> gv<Esc>i' : '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<bar>:let @*=@a<CR> <bar> gv<Esc>'
 "vnoremap <silent> <expr> <C-c> ("vcl" =~ getregtype("*")) ? '"*ygv<Esc>:let @z=getregtype("*")<bar>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*ygv<Esc>:let @z=getregtype("*")<CR>' <bar> (&buftype == 'terminal') ? 'i' : ''
-vnoremap <silent> <expr> <C-c> ("vcl" =~ getregtype("*")) ? '"*y<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*y<Esc>:let @z=getregtype("*")<CR>' <bar> let @x=@y <bar> let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
-"vnoremap <silent> <C-c> :<C-U>call YankIt("*y")<CR>
+
+"vnoremap <silent> <expr> <C-c> ("vcl" =~ getregtype("*")) ? '"*y<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*y<Esc>:let @z=getregtype("*")<CR>' <bar> :let @x=@y <bar> :let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
+vnoremap <silent> <C-c> :<C-U>call YankIt("*y")<CR>
 
 "vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"*ygv<Esc>i' : '"*ygv<Esc>'
 "vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<bar>:let @*=@a<CR> <bar> gv<Esc>i' : '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<bar>:let @*=@a<CR> <bar> gv<Esc>'
 "vnoremap <silent> <expr> y     ("vcl" =~ getregtype("*")) ? '"*ygv<Esc>:let @z=getregtype("*")<bar>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*ygv<Esc>:let @z=getregtype("*")<CR>' <bar> (&buftype == 'terminal') ? 'i' : ''
-vnoremap <silent> <expr> y     ("vcl" =~ getregtype("*")) ? '"*y<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*y<Esc>:let @z=getregtype("*")<CR>' <bar> let @x=@y <bar> let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
-"vnoremap <silent> y     :<C-U>call YankIt("*y")<CR>
+
+"vnoremap <silent> <expr> y     ("vcl" =~ getregtype("*")) ? '"*y<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*y<Esc>:let @z=getregtype("*")<CR>' <bar> :let @x=@y <bar> :let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
+vnoremap <silent> y     :<C-U>call YankIt("*y")<CR>
 
 " cut selection
 "vnoremap <silent> <C-x> "*d<LeftRelease>
@@ -1006,18 +1014,21 @@ vnoremap <silent> <expr> y     ("vcl" =~ getregtype("*")) ? '"*y<Esc>:let @z=get
 "vnoremap <silent> <expr> <C-x> ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*")<bar>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>'
 "vnoremap <silent> <expr> d     ("vcl" =~ getregtype("*")) ? '"*d<Esc>:let @z=getregtype("*")<bar>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*d<Esc>:let @z=getregtype("*")<CR>'
 "vnoremap <silent> <expr> <DEL> ("vcl" =~ getregtype("*")) ? '"*d<Esc>:let @z=getregtype("*")<bar>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*d<Esc>:let @z=getregtype("*")<CR>'
-vnoremap <silent> <expr> x     ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>' <bar> let @x=@y <bar> let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
-vnoremap <silent> <expr> <C-x> ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>' <bar> let @x=@y <bar> let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
-vnoremap <silent> <expr> d     ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>' <bar> let @x=@y <bar> let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
-vnoremap <silent> <expr> <DEL> ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>' <bar> let @x=@y <bar> let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
-"vnoremap <silent> x     :<C-U>call CutIt("*x")<CR>
-"vnoremap <silent> <C-x> :<C-U>call CutIt("*x")<CR>
-"vnoremap <silent> d     :<C-U>call CutIt("*d")<CR>
-"vnoremap <silent> <DEL> :<C-U>call CutIt("*d")<CR>
+
+"vnoremap <silent> <expr> x     ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>' <bar> :let @x=@y <bar> :let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
+"vnoremap <silent> <expr> <C-x> ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z"=getregtype("*")<CR>' <bar> :let @x=@y <bar> :let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
+"vnoremap <silent> <expr> d     ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>' <bar> :let @x=@y <bar> :let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
+"vnoremap <silent> <expr> <DEL> ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>' <bar> :let @x=@y <bar> :let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
+
+vnoremap <silent> x     :<C-U>call CutIt("*x")<CR>
+vnoremap <silent> <C-x> :<C-U>call CutIt("*x")<CR>
+vnoremap <silent> d     :<C-U>call CutIt("*d")<CR>
+vnoremap <silent> <DEL> :<C-U>call CutIt("*d")<CR>
 
 nnoremap <silent> <expr> p (@z ==# 'V') ? 'A<CR><Esc>p_' : (@z ==# 'l') ? 'A<CR><Esc>p_' : 'p'
 nnoremap <silent> <expr> P (@z ==# 'V') ? 'kA<CR><Esc>P_' : (@z ==# 'l') ? 'kA<CR><Esc>P_' : 'P'
 
+" TODO: should we go back to live terminal mode ?
 nnoremap <silent> yy yy:let @z='V' <bar> :let @* = substitute(@*, "\\n\\+$", "", "") <bar> :let @x=@y <bar> :let @y=@*<CR>
 nnoremap <silent> dd dd:let @z='V' <bar> :let @* = substitute(@*, "\\n\\+$", "", "") <bar> :let @x=@y <bar> :let @y=@*<CR>
 
@@ -1261,7 +1272,12 @@ nnoremap <DEL> "_x
 " but miss the xp swap chars, this works but adds an annoying (timeoutlen) delay to the single typed x
 "noremap xp xp
 "noremap Xp Xp
-" add a new swap char mapping that doesn't start with x ...
+" so use Leader ...
+noremap <silent> <Leader>xp xp
+noremap <silent> <Leader>xP xP
+noremap <silent> <Leader>Xp Xp
+noremap <silent> <Leader>XP XP
+" also dd a new swap char mapping that doesn't start with x ...
 noremap sc xp
 noremap Sc Xp
 
@@ -1598,6 +1614,11 @@ function! IdleToNormalMode()
     endif
 endfunction
 autocmd CursorHoldI * call IdleToNormalMode()
+
+function! ClearCmdWindow()
+    echo ""
+endfunction
+autocmd CursorHold * call ClearCmdWindow()
 
 " ---------
 
