@@ -273,6 +273,13 @@ alias kill-hpcc='kill_hpcc'
 alias make-hpcc='make_hpcc'
 alias make-sync='make_sync'
 
+alias stop-indx='rc -X all'
+alias stop_indx='rc -X all'
+alias strt-indx='rc -X clear'
+alias strt_indx='rc -X clear'
+alias start-indx='rc -X clear'
+alias start_indx='rc -X clear'
+
 # dont disappear on a non-exiting command ...
 # also note use of command
 # bash does this automatically
