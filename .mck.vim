@@ -987,6 +987,9 @@ function! CutIt(cmd) abort
     let @y=@*
 endfunction
 
+" example of nested conditionals from :h expr1
+"     lnum == 1 ? "top" : lnum == 1000 ? "last" : lnum
+
 "vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"*ygv<Esc>i' : '"*ygv<Esc>'
 "vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<bar>:let @*=@a<CR> <bar> gv<Esc>i' : '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<bar>:let @*=@a<CR> <bar> gv<Esc>'
 "vnoremap <silent> <expr> <C-c> ("vcl" =~ getregtype("*")) ? '"*ygv<Esc>:let @z=getregtype("*")<bar>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*ygv<Esc>:let @z=getregtype("*")<CR>' <bar> (&buftype == 'terminal') ? 'i' : ''
