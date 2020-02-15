@@ -1198,6 +1198,12 @@ inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
 
 " if mouse not supported try vim-extended or gvim -v
 
+" TODO: disable mouse drag in normal mode ...
+nnoremap <LeftMouse><LeftDrag> <Nop>
+" see below for A-left drag to enter visual mode
+
+" see mousetime for double-click delay
+
 " DoubleClick for word (lbvhe)
 nnoremap <silent> <2-LeftMouse> mvviw
 vnoremap <silent> <2-LeftMouse> mviw
@@ -1213,13 +1219,20 @@ vnoremap <silent> <4-LeftMouse> <Nop>
 " (was viW)
 nnoremap <silent> <C-LeftMouse> <LeftMouse>:call GetPath()<CR>
 vnoremap <silent> <C-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath()<CR>
+
 " whole line
 "nnoremap <silent> <M-LeftMouse> <LeftMouse>V
 "vnoremap <silent> <M-LeftMouse> <Esc><LeftMouse>V
+
 " same as C- (was viW)
 " TODO: perhaps M- should copy/yank and return to normal mode ?
-nnoremap <silent> <M-LeftMouse> <LeftMouse>:call GetPath()<CR>
-vnoremap <silent> <M-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath()<CR>
+"nnoremap <silent> <M-LeftMouse> <LeftMouse>:call GetPath()<CR>
+"vnoremap <silent> <M-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath()<CR>
+
+" Better: Meta/Alt left mouse enters visual mode to drag/select ...
+nnoremap <silent> <A-LeftDrag> v<LeftDrag>
+vnoremap <silent> <A-LeftDrag> <LeftDrag>
+
 " no-op
 "nnoremap <silent> <M-LeftMouse> <Nop>
 "vnoremap <silent> <M-LeftMouse> <Nop>
