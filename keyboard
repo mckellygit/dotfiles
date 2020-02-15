@@ -1,0 +1,39 @@
+#!/bin/bash
+
+if [ $# -eq 0 ] ; then
+  echo "Error, missing 0|1 arg"
+  exit
+fi
+
+arg=$1
+
+list=$(xinput list | grep -i 'AT Translated Set 2 keyboard' | awk '{print $7 " " $10}' | sed -e 's/id//' | sed -e 's/=//' | sed -e 's/(//' | sed -e 's/)]//')
+
+if [[ "$arg" == "0" ]] ; then
+    rm -f ~/.kbdevinfo
+    while read -r item1 item2
+    do
+      if [[ -n "${item1}" && -n "${item2}" ]] ; then
+        #echo "xinput float $item1"
+        notify-send -t 2000 "laptop keyboard disabled ..."
+        xinput float $item1
+        echo "$item1 $item2" >> ~/.kbdevinfo
+      fi
+    done <<< "$list"
+else
+    if [[ ! -f ~/.kbdevinfo ]] ; then
+        echo "Error, missing ~/.kbdevinfo file to know what master device id to use"
+        echo "Perhaps look for \"Virtual core XTEST keyboard\" ..."
+        exit 1
+    fi
+    list=$(cat ~/.kbdevinfo)
+    while read -r item1 item2
+    do
+      if [[ -n "${item1}" && -n "${item2}" ]] ; then
+        echo "xinput reattach $item1 $item2"
+        notify-send -t 2000 "laptop keyboard endabled ..."
+        xinput reattach $item1 $item2
+      fi
+    done <<< "$list"
+fi
+

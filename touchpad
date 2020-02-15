@@ -12,8 +12,13 @@ list=$(xinput list | grep -i 'Touchpad' | grep -v Synaptics | awk -F= '{ print $
 
 while read -r item
 do
-  if [ -n "${item}" ] ; then
-#   echo "xinput set-prop $item \"Device Enabled\" $arg"
+  if [[ -n "${item}" ]] ; then
+    #echo "xinput set-prop $item \"Device Enabled\" $arg"
+    if [[ "$arg" == "0" ]] ; then
+        notify-send -t 2000 "laptop touchpad disabled ..."
+    else
+        notify-send -t 2000 "laptop touchpad enabled ..."
+    fi
     xinput set-prop ${item} "Device Enabled" ${arg}
   fi
 done <<< "$list"

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+t="5m"
+if [ $# -ge 1 ] ; then
+    t=$1
+fi
+
+sudo smbios-keyboard-ctl --set-timeout=$t
+
