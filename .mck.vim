@@ -1198,9 +1198,10 @@ inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
 
 " if mouse not supported try vim-extended or gvim -v
 
-" TODO: disable mouse drag in normal mode ...
+" TODO: disable mouse drag in normal and insert mode ...
 nnoremap <LeftMouse><LeftDrag> <Nop>
-" see below for A-left drag to enter visual mode
+inoremap <LeftMouse><LeftDrag> <Nop>
+" see below for M/A-LeftDrag to enter visual mode
 
 " see mousetime for double-click delay
 
@@ -1232,6 +1233,7 @@ vnoremap <silent> <C-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath()<CR>
 " Better: Meta/Alt left mouse enters visual mode to drag/select ...
 nnoremap <silent> <A-LeftDrag> v<LeftDrag>
 vnoremap <silent> <A-LeftDrag> <LeftDrag>
+inoremap <silent> <A-LeftDrag> <LeftDrag>
 
 " use wheel to scroll, extending selection ...
 vnoremap <silent> <A-ScrollWheelUp>   5<C-U>
