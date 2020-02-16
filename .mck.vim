@@ -532,7 +532,7 @@ autocmd FileType GV setlocal cursorline
 autocmd FileType GV set foldlevelstart=1
 
 autocmd FileType GV nmap <silent> <buffer> qq :qa!<CR>
-autocmd FileType GV nmap <silent> <buffer> <Leader>wc :call <SID>QuitIfOnlyNoNameLeft()<CR>
+"autocmd FileType GV nmap <silent> <buffer> <Leader>wc :call <SID>QuitIfOnlyNoNameLeft()<CR>
 autocmd FileType GV nmap <silent> <buffer> <Leader>wq :call <SID>QuitIfOnlyNoNameLeft()<CR>
 
 "autocmd FileType GV cnoreabbrev <silent> <expr> q! (getcmdtype() == ':' && getcmdline() =~ '\s*q!\s*') ? 'qa!' : 'q!'
