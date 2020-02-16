@@ -1632,7 +1632,7 @@ function! IdleToNormalMode()
     let mymode = mode()
     if mymode ==# 'i' || mymode ==# 'R'
         call feedkeys("\<Esc>", "m")
-        echo "returned from insert mode ..."
+        echo "Exiting Insert mode after idle timeout ..."
     endif
 endfunction
 autocmd CursorHoldI * call IdleToNormalMode()
