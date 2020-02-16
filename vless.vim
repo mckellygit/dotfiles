@@ -358,5 +358,7 @@ au VimEnter * :Alias! x call\ QuitVless()
 "noremap <silent> <expr> <Leader>wc (argidx()+1 == argc()) ? ':set t_te=<CR>:call QuitVless()<CR>' : ':call QuitVless()<CR>'
 noremap <silent> <Leader>wq :call QuitVless()<CR>
 "noremap <silent> <Leader>wc :call QuitVless()<CR>
+" tab quit/close to match vim ...
+noremap <silent> <Leader>tq :call QuitVless()<CR>
 
 " vim: sw=2
