@@ -2713,8 +2713,6 @@ function! MyQuit(arg) abort
         redraw!
     endif
 endfunction
-au VimEnter * :Alias q call\ MyQuit("q")
-au VimEnter * :Alias q! call\ MyQuit("q!")
 
 " vimdiff (also as a git difftool)
 "  git config --global diff.tool vimdiff
@@ -2823,6 +2821,10 @@ if &diff
   unmap <C-b>
   inoremap <C-f> <C-\><C-o><C-f>
   inoremap <C-b> <C-\><C-o><C-b>
+else 
+  "!&diff
+  au VimEnter * :Alias q call\ MyQuit("q")
+  au VimEnter * :Alias q! call\ MyQuit("q!")
 endif
 
 " patience diff algo ...
@@ -2982,16 +2984,18 @@ vnoremap <Leader>cx <C-\><C-n>:echo<CR>
 " tab open
 nnoremap <silent> <Leader>to           :$tabnew<CR>
 vnoremap <silent> <Leader>to <C-\><C-n>:$tabnew<CR>
-" tab close (same as window close)
-nnoremap <silent> <Leader>tc           :conf q<CR>
-vnoremap <silent> <Leader>tc <C-\><C-n>:conf q<CR>
+" tab quit/close (same as window quit/close)
+"nnoremap <silent> <Leader>tc           :conf q<CR>
+"vnoremap <silent> <Leader>tc <C-\><C-n>:conf q<CR>
+nnoremap <silent> <Leader>tq           :conf q<CR>
+vnoremap <silent> <Leader>tq <C-\><C-n>:conf q<CR>
 " tab keep current and close all others
 nnoremap <silent> <Leader>tk           :tabonly<CR>
 vnoremap <silent> <Leader>tk <C-\><C-n>:tabonly<CR>
 
-" window close (same as tab close)
-nnoremap <silent> <Leader>wc           :conf q<CR>
-vnoremap <silent> <Leader>wc <C-\><C-n>:conf q<CR>
+" window quit/close (same as tab close)
+"nnoremap <silent> <Leader>wc           :conf q<CR>
+"vnoremap <silent> <Leader>wc <C-\><C-n>:conf q<CR>
 nnoremap <silent> <Leader>wq           :conf q<CR>
 vnoremap <silent> <Leader>wq <C-\><C-n>:conf q<CR>
 " window keep current and close all others
