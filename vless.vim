@@ -361,4 +361,8 @@ noremap <silent> <Leader>wq :call QuitVless()<CR>
 " tab quit/close to match vim ...
 noremap <silent> <Leader>tq :call QuitVless()<CR>
 
+" unmap terminal cmds
+noremap <Leader>zs <Nop>
+noremap <Leader>zt <Nop>
+
 " vim: sw=2
