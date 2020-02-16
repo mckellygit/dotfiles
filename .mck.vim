@@ -2294,8 +2294,10 @@ nnoremap <silent> <Leader>cC :ColorToggle!<CR>
 
 " less as a pager --
 function LessInitFunc() abort
-  set mouse-=a
+" set mouse-=a
   call lightline#disable()
+  " makes for a nice transparent selection ...
+  hi Visual cterm=None ctermbg=243 gui=None guibg=#767676
   set noshowmode
   set noshowmatch
 " set laststatus=1
