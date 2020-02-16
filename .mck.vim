@@ -1233,6 +1233,10 @@ vnoremap <silent> <C-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath()<CR>
 nnoremap <silent> <A-LeftDrag> v<LeftDrag>
 vnoremap <silent> <A-LeftDrag> <LeftDrag>
 
+" use wheel to scroll, extending selection ...
+vnoremap <silent> <A-ScrollWheelUp>   5<C-U>
+vnoremap <silent> <A-ScrollWheelDown> 5<C-D>
+
 " no-op
 "nnoremap <silent> <M-LeftMouse> <Nop>
 "vnoremap <silent> <M-LeftMouse> <Nop>
