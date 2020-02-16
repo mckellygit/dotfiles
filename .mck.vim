@@ -2706,6 +2706,16 @@ cnoreabbrev <silent> <expr> quita (getcmdtype() == ':' && getcmdline() =~ '\s*qu
 cnoreabbrev <silent> <expr> quital (getcmdtype() == ':' && getcmdline() =~ '\s*quital\s*')  ? 'call <SID>SkipTerminalsConfQA()' : 'quital'
 cnoreabbrev <silent> <expr> quitall (getcmdtype() == ':' && getcmdline() =~ '\s*quitall\s*')  ? 'call <SID>SkipTerminalsConfQA()' : 'quitall'
 
+function! MyQuit(arg) abort
+    if &buftype != 'terminal'
+        exe "conf " . a:arg
+    else
+        redraw!
+    endif
+endfunction
+au VimEnter * :Alias q call\ MyQuit("q")
+au VimEnter * :Alias q! call\ MyQuit("q!")
+
 " vimdiff (also as a git difftool)
 "  git config --global diff.tool vimdiff
 "  git config --global difftool.trustExitCode true
