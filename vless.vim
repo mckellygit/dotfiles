@@ -233,7 +233,8 @@ call NoremapNormalCmd("<expr> u", 0, "(line('.') == line('w$')) ? 'M' : '<C-U>:s
 map <C-P> <C-k>
 "map <C-K> <C-k>
 "map <Up> k
-map p <C-k>
+"map p <C-k>
+map p <Nop>
 
 " ---------
 " ---------
@@ -342,20 +343,20 @@ nnoremap <silent> Q :qa!<CR>
 nnoremap <silent> q :call QuitVless()<CR>
 
 "cnoreabbrev <silent> <expr> q (getcmdtype() == ':' && getcmdline() =~ '\s*\<q\>\s*$') ? 'silent! call QuitVless()' : 'q'
-:Alias q call\ QuitVless()
-":Alias q! call\ QuitVless()
+au VimEnter * :Alias! q call\ QuitVless()
 " if want q! to exit ...
 "because q! includes q which has an alias above, add it explicitly
-:Alias q! q!
+au VimEnter * :Alias! q! q!
 "cnoremap q! FXIT
 "cnoreabbrev <silent> <expr> FXIT (getcmdtype() == ':' && getcmdline() =~ '\s*\<FXIT\>\s*$') ? 'qa!' : 'q!'
 
-:Alias n call\ QuitVless()
-:Alias x call\ QuitVless()
+au VimEnter * :Alias! n call\ QuitVless()
+au VimEnter * :Alias! x call\ QuitVless()
 
 " <Leader>wc - if want screen to remain at exit ...
 " skip for now - messes up tmux alternate screen
 "noremap <silent> <expr> <Leader>wc (argidx()+1 == argc()) ? ':set t_te=<CR>:call QuitVless()<CR>' : ':call QuitVless()<CR>'
-noremap <silent> <Leader>wc :call QuitVless()<CR>
+noremap <silent> <Leader>wq :call QuitVless()<CR>
+"noremap <silent> <Leader>wc :call QuitVless()<CR>
 
 " vim: sw=2
