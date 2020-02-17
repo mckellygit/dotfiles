@@ -2709,6 +2709,7 @@ cnoreabbrev <silent> <expr> quitall (getcmdtype() == ':' && getcmdline() =~ '\s*
 function! MyQuit(arg) abort
     if &buftype != 'terminal'
         exe "conf " . a:arg
+        redraw!
     else
         redraw!
     endif
