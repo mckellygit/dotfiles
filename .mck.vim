@@ -528,6 +528,10 @@ autocmd FileType GV xmap <buffer> d <Down>
 
 autocmd FileType GV setlocal cursorline
 
+" M/A-DoubleClick to open (o) commit ...
+autocmd FileType GV nmap <silent> <buffer> <A-2-LeftMouse> :sleep 351m <bar> :call feedkeys("o")<CR>
+" M/A-q to quit like q, but M/A-q is used by Unity/Gnome
+
 " start with folds open
 autocmd FileType GV set foldlevelstart=1
 
@@ -893,7 +897,12 @@ set mouse=a
 "set clipboard^=unnamed
 "set clipboard^=unnamedplus
 set clipboard^=unnamed
+" ------------------------------
+" NOTE: removing autoselect means visual selection is not automatically copied to unnamed clipboard (*)
+"       also removing autoselectml makes thins fail weirdly
+"       this also affects getregtype("*") se we need to use visualmode() instead
 set clipboard-=autoselect
+" ------------------------------
 
 " need enough time for mapped / <Leader> key sequences
 "set timeoutlen=1000 ttimeoutlen=0
@@ -953,14 +962,16 @@ nnoremap <silent> <Leader>sr :let @y=@* <bar> :let @*=@x <bar> :let @x=@y <bar> 
 " ----------------------
 
 function! YankIt(cmd) abort
-    let @z = getregtype("*")
+    "let @z = getregtype("*")
     exe "silent! normal! gv\"" . a:cmd . "\<Esc>"
-    if "vcl" =~ @z
+    let @z = visualmode()
+    if "V" ==# @z
         let @* = substitute(@*, "\\n\\+$", "", "")
     endif
     let @x=@y " prev in reg x ...
     let @y=@*
-    delmarks v
+    " dont del v mark, as some cmds use this to return to orig pos
+    "delmarks v
     if &buftype == "terminal"
         echo "yanked ..."
         sleep 651m
@@ -979,9 +990,10 @@ function! CutIt(cmd) abort
         redraw!
         return
     endif
-    let @z = getregtype("*")
+    "let @z = getregtype("*")
     exe "silent! normal! gv\"" . a:cmd . "\<Esc>"
-    if "vcl" =~ @z
+    let @z = visualmode()
+    if "V" ==# @z
         let @* = substitute(@*, "\\n\\+$", "", "")
     endif
     let @x=@y " prev in reg x ...
@@ -1027,8 +1039,10 @@ vnoremap <silent> y     :<C-U>call YankIt("*y")<CR>
 " x places cut selection in clipboard
 vnoremap <silent> x     :<C-U>call CutIt("*x")<CR>
 vnoremap <silent> <C-x> :<C-U>call CutIt("*x")<CR>
-" d does not place deleted selection in clipboard
-vnoremap <silent> d     :<C-U>call CutIt("dd")<CR>
+" NOTE: d is same as x here ...
+vnoremap <silent> d     :<C-U>call CutIt("*d")<CR>
+" NOTE: D and <DEL> do not copy deleted selection to clipboard
+vnoremap <silent> D     :<C-U>call CutIt("dd")<CR>
 vnoremap <silent> <DEL> :<C-U>call CutIt("dd")<CR>
 
 nnoremap <silent> <expr> p (@z ==# 'V') ? 'A<CR><Esc>p_' : (@z ==# 'l') ? 'A<CR><Esc>p_' : 'p'
@@ -1201,7 +1215,7 @@ inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
 
 " if mouse not supported try vim-extended or gvim -v
 
-" TODO: disable mouse drag in normal and insert mode ...
+" NOTE: disable mouse drag in normal and insert mode ...
 nnoremap <LeftMouse><LeftDrag> <Nop>
 inoremap <LeftMouse><LeftDrag> <Nop>
 " see below for M/A-LeftDrag to enter visual mode
@@ -1209,11 +1223,11 @@ inoremap <LeftMouse><LeftDrag> <Nop>
 " see mousetime for double-click delay
 
 " DoubleClick for word (lbvhe)
-nnoremap <silent> <2-LeftMouse> mvviw
-vnoremap <silent> <2-LeftMouse> mviw
+nnoremap <silent> <2-LeftMouse> mvviwygv
+vnoremap <silent> <2-LeftMouse> mviwygv
 " TripleClick for next larger entity, not whole line (lBvhE)
-nnoremap <silent> <3-LeftMouse> mvviW
-vnoremap <silent> <3-LeftMouse> mviW
+nnoremap <silent> <3-LeftMouse> mvviWygv
+vnoremap <silent> <3-LeftMouse> mviWygv
 " QuadrupleClick too confusing
 nnoremap <silent> <4-LeftMouse> <Nop>
 vnoremap <silent> <4-LeftMouse> <Nop>
@@ -1221,17 +1235,19 @@ vnoremap <silent> <4-LeftMouse> <Nop>
 " disable searching tags file for symbol under cursor
 " and select words under cursor instead (lBvhE)
 " (was viW)
-nnoremap <silent> <C-LeftMouse> <LeftMouse>:call GetPath()<CR>
-vnoremap <silent> <C-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath()<CR>
-
-" whole line
-"nnoremap <silent> <M-LeftMouse> <LeftMouse>V
-"vnoremap <silent> <M-LeftMouse> <Esc><LeftMouse>V
-
+nnoremap <silent> <C-LeftMouse> <LeftMouse>:call GetPath()<CR>ygv
+vnoremap <silent> <C-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath()<CR>ygv
 " same as C- (was viW)
 " TODO: perhaps M- should copy/yank and return to normal mode ?
 "nnoremap <silent> <M-LeftMouse> <LeftMouse>:call GetPath()<CR>
 "vnoremap <silent> <M-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath()<CR>
+" NOTE: select and copy whole line
+" NOTE: need to set z reg to 'c' also ... (this y is not YankIt)
+"nnoremap <silent> <expr> <A-LeftRelease> (&filetype == 'GV') ? '' : '<LeftMouse>Vy:let @z="c"<CR>gv'
+" or call YankIt() ...
+nnoremap <silent> <expr> <A-LeftRelease> (&filetype == 'GV') ? '' : '<LeftMouse>V:call YankIt("*y")<CR>gv'
+" NOTE: do not add this, it works well without it
+"vnoremap <silent> <A-LeftRelease> <C-\><C-n><LeftMouse>Vygv
 
 " Better: Meta/Alt left mouse enters visual mode to drag/select ...
 nnoremap <silent> <A-LeftDrag> v<LeftDrag>
@@ -1247,47 +1263,52 @@ vnoremap <silent> <A-ScrollWheelDown> 5<C-D>
 "vnoremap <silent> <M-LeftMouse> <Nop>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Word commands
+" => Word commands NOTE: selection is USUALLY copied to clipboard
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " highlight word under cursor (lbvhe)
-nnoremap <silent> <Leader>ws mvviw
-vnoremap <silent> <Leader>ws mviw
+" NOTE: also copy to clipboard (since its not a mouse click event) ?
+nnoremap <silent> <Leader>ws mvviwygv
+vnoremap <silent> <Leader>ws <C-\><C-n>mvviwygv
 
 " highlight WORD under cursor (lBvhE) (does not use iskeyword)
-nnoremap <silent> <Leader>wS mvviW
-vnoremap <silent> <Leader>wS mviW
+" NOTE: also copy to clipboard (since its not a mouse click event) ?
+nnoremap <silent> <Leader>wS mvviWygv
+vnoremap <silent> <Leader>wS <C-\><C-n>mvviWygv
 
 " grab file path (ie w / and w/o :)
-nnoremap <silent> <Leader>wp mv:call GetPath()<CR>
-vnoremap <silent> <Leader>wp mv<C-\><C-n>:call GetPath()<CR>
+" NOTE: also copy to clipboard (since its not a mouse click event) ?
+nnoremap <silent> <Leader>wp mv:call GetPath()<CR>ygv
+vnoremap <silent> <Leader>wp mv<C-\><C-n>:call GetPath()<CR>ygv
 
-" yank/select word under cursor
-nnoremap <silent> <Leader>wy mvviwy`]
-vnoremap <silent> <Leader>wy mviwy`]
+" yank/copy word under cursor
+" `] to go to end of word/block, but `v to go back to orig pos
+nnoremap <silent> <Leader>wy mvviwy`v
+vnoremap <silent> <Leader>wy <C-\><C-n>mvviwygv
 " to match vim yw ...
-nnoremap <silent> <Leader>yw mvviwy`]
-vnoremap <silent> <Leader>yw mviwy`]
+nnoremap <silent> <Leader>yw mvviwy`v
+vnoremap <silent> <Leader>yw <C-\><C-n>mvviwygv
 
-" search for word under cursor (without copying selection)
+" search for word under cursor (without copying selection to clipboard)
 nnoremap <silent> <Leader>wf :set hlsearch<CR>*
 nnoremap <silent> <Leader>wF :set hlsearch<CR>#
-" search for word under curor (copying selection)
-nnoremap <silent> <Leader>wg viwy`]:set hlsearch<CR>*
-nnoremap <silent> <Leader>wG viwy`]:set hlsearch<CR>#
+" search for word under curor (copying selection to clipboard)
+nnoremap <silent> <Leader>wg viwy:set hlsearch<CR>*
+nnoremap <silent> <Leader>wG viwy:set hlsearch<CR>#
 
 " search for visual selection
 " if register is regex with literal metachars then :let @/=escape(@", '.*\\$^')
 "vnoremap <silent> <Leader>wf y <Bar> <Esc>:let @/=@"<CR> <Bar> 2n
-vnoremap <silent> <Leader>wf y<C-\><C-n>:set hlsearch<bar>/<C-r>"<CR>
-vnoremap <silent> <Leader>wF y<C-\><C-n>:set hlsearch<bar>?<C-r>"<CR>
-" to match normal mode ...
-vnoremap <silent> <Leader>wg y<C-\><C-n>:set hlsearch<bar>/<C-r>"<CR>
-vnoremap <silent> <Leader>wG y<C-\><C-n>:set hlsearch<bar>?<C-r>"<CR>
+" (without copying selection to clipboard)
+vnoremap <silent> <Leader>wf "sy<C-\><C-n>:set hlsearch<bar>/<C-r>s<CR>
+vnoremap <silent> <Leader>wF "sy<C-\><C-n>:set hlsearch<bar>?<C-r>s<CR>
+" to match normal mode (copying selection to clipboard)
+vnoremap <silent> <Leader>wg y<C-\><C-n>:set hlsearch<bar>/<C-r>*<CR>
+vnoremap <silent> <Leader>wG y<C-\><C-n>:set hlsearch<bar>?<C-r>*<CR>
 
-" and the *, # ...
-vnoremap <silent> * y<C-\><C-n>:set hlsearch<bar>/<C-r>"<CR>
-vnoremap <silent> # y<C-\><C-n>:set hlsearch<bar>?<C-r>"<CR>
+" and the *, # (without copying selection to clipboard)
+vnoremap <silent> * "sy<C-\><C-n>:set hlsearch<bar>/<C-r>s<CR>
+vnoremap <silent> # "sy<C-\><C-n>:set hlsearch<bar>?<C-r>s<CR>
 
 " dont replace clipboard selection with deleted char (x,X)
 nnoremap x "_x
@@ -1437,7 +1458,7 @@ set tabstop=4
 " @x to playback
 nnoremap <silent> Q q
 nmap <silent> q <Nop>
-" NOTE: q may be re-mapped later on ...
+" NOTE: q will be re-mapped later on ...
 
 " for block select beyond shorter line lengths
 set virtualedit=block
@@ -2967,8 +2988,8 @@ vmap <silent> u <Nop>
 nnoremap <silent> <Leader>hl :set hlsearch! hlsearch?<bar>:redraw!<CR>
 hi Search ctermbg=58
 
-" TODO: remap q to turn off hlsearch ?
-nnoremap <silent> q :set nohlsearch<bar>:redraw!<CR>
+" TODO: remap q to turn off hlsearch ? - but as is for gv etc.
+nnoremap <silent> <expr> q (&filetype != 'GV') ? ':set nohlsearch<bar>:redraw!<CR>' : 'q'
 
 " does this make sense ? (q to cancel select/visual)
 " NOTE: this is done above now in MyVisQ()
