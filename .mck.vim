@@ -893,6 +893,7 @@ set mouse=a
 "set clipboard^=unnamed
 "set clipboard^=unnamedplus
 set clipboard^=unnamed
+set clipboard-=autoselect
 
 " need enough time for mapped / <Leader> key sequences
 "set timeoutlen=1000 ttimeoutlen=0
