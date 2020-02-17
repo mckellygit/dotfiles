@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cd ~/Downloads
-for d in parcellite xclip FlameGraph ethq byobu perf-tools xsel tmux vim rtags cgdb
+for d in parcellite xclip FlameGraph ethq byobu perf-tools xsel tmux vim rtags cgdb ccache
 do
     echo "checking $d ..."
     cd $d
@@ -17,3 +17,8 @@ do
 done
 cd vim_bundles
 ./update.sh
+
+echo ""
+echo "Also check git:     zsh, zsh-autosuggestions ..."
+echo "Also check non-git: readline, gdb, ncurses ..."
+echo ""
