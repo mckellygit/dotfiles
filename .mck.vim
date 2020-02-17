@@ -1024,10 +1024,12 @@ vnoremap <silent> y     :<C-U>call YankIt("*y")<CR>
 "vnoremap <silent> <expr> d     ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>' <bar> :let @x=@y <bar> :let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
 "vnoremap <silent> <expr> <DEL> ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>' <bar> :let @x=@y <bar> :let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
 
+" x places cut selection in clipboard
 vnoremap <silent> x     :<C-U>call CutIt("*x")<CR>
 vnoremap <silent> <C-x> :<C-U>call CutIt("*x")<CR>
-vnoremap <silent> d     :<C-U>call CutIt("*d")<CR>
-vnoremap <silent> <DEL> :<C-U>call CutIt("*d")<CR>
+" d does not place deleted selection in clipboard
+vnoremap <silent> d     :<C-U>call CutIt("dd")<CR>
+vnoremap <silent> <DEL> :<C-U>call CutIt("dd")<CR>
 
 nnoremap <silent> <expr> p (@z ==# 'V') ? 'A<CR><Esc>p_' : (@z ==# 'l') ? 'A<CR><Esc>p_' : 'p'
 nnoremap <silent> <expr> P (@z ==# 'V') ? 'kA<CR><Esc>P_' : (@z ==# 'l') ? 'kA<CR><Esc>P_' : 'P'
@@ -1435,7 +1437,7 @@ set tabstop=4
 " @x to playback
 nnoremap <silent> Q q
 nmap <silent> q <Nop>
-" NOTE: q may be mapped to something else later on ...
+" NOTE: q may be re-mapped later on ...
 
 " for block select beyond shorter line lengths
 set virtualedit=block
@@ -2965,10 +2967,11 @@ vmap <silent> u <Nop>
 nnoremap <silent> <Leader>hl :set hlsearch! hlsearch?<bar>:redraw!<CR>
 hi Search ctermbg=58
 
-" q to turn off hlsearch ?
+" TODO: remap q to turn off hlsearch ?
 nnoremap <silent> q :set nohlsearch<bar>:redraw!<CR>
 
 " does this make sense ? (q to cancel select/visual)
+" NOTE: this is done above now in MyVisQ()
 "vnoremap <unique> <silent> q <C-\><C-n>
 
 " to match normal mode
