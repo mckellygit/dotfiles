@@ -962,11 +962,13 @@ nnoremap <silent> <Leader>sr :let @y=@* <bar> :let @*=@x <bar> :let @x=@y <bar> 
 " ----------------------
 
 function! YankIt(cmd) abort
-    "let @z = getregtype("*")
     exe "silent! normal! gv\"" . a:cmd . "\<Esc>"
-    let @z = visualmode()
-    if "V" ==# @z
-        let @* = substitute(@*, "\\n\\+$", "", "")
+    let @m = substitute(@*, "\\n\\+$", "", "")
+    if @m==#@* " if identical then no trailing nl
+        let @z='v'
+    else
+        let @z='V'
+        let @*=@m
     endif
     let @x=@y " prev in reg x ...
     let @y=@*
@@ -1045,8 +1047,9 @@ vnoremap <silent> d     :<C-U>call CutIt("*d")<CR>
 vnoremap <silent> D     :<C-U>call CutIt("dd")<CR>
 vnoremap <silent> <DEL> :<C-U>call CutIt("dd")<CR>
 
-nnoremap <silent> <expr> p (@z ==# 'V') ? 'A<CR><Esc>p_' : (@z ==# 'l') ? 'A<CR><Esc>p_' : 'p'
-nnoremap <silent> <expr> P (@z ==# 'V') ? 'kA<CR><Esc>P_' : (@z ==# 'l') ? 'kA<CR><Esc>P_' : 'P'
+" TODO: should we add `] or `[ at end of cmd to place cursor after paste ...
+nnoremap <silent> <expr> p (@z ==# 'V') ? 'A<CR><Esc>p_' : (@z ==# 'l') ? 'A<CR><Esc>p_' : 'p`]'
+nnoremap <silent> <expr> P (@z ==# 'V') ? 'kA<CR><Esc>P_' : (@z ==# 'l') ? 'kA<CR><Esc>P_' : 'P`['
 
 " TODO: should we go back to live terminal mode ?
 nnoremap <silent> yy yy:let @z='V' <bar> :let @* = substitute(@*, "\\n\\+$", "", "") <bar> :let @x=@y <bar> :let @y=@*<CR>
@@ -1216,9 +1219,12 @@ inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
 " if mouse not supported try vim-extended or gvim -v
 
 " NOTE: disable mouse drag in normal and insert mode ...
-nnoremap <LeftMouse><LeftDrag> <Nop>
-inoremap <LeftMouse><LeftDrag> <Nop>
-" see below for M/A-LeftDrag to enter visual mode
+"nnoremap <LeftMouse><LeftDrag> <Nop>
+"inoremap <LeftMouse><LeftDrag> <Nop>
+" NOTE: Meta/Alt left mouse enters visual mode to drag/select ...
+"nnoremap <silent> <A-LeftDrag> v<LeftDrag>
+"vnoremap <silent> <A-LeftDrag> <LeftDrag>
+"inoremap <silent> <A-LeftDrag> <LeftDrag>
 
 " see mousetime for double-click delay
 
@@ -1245,14 +1251,9 @@ vnoremap <silent> <C-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath()<CR>ygv
 " NOTE: need to set z reg to 'c' also ... (this y is not YankIt)
 "nnoremap <silent> <expr> <A-LeftRelease> (&filetype == 'GV') ? '' : '<LeftMouse>Vy:let @z="c"<CR>gv'
 " or call YankIt() ...
-nnoremap <silent> <expr> <A-LeftRelease> (&filetype == 'GV') ? '' : '<LeftMouse>V:call YankIt("*y")<CR>gv'
+nnoremap <silent> <expr> <A-LeftRelease> (&filetype == 'GV') ? '' : '<LeftRelease>V:call YankIt("*y")<CR>gv'
 " NOTE: do not add this, it works well without it
 "vnoremap <silent> <A-LeftRelease> <C-\><C-n><LeftMouse>Vygv
-
-" Better: Meta/Alt left mouse enters visual mode to drag/select ...
-nnoremap <silent> <A-LeftDrag> v<LeftDrag>
-vnoremap <silent> <A-LeftDrag> <LeftDrag>
-inoremap <silent> <A-LeftDrag> <LeftDrag>
 
 " use wheel to scroll, extending selection ...
 vnoremap <silent> <A-ScrollWheelUp>   5<C-U>
@@ -2271,9 +2272,9 @@ nmap <Leader>p0 <Plug>UnconditionalPasteCharBefore
 nmap <Leader>p1 <Plug>UnconditionalPasteCharAfter
 
 " at end of line
-nmap <Leader>pe $<Plug>UnconditionalPasteCharAfter
-" at beg of line
-nmap <Leader>pa 0<Plug>UnconditionalPasteCharBefore
+nmap <Leader>pe $A<Space><Esc><Plug>UnconditionalPasteCharAfter`]
+" at beg of first word (^ not 0)
+nmap <Leader>pa ^<Plug>UnconditionalPasteCharBefore`]li<Space><Esc>b
 
 " change l to i to match current indentation ...
 "nmap <Leader>Pl <Plug>UnconditionalPasteIndentedBefore
