@@ -1222,9 +1222,11 @@ inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
 "nnoremap <LeftMouse><LeftDrag> <Nop>
 "inoremap <LeftMouse><LeftDrag> <Nop>
 " NOTE: Meta/Alt left mouse enters visual mode to drag/select ...
-"nnoremap <silent> <A-LeftDrag> v<LeftDrag>
-"vnoremap <silent> <A-LeftDrag> <LeftDrag>
-"inoremap <silent> <A-LeftDrag> <LeftDrag>
+"nnoremap <silent> <A-LeftMouse> <LeftMouse>
+"vnoremap <silent> <A-LeftMouse> <LeftMouse>
+nnoremap <silent> <A-LeftDrag> v<LeftDrag>
+vnoremap <silent> <A-LeftDrag> <LeftDrag>
+inoremap <silent> <A-LeftDrag> <LeftDrag>
 
 " see mousetime for double-click delay
 
@@ -1238,24 +1240,28 @@ vnoremap <silent> <3-LeftMouse> mviWygv
 nnoremap <silent> <4-LeftMouse> <Nop>
 vnoremap <silent> <4-LeftMouse> <Nop>
 
-" disable searching tags file for symbol under cursor
+" change C-LeftMouse searching tags file for symbol under cursor
 " and select words under cursor instead (lBvhE)
-" (was viW)
-nnoremap <silent> <C-LeftMouse> <LeftMouse>:call GetPath()<CR>ygv
-vnoremap <silent> <C-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath()<CR>ygv
-" same as C- (was viW)
-" TODO: perhaps M- should copy/yank and return to normal mode ?
-"nnoremap <silent> <M-LeftMouse> <LeftMouse>:call GetPath()<CR>
-"vnoremap <silent> <M-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath()<CR>
-" NOTE: select and copy whole line
+" (was viW), use GetPath() instead ...
+nnoremap <silent> <C-LeftMouse> <LeftMouse>:call GetPath(0)<CR>ygv
+vnoremap <silent> <C-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath(0)<CR>ygv
+" M- same as C- (was viW)
+" NOTE: copy/yank and returns to normal mode
+nnoremap <silent> <A-LeftRelease> <LeftRelease>:call GetPath(1)<CR>
+vnoremap <silent> <A-LeftRelease> <LeftRelease><C-\><C-n>:call GetPath(1)<CR>
+" TODO: or could select and copy whole line ?
 " NOTE: need to set z reg to 'c' also ... (this y is not YankIt)
-"nnoremap <silent> <expr> <A-LeftRelease> (&filetype == 'GV') ? '' : '<LeftMouse>Vy:let @z="c"<CR>gv'
+"nnoremap <silent> <expr> <A-LeftRelease> (&filetype == 'GV') ? '' : '<LeftRelease>Vy:let @z="c"<CR>gv'
 " or call YankIt() ...
-nnoremap <silent> <expr> <A-LeftRelease> (&filetype == 'GV') ? '' : '<LeftRelease>V:call YankIt("*y")<CR>gv'
-" NOTE: do not add this, it works well without it
-"vnoremap <silent> <A-LeftRelease> <C-\><C-n><LeftMouse>Vygv
+"nnoremap <silent> <expr> <A-LeftRelease> (&filetype == 'GV') ? '' : '<LeftRelease>V<C-\><C-n>:echo "copied to clipboard"<bar>sleep 551m<bar>:call YankIt("*y")<bar>:redraw!<CR>
+" NOTE: M- Drag end now copies selection to clipboard and returns to normal mode
+vnoremap <silent> <expr> <A-LeftDrag><A-LeftRelease> (&filetype == 'GV') ? '' : '<LeftDrag><LeftRelease><C-\><C-n>:echo "copied to clipboard"<bar>sleep 551m<bar>:call YankIt("*y")<bar>:redraw!<CR>'
 
 " use wheel to scroll, extending selection ...
+" A- to speed up scrolling
+nnoremap <silent> <A-ScrollWheelUp>   20<C-U>
+nnoremap <silent> <A-ScrollWheelDown> 20<C-D>
+" C-ScrollWheel is taken, to adjust font size ...
 vnoremap <silent> <A-ScrollWheelUp>   5<C-U>
 vnoremap <silent> <A-ScrollWheelDown> 5<C-D>
 
@@ -1279,8 +1285,8 @@ vnoremap <silent> <Leader>wS <C-\><C-n>mvviWygv
 
 " grab file path (ie w / and w/o :)
 " NOTE: also copy to clipboard (since its not a mouse click event) ?
-nnoremap <silent> <Leader>wp mv:call GetPath()<CR>ygv
-vnoremap <silent> <Leader>wp mv<C-\><C-n>:call GetPath()<CR>ygv
+nnoremap <silent> <Leader>wp mv:call GetPath(0)<CR>ygv
+vnoremap <silent> <Leader>wp mv<C-\><C-n>:call GetPath(0)<CR>ygv
 
 " yank/copy word under cursor
 " `] to go to end of word/block, but `v to go back to orig pos
@@ -2385,12 +2391,19 @@ set grepprg=ag\ --vimgrep\ --hidden
 "================================================================
 
 " to grab a file path (ie /path/to/file.ext:345) ...
-function GetPath() abort
+function GetPath(arg) abort
   let l:oldiskeyword = &iskeyword
   setlocal iskeyword-=:
   setlocal iskeyword+=/,.,-
   execute 'normal! mvviw'
   let &iskeyword = l:oldiskeyword
+  if a:arg > 0
+    redraw!
+    echo "copied to clipboard"
+    sleep 551m
+    execute 'normal! y'
+    redraw!
+  endif
 endfunction
 
 "================================================================
