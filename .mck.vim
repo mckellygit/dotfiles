@@ -1259,8 +1259,8 @@ vnoremap <silent> <expr> <A-LeftDrag><A-LeftRelease> (&filetype == 'GV') ? '' : 
 
 " use wheel to scroll, extending selection ...
 " A- to speed up scrolling
-nnoremap <silent> <A-ScrollWheelUp>   20<C-U>
-nnoremap <silent> <A-ScrollWheelDown> 20<C-D>
+nnoremap <silent> <A-ScrollWheelUp>   40<C-U>
+nnoremap <silent> <A-ScrollWheelDown> 40<C-D>
 " C-ScrollWheel is taken, to adjust font size ...
 vnoremap <silent> <A-ScrollWheelUp>   5<C-U>
 vnoremap <silent> <A-ScrollWheelDown> 5<C-D>
