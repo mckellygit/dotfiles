@@ -1,4 +1,4 @@
 #!/bin/bash
 
-git --no-pager diff --color=always $1 $2 $3 $4 | less -R +k
+git --no-pager diff --color=always $1 $2 $3 $4 |& less -R +k
 

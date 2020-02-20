@@ -1,4 +1,4 @@
 #!/bin/bash
 
-git --no-pager diff $1 $2 $3 $4 | bat
+git --no-pager diff $1 $2 $3 $4 |& bat
 
