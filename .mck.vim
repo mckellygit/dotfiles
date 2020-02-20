@@ -1227,6 +1227,10 @@ inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
 nnoremap <silent> <A-LeftDrag> v<LeftDrag>
 vnoremap <silent> <A-LeftDrag> <LeftDrag>
 inoremap <silent> <A-LeftDrag> <LeftDrag>
+" might as well make C- do the same as normal mode
+nnoremap <silent> <C-LeftDrag> v<LeftDrag>
+vnoremap <silent> <C-LeftDrag> <LeftDrag>
+inoremap <silent> <C-LeftDrag> <LeftDrag>
 
 " see mousetime for double-click delay
 
@@ -1262,8 +1266,8 @@ vnoremap <silent> <expr> <A-LeftDrag><A-LeftRelease> (&filetype == 'GV') ? '' : 
 nnoremap <silent> <A-ScrollWheelUp>   40<C-U>
 nnoremap <silent> <A-ScrollWheelDown> 40<C-D>
 " C-ScrollWheel is taken, to adjust font size ...
-vnoremap <silent> <A-ScrollWheelUp>   5<C-U>
-vnoremap <silent> <A-ScrollWheelDown> 5<C-D>
+vnoremap <silent> <A-ScrollWheelUp>   40<C-U>
+vnoremap <silent> <A-ScrollWheelDown> 40<C-D>
 
 " no-op
 "nnoremap <silent> <M-LeftMouse> <Nop>
@@ -2688,6 +2692,9 @@ function! s:QuitIfOnlyNoNameLeft() abort
         execute "tabclose!"
     endif
 endfunction
+
+" dont exit this way ...
+map ZZ <Nop>
 
 " close all windows and write then quit
 " no imap for this
