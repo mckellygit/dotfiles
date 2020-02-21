@@ -1600,6 +1600,10 @@ inoremap <silent> <expr> <End>  pumvisible() ? '<End>'  : '<C-\><C-o>g<End>'
 
 " ---------
 
+" use wheel to scroll, extending selection ...
+" C- already used to adjust font size ...
+" A- to speed up scrolling ...
+
 "call NoremapNormalCmd("<C-j>",    0, "1<C-D>")
 nnoremap <silent>        <C-j>              :call <SID>Saving_scrollV("1<C-V><C-D>")<CR>
 nnoremap <silent>        <C-Down>           :call <SID>Saving_scrollV("1<C-V><C-D>")<CR>
@@ -1616,33 +1620,34 @@ vnoremap <silent>        <C-Up>   <C-\><C-n>:call <SID>Saving_scrollV("gv1<C-V><
 inoremap <silent> <expr> <C-k>              pumvisible() ? '<C-k>'  : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-U>")<CR>'
 inoremap <silent> <expr> <C-Up>             pumvisible() ? '<C-Up>' : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-U>")<CR>'
 
-"nnoremap <silent>        <ScrollWheelDown>           :call <SID>Saving_scrollV("5<C-V><C-D>")<CR>
+nnoremap <silent> <expr> <ScrollWheelDown>           (line('.') == line('w0')) ? 'M' : ':call <SID>Saving_scrollV("5<C-V><C-D>")<CR>'
+nnoremap <silent> <expr> <A-ScrollWheelDown>         (line('.') == line('w0')) ? 'M' : ':call <SID>Saving_scrollV("40<C-V><C-D>")<CR>'
 "vnoremap <silent>        <ScrollWheelDown> <C-\><C-n>:call <SID>Saving_scrollV("gv5<C-V><C-D>")<CR>
-"inoremap <silent> <expr> <ScrollWheelDown>           pumvisible() ? '<ScrollWhellDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("5<C-V><C-D>")<CR>'
-
-"nnoremap <silent>        <ScrollWheelUp>             :call <SID>Saving_scrollV("5<C-V><C-U>")<CR>
+inoremap <silent> <expr> <ScrollWheelDown>           pumvisible() ? '<ScrollWhellDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("5<C-V><C-D>")<CR>'
+nnoremap <silent> <expr> <ScrollWheelUp>             (line('.') == line('w$')) ? 'M' : ':call <SID>Saving_scrollV("5<C-V><C-U>")<CR>'
+nnoremap <silent> <expr> <A-ScrollWheelUp>           (line('.') == line('w$')) ? 'M' : ':call <SID>Saving_scrollV("40<C-V><C-U>")<CR>'
 "vnoremap <silent>        <ScrollWheelUp>   <C-\><C-n>:call <SID>Saving_scrollV("gv5<C-V><C-U>")<CR>
-"inoremap <silent> <expr> <ScrollWheelUp>             pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("5<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <ScrollWheelUp>             pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("5<C-V><C-U>")<CR>'
 
-" use wheel to scroll, extending selection ...
-" C- already used to adjust font size ...
-" A- to speed up scrolling ...
-nnoremap <silent> <ScrollWheelUp>     5k
-nnoremap <silent> <ScrollWheelDown>   5j
-nnoremap <silent> <A-ScrollWheelUp>   40k
-nnoremap <silent> <A-ScrollWheelDown> 40j
+" TODO: could add same if at top then M logic to imap <ScrollWheel> ...
+" dont imap <A-ScrollWheel> as thats an auto copy and exit so large scroll does not make much sense
+
+"nnoremap <silent> <ScrollWheelUp>     5k
+"nnoremap <silent> <ScrollWheelDown>   5j
+"nnoremap <silent> <A-ScrollWheelUp>   40k
+"nnoremap <silent> <A-ScrollWheelDown> 40j
 
 " NOTE: add selection to beg/end of next line ...
-" do we bother to lok at reg to see if its V for this ?
+" do we bother to look at reg to see if its V for this ?
 vnoremap <silent> <ScrollWheelUp>     5k0
 vnoremap <silent> <ScrollWheelDown>   5j$
 vnoremap <silent> <A-ScrollWheelUp>   40k0
 vnoremap <silent> <A-ScrollWheelDown> 40j$
 
-inoremap <silent> <ScrollWheelUp>     <C-\><C-o>5k
-inoremap <silent> <ScrollWheelDown>   <C-\><C-o>5j
-inoremap <silent> <A-ScrollWheelUp>   <C-\><C-o>40k
-inoremap <silent> <A-ScrollWheelDown> <C-\><C-o>40j
+"inoremap <silent> <ScrollWheelUp>     <C-\><C-o>5k
+"inoremap <silent> <ScrollWheelDown>   <C-\><C-o>5j
+"inoremap <silent> <A-ScrollWheelUp>   <C-\><C-o>40k
+"inoremap <silent> <A-ScrollWheelDown> <C-\><C-o>40j
 
 " -------------------
 
@@ -1652,6 +1657,8 @@ function! MapScrollKeys()
     g:half = 1
   endif
   let g:full = g:half + g:half
+
+  " TODO: could add same if at top then M logic to imap <C-f> ...
 
   "nnoremap <silent> <C-f>                  :call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>
   "vnoremap <silent> <C-f>        <C-\><C-n>:call <SID>Saving_scrollVDn1("gv<C-V><C-D>")<CR>
