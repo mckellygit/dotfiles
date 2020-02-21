@@ -528,7 +528,10 @@ autocmd FileType GV xmap <buffer> d <Down>
 
 autocmd FileType GV setlocal cursorline
 
+" TODO: it seems when ft==git <ScrollWheel> acts different than the map defined in this file
+
 " M/A-DoubleClick to open (o) commit ...
+autocmd FileType GV nmap <silent> <buffer> <A-LeftRelease> <Nop>
 autocmd FileType GV nmap <silent> <buffer> <A-2-LeftMouse> :sleep 351m <bar> :call feedkeys("o")<CR>
 " M/A-q to quit like q, but M/A-q is used by Unity/Gnome
 
