@@ -964,7 +964,7 @@ nnoremap <silent> <Leader>lr :<C-U>call ForceLoadNammedReg()<CR>
 nnoremap <silent> <Leader>sr :let @y=@* <bar> :let @*=@x <bar> :let @x=@y <bar> echohl DiffText <bar> echo "--- registers swapped ---" <bar> echohl None <bar> sleep 551m <bar> redraw!<CR>
 " ----------------------
 
-function! YankIt(cmd) abort
+function! YankIt(cmd, arg) abort
     exe "silent! normal! gv\"" . a:cmd . "\<Esc>"
     let @m = substitute(@*, "\\n\\+$", "", "")
     if @m==#@* " if identical then no trailing nl
@@ -977,12 +977,14 @@ function! YankIt(cmd) abort
     let @y=@*
     " dont del v mark, as some cmds use this to return to orig pos
     "delmarks v
-    if &buftype == "terminal"
-        echo "yanked ..."
-        sleep 651m
-        redraw!
-    " TODO: should we go back to live terminal mode ?
-    "   exe "silent! normal! i"
+    if &buftype == "terminal" && a:arg >= 1
+        if a:arg == 1
+            echo "copied to clipboard"
+            sleep 651m
+            redraw!
+        endif
+        " NOTE: should we go back to live terminal mode ?
+        exe "silent! normal! i"
     endif
 endfunction
 
@@ -1013,14 +1015,14 @@ endfunction
 "vnoremap <silent> <expr> <C-c> ("vcl" =~ getregtype("*")) ? '"*ygv<Esc>:let @z=getregtype("*")<bar>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*ygv<Esc>:let @z=getregtype("*")<CR>' <bar> (&buftype == 'terminal') ? 'i' : ''
 
 "vnoremap <silent> <expr> <C-c> ("vcl" =~ getregtype("*")) ? '"*y<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*y<Esc>:let @z=getregtype("*")<CR>' <bar> :let @x=@y <bar> :let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
-vnoremap <silent> <C-c> :<C-U>call YankIt("*y")<CR>
+vnoremap <silent> <C-c> :<C-U>call YankIt("*y", 1)<CR>
 
 "vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"*ygv<Esc>i' : '"*ygv<Esc>'
 "vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<bar>:let @*=@a<CR> <bar> gv<Esc>i' : '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<bar>:let @*=@a<CR> <bar> gv<Esc>'
 "vnoremap <silent> <expr> y     ("vcl" =~ getregtype("*")) ? '"*ygv<Esc>:let @z=getregtype("*")<bar>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*ygv<Esc>:let @z=getregtype("*")<CR>' <bar> (&buftype == 'terminal') ? 'i' : ''
 
 "vnoremap <silent> <expr> y     ("vcl" =~ getregtype("*")) ? '"*y<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*y<Esc>:let @z=getregtype("*")<CR>' <bar> :let @x=@y <bar> :let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
-vnoremap <silent> y     :<C-U>call YankIt("*y")<CR>
+vnoremap <silent> y     :<C-U>call YankIt("*y", 1)<CR>
 
 " cut selection
 "vnoremap <silent> <C-x> "*d<LeftRelease>
@@ -1262,7 +1264,7 @@ vnoremap <silent> <A-LeftRelease> <LeftRelease><C-\><C-n>:call GetPath(1)<CR>
 " or call YankIt() ...
 "nnoremap <silent> <expr> <A-LeftRelease> (&filetype == 'GV') ? '' : '<LeftRelease>V<C-\><C-n>:echo "copied to clipboard"<bar>sleep 551m<bar>:call YankIt("*y")<bar>:redraw!<CR>
 " NOTE: M- Drag end now copies selection to clipboard and returns to normal mode
-vnoremap <silent> <expr> <A-LeftDrag><A-LeftRelease> (&filetype == 'GV') ? '' : '<LeftDrag><LeftRelease><C-\><C-n>:echo "copied to clipboard"<bar>sleep 551m<bar>:call YankIt("*y")<bar>:redraw!<CR>'
+vnoremap <silent> <expr> <A-LeftDrag><A-LeftRelease> (&filetype == 'GV') ? '' : '<LeftDrag><LeftRelease><C-\><C-n>:echo "copied to clipboard"<bar>sleep 551m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR>'
 
 " no-op
 "nnoremap <silent> <M-LeftMouse> <Nop>
@@ -2424,6 +2426,10 @@ function GetPath(arg) abort
     sleep 551m
     execute 'normal! y'
     redraw!
+    if &buftype == "terminal"
+      " NOTE: should we go back to live terminal mode ?
+      exe "silent! normal! i"
+    endif
   endif
 endfunction
 
