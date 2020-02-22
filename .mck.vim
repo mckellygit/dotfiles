@@ -485,6 +485,8 @@ autocmd BufReadCmd  index{,.lock}
     \     nmap <buffer> <Space> <C-f> |
     \     nmap <buffer> u <C-b> |
     \ endif
+au VimEnter * :Alias GBlame  Gblame
+au VimEnter * :Alias GStatus Gstatus
 " fugitive -----------
 
 " gitgutter -----------
