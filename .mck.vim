@@ -2277,22 +2277,6 @@ autocmd BufReadPost quickfix nnoremap <silent> <buffer> qq :ccl<bar>lcl<bar>pcl<
 "autocmd BufWritePost,FileWritePost,FileAppendPost *.{c,h,C,cc,cpp,hpp,ipp,tpp} call rtags#ReindexFile()
 " this is done in plugin now ...
 let g:rtagsAutoReindexOnWrite=1
-"
-" also had to make changes to python run() command
-function RtagsToggleColonKeyword() abort
-  if (g:rtagsUseColonKeyword == 0)
-    let g:rtagsUseColonKeyword = 1
-    let l:rtagskeywordmsg = '[vim-rtags] use symbol colon is enabled'
-  else
-    let g:rtagsUseColonKeyword = 0
-    let l:rtagskeywordmsg = '[vim-rtags] use symbol colon is disabled'
-  endif
-  echohl DiffChange | echo l:rtagskeywordmsg | echohl None
-  sleep 500m
-  redraw!
-endfunction
-nnoremap <silent> <Leader>rx           :call RtagsToggleColonKeyword()<CR>
-vnoremap <silent> <Leader>rx <C-\><C-n>:call RtagsToggleColonKeyword()<CR>
 " rtags -----------------
 
 " fswitch ---------------
