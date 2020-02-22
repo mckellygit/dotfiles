@@ -1,6 +1,6 @@
 #!/bin/bash
 
-make
+make -j$NCPUS
 rc=$?
 if [[ $rc -ne 0 ]] ; then
   exit 1
