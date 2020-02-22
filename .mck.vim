@@ -1053,8 +1053,9 @@ vnoremap <silent> D     :<C-U>call CutIt("dd")<CR>
 vnoremap <silent> <DEL> :<C-U>call CutIt("dd")<CR>
 
 " TODO: should we add `] or `[ at end of cmd to place cursor after paste ...
-nnoremap <silent> <expr> p (@z ==# 'V') ? 'A<CR><Esc>p_' : (@z ==# 'l') ? 'A<CR><Esc>p_' : 'p`]'
-nnoremap <silent> <expr> P (@z ==# 'V') ? 'kA<CR><Esc>P_' : (@z ==# 'l') ? 'kA<CR><Esc>P_' : 'P`['
+" NOTE: ok, but not for block-mode ...
+nnoremap <silent> <expr> p (@z ==# 'V') ? 'A<CR><Esc>p_' : (@z ==# 'l') ? 'A<CR><Esc>p_' : (@z == "\<C-v>") ? 'p' : 'p`]'
+nnoremap <silent> <expr> P (@z ==# 'V') ? 'kA<CR><Esc>P_' : (@z ==# 'l') ? 'kA<CR><Esc>P_' : (@z == "\<C-v>") ? 'P' : 'P`['
 
 " TODO: should we go back to live terminal mode ?
 nnoremap <silent> yy yy:let @z='V' <bar> :let @* = substitute(@*, "\\n\\+$", "", "") <bar> :let @x=@y <bar> :let @y=@*<CR>
