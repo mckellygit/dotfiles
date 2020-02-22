@@ -1043,14 +1043,25 @@ vnoremap <silent> y     :<C-U>call YankIt("*y", 1)<CR>
 "vnoremap <silent> <expr> d     ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>' <bar> :let @x=@y <bar> :let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
 "vnoremap <silent> <expr> <DEL> ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>' <bar> :let @x=@y <bar> :let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
 
-" x places cut selection in clipboard
-vnoremap <silent> x     :<C-U>call CutIt("*x")<CR>
-vnoremap <silent> <C-x> :<C-U>call CutIt("*x")<CR>
+" x/d places cut selection in clipboard
+
+" NOTE: these dont work with . (dot) for repeat ...
+"vnoremap <silent> x     :<C-U>call CutIt("*x")<CR>
+"vnoremap <silent> <C-x> :<C-U>call CutIt("*x")<CR>
 " NOTE: d is same as x here ...
-vnoremap <silent> d     :<C-U>call CutIt("*d")<CR>
+"vnoremap <silent> d     :<C-U>call CutIt("*d")<CR>
 " NOTE: D and <DEL> do not copy deleted selection to clipboard
-vnoremap <silent> D     :<C-U>call CutIt("dd")<CR>
-vnoremap <silent> <DEL> :<C-U>call CutIt("dd")<CR>
+"vnoremap <silent> D     :<C-U>call CutIt("dd")<CR>
+"vnoremap <silent> <DEL> :<C-U>call CutIt("dd")<CR>
+
+" NOTE: x into * reg
+vnoremap <silent> <expr> x     (&buftype == 'terminal') ? '<C-\><C-n>:echo "readonly buffer ..." <bar> :sleep 551m <bar> redraw! <CR>' : ("V" ==# mode()) ? '"*x:let @z=visualmode() <bar> :let @* = substitute(@*, "\\n\\+$", "", "") <bar> :let @x=@y <bar> :let @y=@* <CR>' : '"*x:let @z=visualmode() <bar> :let @x=@y <bar> :let @y=@* <CR>'
+vnoremap <silent> <expr> <C-x> (&buftype == 'terminal') ? '<C-\><C-n>:echo "readonly buffer ..." <bar> :sleep 551m <bar> redraw! <CR>' : ("V" ==# mode()) ? '"*x:let @z=visualmode() <bar> :let @* = substitute(@*, "\\n\\+$", "", "") <bar> :let @x=@y <bar> :let @y=@* <CR>' : '"*x:let @z=visualmode() <bar> :let @x=@y <bar> :let @y=@* <CR>'
+" NOTE: use d instead of x but still into * reg
+vnoremap <silent> <expr> d     (&buftype == 'terminal') ? '<C-\><C-n>:echo "readonly buffer ..." <bar> :sleep 551m <bar> redraw! <CR>' : ("V" ==# mode()) ? '"*d:let @z=visualmode() <bar> :let @* = substitute(@*, "\\n\\+$", "", "") <bar> :let @x=@y <bar> :let @y=@* <CR>' : '"*d:let @z=visualmode() <bar> :let @x=@y <bar> :let @y=@* <CR>'
+" NOTE: D and <DEL> do not copy deleted selection to clipboard, use d reg
+vnoremap <silent> <expr> D     (&buftype == 'terminal') ? '<C-\><C-n>:echo "readonly buffer ..." <bar> :sleep 551m <bar> redraw! <CR>' : ("V" ==# mode()) ? '"dd:let @z=visualmode() <bar> :let @* = substitute(@*, "\\n\\+$", "", "") <bar> :let @x=@y <bar> :let @y=@* <CR>' : '"dd:let @z=visualmode() <bar> :let @x=@y <bar> :let @y=@* <CR>'
+vnoremap <silent> <expr> <DEL> (&buftype == 'terminal') ? '<C-\><C-n>:echo "readonly buffer ..." <bar> :sleep 551m <bar> redraw! <CR>' : ("V" ==# mode()) ? '"dd:let @z=visualmode() <bar> :let @* = substitute(@*, "\\n\\+$", "", "") <bar> :let @x=@y <bar> :let @y=@* <CR>' : '"dd:let @z=visualmode() <bar> :let @x=@y <bar> :let @y=@* <CR>'
 
 " TODO: should we add `] or `[ at end of cmd to place cursor after paste ...
 " NOTE: ok, but not for block-mode ...
