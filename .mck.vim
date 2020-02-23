@@ -534,6 +534,7 @@ autocmd FileType GV setlocal cursorline
 
 " M/A-DoubleClick to open (o) commit ...
 autocmd FileType GV nmap <silent> <buffer> <A-LeftRelease> <Nop>
+autocmd FileType GV nmap <silent> <buffer> <A-2-LeftRelease> <Nop>
 autocmd FileType GV nmap <silent> <buffer> <A-2-LeftMouse> :sleep 351m <bar> :call feedkeys("o")<CR>
 " M/A-q to quit like q, but M/A-q is used by Unity/Gnome
 
@@ -1268,10 +1269,13 @@ vnoremap <silent> <4-LeftMouse> <Nop>
 " (was viW), use GetPath() instead ...
 nnoremap <silent> <C-LeftMouse> <LeftMouse>:call GetPath(0)<CR>ygv
 vnoremap <silent> <C-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath(0)<CR>ygv
+" C-DoubleClick for whole line
+nnoremap <silent> <C-2-LeftMouse> <LeftMouse>V<C-\><C-n>:call YankIt("*y", 2)<CR>gv
+vnoremap <silent> <C-2-LeftMouse> <LeftMouse>V<C-\><C-n>:call YankIt("*y", 2)<CR>gv
 " M- same as C- (was viW)
 " NOTE: copy/yank and returns to normal mode
-nnoremap <silent> <A-LeftRelease> <LeftRelease>:call GetPath(1)<CR>
-vnoremap <silent> <A-LeftRelease> <LeftRelease><C-\><C-n>:call GetPath(1)<CR>
+nnoremap <silent> <A-2-LeftRelease> <LeftRelease>:call GetPath(1)<CR>
+vnoremap <silent> <A-2-LeftRelease> <LeftRelease><C-\><C-n>:call GetPath(1)<CR>
 " TODO: or could select and copy whole line ?
 " NOTE: need to set z reg to 'c' also ... (this y is not YankIt)
 "nnoremap <silent> <expr> <A-LeftRelease> (&filetype == 'GV') ? '' : '<LeftRelease>Vy:let @z="c"<CR>gv'
