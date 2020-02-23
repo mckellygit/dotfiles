@@ -1258,8 +1258,11 @@ inoremap <silent> <C-LeftDrag> <LeftDrag>
 nnoremap <silent> <2-LeftMouse> mvviwygv
 vnoremap <silent> <2-LeftMouse> mviwygv
 " TripleClick for next larger entity, not whole line (lBvhE)
-nnoremap <silent> <3-LeftMouse> mvviWygv
-vnoremap <silent> <3-LeftMouse> mviWygv
+"nnoremap <silent> <3-LeftMouse> mvviWygv
+"vnoremap <silent> <3-LeftMouse> mviWygv
+" TODO: Use GetPath instead of lBvhE ...
+nnoremap <silent> <3-LeftMouse> <LeftMouse>:call GetPath(0)<CR>ygv
+vnoremap <silent> <3-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath(0)<CR>ygv
 " QuadrupleClick too confusing
 nnoremap <silent> <4-LeftMouse> <Nop>
 vnoremap <silent> <4-LeftMouse> <Nop>
@@ -1267,11 +1270,12 @@ vnoremap <silent> <4-LeftMouse> <Nop>
 " change C-LeftMouse searching tags file for symbol under cursor
 " and select words under cursor instead (lBvhE)
 " (was viW), use GetPath() instead ...
-nnoremap <silent> <C-LeftMouse> <LeftMouse>:call GetPath(0)<CR>ygv
-vnoremap <silent> <C-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath(0)<CR>ygv
+noremap <silent> <C-LeftMouse> <Nop>
+nnoremap <silent> <C-2-LeftMouse> <LeftMouse>:call GetPath(0)<CR>ygv
+vnoremap <silent> <C-2-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath(0)<CR>ygv
 " C-DoubleClick for whole line
-nnoremap <silent> <C-2-LeftMouse> <LeftMouse>V<C-\><C-n>:call YankIt("*y", 2)<CR>gv
-vnoremap <silent> <C-2-LeftMouse> <LeftMouse>V<C-\><C-n>:call YankIt("*y", 2)<CR>gv
+nnoremap <silent> <C-3-LeftMouse> <LeftMouse>V<C-\><C-n>:call YankIt("*y", 2)<CR>gv
+vnoremap <silent> <C-3-LeftMouse> <LeftMouse>V<C-\><C-n>:call YankIt("*y", 2)<CR>gv
 " M- same as C- (was viW)
 " NOTE: copy/yank and returns to normal mode
 nnoremap <silent> <A-2-LeftRelease> <LeftRelease>:call GetPath(1)<CR>
