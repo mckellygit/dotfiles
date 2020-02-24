@@ -3205,6 +3205,9 @@ cnoreabbrev <silent> <expr> hnew   (getcmdtype() == ':' && getcmdline() =~ '\s*h
 nnoremap <silent> <Leader>sV :vsplit<CR>
 " split line horizontal
 nnoremap <silent> <Leader>sH :split<CR>
+" to match tmux
+nnoremap <silent> <Leader>s\| :vsplit<CR>
+nnoremap <silent> <Leader>s_  :split<CR>
 " split into new tab - but same file buffer
 nnoremap <silent> <Leader>sT :tab split<CR>
 
