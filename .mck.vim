@@ -36,6 +36,8 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'inkarkat/vim-ingo-library'
 " more paste options
 Plugin 'inkarkat/vim-UnconditionalPaste'
+" . (dot) repeat in visual-mode
+Plugin 'inkarkat/vim-visualrepeat'
 "
 " bracketed paste mode ?
 "Plugin 'ConradIrwin/vim-bracketed-paste'
@@ -1256,7 +1258,8 @@ inoremap <silent> <C-LeftDrag> <LeftDrag>
 
 " DoubleClick for word (lbvhe)
 nnoremap <silent> <2-LeftMouse> mvviwygv
-vnoremap <silent> <2-LeftMouse> mviwygv
+vnoremap <silent> <2-LeftMouse> <Esc>mvviwygv
+inoremap <silent> <2-LeftMouse> <Esc>mvviwy`vl:echo "copied ..."<bar>:sleep 551m<bar>:redraw!<CR>i
 " TripleClick for next larger entity, not whole line (lBvhE)
 "nnoremap <silent> <3-LeftMouse> mvviWygv
 "vnoremap <silent> <3-LeftMouse> mviWygv
@@ -2437,7 +2440,7 @@ function GetPath(arg) abort
     redraw!
     echo "copied to clipboard"
     sleep 551m
-    execute 'normal! y'
+    execute 'normal! y`v'
     redraw!
     if &buftype == "terminal"
       " NOTE: should we go back to live terminal mode ?
