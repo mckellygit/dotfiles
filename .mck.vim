@@ -1287,9 +1287,9 @@ vnoremap <silent> <A-2-LeftRelease> <LeftRelease><C-\><C-n>:call GetPath(1)<CR>
 " NOTE: need to set z reg to 'c' also ... (this y is not YankIt)
 "nnoremap <silent> <expr> <A-LeftRelease> (&filetype == 'GV') ? '' : '<LeftRelease>Vy:let @z="c"<CR>gv'
 " or call YankIt() ...
-"nnoremap <silent> <expr> <A-LeftRelease> (&filetype == 'GV') ? '' : '<LeftRelease>V<C-\><C-n>:echo "copied to clipboard"<bar>sleep 551m<bar>:call YankIt("*y")<bar>:redraw!<CR>
+"nnoremap <silent> <expr> <A-LeftRelease> (&filetype == 'GV') ? '' : '<LeftRelease>V<C-\><C-n>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y")<bar>:redraw!<CR>
 " NOTE: M- Drag end now copies selection to clipboard and returns to normal mode
-vnoremap <silent> <expr> <A-LeftDrag><A-LeftRelease> (&filetype == 'GV') ? '' : '<LeftDrag><LeftRelease><C-\><C-n>:echo "copied to clipboard"<bar>sleep 551m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR>'
+vnoremap <silent> <expr> <A-LeftDrag><A-LeftRelease> (&filetype == 'GV') ? '' : '<LeftDrag><LeftRelease><C-\><C-n>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR>'
 
 " no-op
 "nnoremap <silent> <M-LeftMouse> <Nop>
