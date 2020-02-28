@@ -258,7 +258,7 @@ alias less='less -R'
 export PAGER='bat -p'
 #alias cat='ccat'
 #alias cat='mckless -EXR:'
-alias cat='bat --plain --paging=never'
+#alias cat='bat --plain --paging=never'
 alias smesg='vless /var/log/syslog'
 
 alias tailrdm='tail -f /tmp/rdm-$LOGNAME.log'
@@ -361,7 +361,7 @@ alias rdpclient='padsp rdesktop -g 1580x932 -d <domain> -u $LOGNAME -p password 
 # other sizes: 1280x820, 1540x836
 # padsp for getting sound to work but no mic support
 # remove -grab-keyboard to use Ctrl-Alt-Del to change passwd ...
-alias freerdp='xfreerdp +clipboard /size:1580x932 /sound /microphone +unmap-buttons -grab-keyboard /d:<domain> /u:$LOGNAME /sec:tls /v:<host> > /dev/null 2>&1 &|'
+alias freerdp='xfreerdp +clipboard /scale:140 /size:2200x1300 /sound /microphone +unmap-buttons -grab-keyboard /d:RISK     /u:$LOGNAME /sec:tls /v:bct4171477-wxd > /dev/null 2>&1 &|'
 # could also use /sound:sys:alsa /microphone:sys:alsa
 # other sizes: 1528x832
 

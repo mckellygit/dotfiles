@@ -1,0 +1,7 @@
+#!/bin/bash
+
+bat=$(which bat 2> /dev/null)
+if [[ -n "$bat" ]] ; then
+    exec bat --plain --paging=never $@
+fi
+exec cat $@

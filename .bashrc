@@ -133,7 +133,7 @@ alias less='less -R'
 export PAGER='bat -p'
 #alias cat='ccat'
 #alias cat='mckless -EXR:'
-alias cat='bat --plain --paging=never'
+#alias cat='bat --plain --paging=never'
 alias smesg='vless /var/log/syslog'
 
 alias tailrdm='tail -f /tmp/rdm-$LOGNAME.log'
