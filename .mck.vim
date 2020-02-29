@@ -727,6 +727,11 @@ set shortmess-=s
 " and dont forget <Leader>hl for hlsearch toggle
 " and we set WarningMsg highlight color below for wrap warning
 
+" search direction
+" NOTE: make n ALWAYS forward and N ALWAYS backward ...
+nmap n /<CR>
+nmap N ?<CR>
+
 " to match vless and tmux
 " terminator <C-Home> mapped to <Esc>5
 noremap <silent> <Esc>5 gg
