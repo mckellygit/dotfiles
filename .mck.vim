@@ -1371,12 +1371,22 @@ vnoremap <silent> <Leader>wy <C-\><C-n>mvviwygv
 nnoremap <silent> <Leader>yw mvviwy`v
 vnoremap <silent> <Leader>yw <C-\><C-n>mvviwygv
 
+" -----------------------------------------------------
 " search for word under cursor (without copying selection to clipboard)
-nnoremap <silent> <Leader>wf :set hlsearch<CR>*
-nnoremap <silent> <Leader>wF :set hlsearch<CR>#
+" NOTE: *, # search for whole \<word\> which may not always be desired
+nnoremap <silent> <Leader>* :set hlsearch<CR>*
+nnoremap <silent> <Leader># :set hlsearch<CR>#
+
+nnoremap <silent> <Leader>wf viw"sy:set hlsearch<bar>/<C-r>s<CR>
+nnoremap <silent> <Leader>wF viw"sy:set hlsearch<bar>?<C-r>s<CR>
+
 " search for word under curor (copying selection to clipboard)
-nnoremap <silent> <Leader>wg viwy:set hlsearch<CR>*
-nnoremap <silent> <Leader>wG viwy:set hlsearch<CR>#
+" NOTE: *, # search for whole \<word\> which may not always be desired
+"nnoremap <silent> <Leader>wg viwy:set hlsearch<CR>*
+"nnoremap <silent> <Leader>wG viwy:set hlsearch<CR>#
+nnoremap <silent> <Leader>wg viwy:set hlsearch<bar>/<C-r>*<CR>
+nnoremap <silent> <Leader>wG viwy:set hlsearch<bar>?<C-r>*<CR>
+" -----------------------------------------------------
 
 " search for visual selection
 " if register is regex with literal metachars then :let @/=escape(@", '.*\\$^')
