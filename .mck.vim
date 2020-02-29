@@ -49,7 +49,9 @@ Plugin 'inkarkat/vim-visualrepeat'
 Plugin 'justmao945/vim-clang'
 "
 " rooter for :Files and FileBeagle (<Leader>fb)
-Plugin 'airblade/vim-rooter'
+"Plugin 'airblade/vim-rooter'
+" slightly different method
+Plugin 'mattn/vim-findroot'
 "
 " rtags for code navigation (**modified++)
 "Plugin 'lyuts/vim-rtags'
@@ -406,8 +408,34 @@ au BufAdd * let &tabline = &tabline
 
 " rooter ----------
 " echo cwd: status
+"let g:rooter_manual_only = 1
+" Dont do this, use autocmd and paths to fix FileBeagle and fzf/Files
 let g:rooter_silent_chdir = 0
+let g:rooter_use_lcd = 1
 " rooter ----------
+
+" findroot ------------
+let g:findroot_not_for_subdir = 1
+" findroot ------------
+
+" fzf -----------------
+autocmd VimEnter,BufEnter * silent! lcd %:p:h
+" add \fz mapping also
+nnoremap <silent> <Leader>fz :FZFProjectFiles<CR>
+function! s:find_git_root()
+    " in a submodule dir this returns git root, otherwise returns empty
+    let gdir = system('git rev-parse --show-superproject-working-tree 2> /dev/null')[:-2]
+    if empty(gdir)
+        " not in a submodule, returns git root
+        let gdir = system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
+    endif
+    return gdir
+endfunction
+command! FZFProjectFiles execute 'Files' s:find_git_root()
+" you can always run
+" :Files       - to get list from current dir
+" "Files <dir> - to get list from <dir>
+" fzf -----------------
 
 " vinegar ------------
 " vinegar open/close
@@ -442,9 +470,17 @@ let g:rooter_silent_chdir = 0
 " NERDtree-like -------
 
 " FileBeagle ----------
+" NOTE: see above fzf BufEnter autocmd to set lcd to %:p:h
+" so the getcwd() is correct
 let g:filebeagle_suppress_keymaps = 1
-nmap <silent> <Leader>fB <Plug>FileBeagleOpenCurrentWorkingDir
-nmap <silent> <Leader>fb <Plug>FileBeagleOpenCurrentBufferDir
+"nmap <silent> <Leader>fB <Plug>FileBeagleOpenCurrentWorkingDir
+"nmap <silent> <Leader>fb <Plug>FileBeagleOpenCurrentBufferDir
+nmap <silent> <Leader>fb :FBCurrentFiles<CR>:redraw!<CR>
+nmap <silent> <Leader>fB :FBProjectFiles<CR>:redraw!<CR>
+command! FBCurrentFiles execute ':FileBeagle' getcwd()
+command! FBProjectFiles execute ':FileBeagle' s:find_git_root()
+let g:filebeagle_statusline = ""
+
 "nmap <silent> -          <Plug>FileBeagleOpenCurrentBufferDir
 " unmap these in qf
 autocmd BufReadPost quickfix nnoremap <buffer> <Leader>fb <Nop>
@@ -570,8 +606,6 @@ command! -bang Tabcloseleft silent! call TabCloseLeft('<bang>')
 " add C-t to open in new tab to be consistent with fzf
 let g:qfenter_keymap = {}
 let g:qfenter_keymap.topen = ['<Leader><Tab>', '<C-t>']
-" add \fz mapping also
-nnoremap <silent> <Leader>fz :Files<CR>
 let g:qf_loclist_window_bottom = 0
 " QFEnter -------------
 
