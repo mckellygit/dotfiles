@@ -1704,14 +1704,14 @@ vnoremap <silent>        <C-Up>   <C-\><C-n>:call <SID>Saving_scrollV("gv1<C-V><
 inoremap <silent> <expr> <C-k>              pumvisible() ? '<C-k>'  : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-U>")<CR>'
 inoremap <silent> <expr> <C-Up>             pumvisible() ? '<C-Up>' : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-U>")<CR>'
 
-nnoremap <silent> <expr> <ScrollWheelDown>           (line('.') == line('w0')) ? 'M' : ':call <SID>Saving_scrollV("5<C-V><C-D>")<CR>'
-nnoremap <silent> <expr> <A-ScrollWheelDown>         (line('.') == line('w0')) ? 'M' : ':call <SID>Saving_scrollV("40<C-V><C-D>")<CR>'
-"vnoremap <silent>        <ScrollWheelDown> <C-\><C-n>:call <SID>Saving_scrollV("gv5<C-V><C-D>")<CR>
-inoremap <silent> <expr> <ScrollWheelDown>           pumvisible() ? '<ScrollWhellDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("5<C-V><C-D>")<CR>'
-nnoremap <silent> <expr> <ScrollWheelUp>             (line('.') == line('w$')) ? 'M' : ':call <SID>Saving_scrollV("5<C-V><C-U>")<CR>'
-nnoremap <silent> <expr> <A-ScrollWheelUp>           (line('.') == line('w$')) ? 'M' : ':call <SID>Saving_scrollV("40<C-V><C-U>")<CR>'
-"vnoremap <silent>        <ScrollWheelUp>   <C-\><C-n>:call <SID>Saving_scrollV("gv5<C-V><C-U>")<CR>
-inoremap <silent> <expr> <ScrollWheelUp>             pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("5<C-V><C-U>")<CR>'
+nnoremap <silent> <expr> <ScrollWheelDown>           (line('.') == line('w0')) ? 'M' : ':call <SID>Saving_scrollV("10<C-V><C-D>")<CR>'
+nnoremap <silent> <expr> <A-ScrollWheelDown>         (line('.') == line('w0')) ? 'M' : ':call <SID>Saving_scrollV("48<C-V><C-D>")<CR>'
+"vnoremap <silent>        <ScrollWheelDown> <C-\><C-n>:call <SID>Saving_scrollV("gv10<C-V><C-D>")<CR>
+inoremap <silent> <expr> <ScrollWheelDown>           pumvisible() ? '<ScrollWhellDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-D>")<CR>'
+nnoremap <silent> <expr> <ScrollWheelUp>             (line('.') == line('w$')) ? 'M' : ':call <SID>Saving_scrollV("10<C-V><C-U>")<CR>'
+nnoremap <silent> <expr> <A-ScrollWheelUp>           (line('.') == line('w$')) ? 'M' : ':call <SID>Saving_scrollV("48<C-V><C-U>")<CR>'
+"vnoremap <silent>        <ScrollWheelUp>   <C-\><C-n>:call <SID>Saving_scrollV("gv10<C-V><C-U>")<CR>
+inoremap <silent> <expr> <ScrollWheelUp>             pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-U>")<CR>'
 
 " TODO: could add same if at top then M logic to imap <ScrollWheel> ...
 " dont imap <A-ScrollWheel> as thats an auto copy and exit so large scroll does not make much sense
