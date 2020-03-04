@@ -1335,15 +1335,19 @@ vnoremap <silent> <C-3-LeftMouse> <LeftMouse>V<C-\><C-n>:call YankIt("*y", 2)<CR
 
 " M- same as C- (was viW)
 " NOTE: copy/yank and returns to normal mode
-nnoremap <silent> <A-2-LeftRelease> <LeftRelease>:call GetPath(1)<CR>
-vnoremap <silent> <A-2-LeftRelease> <LeftRelease><C-\><C-n>:call GetPath(1)<CR>
+" NOTE: these were <A-2-LeftRelease>
+nnoremap <silent> <A-2-LeftMouse> <LeftMouse>:call GetPath(1)<CR>
+vnoremap <silent> <A-2-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath(1)<CR>
+inoremap <silent> <A-2-LeftMouse> <LeftMouse><C-\><C-n>:call GetWord(1)<CR>i
 " TODO: or could select and copy whole line ?
 " NOTE: need to set z reg to 'c' also ... (this y is not YankIt)
 "nnoremap <silent> <expr> <A-LeftRelease> (&filetype == 'GV') ? '' : '<LeftRelease>Vy:let @z="c"<CR>gv'
 " or call YankIt() ...
 "nnoremap <silent> <expr> <A-LeftRelease> (&filetype == 'GV') ? '' : '<LeftRelease>V<C-\><C-n>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y")<bar>:redraw!<CR>
 " NOTE: M- Drag end now copies selection to clipboard and returns to normal mode
-vnoremap <silent> <A-LeftRelease> <C-\><C-n>mv<LeftRelease><C-\><C-n>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR>`v
+"vnoremap <silent> <A-LeftRelease> <C-\><C-n>mv<LeftRelease><C-\><C-n>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR>`v
+vnoremap <silent> <expr> <A-LeftRelease> (@i=="1") ? '<C-\><C-n>mv<LeftRelease><C-\><C-n>:let @i="0"<bar>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR>`v<Esc>i' : '<C-\><C-n>mv<LeftRelease><C-\><C-n>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR>`v'
+inoremap <silent> <A-LeftMouse> <C-\><C-o>:let @i="1"<CR><LeftMouse>
 
 " no-op
 "nnoremap <silent> <M-LeftMouse> <Nop>
