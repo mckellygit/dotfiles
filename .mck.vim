@@ -2467,6 +2467,7 @@ function MySearch(meth) abort
     return
   endif
   if (a:meth == 0)
+    " NOTE: list of files code below is from ack.vim for :LAckWindow ...
     let files = tabpagebuflist()
     " remove duplicated filenames (files appearing in more than one window)
     let files = filter(copy(sort(files)), 'index(files,v:val,v:key+1)==-1')
