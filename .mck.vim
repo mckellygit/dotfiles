@@ -2453,10 +2453,8 @@ endfunction
 function MySearch(meth) abort
   if (a:meth == 0)
     let promptstr = 'buf:/'
-    let cmdstr = 'LAckWindow!'
   elseif (a:meth == 1)
     let promptstr = 'gbl:/'
-    let cmdstr = 'LAck!'
   else
     redraw!
     return
@@ -2468,14 +2466,21 @@ function MySearch(meth) abort
     redraw!
     return
   endif
-  let saved_shellpipe = &shellpipe
-  let &shellpipe = '>'
-  " NOTE: without cd/autochdir/vim-rooter we need to add git dir ...
-  try
-    execute cmdstr shellescape(string, 1) s:find_git_root()
-  finally
-    let &shellpipe = saved_shellpipe
-  endtry
+  if (a:meth == 0)
+    let files = tabpagebuflist()
+    " remove duplicated filenames (files appearing in more than one window)
+    let files = filter(copy(sort(files)), 'index(files,v:val,v:key+1)==-1')
+    call map(files, "bufname(v:val)")
+    " remove unnamed buffers as quickfix (empty strings before shellescape)
+    call filter(files, 'v:val != ""')
+    " expand to full path (avoid problems with cd/lcd in au QuickFixCmdPre)
+    let files = map(files, "shellescape(fnamemodify(v:val, ':p'))")
+    execute 'AsyncRun! -strip ag --vimgrep' shellescape(string, 1) join(files) ' 2>/dev/null'
+  else
+    execute 'AsyncRun! -strip ag --vimgrep --hidden' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
+  endif
+  let @/=string
+  set hlsearch
 endfunction
 
 " use :let @/="" to clear out search pattern
