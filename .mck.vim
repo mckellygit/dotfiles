@@ -2470,8 +2470,9 @@ function MySearch(meth) abort
   endif
   let saved_shellpipe = &shellpipe
   let &shellpipe = '>'
+  " NOTE: without cd/autochdir/vim-rooter we need to add git dir ...
   try
-    execute cmdstr shellescape(string, 1)
+    execute cmdstr shellescape(string, 1) s:find_git_root()
   finally
     let &shellpipe = saved_shellpipe
   endtry
