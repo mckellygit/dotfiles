@@ -1292,26 +1292,29 @@ inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
 nnoremap <silent> <A-LeftDrag> v<LeftDrag>
 vnoremap <silent> <A-LeftDrag> <LeftDrag>
 inoremap <silent> <A-LeftDrag> <LeftDrag>
+
 " might as well make C- do the same as normal mode
-nnoremap <silent> <C-LeftDrag> v<LeftDrag>
-vnoremap <silent> <C-LeftDrag> <LeftDrag>
-inoremap <silent> <C-LeftDrag> <LeftDrag>
+"nnoremap <silent> <C-LeftDrag> v<LeftDrag>
+"vnoremap <silent> <C-LeftDrag> <LeftDrag>
+"inoremap <silent> <C-LeftDrag> <LeftDrag>
 
 " see mousetime for double-click delay
 
 " DoubleClick for word (lbvhe)
 nnoremap <silent> <2-LeftMouse> mvviwygv
 vnoremap <silent> <2-LeftMouse> <Esc>mvviwygv
-"inoremap <silent> <2-LeftMouse> <Esc>mvviwy`vl:echo "copied ..."<bar>:sleep 551m<bar>:redraw!<CR>i
-"inoremap <silent> <2-LeftRelease> <LeftRelease><C-\><C-n>:call YankIt("*y", 3)<bar>:echo "copied to clipboard"<bar>:sleep 551m:<bar>:redraw!<CR>`vi
-inoremap <silent> <2-LeftMouse> <LeftMouse><C-\><C-n>:call GetWord(1)<CR>i
+inoremap <silent> <2-LeftMouse> <C-\><C-o>:call GetWord(1)<CR>
+
 " TripleClick for next larger entity, not whole line (lBvhE)
 "nnoremap <silent> <3-LeftMouse> mvviWygv
 "vnoremap <silent> <3-LeftMouse> mviWygv
+
 " TODO: Use GetPath instead of lBvhE ...
 nnoremap <silent> <3-LeftMouse> <LeftMouse>:call GetPath(0)<CR>ygv
 vnoremap <silent> <3-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath(0)<CR>ygv
-inoremap <silent> <3-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath(1)<CR>i
+" TODO: 3-click in insert mode is difficult
+"inoremap <silent> <3-LeftMouse> <LeftMouse><C-\><C-o>:call GetPath(1)<CR>
+
 " QuadrupleClick too confusing
 nnoremap <silent> <4-LeftMouse> <Nop>
 vnoremap <silent> <4-LeftMouse> <Nop>
@@ -1322,12 +1325,16 @@ inoremap <silent> <4-LeftMouse> <Nop>
 " (was viW), use GetPath() instead ...
 noremap <silent> <C-LeftMouse> <Nop>
 inoremap <silent> <C-LeftMouse> <Nop>
+
 nnoremap <silent> <C-2-LeftMouse> <LeftMouse>:call GetPath(0)<CR>ygv
 vnoremap <silent> <C-2-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath(0)<CR>ygv
-inoremap <silent> <C-2-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath(1)<CR>i
+inoremap <silent> <C-2-LeftMouse> <LeftMouse><C-\><C-o>:call GetPath(1)<CR>
+
 " C-TripleClick for whole line
-nnoremap <silent> <C-3-LeftMouse> <LeftMouse>V<C-\><C-n>:call YankIt("*y", 2)<CR>gv
-vnoremap <silent> <C-3-LeftMouse> <LeftMouse>V<C-\><C-n>:call YankIt("*y", 2)<CR>gv
+nnoremap <silent> <C-3-LeftMouse> <LeftMouse>:call GetLine(0)<CR>ygv
+vnoremap <silent> <C-3-LeftMouse> <LeftMouse><C-\><C-n>:call GetLine(0)<CR>ygv
+" TODO: 3-click in insert mode is difficult
+"inoremap <silent> <C-3-LeftMouse> <LeftMouse><C-\><C-o>:call GetLine(1)<CR>
 
 " TODO: this does not work yet ...
 "inoremap <silent> <C-3-LeftMouse> <LeftMouse><C-\><C-o>V<C-\><C-n>:call YankIt("*y", 2)<CR>i
@@ -1336,9 +1343,9 @@ vnoremap <silent> <C-3-LeftMouse> <LeftMouse>V<C-\><C-n>:call YankIt("*y", 2)<CR
 " M- same as C- (was viW)
 " NOTE: copy/yank and returns to normal mode
 " NOTE: these were <A-2-LeftRelease>
-nnoremap <silent> <A-2-LeftMouse> <LeftMouse>:call GetPath(1)<CR>
-vnoremap <silent> <A-2-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath(1)<CR>
-inoremap <silent> <A-2-LeftMouse> <LeftMouse><C-\><C-n>:call GetWord(1)<CR>i
+nnoremap <silent> <A-2-LeftMouse> <LeftMouse>:call GetWord(2)<CR>
+vnoremap <silent> <A-2-LeftMouse> <LeftMouse><C-\><C-n>:call GetWord(2)<CR>
+inoremap <silent> <A-2-LeftMouse> <LeftMouse><C-\><C-o>:call GetWord(2)<CR>
 " TODO: or could select and copy whole line ?
 " NOTE: need to set z reg to 'c' also ... (this y is not YankIt)
 "nnoremap <silent> <expr> <A-LeftRelease> (&filetype == 'GV') ? '' : '<LeftRelease>Vy:let @z="c"<CR>gv'
@@ -2506,10 +2513,17 @@ set grepprg=ag\ --vimgrep\ --hidden
 
 "================================================================
 
-" to grab a file path (ie /path/to/file.ext:345) ...
+" to grab a word - like file path below
 function GetWord(arg) abort
-  execute 'normal! mvviw'
-  if a:arg > 0
+  " 0 selects in visual mode - (0)ygv is like (1)
+  " 1 selects in visual mode and yanks
+  " 2 selects, yanks and returns to previous mode
+  if a:arg == 1
+    execute 'normal! mvviwygv'
+  else
+    execute 'normal! mvviw'
+  endif
+  if a:arg > 1
     redraw!
     echo "copied to clipboard"
     sleep 551m
@@ -2524,12 +2538,42 @@ endfunction
 
 " to grab a file path (ie /path/to/file.ext:345) ...
 function GetPath(arg) abort
+  " 0 selects in visual mode - (0)ygv is like (1)
+  " 1 selects in visual mode and yanks
+  " 2 selects, yanks and returns to previous mode
   let l:oldiskeyword = &iskeyword
   setlocal iskeyword-=:
   setlocal iskeyword+=/,.,-
-  execute 'normal! mvviw'
+  if a:arg == 1
+    execute 'normal! mvviwygv'
+  else
+    execute 'normal! mvviw'
+  endif
   let &iskeyword = l:oldiskeyword
-  if a:arg > 0
+  if a:arg > 1
+    redraw!
+    echo "copied to clipboard"
+    sleep 551m
+    execute 'normal! y`v'
+    redraw!
+    if &buftype == "terminal"
+      " NOTE: should we go back to live terminal mode ?
+      exe "silent! normal! i"
+    endif
+  endif
+endfunction
+
+" to grab a line - like file path above
+function GetLine(arg) abort
+  " 0 selects in visual mode - (0)ygv is like (1)
+  " 1 selects in visual mode and yanks
+  " 2 selects, yanks and returns to previous mode
+  if a:arg == 1
+    execute 'normal! mvVygv'
+  else
+    execute 'normal! mvV'
+  endif
+  if a:arg > 1
     redraw!
     echo "copied to clipboard"
     sleep 551m
