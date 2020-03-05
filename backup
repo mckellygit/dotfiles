@@ -12,6 +12,9 @@ done
 
 list_repo_info
 
+# ppas ...
+grep -r --include '*.list' '^deb ' /etc/apt/ | sed -re 's/^\/etc\/apt\/sources\.list((\.d\/)?|(:)?)//' -e 's/(.*\.list):/\[\1\] /' -e 's/deb http:\/\/ppa.launchpad.net\/(.*?)\/ubuntu .*/ppa:\1/' > ~/misc/ppa.list
+
 cp -p ~/Downloads/repo_info.lst ~/misc
 dpkg -l > ~/misc/dpkg.list
 apt list --installed > ~/misc/apt.list
