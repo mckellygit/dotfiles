@@ -38,13 +38,18 @@ logdir=~/radssh/sessions/session_%Y%m%d_%H%M%S
 
 ### Available modes: {stream, ordered, off}
 output_mode=ordered
+
+### If output_mode is ordered then addl quiet flag to not echo 'No Output'
+output_quiet=on
+
 ### Can override character encoding (will use sys.stdout.encoding if not specified)
 ### character_encoding=UTF-8
 ### Avoiding runaway commands with either too much output, or
 ### waiting indefinately at a user prompt...
 # quota.time=0
 # quota.lines=0
-# quota.bytes=0
+quota.bytes=262144
+
 character_encoding=UTF-8
 #character_encoding=latin-1
 

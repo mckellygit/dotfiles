@@ -273,14 +273,19 @@ alias kill-hpcc='kill_hpcc'
 alias make-hpcc='make_hpcc'
 alias make-sync='make_sync'
 
-alias stop-indx='rc -X all'
-alias stop_indx='rc -X all'
-alias start-indx='rc -X clear'
-alias start_indx='rc -X clear'
-alias clear-indx='rc -C'
-alias clear_indx='rc -C'
-alias quit-indx='rc -q'
-alias quit_indx='rc -q'
+alias disable-indx='rc -X all'
+alias disable_indx='rc -X all'
+alias enable-indx='rc -X clear'
+alias enable_indx='rc -X clear'
+alias wipe-indx='rc -C'
+alias wipe_indx='rc -C'
+alias start-indx='rc -J .'
+alias start_indx='rc -J .'
+
+alias start-rdm="rdm --tempdir /tmp/rdm-${LOGNAME} --log-file /tmp/rdm-${LOGNAME}.log --daemon"
+alias start_rdm="rdm --tempdir /tmp/rdm-${LOGNAME} --log-file /tmp/rdm-${LOGNAME}.log --daemon"
+alias stop-rdm='rc -q'
+alias stop_rdm='rc -q'
 
 # dont disappear on a non-exiting command ...
 # also note use of command
