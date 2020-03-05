@@ -275,10 +275,12 @@ alias make-sync='make_sync'
 
 alias stop-indx='rc -X all'
 alias stop_indx='rc -X all'
-alias strt-indx='rc -X clear'
-alias strt_indx='rc -X clear'
 alias start-indx='rc -X clear'
 alias start_indx='rc -X clear'
+alias clear-indx='rc -C'
+alias clear_indx='rc -C'
+alias quit-indx='rc -q'
+alias quit_indx='rc -q'
 
 # dont disappear on a non-exiting command ...
 # also note use of command
