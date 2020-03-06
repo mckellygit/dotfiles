@@ -33,8 +33,9 @@ Plugin 'VundleVim/Vundle.vim'
 "" Add Plugins here ...
 "
 " required utils for EnhancedJumps plugin
+" NOTE: use stable branch
 Plugin 'inkarkat/vim-ingo-library'
-" more paste options
+" Awesome paste options
 Plugin 'inkarkat/vim-UnconditionalPaste'
 " . (dot) repeat in visual-mode
 Plugin 'inkarkat/vim-visualrepeat'
@@ -1322,12 +1323,23 @@ inoremap <silent> <4-LeftMouse> <Nop>
 " change C-LeftMouse searching tags file for symbol under cursor
 " and select words under cursor instead (lBvhE)
 " (was viW), use GetPath() instead ...
-noremap <silent> <C-LeftMouse> <Nop>
+nnoremap <silent> <C-LeftMouse> <Nop>
+vnoremap <silent> <C-LeftMouse> <Nop>
 inoremap <silent> <C-LeftMouse> <Nop>
 
 nnoremap <silent> <C-2-LeftMouse> <LeftMouse>:call GetPath(1)<CR>
 vnoremap <silent> <C-2-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath(1)<CR>
 inoremap <silent> <C-2-LeftMouse> <LeftMouse><C-\><C-o>:call GetPath(1)<CR>
+
+" if visual selection is only one line then auto yank it ...
+function YankIfOnlyOneLine()
+    let [line_start, column_start] = getpos("'<")[1:2]
+    let [line_end, column_end] = getpos("'>")[1:2]
+    if line_end == line_start
+        call YankIt("*y", 1)
+    endif
+endfunction
+vnoremap <silent> <LeftRelease> <LeftRelease><C-\><C-n>:call YankIfOnlyOneLine()<CR>gv
 
 " C-TripleClick for whole line
 "nnoremap <silent> <C-3-LeftMouse> <LeftMouse>:call GetLine(1)<CR>
