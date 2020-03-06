@@ -1303,17 +1303,16 @@ inoremap <silent> <A-LeftDrag> <LeftDrag>
 " DoubleClick for word (lbvhe)
 nnoremap <silent> <2-LeftMouse> mvviwygv
 vnoremap <silent> <2-LeftMouse> <Esc>mvviwygv
-inoremap <silent> <2-LeftMouse> <C-\><C-o>:call GetWord(1)<CR>
+inoremap <silent> <2-LeftMouse> <C-\><C-o>:let @i="2"<CR><C-\><C-o>:call GetWord(1)<CR>
 
 " TripleClick for next larger entity, not whole line (lBvhE)
 "nnoremap <silent> <3-LeftMouse> mvviWygv
 "vnoremap <silent> <3-LeftMouse> mviWygv
 
-" TODO: Use GetPath instead of lBvhE ...
-nnoremap <silent> <3-LeftMouse> <LeftMouse>:call GetPath(0)<CR>ygv
-vnoremap <silent> <3-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath(0)<CR>ygv
-" TODO: 3-click in insert mode is difficult
-"inoremap <silent> <3-LeftMouse> <LeftMouse><C-\><C-o>:call GetPath(1)<CR>
+" NOTE: Use GetPath instead of lBvhE ...
+nnoremap <silent> <3-LeftMouse> <LeftMouse>:call GetPath(1)<CR>
+vnoremap <silent> <3-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath(1)<CR>
+" TODO: 3-click in insert mode is handled in vmode with @i==2
 
 " QuadrupleClick too confusing
 nnoremap <silent> <4-LeftMouse> <Nop>
@@ -1326,19 +1325,15 @@ inoremap <silent> <4-LeftMouse> <Nop>
 noremap <silent> <C-LeftMouse> <Nop>
 inoremap <silent> <C-LeftMouse> <Nop>
 
-nnoremap <silent> <C-2-LeftMouse> <LeftMouse>:call GetPath(0)<CR>ygv
-vnoremap <silent> <C-2-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath(0)<CR>ygv
+nnoremap <silent> <C-2-LeftMouse> <LeftMouse>:call GetPath(1)<CR>
+vnoremap <silent> <C-2-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath(1)<CR>
 inoremap <silent> <C-2-LeftMouse> <LeftMouse><C-\><C-o>:call GetPath(1)<CR>
 
 " C-TripleClick for whole line
-nnoremap <silent> <C-3-LeftMouse> <LeftMouse>:call GetLine(0)<CR>ygv
-vnoremap <silent> <C-3-LeftMouse> <LeftMouse><C-\><C-n>:call GetLine(0)<CR>ygv
+"nnoremap <silent> <C-3-LeftMouse> <LeftMouse>:call GetLine(1)<CR>
+"vnoremap <silent> <C-3-LeftMouse> <LeftMouse><C-\><C-n>:call GetLine(1)<CR>
 " TODO: 3-click in insert mode is difficult
 "inoremap <silent> <C-3-LeftMouse> <LeftMouse><C-\><C-o>:call GetLine(1)<CR>
-
-" TODO: this does not work yet ...
-"inoremap <silent> <C-3-LeftMouse> <LeftMouse><C-\><C-o>V<C-\><C-n>:call YankIt("*y", 2)<CR>i
-" TODO: --------------------------
 
 " M- same as C- (was viW)
 " NOTE: copy/yank and returns to normal mode
@@ -2541,6 +2536,10 @@ function GetPath(arg) abort
   " 0 selects in visual mode - (0)ygv is like (1)
   " 1 selects in visual mode and yanks
   " 2 selects, yanks and returns to previous mode
+  if @i=="2"
+      let @i="0"
+      startinsert
+  endif
   let l:oldiskeyword = &iskeyword
   setlocal iskeyword-=:
   setlocal iskeyword+=/,.,-
