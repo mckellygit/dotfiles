@@ -1350,9 +1350,13 @@ vnoremap <silent> <LeftRelease> <LeftRelease><C-\><C-n>:call YankIfOnlyOneLine()
 " M- same as C- (was viW)
 " NOTE: copy/yank and returns to normal mode
 " NOTE: these were <A-2-LeftRelease>
-nnoremap <silent> <A-2-LeftMouse> <LeftMouse>:call GetWord(2)<CR>
-vnoremap <silent> <A-2-LeftMouse> <LeftMouse><C-\><C-n>:call GetWord(2)<CR>
-inoremap <silent> <A-2-LeftMouse> <LeftMouse><C-\><C-o>:call GetWord(2)<CR>
+"nnoremap <silent> <A-2-LeftMouse> <LeftMouse>:call GetWord(2)<CR>
+"vnoremap <silent> <A-2-LeftMouse> <LeftMouse><C-\><C-n>:call GetWord(2)<CR>
+"inoremap <silent> <A-2-LeftMouse> <LeftMouse><C-\><C-o>:call GetWord(2)<CR>
+nnoremap <silent> <expr> <A-2-LeftMouse> (@j=="0") ? '<LeftMouse>:let @j="1"<bar>:call GetWord(2)<CR>' : '<LeftMouse>:call GetPath(2)<CR>'
+vnoremap <silent> <expr> <A-2-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-n>:let @j="1"<bar>:call GetWord(2)<CR>' : '<LeftMouse><C-\><C-n>:call GetPath(2)<CR>'
+inoremap <silent> <expr> <A-2-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call GetWord(2)<CR>' : '<LeftMouse><C-\><C-o>:call GetPath(2)<CR>'
+
 " TODO: or could select and copy whole line ?
 " NOTE: need to set z reg to 'c' also ... (this y is not YankIt)
 "nnoremap <silent> <expr> <A-LeftRelease> (&filetype == 'GV') ? '' : '<LeftRelease>Vy:let @z="c"<CR>gv'
@@ -2520,11 +2524,18 @@ set grepprg=ag\ --vimgrep\ --hidden
 
 "================================================================
 
+let g:orig_pos = getcurpos()
+let g:click_start = reltime()
+
 " to grab a word - like file path below
 function GetWord(arg) abort
   " 0 selects in visual mode - (0)ygv is like (1)
   " 1 selects in visual mode and yanks
   " 2 selects, yanks and returns to previous mode
+  if @j!="0"
+    let g:click_start = reltime()
+    let g:orig_pos = getcurpos()
+  endif
   if a:arg == 1
     execute 'normal! mvviwygv'
   else
@@ -2549,8 +2560,21 @@ function GetPath(arg) abort
   " 1 selects in visual mode and yanks
   " 2 selects, yanks and returns to previous mode
   if @i=="2"
-      let @i="0"
-      startinsert
+    let @i="0"
+    startinsert
+  endif
+  if @j!="0"
+    let @j="0"
+    let elapsed_time = reltimefloat(reltime(g:click_start))
+    if elapsed_time >= 2.1
+      call GetWord(a:arg)
+      return
+    endif
+    let curr_pos = getcurpos()
+    if curr_pos != g:orig_pos
+      call GetWord(a:arg)
+      return
+    endif
   endif
   let l:oldiskeyword = &iskeyword
   setlocal iskeyword-=:
