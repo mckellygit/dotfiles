@@ -2935,6 +2935,9 @@ nnoremap <silent> <C-x><C-w>      :call <SID>SkipTerminalsQuitCmd(":wqa")<CR>
 "vnoremap <silent> <C-x>c     <Esc>:call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
 "nnoremap <silent> <C-x>c          :call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
 
+" another way to exit insert mode ...
+inoremap <C-c> <Esc>
+
 " need to remap <C-c> for this to work ...
 nnoremap <C-c> <C-c>
 " (<C-c> previously remapped in visual mode above)
