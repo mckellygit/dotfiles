@@ -25,6 +25,9 @@ set rtp+=~/.vim/bundle/Vundle.vim
 " fzf from git install in ~/.fzf 
 set rtp+=~/.fzf
 "
+" this files mappings for help, ~/.vim/doc/mck.txt ...
+set rtp+=~/.vim
+"
 call vundle#begin()
 "" alternatively, pass a path where Vundle should install plugins
 ""call vundle#begin('~/some/path/here')
@@ -728,11 +731,6 @@ set shortmess-=s
 " and dont forget <Leader>hl for hlsearch toggle
 " and we set WarningMsg highlight color below for wrap warning
 
-" search direction
-" NOTE: make n ALWAYS forward and N ALWAYS backward ...
-nmap n /<CR>
-nmap N ?<CR>
-
 " to match vless and tmux
 " terminator <C-Home> mapped to <Esc>5
 noremap <silent> <Esc>5 gg
@@ -755,6 +753,11 @@ nnoremap <silent> <Leader>rg :reg *,x<CR>
 " E486: Pattern not found: <search-exp>
 " catch /^Vim\%((\a\+)\)\=:E385/
 
+" search direction
+" NOTE: make n ALWAYS forward and N ALWAYS backward ...
+nmap n /<CR>
+nmap N ?<CR>
+
 " hack to pause a little on search wraps ...
 
 nnoremap <buffer> <silent> n :call Searchn()<CR>
@@ -766,6 +769,7 @@ function Searchn() abort
   nunmap <buffer> n
   set nows
   try
+    " /<CR> ?
     exe "normal n"
     redraw!
   catch /E384:/
@@ -816,6 +820,7 @@ function SearchN() abort
   nunmap <buffer> N
   set nows
   try
+    " ?<CR> ?
     exe "normal N"
     redraw!
   catch /E384:/
@@ -1338,8 +1343,14 @@ function YankIfOnlyOneLine()
     if line_end == line_start
         call YankIt("*y", 1)
     endif
+    if @k=="1"
+        let @k="0"
+        startinsert
+    endif
+    execute 'normal! gv'
 endfunction
-vnoremap <silent> <LeftRelease> <LeftRelease><C-\><C-n>:call YankIfOnlyOneLine()<CR>gv
+vnoremap <silent> <LeftRelease> <LeftRelease><C-\><C-n>:call YankIfOnlyOneLine()<CR>
+inoremap <silent> <LeftMouse> <C-\><C-o>:let @k="1"<CR><LeftMouse>
 
 " C-TripleClick for whole line
 "nnoremap <silent> <C-3-LeftMouse> <LeftMouse>:call GetLine(1)<CR>
