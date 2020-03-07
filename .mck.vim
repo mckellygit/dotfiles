@@ -2927,7 +2927,8 @@ map ZZ <Nop>
 " no imap for this
 " <C-x> used in visual mode already
 "vnoremap <silent> <C-x><C-w> <Esc>:call <SID>SkipTerminalsQuitCmd(":wqa")<CR>
-nnoremap <silent> <C-x><C-w>      :call <SID>SkipTerminalsQuitCmd(":wqa")<CR>
+" skip for now
+"nnoremap <silent> <C-x><C-w>      :call <SID>SkipTerminalsQuitCmd(":wqa")<CR>
 
 " close all windows and confirm then quit
 " no imap for this
@@ -2938,21 +2939,23 @@ nnoremap <silent> <C-x><C-w>      :call <SID>SkipTerminalsQuitCmd(":wqa")<CR>
 " another way to exit insert mode ...
 inoremap <C-c> <Esc>
 
-" need to remap <C-c> for this to work ...
-nnoremap <C-c> <C-c>
+" NOTE: need to remap <C-c> for <C-x><C-c> below to work ...
+"nnoremap <C-c> <C-c>
 " (<C-c> previously remapped in visual mode above)
 " no imap for this
 " <C-x> used in visual mode already
 ""vnoremap <silent> <C-x><C-c> <Esc>:call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
-nnoremap <silent> <C-x><C-c>            :call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
+" skip for now
+"nnoremap <silent> <C-x><C-c>            :call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
 
 " no imap for this
 vnoremap <silent> <Leader>xc  <C-\><C-n>:<C-u>call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
 nnoremap <silent> <Leader>xc            :call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
 
 " no imap for this
-vnoremap <silent> <Leader>ax  <C-\><C-n>:<C-u>call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
-nnoremap <silent> <Leader>ax            :call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
+" skip for now
+"vnoremap <silent> <Leader>ax  <C-\><C-n>:<C-u>call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
+"nnoremap <silent> <Leader>ax            :call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
 
 function! s:EndTerminalsConfQA() abort
     for b in range(1, bufnr('$'))

@@ -1,6 +1,7 @@
 *mck* vimrc documentation
 
 *file*
+-------------------------------------------------
 <Leader>fz fzf project dir
 <Leader>fb FileBeagle current dir
 <Leader>fB FileBeagle project dir
@@ -9,11 +10,13 @@
 <Leader>gt open file at cursor pos in new tab
 
 *git*
+-------------------------------------------------
 <Leader>gn next changed git block
 <Leader>gp prev changed git block
 <Leader>gg re-scan for git changes
 
 *word*
+-------------------------------------------------
 <Leader>ws word select
 <Leader>wS WORD select
 <Leader>wp path select
@@ -33,6 +36,7 @@
 <Leader>wn word new (change word)
 
 *paste*
+-------------------------------------------------
 <Leader>Pc paste char before cursor
 <Leader>pc paste char after cursor
 <Leader>Pj UnconditionalPasteJustJoinedBefore
@@ -56,6 +60,7 @@
 <Leader>p< paste more indent before
 
 *search*
+-------------------------------------------------
 <Leader>*  set hlsearch and search (*)
 <Leader>#  set hlsearch and search (#)
 <Leader>sx clear search buffer
@@ -65,10 +70,12 @@
 <Leader>hl toggle hlsearch
 
 *terminal*
+-------------------------------------------------
 <Leader>zs shell terminal
 <Leader>zt shell terminal in a new tab
 
 *tab*
+-------------------------------------------------
 <Leader>to open new tab
 <Leader>tq tab quit
 <Leader>tk tab close all others
@@ -77,6 +84,7 @@
 <Leader>tw move current window into new tab
 
 *fold*
+-------------------------------------------------
 <Leader>ff toggle fold
 <Leader>fo open fold
 <Leader>fc close fold
@@ -86,6 +94,7 @@
 <Leader>fC close all folds
 
 *split*
+-------------------------------------------------
 <Leader>sV vertical split
 <Leader>s| vertical split
 <Leader>sH horizontal split
@@ -93,21 +102,28 @@
 <Leader>sT tab split
 
 *quit*
-<Leader>wq [write] and quit window
+-------------------------------------------------
+<Leader>wq confirm write and quit window
 <Leader>xc quit all windows and exit
-<Leader>ax quit all windows and exit
 <Leader>wk window close all others
 <Leader>nf next file/window/buffer or quit
 
 *misc*
+-------------------------------------------------
 <Leader>ct center text on screen
 <Leader>cz center line on screen
+
 <Leader>cC toggle color syntax
+
 <Leader>lw toggle line wrap
+
 <Leader>rg show registers
 <Leader>sr swap history registers (2-entry stack)
+
 <Leader>lr explicit load clipboard into * (named) reg
+
 <Leader>uu undo all
+
 <Leader>cc close quickfix and location list
 <Leader>cx clear command line
 
