@@ -1332,9 +1332,9 @@ nnoremap <silent> <C-LeftMouse> <Nop>
 vnoremap <silent> <C-LeftMouse> <Nop>
 inoremap <silent> <C-LeftMouse> <Nop>
 
-nnoremap <silent> <C-2-LeftMouse> <LeftMouse>:call GetPath(1)<CR>
-vnoremap <silent> <C-2-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath(1)<CR>
-inoremap <silent> <C-2-LeftMouse> <LeftMouse><C-\><C-o>:call GetPath(1)<CR>
+nnoremap <silent> <C-2-LeftMouse> <LeftMouse>:call GetWord2(1)<CR>
+vnoremap <silent> <C-2-LeftMouse> <LeftMouse><C-\><C-n>:call GetWord2(1)<CR>
+inoremap <silent> <C-2-LeftMouse> <LeftMouse><C-\><C-o>:call GetWord2(1)<CR>
 
 " if visual selection is only one line then auto yank it ...
 function YankIfOnlyOneLine()
@@ -2609,11 +2609,72 @@ function GetPath(arg) abort
   endif
 endfunction
 
-" to grab a line - like file path above
+" to grab a WORD
+function GetWord2(arg) abort
+  " 0 selects in visual mode - (0)ygv is like (1)
+  " 1 selects in visual mode and yanks
+  " 2 selects, yanks and returns to previous mode
+  if @i=="2"
+    let @i="0"
+    startinsert
+  endif
+  if @j!="0"
+    let @j="0"
+    let elapsed_time = reltimefloat(reltime(g:click_start))
+    if elapsed_time >= 2.1
+      call GetWord(a:arg)
+      return
+    endif
+    let curr_pos = getcurpos()
+    if curr_pos != g:orig_pos
+      call GetWord(a:arg)
+      return
+    endif
+  endif
+  let l:oldiskeyword = &iskeyword
+  setlocal iskeyword-=:
+  setlocal iskeyword+=/,.,-
+  if a:arg == 1
+    execute 'normal! mvviWygv'
+  else
+    execute 'normal! mvviW'
+  endif
+  let &iskeyword = l:oldiskeyword
+  if a:arg > 1
+    redraw!
+    echo "copied to clipboard"
+    sleep 551m
+    execute 'normal! y`v'
+    redraw!
+    if &buftype == "terminal"
+      " NOTE: should we go back to live terminal mode ?
+      exe "silent! normal! i"
+    endif
+  endif
+endfunction
+
+" to grab a line
 function GetLine(arg) abort
   " 0 selects in visual mode - (0)ygv is like (1)
   " 1 selects in visual mode and yanks
   " 2 selects, yanks and returns to previous mode
+  if @i=="2"
+    let @i="0"
+    startinsert
+  endif
+  if @j!="0"
+    let @j="0"
+    let elapsed_time = reltimefloat(reltime(g:click_start))
+    if elapsed_time >= 2.1
+      call GetWord(a:arg)
+      return
+    endif
+    let curr_pos = getcurpos()
+    if curr_pos != g:orig_pos
+      call GetWord(a:arg)
+      return
+    endif
+  endif
   if a:arg == 1
     execute 'normal! mvVygv'
   else
