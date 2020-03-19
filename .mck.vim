@@ -2749,7 +2749,7 @@ endfunction
 "hi QuickFixLine cterm=None ctermbg=256 guibg=#ffff00
 "hi QuickFixLine cterm=None ctermbg=60
 hi QuickFixLine cterm=None
-hi cursorline cterm=None ctermbg=239
+hi cursorline cterm=None ctermbg=241
 
 " makes for a nice transparent selection ...
 hi Visual cterm=None ctermbg=243 gui=None guibg=#767676
