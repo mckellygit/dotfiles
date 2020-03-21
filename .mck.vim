@@ -1300,9 +1300,9 @@ vnoremap <silent> <A-LeftDrag> <LeftDrag>
 inoremap <silent> <A-LeftDrag> <LeftDrag>
 
 " might as well make C- do the same as normal mode
-"nnoremap <silent> <C-LeftDrag> v<LeftDrag>
-"vnoremap <silent> <C-LeftDrag> <LeftDrag>
-"inoremap <silent> <C-LeftDrag> <LeftDrag>
+nnoremap <silent> <C-LeftDrag> v<LeftDrag>
+vnoremap <silent> <C-LeftDrag> <LeftDrag>
+inoremap <silent> <C-LeftDrag> <LeftDrag>
 
 " see mousetime for double-click delay
 
@@ -1328,9 +1328,12 @@ inoremap <silent> <4-LeftMouse> <Nop>
 " change C-LeftMouse searching tags file for symbol under cursor
 " and select words under cursor instead (lBvhE)
 " (was viW), use GetPath() instead ...
-nnoremap <silent> <C-LeftMouse> <Nop>
-vnoremap <silent> <C-LeftMouse> <Nop>
-inoremap <silent> <C-LeftMouse> <Nop>
+"nnoremap <silent> <C-LeftMouse> <Nop>
+"vnoremap <silent> <C-LeftMouse> <Nop>
+"inoremap <silent> <C-LeftMouse> <Nop>
+nnoremap <silent> <C-LeftMouse> <LeftMouse>
+vnoremap <silent> <C-LeftMouse> <LeftMouse>
+inoremap <silent> <C-LeftMouse> <LeftMouse>
 
 nnoremap <silent> <C-2-LeftMouse> <LeftMouse>:call GetWord2(1)<CR>
 vnoremap <silent> <C-2-LeftMouse> <LeftMouse><C-\><C-n>:call GetWord2(1)<CR>
