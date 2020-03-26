@@ -952,9 +952,12 @@ set mouse=a
 set clipboard^=unnamed
 " ------------------------------
 " NOTE: removing autoselect means visual selection is not automatically copied to unnamed clipboard (*)
-"       also removing autoselectml makes thins fail weirdly
+"       also removing autoselectml makes things fail weirdly
 "       this also affects getregtype("*") se we need to use visualmode() instead
 set clipboard-=autoselect
+" add this to get decent mouse selection and copy to clipboard when in command-mode ...
+set clipboard^=autoselectml guioptions+=A
+
 " ------------------------------
 
 " need enough time for mapped / <Leader> key sequences
