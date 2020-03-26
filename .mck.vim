@@ -1224,18 +1224,11 @@ endfunction
 
 " ---------------
 
-" if leaving cmd-mode and we return to vis-mode then clear any selection
-" since if we selected anything what was selected is no longer in the clipboard
-" TODO: could yank (if <= one line etc) but not sure what is best ...
+" if leaving cmd-mode and we return to vis-mode then clear any modeless-selection
+" TODO: can we also clear cmd-line ? how ?
 autocmd CmdlineLeave * call MyCmdLeave()
 function! MyCmdLeave()
-    let m = mode()
-    if m == 'v' || m == 'V' || m == ''
-        " clear any selection ? or yank ??
-        "exe "silent! normal! gv" . "\<Esc>"
-        " clear any modeless selection ...
-        redraw!
-    endif
+    redraw!
 endfunction
 
 " ---------------
