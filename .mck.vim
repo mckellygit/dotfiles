@@ -1222,6 +1222,24 @@ function! MyVisQ()
     exe "silent! normal! gv" . "\<Esc>"
 endfunction
 
+" ---------------
+
+" if leaving cmd-mode and we return to vis-mode then clear any selection
+" since if we selected anything what was selected is no longer in the clipboard
+" TODO: could yank (if <= one line etc) but not sure what is best ...
+autocmd CmdlineLeave * call MyCmdLeave()
+function! MyCmdLeave()
+    let m = mode()
+    if m == 'v' || m == 'V' || m == ''
+        " clear any selection ? or yank ??
+        "exe "silent! normal! gv" . "\<Esc>"
+        " clear any modeless selection ...
+        redraw!
+    endif
+endfunction
+
+" ---------------
+
 " insert/paste
 " this removes the <C-v> literal input mode
 "inoremap <silent> <C-v> <C-r>+
