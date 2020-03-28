@@ -61,7 +61,8 @@
 #   git show - to describe last commit ...
 #   ls-changes = !git diff HEAD~1 --name-only
 [diff]
-	compactionHeuristic = true
+	algorithm = histogram
+#	compactionHeuristic = true
 	tool = vimdiff
 [difftool]
 	prompt = false
