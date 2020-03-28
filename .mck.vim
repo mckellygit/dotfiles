@@ -686,6 +686,12 @@ let g:vimade.fadelevel = 0.6
 let g:vimade.checkinterval = 120
 " vimade -----------
 
+" vim-man ----------
+" use vim-man instead of default vim K at root level ...
+nnoremap <silent> <buffer> K :call man#get_page_from_cword('horizontal', v:count)<CR>
+vnoremap <silent> <buffer> K :call man#get_page_from_cword('horizontal', v:count)<CR>
+" vim-man ----------
+
 " improves color highlighing with dark terminals
 set background=dark
 " tmux default term set to screen-256color
