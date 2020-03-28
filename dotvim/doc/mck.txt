@@ -105,11 +105,11 @@
 
 *mck-split*
 -------------------------------------------------
-<Leader>sV vertical split
-<Leader>s| vertical split
-<Leader>sH horizontal split
-<Leader>s_ horizontal split
-<Leader>sT tab split
+<Leader>sV   vertical split
+<Leader>s|   vertical split
+<Leader>sH   horizontal split
+<Leader>s_   horizontal split
+<Leader>sT   tab split
 <C-w>t       makes topleft window current
 <C-w>K       moves curr window to topmost
 <C-w>H       moves curr window to leftmost
