@@ -1,6 +1,6 @@
 *mck* vimrc documentation
 
-*file*
+*mck-file*
 -------------------------------------------------
 <Leader>fz fzf project dir
 <Leader>fb FileBeagle current dir
@@ -9,13 +9,13 @@
 <Leader>gf open file at cursor pos
 <Leader>gt open file at cursor pos in new tab
 
-*git*
+*mck-git*
 -------------------------------------------------
 <Leader>gn next changed git block
 <Leader>gp prev changed git block
 <Leader>gg re-scan for git changes
 
-*word*
+*mck-word*
 -------------------------------------------------
 <Leader>ws word select
 <Leader>wS WORD select
@@ -35,7 +35,7 @@
 <Leader>wD word delete and yank
 <Leader>wn word new (change word)
 
-*paste*
+*mck-paste*
 -------------------------------------------------
 <Leader>Pc paste char before cursor
 <Leader>pc paste char after cursor
@@ -59,7 +59,7 @@
 <Leader>p, paste more indent before
 <Leader>p< paste more indent before
 
-*search*
+*mck-search*
 -------------------------------------------------
 <Leader>*  set hlsearch and search (*)
 <Leader>#  set hlsearch and search (#)
@@ -69,21 +69,31 @@
 <Leader>sg search all project files
 <Leader>hl toggle hlsearch
 
-*terminal*
+*mck-terminal*
 -------------------------------------------------
 <Leader>zs shell terminal
 <Leader>zt shell terminal in a new tab
 
-*tab*
+*mck-tab* / window
 -------------------------------------------------
-<Leader>to open new tab
-<Leader>tq tab quit
-<Leader>tk tab close all others
-<Leader>tn next tab
-<Leader>tp previous tab
-<Leader>tw move current window into new tab
+<Leader>to  open new tab
+<Leader>tq  tab quit
+<Leader>tk  tab close all others
+<Leader>tn  next tab
+<Leader>tp  previous tab
+<Leader>tw  move current window into new tab
+<Leader>tm  merge current tab into Window to the left
+<Leader>tM  merge current tab into Window to the right
+<C-S-Left>  previous tab
+<C-S-Right> next tab
+<C-w>w      next window (also Left, Right, Up, Down)
+<C-w>10+    resize window +10 lines   :res +10
+<C-w>10-    resize window -10 lines   :res -10
+<C-w>10>    resize window +10 columns :vertical res +10
+<C-w>10<    resize window -10 columns :vertical res -10
+<C-LeftDrag> to move divider
 
-*fold*
+*mck-fold*
 -------------------------------------------------
 <Leader>ff toggle fold
 <Leader>fo open fold
@@ -93,25 +103,33 @@
 <Leader>fO open all folds
 <Leader>fC close all folds
 
-*split*
+*mck-split*
 -------------------------------------------------
 <Leader>sV vertical split
 <Leader>s| vertical split
 <Leader>sH horizontal split
 <Leader>s_ horizontal split
 <Leader>sT tab split
+<C-w>t       makes topleft window current
+<C-w>K       moves curr window to topmost
+<C-w>H       moves curr window to leftmost
+<C-w>t<C-w>K to change 2 vertical split windows into horiz split
+<C-w>t<C-w>H to change 2 horiz split windows into vertical split
 
-*quit*
+*mck-quit*
 -------------------------------------------------
 <Leader>wq confirm write and quit window
 <Leader>xc quit all windows and exit
 <Leader>wk window close all others
 <Leader>nf next file/window/buffer or quit
 
-*misc*
+*mck-misc*
 -------------------------------------------------
 <Leader>ct center text on screen
 <Leader>cz center line on screen
+
+<Leader>cc close quickfix and location list
+<Leader>cx clear command line
 
 <Leader>cC toggle color syntax
 
@@ -123,7 +141,4 @@
 <Leader>lr explicit load clipboard into * (named) reg
 
 <Leader>uu undo all
-
-<Leader>cc close quickfix and location list
-<Leader>cx clear command line
 

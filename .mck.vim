@@ -184,6 +184,9 @@ Plugin 'PeterRincker/vim-searchlight'
 "Plugin 'powerman/vim-plugin-AnsiEsc'
 Plugin 'chrisbra/Colorizer'
 "
+" man pages
+Plugin 'vim-utils/vim-man'
+"
 "" All of your Plugins must be added before the following line
 call vundle#end()         " required
 filetype plugin indent on " required
@@ -2901,6 +2904,29 @@ function WinToTab()
 endfunc
 nnoremap <silent> <unique> <Leader>tw :call WinToTab()<CR>
 
+function! MergeTab()
+    let bufnums = tabpagebuflist()
+    hide tabclose
+    "topleft vsplit
+    botright split
+    for n in bufnums
+        execute 'sbuffer ' . n
+        wincmd _
+    endfor
+    wincmd t
+    quit
+    wincmd j
+endfunction
+"command! MergeTab call MergeTab()
+
+" NOTE: also :Tabmerge and <Leader>tm, <Leader>tM
+
+" <C-w>t<C-w>K to split 2 vertical windows into horiz windows
+" <C-w>t<C-w>H to split 2 horiz windows into vertical windows
+" <C-w>t makes topleft window current
+" <C-w>K moves curr window to topmost
+" <C-w>H moves curr window to leftmost
+
 " -----------------------------
 
 " disable : in visual mode (can still use <C-w>:)
@@ -3449,13 +3475,25 @@ inoremap <silent> <C-S-Left> <Esc>:tabprevious<CR>
 "vnoremap <silent> <M-,>  <Esc>:tabprevious<CR>
 "inoremap <silent> <M-,>  <Esc>:tabprevious<CR>
 
+nnoremap <C-t> :tabnext<CR>
+
 " moving between windows, somtimes hard to let go of ctrl before arrow ...
 " these could map to same cmds: <C-w><C-Left> -> <C-w><Left>
 " or to navigate tabs ...
-nnoremap <silent> <C-w><C-Left>  :tabprevious<CR>
-nnoremap <silent> <C-w><C-Right> :tabnext<CR>
-nnoremap <silent> <C-w><C-Up>    <C-w><Up>
-nnoremap <silent> <C-w><C-Down>  <C-w><Down>
+" NOTE: <C-w><Left>,<Right> is for moving between window splits
+"nnoremap <silent> <C-w><C-Left>  :tabprevious<CR>
+"nnoremap <silent> <C-w><C-Right> :tabnext<CR>
+nnoremap <silent> <C-w><C-Left>  <C-w>h
+nnoremap <silent> <C-w><C-Right> <C-w>l
+nnoremap <silent> <C-w><C-Up>    <C-w>k
+nnoremap <silent> <C-w><C-Down>  <C-w>j
+
+" TODO: M-L,R,U,D used for horizontal scroll above ...
+" NOTE: S-L,R,U,D was used by tmux for window nav ...
+"nnoremap <silent> <S-Left>       <C-w><Left>
+"nnoremap <silent> <S-Right>      <C-w><Right>
+"nnoremap <silent> <S-Up>         <C-w><Up>
+"nnoremap <silent> <S-Down>       <C-w><Down>
 
 " -----------------------------
 
