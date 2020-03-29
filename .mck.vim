@@ -178,7 +178,14 @@ Plugin 'PeterRincker/vim-searchlight'
 "
 " fade inactive buffers
 " NOTE: disable for now - causes rtags popup to take forever ...
-"Plugin 'TaDaa/vimade'
+"       recently works ok but may need au CompleteChanged * redraw
+"       but causes flashing redraws on pum autocompletions ...
+Plugin 'TaDaa/vimade'
+" alternative ...
+"Plugin 'blueyed/vim-diminactive'
+"
+" focus
+Plugin 'tmux-plugins/vim-tmux-focus-events'
 "
 " ansi esc sequences
 "Plugin 'powerman/vim-plugin-AnsiEsc'
@@ -683,7 +690,10 @@ let g:echodoc#enable_at_startup = 1
 " vimade -----------
 let g:vimade = {}
 let g:vimade.fadelevel = 0.6
-let g:vimade.checkinterval = 120
+let g:vimade.checkinterval = 300
+let g:vimade.enablefocusfading = 1
+" may help pum autocomplete lag ...
+au! CompleteChanged * redraw
 " vimade -----------
 
 " vim-man ----------
