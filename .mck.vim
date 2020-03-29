@@ -225,16 +225,22 @@ endfunction
 "   call <SID>LogIt(msg)
 
 " ack ------------
+"let g:ackprg = 'ack -k --nogroup --nocolor --column --smart-case --follow'
 " use ag (silver-searcher) instead of ack
-if executable('ag')
-  let g:ackprg = 'ag --vimgrep --hidden'
-  " let g:ackprg = 'ag --nogroup --nocolor --column'
-  let g:ack_use_dispatch = 1
-endif
+"if executable('ag')
+"  let g:ackprg = 'ag --vimgrep --hidden'
+"endif
+" NOTE: ag can miss some searches, use ack instead ...
 " example: (cdo/cfdo ldo/lfdo [!])
 " :Ack foo
 " :cdo s/foo/bar/g | update
 " Also look into Plugin 'dkprice/vim-easygrep'
+let g:ack_use_dispatch = 1
+let g:ackhighlight = 1
+" open :grep output in qf ...
+autocmd QuickFixCmdPost *grep* cwindow
+"set grepprg=ag\ --vimgrep\ --hidden
+set grepprg=ack\ -k
 " ack ------------
 
 " airline ---------
@@ -249,11 +255,11 @@ let g:lightline = {
     \ 'colorscheme': 'wombat',
     \ 'active': {
     \   'left': [ [ 'mymode', 'paste' ],
-    \             [ 'gitbranch', 'myfilename', 'mymodified', 'mycolonkeyword' ] ]
+    \             [ 'gitbranch', 'myfilename', 'mymodified', 'mycolonkeyword', 'myasyncrunstatus' ] ]
     \ },
     \ 'inactive': {
     \   'left': [ [ 'mymode', 'paste' ],
-    \             [ 'gitbranch', 'myfilename', 'mymodified', 'mycolonkeyword' ] ]
+    \             [ 'gitbranch', 'myfilename', 'mymodified', 'mycolonkeyword', 'myasyncrunstatus' ] ]
     \ },
     \ 'component_function': {
     \   'mymode': 'MyLightlineMode',
@@ -261,6 +267,7 @@ let g:lightline = {
     \   'myfilename': 'MyLightlineFilename',
     \   'mymodified': 'MyLightlineModified',
     \   'mycolonkeyword': 'MyLightlineColonKeyword',
+    \   'myasyncrunstatus': 'MyLightlineAsyncRunStatus',
     \ },
     \ 'tab_component_function': {
     \   'filename': 'MyLightlineTabFilename',
@@ -392,6 +399,25 @@ function! MyLightlineColonKeyword()
     else
       return 'rt-'
     endif
+  endif
+endfunction
+
+function! MyLightlineAsyncRunStatus()
+  if &filetype ==# 'qf'
+    return ''
+  elseif &buftype ==# 'terminal'
+    return ''
+  elseif !&buflisted
+    return ''
+  else
+    if g:asyncrun_status == 'running'
+      return 'ar:run'
+    elseif g:asyncrun_status == 'success'
+      return 'ar:ok '
+    elseif g:asyncrun_status == 'failure'
+      return 'ar:no '
+    else
+      return 'ar:-- '
   endif
 endfunction
 
@@ -652,7 +678,13 @@ let c_no_curly_error = 1
 
 " asyncrun -----------
 " open quickfix (10 lines) when cmd ends
-let g:asyncrun_open = 10 
+" skip as we now copen at end ...
+"let g:asyncrun_open = 10
+" se we can see echoes at end ...
+let g:asyncrun_silent = 0
+autocmd User AsyncRunPre echohl DiffAdd | echo 'AsyncRun started ...' | echohl None
+autocmd User AsyncRunStop if g:asyncrun_code != 0 | echohl DiffText | echo 'AsyncRun complete: [FAIL]' | echohl None |
+            \ else | echohl DiffAdd | echo 'AsyncRun complete: [OK]' | echohl None | copen | wincmd p | endif
 " asyncrun -----------
 
 " startify -----------
@@ -1859,6 +1891,7 @@ autocmd CursorHoldI * call IdleToNormalMode()
 function! ClearCmdWindow()
     echo ""
 endfunction
+" nice but can clear asyncrun status in cmdline ...
 autocmd CursorHold * call ClearCmdWindow()
 
 " ---------
@@ -2521,9 +2554,11 @@ endfunction
 
 function MySearch(meth) abort
   if (a:meth == 0)
-    let promptstr = 'buf:/'
+    let promptstr = 's-buf:/'
   elseif (a:meth == 1)
-    let promptstr = 'gbl:/'
+    let promptstr = 's-gbl:/'
+  elseif (a:meth == 2)
+    let promptstr = 's-dir:/'
   else
     redraw!
     return
@@ -2532,7 +2567,12 @@ function MySearch(meth) abort
   let string = input(promptstr)
   call inputrestore()
   if (len(string) == 0)
+    " should we reset @/ ?
     redraw!
+    return
+  endif
+  if g:asyncrun_status == 'running'
+    echohl WarningMsg | echo "AsyncRun currently running" | echohl None
     return
   endif
   if (a:meth == 0)
@@ -2545,9 +2585,45 @@ function MySearch(meth) abort
     call filter(files, 'v:val != ""')
     " expand to full path (avoid problems with cd/lcd in au QuickFixCmdPre)
     let files = map(files, "shellescape(fnamemodify(v:val, ':p'))")
-    execute 'AsyncRun! -strip ag --vimgrep' shellescape(string, 1) join(files) ' 2>/dev/null'
+    "execute 'AsyncRun! -strip ag --vimgrep' shellescape(string, 1) join(files) ' 2>/dev/null'
+    execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case  --follow' shellescape(string, 1) join(files) ' 2>/dev/null'
+  elseif (a:meth == 1)
+    "execute 'AsyncRun! -strip ag --vimgrep --hidden' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
+    execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case  --follow' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
   else
-    execute 'AsyncRun! -strip ag --vimgrep --hidden' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
+    execute 'AsyncRun! -strip -cwd ack -s -H --nopager --nocolor --nogroup --column --smart-case  --follow' shellescape(string, 1) ' 2>/dev/null'
+  endif
+  let @/=string
+  set hlsearch
+endfunction
+
+function MyVisSearch(meth) abort
+  let string=@s
+  if (len(string) == 0)
+    " should we reset @/ ?
+    return
+  endif
+  if g:asyncrun_status == 'running'
+    echohl WarningMsg | echo "AsyncRun currently running" | echohl None
+    return
+  endif
+  if (a:meth == 0)
+    " NOTE: list of files code below is from ack.vim for :LAckWindow ...
+    let files = tabpagebuflist()
+    " remove duplicated filenames (files appearing in more than one window)
+    let files = filter(copy(sort(files)), 'index(files,v:val,v:key+1)==-1')
+    call map(files, "bufname(v:val)")
+    " remove unnamed buffers as quickfix (empty strings before shellescape)
+    call filter(files, 'v:val != ""')
+    " expand to full path (avoid problems with cd/lcd in au QuickFixCmdPre)
+    let files = map(files, "shellescape(fnamemodify(v:val, ':p'))")
+    "execute 'AsyncRun! -strip ag --vimgrep' shellescape(string, 1) join(files) ' 2>/dev/null'
+    execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case  --follow' shellescape(string, 1) join(files) ' 2>/dev/null'
+  elseif (a:meth == 1)
+    "execute 'AsyncRun! -strip ag --vimgrep --hidden' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
+    execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case  --follow' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
+  else
+    execute 'AsyncRun! -strip -cwd ack -s -H --nopager --nocolor --nogroup --column --smart-case  --follow' shellescape(string, 1) ' 2>/dev/null'
   endif
   let @/=string
   set hlsearch
@@ -2558,16 +2634,15 @@ nnoremap <silent> <Leader>sx :let @/=""<bar>:echo ""<CR>
 " search normally
 nnoremap <Leader>sn :let @/=""<bar>:set hlsearch<CR>/
 vnoremap <Leader>sn y<Esc>:let @/=""<bar>:set hlsearch<CR>/<C-r>"
-" search buffer with results in loc list
+" search buffer with results in qf list
 nnoremap <silent> <Leader>sb :call MySearch(0)<CR>
-" search globally with results in loc list
+vnoremap <silent> <Leader>sb "sy<Esc>:call MyVisSearch(0)<CR>
+" search globally (root/project/git dir) with results in qf list
 nnoremap <silent> <Leader>sg :call MySearch(1)<CR>
-
-let g:ackhighlight = 1
-
-" open :grep output in qf ...
-autocmd QuickFixCmdPost *grep* cwindow
-set grepprg=ag\ --vimgrep\ --hidden
+vnoremap <silent> <Leader>sg "sy<Esc>:call MyVisSearch(1)<CR>
+" search dir with results in qf list
+nnoremap <silent> <Leader>sd :call MySearch(2)<CR>
+vnoremap <silent> <Leader>sd "sy<Esc>:call MyVisSearch(2)<CR>
 
 "================================================================
 
