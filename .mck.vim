@@ -226,21 +226,22 @@ endfunction
 
 " ack ------------
 "let g:ackprg = 'ack -k --nogroup --nocolor --column --smart-case --follow'
-" use ag (silver-searcher) instead of ack
-"if executable('ag')
-"  let g:ackprg = 'ag --vimgrep --hidden'
-"endif
-" NOTE: ag can miss some searches, use ack instead ...
+" use ag (silver-searcher) instead of ack, if possible
+if executable('ag')
+  " NOTE: ag can miss some matches without --all-text --hidden ...
+  let g:ackprg = 'ag --vimgrep --all-text --hidden'
+endif
 " example: (cdo/cfdo ldo/lfdo [!])
 " :Ack foo
 " :cdo s/foo/bar/g | update
 " Also look into Plugin 'dkprice/vim-easygrep'
-let g:ack_use_dispatch = 1
 let g:ackhighlight = 1
+let g:ack_use_dispatch = 1
+"set grepprg=ack\ -k
+set grepprg=ag\ --vimgrep\ --all-text
+set grepformat=%f:%l:%c:%m
 " open :grep output in qf ...
 autocmd QuickFixCmdPost *grep* cwindow
-"set grepprg=ag\ --vimgrep\ --hidden
-set grepprg=ack\ -k
 " ack ------------
 
 " airline ---------
@@ -2583,13 +2584,14 @@ function MySearch(meth) abort
     call filter(files, 'v:val != ""')
     " expand to full path (avoid problems with cd/lcd in au QuickFixCmdPre)
     let files = map(files, "shellescape(fnamemodify(v:val, ':p'))")
-    "execute 'AsyncRun! -strip ag --vimgrep' shellescape(string, 1) join(files) ' 2>/dev/null'
-    execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case  --follow' shellescape(string, 1) join(files) ' 2>/dev/null'
+    "execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case  --follow' shellescape(string, 1) join(files) ' 2>/dev/null'
+    execute 'AsyncRun! -strip ag --vimgrep ' shellescape(string, 1) join(files) ' 2>/dev/null'
   elseif (a:meth == 1)
-    "execute 'AsyncRun! -strip ag --vimgrep --hidden' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
-    execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case  --follow' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
+    "execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case  --follow' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
+    execute 'AsyncRun! -strip ag --vimgrep --all-text --hidden' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
   else
-    execute 'AsyncRun! -strip -cwd ack -s -H --nopager --nocolor --nogroup --column --smart-case  --follow' shellescape(string, 1) ' 2>/dev/null'
+    "execute 'AsyncRun! -strip -cwd ack -s -H --nopager --nocolor --nogroup --column --smart-case  --follow' shellescape(string, 1) ' 2>/dev/null'
+    execute 'AsyncRun! -strip ag --vimgrep --all-text --hidden' shellescape(string, 1) ' 2>/dev/null'
   endif
   let @/=string
   set hlsearch
@@ -2615,13 +2617,14 @@ function MyVisSearch(meth) abort
     call filter(files, 'v:val != ""')
     " expand to full path (avoid problems with cd/lcd in au QuickFixCmdPre)
     let files = map(files, "shellescape(fnamemodify(v:val, ':p'))")
-    "execute 'AsyncRun! -strip ag --vimgrep' shellescape(string, 1) join(files) ' 2>/dev/null'
-    execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case  --follow' shellescape(string, 1) join(files) ' 2>/dev/null'
+    "execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case  --follow' shellescape(string, 1) join(files) ' 2>/dev/null'
+    execute 'AsyncRun! -strip ag --vimgrep ' shellescape(string, 1) join(files) ' 2>/dev/null'
   elseif (a:meth == 1)
-    "execute 'AsyncRun! -strip ag --vimgrep --hidden' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
-    execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case  --follow' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
+    "execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case  --follow' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
+    execute 'AsyncRun! -strip ag --vimgrep --all-text --hidden' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
   else
-    execute 'AsyncRun! -strip -cwd ack -s -H --nopager --nocolor --nogroup --column --smart-case  --follow' shellescape(string, 1) ' 2>/dev/null'
+    "execute 'AsyncRun! -strip -cwd ack -s -H --nopager --nocolor --nogroup --column --smart-case  --follow' shellescape(string, 1) ' 2>/dev/null'
+    execute 'AsyncRun! -strip ag --vimgrep --all-text --hidden' shellescape(string, 1) ' 2>/dev/null'
   endif
   let @/=string
   set hlsearch
