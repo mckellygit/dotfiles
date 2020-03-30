@@ -97,7 +97,7 @@ cS         swap chars with char before
 <C-w>10-    resize window -10 lines   :res -10
 <C-w>10>    resize window +10 columns :vertical res +10
 <C-w>10<    resize window -10 columns :vertical res -10
-<C-LeftDrag> to move divider
+<LeftDrag>  to move window divider
 
 *mck-fold*
 -------------------------------------------------
