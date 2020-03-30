@@ -684,7 +684,7 @@ let c_no_curly_error = 1
 let g:asyncrun_silent = 0
 autocmd User AsyncRunPre echohl DiffAdd | echo 'AsyncRun started ...' | echohl None
 autocmd User AsyncRunStop if g:asyncrun_code != 0 | echohl DiffText | echo 'AsyncRun complete: [FAIL]' | echohl None |
-            \ else | echohl DiffAdd | echo 'AsyncRun complete: [OK]' | echohl None | copen | wincmd p | endif
+            \ else | echohl DiffAdd | echo 'AsyncRun complete: [OK]' | echohl None | copen | set nowrap | clearjumps | call lightline#update() | wincmd p | endif
 " asyncrun -----------
 
 " startify -----------
@@ -1518,12 +1518,10 @@ nnoremap <DEL> "_x
 "noremap Xp Xp
 " so use Leader ...
 noremap <silent> <Leader>xp xp
-noremap <silent> <Leader>xP xP
-noremap <silent> <Leader>Xp Xp
-noremap <silent> <Leader>XP XP
-" also dd a new swap char mapping that doesn't start with x ...
-noremap sc xp
-noremap Sc Xp
+noremap <silent> <Leader>xP Xp
+" c(har)s(swap) - swap char mapping that doesn't start with x ...
+noremap cs xp
+noremap cS Xp
 
 " do we want the same for delete-word ?  Probably not ...
 "noremap dw "_dw
@@ -2629,8 +2627,12 @@ function MyVisSearch(meth) abort
   set hlsearch
 endfunction
 
-" use :let @/="" to clear out search pattern
-nnoremap <silent> <Leader>sx :let @/=""<bar>:echo ""<CR>
+" use :let @/="" to clear out search pattern and stop any running search
+nnoremap <silent> <Leader>sx :let @/=""<bar>:echo ""<bar>:AsyncStop!<CR>
+vnoremap <silent> <Leader>sx :let @/=""<bar>:echo ""<bar>:AsyncStop!<CR>
+" stop running search
+nnoremap <silent> <Leader>sq :AsyncStop!<CR>
+vnoremap <silent> <Leader>sq :AsyncStop!<CR>
 " search normally
 nnoremap <Leader>sn :let @/=""<bar>:set hlsearch<CR>/
 vnoremap <Leader>sn y<Esc>:let @/=""<bar>:set hlsearch<CR>/<C-r>"

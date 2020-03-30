@@ -34,6 +34,10 @@
 <Leader>wd word delete (no yank)
 <Leader>wD word delete and yank
 <Leader>wn word new (change word)
+<Leader>xp swap chars with char after
+<Leader>xP swap chars with char before
+cs         swap chars with char after
+cS         swap chars with char before
 
 *mck-paste*
 -------------------------------------------------
@@ -63,10 +67,12 @@
 -------------------------------------------------
 <Leader>*  set hlsearch and search (*)
 <Leader>#  set hlsearch and search (#)
-<Leader>sx clear search buffer
+<Leader>sx clear search buffer and stop async running search
+<Leader>sq stop async running search
 <Leader>sn search (/)
 <Leader>sb search buffer files
-<Leader>sg search all project files
+<Leader>sd search files in same dir
+<Leader>sg search all root/git/project files
 <Leader>hl toggle hlsearch
 
 *mck-terminal*
