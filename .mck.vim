@@ -2586,13 +2586,13 @@ function MySearch(meth) abort
     call filter(files, 'v:val != ""')
     " expand to full path (avoid problems with cd/lcd in au QuickFixCmdPre)
     let files = map(files, "shellescape(fnamemodify(v:val, ':p'))")
-    "execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case  --follow' shellescape(string, 1) join(files) ' 2>/dev/null'
+    "execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) join(files) ' 2>/dev/null'
     execute 'AsyncRun! -strip ag --vimgrep ' shellescape(string, 1) join(files) ' 2>/dev/null'
   elseif (a:meth == 1)
-    "execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case  --follow' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
+    "execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
     execute 'AsyncRun! -strip ag --vimgrep --all-text --hidden' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
   else
-    "execute 'AsyncRun! -strip -cwd ack -s -H --nopager --nocolor --nogroup --column --smart-case  --follow' shellescape(string, 1) ' 2>/dev/null'
+    "execute 'AsyncRun! -strip -cwd ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) ' 2>/dev/null'
     execute 'AsyncRun! -strip ag --vimgrep --all-text --hidden' shellescape(string, 1) ' 2>/dev/null'
   endif
   let @/=string
@@ -2619,13 +2619,13 @@ function MyVisSearch(meth) abort
     call filter(files, 'v:val != ""')
     " expand to full path (avoid problems with cd/lcd in au QuickFixCmdPre)
     let files = map(files, "shellescape(fnamemodify(v:val, ':p'))")
-    "execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case  --follow' shellescape(string, 1) join(files) ' 2>/dev/null'
+    "execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) join(files) ' 2>/dev/null'
     execute 'AsyncRun! -strip ag --vimgrep ' shellescape(string, 1) join(files) ' 2>/dev/null'
   elseif (a:meth == 1)
-    "execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case  --follow' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
+    "execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
     execute 'AsyncRun! -strip ag --vimgrep --all-text --hidden' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
   else
-    "execute 'AsyncRun! -strip -cwd ack -s -H --nopager --nocolor --nogroup --column --smart-case  --follow' shellescape(string, 1) ' 2>/dev/null'
+    "execute 'AsyncRun! -strip -cwd ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) ' 2>/dev/null'
     execute 'AsyncRun! -strip ag --vimgrep --all-text --hidden' shellescape(string, 1) ' 2>/dev/null'
   endif
   let @/=string
