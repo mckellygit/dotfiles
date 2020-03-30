@@ -723,6 +723,8 @@ let g:echodoc#enable_at_startup = 1
 " vimade -----------
 let g:vimade = {}
 let g:vimade.fadelevel = 0.6
+" to keep search highlighting
+let g:vimade.fadepriority = 0
 let g:vimade.checkinterval = 300
 let g:vimade.enablefocusfading = 1
 " may help pum autocomplete lag ...
