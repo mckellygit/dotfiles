@@ -178,8 +178,8 @@ Plugin 'PeterRincker/vim-searchlight'
 "
 " fade inactive buffers
 " NOTE: disable for now - causes rtags popup to take forever ...
-"       recently works ok but may need au CompleteChanged * redraw
-"       but causes flashing redraws on pum autocompletions ...
+"       recently works ok but many flashing redraws on pum up/down ...
+"       may need au! CompleteChanged code to help ...
 Plugin 'TaDaa/vimade'
 " alternative ...
 "Plugin 'blueyed/vim-diminactive'
@@ -727,9 +727,33 @@ let g:vimade.fadelevel = 0.6
 let g:vimade.fadepriority = 0
 let g:vimade.checkinterval = 300
 let g:vimade.enablefocusfading = 1
-" may help pum autocomplete lag ...
-au! CompleteChanged * call vimade#WinDisable()
-au! CompleteDone * call vimade#WinEnable()
+" may help pum autocomplete redraw/flash/lag ...
+"au! CompleteChanged * call vimade#WinDisable()
+"au! CompleteDone    * call vimade#WinEnable()
+function! MyVimadeWinDisable()
+    if exists('g:vimade_init') && exists('g:vimade_running')
+        if g:vimade_running == 1
+            if !exists('g:vimade_disabled')
+                call vimade#WinDisable()
+            elseif w:vimade_disabled == 0
+                call vimade#WinDisable()
+            endif
+        endif
+    endif
+endfunction
+function! MyVimadeWinEnable()
+    if exists('g:vimade_init') && exists('g:vimade_running')
+        if g:vimade_running == 1
+            if !exists('g:vimade_disabled')
+                return
+            elseif w:vimade_disabled != 0
+                call vimade#WinEnable()
+            endif
+        endif
+    endif
+endfunction
+au! CompleteChanged * call MyVimadeWinDisable()
+au! CompleteDone    * call MyVimadeWinEnable()
 " vimade -----------
 
 " vim-man ----------
@@ -2308,6 +2332,7 @@ endif " has("autocmd")
 " put preview window at bottom
 set splitbelow
 set splitright
+"let g:clang_verbose_pmenu = 1
 let g:clang_cpp_options = '-std=c++11 -DNDEBUG -Wno-inconsistent-missing-override'
 " put this in the local .lvimrc now ...
 "let g:clang_compilation_database = '~/lnrs/wip/buildln/compile_commands.json'
