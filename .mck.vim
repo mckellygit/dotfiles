@@ -728,7 +728,8 @@ let g:vimade.fadepriority = 0
 let g:vimade.checkinterval = 300
 let g:vimade.enablefocusfading = 1
 " may help pum autocomplete lag ...
-au! CompleteChanged * redraw
+au! CompleteChanged * call vimade#WinDisable()
+au! CompleteDone * call vimade#WinEnable()
 " vimade -----------
 
 " vim-man ----------
@@ -2311,6 +2312,8 @@ let g:clang_cpp_options = '-std=c++11 -DNDEBUG -Wno-inconsistent-missing-overrid
 " put this in the local .lvimrc now ...
 "let g:clang_compilation_database = '~/lnrs/wip/buildln/compile_commands.json'
 "let g:clang_compilation_database = '~/lnrs/wip/buildln'
+let g:clang_c_completeopt = 'menuone,preview,popup'
+let g:clang_cpp_completeopt = 'menuone,preview,popup'
 let g:clang_complete_copen = 1
 let g:clang_auto = 1
 let g:clang_load_if_clang_dotfile = 1
