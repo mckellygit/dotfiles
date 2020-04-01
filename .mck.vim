@@ -723,13 +723,25 @@ let g:echodoc#enable_at_startup = 1
 " vimade -----------
 let g:vimade = {}
 let g:vimade.fadelevel = 0.6
-" to keep search highlighting
+" to keep search highlighting in dimmed windows ...
 let g:vimade.fadepriority = 0
 let g:vimade.checkinterval = 300
 let g:vimade.enablefocusfading = 1
-" may help pum autocomplete redraw/flash/lag ...
-"au! CompleteChanged * call vimade#WinDisable()
-"au! CompleteDone    * call vimade#WinEnable()
+
+" to mitigate pum redraw/flash/lag with vimade -
+" (change in autoload/vimade.vim)
+"
+"  function! vimade#CheckWindows()
+"    call vimade#UpdateState()
+"    "prevent if inside popup window
+" -  if winnr() == 0
+" +  if winnr() == 0 || pumvisible()
+"      return
+"    endif
+"    if g:vimade_running && g:vimade_paused == 0 && getcmdwintype() == ''
+"
+" local alternative is to disable vimade in window -
+
 function! MyVimadeWinDisable()
     if exists('g:vimade_init') && exists('g:vimade_running')
         if g:vimade_running == 1
