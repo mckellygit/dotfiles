@@ -1006,6 +1006,10 @@ endif
 " always show tabs
 set showtabline=2
 
+" change popup menu colors (after enabling syntax) ...
+" 136, 144 reasonable (there also Pmenu)
+highlight PmenuSel ctermbg=136
+
 " -----------------------------
 
 set fileformat=unix
