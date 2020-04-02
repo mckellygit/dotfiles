@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/bash -e
 
 sess=$(tmux list-sessions | head -n 1 | awk -F: '{print $1}')
 
@@ -8,9 +8,22 @@ else
     add=$(cat /dev/shm/tmux${sess}.spc)
 fi
 
-symbol="-"
-if [ $add -eq 1 ] ; then
-    symbol="+"
+addsym="-"
+if [ ${add} -eq 1 ] ; then
+    addsym="+"
 fi
+
+# if we ssh/radssh somewhere then skip gitinfo ...
+pcmd=$(tmux display -p '#{pane_current_command}')
+
+if [ "${pcmd##*ssh*}" ] ; then
+    gdir=$(tmux display -p '#{pane_current_path}')
+    ginfo=$(gitinfo ${gdir})
+else
+    # pcmd contains ssh substring ...
+    ginfo="git:<n/a>"
+fi
+
+symbol="${addsym} ${ginfo}"
 
 echo "#[default]#[fg=colour13,bold,bg=$BYOBU_DARK]${symbol}#[default]#[fg=$BYOBU_LIGHT]#[bg=$BYOBU_DARK]"
