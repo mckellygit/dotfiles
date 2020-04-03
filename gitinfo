@@ -22,10 +22,18 @@ do
   fi
 done
 
+# TODO: maybe also check for TMUX env var ... ?
+
 if [[ "${meth}" = "tmux" ]] ; then
   # get dir from current tmux window
   tmux_win=$(tmux list-windows | grep active | awk '{print $1}' | sed -e 's/://g')
   # strangely the -t<pane> is really a window index ...
+  pcmd=$(tmux display-message -p -F "#{pane_current_command}" -t${tmux_win})
+  # if pane command contains ssh substring then git dir is n/a ...
+  if [[ -n "$pcmd" && $pcmd =~ ssh ]] ; then
+    echo "git:<n/a>"
+    exit 0
+  fi
   git_dir=$(tmux display-message -p -F "#{pane_current_path}" -t${tmux_win})
   if [[ -z "${git_dir}" ]] ; then
     echo "git:<err(pane:null)>"

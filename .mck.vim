@@ -3617,7 +3617,8 @@ inoremap <silent> <C-S-Left> <Esc>:tabprevious<CR>
 "vnoremap <silent> <M-,>  <Esc>:tabprevious<CR>
 "inoremap <silent> <M-,>  <Esc>:tabprevious<CR>
 
-nnoremap <C-t> :tabnext<CR>
+nnoremap <silent> <C-t> :tabnext<CR>
+vnoremap <silent> <C-t> :tabnext<CR>
 
 " moving between windows, somtimes hard to let go of ctrl before arrow ...
 " these could map to same cmds: <C-w><C-Left> -> <C-w><Left>
