@@ -2788,8 +2788,8 @@ vnoremap <silent> <Leader>sd "sy<Esc>:call MyVisSearch(2)<CR>
 
 " search globally (root/project/git dir) with results in fzf/Ag list
 " same as :Agit ...
-nnoremap <silent> <Leader>sp :call MySearch(3)<CR>
-vnoremap <silent> <Leader>sp "sy<Esc>:call MyVisSearch(3)<CR>
+nnoremap <silent> <Leader>s/ :call MySearch(3)<CR>
+vnoremap <silent> <Leader>s/ "sy<Esc>:call MyVisSearch(3)<CR>
 " search dir (root/project/git dir) with results in fzf/Ag list
 " same as :Ag ...
 nnoremap <silent> <Leader>s. :call MySearch(4)<CR>

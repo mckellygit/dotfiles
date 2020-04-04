@@ -74,7 +74,7 @@ cS         swap chars with char before
 <Leader>sd search files in same dir
 <Leader>sg search all root/git/project files
 <Leader>s. search files in same dir with fzf/ag method
-<Leader>sp search all root/git files with fzf/ag method
+<Leader>s/ search all root/git files with fzf/ag method
 <Leader>hl toggle hlsearch
 
 *mck-terminal*
