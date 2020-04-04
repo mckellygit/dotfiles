@@ -522,6 +522,17 @@ command! -bang -nargs=* Agit
   \ 1,
   \ fzf#vim#with_preview('up:50%:hidden', 'p'),
   \ <bang>0)
+"
+" fzf env vars:
+"export FZF_PREVIEW_LINES=20
+"export FZF_DEFAULT_COMMAND='ag --all-text --nocolor -g ""'
+"
+" fzf preview.sh fix:
+"-FIRST=$(($CENTER-$LINES/3))
+"+# to account for when preview is set to 'up:50%'
+"+# as lines is then less than FZF_PREVIEW_LINES ...
+"+#FIRST=$(($CENTER-$LINES/3))
+"+FIRST=$(($CENTER-$LINES/7))
 " fzf -----------------
 
 " vinegar ------------
