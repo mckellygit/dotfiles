@@ -402,7 +402,8 @@ export EDITOR=vim
 export FZF_DEFAULT_OPTS="--extended --cycle --reverse"
 
 # fzf + ag configuration
-export FZF_DEFAULT_COMMAND='ag --nocolor -g ""'
+export FZF_PREVIEW_LINES=20
+export FZF_DEFAULT_COMMAND='ag --all-text --nocolor -g ""'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_DEFAULT_OPTS='
