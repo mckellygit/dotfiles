@@ -1822,25 +1822,18 @@ vnoremap <silent> <M-Right> lzl
 " ---------
 
 " could skip ()&,[]{}'"+-/:;
+"
 nnoremap <silent> <C-Right> W
 nnoremap <silent> <C-Left> B
-
+"
 " NOTE: this is good for when sel is adding to the right
-" TODO: reverse these for when sel is adding to the left ...
-"
-"function! s:MyEndPrevWord(m) abort
-"  let curline = line('.')
-"  if a:m == 'v'
-"    exe 'normal gv'
-"  endif
-"  exe 'normal B'
-"  if line('.') != curline
-"    exe 'normal hE'
-"  endif
-"endfunction
-"
+"       and erasing to the leftfrom what was added
 vnoremap <silent> <C-Right> E
 vnoremap <silent> <C-Left> gE
+" if we were adding to the left it would be:
+"vnoremap <silent> <C-Left> B
+" if we were erasing to the right it would be:
+"vnoremap <silent> <C-Right> W
 
 " ---------
 
