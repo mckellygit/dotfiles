@@ -483,36 +483,45 @@ command! FZFProjectFiles execute 'Files' s:find_git_root()
 " you can always run
 " :Files       - to get list from current dir
 " "Files <dir> - to get list from <dir>
-" "Raw" version of ag; arguments directly passed to ag
 "
+" "Raw" version of ag; arguments directly passed to ag
 " e.g.
 "   " Search 'foo bar' in ~/projects
 "   :Ag "foo bar" ~/projects
-"
 "   " Start in fullscreen mode
 "   :Ag! "foo bar"
-command! -bang -nargs=+ -complete=file Ag call fzf#vim#ag_raw(<q-args>, <bang>0)
-
+"command! -bang -nargs=+ -complete=file Ag call fzf#vim#ag_raw(<q-args>, <bang>0)
 " Raw version with preview
-command! -bang -nargs=+ -complete=file Ag call fzf#vim#ag_raw(<q-args>, fzf#vim#with_preview(), <bang>0)
-
-
-" AgIn: Start ag in the specified directory
+command! -bang -nargs=+ -complete=file Ags call fzf#vim#ag_raw(<q-args>, fzf#vim#with_preview(), <bang>0)
 "
+" Agit: Start ag in the git/root directory
 " e.g.
-"   :AgIn .. foo
+"   :Agit foo
 function! s:ag_in(bang, ...)
-  if !isdirectory(a:1)
-    throw 'not a valid directory: ' .. a:1
+  let gdir = s:find_git_root()
+  "if !isdirectory(a:1)
+  if !isdirectory(gdir)
+    throw 'not a valid directory: ' .. gdir
   endif
   " Press `?' to enable preview window.
-  call fzf#vim#ag(join(a:000[1:], ' '), fzf#vim#with_preview({'dir': a:1}, 'up:50%:hidden', '?'), a:bang)
-
+  "call fzf#vim#ag(join(a:000[1:], ' '), fzf#vim#with_preview({'dir': a:1}, 'up:50%:hidden', '?'), a:bang)
+  call fzf#vim#ag(join(a:000[0:], ' '), fzf#vim#with_preview({'dir': gdir}, 'up:50%:hidden', 'p'), a:bang)
   " If you don't want preview option, use this
   " call fzf#vim#ag(join(a:000[1:], ' '), {'dir': a:1}, a:bang)
 endfunction
-
-command! -bang -nargs=+ -complete=dir AgIn call s:ag_in(<bang>0, <f-args>)
+command! -bang -nargs=+ -complete=dir Agits call s:ag_in(<bang>0, <f-args>)
+"
+command! -bang -nargs=* Ag
+  \ call fzf#vim#grep('ag --all-text --hidden --nogroup --column --color '.shellescape(<q-args>),
+  \ 1,
+  \ fzf#vim#with_preview(),
+  \ <bang>0)
+"
+command! -bang -nargs=* Agit
+  \ call fzf#vim#grep('ag --all-text --hidden --nogroup --column --color '.shellescape(<q-args>).' '.s:find_git_root(),
+  \ 1,
+  \ fzf#vim#with_preview('up:50%:hidden', 'p'),
+  \ <bang>0)
 " fzf -----------------
 
 " vinegar ------------
@@ -601,8 +610,11 @@ autocmd BufReadCmd  index{,.lock}
     \     nmap <buffer> <Space> <C-f> |
     \     nmap <buffer> u <C-b> |
     \ endif
-au VimEnter * :Alias GBlame  Gblame
-au VimEnter * :Alias GStatus Gstatus
+aug fugitive_alias
+  au!
+  au VimEnter * :Alias GBlame  Gblame
+  au VimEnter * :Alias GStatus Gstatus
+aug END
 " fugitive -----------
 
 " gitgutter -----------
@@ -1185,7 +1197,9 @@ function! YankIt(cmd, arg) abort
     endif
     let @m = substitute(@*, "\\n\\+$", "", "")
     if @m==#@* " if identical then no trailing nl
-        let @z='v'
+        "let @z='v'
+        " need to remember if it was <C-V>
+        let @z = visualmode()
     else
         let @z='V'
         let @*=@m
@@ -2669,6 +2683,10 @@ function MySearch(meth) abort
     let promptstr = 's-gbl:/'
   elseif (a:meth == 2)
     let promptstr = 's-dir:/'
+  elseif (a:meth == 3)
+    let promptstr = 'a-gbl:/'
+  elseif (a:meth == 4)
+    let promptstr = 'a-dir:/'
   else
     redraw!
     return
@@ -2700,9 +2718,13 @@ function MySearch(meth) abort
   elseif (a:meth == 1)
     "execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
     execute 'AsyncRun! -strip ag --vimgrep --all-text --hidden' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
-  else
+  elseif (a:meth == 2)
     "execute 'AsyncRun! -strip -cwd ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) ' 2>/dev/null'
     execute 'AsyncRun! -strip ag --vimgrep --all-text --hidden' shellescape(string, 1) ' 2>/dev/null'
+  elseif (a:meth == 3)
+    call fzf#vim#grep('ag --all-text --hidden --nogroup --column --color '.shellescape(string, 1).' '.s:find_git_root(), 1, fzf#vim#with_preview('up:50%:hidden', 'p'), 0)
+  elseif (a:meth == 4)
+    call fzf#vim#grep('ag --all-text --hidden --nogroup --column --color '.shellescape(string, 1), 1, fzf#vim#with_preview(), 0)
   endif
   let @/=string
   set hlsearch
@@ -2733,9 +2755,13 @@ function MyVisSearch(meth) abort
   elseif (a:meth == 1)
     "execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
     execute 'AsyncRun! -strip ag --vimgrep --all-text --hidden' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
-  else
+  elseif (a:meth == 2)
     "execute 'AsyncRun! -strip -cwd ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) ' 2>/dev/null'
     execute 'AsyncRun! -strip ag --vimgrep --all-text --hidden' shellescape(string, 1) ' 2>/dev/null'
+  elseif (a:meth == 3)
+    call fzf#vim#grep('ag --all-text --hidden --nogroup --column --color '.shellescape(string, 1).' '.s:find_git_root(), 1, fzf#vim#with_preview('up:50%:hidden', 'p'), 0)
+  elseif (a:meth == 4)
+    call fzf#vim#grep('ag --all-text --hidden --nogroup --column --color '.shellescape(string, 1), 1, fzf#vim#with_preview(), 0)
   endif
   let @/=string
   set hlsearch
@@ -2759,6 +2785,15 @@ vnoremap <silent> <Leader>sg "sy<Esc>:call MyVisSearch(1)<CR>
 " search dir with results in qf list
 nnoremap <silent> <Leader>sd :call MySearch(2)<CR>
 vnoremap <silent> <Leader>sd "sy<Esc>:call MyVisSearch(2)<CR>
+
+" search globally (root/project/git dir) with results in fzf/Ag list
+" same as :Agit ...
+nnoremap <silent> <Leader>sf :call MySearch(3)<CR>
+vnoremap <silent> <Leader>sf "sy<Esc>:call MyVisSearch(3)<CR>
+" search dir (root/project/git dir) with results in fzf/Ag list
+" same as :Ag ...
+nnoremap <silent> <Leader>sa :call MySearch(4)<CR>
+vnoremap <silent> <Leader>sa "sy<Esc>:call MyVisSearch(4)<CR>
 
 "================================================================
 
@@ -3407,9 +3442,12 @@ if &diff
   inoremap <C-f> <C-\><C-o><C-f>
   inoremap <C-b> <C-\><C-o><C-b>
 else 
+  aug not_diff_alias
   "!&diff
-  au VimEnter * :Alias q call\ MyQuit("q")
-  au VimEnter * :Alias q! call\ MyQuit("q!")
+    au!
+    au VimEnter * :Alias q call\ MyQuit("q")
+    au VimEnter * :Alias q! call\ MyQuit("q!")
+  aug END
 endif
 
 " patience diff algo ...
