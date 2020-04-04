@@ -1823,17 +1823,17 @@ vnoremap <silent> <M-Right> lzl
 
 " could skip ()&,[]{}'"+-/:;
 "
-nnoremap <silent> <C-Right> W
-nnoremap <silent> <C-Left> B
+nnoremap <silent> <C-Right> w
+nnoremap <silent> <C-Left> b
 "
 " NOTE: this is good for when sel is adding to the right
 "       and erasing to the leftfrom what was added
-vnoremap <silent> <C-Right> E
-vnoremap <silent> <C-Left> gE
+vnoremap <silent> <C-Right> e
+vnoremap <silent> <C-Left> ge
 " if we were adding to the left it would be:
-"vnoremap <silent> <C-Left> B
+"vnoremap <silent> <C-Left> b
 " if we were erasing to the right it would be:
-"vnoremap <silent> <C-Right> W
+"vnoremap <silent> <C-Right> w
 
 " ---------
 
