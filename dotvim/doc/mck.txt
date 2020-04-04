@@ -90,6 +90,7 @@ cS         swap chars with char before
 <Leader>tw  move current window into new tab
 <Leader>tm  merge current tab into Window to the left
 <Leader>tM  merge current tab into Window to the right
+<C-t>       next tab
 <C-S-Left>  previous tab
 <C-S-Right> next tab
 <C-w>w      next window (also Left, Right, Up, Down)
@@ -97,7 +98,7 @@ cS         swap chars with char before
 <C-w>10-    resize window -10 lines   :res -10
 <C-w>10>    resize window +10 columns :vertical res +10
 <C-w>10<    resize window -10 columns :vertical res -10
-<LeftDrag>  to move window divider
+<LeftDrag>  drag to move window divider
 
 *mck-fold*
 -------------------------------------------------
@@ -112,9 +113,9 @@ cS         swap chars with char before
 *mck-split*
 -------------------------------------------------
 <Leader>sV   vertical split
-<Leader>s|   vertical split
+<Leader>s|   vertical split new
 <Leader>sH   horizontal split
-<Leader>s_   horizontal split
+<Leader>s_   horizontal split new
 <Leader>sT   tab split
 <C-w>t       makes topleft window current
 <C-w>K       moves curr window to topmost

@@ -68,6 +68,11 @@ Plugin 'mckellyln/vim-rtags'
 "Plugin 'yssl/QFEnter'
 Plugin 'mckellyln/QFEnter'
 "
+" qf preview popup
+Plugin 'bfrg/vim-qf-preview'
+"Plugin 'ronakg/quickr-preview.vim'
+"Plugin 'skywind3000/vim-quickui'
+"
 " other qf plugin
 "Plugin 'romainl/vim-qf'
 "
@@ -460,6 +465,8 @@ let g:findroot_not_for_subdir = 1
 " findroot ------------
 
 " fzf -----------------
+" always show preview window ...
+let g:fzf_preview_window = 'right:60%'
 autocmd VimEnter,BufEnter * silent! lcd %:p:h
 " add \fz mapping also
 nnoremap <silent> <Leader>fz :FZFProjectFiles<CR>
@@ -476,6 +483,36 @@ command! FZFProjectFiles execute 'Files' s:find_git_root()
 " you can always run
 " :Files       - to get list from current dir
 " "Files <dir> - to get list from <dir>
+" "Raw" version of ag; arguments directly passed to ag
+"
+" e.g.
+"   " Search 'foo bar' in ~/projects
+"   :Ag "foo bar" ~/projects
+"
+"   " Start in fullscreen mode
+"   :Ag! "foo bar"
+command! -bang -nargs=+ -complete=file Ag call fzf#vim#ag_raw(<q-args>, <bang>0)
+
+" Raw version with preview
+command! -bang -nargs=+ -complete=file Ag call fzf#vim#ag_raw(<q-args>, fzf#vim#with_preview(), <bang>0)
+
+
+" AgIn: Start ag in the specified directory
+"
+" e.g.
+"   :AgIn .. foo
+function! s:ag_in(bang, ...)
+  if !isdirectory(a:1)
+    throw 'not a valid directory: ' .. a:1
+  endif
+  " Press `?' to enable preview window.
+  call fzf#vim#ag(join(a:000[1:], ' '), fzf#vim#with_preview({'dir': a:1}, 'up:50%:hidden', '?'), a:bang)
+
+  " If you don't want preview option, use this
+  " call fzf#vim#ag(join(a:000[1:], ' '), {'dir': a:1}, a:bang)
+endfunction
+
+command! -bang -nargs=+ -complete=dir AgIn call s:ag_in(<bang>0, <f-args>)
 " fzf -----------------
 
 " vinegar ------------
@@ -623,6 +660,7 @@ autocmd FileType GV set foldlevelstart=1
 autocmd FileType GV nmap <silent> <buffer> qq :qa!<CR>
 "autocmd FileType GV nmap <silent> <buffer> <Leader>wc :call <SID>QuitIfOnlyNoNameLeft()<CR>
 autocmd FileType GV nmap <silent> <buffer> <Leader>wq :call <SID>QuitIfOnlyNoNameLeft()<CR>
+autocmd FileType GV nmap <silent> <buffer> <Leader>qq :call <SID>QuitIfOnlyNoNameLeft()<CR>
 
 "autocmd FileType GV cnoreabbrev <silent> <expr> q! (getcmdtype() == ':' && getcmdline() =~ '\s*q!\s*') ? 'qa!' : 'q!'
 
@@ -644,11 +682,38 @@ command! -bang Tabcloseleft silent! call TabCloseLeft('<bang>')
 " gv -----------
 
 " QFEnter -------------
-" add C-t to open in new tab to be consistent with fzf
+" add C-t, C-v, C-x to open consistently with fzf ...
 let g:qfenter_keymap = {}
-let g:qfenter_keymap.topen = ['<Leader><Tab>', '<C-t>']
+let g:qfenter_keymap.topen = ['<Leader><Tab>',   '<C-t>']
+let g:qfenter_keymap.vopen = ['<Leader><CR>',    '<C-v>']
+let g:qfenter_keymap.hopen = ['<Leader><Space>', '<C-x>']
 let g:qf_loclist_window_bottom = 0
+function! <SID>OpenQuickfix(new_split_cmd)
+  " 1. the current line is the result idx as we are in the quickfix
+  let l:qf_idx = line('.')
+  " 2. jump to the previous window
+  wincmd p
+  " 3. switch to a new split (the new_split_cmd will be 'vnew' or 'split')
+  execute a:new_split_cmd
+  " 4. open the 'current' item of the quickfix list in the newly created buffer
+  "    (the current means, the one focused before switching to the new buffer)
+  execute l:qf_idx . 'cc'
+endfunction
+"autocmd FileType qf noremap <buffer> <C-v> :call <SID>OpenQuickfix("vnew")<CR>
+"autocmd FileType qf noremap <buffer> <C-x> :call <SID>OpenQuickfix("split")<CR>
 " QFEnter -------------
+
+" vim-qf-preview ------
+augroup qfpreview
+    autocmd!
+    autocmd FileType qf nmap <buffer> <Space> <plug>(qf-preview-open)
+    autocmd FileType qf nmap <buffer> p       <plug>(qf-preview-open)
+augroup END
+let g:qfpreview = {
+    \ 'close': 'q',
+    \ 'number': '1',
+    \ }
+" vim-qf-preview ------
 
 " lastplace -----------
 " mods to skip for vimdiff
@@ -3519,6 +3584,8 @@ vnoremap <silent> <Leader>tk <C-\><C-n>:tabonly<CR>
 "vnoremap <silent> <Leader>wc <C-\><C-n>:conf q<CR>
 nnoremap <silent> <Leader>wq           :conf q<CR>
 vnoremap <silent> <Leader>wq <C-\><C-n>:conf q<CR>
+nnoremap <silent> <Leader>qq           :conf q<CR>
+vnoremap <silent> <Leader>qq <C-\><C-n>:conf q<CR>
 " window keep current and close all others
 nnoremap <silent> <Leader>wk           :only<CR>
 vnoremap <silent> <Leader>wk <C-\><C-n>:only<CR>
@@ -3657,10 +3724,11 @@ nnoremap <silent> <Leader>sV :vsplit<CR>
 " split line horizontal
 nnoremap <silent> <Leader>sH :split<CR>
 " to match tmux
-nnoremap <silent> <Leader>s\| :vsplit<CR>
-nnoremap <silent> <Leader>s_  :split<CR>
+nnoremap <silent> <Leader>s\| :vnew<CR>
+nnoremap <silent> <Leader>s_  :new<CR>
 " split into new tab - but same file buffer
 nnoremap <silent> <Leader>sT :tab split<CR>
+" use <Leader>to to open a new tab ...
 
 " -----------------------------
 
