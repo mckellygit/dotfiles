@@ -1819,10 +1819,28 @@ nnoremap <silent> <M-Right> lzl
 vnoremap <silent> <M-Left>  zhh
 vnoremap <silent> <M-Right> lzl
 
-" use w, not W - but should skip ()&,[]{}'"+-/:;
-nnoremap <silent> <C-Right> w
-" use b, not B - but should skip ()&,[]{}'"+-/:;
-nnoremap <silent> <C-Left>  b
+" ---------
+
+" could skip ()&,[]{}'"+-/:;
+nnoremap <silent> <C-Right> W
+nnoremap <silent> <C-Left> B
+
+" NOTE: this is good for when sel is adding to the right
+" TODO: reverse these for when sel is adding to the left ...
+"
+"function! s:MyEndPrevWord(m) abort
+"  let curline = line('.')
+"  if a:m == 'v'
+"    exe 'normal gv'
+"  endif
+"  exe 'normal B'
+"  if line('.') != curline
+"    exe 'normal hE'
+"  endif
+"endfunction
+"
+vnoremap <silent> <C-Right> E
+vnoremap <silent> <C-Left> gE
 
 " ---------
 
