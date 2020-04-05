@@ -1830,14 +1830,72 @@ nnoremap <silent> <C-Right> w
 nnoremap <silent> <C-Left> b
 "
 " NOTE: this is good for when sel is adding to the right
-"       and erasing to the leftfrom what was added
-vnoremap <silent> <C-Right> e
-vnoremap <silent> <C-Left> ge
+"       and erasing to the left from what was added
+"vnoremap <silent> <C-Right> e
+"vnoremap <silent> <C-Left> ge
 " if we were adding to the left it would be:
 "vnoremap <silent> <C-Left> b
 " if we were erasing to the right it would be:
 "vnoremap <silent> <C-Right> w
 
+function! s:MyCRight()
+    exe 'normal gv'
+    " in vis mode getpos("v") returns start of selection ...
+    let [line_start, col_start] = getpos("v")[1:2]
+    let [line_end, col_end] = getpos(".")[1:2]
+    if line_end == line_start
+        if col_end <= col_start
+            " special when on orginal word
+            exe 'normal mplb'
+            let ws = col('.')
+            exe 'normal he'
+            let we = col('.')
+            exe 'normal `p'
+            if ws <= col_start && we > col_start
+                exe 'normal e'
+            else
+                exe 'normal w'
+            endif
+        else
+            exe 'normal e'
+        endif
+    elseif line_end > line_start
+        exe 'normal e'
+    else
+        exe 'normal w'
+    endif
+endfunction
+
+function! s:MyCLeft()
+    exe 'normal gv'
+    " in vis mode getpos("v") returns start of selection ...
+    let [line_start, col_start] = getpos("v")[1:2]
+    let [line_end, col_end] = getpos(".")[1:2]
+    if line_end == line_start
+        if col_end >= col_start
+            " special when on orginal word
+            exe 'normal mplb'
+            let ws = col('.')
+            exe 'normal he'
+            let we = col('.')
+            exe 'normal `p'
+            if ws < col_start && we >= col_start
+                exe 'normal b'
+            else
+                exe 'normal ge'
+            endif
+        else
+            exe 'normal b'
+        endif
+    elseif line_end < line_start
+        exe 'normal b'
+    else
+        exe 'normal ge'
+    endif
+endfunction
+
+vnoremap <silent> <C-Right> <C-\><C-n>:call <SID>MyCRight()<CR>
+vnoremap <silent> <C-Left> <C-\><C-n>:call <SID>MyCLeft()<CR>
 " ---------
 
 " N<C-D> and N<C-U> idiotically change the scroll setting
