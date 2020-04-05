@@ -735,6 +735,9 @@ augroup END
 let g:qfpreview = {
     \ 'close': 'q',
     \ 'number': '1',
+    \ 'height': '15',
+    \ 'offset': '7',
+    \ 'sign': {'linehl': 'CursorLine'},
     \ }
 " vim-qf-preview ------
 
