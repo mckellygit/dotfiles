@@ -1854,7 +1854,7 @@ function! s:MyCRight()
             if ws <= col_start && we > col_start
                 exe 'normal e'
             else
-                exe 'normal w'
+                exe 'normal wh'
             endif
         else
             exe 'normal e'
@@ -1882,7 +1882,7 @@ function! s:MyCLeft()
             if ws < col_start && we >= col_start
                 exe 'normal b'
             else
-                exe 'normal ge'
+                exe 'normal gel'
             endif
         else
             exe 'normal b'
