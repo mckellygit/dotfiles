@@ -287,6 +287,8 @@ alias start_rdm="rdm --tempdir /tmp/rdm-${LOGNAME} --log-file /tmp/rdm-${LOGNAME
 alias stop-rdm='rc -q'
 alias stop_rdm='rc -q'
 
+alias fzf='fzf-tmux'
+
 # dont disappear on a non-exiting command ...
 # also note use of command
 # bash does this automatically
