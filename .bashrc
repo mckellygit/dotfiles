@@ -174,6 +174,8 @@ else
 fi
 alias make='make -j$NCPUS'
 
+alias fzf='fzf-tmux'
+
 sship()
 {
   if [ -n "$SSH_CLIENT" ] ; then
