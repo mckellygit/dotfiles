@@ -3,6 +3,7 @@
 *mck-file*
 -------------------------------------------------
 <Leader>fz fzf project dir
+<Leader>ls fzf list buffers
 <Leader>fb FileBeagle current dir
 <Leader>fB FileBeagle project dir
 <Leader>of switch to other file (.hpp/.cpp/etc)

@@ -233,8 +233,8 @@ endfunction
 "let g:ackprg = 'ack -k --nogroup --nocolor --column --smart-case --follow'
 " use ag (silver-searcher) instead of ack, if possible
 if executable('ag')
-  " NOTE: ag can miss some matches without --all-text --hidden ...
-  let g:ackprg = 'ag --vimgrep --all-text --hidden'
+  " NOTE: ag can miss some matches without -U --hidden ...
+  let g:ackprg = 'ag --vimgrep -U --hidden '
 endif
 " example: (cdo/cfdo ldo/lfdo [!])
 " :Ack foo
@@ -243,7 +243,7 @@ endif
 let g:ackhighlight = 1
 let g:ack_use_dispatch = 1
 "set grepprg=ack\ -k
-set grepprg=ag\ --vimgrep\ --all-text
+set grepprg=ag\ --vimgrep\ -U\ --hidden
 set grepformat=%f:%l:%c:%m
 " open :grep output in qf ...
 autocmd QuickFixCmdPost *grep* cwindow
@@ -466,6 +466,7 @@ let g:findroot_not_for_subdir = 1
 
 " fzf -----------------
 " always show preview window ...
+let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.5, 'yoffset': 0.8, 'xoffset': 0.8 } }
 let g:fzf_preview_window = 'right:60%'
 autocmd VimEnter,BufEnter * silent! lcd %:p:h
 " add \fz mapping also
@@ -512,20 +513,20 @@ endfunction
 command! -bang -nargs=+ -complete=dir Agits call s:ag_in(<bang>0, <f-args>)
 "
 command! -bang -nargs=* Ag
-  \ call fzf#vim#grep('ag --all-text --hidden --nogroup --column --color '.shellescape(<q-args>),
+  \ call fzf#vim#grep('ag -U --hidden --nogroup --column --color '.shellescape(<q-args>),
   \ 1,
   \ fzf#vim#with_preview(),
   \ <bang>0)
 "
 command! -bang -nargs=* Agit
-  \ call fzf#vim#grep('ag --all-text --hidden --nogroup --column --color '.shellescape(<q-args>).' '.s:find_git_root(),
+  \ call fzf#vim#grep('ag -U --hidden --nogroup --column --color '.shellescape(<q-args>).' '.s:find_git_root(),
   \ 1,
   \ fzf#vim#with_preview('up:50%:hidden', 'p'),
   \ <bang>0)
 "
 " fzf env vars:
 "export FZF_PREVIEW_LINES=20
-"export FZF_DEFAULT_COMMAND='ag --all-text --nocolor -g ""'
+"export FZF_DEFAULT_COMMAND='ag -U --hidden --nocolor -g ""'
 "
 " fzf preview.sh fix:
 "-FIRST=$(($CENTER-$LINES/3))
@@ -533,6 +534,25 @@ command! -bang -nargs=* Agit
 "+# as lines is then less than FZF_PREVIEW_LINES ...
 "+#FIRST=$(($CENTER-$LINES/3))
 "+FIRST=$(($CENTER-$LINES/7))
+"
+function! s:buflist()
+  redir => ls
+  silent ls
+  redir END
+  return split(ls, '\n')
+endfunction
+
+function! s:bufopen(e)
+  execute 'buffer' matchstr(a:e, '^[ 0-9]*')
+endfunction
+
+nnoremap <silent> <Leader>ls :call fzf#run({
+\   'source':  reverse(<sid>buflist()),
+\   'sink':    function('<sid>bufopen'),
+\   'options': '+m',
+\   'window' : { 'width': 0.8, 'height': 0.3, 'yoffset': 0.8, 'xoffset': 0.8 },
+\   'down':    len(<sid>buflist()) + 2
+\ })<CR>
 " fzf -----------------
 
 " vinegar ------------
@@ -2804,14 +2824,14 @@ function MySearch(meth) abort
     execute 'AsyncRun! -strip ag --vimgrep ' shellescape(string, 1) join(files) ' 2>/dev/null'
   elseif (a:meth == 1)
     "execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
-    execute 'AsyncRun! -strip ag --vimgrep --all-text --hidden' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
+    execute 'AsyncRun! -strip ag --vimgrep -U --hidden ' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
   elseif (a:meth == 2)
     "execute 'AsyncRun! -strip -cwd ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) ' 2>/dev/null'
-    execute 'AsyncRun! -strip ag --vimgrep --all-text --hidden' shellescape(string, 1) ' 2>/dev/null'
+    execute 'AsyncRun! -strip ag --vimgrep -U --hidden ' shellescape(string, 1) ' 2>/dev/null'
   elseif (a:meth == 3)
-    call fzf#vim#grep('ag --all-text --hidden --nogroup --column --color '.shellescape(string, 1).' '.s:find_git_root(), 1, fzf#vim#with_preview('up:50%:hidden', 'p'), 0)
+    call fzf#vim#grep('ag -U --hidden --nogroup --column --color '.shellescape(string, 1).' '.s:find_git_root(), 1, fzf#vim#with_preview('up:50%:hidden', 'p'), 0)
   elseif (a:meth == 4)
-    call fzf#vim#grep('ag --all-text --hidden --nogroup --column --color '.shellescape(string, 1), 1, fzf#vim#with_preview(), 0)
+    call fzf#vim#grep('ag -U --hidden --nogroup --column --color '.shellescape(string, 1), 1, fzf#vim#with_preview(), 0)
   endif
   let @/=string
   set hlsearch
@@ -2841,14 +2861,14 @@ function MyVisSearch(meth) abort
     execute 'AsyncRun! -strip ag --vimgrep ' shellescape(string, 1) join(files) ' 2>/dev/null'
   elseif (a:meth == 1)
     "execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
-    execute 'AsyncRun! -strip ag --vimgrep --all-text --hidden' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
+    execute 'AsyncRun! -strip ag --vimgrep -U --hidden ' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
   elseif (a:meth == 2)
     "execute 'AsyncRun! -strip -cwd ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) ' 2>/dev/null'
-    execute 'AsyncRun! -strip ag --vimgrep --all-text --hidden' shellescape(string, 1) ' 2>/dev/null'
+    execute 'AsyncRun! -strip ag --vimgrep -U --hidden ' shellescape(string, 1) ' 2>/dev/null'
   elseif (a:meth == 3)
-    call fzf#vim#grep('ag --all-text --hidden --nogroup --column --color '.shellescape(string, 1).' '.s:find_git_root(), 1, fzf#vim#with_preview('up:50%:hidden', 'p'), 0)
+    call fzf#vim#grep('ag -U --hidden --nogroup --column --color '.shellescape(string, 1).' '.s:find_git_root(), 1, fzf#vim#with_preview('up:50%:hidden', 'p'), 0)
   elseif (a:meth == 4)
-    call fzf#vim#grep('ag --all-text --hidden --nogroup --column --color '.shellescape(string, 1), 1, fzf#vim#with_preview(), 0)
+    call fzf#vim#grep('ag -U --hidden --nogroup --column --color '.shellescape(string, 1), 1, fzf#vim#with_preview(), 0)
   endif
   let @/=string
   set hlsearch
