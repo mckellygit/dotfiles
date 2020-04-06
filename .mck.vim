@@ -1848,13 +1848,15 @@ function! s:MyCRight()
             " special when on orginal word
             exe 'normal mplb'
             let ws = col('.')
-            exe 'normal he'
+            exe 'normal e'
             let we = col('.')
             exe 'normal `p'
             if ws <= col_start && we > col_start
                 exe 'normal e'
-            else
+            elseif we == col_start
                 exe 'normal wh'
+            else
+                exe 'normal w'
             endif
         else
             exe 'normal e'
@@ -1876,13 +1878,15 @@ function! s:MyCLeft()
             " special when on orginal word
             exe 'normal mplb'
             let ws = col('.')
-            exe 'normal he'
+            exe 'normal e'
             let we = col('.')
             exe 'normal `p'
             if ws < col_start && we >= col_start
                 exe 'normal b'
-            else
+            elseif ws == col_start
                 exe 'normal gel'
+            else
+                exe 'normal ge'
             endif
         else
             exe 'normal b'
