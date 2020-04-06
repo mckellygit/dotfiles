@@ -287,7 +287,19 @@ alias start_rdm="rdm --tempdir /tmp/rdm-${LOGNAME} --log-file /tmp/rdm-${LOGNAME
 alias stop-rdm='rc -q'
 alias stop_rdm='rc -q'
 
-alias fzf='fzf-tmux'
+# ------------------
+
+# -x S -y R are not supported values
+#alias fzf='fzf-tmux -p -x R -y S -w 80% -h 80%'
+alias fzf='fzf-tmux -p -x 30 -y 40 -w 80% -h 80%'
+
+# to use tmux window instead of popup, add -d arg
+# ls -l | fzf -d
+
+# to add fzf args, add -- <fzf args>, as in
+# ls -l | fzf -d -- --cycle
+
+# ------------------
 
 # dont disappear on a non-exiting command ...
 # also note use of command
@@ -412,13 +424,7 @@ export FZF_PREVIEW_LINES=20
 export FZF_DEFAULT_COMMAND='ag -U --hidden --nocolor -g ""'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_DEFAULT_OPTS='
-  --preview "bat --style=numbers --color=always --line-range :200 {}"
-  --bind "ctrl-_:toggle-preview"
-  --preview-window=right:hidden
-  --color fg:242,bg:236,hl:65,fg+:15,bg+:239,hl+:108
-  --color info:108,prompt:109,spinner:108,pointer:168,marker:168
-  '
+export FZF_DEFAULT_OPTS='--preview "bat --style=numbers --color=always --line-range :200 {}" --bind "ctrl-_:toggle-preview" --preview-window=right:hidden --color fg:242,bg:236,hl:65,fg+:15,bg+:239,hl+:108 --color info:108,prompt:109,spinner:108,pointer:168,marker:168'
 
 # This can be slow, try it in byobu/tmux status bar ...
 # git repo info/status in prompt
