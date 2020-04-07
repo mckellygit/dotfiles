@@ -430,6 +430,24 @@ export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND -t d"
 # add --ansi because fd above uses --color=always ...
 export FZF_DEFAULT_OPTS='--ansi --preview "bat --style=numbers --color=always --line-range :200 {}" --bind "ctrl-_:toggle-preview" --preview-window=right:hidden --color fg:242,bg:236,hl:65,fg+:15,bg+:239,hl+:108 --color info:108,prompt:109,spinner:108,pointer:168,marker:168'
 
+# Options to fzf command
+export FZF_COMPLETION_OPTS='+c -x'
+
+# Use fd (https://github.com/sharkdp/fd) instead of the default find
+# command for listing path candidates.
+# - The first argument to the function ($1) is the base path to start traversal
+# - See the source code (completion.{bash,zsh}) for the details.
+_fzf_compgen_path() {
+  fd -u --hidden --follow -I --exclude ".git" . "$1"
+}
+
+# Use fd to generate the list for directory completion
+_fzf_compgen_dir() {
+  fd --type d -u --hidden -I -follow --exclude ".git" . "$1"
+}
+
+alias manf="man -k . | fzf --prompt='Man> ' | awk '{print $1}' | xargs -r man"
+
 # This can be slow, try it in byobu/tmux status bar ...
 # git repo info/status in prompt
 #if [ -f ~/.git-prompt.sh ] ; then
