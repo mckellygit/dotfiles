@@ -290,8 +290,7 @@ alias stop_rdm='rc -q'
 # ------------------
 
 # -x S -y R are not supported values
-#alias fzf='fzf-tmux -p -x R -y S -w 80% -h 80%'
-alias fzf='fzf-tmux -p -x 30 -y 40 -w 80% -h 80%'
+alias fzf='fzf-tmux -p -x R -y S -w 80% -h 80%'
 
 # to use tmux window instead of popup, add -d arg
 # ls -l | fzf -d
