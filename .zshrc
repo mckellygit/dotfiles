@@ -432,20 +432,45 @@ export FZF_DEFAULT_OPTS='--ansi --preview "bat --style=numbers --color=always --
 # Options to fzf command
 export FZF_COMPLETION_OPTS='+c -x'
 
+export FZF_COMPLETION_TRIGGER="\`"
+
+# use ag instead of the default find ...
+# _fzf_compgen_path() {
+#  ag -u --hidden --nocolor -g "" "$1"
+#}
+
+# Ag only lists files not directories, so we can use awk to get dirnames
+# _fzf_compgen_dir() {
+#  ag -u --hidden --nocolor -g "" "$1" | awk 'function dirname(fn) { if (fn == "") return ".";  if (fn !~ "[^/]") return "/"; sub("/*$", "", fn); if (fn !~ "/") return ".";# sub("/[^/]*$", "", fn); if (fn == "") fn = "/"; return fn } {$0 = dirname($0)} !a[$0]++'
+#}
+
 # Use fd (https://github.com/sharkdp/fd) instead of the default find
 # command for listing path candidates.
 # - The first argument to the function ($1) is the base path to start traversal
 # - See the source code (completion.{bash,zsh}) for the details.
 _fzf_compgen_path() {
-  fd -u --hidden --follow -I --exclude ".git" . "$1"
+  fd -u --hidden --follow --exclude ".git" . "$1"
 }
 
 # Use fd to generate the list for directory completion
 _fzf_compgen_dir() {
-  fd --type d -u --hidden -I -follow --exclude ".git" . "$1"
+  fd -t d -u --hidden --follow --exclude ".git" . "$1"
 }
 
-alias manf="man -k . | fzf --prompt='Man> ' | awk '{print $1}' | xargs -r man"
+# (EXPERIMENTAL) Advanced customization of fzf options via _fzf_comprun function
+# - The first argument to the function is the name of the command.
+# - You should make sure to pass the rest of the arguments to fzf.
+# _fzf_comprun() {
+#   local command=$1
+#   shift
+#   case "$command" in
+#     cd)           fzf -d "$@" --preview 'tree -C {} | head -200' ;;
+#     *)            fzf -d "$@" ;;
+#   esac
+# }
+
+export MANPAGER="less"
+alias manls="man -k . | fzf --prompt='Man> ' | awk '{print \$1}' | xargs -r man -P 'less'"
 
 # This can be slow, try it in byobu/tmux status bar ...
 # git repo info/status in prompt
