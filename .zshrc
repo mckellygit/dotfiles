@@ -432,7 +432,7 @@ export FZF_DEFAULT_OPTS='--ansi --preview "bat --style=numbers --color=always --
 # Options to fzf command
 export FZF_COMPLETION_OPTS='+c -x'
 
-export FZF_COMPLETION_TRIGGER="\`"
+export FZF_COMPLETION_TRIGGER="\`\`"
 
 # use ag instead of the default find ...
 # _fzf_compgen_path() {
