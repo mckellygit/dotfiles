@@ -419,12 +419,16 @@ export FZF_DEFAULT_OPTS="--extended --cycle --reverse"
 
 # fzf shell history is in CTRL_R ...
 
-# fzf + ag configuration
+# fzf + ag or fd configuration
 export FZF_PREVIEW_LINES=20
-export FZF_DEFAULT_COMMAND='ag -U --hidden --nocolor -g ""'
+# use fd instead of ag to get dirs listed ...
+#export FZF_DEFAULT_COMMAND='ag -U --hidden --nocolor -g ""'
+export FZF_DEFAULT_COMMAND='fd -u --hidden --follow --exclude .git --color=always'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+# could make alt-c for dirs only ...
 export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_DEFAULT_OPTS='--preview "bat --style=numbers --color=always --line-range :200 {}" --bind "ctrl-_:toggle-preview" --preview-window=right:hidden --color fg:242,bg:236,hl:65,fg+:15,bg+:239,hl+:108 --color info:108,prompt:109,spinner:108,pointer:168,marker:168'
+# add --ansi because fd above uses --color=always ...
+export FZF_DEFAULT_OPTS='--ansi --preview "bat --style=numbers --color=always --line-range :200 {}" --bind "ctrl-_:toggle-preview" --preview-window=right:hidden --color fg:242,bg:236,hl:65,fg+:15,bg+:239,hl+:108 --color info:108,prompt:109,spinner:108,pointer:168,marker:168'
 
 # This can be slow, try it in byobu/tmux status bar ...
 # git repo info/status in prompt
