@@ -662,11 +662,10 @@ aug END
 
 " gitgutter -----------
 let g:gitgutter_enabled = 1
+let g:gitgutter_sign_column_always = 1
 " always have sign column
 if exists('&signcolumn')  " Vim 7.4.2201
   set signcolumn=yes
-else
-  let g:gitgutter_sign_column_always = 1
 endif
 nmap <Leader>gn <Plug>(GitGutterNextHunk)
 nmap <Leader>gp <Plug>(GitGutterPrevHunk)
@@ -3679,7 +3678,9 @@ nnoremap <silent> <expr> <Return> (&buftype == 'terminal') ? 'i' : '<Return>'
 tnoremap <silent> <C-x>]   <C-\><C-n>
 nnoremap <silent> <expr> <C-x>] (&buftype == 'terminal') ? 'i' : '<C-x>]'
 
-au TerminalOpen * set signcolumn=no
+" not needed any more and it causes sign column to disappear on
+" popups that are terminal windows ...
+"au TerminalOpen * set signcolumn=no
 
 " -----------
 
