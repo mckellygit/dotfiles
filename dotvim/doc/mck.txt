@@ -2,8 +2,10 @@
 
 *mck-file*
 -------------------------------------------------
-<Leader>fz fzf project dir
-<Leader>ls fzf list buffers
+<Leader>f. fzf list of current dir files
+<Leader>f/ fzf list of project dir files
+<Leader>ls fzf list of buffers - open in new tab
+<Leader>hb hide buffer
 <Leader>fb FileBeagle current dir
 <Leader>fB FileBeagle project dir
 <Leader>of switch to other file (.hpp/.cpp/etc)
@@ -71,11 +73,12 @@ cS         swap chars with char before
 <Leader>sx clear search buffer and stop async running search
 <Leader>sq stop async running search
 <Leader>sn search (/)
+<Leader>sN search (?)
 <Leader>sb search buffer files
-<Leader>sd search files in same dir
-<Leader>sg search all root/git/project files
-<Leader>s. search files in same dir with fzf/ag method
-<Leader>s/ search all root/git files with fzf/ag method
+<Leader>sd search files in curr dir
+<Leader>sg search files in git root dir
+<Leader>s. search files in curr dir with fzf+ag
+<Leader>s/ search files in git root dir with fzf+ag
 <Leader>hl toggle hlsearch
 
 *mck-terminal*

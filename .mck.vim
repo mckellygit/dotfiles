@@ -174,6 +174,9 @@ Plugin 'Konfekt/vim-alias'
 " tab/buffer
 "Plugin 'ap/vim-buftabline'
 "
+" bufexplorer
+"Plugin 'jlanzarotta/bufexplorer'
+"
 " start screen
 Plugin 'mhinz/vim-startify'
 "
@@ -472,7 +475,8 @@ let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.5, 'yoffset': 0.8, 'x
 let g:fzf_preview_window = 'right:60%'
 autocmd VimEnter,BufEnter * silent! lcd %:p:h
 " add \fz mapping also
-nnoremap <silent> <Leader>fz :FZFProjectFiles<CR>
+noremap <silent> <Leader>fz :FZFProjectFiles<CR>
+noremap <silent> <Leader>f/ :FZFProjectFiles<CR>
 function! s:find_git_root()
     " in a submodule dir this returns git root, otherwise returns empty
     let gdir = system('git rev-parse --show-superproject-working-tree 2> /dev/null')[:-2]
@@ -483,6 +487,7 @@ function! s:find_git_root()
     return gdir
 endfunction
 command! FZFProjectFiles execute 'Files' s:find_git_root()
+noremap <silent> <Leader>f. :Files<CR>
 " you can always run
 " :Files       - to get list from current dir
 " "Files <dir> - to get list from <dir>
@@ -545,8 +550,11 @@ function! s:buflist()
 endfunction
 
 function! s:bufopen(e)
-" execute 'buffer' matchstr(a:e, '^[ 0-9]*')
-" let l:bufid = bufnr(a:name)
+  if empty(a:e)
+    return
+  endif
+  "execute 'buffer' matchstr(a:e, '^[ 0-9]*')
+  "let l:bufid = bufnr(a:name)
   let l:bufid = str2nr(matchstr(a:e, '^[ 0-9]*'))
   let l:winids = win_findbuf(l:bufid)
   if empty(l:winids)
@@ -558,13 +566,15 @@ function! s:bufopen(e)
   endif
 endfunction
 
-nnoremap <silent> <Leader>ls :call fzf#run({
+noremap <silent> <Leader>ls :call fzf#run({
 \   'source':  reverse(<sid>buflist()),
 \   'sink':    function('<sid>bufopen'),
 \   'options': '+m',
 \   'window' : { 'width': 0.8, 'height': 0.3, 'yoffset': 0.8, 'xoffset': 0.8 },
 \   'down':    len(<sid>buflist()) + 2
 \ })<CR>
+" hide buffer
+noremap <silent> <Leader>hb :hide<CR>
 " fzf -----------------
 
 " vinegar ------------
@@ -2910,24 +2920,28 @@ vnoremap <silent> <Leader>sq :AsyncStop!<CR>
 " search normally
 nnoremap <Leader>sn :let @/=""<bar>:set hlsearch<CR>/
 vnoremap <Leader>sn y<Esc>:let @/=""<bar>:set hlsearch<CR>/<C-r>"
+" search normally
+nnoremap <Leader>sN :let @/=""<bar>:set hlsearch<CR>?
+vnoremap <Leader>sN y<Esc>:let @/=""<bar>:set hlsearch<CR>?<C-r>"
+
 " search buffer with results in qf list
 nnoremap <silent> <Leader>sb :call MySearch(0)<CR>
 vnoremap <silent> <Leader>sb "sy<Esc>:call MyVisSearch(0)<CR>
-" search globally (root/project/git dir) with results in qf list
-nnoremap <silent> <Leader>sg :call MySearch(1)<CR>
-vnoremap <silent> <Leader>sg "sy<Esc>:call MyVisSearch(1)<CR>
 " search dir with results in qf list
 nnoremap <silent> <Leader>sd :call MySearch(2)<CR>
 vnoremap <silent> <Leader>sd "sy<Esc>:call MyVisSearch(2)<CR>
+" search globally (root/project/git dir) with results in qf list
+nnoremap <silent> <Leader>sg :call MySearch(1)<CR>
+vnoremap <silent> <Leader>sg "sy<Esc>:call MyVisSearch(1)<CR>
 
-" search globally (root/project/git dir) with results in fzf/Ag list
-" same as :Agit ...
-nnoremap <silent> <Leader>s/ :call MySearch(3)<CR>
-vnoremap <silent> <Leader>s/ "sy<Esc>:call MyVisSearch(3)<CR>
 " search dir (root/project/git dir) with results in fzf/Ag list
 " same as :Ag ...
 nnoremap <silent> <Leader>s. :call MySearch(4)<CR>
 vnoremap <silent> <Leader>s. "sy<Esc>:call MyVisSearch(4)<CR>
+" search globally (root/project/git dir) with results in fzf/Ag list
+" same as :Agit ...
+nnoremap <silent> <Leader>s/ :call MySearch(3)<CR>
+vnoremap <silent> <Leader>s/ "sy<Esc>:call MyVisSearch(3)<CR>
 
 "================================================================
 
