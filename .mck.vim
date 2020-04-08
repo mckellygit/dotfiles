@@ -374,6 +374,7 @@ endfunction
 function! MyLightlineTabFilename(n)
   let tab_filename = gettabvar(a:n, 'lightline_tab_filename', '')
   if gettabwinvar(a:n, tabpagewinnr(a:n), '&buftype') ==# 'quickfix'
+    \ || tabpagenr() ==# a:n && win_gettype(win_getid()) ==# 'popup'
     return tab_filename
   endif
   let tab_filename = lightline#tab#filename(a:n)
@@ -385,6 +386,7 @@ endfunction
 function! MyLightlineTabModified(n)
   let tab_modified = gettabvar(a:n, 'lightline_tab_modified', '')
   if gettabwinvar(a:n, tabpagewinnr(a:n), '&buftype') ==# 'quickfix'
+    \ || tabpagenr() ==# a:n && win_gettype(win_getid()) ==# 'popup'
     return tab_modified
   endif
   let tab_modified = lightline#tab#modified(a:n)
@@ -543,7 +545,17 @@ function! s:buflist()
 endfunction
 
 function! s:bufopen(e)
-  execute 'buffer' matchstr(a:e, '^[ 0-9]*')
+" execute 'buffer' matchstr(a:e, '^[ 0-9]*')
+" let l:bufid = bufnr(a:name)
+  let l:bufid = str2nr(matchstr(a:e, '^[ 0-9]*'))
+  let l:winids = win_findbuf(l:bufid)
+  if empty(l:winids)
+    " open hidden buffer in a new tab ...
+    " TODO: or hsplit or vsplit or in current window ...
+    execute 'tabnew|b'.l:bufid
+  else
+    call win_gotoid(l:winids[0])
+  endif
 endfunction
 
 nnoremap <silent> <Leader>ls :call fzf#run({
@@ -713,6 +725,7 @@ function! TabCloseRightQuit(bang)
     exe 'tabclose' . a:bang . ' ' . (cur + 1)
   endwhile
   execute "qa!"
+  execute 'normal! \<CR>'
 endfunction
 command! -bang Tabcloserightquit silent! call TabCloseRightQuit('<bang>')
 
@@ -1866,6 +1879,12 @@ nnoremap <silent> <C-Left> b
 "vnoremap <silent> <C-Left> b
 " if we were erasing to the right it would be:
 "vnoremap <silent> <C-Right> w
+
+" TODO: get ws, we without moving cursor ...
+" let line = getline('.')
+" let col = col('.')
+" let ws = col - len(matchstr(line[:col], '\k*$')) or perhaps ^\k$* ??
+" let we = col + len(matchstr(line[col:], '^\k*'))
 
 function! s:MyCRight()
     exe 'normal gv'
@@ -3322,6 +3341,7 @@ function! s:SkipTerminalsQuitCmd(cmd) abort
     if l:doquit == 1
         "quit!
         execute "qa!"
+        execute 'normal! \<CR>'
     else
         execute a:cmd
     endif
@@ -3350,6 +3370,7 @@ function! s:SkipTerminalsConfQA() abort
     if l:doquit == 1
         "quit!
         execute "qa!"
+        execute 'normal! \<CR>'
     else
         execute "conf qa"
     endif
@@ -3372,6 +3393,7 @@ function! s:QuitIfOnlyNoNameLeft() abort
     endfor
     if l:doquit == 1
         execute "qa!"
+        execute 'normal! \<CR>'
     else
         execute "tabclose!"
     endif
