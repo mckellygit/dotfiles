@@ -1889,11 +1889,21 @@ nnoremap <silent> <C-Left> b
 " if we were erasing to the right it would be:
 "vnoremap <silent> <C-Right> w
 
-" TODO: get ws, we without moving cursor ...
-" let line = getline('.')
-" let col = col('.')
-" let ws = col - len(matchstr(line[:col], '\k*$')) or perhaps ^\k$* ??
-" let we = col + len(matchstr(line[col:], '^\k*'))
+" NOTE: get ws, we without moving cursor ...
+"   exe 'normal mplb'
+"   let ws = col('.')
+"   exe 'normal e'
+"   let we = col('.')
+"   exe 'normal `p'
+" from Itchyny -
+"   let line = getline('.')
+"   let col = col('.')
+"   let ws = col - len(matchstr(line[:col], '\k*$'))
+"   let we = col + len(matchstr(line[col:], '^\k*'))
+" but col() is 1-based, and index [:col], is 0-based ...
+" from Ingo -
+"   let start = searchpos('\k*\%#\k*', 'bcnW') " Backward
+"   let end = searchpos('\%#\k*', 'cenW') " Forward to end
 
 function! s:MyCRight()
     exe 'normal gv'
@@ -1903,11 +1913,9 @@ function! s:MyCRight()
     if line_end == line_start
         if col_end <= col_start
             " special when on orginal word
-            exe 'normal mplb'
-            let ws = col('.')
-            exe 'normal e'
-            let we = col('.')
-            exe 'normal `p'
+            " get ws, we without normal cmds, thanks Ingo ...
+            let [ls, ws] = searchpos('\k*\%#\k*', 'bcnW')
+            let [le, we] = searchpos('\%#\k*', 'cenW')
             if ws <= col_start && we > col_start
                 exe 'normal e'
             elseif we == col_start
@@ -1933,11 +1941,9 @@ function! s:MyCLeft()
     if line_end == line_start
         if col_end >= col_start
             " special when on orginal word
-            exe 'normal mplb'
-            let ws = col('.')
-            exe 'normal e'
-            let we = col('.')
-            exe 'normal `p'
+            " get ws, we without normal cmds, thanks Ingo ...
+            let [ls, ws] = searchpos('\k*\%#\k*', 'bcnW')
+            let [le, we] = searchpos('\%#\k*', 'cenW')
             if ws < col_start && we >= col_start
                 exe 'normal b'
             elseif ws == col_start
