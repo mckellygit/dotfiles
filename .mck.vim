@@ -1960,8 +1960,52 @@ function! s:MyCLeft()
     endif
 endfunction
 
-vnoremap <silent> <C-Right> <C-\><C-n>:call <SID>MyCRight()<CR>
-vnoremap <silent> <C-Left> <C-\><C-n>:call <SID>MyCLeft()<CR>
+"vnoremap <silent> <C-Right> <C-\><C-n>:call <SID>MyCRight()<CR>
+"vnoremap <silent> <C-Left> <C-\><C-n>:call <SID>MyCLeft()<CR>
+
+" ---------
+
+" From Andy Wokula -
+"
+" VisAtStart({strict})
+"
+"   return true if the cursor is in the upper left corner of the Visual
+"   area, otherwise false.  If Visual mode is off: returns true always.
+"   For {strict}, see VisAtEnd().
+"
+" VisAtEnd({strict})
+"
+"   return true if the cursor is in the lower right corner of the Visual
+"   area, otherwise false.  If Visual mode is off: returns true always.
+"
+"   {strict}        (boolean)
+"       true        more exact check when in Visual block mode (4 corners)
+"       false       always do the charwise/linewise check (2 corners)
+"
+"   When {strict} is true, then in Visual block mode both VisAtStart() and
+"   VisAtEnd() can be false.  See :h v_O .
+
+func! VisAtStart(strict) "{{{
+     if mode() ==? 'v' || !a:strict
+        return line("v") > line(".") || line("v") == line(".") && col("v") >= col(".")
+     else
+        " assume Visual block mode
+        return line("v") >= line(".") && col("v") >= col(".")
+     endif
+endfunc "}}}
+
+func! VisAtEnd(strict) "{{{
+     if mode() ==? 'v' || !a:strict
+        return line("v") < line(".") || line("v") == line(".") && col("v") <= col(".")
+     else
+        " assume Visual block mode
+        return line("v") <= line(".") && col("v") <= col(".")
+     endif
+endfunc "}}}
+
+vnoremap <silent> <expr> <C-Right> VisAtEnd(0) ? 'e' : 'w'
+vnoremap <silent> <expr> <C-Left>  VisAtStart(0) ? 'b' : 'ge'
+
 " ---------
 
 " N<C-D> and N<C-U> idiotically change the scroll setting
