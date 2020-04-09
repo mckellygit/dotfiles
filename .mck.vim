@@ -904,7 +904,7 @@ au! CompleteDone    * call MyVimadeWinEnable()
 " vim-man ----------
 " use vim-man instead of default vim K at root level ...
 nnoremap <silent> <buffer> K :call man#get_page_from_cword('horizontal', v:count)<CR>
-vnoremap <silent> <buffer> K :call man#get_page_from_cword('horizontal', v:count)<CR>
+vnoremap <silent> <buffer> K <C-\><C-n>:call man#get_page_from_cword('horizontal', v:count)<CR>
 " vim-man ----------
 
 " improves color highlighing with dark terminals
@@ -1302,14 +1302,14 @@ endfunction
 "vnoremap <silent> <expr> <C-c> ("vcl" =~ getregtype("*")) ? '"*ygv<Esc>:let @z=getregtype("*")<bar>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*ygv<Esc>:let @z=getregtype("*")<CR>' <bar> (&buftype == 'terminal') ? 'i' : ''
 
 "vnoremap <silent> <expr> <C-c> ("vcl" =~ getregtype("*")) ? '"*y<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*y<Esc>:let @z=getregtype("*")<CR>' <bar> :let @x=@y <bar> :let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
-vnoremap <silent> <C-c> :<C-U>call YankIt("*y", 1)<CR>
+vnoremap <silent> <C-c> <C-\><C-n>:<C-U>call YankIt("*y", 1)<CR>
 
 "vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"*ygv<Esc>i' : '"*ygv<Esc>'
 "vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<bar>:let @*=@a<CR> <bar> gv<Esc>i' : '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<bar>:let @*=@a<CR> <bar> gv<Esc>'
 "vnoremap <silent> <expr> y     ("vcl" =~ getregtype("*")) ? '"*ygv<Esc>:let @z=getregtype("*")<bar>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*ygv<Esc>:let @z=getregtype("*")<CR>' <bar> (&buftype == 'terminal') ? 'i' : ''
 
 "vnoremap <silent> <expr> y     ("vcl" =~ getregtype("*")) ? '"*y<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*y<Esc>:let @z=getregtype("*")<CR>' <bar> :let @x=@y <bar> :let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
-vnoremap <silent> y     :<C-U>call YankIt("*y", 1)<CR>
+vnoremap <silent> y     <C-\><C-n>:<C-U>call YankIt("*y", 1)<CR>
 
 " cut selection
 "vnoremap <silent> <C-x> "*d<LeftRelease>
@@ -1374,7 +1374,7 @@ function! MyVisCvN()
     exe "silent! normal! \<C-v>"
 endfunction
 
-xnoremap <silent> <C-v> :<C-u>call MyVisCv()<CR>
+xnoremap <silent> <C-v> <C-\><C-n>:<C-u>call MyVisCv()<CR>
 function! MyVisCv()
     if w:vc ==# 'v'
         let w:vp = w:vc
@@ -1412,7 +1412,7 @@ function! MyVisV1N()
     exe "silent! normal! v"
 endfunction
 
-xnoremap <silent> v :<C-u>call MyVisV1()<CR>
+xnoremap <silent> v <C-\><C-n>:<C-u>call MyVisV1()<CR>
 function! MyVisV1()
     if w:vc ==# 'v'
         " no-op
@@ -1431,7 +1431,7 @@ function! MyVisV2N()
     exe "silent! normal! V"
 endfunction
 
-xnoremap <silent> V :<C-u>call MyVisV2()<CR>
+xnoremap <silent> V <C-\><C-n>:<C-u>call MyVisV2()<CR>
 function! MyVisV2()
     if w:vc ==# 'V'
         " no-op
@@ -1444,8 +1444,7 @@ function! MyVisV2()
 endfunction
 
 " q to exit visual-mode and clear previous w:v* states
-"xnoremap <silent> q <Esc>
-xnoremap <silent> q :<C-u>call MyVisQ()<CR>
+xnoremap <silent> q <C-\><C-n>:<C-u>call MyVisQ()<CR>
 function! MyVisQ()
     let w:vc = 'u'
     let w:vp = 'u'
@@ -2919,10 +2918,10 @@ endfunction
 
 " use :let @/="" to clear out search pattern and stop any running search
 nnoremap <silent> <Leader>sx :let @/=""<bar>:echo ""<bar>:AsyncStop!<CR>
-vnoremap <silent> <Leader>sx :let @/=""<bar>:echo ""<bar>:AsyncStop!<CR>
+vnoremap <silent> <Leader>sx <C-\><C-n>:let @/=""<bar>:echo ""<bar>:AsyncStop!<CR>
 " stop running search
 nnoremap <silent> <Leader>sq :AsyncStop!<CR>
-vnoremap <silent> <Leader>sq :AsyncStop!<CR>
+vnoremap <silent> <Leader>sq <C-\><C-n>:AsyncStop!<CR>
 " search normally
 nnoremap <Leader>sn :let @/=""<bar>:set hlsearch<CR>/
 vnoremap <Leader>sn y<Esc>:let @/=""<bar>:set hlsearch<CR>/<C-r>"
@@ -3858,7 +3857,7 @@ tnoremap <silent> <C-d> <C-w>:call <SID>TermQuit()<CR>
 "inoremap <silent> <M-Right> <Esc>:tabnext<CR>
 nnoremap <silent> <C-S-Right>      :tabnext<CR>
 tnoremap <silent> <C-S-Right> <C-w>:tabnext<CR>
-vnoremap <silent> <C-S-Right> <Esc>:tabnext<CR>
+vnoremap <silent> <C-S-Right> <C-\><C-n>:tabnext<CR>
 inoremap <silent> <C-S-Right> <Esc>:tabnext<CR>
 " Alt-. (>)
 "tnoremap <silent> <Esc>. <C-w>:tabnext<CR>
@@ -3873,7 +3872,7 @@ inoremap <silent> <C-S-Right> <Esc>:tabnext<CR>
 "inoremap <silent> <M-Left> <Esc>:tabprevious<CR>
 nnoremap <silent> <C-S-Left>      :tabprevious<CR>
 tnoremap <silent> <C-S-Left> <C-w>:tabprevious<CR>
-vnoremap <silent> <C-S-Left> <Esc>:tabprevious<CR>
+vnoremap <silent> <C-S-Left> <C-\><C-n>:tabprevious<CR>
 inoremap <silent> <C-S-Left> <Esc>:tabprevious<CR>
 " Alt-, (<)
 "tnoremap <silent> <Esc>, <C-w>:tabprevious<CR>
@@ -3882,7 +3881,7 @@ inoremap <silent> <C-S-Left> <Esc>:tabprevious<CR>
 "inoremap <silent> <M-,>  <Esc>:tabprevious<CR>
 
 nnoremap <silent> <C-t> :tabnext<CR>
-vnoremap <silent> <C-t> :tabnext<CR>
+vnoremap <silent> <C-t> <C-\><C-n>:tabnext<CR>
 
 " moving between windows, somtimes hard to let go of ctrl before arrow ...
 " these could map to same cmds: <C-w><C-Left> -> <C-w><Left>
