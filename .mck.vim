@@ -13,6 +13,9 @@
 " This must be first, because it changes other options as a side effect.
 set nocompatible
 
+" skip loading this plugin for now ...
+let loaded_bufkill = 1
+
 " to [silently] remap unless a mapping already exits ...
 "silent! nnoremap <unique> lhs rhs
 "if empty(maparg('lhs', 'old-rhs')) | nnoremap lhs new-rhs | endif
@@ -2104,34 +2107,53 @@ inoremap <silent> <expr> <End>  pumvisible() ? '<End>'  : '<C-\><C-o>g<End>'
 
 " ---------
 
+"call NoremapNormalCmd("<C-j>",    0, "1<C-D>")
+nnoremap <silent>        <C-j>     :call <SID>Saving_scrollV("1<C-V><C-D>")<CR>
+nnoremap <silent>        <C-Down>  :call <SID>Saving_scrollV("1<C-V><C-D>")<CR>
+
+"vnoremap <silent>        <C-j>    <C-\><C-n>:call <SID>Saving_scrollV("gv1<C-V><C-D>")<CR>
+"vnoremap <silent>        <C-Down> <C-\><C-n>:call <SID>Saving_scrollV("gv1<C-V><C-D>")<CR>
+vnoremap <silent> <expr> <C-Down> ((line('$') - line('w$')) < 1) ? 'j' : '<C-e>j'
+vnoremap <silent> <expr> <C-j>    ((line('$') - line('w$')) < 1) ? 'j' : '<C-e>j'
+
+inoremap <silent> <expr> <C-j>     pumvisible() ? '<C-j>'    : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <C-Down>  pumvisible() ? '<C-Down>' : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-D>")<CR>'
+
+"call NoremapNormalCmd("<C-k>",    0, "1<C-U>")
+nnoremap <silent>        <C-k>     :call <SID>Saving_scrollV("1<C-V><C-U>")<CR>
+nnoremap <silent>        <C-Up>    :call <SID>Saving_scrollV("1<C-V><C-U>")<CR>
+
+"vnoremap <silent>        <C-k>    <C-\><C-n>:call <SID>Saving_scrollV("gv1<C-V><C-U>")<CR>
+"vnoremap <silent>        <C-Up>   <C-\><C-n>:call <SID>Saving_scrollV("gv1<C-V><C-U>")<CR>
+vnoremap <silent> <C-Up> <C-y>k
+vnoremap <silent> <C-k>  <C-y>k
+
+inoremap <silent> <expr> <C-k>     pumvisible() ? '<C-k>'  : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <C-Up>    pumvisible() ? '<C-Up>' : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-U>")<CR>'
+
+" ---------
+
 " use wheel to scroll, extending selection ...
 " C- already used to adjust font size ...
 " A- to speed up scrolling ...
 
-"call NoremapNormalCmd("<C-j>",    0, "1<C-D>")
-nnoremap <silent>        <C-j>              :call <SID>Saving_scrollV("1<C-V><C-D>")<CR>
-nnoremap <silent>        <C-Down>           :call <SID>Saving_scrollV("1<C-V><C-D>")<CR>
-vnoremap <silent>        <C-j>    <C-\><C-n>:call <SID>Saving_scrollV("gv1<C-V><C-D>")<CR>
-vnoremap <silent>        <C-Down> <C-\><C-n>:call <SID>Saving_scrollV("gv1<C-V><C-D>")<CR>
-inoremap <silent> <expr> <C-j>              pumvisible() ? '<C-j>'    : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-D>")<CR>'
-inoremap <silent> <expr> <C-Down>           pumvisible() ? '<C-Down>' : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-D>")<CR>'
+nnoremap <silent> <expr> <ScrollWheelDown>   (line('.') == line('w0')) ? 'M' : ':call <SID>Saving_scrollV("10<C-V><C-D>")<CR>'
+nnoremap <silent> <expr> <A-ScrollWheelDown> (line('.') == line('w0')) ? 'M' : ':call <SID>Saving_scrollV("48<C-V><C-D>")<CR>'
 
-"call NoremapNormalCmd("<C-k>",    0, "1<C-U>")
-nnoremap <silent>        <C-k>              :call <SID>Saving_scrollV("1<C-V><C-U>")<CR>
-nnoremap <silent>        <C-Up>             :call <SID>Saving_scrollV("1<C-V><C-U>")<CR>
-vnoremap <silent>        <C-k>    <C-\><C-n>:call <SID>Saving_scrollV("gv1<C-V><C-U>")<CR>
-vnoremap <silent>        <C-Up>   <C-\><C-n>:call <SID>Saving_scrollV("gv1<C-V><C-U>")<CR>
-inoremap <silent> <expr> <C-k>              pumvisible() ? '<C-k>'  : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-U>")<CR>'
-inoremap <silent> <expr> <C-Up>             pumvisible() ? '<C-Up>' : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-U>")<CR>'
-
-nnoremap <silent> <expr> <ScrollWheelDown>           (line('.') == line('w0')) ? 'M' : ':call <SID>Saving_scrollV("10<C-V><C-D>")<CR>'
-nnoremap <silent> <expr> <A-ScrollWheelDown>         (line('.') == line('w0')) ? 'M' : ':call <SID>Saving_scrollV("48<C-V><C-D>")<CR>'
+" see below
 "vnoremap <silent>        <ScrollWheelDown> <C-\><C-n>:call <SID>Saving_scrollV("gv10<C-V><C-D>")<CR>
-inoremap <silent> <expr> <ScrollWheelDown>           pumvisible() ? '<ScrollWhellDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-D>")<CR>'
-nnoremap <silent> <expr> <ScrollWheelUp>             (line('.') == line('w$')) ? 'M' : ':call <SID>Saving_scrollV("10<C-V><C-U>")<CR>'
-nnoremap <silent> <expr> <A-ScrollWheelUp>           (line('.') == line('w$')) ? 'M' : ':call <SID>Saving_scrollV("48<C-V><C-U>")<CR>'
+
+inoremap <silent> <expr> <ScrollWheelDown>   pumvisible() ? '<ScrollWhellDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-D>")<CR>'
+
+nnoremap <silent> <expr> <ScrollWheelUp>     (line('.') == line('w$')) ? 'M' : ':call <SID>Saving_scrollV("10<C-V><C-U>")<CR>'
+nnoremap <silent> <expr> <A-ScrollWheelUp>   (line('.') == line('w$')) ? 'M' : ':call <SID>Saving_scrollV("48<C-V><C-U>")<CR>'
+
+" see below
 "vnoremap <silent>        <ScrollWheelUp>   <C-\><C-n>:call <SID>Saving_scrollV("gv10<C-V><C-U>")<CR>
-inoremap <silent> <expr> <ScrollWheelUp>             pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-U>")<CR>'
+
+inoremap <silent> <expr> <ScrollWheelUp>     pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-U>")<CR>'
+
+" ---------
 
 " TODO: could add same if at top then M logic to imap <ScrollWheel> ...
 " dont imap <A-ScrollWheel> as thats an auto copy and exit so large scroll does not make much sense
@@ -3369,7 +3391,7 @@ endfunction
 " -----------------------------
 
 " disable : in visual mode (can still use <C-w>:)
-vnoremap <silent> : <Nop>
+vnoremap <silent> : <C-\><C-n>:<C-u>call MyVisQ()<CR>
 
 noremap <C-a> 0
 " ctrl-e was scroll down one line so we lose that
