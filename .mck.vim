@@ -395,7 +395,12 @@ function! MyLightlineTabModified(n)
     \ || tabpagenr() ==# a:n && win_gettype(win_getid()) ==# 'popup'
     return tab_modified
   endif
-  let tab_modified = lightline#tab#modified(a:n)
+  let raw_modified = lightline#tab#modified(a:n)
+  if empty(raw_modified)
+    let raw_modified = ' '
+  endif
+  let tab_numwins = tabpagewinnr(a:n)
+  let tab_modified = '/' . string(tab_numwins) . raw_modified
   call settabvar(a:n, 'lightline_tab_modified', tab_modified)
   return tab_modified
 endfunction
