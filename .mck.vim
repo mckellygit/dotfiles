@@ -636,41 +636,37 @@ autocmd BufReadPost quickfix nnoremap <buffer> - -
 " FileBeagle ----------
 
 " fugitive -----------
+autocmd FileType fugitiveblame nmap <buffer> <Leader>wq gq
+autocmd FileType fugitiveblame nmap <buffer> <Leader>qq gq
 autocmd FileType fugitiveblame nmap <buffer> <Leader><Tab> O
 autocmd FileType fugitiveblame nmap <buffer> <C-t> O
-autocmd FileType fugitiveblame nmap <buffer> <Space> <C-f>
-autocmd FileType fugitiveblame nmap <buffer> u <C-b>
+" NOTE: FileType autocmd does not work for this map,
+"       plugin probably overwrites it, this seems to work ...
+autocmd BufEnter *.fugitiveblame nmap <buffer> <Return> o
+
 autocmd FileType git           nmap <buffer> <Leader><Tab> O
 autocmd FileType git           nmap <buffer> <C-t> O
-autocmd FileType git           nmap <buffer> <Space> <C-f>
-autocmd FileType git           nmap <buffer> u <C-b>
+
 autocmd FileReadCmd fugitive://**//[0-3]/**          nmap <buffer> <Leader><Tab> O
 autocmd FileReadCmd fugitive://**//[0-3]/**          nmap <buffer> <C-t> O
-autocmd FileReadCmd fugitive://**//[0-3]/**          nmap <buffer> <Space> <C-f>
-autocmd FileReadCmd fugitive://**//[0-3]/**          nmap <buffer> u <C-b>
 autocmd BufReadCmd  fugitive://**//[0-3]/**          nmap <buffer> <Leader><Tab> O
 autocmd BufReadCmd  fugitive://**//[0-3]/**          nmap <buffer> <C-t> O
-autocmd BufReadCmd  fugitive://**//[0-3]/**          nmap <buffer> <Space> <C-f>
-autocmd BufReadCmd  fugitive://**//[0-3]/**          nmap <buffer> u <C-b>
 autocmd BufWriteCmd fugitive://**//[0-3]/**          nmap <buffer> <Leader><Tab> O
 autocmd BufWriteCmd fugitive://**//[0-3]/**          nmap <buffer> <C-t> O
-autocmd BufWriteCmd fugitive://**//[0-3]/**          nmap <buffer> <Space> <C-f>
-autocmd BufWriteCmd fugitive://**//[0-3]/**          nmap <buffer> u <C-b>
-autocmd BufReadCmd  fugitive://**//[0-9a-f][0-9a-f]* nmap <buffer> <Leader><Tab> O
-autocmd BufReadCmd  fugitive://**//[0-9a-f][0-9a-f]* nmap <buffer> <C-t> O
-autocmd BufReadCmd  fugitive://**//[0-9a-f][0-9a-f]* nmap <buffer> <Space> <C-f>
-autocmd BufReadCmd  fugitive://**//[0-9a-f][0-9a-f]* nmap <buffer> u <C-u>
+
 autocmd FileReadCmd fugitive://**//[0-9a-f][0-9a-f]* nmap <buffer> <Leader><Tab> O
 autocmd FileReadCmd fugitive://**//[0-9a-f][0-9a-f]* nmap <buffer> <C-t> O
-autocmd FileReadCmd fugitive://**//[0-9a-f][0-9a-f]* nmap <buffer> <Space> <C-f>
-autocmd FileReadCmd fugitive://**//[0-9a-f][0-9a-f]* nmap <buffer> u <C-b>
+autocmd BufReadCmd  fugitive://**//[0-9a-f][0-9a-f]* nmap <buffer> <Leader><Tab> O
+autocmd BufReadCmd  fugitive://**//[0-9a-f][0-9a-f]* nmap <buffer> <C-t> O
+autocmd BufWriteCmd fugitive://**//[0-9a-f][0-9a-f]* nmap <buffer> <Leader><Tab> O
+autocmd BufWriteCmd fugitive://**//[0-9a-f][0-9a-f]* nmap <buffer> <C-t> O
+
 autocmd BufReadCmd  index{,.lock}
     \ if FugitiveIsGitDir(expand('<amatch>:p:h')) |
     \     nmap <buffer> <Leader><Tab> O |
     \     nmap <buffer> <C-t> O |
-    \     nmap <buffer> <Space> <C-f> |
-    \     nmap <buffer> u <C-b> |
     \ endif
+
 aug fugitive_alias
   au!
   au VimEnter * :Alias GBlame  Gblame
@@ -3759,7 +3755,7 @@ tnoremap <silent> <C-x>v <C-w>:$tabnew<CR>
 " or <C-\><C-n> to toggle
 nnoremap <silent> <expr> <C-\><C-n> (&buftype == 'terminal') ? 'i' : '<C-\><C-n>'
 " or <Return>, like tmux
-nnoremap <silent> <expr> <Return> (&buftype == 'terminal') ? 'i' : '<Return>'
+nmap <silent> <expr> <Return> (&buftype == 'terminal') ? 'i' : '<Return>'
 " to enter normal mode, like tmux
 " there is no alternate screen so this removes these from less/more/etc.
 "tnoremap <silent> <C-Up>   <C-\><C-n>
