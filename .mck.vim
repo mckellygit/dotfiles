@@ -483,8 +483,8 @@ let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.5, 'yoffset': 0.8, 'x
 let g:fzf_preview_window = 'right:60%'
 autocmd VimEnter,BufEnter * silent! lcd %:p:h
 " add \fz mapping also
-noremap <silent> <Leader>fz :FZFProjectFiles<CR>
-noremap <silent> <Leader>f/ :FZFProjectFiles<CR>
+noremap <silent> <Leader>fz <C-\><C-n>:FZFProjectFiles<CR>
+noremap <silent> <Leader>f/ <C-\><C-n>:FZFProjectFiles<CR>
 function! s:find_git_root()
     " in a submodule dir this returns git root, otherwise returns empty
     let gdir = system('git rev-parse --show-superproject-working-tree 2> /dev/null')[:-2]
@@ -495,7 +495,7 @@ function! s:find_git_root()
     return gdir
 endfunction
 command! FZFProjectFiles execute 'Files' s:find_git_root()
-noremap <silent> <Leader>f. :Files<CR>
+noremap <silent> <Leader>f. <C-\><C-n>:Files<CR>
 " you can always run
 " :Files       - to get list from current dir
 " "Files <dir> - to get list from <dir>
@@ -552,7 +552,7 @@ command! -bang -nargs=* Agit
 "
 function! s:buflist()
   redir => ls
-  silent ls
+  silent ls!
   redir END
   return split(ls, '\n')
 endfunction
@@ -574,7 +574,7 @@ function! s:bufopen(e)
   endif
 endfunction
 
-noremap <silent> <Leader>ls :call fzf#run({
+noremap <silent> <Leader>ls <C-\><C-n>:<C-u>call fzf#run({
 \   'source':  reverse(<sid>buflist()),
 \   'sink':    function('<sid>bufopen'),
 \   'options': '+m',
@@ -582,7 +582,7 @@ noremap <silent> <Leader>ls :call fzf#run({
 \   'down':    len(<sid>buflist()) + 2
 \ })<CR>
 " hide buffer
-noremap <silent> <Leader>hb :hide<CR>
+noremap <silent> <Leader>hb <C-\><C-n>:hide<CR>
 " fzf -----------------
 
 " vinegar ------------
@@ -2777,7 +2777,7 @@ if $USER != 'root'
 else
   let g:rtagsAutoLaunchRdm=0
 endif
-nmap <C-]> :call rtags#JumpTo(g:SAME_WINDOW)<CR>
+noremap <C-]> <C-\><C-n>:<C-u>call rtags#JumpTo(g:SAME_WINDOW)<CR>
 " C-o to go back
 " C-t to go back (not implemented)
 " nmap <C-t> :call rtags#JumpBack()<bar>:echo<CR>
