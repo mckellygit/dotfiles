@@ -399,28 +399,32 @@ function! MyLightlineTabModified(n)
   if empty(raw_modified)
     let raw_modified = ' '
   endif
-  " loop over tab windows and skip quickfix and some others ...
-  let tab_numwins = 1
-  for w in range(1, tabpagewinnr(a:n, '$'))
-    if w == winnr()
-        continue
-    elseif getwinvar(w, '&previewwindow')
-        continue
-    endif
-    let b = winbufnr(w)
-    if !buflisted(b)
-        continue
-    elseif !bufloaded(b)
-        continue
-    elseif getbufvar(b, '&buftype') ==# 'quickfix'
-        continue
-    elseif getbufvar(b, '&buftype') ==# 'popup'
-        continue
-    endif
-    let tab_numwins = tab_numwins + 1
-  endfor
-  let tab_modified = '/' . string(tab_numwins) . raw_modified
-  call settabvar(a:n, 'lightline_tab_modified', tab_modified)
+  if tabpagenr() ==# a:n
+    " loop over tab windows and skip quickfix and some others ...
+    let tab_numwins = 1
+    for w in range(1, tabpagewinnr(a:n, '$'))
+      if w == winnr()
+          continue
+      elseif getwinvar(w, '&previewwindow')
+          continue
+      endif
+      let b = winbufnr(w)
+      if !buflisted(b)
+          continue
+      elseif !bufloaded(b)
+          continue
+      elseif getbufvar(b, '&buftype') ==# 'quickfix'
+          continue
+      elseif getbufvar(b, '&buftype') ==# 'popup'
+          continue
+      endif
+      let tab_numwins = tab_numwins + 1
+    endfor
+    let tab_modified = '/' . string(tab_numwins) . raw_modified
+    call settabvar(a:n, 'lightline_tab_modified', tab_modified)
+  else
+    let rab_modified = raw_modified
+  endif
   return tab_modified
 endfunction
 
@@ -569,11 +573,17 @@ command! -bang -nargs=* Agit
 "+#FIRST=$(($CENTER-$LINES/3))
 "+FIRST=$(($CENTER-$LINES/7))
 "
-function! s:buflist()
-    redir => ls
-    silent ls
-    redir END
-    return split(ls, '\n')
+function! s:buflist(arg)
+    if a:arg == 0
+        redir => lsout
+        silent ls
+        redir END
+    else
+        redir => lsout
+        silent ls!
+        redir END
+    endif
+    return split(lsout, '\n')
 endfunction
 
 function! s:bufopen(e)
@@ -603,7 +613,7 @@ function! MylsFilter(id, key)
         " return > 0 to not pass on to callback ...
         return 1
     endif
-    " TODO: could add options to hide/unhide buffer etc.
+    " TODO: add options to open in split, vsplit, tab, hide buffer etc.
     " pass to generic filter
     return popup_filter_menu(a:id, a:key)
 endfunction
@@ -615,22 +625,23 @@ function! MylsCallback(id, indx) abort
     call <SID>bufopen(g:blist[a:indx-1])
 endfunction
 
-function! s:Mylspopup() abort
-    let g:blist = <SID>buflist()
+function! s:Mylspopup(arg) abort
+    let g:blist = <SID>buflist(a:arg)
     call popup_menu(g:blist, #{ title: ' Buffers:', filter: 'MylsFilter', callback: 'MylsCallback' })
 endfunction
 
-noremap <silent> <Leader>lb <C-\><C-n>:<C-u>call fzf#run({
-\   'source':  reverse(<sid>buflist()),
-\   'sink':    function('<sid>bufopen'),
-\   'options': '+m',
-\   'window' : { 'width': 0.8, 'height': 0.3, 'yoffset': 0.8, 'xoffset': 0.8 },
-\   'down':    len(<sid>buflist()) + 2
-\ })<CR>
-" hide buffer
+" fzf#run() example ...
+"noremap <silent> <Leader>lb <C-\><C-n>:<C-u>call fzf#run({
+"\   'source':  reverse(<sid>buflist()),
+"\   'sink':    function('<sid>bufopen'),
+"\   'options': '+m',
+"\   'window' : { 'width': 0.8, 'height': 0.3, 'yoffset': 0.8, 'xoffset': 0.8 },
+"\   'down':    len(<sid>buflist()) + 2
+"\ })<CR>
 
 " native vim popup ls ...
-noremap <silent> <Leader>ls <C-\><C-n>:<C-u>call <SID>Mylspopup()<CR>
+noremap <silent> <Leader>ls <C-\><C-n>:<C-u>call <SID>Mylspopup(0)<CR>
+noremap <silent> <Leader>lb <C-\><C-n>:<C-u>call <SID>Mylspopup(1)<CR>
 
 " hide buffer
 noremap <silent> <Leader>hb <C-\><C-n>:hide<CR>
@@ -764,9 +775,6 @@ autocmd FileType GV xmap <buffer> u <Up>
 autocmd FileType GV xmap <buffer> d <Down>
 
 autocmd FileType GV setlocal cursorline
-" change nofile to ''
-autocmd FileType GV setlocal buftype=
-" TODO: try to set other tab as hidden
 
 " TODO: it seems when ft==git <ScrollWheel> acts different than the map defined in this file
 

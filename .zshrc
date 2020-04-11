@@ -263,8 +263,8 @@ alias smesg='vless /var/log/syslog'
 
 alias tailrdm='tail -f /tmp/rdm-$LOGNAME.log'
 alias difff='diff'
-# gv.vim uses noremap so need to override q, x here
-alias vigv='vim -R -c GV -c ":nnoremap <buffer> q <Nop>" -c ":cnoreabbrev <buffer> q Tabcloserightquit" -c ":cnoreabbrev <buffer> q! Tabcloserightquit" -c ":nnoremap <buffer> x <Nop>" -c ":cnoreabbrev <buffer> x Tabcloserightquit" -c ":redraw!"'
+# gv.vim uses noremap so need to override q, x here, look into using :Alias ?
+alias vigv='vim -R -c GV -c ":nnoremap <silent> <buffer> q <Nop>" -c ":cnoreabbrev <silent> <buffer> q Tabcloserightquit" -c ":cnoreabbrev <silent> <buffer> q! Tabcloserightquit" -c ":nnoremap <silent> <buffer> x <Nop>" -c ":cnoreabbrev <silent> <buffer> x Tabcloserightquit" -c ":se bt=nowrite|:tabn|:hide|:redraw!"'
 alias sync-hpcc='sync_hpcc'
 alias stop-hpcc='stop_hpcc'
 alias stat-hpcc='stat_hpcc'
