@@ -734,7 +734,7 @@ if exists('&signcolumn')  " Vim 7.4.2201
 endif
 nmap <Leader>gn <Plug>(GitGutterNextHunk)
 nmap <Leader>gp <Plug>(GitGutterPrevHunk)
-nmap <silent> <Leader>gg :call gitgutter#process_buffer(bufnr(''), 0)<CR>
+nmap <silent> <Leader>gg <C-\><C-n>:<C-u>call gitgutter#process_buffer(bufnr(''), 0)<CR>
 " gitgutter -----------
 
 " gitv -----------
@@ -764,13 +764,16 @@ autocmd FileType GV xmap <buffer> u <Up>
 autocmd FileType GV xmap <buffer> d <Down>
 
 autocmd FileType GV setlocal cursorline
+" change nofile to ''
+autocmd FileType GV setlocal buftype=
+" TODO: try to set other tab as hidden
 
 " TODO: it seems when ft==git <ScrollWheel> acts different than the map defined in this file
 
 " M/A-DoubleClick to open (o) commit ...
 autocmd FileType GV nmap <silent> <buffer> <A-LeftRelease> <Nop>
 autocmd FileType GV nmap <silent> <buffer> <A-2-LeftRelease> <Nop>
-autocmd FileType GV nmap <silent> <buffer> <A-2-LeftMouse> :sleep 351m <bar> :call feedkeys("o")<CR>
+autocmd FileType GV nmap <silent> <buffer> <A-2-LeftMouse> <C-\><C-n>:<C-u>sleep 351m<bar>:call feedkeys("o")<CR>
 " M/A-q to quit like q, but M/A-q is used by Unity/Gnome
 
 " start with folds open
@@ -778,8 +781,8 @@ autocmd FileType GV set foldlevelstart=1
 
 autocmd FileType GV nmap <silent> <buffer> qq :qa!<CR>
 "autocmd FileType GV nmap <silent> <buffer> <Leader>wc :call <SID>QuitIfOnlyNoNameLeft()<CR>
-autocmd FileType GV nmap <silent> <buffer> <Leader>wq :call <SID>QuitIfOnlyNoNameLeft()<CR>
-autocmd FileType GV nmap <silent> <buffer> <Leader>qq :call <SID>QuitIfOnlyNoNameLeft()<CR>
+autocmd FileType GV nmap <silent> <buffer> <Leader>wq <C-\><C-n>:<C-u>call <SID>QuitIfOnlyNoNameLeft()<CR>
+autocmd FileType GV nmap <silent> <buffer> <Leader>qq <C-\><C-n>:<C-u>call <SID>QuitIfOnlyNoNameLeft()<CR>
 
 "autocmd FileType GV cnoreabbrev <silent> <expr> q! (getcmdtype() == ':' && getcmdline() =~ '\s*q!\s*') ? 'qa!' : 'q!'
 
