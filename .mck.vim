@@ -399,7 +399,26 @@ function! MyLightlineTabModified(n)
   if empty(raw_modified)
     let raw_modified = ' '
   endif
-  let tab_numwins = tabpagewinnr(a:n)
+  " loop over tab windows and skip quickfix and some others ...
+  let tab_numwins = 1
+  for w in range(1, tabpagewinnr(a:n, '$'))
+    if w == winnr()
+        continue
+    elseif getwinvar(w, '&previewwindow')
+        continue
+    endif
+    let b = winbufnr(w)
+    if !buflisted(b)
+        continue
+    elseif !bufloaded(b)
+        continue
+    elseif getbufvar(b, '&buftype') ==# 'quickfix'
+        continue
+    elseif getbufvar(b, '&buftype') ==# 'popup'
+        continue
+    endif
+    let tab_numwins = tab_numwins + 1
+  endfor
   let tab_modified = '/' . string(tab_numwins) . raw_modified
   call settabvar(a:n, 'lightline_tab_modified', tab_modified)
   return tab_modified
@@ -551,36 +570,68 @@ command! -bang -nargs=* Agit
 "+FIRST=$(($CENTER-$LINES/7))
 "
 function! s:buflist()
-  redir => ls
-  silent ls!
-  redir END
-  return split(ls, '\n')
+    redir => ls
+    silent ls
+    redir END
+    return split(ls, '\n')
 endfunction
 
 function! s:bufopen(e)
-  if empty(a:e)
-    return
-  endif
-  "execute 'buffer' matchstr(a:e, '^[ 0-9]*')
-  "let l:bufid = bufnr(a:name)
-  let l:bufid = str2nr(matchstr(a:e, '^[ 0-9]*'))
-  let l:winids = win_findbuf(l:bufid)
-  if empty(l:winids)
-    " open hidden buffer in a new tab ...
-    " TODO: or hsplit or vsplit or in current window ...
-    execute 'tabnew|b'.l:bufid
-  else
-    call win_gotoid(l:winids[0])
-  endif
+    if empty(a:e)
+        return
+    endif
+    "execute 'buffer' matchstr(a:e, '^[ 0-9]*')
+    "let l:bufid = bufnr(a:name)
+    let l:bufid = str2nr(matchstr(a:e, '^[ 0-9]*'))
+    if !bufexists(l:bufid)
+        return
+    endif
+    let l:winids = win_findbuf(l:bufid)
+    if empty(l:winids)
+        " open hidden buffer in a new tab ...
+        " TODO: or hsplit or vsplit or in current window ...
+        execute 'tabnew|b'.l:bufid
+    else
+        call win_gotoid(l:winids[0])
+    endif
 endfunction
 
-noremap <silent> <Leader>ls <C-\><C-n>:<C-u>call fzf#run({
+let g:blist = []
+function! MylsFilter(id, key)
+    if a:key == 'q' || a:key == 'x' || a:key == '\<Esc>' || a:key == '\<C-c>'
+        call popup_close(a:id, 0)
+        " return > 0 to not pass on to callback ...
+        return 1
+    endif
+    " TODO: could add options to hide/unhide buffer etc.
+    " pass to generic filter
+    return popup_filter_menu(a:id, a:key)
+endfunction
+
+function! MylsCallback(id, indx) abort
+    if a:indx <= 0
+        return
+    endif
+    call <SID>bufopen(g:blist[a:indx-1])
+endfunction
+
+function! s:Mylspopup() abort
+    let g:blist = <SID>buflist()
+    call popup_menu(g:blist, #{ title: ' Buffers:', filter: 'MylsFilter', callback: 'MylsCallback' })
+endfunction
+
+noremap <silent> <Leader>lb <C-\><C-n>:<C-u>call fzf#run({
 \   'source':  reverse(<sid>buflist()),
 \   'sink':    function('<sid>bufopen'),
 \   'options': '+m',
 \   'window' : { 'width': 0.8, 'height': 0.3, 'yoffset': 0.8, 'xoffset': 0.8 },
 \   'down':    len(<sid>buflist()) + 2
 \ })<CR>
+" hide buffer
+
+" native vim popup ls ...
+noremap <silent> <Leader>ls <C-\><C-n>:<C-u>call <SID>Mylspopup()<CR>
+
 " hide buffer
 noremap <silent> <Leader>hb <C-\><C-n>:hide<CR>
 " fzf -----------------
@@ -3574,7 +3625,7 @@ function Xdiff()
   let bufcount = bufnr("$")
   let currbufnr = 1
   while currbufnr <= bufcount
-    if(bufexists(currbufnr))
+    if bufexists(currbufnr)
       let bufmod = getbufvar(currbufnr, "&mod")
       "let dbgmsg = "diffx: bufnr = " . currbufnr . " &bufmod = " . bufmod
       "echomsg dbgmsg
