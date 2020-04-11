@@ -578,11 +578,14 @@ function! s:buflist(arg)
         redir => lsout
         silent ls
         redir END
-    else
-        redir => lsout
-        silent ls!
-        redir END
+        if !empty(lsout)
+            return split(lsout, '\n')
+        endif
+        " if only unlisted buffers then try again ...
     endif
+    redir => lsout
+    silent ls!
+    redir END
     return split(lsout, '\n')
 endfunction
 
@@ -590,10 +593,14 @@ function! s:bufopen(e)
     if empty(a:e)
         return
     endif
+    let bufstr = matchstr(a:e, '^[ 0-9]*')
+    if empty(bufstr)
+        return
+    endif
     "execute 'buffer' matchstr(a:e, '^[ 0-9]*')
     "let l:bufid = bufnr(a:name)
-    let l:bufid = str2nr(matchstr(a:e, '^[ 0-9]*'))
-    if !bufexists(l:bufid)
+    let l:bufid = str2nr(bufstr)
+    if l:bufid <= 0 || !bufexists(l:bufid)
         return
     endif
     let l:winids = win_findbuf(l:bufid)
@@ -607,7 +614,9 @@ function! s:bufopen(e)
 endfunction
 
 let g:blist = []
+let g:btimer = -1
 function! MylsFilter(id, key)
+    call timer_stop(g:btimer)
     if a:key == 'q' || a:key == 'x' || a:key == '\<Esc>' || a:key == '\<C-c>'
         call popup_close(a:id, 0)
         " return > 0 to not pass on to callback ...
@@ -625,8 +634,17 @@ function! MylsCallback(id, indx) abort
     call <SID>bufopen(g:blist[a:indx-1])
 endfunction
 
+function! MylsClear(tid) abort
+    call feedkeys("\<Esc>", "m")
+endfunction
+
 function! s:Mylspopup(arg) abort
     let g:blist = <SID>buflist(a:arg)
+    if empty(g:blist)
+        " shouldn't happen now that buflist always returns something ...
+        let g:blist = [ '0 - No listed buffers ...' ]
+    endif
+    let g:btimer = timer_start(10000, 'MylsClear')
     call popup_menu(g:blist, #{ title: ' Buffers:', filter: 'MylsFilter', callback: 'MylsCallback' })
 endfunction
 
