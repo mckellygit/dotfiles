@@ -77,6 +77,11 @@ setopt -o cshnullglob
 
 h() { if [ -z "$*" ]; then history 1; else history 1 | egrep "$@"; fi; }
 
+# if we want to use lsp and send cmd to all panes ...
+# preexec () {
+#    print ">>>preexec<<< cmd: \"$1\""
+#}
+
 # to not eat the space before | or & ...
 export ZLE_REMOVE_SUFFIX_CHARS=""
 
