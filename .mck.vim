@@ -722,24 +722,19 @@ autocmd FileType fugitiveblame nmap <buffer> <Leader><Tab> O
 autocmd FileType fugitiveblame nmap <buffer> <C-t> O
 " NOTE: FileType autocmd does not work for this map,
 "       plugin probably overwrites it, this seems to work ...
-autocmd BufEnter *.fugitiveblame nmap <buffer> <Return> o
+autocmd BufEnter *.fugitiveblame  nmap <buffer> <Return> o
+autocmd BufEnter fugitive://**    nmap <buffer> <Return> o
 
-autocmd FileType git           nmap <buffer> <Leader><Tab> O
-autocmd FileType git           nmap <buffer> <C-t> O
+autocmd FileType git              nmap <buffer> <Leader><Tab> O
+autocmd FileType git              nmap <buffer> <C-t> O
+autocmd FileType git              nmap <silent> <buffer> qq :close<cr>
 
-autocmd FileReadCmd fugitive://**//[0-3]/**          nmap <buffer> <Leader><Tab> O
-autocmd FileReadCmd fugitive://**//[0-3]/**          nmap <buffer> <C-t> O
-autocmd BufReadCmd  fugitive://**//[0-3]/**          nmap <buffer> <Leader><Tab> O
-autocmd BufReadCmd  fugitive://**//[0-3]/**          nmap <buffer> <C-t> O
-autocmd BufWriteCmd fugitive://**//[0-3]/**          nmap <buffer> <Leader><Tab> O
-autocmd BufWriteCmd fugitive://**//[0-3]/**          nmap <buffer> <C-t> O
-
-autocmd FileReadCmd fugitive://**//[0-9a-f][0-9a-f]* nmap <buffer> <Leader><Tab> O
-autocmd FileReadCmd fugitive://**//[0-9a-f][0-9a-f]* nmap <buffer> <C-t> O
-autocmd BufReadCmd  fugitive://**//[0-9a-f][0-9a-f]* nmap <buffer> <Leader><Tab> O
-autocmd BufReadCmd  fugitive://**//[0-9a-f][0-9a-f]* nmap <buffer> <C-t> O
-autocmd BufWriteCmd fugitive://**//[0-9a-f][0-9a-f]* nmap <buffer> <Leader><Tab> O
-autocmd BufWriteCmd fugitive://**//[0-9a-f][0-9a-f]* nmap <buffer> <C-t> O
+autocmd FileReadCmd fugitive://** nmap <buffer> <Leader><Tab> O
+autocmd FileReadCmd fugitive://** nmap <buffer> <C-t> O
+autocmd BufReadCmd  fugitive://** nmap <buffer> <Leader><Tab> O
+autocmd BufReadCmd  fugitive://** nmap <buffer> <C-t> O
+autocmd BufWriteCmd fugitive://** nmap <buffer> <Leader><Tab> O
+autocmd BufWriteCmd fugitive://** nmap <buffer> <C-t> O
 
 autocmd BufReadCmd  index{,.lock}
     \ if FugitiveIsGitDir(expand('<amatch>:p:h')) |
@@ -805,7 +800,7 @@ autocmd FileType GV nmap <silent> <buffer> <A-2-LeftMouse> <C-\><C-n>:<C-u>sleep
 " start with folds open
 autocmd FileType GV set foldlevelstart=1
 
-autocmd FileType GV nmap <silent> <buffer> qq :qa!<CR>
+"autocmd FileType GV nmap <silent> <buffer> qq :qa!<CR>
 "autocmd FileType GV nmap <silent> <buffer> <Leader>wc :call <SID>QuitIfOnlyNoNameLeft()<CR>
 autocmd FileType GV nmap <silent> <buffer> <Leader>wq <C-\><C-n>:<C-u>call <SID>QuitIfOnlyNoNameLeft()<CR>
 autocmd FileType GV nmap <silent> <buffer> <Leader>qq <C-\><C-n>:<C-u>call <SID>QuitIfOnlyNoNameLeft()<CR>
@@ -828,6 +823,111 @@ function! TabCloseLeft(bang)
   endwhile
 endfunction
 command! -bang Tabcloseleft silent! call TabCloseLeft('<bang>')
+
+function! s:warn(message)
+  echohl WarningMsg | echom a:message | echohl None
+endfunction
+
+function! s:shrug()
+  call s:warn('¯\_(ツ)_/¯')
+endfunction
+
+function! s:browse(url)
+  call netrw#BrowseX(b:git_origin.a:url, 0)
+endfunction
+
+function! s:tabnew()
+  execute (tabpagenr()-1).'tabnew'
+endfunction
+
+function! s:type(visual)
+  if a:visual
+    let shas = filter(map(getline("'<", "'>"), 'gv#sha(v:val)'), '!empty(v:val)')
+    if len(shas) < 2
+      return [0, 0]
+    endif
+    return ['diff', fugitive#repo().git_command('diff', shas[-1], shas[0])]
+  endif
+
+  if exists('b:git_origin')
+    let syn = synIDattr(synID(line('.'), col('.'), 0), 'name')
+    if syn == 'gvGitHub'
+      return ['link', '/issues/'.expand('<cword>')[1:]]
+    elseif syn == 'gvTag'
+      let tag = matchstr(getline('.'), '(tag: \zs[^ ,)]\+')
+      return ['link', '/releases/'.tag]
+    endif
+  endif
+
+  let sha = gv#sha()
+  if !empty(sha)
+    return ['commit', FugitiveFind(sha, b:git_dir)]
+  endif
+  return [0, 0]
+endfunction
+
+function! s:split(tab)
+  echom "split, tab: " a:tab
+  if a:tab && a:tab != 2
+    call s:tabnew()
+  elseif getwinvar(winnr('$'), 'gv')
+    $wincmd w
+    enew
+  elseif a:tab != 2
+    vertical botright new
+  else
+    bot split new
+  endif
+  let w:gv = 1
+endfunction
+
+function! s:open(visual, ...)
+  let [type, target] = s:type(a:visual)
+
+  if empty(type)
+    return s:shrug()
+  elseif type == 'link'
+    return s:browse(target)
+  endif
+
+  call s:split(a:0)
+  call s:scratch()
+  if type == 'commit'
+    execute 'e' escape(target, ' ')
+    nnoremap <silent> <buffer> gb :Gbrowse<cr>
+  elseif type == 'diff'
+    call s:fill(target)
+    setf diff
+  endif
+  nnoremap <silent> <buffer> qq :close<cr>
+  let bang = a:0 ? '!' : ''
+  if exists('#User#GV'.bang)
+    execute 'doautocmd <nomodeline> User GV'.bang
+  endif
+  "wincmd p
+  echo
+endfunction
+
+function! s:scratch()
+  setlocal buftype=nofile bufhidden=wipe noswapfile
+endfunction
+
+function! s:fill(cmd)
+  setlocal modifiable
+  silent execute 'read' escape('!'.a:cmd, '%')
+  normal! gg"_dd
+  setlocal nomodifiable
+endfunction
+
+" tab split
+autocmd FileType GV nnoremap <silent> <buffer> O    :call <sid>open(0, 1)<cr>
+autocmd FileType GV nnoremap <silent> <buffer> <cr> :call <sid>open(0, 1)<cr>
+" <C-t> and <Leader><Tab> already mapped ...
+" vertical split
+autocmd FileType GV nnoremap <silent> <buffer> o    :call <sid>open(0)<cr>
+autocmd FileType GV nnoremap <silent> <buffer> <C-v> :call <sid>open(0)<cr>
+" horizontal split
+autocmd FileType GV nnoremap <silent> <buffer> <C-x> :call <sid>open(0, 1, 9)<cr>
 " gv -----------
 
 " QFEnter -------------
