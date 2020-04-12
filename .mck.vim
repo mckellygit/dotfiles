@@ -771,18 +771,14 @@ let g:Gitv_WipeAllOnClose = 0
 autocmd FileType GV nmap <buffer> <Leader><Tab> O
 autocmd FileType GV nmap <buffer> <C-t> O
 autocmd FileType GV nmap <buffer> <Return> O
-"autocmd FileType GV nmap <buffer> o <Nop>
 autocmd FileType GV nmap <buffer> o O
-"autocmd FileType GV nmap <buffer> <Space> O
 autocmd FileType GV nmap <buffer> <Space> <Down>
 autocmd FileType GV nmap <buffer> u <Up>
 autocmd FileType GV nmap <buffer> d <Down>
 autocmd FileType GV xmap <buffer> <Leader><Tab> O
 autocmd FileType GV xmap <buffer> <C-t> O
 autocmd FileType GV xmap <buffer> <Return> O
-"autocmd FileType GV xmap <buffer> o <Nop>
 autocmd FileType GV xmap <buffer> o O
-"autocmd FileType GV xmap <buffer> <Space> O
 autocmd FileType GV xmap <buffer> <Space> <Down>
 autocmd FileType GV xmap <buffer> u <Up>
 autocmd FileType GV xmap <buffer> d <Down>
@@ -800,8 +796,8 @@ autocmd FileType GV nmap <silent> <buffer> <A-2-LeftMouse> <C-\><C-n>:<C-u>sleep
 " start with folds open
 autocmd FileType GV set foldlevelstart=1
 
+" make it more like a real vim session and not have qq exit ...
 "autocmd FileType GV nmap <silent> <buffer> qq :qa!<CR>
-"autocmd FileType GV nmap <silent> <buffer> <Leader>wc :call <SID>QuitIfOnlyNoNameLeft()<CR>
 autocmd FileType GV nmap <silent> <buffer> <Leader>wq <C-\><C-n>:<C-u>call <SID>QuitIfOnlyNoNameLeft()<CR>
 autocmd FileType GV nmap <silent> <buffer> <Leader>qq <C-\><C-n>:<C-u>call <SID>QuitIfOnlyNoNameLeft()<CR>
 
@@ -928,6 +924,33 @@ autocmd FileType GV nnoremap <silent> <buffer> o    :call <sid>open(0)<cr>
 autocmd FileType GV nnoremap <silent> <buffer> <C-v> :call <sid>open(0)<cr>
 " horizontal split
 autocmd FileType GV nnoremap <silent> <buffer> <C-x> :call <sid>open(0, 1, 9)<cr>
+
+" to make vigv wrapper error more nicely in a non-git dir ..
+function! s:MyGV() abort
+    let errmsg = ''
+    enew
+    setlocal buftype=nofile hidden bufhidden=wipe noswapfile
+    if !exists('g:loaded_fugitive')
+        let errmsg = 'fugitive not found'
+        call s:warn(errmsg)
+        sleep 651m
+        cquit
+        return
+    endif
+    let git_dir = FugitiveGitDir()
+    if empty(git_dir)
+        let errmsg = 'not in git repo'
+        call s:warn(errmsg)
+        sleep 651m
+        cquit
+        return
+    endif
+    execute 'GV'
+endfunction
+command! GV2 call s:MyGV()
+
+" vigv alias ...
+" vigv='vim -R -c GV2 -c ":nnoremap <silent> <buffer> q <Nop>" -c ":cnoreabbrev <silent> <buffer> q Tabcloserightquit" -c ":cnoreabbrev <silent> <buffer> q! Tabcloserightquit" -c ":nnoremap <silent> <buffer> x <Nop>" -c ":cnoreabbrev <silent> <buffer> x Tabcloserightquit" -c ":se bt=nowrite|:tabn|:hide|:redraw!"'
 " gv -----------
 
 " QFEnter -------------
