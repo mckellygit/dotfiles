@@ -22,7 +22,7 @@
 # jump method:
 # radssh jump:jumphost/10.173.104.{1..100}
 
-max_threads=500
+max_threads=220
 ### Automatically save log files into date/time-stamped local directory
 # logdir=session_%Y%m%d_%H%M%S
 logdir=~/radssh/sessions/session_%Y%m%d_%H%M%S
@@ -38,20 +38,26 @@ logdir=~/radssh/sessions/session_%Y%m%d_%H%M%S
 
 ### Available modes: {stream, ordered, off}
 output_mode=ordered
-
-### If output_mode is ordered then addl quiet flag to not echo 'No Output'
+# If output_mode is ordered then addl quiet flag to not echo 'No Output' is:
 output_quiet=on
 
+# If only one host then go into tty session automatically
+auto_tty=on
+# Shell commands to execute at start of each tty session,
+# as an example:
+#   export TERM=xterm-256color; tset
+#   alias rm='rm -i'
+tty_init_file=~/.radssh_ttyinit
+
 ### Can override character encoding (will use sys.stdout.encoding if not specified)
-### character_encoding=UTF-8
+character_encoding=UTF-8
+#character_encoding=latin-1
+
 ### Avoiding runaway commands with either too much output, or
 ### waiting indefinately at a user prompt...
 # quota.time=0
 # quota.lines=0
 quota.bytes=262144
-
-character_encoding=UTF-8
-#character_encoding=latin-1
 
 ### Connection & Authentication Options
 ### Username defaults to $SSH_USER (or $USER) if not set here
@@ -82,7 +88,7 @@ plugins=~/radssh/plugins
 
 ### Enable loading of user specific settings (and command line options)
 ### Only if this is set.
-# user.settings=~/.radssh_config
+user.settings=~/.radssh_config
 
 ### Rudimentary command safeguards
 ### First, outright forbid commands that should only be run with a TTY
