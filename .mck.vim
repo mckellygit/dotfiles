@@ -791,7 +791,7 @@ autocmd FileType GV setlocal cursorline
 " M/A-DoubleClick to open (o) commit ...
 autocmd FileType GV nmap <silent> <buffer> <A-LeftRelease> <Nop>
 autocmd FileType GV nmap <silent> <buffer> <A-2-LeftRelease> <Nop>
-autocmd FileType GV nmap <silent> <buffer> <A-2-LeftMouse> <C-\><C-n>:<C-u>sleep 351m<bar>:call feedkeys("o")<CR>
+autocmd FileType GV nmap <silent> <buffer> <A-2-LeftMouse> <C-\><C-n>:<C-u>sleep 351m<bar>:call feedkeys("O")<CR>
 " M/A-q to quit like q, but M/A-q is used by Unity/Gnome
 
 " start with folds open
