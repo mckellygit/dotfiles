@@ -1,7 +1,8 @@
 [global_config]
   enabled_plugins = LaunchpadCodeURLHandler, APTURLHandler, LaunchpadBugURLHandler
-  handle_size = 2
+# handle_size = 2
   title_font = Liberation Mono 13
+  title_hide_sizetext = True
   title_transmit_bg_color = "#d85f00"
   title_transmit_fg_color = "#f6f3ea"
   title_use_system_font = False
@@ -88,7 +89,7 @@
 #   cursor_color = "#6a6863"
 #   cursor_color = "#73684C"
     cursor_color = "#a49b88"
-    font = Liberation Mono 11
+    font = Liberation Mono 13
 #   foreground_color = "#fba61b"
 #   foreground_color = "#fbb51b"
 #   foreground_color = "#ffc6a1"

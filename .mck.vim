@@ -108,6 +108,7 @@ Plugin 'airblade/vim-gitgutter'
 "
 " gitk like repo viewer
 "Plugin 'gregsexton/gitv'
+"Plugin 'sodapopcan/vim-twiggy'
 Plugin 'junegunn/gv.vim'
 "
 " fzf for fuzzy listing/searching
@@ -1119,6 +1120,11 @@ set background=dark
 " tmux default term set to screen-256color
 set t_Co=256
 
+" bg color fill-in for kitty term
+if &term=~"kitty"
+  let &t_ut=''
+endif
+
 if &term=="xterm"
   set t_Co=8
   set t_Sb=^[[4%dm
@@ -1186,8 +1192,8 @@ nnoremap <silent> <Leader>rg :reg *,x<CR>
 
 " search direction
 " NOTE: make n ALWAYS forward and N ALWAYS backward ...
-nmap n /<CR>
-nmap N ?<CR>
+"nmap n /<CR>
+"nmap N ?<CR>
 
 " hack to pause a little on search wraps ...
 
@@ -1200,16 +1206,17 @@ function Searchn() abort
   nunmap <buffer> n
   set nows
   try
-    " /<CR> ?
-    exe "normal n"
-    redraw!
+    "exe "normal n"
+    exe "normal /\<CR>"
+    "redraw!
   catch /E384:/
 "   echohl WarningMsg
 "   echo "E384: search hit TOP without match for: " . l:stext
 "   echohl None
     set ws
     try
-      exe "normal n"
+      "exe "normal n"
+      exe "normal /\<CR>"
       sleep 200m
       redraw!
     catch /E486:/
@@ -1226,8 +1233,12 @@ function Searchn() abort
 "   echohl None
     set ws
     try
-      exe "normal n"
+      "exe "normal n"
+      exe "normal /\<CR>"
       sleep 200m
+      " eat typeahead ...
+      while getchar(0)
+      endwhile
       redraw!
     catch /E486:/
       echo ' '
@@ -1251,17 +1262,21 @@ function SearchN() abort
   nunmap <buffer> N
   set nows
   try
-    " ?<CR> ?
-    exe "normal N"
-    redraw!
+    "exe "normal N"
+    exe "normal ?\<CR>"
+    "redraw!
   catch /E384:/
 "   echohl WarningMsg
 "   echo "E384: search hit TOP without match for: " . l:stext
 "   echohl None
     set ws
     try
-      exe "normal N"
+      "exe "normal N"
+      exe "normal ?\<CR>"
       sleep 200m
+      " eat typeahead ...
+      while getchar(0)
+      endwhile
       redraw!
     catch /E486:/
       echo ' '
@@ -1277,7 +1292,8 @@ function SearchN() abort
 "   echohl None
     set ws
     try
-      exe "normal N"
+      "exe "normal N"
+      exe "normal ?\<CR>"
       sleep 200m
       redraw!
     catch /E486:/
@@ -1342,6 +1358,9 @@ if &t_Co > 2 || has("gui_running")
 " hi StatusLineNC term=reverse ctermfg=LightGray
 " hi Comment      term=NONE    ctermfg=LightGray
 endif
+
+" NOTE: if want terminal default background (opacity etc.) ...
+hi Normal cterm=none ctermbg=none
 
 " always show tabs
 set showtabline=2
@@ -1453,19 +1472,22 @@ nnoremap <silent> <Leader>sr :let @y=@* <bar> :let @*=@x <bar> :let @x=@y <bar> 
 " ----------------------
 
 function! YankIt(cmd, arg) abort
-    if a:arg >= 3
-        exe "silent! normal! mvgv\"" . a:cmd . "\<Esc>"
+    if a:arg >= 1
+        let offset = line(".") - line ("w0")
+        exe "silent! normal! mtgv\"" . a:cmd . "\<Esc>"
     else
         exe "silent! normal! gv\"" . a:cmd . "\<Esc>"
     endif
-    let @m = substitute(@*, "\\n\\+$", "", "")
-    if @m==#@* " if identical then no trailing nl
-        "let @z='v'
-        " need to remember if it was <C-V>
-        let @z = visualmode()
+    let oldz = 0
+    let @z = visualmode()
+    if "" !=# @z
+        let @m = substitute(@*, "\\n\\+$", "", "")
+        if @m!=#@* " if not identical then had trailing nl ...
+            let @z="V"
+            let @*=@m
+        endif
     else
-        let @z='V'
-        let @*=@m
+        let oldz = 1
     endif
     let @x=@y " prev in reg x ...
     let @y=@*
@@ -1479,6 +1501,20 @@ function! YankIt(cmd, arg) abort
         endif
         " NOTE: should we go back to live terminal mode ?
         exe "silent! normal! i"
+    else
+        if a:arg >= 1
+            if oldz == 0
+                exe "silent! normal! `t"
+                let offset2 = line(".") - line ("w0")
+                let offdiff = offset - offset2
+                if offdiff < 0
+                    exe "silent! normal! " . -offdiff . "\<C-e>"
+                elseif offdiff > 0
+                    exe "silent! normal! " . +offdiff . "\<C-y>"
+                endif
+                delmarks t
+            endif
+        endif
     endif
 endfunction
 
@@ -1730,7 +1766,58 @@ function! XTermPasteBegin()
   return ""
 endfunction
 
-inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
+inoremap <special> <silent> <expr> <Esc>[200~ XTermPasteBegin()
+
+" mouse paste
+" NOTE: tmux could always paste and then we dont need these
+"       but then we loose the C- mapping difference
+nnoremap <silent> <RightMouse> "*p
+vnoremap <silent> <RightMouse> <C-\><C-n>"*p
+inoremap <silent> <RightMouse> <C-o>"*p
+
+nnoremap <silent> <2-RightMouse> "*p
+vnoremap <silent> <2-RightMouse> <C-\><C-n>"*p
+inoremap <silent> <2-RightMouse> <C-o>"*p
+
+nnoremap <silent> <3-RightMouse> "*p
+vnoremap <silent> <3-RightMouse> <C-\><C-n>"*p
+inoremap <silent> <3-RightMouse> <C-o>"*p
+
+nnoremap <silent> <4-RightMouse> "*p
+vnoremap <silent> <4-RightMouse> <C-\><C-n>"*p
+inoremap <silent> <4-RightMouse> <C-o>"*p
+
+nnoremap <silent> <C-RightMouse> "*P
+vnoremap <silent> <C-RightMouse> <C-\><C-n>"*P
+inoremap <silent> <C-RightMouse> <C-o>"*P
+
+nnoremap <silent> <C-2-RightMouse> "*P
+vnoremap <silent> <C-2-RightMouse> <C-\><C-n>"*P
+inoremap <silent> <C-2-RightMouse> <C-o>"*P
+
+nnoremap <silent> <C-3-RightMouse> "*P
+vnoremap <silent> <C-3-RightMouse> <C-\><C-n>"*P
+inoremap <silent> <C-3-RightMouse> <C-o>"*P
+
+nnoremap <silent> <C-4-RightMouse> "*P
+vnoremap <silent> <C-4-RightMouse> <C-\><C-n>"*P
+inoremap <silent> <C-4-RightMouse> <C-o>"*P
+
+nnoremap <silent> <A-RightMouse> "*p`]li <Esc>
+vnoremap <silent> <A-RightMouse> <C-\><C-n>"*p`]li <Esc>
+inoremap <silent> <A-RightMouse> <C-o>"*p 
+
+nnoremap <silent> <A-2-RightMouse> "*p`]li <Esc>
+vnoremap <silent> <A-2-RightMouse> <C-\><C-n>"*p`]li <Esc>
+inoremap <silent> <A-2-RightMouse> <C-o>"*p 
+
+nnoremap <silent> <A-3-RightMouse> "*p`]li <Esc>
+vnoremap <silent> <A-3-RightMouse> <C-\><C-n>"*p`]li <Esc>
+inoremap <silent> <A-3-RightMouse> <C-o>"*p 
+
+nnoremap <silent> <A-4-RightMouse> "*p`]li <Esc>
+vnoremap <silent> <A-4-RightMouse> <C-\><C-n>"*p`]li <Esc>
+inoremap <silent> <A-4-RightMouse> <C-o>"*p 
 
 " ---------------
 
@@ -1828,7 +1915,9 @@ inoremap <silent> <expr> <A-2-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-o>:let 
 "nnoremap <silent> <expr> <A-LeftRelease> (&filetype == 'GV') ? '' : '<LeftRelease>V<C-\><C-n>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y")<bar>:redraw!<CR>
 " NOTE: M- Drag end now copies selection to clipboard and returns to normal mode
 "vnoremap <silent> <A-LeftRelease> <C-\><C-n>mv<LeftRelease><C-\><C-n>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR>`v
-vnoremap <silent> <expr> <A-LeftRelease> (@i=="1") ? '<C-\><C-n>mv<LeftRelease><C-\><C-n>:let @i="0"<bar>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR>`v<Esc>i' : '<C-\><C-n>mv<LeftRelease><C-\><C-n>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR>`v'
+"vnoremap <silent> <expr> <A-LeftRelease> (@i=="1") ? '<C-\><C-n>mv<LeftRelease><C-\><C-n>:let @i="0"<bar>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR>`v<Esc>i' : '<C-\><C-n>mv<LeftRelease><C-\><C-n>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR>`v'
+" YankIt() now leaves cursor at end position ...
+vnoremap <silent> <expr> <A-LeftRelease> (@i=="1") ? '<LeftRelease><C-\><C-n>:let @i="0"<bar>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR><Esc>i' : '<LeftRelease><C-\><C-n>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR>'
 inoremap <silent> <A-LeftMouse> <C-\><C-o>:let @i="1"<CR><LeftMouse>
 
 " no-op

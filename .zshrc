@@ -60,7 +60,10 @@ random_title=$[$RANDOM%100]
 # precmd () { print -Pn "\e]0;%M:%12<..<%~%<<%%\a" }
 # precmd () { if [[ -n "$SSH_CLIENT" ]] ; then PS1='%F{007}ssh%f-%F{100}%n@%m%f:%F{150}%12<..<%~%<<%f%% '; print -Pn '\e]0;ssh-%M:%12<..<%~%<<%\a'; else ; PS1='%F{100}%n@%m%f:%F{150}%12<..<%~%<<%f%% '; print -Pn '\e]0;%M:%12<..<%~%<<%\a' ; fi ; if [[ -n "$TMUX_PANE" ]] ; then tmux set-window-option automatic-rename on; fi }
 # dont print hostname in tmux if not ssh (remote)
-precmd () { if [[ -n "$SSH_CLIENT" ]] ; then PS1='%F{007}ssh%f-%F{100}%n@%m%f:%F{150}%12<..<%~%<<%f%% '; print -Pn '\e]0;ssh-%M:%12<..<%~%<<%\a'; else ; PS1='%F{100}%n@%m%f:%F{150}%12<..<%~%<<%f%% '; print -Pn '\e]0;%12<..<%~%<<%\a' ; fi ; if [[ -n "$TMUX_PANE" ]] ; then tmux set-window-option automatic-rename on; fi }
+# TODO: this breaks kitty terminal ...
+if [ "$TERM" != "xterm-kitty" ] ; then
+  precmd () { if [[ -n "$SSH_CLIENT" ]] ; then PS1='%F{007}ssh%f-%F{100}%n@%m%f:%F{150}%12<..<%~%<<%f%% '; print -Pn '\e]0;ssh-%M:%12<..<%~%<<%\a'; else ; PS1='%F{100}%n@%m%f:%F{150}%12<..<%~%<<%f%% '; print -Pn '\e]0;%12<..<%~%<<%\a' ; fi ; if [[ -n "$TMUX_PANE" ]] ; then tmux set-window-option automatic-rename on; fi }
+fi
 
 # skip SHARE_HISTORY
 setopt APPEND_HISTORY INC_APPEND_HISTORY
@@ -78,12 +81,20 @@ setopt -o cshnullglob
 h() { if [ -z "$*" ]; then history 1; else history 1 | egrep "$@"; fi; }
 
 # if we want to use lsp and send cmd to all panes ...
+# get list of panes:
+#   tmux lsp -s
+# remove ourselves ...
+#   tmux lsp
 # preexec () {
-#    print ">>>preexec<<< cmd: \"$1\""
+#   print ">>>preexec<<< cmd: \"$1\""
+#   tmux send -t <pane-id> -l $1
 #}
 
 # to not eat the space before | or & ...
 export ZLE_REMOVE_SUFFIX_CHARS=""
+
+export ASAN_OPTIONS="detect_leaks=0"
+export LSAN_OPTIONS="detect_leaks=0 exitcode=0"
 
 # --------------------
 

@@ -8,25 +8,25 @@ from terminatorlib.terminal import Terminal
 available = AVAILABLE = []
 
 def key_esc_delete(self):
-    self.vte.feed_child('\x1b\x7f')
+    self.vte.feed_child('\x1b\x7f', 2)
 
 def key_esc_one(self):
-    self.vte.feed_child('\x1b\x31')
+    self.vte.feed_child('\x1b\x31', 2)
 
 def key_esc_two(self):
-    self.vte.feed_child('\x1b\x32')
+    self.vte.feed_child('\x1b\x32', 2)
 
 def key_esc_thr(self):
-    self.vte.feed_child('\x1b\x33')
+    self.vte.feed_child('\x1b\x33', 2)
 
 def key_esc_four(self):
-    self.vte.feed_child('\x1b\x34')
+    self.vte.feed_child('\x1b\x34', 2)
 
 def key_esc_five(self):
-    self.vte.feed_child('\x1b\x35')
+    self.vte.feed_child('\x1b\x35', 2)
 
 def key_esc_six(self):
-    self.vte.feed_child('\x1b\x36')
+    self.vte.feed_child('\x1b\x36', 2)
 
 setattr(Terminal, 'key_esc_delete', key_esc_delete)
 setattr(Terminal, 'key_esc_one', key_esc_one)
