@@ -221,6 +221,9 @@ if ! shopt -oq posix; then
   fi
 fi
 
+# Completion for kitty
+#source <(kitty + complete setup bash)
+
 # this changes PS1 ...
 # [ -r ~/.byobu/prompt ] && . ~/.byobu/prompt   #byobu-prompt#
 

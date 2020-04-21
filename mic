@@ -1,0 +1,15 @@
+#!/bin/bash
+
+var="nocap"
+if [[ $# -ge 1 ]] ; then
+  if [[  $1 == 1 || $1 == on ]] ; then
+    var="cap"
+  fi
+fi
+
+amixer set Capture $var > /dev/null 
+if [[ $var == cap ]] ; then
+    amixer set Capture 60% > /dev/null
+fi
+amixer get Capture | grep -q '\[off\]' && notify-send "MIC switched OFF" || notify-send "MIC switched ON"
+

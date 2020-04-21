@@ -1,6 +1,6 @@
 [global_config]
 # putty swaps 2/3 mouse buttons
-# putty_paste_style = True
+  putty_paste_style = True
   enabled_plugins = LaunchpadCodeURLHandler, APTURLHandler, LaunchpadBugURLHandler
 # handle_size = 2
   title_font = Liberation Mono 13

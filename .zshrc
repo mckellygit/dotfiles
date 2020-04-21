@@ -24,6 +24,10 @@ fi
 
 autoload -Uz compinit
 compinit
+
+# Completion for kitty
+#kitty + complete setup zsh | source /dev/stdin
+
 # End of lines added by compinstall
 
 zmodload -i zsh/complist
