@@ -1311,7 +1311,7 @@ function SearchN() abort
 endfunction
 
 " get paste confirmation on < 3 lines ...
-set report=0
+set report=1
 
 "set keymodel=startsel
 
@@ -1779,61 +1779,63 @@ inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
 "       but then do we loose the C/A- mapping differences ?
 
 nnoremap <RightMouse> "*p
-vnoremap <RightMouse> <C-\><C-n>"*p
+vnoremap <RightMouse> "*p
 inoremap <RightMouse> <C-o>"*p
 cnoremap <RightMouse> <C-r>*
 tnoremap <RightMouse> <C-w>"*
 
 nnoremap <2-RightMouse> "*p
-vnoremap <2-RightMouse> <C-\><C-n>"*p
+vnoremap <2-RightMouse> "*p
 inoremap <2-RightMouse> <C-o>"*p
 cnoremap <2-RightMouse> <C-r>*
 tnoremap <2-RightMouse> <C-w>"*
 
 nnoremap <3-RightMouse> "*p
-vnoremap <3-RightMouse> <C-\><C-n>"*p
+vnoremap <3-RightMouse> "*p
 inoremap <3-RightMouse> <C-o>"*p
 cnoremap <3-RightMouse> <C-r>*
 tnoremap <3-RightMouse> <C-w>"*
 
 nnoremap <4-RightMouse> "*p
-vnoremap <4-RightMouse> <C-\><C-n>"*p
+vnoremap <4-RightMouse> "*p
 inoremap <4-RightMouse> <C-o>"*p
 cnoremap <4-RightMouse> <C-r>*
 tnoremap <4-RightMouse> <C-w>"*
 
 " ------------------------------
 
+" could add `[ to go back to orig col ...
+
 nnoremap <C-RightMouse> "*P
-vnoremap <C-RightMouse> <C-\><C-n>"*P
+vnoremap <C-RightMouse> "*P
 inoremap <C-RightMouse> <C-o>"*P
 
 nnoremap <C-2-RightMouse> "*P
-vnoremap <C-2-RightMouse> <C-\><C-n>"*P
+vnoremap <C-2-RightMouse> "*P
 inoremap <C-2-RightMouse> <C-o>"*P
 
 nnoremap <C-3-RightMouse> "*P
-vnoremap <C-3-RightMouse> <C-\><C-n>"*P
+vnoremap <C-3-RightMouse> "*P
 inoremap <C-3-RightMouse> <C-o>"*P
 
 nnoremap <C-4-RightMouse> "*P
-vnoremap <C-4-RightMouse> <C-\><C-n>"*P
+vnoremap <C-4-RightMouse> "*P
 inoremap <C-4-RightMouse> <C-o>"*P
 
 nnoremap <A-RightMouse> "*p`]li <Esc>
-vnoremap <A-RightMouse> <C-\><C-n>"*p`]li <Esc>
+vnoremap <A-RightMouse> "*p`]li <Esc>
 inoremap <A-RightMouse> <C-o>"*p 
 
 nnoremap <A-2-RightMouse> "*p`]li <Esc>
-vnoremap <A-2-RightMouse> <C-\><C-n>"*p`]li <Esc>
+vnoremap <A-2-RightMouse> "*p`]li <Esc>
 inoremap <A-2-RightMouse> <C-o>"*p 
 
 nnoremap <A-3-RightMouse> "*p`]li <Esc>
-vnoremap <A-3-RightMouse> <C-\><C-n>"*p`]li <Esc>
+vnoremap <A-3-RightMouse> "*p`]li <Esc>
 inoremap <A-3-RightMouse> <C-o>"*p 
 
 nnoremap <A-4-RightMouse> "*p`]li <Esc>
-vnoremap <A-4-RightMouse> <C-\><C-n>"*p`]li <Esc>
+vnoremap <A-4-RightMouse> "*p`]li <Esc>
 inoremap <A-4-RightMouse> <C-o>"*p 
 
 " ---------------
@@ -1870,13 +1872,15 @@ inoremap <2-LeftMouse> <C-\><C-o>:let @i="2"<CR><C-\><C-o>:call GetWord(1)<CR>
 "vnoremap <silent> <3-LeftMouse> mviWygv
 
 " NOTE: Use GetPath instead of lBvhE ...
-nnoremap <3-LeftMouse> <LeftMouse>:call GetPath(1,1)<CR>
-vnoremap <3-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath(1,1)<CR>
+"nnoremap <3-LeftMouse> <LeftMouse>:call GetPath(1,1)<CR>
+"vnoremap <3-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath(1,1)<CR>
+nnoremap <3-LeftMouse> mvviWygv
+vnoremap <3-LeftMouse> <Esc>mvviWygv
 " TODO: 3-click in insert mode is handled in vmode with @i==2
 
 " QuadrupleClick too confusing
-nnoremap <4-LeftMouse> <Nop>
-vnoremap <4-LeftMouse> <Nop>
+nnoremap <4-LeftMouse> mvV<C-\><C-n>:call YankIt("*y",1)<CR>gv
+vnoremap <4-LeftMouse> <Esc>mvV<C-\><C-n>:call YankIt("*y",1)<CR>gv
 inoremap <4-LeftMouse> <Nop>
 
 " change C-LeftMouse searching tags file for symbol under cursor
@@ -1927,20 +1931,20 @@ vnoremap <C-3-LeftMouse> <LeftMouse><C-\><C-n>:call GetLine(1)<CR>
 
 " NOTE: single click after double ...
 
-"nnoremap <silent> <A-2-LeftMouse> <LeftMouse>:call GetWord(2)<CR>
-nnoremap <expr> <A-LeftMouse> (@j=="0") ? '<LeftMouse>' : '<LeftMouse>:call GetPath(2,1)<CR>'
+nnoremap <silent> <A-2-LeftMouse> <LeftMouse>:call GetWord(2)<CR>
+"nnoremap <expr> <A-LeftMouse> (@j=="0") ? '<LeftMouse>' : '<LeftMouse>:call GetPath(2,1)<CR>'
 
-"vnoremap <silent> <A-2-LeftMouse> <LeftMouse><C-\><C-n>:call GetWord(2)<CR>
+vnoremap <silent> <A-2-LeftMouse> <LeftMouse><C-\><C-n>:call GetWord(2)<CR>
 "inoremap <silent> <A-2-LeftMouse> <LeftMouse><C-\><C-o>:call GetWord(2)<CR>
 
 "nnoremap <silent> <expr> <A-2-LeftMouse> (@j=="0") ? '<LeftMouse>:let @j="1"<bar>:call GetWord(2)<CR>' : '<LeftMouse>:call GetPath(2,1)<CR>'
-nnoremap <expr> <A-2-LeftMouse> (@j=="0") ? '<LeftMouse>:let @j="1"<bar>:call GetWord(2)<CR>' : '<LeftMouse>'
-nnoremap <expr> <A-3-LeftMouse> (@j=="0") ? '<LeftMouse>:let @j="1"<bar>:call GetWord(2)<CR>' : '<LeftMouse>'
-nnoremap <expr> <A-4-LeftMouse> (@j=="0") ? '<LeftMouse>:let @j="1"<bar>:call GetWord(2)<CR>' : '<LeftMouse>'
+"nnoremap <expr> <A-2-LeftMouse> (@j=="0") ? '<LeftMouse>:let @j="1"<bar>:call GetWord(2)<CR>' : '<LeftMouse>'
+"nnoremap <expr> <A-3-LeftMouse> (@j=="0") ? '<LeftMouse>:let @j="1"<bar>:call GetWord(2)<CR>' : '<LeftMouse>'
+"nnoremap <expr> <A-4-LeftMouse> (@j=="0") ? '<LeftMouse>:let @j="1"<bar>:call GetWord(2)<CR>' : '<LeftMouse>'
 
-vnoremap <expr> <A-2-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-n>:let @j="1"<bar>:call GetWord(2)<CR>' : '<LeftMouse><C-\><C-n>:call GetPath(2,1)<CR>'
-vnoremap <expr> <A-3-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-n>:let @j="1"<bar>:call GetWord(2)<CR>' : '<LeftMouse><C-\><C-n>:call GetPath(2,1)<CR>'
-vnoremap <expr> <A-4-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-n>:let @j="1"<bar>:call GetWord(2)<CR>' : '<LeftMouse><C-\><C-n>:call GetPath(2,1)<CR>'
+"vnoremap <expr> <A-2-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-n>:let @j="1"<bar>:call GetWord(2)<CR>' : '<LeftMouse><C-\><C-n>:call GetPath(2,1)<CR>'
+"vnoremap <expr> <A-3-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-n>:let @j="1"<bar>:call GetWord(2)<CR>' : '<LeftMouse><C-\><C-n>:call GetPath(2,1)<CR>'
+"vnoremap <expr> <A-4-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-n>:let @j="1"<bar>:call GetWord(2)<CR>' : '<LeftMouse><C-\><C-n>:call GetPath(2,1)<CR>'
 
 inoremap <expr> <A-2-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call GetWord(2)<CR>' : '<LeftMouse><C-\><C-o>:call GetPath(2,1)<CR>'
 inoremap <expr> <A-3-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call GetWord(2)<CR>' : '<LeftMouse><C-\><C-o>:call GetPath(2,1)<CR>'
@@ -1954,9 +1958,14 @@ inoremap <expr> <A-4-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<ba
 " NOTE: M- Drag end now copies selection to clipboard and returns to normal mode
 "vnoremap <silent> <A-LeftRelease> <C-\><C-n>mv<LeftRelease><C-\><C-n>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR>`v
 "vnoremap <silent> <expr> <A-LeftRelease> (@i=="1") ? '<C-\><C-n>mv<LeftRelease><C-\><C-n>:let @i="0"<bar>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR>`v<Esc>i' : '<C-\><C-n>mv<LeftRelease><C-\><C-n>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR>`v'
+
 " YankIt() now leaves cursor at end position ...
-vnoremap <expr> <A-LeftRelease> (@i=="1") ? '<LeftRelease><C-\><C-n>:let @i="0"<bar>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR><Esc>i' : '<LeftRelease><C-\><C-n>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR>'
+"vnoremap <expr> <A-LeftRelease> (@i=="1") ? '<LeftRelease><C-\><C-n>:let @i="0"<bar>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR><Esc>i' : '<LeftRelease><C-\><C-n>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR>'
+vnoremap <expr> <A-LeftRelease> (@i=="1") ? '<LeftRelease><C-\><C-n>:let @i="0"<bar>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<CR><Esc>i' : '<LeftRelease><C-\><C-n>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<CR>'
+"vnoremap <expr> <A-LeftRelease> (@i=="1") ? '<LeftRelease><C-\><C-n>:let @i="0"<bar>:call YankIt("*y", 2)<CR><Esc>i' : '<LeftRelease><C-\><C-n>:call YankIt("*y", 2)<CR>'
+
 inoremap <A-LeftMouse> <C-\><C-o>:let @i="1"<CR><LeftMouse>
+
 vnoremap <A-2-LeftRelease>  <Nop>
 vnoremap <A-3-LeftRelease>  <Nop>
 vnoremap <A-4-LeftRelease>  <Nop>
@@ -2479,20 +2488,20 @@ inoremap <silent> <expr> <C-Up>    pumvisible() ? '<C-Up>' : '<C-\><C-o>:call <S
 " C- already used to adjust font size ...
 " A- to speed up scrolling ...
 
-"nnoremap <silent> <expr> <ScrollWheelDown>   (line('.') == line('w0')) ? 'M' : ':call <SID>Saving_scrollV("10<C-V><C-D>")<CR>'
-"nnoremap <silent> <expr> <A-ScrollWheelDown> (line('.') == line('w0')) ? 'M' : ':call <SID>Saving_scrollV("48<C-V><C-D>")<CR>'
-nnoremap <silent> <expr> <ScrollWheelDown>   (line('.') == line('w0')) ? 'M' : '10<C-e>10j'
-nnoremap <silent> <expr> <A-ScrollWheelDown> (line('.') == line('w0')) ? 'M' : '48<C-e>48j'
+nnoremap <silent> <expr> <ScrollWheelDown>   (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
+nnoremap <silent> <expr> <A-ScrollWheelDown> (line('.') == line('w0')) ? '96j' : ((line('$') - line('w$')) < 96) ? 'mfG`f96j' : '96<C-e>96j'
+" C-Wheel is often font scaling but ...
+nnoremap <silent> <expr> <C-ScrollWheelDown> (line('.') == line('w0')) ? '48j' : ((line('$') - line('w$')) < 48) ? 'mfG`f48j' : '48<C-e>48j'
 
 " see below
 "vnoremap <silent>        <ScrollWheelDown> <C-\><C-n>:call <SID>Saving_scrollV("gv10<C-V><C-D>")<CR>
 
 inoremap <silent> <expr> <ScrollWheelDown>   pumvisible() ? '<ScrollWhellDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-D>")<CR>'
 
-"nnoremap <silent> <expr> <ScrollWheelUp>     (line('.') == line('w$')) ? 'M' : ':call <SID>Saving_scrollV("10<C-V><C-U>")<CR>'
-"nnoremap <silent> <expr> <A-ScrollWheelUp>   (line('.') == line('w$')) ? 'M' : ':call <SID>Saving_scrollV("48<C-V><C-U>")<CR>'
-nnoremap <silent> <expr> <ScrollWheelUp>     (line('.') == line('w$')) ? 'M' : '10<C-y>10k'
-nnoremap <silent> <expr> <A-ScrollWheelUp>   (line('.') == line('w$')) ? 'M' : '48<C-y>48k'
+nnoremap <silent> <expr> <ScrollWheelUp>     (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
+nnoremap <silent> <expr> <A-ScrollWheelUp>   (line('.') == line('w$')) ? '96k' : '96<C-y>96k'
+" C-Wheel is often font scaling but ...
+nnoremap <silent> <expr> <C-ScrollWheelUp>   (line('.') == line('w$')) ? '48k' : '48<C-y>48k'
 
 " see below
 "vnoremap <silent>        <ScrollWheelUp>   <C-\><C-n>:call <SID>Saving_scrollV("gv10<C-V><C-U>")<CR>
@@ -2989,6 +2998,7 @@ endif " has("autocmd")
 set splitbelow
 set splitright
 "let g:clang_verbose_pmenu = 1
+let g:clang_exec = 'clang++-9'
 let g:clang_cpp_options = '-std=c++11 -DNDEBUG -Wno-inconsistent-missing-override'
 " put this in the local .lvimrc now ...
 "let g:clang_compilation_database = '~/lnrs/wip/buildln/compile_commands.json'
@@ -3380,15 +3390,16 @@ function GetWord(arg) abort
     execute 'normal! mvviw'
   endif
   if a:arg > 1
-    redraw!
-    echo "copied to clipboard"
+    redraw
+    "echo "copied to clipboard"
     sleep 551m
     execute 'normal! y`v'
-    redraw!
+    "redraw!
     if &buftype == "terminal"
       " NOTE: should we go back to live terminal mode ?
       exe "silent! normal! i"
     endif
+    " TODO - get we use getchar() here to get A-3-LeftMouse ?
   endif
 endfunction
 
@@ -3430,11 +3441,11 @@ function GetPath(arg,ws) abort
   endif
   let &iskeyword = l:oldiskeyword
   if a:arg > 1
-    redraw!
-    echo "copied to clipboard"
+    redraw
+    "echo "copied to clipboard"
     sleep 551m
     execute 'normal! y`v'
-    redraw!
+    redraw
     if &buftype == "terminal"
       " NOTE: should we go back to live terminal mode ?
       exe "silent! normal! i"
@@ -3474,11 +3485,11 @@ function GetWord2(arg) abort
   endif
   let &iskeyword = l:oldiskeyword
   if a:arg > 1
-    redraw!
-    echo "copied to clipboard"
+    redraw
+    "echo "copied to clipboard"
     sleep 551m
     execute 'normal! y`v'
-    redraw!
+    redraw
     if &buftype == "terminal"
       " NOTE: should we go back to live terminal mode ?
       exe "silent! normal! i"
@@ -3514,11 +3525,11 @@ function GetLine(arg) abort
     execute 'normal! mvV'
   endif
   if a:arg > 1
-    redraw!
-    echo "copied to clipboard"
+    redraw
+    "echo "copied to clipboard"
     sleep 551m
     execute 'normal! y`v'
-    redraw!
+    redraw
     if &buftype == "terminal"
       " NOTE: should we go back to live terminal mode ?
       exe "silent! normal! i"
