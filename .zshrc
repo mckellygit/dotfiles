@@ -307,6 +307,9 @@ alias start_rdm="rdm --tempdir /tmp/rdm-${LOGNAME} --log-file /tmp/rdm-${LOGNAME
 alias stop-rdm='rc -q'
 alias stop_rdm='rc -q'
 
+# also could use -u or -U instead of --all-text
+alias ag='\ag --all-text --hidden'
+
 # ------------------
 
 # -x S -y R are not supported values

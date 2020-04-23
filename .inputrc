@@ -35,3 +35,4 @@ set enable-bracketed-paste on
 # INS - essentially a no-op ...
 "\e[2~": redraw-current-line
 #
+set bell-style none

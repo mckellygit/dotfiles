@@ -3,6 +3,6 @@ export TERM=xterm-256color; tset
 export sship=$(echo $SSH_CLIENT | awk '{print $1}')
 alias rm='rm -i'
 alias lla='ls -lAtr'
-alias vi='vim -c ":hi Search cterm=NONE ctermfg=grey ctermbg=darkred"'
+alias vi='vim -c ":hi Search cterm=NONE ctermfg=0 ctermbg=214" -c ":hi String ctermfg=70"'
 bind 'set enable-bracketed-paste on'
 set -o history
