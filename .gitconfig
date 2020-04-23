@@ -12,7 +12,12 @@
 [credential]
 	helper = cache --timeout=9600
 [checkout]
-	defaultRemote = upstream
+    defaultRemote = upstream
+[color "status"]
+	added = 2
+	changed = 160
+	untracked = 5
+	deleted = 1
 [color "diff"]
 #	old = red
 	old = 208
