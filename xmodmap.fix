@@ -1,9 +1,6 @@
 #!/bin/bash
 
-# this goes in autostart, but see also:
-# /lib/systemd/system-sleep/xmodmap_post
-# run script at resume|thaw (post)
-
 sleep 5
+xrdb -load ~/.Xresources
 xmodmap ~/.Xmodmap
 
