@@ -7,9 +7,9 @@
 # for a left-handed Enter -
 
 # turn control_L into Mode_switch
-xmodmap -e "keycode 37 = Mode_switch"
+#xmodmap -e "keycode 37 = Mode_switch"
 # map space = space, shift-space = space and control_L-space = Return
-xmodmap -e "keycode 65 = space space Return"
+#xmodmap -e "keycode 65 = space space Return"
 
 # --------------
 
