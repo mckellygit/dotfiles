@@ -16,7 +16,8 @@
 *pointerColorBackground:S_base01
 *pointerColorForeground:S_base1
 
-#define S_yellow        #b58900
+!! #define S_yellow        #b58900
+#define S_yellow        #ffe205
 #define S_orange        #cb4b16
 #define S_red           #dc322f
 #define S_magenta       #d33682
@@ -160,7 +161,9 @@ URxvt.boldFont: xft:DejaVu Sans Mono:pixelsize=21:weight=bold
 URxvt.letterSpace: 0
 URxvt.lineSpace: 0
 URxvt.geometry: 168x48+800+850
-URxvt.internalBorder: 24
+URxvt*externalBorder: 1
+URxvt.internalBorder: 6
+URxvt.borderColor: #262626
 URxvt.cursorBlink: true
 URxvt.cursorUnderline: false
 URxvt.saveline: 2048
@@ -213,8 +216,17 @@ URxvt.keysym.Shift-Control-C: eval:selection_to_clipboard
 URxvt.keysym.Control-Meta-c: builtin-string:
 URxvt.keysym.Control-Meta-v: builtin-string:
 
+URxvt.keysym.Control-minus:   resize-font:smaller
+URxvt.keysym.Control-plus:    resize-font:bigger
+
 !! ==========================================
 !! ==========================================
+
+!! disable scrollback buffer for alternate screen
+!! thus shift+up etc. does not scroll ...
+URxvt.secondaryScreen: 1
+URxvt.secondaryScroll: 0
+URxvt.secondaryWheel:  1
 
 !!no command ...
 !!URxvt.keysym.C-BackSpace: command:\000
