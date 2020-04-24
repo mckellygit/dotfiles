@@ -287,9 +287,16 @@ URxvt.keysym.Control-plus:    resize-font:bigger
 
 !! disable scrollback buffer for alternate screen
 !! thus shift+up etc. does not scroll ...
-URxvt.secondaryScreen: 1
-URxvt.secondaryScroll: 0
-URxvt.secondaryWheel:  1
+URxvt.secondaryScreen: false
+URxvt.secondaryScroll: false
+URxvt.secondaryWheel:  false
+
+! do not scroll with output
+URxvt.scrollTtyOutput: false
+! scroll in relation to buffer (with mouse scroll or Shift+Page Up)
+URxvt.scrollWithBuffer: true
+! scroll back to the bottom on keypress
+URxvt.scrollTtyKeypress: true
 
 !!no command ...
 !!URxvt.keysym.C-BackSpace: command:\000
