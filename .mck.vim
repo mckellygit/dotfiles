@@ -1406,7 +1406,7 @@ set mouse=a
 "       parcellite/diodon/clipit/copyq etc. could sync
 "set clipboard^=unnamed
 "set clipboard^=unnamedplus
-set clipboard^=unnamed
+set clipboard^=unnamedplus
 " ------------------------------
 " NOTE: removing autoselect means visual selection is not automatically copied to unnamed clipboard (*)
 "       also removing autoselectml makes things fail weirdly
@@ -1598,8 +1598,8 @@ vnoremap <expr> <DEL> (&buftype == 'terminal') ? '<C-\><C-n>:echo "readonly buff
 
 " TODO: should we add `] or `[ at end of cmd to place cursor after paste ...
 " NOTE: ok, but not for block-mode ...
-nnoremap <expr> p (@z ==# 'V') ? 'A<CR><Esc>p_' : (@z ==# 'l') ? 'A<CR><Esc>p_' : (@z == "\<C-v>") ? 'p' : 'p`]'
-nnoremap <expr> P (@z ==# 'V') ? 'kA<CR><Esc>P_' : (@z ==# 'l') ? 'kA<CR><Esc>P_' : (@z == "\<C-v>") ? 'P' : 'P`['
+nnoremap <expr> p (getregtype("*") ==# 'V') ? 'A<CR><Esc>p_' : (getregtype("*") ==# 'v') ? 'p`]' : (getregtype("*") =~ "\<C-v>") ? 'p' : 'p`]'
+nnoremap <expr> P (getregtype("*") ==# 'V') ? 'kA<CR><Esc>P_' : (getregtype("*") ==# 'v') ? 'P`[' : (getregtype("*") =~ "\<C-v>") ? 'P' : 'P`['
 
 " TODO: should we go back to live terminal mode ?
 nnoremap yy yy:let @z='V' <bar> :let @* = substitute(@*, "\\n\\+$", "", "") <bar> :let @x=@y <bar> :let @y=@*<CR>
@@ -1961,8 +1961,8 @@ inoremap <expr> <A-4-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<ba
 
 " YankIt() now leaves cursor at end position ...
 "vnoremap <expr> <A-LeftRelease> (@i=="1") ? '<LeftRelease><C-\><C-n>:let @i="0"<bar>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR><Esc>i' : '<LeftRelease><C-\><C-n>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR>'
-vnoremap <expr> <A-LeftRelease> (@i=="1") ? '<LeftRelease><C-\><C-n>:let @i="0"<bar>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<CR><Esc>i' : '<LeftRelease><C-\><C-n>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<CR>'
-"vnoremap <expr> <A-LeftRelease> (@i=="1") ? '<LeftRelease><C-\><C-n>:let @i="0"<bar>:call YankIt("*y", 2)<CR><Esc>i' : '<LeftRelease><C-\><C-n>:call YankIt("*y", 2)<CR>'
+"vnoremap <expr> <A-LeftRelease> (@i=="1") ? '<LeftRelease><C-\><C-n>:let @i="0"<bar>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<CR><Esc>i' : '<LeftRelease><C-\><C-n>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<CR>'
+vnoremap <expr> <A-LeftRelease> (@i=="1") ? '<LeftRelease><C-\><C-n>:let @i="0"<bar>:call YankIt("*y", 2)<CR><Esc>i' : '<LeftRelease><C-\><C-n>:call YankIt("*y", 2)<CR>'
 
 inoremap <A-LeftMouse> <C-\><C-o>:let @i="1"<CR><LeftMouse>
 
