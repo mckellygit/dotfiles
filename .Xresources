@@ -169,18 +169,18 @@
 
 ! black
  *color0:      #000000
-! maroon
- *color1:      #800000
+! maroon #800000
+ *color1:      #b22222
 ! green
  *color2:      #008000
-! olive
- *color3:      #808000
+! olive #808000
+ *color3:      #999900
 ! navy
  *color4:      #0066ff
-! purple
- *color5:      #800080
-! teal
- *color6:      #008080
+! purple #800080
+ *color5:      #ba55d3
+! cyan/teal #008080
+ *color6:      #009999
 ! silver
  *color7:      #c7c7c7
 ! grey
@@ -190,7 +190,7 @@
 ! lime #00ff00
  *color10:     #00d700
 ! yellow #ffff00
- *color11:     #afd700
+ *color11:     #ffd700
 ! blue #0000ff
  *color12:     #5f87d7
 ! fuchsia #ff00ff
