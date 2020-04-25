@@ -1474,6 +1474,8 @@ nnoremap <silent> <Leader>lr :<C-U>call ForceLoadNammedReg()<CR>
 nnoremap <silent> <Leader>sr :let @y=@* <bar> :let @*=@x <bar> :let @x=@y <bar> echohl DiffText <bar> echo "--- registers swapped ---" <bar> echohl None <bar> sleep 551m <bar> redraw! <CR>
 " ----------------------
 
+" ----------- yank / cut / paste -----------
+
 function! YankIt(cmd, arg) abort
     if a:arg >= 1
         let offset = line(".") - line ("w0")
@@ -1543,69 +1545,15 @@ endfunction
 " example of nested conditionals from :h expr1
 "     lnum == 1 ? "top" : lnum == 1000 ? "last" : lnum
 
-"vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"*ygv<Esc>i' : '"*ygv<Esc>'
-"vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<bar>:let @*=@a<CR> <bar> gv<Esc>i' : '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<bar>:let @*=@a<CR> <bar> gv<Esc>'
-"vnoremap <silent> <expr> <C-c> ("vcl" =~ getregtype("*")) ? '"*ygv<Esc>:let @z=getregtype("*")<bar>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*ygv<Esc>:let @z=getregtype("*")<CR>' <bar> (&buftype == 'terminal') ? 'i' : ''
-
-"vnoremap <silent> <expr> <C-c> ("vcl" =~ getregtype("*")) ? '"*y<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*y<Esc>:let @z=getregtype("*")<CR>' <bar> :let @x=@y <bar> :let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
-vnoremap <C-c> <C-\><C-n>:<C-U>call YankIt("*y", 1)<CR>
-
-"vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"*ygv<Esc>i' : '"*ygv<Esc>'
-"vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<bar>:let @*=@a<CR> <bar> gv<Esc>i' : '"ay <bar> :<C-U>call system("xsel -i --rmlastnl --sc 0 -p", @a)<bar>:let @*=@a<CR> <bar> gv<Esc>'
-"vnoremap <silent> <expr> y     ("vcl" =~ getregtype("*")) ? '"*ygv<Esc>:let @z=getregtype("*")<bar>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*ygv<Esc>:let @z=getregtype("*")<CR>' <bar> (&buftype == 'terminal') ? 'i' : ''
-
-"vnoremap <silent> <expr> y     ("vcl" =~ getregtype("*")) ? '"*y<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*y<Esc>:let @z=getregtype("*")<CR>' <bar> :let @x=@y <bar> :let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
-vnoremap y     <C-\><C-n>:<C-U>call YankIt("*y", 1)<CR>
+" copy (yank) selection
+vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"*ygv<Esc>i' : '"*ygv<Esc>'
+vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"*ygv<Esc>i' : '"*ygv<Esc>'
 
 " cut selection
 "vnoremap <silent> <C-x> "*d<LeftRelease>
-"vnoremap <silent> <C-x> "*d
-" if X11 Forwarding is not on/allowed then perhaps vim copy to + and * does not work over ssh ?
-"vnoremap <silent> <C-x> ""d <Bar> :<C-u>call system("xsel -i -b -t 5000", @")<CR>
-" should we use " or + or * reg ? And what with clipboard setting ?
+vnoremap <silent> <C-x> "*d
 
-" do the same for x, d, <C-x> cut/del selection ...
-"vnoremap <silent> <C-x> "*d
-"vnoremap <silent> <expr> x     ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*")<bar>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>'
-"vnoremap <silent> <expr> <C-x> ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*")<bar>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>'
-"vnoremap <silent> <expr> d     ("vcl" =~ getregtype("*")) ? '"*d<Esc>:let @z=getregtype("*")<bar>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*d<Esc>:let @z=getregtype("*")<CR>'
-"vnoremap <silent> <expr> <DEL> ("vcl" =~ getregtype("*")) ? '"*d<Esc>:let @z=getregtype("*")<bar>:let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*d<Esc>:let @z=getregtype("*")<CR>'
-
-"vnoremap <silent> <expr> x     ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>' <bar> :let @x=@y <bar> :let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
-"vnoremap <silent> <expr> <C-x> ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z"=getregtype("*")<CR>' <bar> :let @x=@y <bar> :let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
-"vnoremap <silent> <expr> d     ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>' <bar> :let @x=@y <bar> :let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
-"vnoremap <silent> <expr> <DEL> ("vcl" =~ getregtype("*")) ? '"*x<Esc>:let @z=getregtype("*") <bar> :let @* = substitute(@*, "\\n\\+$", "", "")<CR>' : '"*x<Esc>:let @z=getregtype("*")<CR>' <bar> :let @x=@y <bar> :let @y=@* <bar> (&buftype == 'terminal') ? 'i' : ''
-
-" x/d places cut selection in clipboard
-
-" NOTE: these dont work with . (dot) for repeat ...
-"vnoremap <silent> x     :<C-U>call CutIt("*x")<CR>
-"vnoremap <silent> <C-x> :<C-U>call CutIt("*x")<CR>
-" NOTE: d is same as x here ...
-"vnoremap <silent> d     :<C-U>call CutIt("*d")<CR>
-" NOTE: D and <DEL> do not copy deleted selection to clipboard
-"vnoremap <silent> D     :<C-U>call CutIt("dd")<CR>
-"vnoremap <silent> <DEL> :<C-U>call CutIt("dd")<CR>
-
-" NOTE: x into * reg
-vnoremap <expr> x     (&buftype == 'terminal') ? '<C-\><C-n>:echo "readonly buffer ..." <bar> :sleep 551m <bar> redraw! <CR>' : ("V" ==# mode()) ? '"*x:let @z=visualmode() <bar> :let @* = substitute(@*, "\\n\\+$", "", "") <bar> :let @x=@y <bar> :let @y=@* <CR>' : '"*x:let @z=visualmode() <bar> :let @x=@y <bar> :let @y=@* <CR>'
-vnoremap <expr> <C-x> (&buftype == 'terminal') ? '<C-\><C-n>:echo "readonly buffer ..." <bar> :sleep 551m <bar> redraw! <CR>' : ("V" ==# mode()) ? '"*x:let @z=visualmode() <bar> :let @* = substitute(@*, "\\n\\+$", "", "") <bar> :let @x=@y <bar> :let @y=@* <CR>' : '"*x:let @z=visualmode() <bar> :let @x=@y <bar> :let @y=@* <CR>'
-" NOTE: use d instead of x but still into * reg
-vnoremap <expr> d     (&buftype == 'terminal') ? '<C-\><C-n>:echo "readonly buffer ..." <bar> :sleep 551m <bar> redraw! <CR>' : ("V" ==# mode()) ? '"*d:let @z=visualmode() <bar> :let @* = substitute(@*, "\\n\\+$", "", "") <bar> :let @x=@y <bar> :let @y=@* <CR>' : '"*d:let @z=visualmode() <bar> :let @x=@y <bar> :let @y=@* <CR>'
-" NOTE: D and <DEL> do not copy deleted selection to clipboard, use d reg
-vnoremap <expr> D     (&buftype == 'terminal') ? '<C-\><C-n>:echo "readonly buffer ..." <bar> :sleep 551m <bar> redraw! <CR>' : ("V" ==# mode()) ? '"dd:let @z=visualmode() <bar> :let @* = substitute(@*, "\\n\\+$", "", "") <bar> :let @x=@y <bar> :let @y=@* <CR>' : '"dd:let @z=visualmode() <bar> :let @x=@y <bar> :let @y=@* <CR>'
-vnoremap <expr> <DEL> (&buftype == 'terminal') ? '<C-\><C-n>:echo "readonly buffer ..." <bar> :sleep 551m <bar> redraw! <CR>' : ("V" ==# mode()) ? '"dd:let @z=visualmode() <bar> :let @* = substitute(@*, "\\n\\+$", "", "") <bar> :let @x=@y <bar> :let @y=@* <CR>' : '"dd:let @z=visualmode() <bar> :let @x=@y <bar> :let @y=@* <CR>'
-
-" TODO: should we add `] or `[ at end of cmd to place cursor after paste ...
-" NOTE: ok, but not for block-mode ...
-nnoremap <expr> p (getregtype("*") ==# 'V') ? 'A<CR><Esc>p_' : (getregtype("*") ==# 'v') ? 'p`]' : (getregtype("*") =~ "\<C-v>") ? 'p' : 'p`]'
-nnoremap <expr> P (getregtype("*") ==# 'V') ? 'kA<CR><Esc>P_' : (getregtype("*") ==# 'v') ? 'P`[' : (getregtype("*") =~ "\<C-v>") ? 'P' : 'P`['
-
-" TODO: should we go back to live terminal mode ?
-nnoremap yy yy:let @z='V' <bar> :let @* = substitute(@*, "\\n\\+$", "", "") <bar> :let @x=@y <bar> :let @y=@*<CR>
-nnoremap dd dd:let @z='V' <bar> :let @* = substitute(@*, "\\n\\+$", "", "") <bar> :let @x=@y <bar> :let @y=@*<CR>
-
-" ----------- yank / cut / paste -----------
+" ---------------
 
 " <C-v> to toggle block-mode instead of on or cancel visual-mode
 " simple and almost there -
@@ -1744,6 +1692,8 @@ endfunction
 "nmap <silent> <buffer> p :call MyPasteNoJump()<CR>
 vmap <buffer> p <C-\><C-n>p
 
+" ---------------
+
 " set paste mode, paste, set nopaste mode
 function! WrapForTmux(s)
   if !exists('$TMUX')
@@ -1771,40 +1721,31 @@ endfunction
 
 inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
 
+" ------------------------------
+
 " mouse paste
 
-" ------------------------------
-
-" NOTE: tmux could always paste and then we dont need these
-"       but then do we loose the C/A- mapping differences ?
-
-nnoremap <RightMouse> "*p
-vnoremap <RightMouse> "*p
-inoremap <RightMouse> <C-o>"*p
-cnoremap <RightMouse> <C-r>*
-tnoremap <RightMouse> <C-w>"*
-
-nnoremap <2-RightMouse> "*p
-vnoremap <2-RightMouse> "*p
-inoremap <2-RightMouse> <C-o>"*p
-cnoremap <2-RightMouse> <C-r>*
-tnoremap <2-RightMouse> <C-w>"*
-
-nnoremap <3-RightMouse> "*p
-vnoremap <3-RightMouse> "*p
-inoremap <3-RightMouse> <C-o>"*p
-cnoremap <3-RightMouse> <C-r>*
-tnoremap <3-RightMouse> <C-w>"*
-
-nnoremap <4-RightMouse> "*p
-vnoremap <4-RightMouse> "*p
-inoremap <4-RightMouse> <C-o>"*p
-cnoremap <4-RightMouse> <C-r>*
-tnoremap <4-RightMouse> <C-w>"*
-
-" ------------------------------
-
 " could add `[ to go back to orig col ...
+
+" ---- if want vim menu ----
+
+nnoremap <RightMouse> :echo "Mouse 3 button"<CR>
+vnoremap <RightMouse> <C-\><C-n>:echo "Mouse 3 button"<CR>gv
+inoremap <RightMouse> <C-\><C-o>:echo "Mouse 3 button"<CR>
+
+nnoremap <2-RightMouse> <Nop>
+vnoremap <2-RightMouse> <Nop>
+inoremap <3-RightMouse> <Nop>
+
+nnoremap <3-RightMouse> <Nop>
+vnoremap <3-RightMouse> <Nop>
+inoremap <3-RightMouse> <Nop>
+
+nnoremap <4-RightMouse> <Nop>
+vnoremap <4-RightMouse> <Nop>
+inoremap <4-RightMouse> <Nop>
+
+" --------------------------
 
 nnoremap <C-RightMouse> "*P
 vnoremap <C-RightMouse> "*P
@@ -1879,8 +1820,8 @@ vnoremap <3-LeftMouse> <Esc>mvviWygv
 " TODO: 3-click in insert mode is handled in vmode with @i==2
 
 " QuadrupleClick too confusing
-nnoremap <4-LeftMouse> mvV<C-\><C-n>:call YankIt("*y",1)<CR>gv
-vnoremap <4-LeftMouse> <Esc>mvV<C-\><C-n>:call YankIt("*y",1)<CR>gv
+nnoremap <4-LeftMouse> mvVygv
+vnoremap <4-LeftMouse> <Esc>mvVygv
 inoremap <4-LeftMouse> <Nop>
 
 " change C-LeftMouse searching tags file for symbol under cursor
@@ -1893,9 +1834,9 @@ nnoremap <C-LeftMouse> <LeftMouse>
 vnoremap <C-LeftMouse> <LeftMouse>
 inoremap <C-LeftMouse> <LeftMouse>
 
-nnoremap <C-2-LeftMouse> <LeftMouse>:call GetWord2(1)<CR>
-vnoremap <C-2-LeftMouse> <LeftMouse><C-\><C-n>:call GetWord2(1)<CR>
-inoremap <C-2-LeftMouse> <LeftMouse><C-\><C-o>:call GetWord2(1)<CR>
+nnoremap <C-2-LeftMouse> mvVygv
+vnoremap <C-2-LeftMouse> <Esc>mvVygv
+inoremap <C-2-LeftMouse> <C-\><C-o>:let @i="2"<CR><C-\><C-o>:call GetWord2(1)<CR>
 
 " if visual selection is only one line then auto yank it ...
 function YankIfOnlyOneLine()
@@ -2011,30 +1952,30 @@ vnoremap <silent> <Leader>yw <C-\><C-n>mvviwygv
 nnoremap <silent> <Leader>* :set hlsearch<CR>*
 nnoremap <silent> <Leader># :set hlsearch<CR>#
 
-nnoremap <silent> <Leader>wf viw"sy:set hlsearch<bar>/<C-r>s<CR>
-nnoremap <silent> <Leader>wF viw"sy:set hlsearch<bar>?<C-r>s<CR>
+nnoremap <silent> <Leader>wf viw"sy:set hlsearch<CR>/<C-r>s<CR>
+nnoremap <silent> <Leader>wF viw"sy:set hlsearch<CR>?<C-r>s<CR>
 
 " search for word under curor (copying selection to clipboard)
 " NOTE: *, # search for whole \<word\> which may not always be desired
 "nnoremap <silent> <Leader>wg viwy:set hlsearch<CR>*
 "nnoremap <silent> <Leader>wG viwy:set hlsearch<CR>#
-nnoremap <silent> <Leader>wg viwy:set hlsearch<bar>/<C-r>*<CR>
-nnoremap <silent> <Leader>wG viwy:set hlsearch<bar>?<C-r>*<CR>
+nnoremap <silent> <Leader>wg viwy:set hlsearch<CR>/<C-r>*<CR>
+nnoremap <silent> <Leader>wG viwy:set hlsearch<CR>?<C-r>*<CR>
 " -----------------------------------------------------
 
 " search for visual selection
 " if register is regex with literal metachars then :let @/=escape(@", '.*\\$^')
 "vnoremap <silent> <Leader>wf y <Bar> <Esc>:let @/=@"<CR> <Bar> 2n
 " (without copying selection to clipboard)
-vnoremap <silent> <Leader>wf "sy<C-\><C-n>:set hlsearch<bar>/<C-r>s<CR>
-vnoremap <silent> <Leader>wF "sy<C-\><C-n>:set hlsearch<bar>?<C-r>s<CR>
+vnoremap <silent> <Leader>wf "sy<C-\><C-n>:set hlsearch<CR>/<C-r>s<CR>
+vnoremap <silent> <Leader>wF "sy<C-\><C-n>:set hlsearch<CR>?<C-r>s<CR>
 " to match normal mode (copying selection to clipboard)
-vnoremap <silent> <Leader>wg y<C-\><C-n>:set hlsearch<bar>/<C-r>*<CR>
-vnoremap <silent> <Leader>wG y<C-\><C-n>:set hlsearch<bar>?<C-r>*<CR>
+vnoremap <silent> <Leader>wg y<C-\><C-n>:set hlsearch<CR>/<C-r>*<CR>
+vnoremap <silent> <Leader>wG y<C-\><C-n>:set hlsearch<CR>?<C-r>*<CR>
 
 " and the *, # (without copying selection to clipboard)
-vnoremap <silent> * "sy<C-\><C-n>:set hlsearch<bar>/<C-r>s<CR>
-vnoremap <silent> # "sy<C-\><C-n>:set hlsearch<bar>?<C-r>s<CR>
+vnoremap <silent> * "sy<C-\><C-n>:set hlsearch<CR>/<C-r>s<CR>
+vnoremap <silent> # "sy<C-\><C-n>:set hlsearch<CR>?<C-r>s<CR>
 
 " dont replace clipboard selection with deleted char (x,X)
 nnoremap x "_x
@@ -2414,10 +2355,8 @@ endfunction
 
 nnoremap <silent> <expr> <C-D> (line('.') == line('w0')) ? 'M' : '<C-D>'
 vnoremap <silent> <expr> <C-D> (line('.') == line('w0')) ? 'M' : '<C-D>'
-inoremap <silent> <expr> <C-D> pumvisible() ? '<C-D>' : '<C-\><C-o>:call <SID>Saving_scrollV("<C-V><C-D>")<CR>'
 nnoremap <silent> <expr> <C-U> (line('.') == line('w$')) ? 'M' : '<C-U>'
 vnoremap <silent> <expr> <C-U> (line('.') == line('w$')) ? 'M' : '<C-U>'
-inoremap <silent> <expr> <C-U> pumvisible() ? '<C-U>' : '<C-\><C-o>:call <SID>Saving_scrollV("<C-V><C-U>")<CR>'
 
 " ---------
 
@@ -2455,13 +2394,9 @@ inoremap <expr> <End>  pumvisible() ? '<End>'  : '<C-\><C-o>g<End>'
 " ---------
 
 "call NoremapNormalCmd("<C-j>",    0, "1<C-D>")
-"nnoremap <silent> <C-j>     :call <SID>Saving_scrollV("1<C-V><C-D>")<CR>
-"nnoremap <silent> <C-Down>  :call <SID>Saving_scrollV("1<C-V><C-D>")<CR>
 nnoremap <expr> <C-Down> ((line('$') - line('w$')) < 1) ? 'j' : '<C-e>j'
 nnoremap <expr> <C-j>    ((line('$') - line('w$')) < 1) ? 'j' : '<C-e>j'
 
-"vnoremap <silent>        <C-j>    <C-\><C-n>:call <SID>Saving_scrollV("gv1<C-V><C-D>")<CR>
-"vnoremap <silent>        <C-Down> <C-\><C-n>:call <SID>Saving_scrollV("gv1<C-V><C-D>")<CR>
 vnoremap <expr> <C-Down> ((line('$') - line('w$')) < 1) ? 'j' : '<C-e>j'
 vnoremap <expr> <C-j>    ((line('$') - line('w$')) < 1) ? 'j' : '<C-e>j'
 
@@ -2469,13 +2404,9 @@ inoremap <silent> <expr> <C-j>     pumvisible() ? '<C-j>'    : '<C-\><C-o>:call 
 inoremap <silent> <expr> <C-Down>  pumvisible() ? '<C-Down>' : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-D>")<CR>'
 
 "call NoremapNormalCmd("<C-k>",    0, "1<C-U>")
-"nnoremap <silent> <C-k>     :call <SID>Saving_scrollV("1<C-V><C-U>")<CR>
-"nnoremap <silent> <C-Up>    :call <SID>Saving_scrollV("1<C-V><C-U>")<CR>
 nnoremap <C-Up> <C-y>k
 nnoremap <C-k>  <C-y>k
 
-"vnoremap <silent>        <C-k>    <C-\><C-n>:call <SID>Saving_scrollV("gv1<C-V><C-U>")<CR>
-"vnoremap <silent>        <C-Up>   <C-\><C-n>:call <SID>Saving_scrollV("gv1<C-V><C-U>")<CR>
 vnoremap <C-Up> <C-y>k
 vnoremap <C-k>  <C-y>k
 
@@ -2541,13 +2472,9 @@ function! MapScrollKeys()
 
   " TODO: could add same if at top then M logic to imap <C-f> ...
 
-  "nnoremap <silent> <C-f>                  :call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>
-  "vnoremap <silent> <C-f>        <C-\><C-n>:call <SID>Saving_scrollVDn1("gv<C-V><C-D>")<CR>
   noremap            <expr> <C-f> (line('.') == line('w0')) ? 'M' : '<C-D>'
   inoremap  <silent> <expr> <C-f> pumvisible() ? '<C-f>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
 
-  "nnoremap <silent> <C-b>                  :call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>
-  "vnoremap <silent> <C-b>        <C-\><C-n>:call <SID>Saving_scrollVUp1("gv<C-V><C-U>")<CR>
   noremap            <expr> <C-b> (line('.') == line('w$')) ? 'M' : '<C-U>'
   inoremap  <silent> <expr> <C-b> pumvisible() ? '<C-b>' : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
 
@@ -2593,7 +2520,7 @@ noremap <S-Up>    <Nop>
 noremap <S-Left>  <Nop>
 noremap <S-Right> <Nop>
 
-" X uses these to scroll
+" X might use these to scroll ...
 noremap <S-PageDown> <Nop>
 noremap <S-PageUp>   <Nop>
 
@@ -2629,200 +2556,6 @@ vnoremap <silent> <Leader>ct <C-\><C-n>:call <SID>GoToMID(1)<CR>
 " <C-/> (sends C-_) move current line to center of screen (not ideal with wrap and long lines)
 noremap <silent> <C-_> zz
 noremap <silent> <Leader>cz zz
-
-" ---------
-
-if 0 " disable old scroll functions
-
-function! s:GetNumScroll(num)
-  let num_rows = winheight(0)
-  let num_scroll = a:num
-  if (a:num == -1)
-    let num_scroll = (num_rows + 1) / 2
-  elseif (a:num == -2)
-    let num_scroll = num_rows
-  endif
-  if (num_scroll < 1)
-    let num_scroll = 1
-  endif
-  return num_scroll
-endfunction
-
-function! s:RtrnToOrig(before_scr_line, curr_mode)
-  keepjumps normal H
-  let delta = a:before_scr_line - winline()
-  while (delta != 0)
-    if (delta < 0)
-      let delta = winline() - a:before_scr_line
-      let iter = 1
-      while (iter <= delta)
-        execute "keepjumps normal" "gk"
-        let iter +=1
-      endwhile
-    elseif (delta > 0)
-      let iter = 1
-      while (iter <= delta)
-        execute "keepjumps normal" "gj"
-        let iter +=1
-      endwhile
-    endif
-    let delta = a:before_scr_line - winline()
-  endwhile
-endfunction
-
-function! s:scrollUP(num, curr_mode)
-  let num_scroll = <SID>GetNumScroll(a:num)
-  let num_rows = winheight(0)
-  " -------------
-  let before_scr_line = winline()
-  keepjumps normal L
-  let after_scr_line = winline()
-  let extra = num_rows - after_scr_line
-  let extra += num_scroll
-  " move by 1 to prevent over scrolling
-  let iter = 1
-  while (iter <= extra)
-    execute "keepjumps normal" "gj"
-    let iter +=1
-  endwhile
-  " -------------
-  call <SID>RtrnToOrig(before_scr_line, a:curr_mode)
-endfunction
-  
-function! s:scrollDN(num, curr_mode)
-  let num_scroll = <SID>GetNumScroll(a:num)
-  " -------------
-  let before_scr_line = winline()
-  keepjumps normal H
-  let after_scr_line = line(".")
-  execute "keepjumps normal" "gk"
-  let after_scr2_line = line(".")
-  " special case where gk doesnt move up one as expected
-  if ( (after_scr_line == after_scr2_line) && (after_scr_line > 1) )
-    execute "keepjumps normal" "gk"
-  endif
-  let extra = (num_scroll - 1)
-  let extra += (winline() - 1)
-  " move by 1 to prevent over scrolling
-  let iter = 1
-  while (iter <= extra)
-    execute "keepjumps normal" "gk"
-    let iter +=1
-  endwhile
-  " -------------
-  call <SID>RtrnToOrig(before_scr_line, a:curr_mode)
-endfunction
-
-"nnoremap <silent> <C-J>           :call <SID>scrollUP(1,0)<CR>
-"nnoremap <silent> <C-Down>        :call <SID>scrollUP(1,0)<CR>
-"vnoremap <silent> <C-J>      <Esc>:call <SID>scrollUP(1,1)<CR>
-"vnoremap <silent> <C-Down>   <Esc>:call <SID>scrollUP(1,1)<CR>
-
-"nnoremap <silent> <C-K>           :call <SID>scrollDN(1,0)<CR>
-"nnoremap <silent> <C-Up>          :call <SID>scrollDN(1,0)<CR>
-"vnoremap <silent> <C-K>      <Esc>:call <SID>scrollDN(1,1)<CR>
-"vnoremap <silent> <C-Up>     <Esc>:call <SID>scrollDN(1,1)<CR>
-
-"nnoremap <silent> <C-F>           :call <SID>scrollUP(-1,0)<CR>
-"vnoremap <silent> <C-F>      <Esc>:call <SID>scrollUP(-1,1)<CR>
-
-"nnoremap <silent> <C-B>           :call <SID>scrollDN(-1,0)<CR>
-"vnoremap <silent> <C-B>      <Esc>:call <SID>scrollDN(-1,1)<CR>
-
-"nnoremap <silent> <PageDown>      :call <SID>scrollUP(-2,0)<CR>
-"vnoremap <silent> <PageDown> <Esc>:call <SID>scrollUP(-2,1)<CR>
-"inoremap <silent> <PageDown> <C-\><C-o><PageDown>
-
-" C-PageDown
-
-"nnoremap <silent> <PageUp>        :call <SID>scrollDN(-2,0)<CR>
-"vnoremap <silent> <PageUp>   <Esc>:call <SID>scrollDN(-2,1)<CR>
-"inoremap <silent> <PageUp>   <C-\><C-o><PageUp>
-
-" C-PageUp
-
-" ---------
-
-" move and scroll
-"nnoremap <silent> <C-J>           :call <SID>Saving_scrollV("1<C-V><C-D>")<CR>
-"nnoremap <silent> <C-Down>        :call <SID>Saving_scrollV("1<C-V><C-D>")<CR>
-"vnoremap <silent> <C-J>      <Esc>:call <SID>Saving_scrollV("gv1<C-V><C-D>")<CR>
-"vnoremap <silent> <C-Down>   <Esc>:call <SID>Saving_scrollV("gv1<C-V><C-D>")<CR>
-
-"nnoremap <silent> <C-K>           :call <SID>Saving_scrollV("1<C-V><C-U>")<CR>
-"nnoremap <silent> <C-Up>          :call <SID>Saving_scrollV("1<C-V><C-U>")<CR>
-"vnoremap <silent> <C-K>      <Esc>:call <SID>Saving_scrollV("gv1<C-V><C-U>")<CR>
-"vnoremap <silent> <C-Up>     <Esc>:call <SID>Saving_scrollV("gv1<C-V><C-U>")<CR>
-
-"nnoremap <silent> <C-F>           :call <SID>Saving_scrollV("<C-V><C-D>")<CR>
-"vnoremap <silent> <C-F>      <Esc>:call <SID>Saving_scrollV("gv<C-V><C-D>")<CR>
-
-"nnoremap <silent> <C-B>           :call <SID>Saving_scrollV("<C-V><C-U>")<CR>
-"vnoremap <silent> <C-B>      <Esc>:call <SID>Saving_scrollV("gv<C-V><C-U>")<CR>
-
-"nnoremap <silent> <PageDown>      :call <SID>Saving_scrollV("<C-V><C-D>")<CR>
-"vnoremap <silent> <PageDown> <Esc>:call <SID>Saving_scrollV("gv<C-V><C-D>")<CR>
-
-" C-PageDown
-
-"nnoremap <silent> <PageUp>        :call <SID>Saving_scrollV("<C-V><C-U>")<CR>
-"vnoremap <silent> <PageUp>   <Esc>:call <SID>Saving_scrollV("gv<C-V><C-U>")<CR>
-
-" C-PageUp
-
-" ---------
-
-"noremap <C-j> @="1\<lt>C-D>"<bar>:set scroll=0<CR>
-"noremap <C-k> @="1\<lt>C-U>"<bar>:set scroll=0<CR>
-
-"noremap <PageUp>   39<C-U>:set scroll=0<CR>
-"noremap <PageDown> 39<C-D>:set scroll=0<CR>
-
-" ---------
-
-"" I couldn't find any get_num_of_vis_lines function, so I made my own.
-"function GetNumberOfVisibleLines()
-"  let cur_line = line(".")
-"  let cur_col = virtcol(".")
-"  keepjumps normal H
-"  let top_line = line(".")
-"  keepjumps normal L
-"  let bot_line = line(".")
-"  execute "keepjumps normal " . cur_line . "G"
-"  execute "keepjumps normal " . cur_col  . "|"
-"  return bot_line - top_line
-"endfunc
-"
-"function! MyPageUp()
-"  let visible_lines = GetNumberOfVisibleLines()
-"  execute "keepjumps normal " . visible_lines . "\<C-U>:set scroll=0\r"
-"endfunction
-"
-"function! MyPageDown()
-"  let visible_lines = GetNumberOfVisibleLines()
-"  execute "keepjumps normal " . visible_lines . "\<C-D>:set scroll=0\r"
-"endfunction
-"
-" BorlandPascal pageup/down behaviour!
-" todo: when hitting top/bottom of file, then restore Y to last Y
-"noremap <PageUp>   :call MyPageUp()<CR>
-"noremap <PageDown> :call MyPageDown()<CR>
-
-" ---------
-
-" mouse scroll not to go past end
-" noremap <silent> <ScrollWheelUp>   H5k
-" noremap <silent> <ScrollWheelDown> L5j
-"nnoremap <silent> <ScrollWheelUp>        :call <SID>scrollDN(5,0)<CR>
-"nnoremap <silent> <ScrollWheelDown>      :call <SID>scrollUP(5,0)<CR>
-"vnoremap <silent> <ScrollWheelUp>        :call <SID>scrollDN(5,1)<CR>
-"vnoremap <silent> <ScrollWheelDown>      :call <SID>scrollUP(5,1)<CR>
-"nnoremap <silent> <ScrollWheelUp>        :call <SID>Saving_scrollV("5<C-V><C-U>")<CR>
-"nnoremap <silent> <ScrollWheelDown>      :call <SID>Saving_scrollV("5<C-V><C-D>")<CR>
-"vnoremap <silent> <ScrollWheelUp>   <Esc>:call <SID>Saving_scrollV("gv5<C-V><C-U>")<CR>
-"vnoremap <silent> <ScrollWheelDown> <Esc>:call <SID>Saving_scrollV("gv5<C-V><C-D>")<CR>
-
-endif " disable old scroll functions
 
 " ------ scroll ------
 
@@ -3981,6 +3714,8 @@ if &diff
   cnoreabbrev <silent> <expr> exi (getcmdtype() == ':' && getcmdline() =~ '\s*exi\s*') ? 'cquit' : 'exi'
   cuna exit
   cnoreabbrev <silent> <expr> exit (getcmdtype() == ':' && getcmdline() =~ '\s*exit\s*') ? 'cquit' : 'exit'
+  nmap  <silent> <Leader>qq           :qa<CR>
+  vmap  <silent> <Leader>qq <C-\><C-n>:qa<CR>
   aug diff_alias
       au!
       au VimEnter * :Alias qa  cquit
@@ -4210,8 +3945,8 @@ vnoremap <silent> <Leader>tk <C-\><C-n>:tabonly<CR>
 "vnoremap <silent> <Leader>wc <C-\><C-n>:conf q<CR>
 nnoremap <silent> <Leader>wq           :conf q<CR>
 vnoremap <silent> <Leader>wq <C-\><C-n>:conf q<CR>
-nnoremap <silent> <Leader>qq           :conf q<CR>
-vnoremap <silent> <Leader>qq <C-\><C-n>:conf q<CR>
+nmap <silent> <Leader>qq           :conf q<CR>
+vmap <silent> <Leader>qq <C-\><C-n>:conf q<CR>
 " window keep current and close all others
 nnoremap <silent> <Leader>wk           :only<CR>
 vnoremap <silent> <Leader>wk <C-\><C-n>:only<CR>

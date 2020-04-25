@@ -1,6 +1,7 @@
-!! Colorscheme
 
 !! ==========================================
+
+!! colors ...
 
 !!#define S_base03        #002b36
 #define S_base03        #808080
@@ -210,12 +211,14 @@
 !! ==========================================
 !! ==========================================
 
+!! features ...
+
 URxvt*termName: rxvt-unicode-256color
 
-!URxvt.font:     xft:Liberation Mono:pixelsize=21
-!URxvt.boldFont: xft:Liberation Mono:pixelsize=21:weight=bold
-URxvt.font:     xft:DejaVu Sans Mono:pixelsize=21
-URxvt.boldFont: xft:DejaVu Sans Mono:pixelsize=21:weight=bold
+!URxvt.font:     xft:Liberation Mono:pixelsize=21:antialias=false
+!URxvt.boldFont: xft:Liberation Mono:pixelsize=21:weight=bold:antialias=false
+URxvt.font:     xft:DejaVu Sans Mono:pixelsize=21:antialias=true
+URxvt.boldFont: xft:DejaVu Sans Mono:pixelsize=21:weight=bold:antialias=true
 
 URxvt.letterSpace: 0
 URxvt.lineSpace: 0
@@ -235,6 +238,18 @@ URxvt.urgentOnBell: false
 !! gsettings set org.gnome.desktop.wm.preferences visual-bell false
 !! gsettings set org.gnome.desktop.wm.preferences audible-bell false
 
+!! disable scrollback buffer for alternate screen
+!! thus shift+up etc. does not scroll ...
+URxvt.secondaryScreen: false
+URxvt.secondaryScroll: false
+URxvt.secondaryWheel:  false
+
+! do not scroll with output
+URxvt.scrollTtyOutput: false
+! scroll in relation to buffer (with mouse scroll or Shift+Page Up)
+URxvt.scrollWithBuffer: true
+! scroll back to the bottom on keypress
+URxvt.scrollTtyKeypress: true
 *.foreground:  #ffd1b7
 !!*.background:  #2e2e26
 urxvt*depth: 32
@@ -244,6 +259,10 @@ urxvt*depth: 32
 URxvt.background: [96]#2e2e26
 !!urxvt*transparent: true
 !!urxvt*shading: 30
+
+!! ==========================================
+
+!! keybindings
 
 URxvt.keysym.Home:              \033[1~
 URxvt.keysym.End:               \033[4~
@@ -264,49 +283,36 @@ URxvt.keysym.C-BackSpace:       string:\033\177
 URxvt.keysym.C-Insert:          string:\033\061
 URxvt.keysym.C-S-BackSpace:     string:\033\062
 URxvt.keysym.C-equal:           string:\033\063
-URxvt.keysym.C-End:             string:\033\066
-URxvt.keysym.C-Home:            string:\033\065
 URxvt.keysym.C-S-space:         string:\033\064
+URxvt.keysym.C-Home:            string:\033\065
+URxvt.keysym.C-End:             string:\033\066
 
-!! ==========================================
+!! for tmux/vim ...
+URxvt.keysym.Shift-Control-C:   string:\033\067
+URxvt.keysym.Shift-Control-V:   string:\033\070
+URxvt.keysym.Shift-Control-X:   string:\033\071
 
-URxvt.copyCommand:   xsel -i -p --rmlastnl --sc 0
-URxvt.pasteCommand:  xsel -o -p --rmlastnl --sc 0
+!!URxvt.keysym.Shift-Control-V: eval:paste_clipboard
+!!URxvt.keysym.Shift-Control-C: eval:selection_to_clipboard
 
-URxvt.keysym.Shift-Control-V: eval:paste_clipboard
-URxvt.keysym.Shift-Control-C: eval:selection_to_clipboard
+URxvt.keysym.Control-Meta-c:    builtin-string:
+URxvt.keysym.Control-Meta-v:    builtin-string:
 
-URxvt.keysym.Control-Meta-c: builtin-string:
-URxvt.keysym.Control-Meta-v: builtin-string:
+URxvt.keysym.Control-minus:     resize-font:smaller
+URxvt.keysym.Control-plus:      resize-font:bigger
 
-URxvt.keysym.Control-minus:   resize-font:smaller
-URxvt.keysym.Control-plus:    resize-font:bigger
+!! no-op is command:\000
+URxvt.keysym.S-BackSpace:       command:\000
 
-!! ==========================================
-!! ==========================================
-
-!! disable scrollback buffer for alternate screen
-!! thus shift+up etc. does not scroll ...
-URxvt.secondaryScreen: false
-URxvt.secondaryScroll: false
-URxvt.secondaryWheel:  false
-
-! do not scroll with output
-URxvt.scrollTtyOutput: false
-! scroll in relation to buffer (with mouse scroll or Shift+Page Up)
-URxvt.scrollWithBuffer: true
-! scroll back to the bottom on keypress
-URxvt.scrollTtyKeypress: true
-
-!!no command ...
-!!URxvt.keysym.C-BackSpace: command:\000
-
-!! Common Keybinds for Navigations
 !!URxvt.keysym.Shift-Up: command:\033]720;1\007
 !!URxvt.keysym.Shift-Down: command:\033]721;1\007
 
-!! Perl extensions
-!!URxvt.perl-ext-common: default,matcher,font-size
+!! ==========================================
+!! ==========================================
+
+!! perl extensions, misc ...
+
+!!URxvt.perl-ext-common: default,matcher,font-size,selection-to-clipbaord
 !! Open urls in browser with Control-Click
 !!URxvt.urlLauncher: /usr/bin/firefox
 URxvt.matcher.button: C1
@@ -325,6 +331,9 @@ URxvt.perl-ext-common: default, matcher
 URxvt.urlLauncher: chrome
 URxvt.underlineURLs: true
 URxvt.urlButton: 1
+
+URxvt.copyCommand:   xsel -i -p --rmlastnl --sc 0
+URxvt.pasteCommand:  xsel -o -p --rmlastnl --sc 0
 
 URxvt.autocopy: false
 URxvt.copycmd:  xsel -ib

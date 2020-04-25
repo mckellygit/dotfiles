@@ -1,0 +1,17 @@
+#!/bin/bash
+
+list=$(ls -1d .[a-z]*/.git */.git 2>/dev/null | awk -F / '{print $1}')
+
+while read -r dir
+do
+  #echo "dir: $dir"
+  if [ -n "${dir}" ] ; then
+      cd ${dir} || continue
+      echo " "
+      pwd
+      git remote -v
+      git branch
+      cd ..
+  fi
+done <<< "$list"
+
