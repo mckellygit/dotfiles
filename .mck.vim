@@ -639,7 +639,7 @@ function! MylsClear(tid) abort
     call feedkeys("\<Esc>", "m")
 endfunction
 
-function! s:Mylspopup(arg) abort
+function! s:MylsPopup(arg) abort
     let g:blist = <SID>buflist(a:arg)
     if empty(g:blist)
         " shouldn't happen now that buflist always returns something ...
@@ -659,8 +659,8 @@ endfunction
 "\ })<CR>
 
 " native vim popup ls ...
-noremap <silent> <Leader>ls <C-\><C-n>:<C-u>call <SID>Mylspopup(0)<CR>
-noremap <silent> <Leader>lb <C-\><C-n>:<C-u>call <SID>Mylspopup(1)<CR>
+noremap <silent> <Leader>ls <C-\><C-n>:<C-u>call <SID>MylsPopup(0)<CR>
+noremap <silent> <Leader>lb <C-\><C-n>:<C-u>call <SID>MylsPopup(1)<CR>
 
 " hide buffer
 noremap <silent> <Leader>hb <C-\><C-n>:hide<CR>
@@ -791,7 +791,7 @@ autocmd FileType GV setlocal cursorline
 " M/A-DoubleClick to open (o) commit ...
 autocmd FileType GV nmap <buffer> <A-LeftRelease> <Nop>
 autocmd FileType GV nmap <buffer> <A-2-LeftRelease> <Nop>
-autocmd FileType GV nmap <buffer> <A-2-LeftMouse> <C-\><C-n>:<C-u>sleep 351m<bar>:call feedkeys("O")<CR>
+autocmd FileType GV nmap <buffer> <A-2-LeftMouse> <C-\><C-n>:<C-u>call feedkeys("O")<CR>
 " M/A-q to quit like q, but M/A-q is used by Unity/Gnome
 
 " start with folds open
@@ -1083,7 +1083,7 @@ let g:vimade.enablefocusfading = 1
 "
 " local alternative is to disable vimade in window -
 
-function! MyVimadeWinDisable()
+function! s:MyVimadeWinDisable()
     if exists('g:vimade_init') && exists('g:vimade_running')
         if g:vimade_running == 1
             if !exists('g:vimade_disabled')
@@ -1094,7 +1094,7 @@ function! MyVimadeWinDisable()
         endif
     endif
 endfunction
-function! MyVimadeWinEnable()
+function! s:MyVimadeWinEnable()
     if exists('g:vimade_init') && exists('g:vimade_running')
         if g:vimade_running == 1
             if !exists('g:vimade_disabled')
@@ -1105,8 +1105,8 @@ function! MyVimadeWinEnable()
         endif
     endif
 endfunction
-au! CompleteChanged * call MyVimadeWinDisable()
-au! CompleteDone    * call MyVimadeWinEnable()
+au! CompleteChanged * call <SID>MyVimadeWinDisable()
+au! CompleteDone    * call <SID>MyVimadeWinEnable()
 " vimade -----------
 
 " vim-man ----------
@@ -1175,7 +1175,7 @@ noremap <silent> <Esc>5 gg
 noremap <silent> <Esc>6 G
 
 " toggle line wrap
-nnoremap <silent> <Leader>lw :set nowrap! nowrap?<bar>:redraw!<CR>
+nnoremap <silent> <Leader>lw :set nowrap! nowrap?<CR>
 
 " show registers (x is next on stack)
 nnoremap <silent> <Leader>rg :reg *,x<CR>
@@ -1190,17 +1190,12 @@ nnoremap <silent> <Leader>rg :reg *,x<CR>
 " E486: Pattern not found: <search-exp>
 " catch /^Vim\%((\a\+)\)\=:E385/
 
-" search direction
-" NOTE: make n ALWAYS forward and N ALWAYS backward ...
-vnoremap <silent> n /<CR>
-vnoremap <silent> N ?<CR>
-
 " hack to pause a little on search wraps ...
+" causes too many redraws
 
-nnoremap <buffer> <silent> n :call Searchn()<CR>
-nnoremap <buffer> <silent> N :call SearchN()<CR>
-
-function Searchn() abort
+"nnoremap <buffer> <silent> n :call <SID>Searchn()<CR>
+"nnoremap <buffer> <silent> N :call <SID>SearchN()<CR>
+function s:Searchn() abort
   let l:stext=@/
   if (len(l:stext) == 0)
     return
@@ -1251,11 +1246,11 @@ function Searchn() abort
       sleep 200m
     endtry
   endtry
-  nnoremap <buffer> <silent> n :call Searchn()<CR>
+  nnoremap <buffer> <silent> n :call <SID>Searchn()<CR>
   set ws
 endfunction
 
-function SearchN() abort
+function s:SearchN() abort
   let l:stext=@/
   if (len(l:stext) == 0)
     return
@@ -1306,12 +1301,12 @@ function SearchN() abort
       sleep 200m
     endtry
   endtry
-  nnoremap <buffer> <silent> N :call SearchN()<CR>
+  nnoremap <buffer> <silent> N :call <SID>SearchN()<CR>
   set ws
 endfunction
 
-" get paste confirmation on < 3 lines ...
-set report=1
+" turn off all nnn lines yanked ... messages
+set report=99999999
 
 "set keymodel=startsel
 
@@ -1406,6 +1401,7 @@ set mouse=a
 "       parcellite/diodon/clipit/copyq etc. could sync
 "set clipboard^=unnamed
 "set clipboard^=unnamedplus
+set clipboard^=unnamed
 set clipboard^=unnamedplus
 " ------------------------------
 " NOTE: removing autoselect means visual selection is not automatically copied to unnamed clipboard (*)
@@ -1476,7 +1472,7 @@ nnoremap <silent> <Leader>sr :let @y=@* <bar> :let @*=@x <bar> :let @x=@y <bar> 
 
 " ----------- yank / cut / paste -----------
 
-function! YankIt(cmd, arg) abort
+function! s:YankIt(cmd, arg) abort
     if a:arg >= 1
         let offset = line(".") - line ("w0")
         exe "silent! normal! mtgv\"" . a:cmd . "\<Esc>"
@@ -1523,7 +1519,7 @@ function! YankIt(cmd, arg) abort
     endif
 endfunction
 
-function! CutIt(cmd) abort
+function! s:CutIt(cmd) abort
     if &buftype == "terminal"
         " cannot cut from readonly buffer ...
         exe "silent! normal! gv\""
@@ -1545,9 +1541,16 @@ endfunction
 " example of nested conditionals from :h expr1
 "     lnum == 1 ? "top" : lnum == 1000 ? "last" : lnum
 
-" copy (yank) selection
-vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"*ygv<Esc>i' : '"*ygv<Esc>'
-vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"*ygv<Esc>i' : '"*ygv<Esc>'
+" copy (yank) selection, stay at end unless rectangular region ...
+vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? 'mv"*y`vi' : (mode() =~ '\<C-v>') ? '"*y' : 'mv"*y`v'
+vnoremap <silent> <expr> y     (&buftype == 'terminal') ? 'mv"*y`vi' : (mode() =~ '\<C-v>') ? '"*y' : 'mv"*y`v'
+
+" tmux maps <C-S-c> to M-7
+vnoremap <silent> <Esc>7 "*y
+" tmux maps <C-S-v> to M-7
+nnoremap <silent> <expr> <Esc>8 (&buftype == 'terminal') ? '<Nop>' : '"*p'
+" tmux maps <C-S-x> to M-7
+vnoremap <silent> <expr> <Esc>9 (&buftype == 'terminal') ? '<Nop>' : '"*d'
 
 " cut selection
 "vnoremap <silent> <C-x> "*d<LeftRelease>
@@ -1561,15 +1564,15 @@ vnoremap <silent> <C-x> "*d
 
 let w:vc = 'u'
 let w:vp = 'u'
-nnoremap <silent> <C-v> :<C-u>call MyVisCvN()<CR>
-function! MyVisCvN()
+nnoremap <silent> <C-v> :<C-u>call <SID>MyVisCvN()<CR>
+function! s:MyVisCvN()
     let w:vc = 'x'
     let w:vp = 'u'
     exe "silent! normal! \<C-v>"
 endfunction
 
-xnoremap <silent> <C-v> <C-\><C-n>:<C-u>call MyVisCv()<CR>
-function! MyVisCv()
+xnoremap <silent> <C-v> <C-\><C-n>:<C-u>call <SID>MyVisCv()<CR>
+function! s:MyVisCv()
     if w:vc ==# 'v'
         let w:vp = w:vc
         let w:vc = 'x'
@@ -1599,15 +1602,15 @@ function! MyVisCv()
     endif
 endfunction
 
-nnoremap <silent> v :<C-u>call MyVisV1N()<CR>
-function! MyVisV1N()
+nnoremap <silent> v :<C-u>call <SID>MyVisV1N()<CR>
+function! s:MyVisV1N()
     let w:vc = 'v'
     let w:vp = 'u'
     exe "silent! normal! v"
 endfunction
 
-xnoremap <silent> v <C-\><C-n>:<C-u>call MyVisV1()<CR>
-function! MyVisV1()
+xnoremap <silent> v <C-\><C-n>:<C-u>call <SID>MyVisV1()<CR>
+function! s:MyVisV1()
     if w:vc ==# 'v'
         " no-op
         exe "silent! normal! gv"
@@ -1618,15 +1621,15 @@ function! MyVisV1()
     endif
 endfunction
 
-nnoremap <silent> V :<C-u>call MyVisV2N()<CR>
-function! MyVisV2N()
+nnoremap <silent> V :<C-u>call <SID>MyVisV2N()<CR>
+function! s:MyVisV2N()
     let w:vc = 'V'
     let w:vp = 'u'
     exe "silent! normal! V"
 endfunction
 
-xnoremap <silent> V <C-\><C-n>:<C-u>call MyVisV2()<CR>
-function! MyVisV2()
+xnoremap <silent> V <C-\><C-n>:<C-u>call <SID>MyVisV2()<CR>
+function! s:MyVisV2()
     if w:vc ==# 'V'
         " no-op
         exe "silent! normal! gv"
@@ -1638,8 +1641,8 @@ function! MyVisV2()
 endfunction
 
 " q to exit visual-mode and clear previous w:v* states
-xnoremap <silent> q <C-\><C-n>:<C-u>call MyVisQ()<CR>
-function! MyVisQ()
+xnoremap <silent> q <C-\><C-n>:<C-u>call <SID>MyVisQ()<CR>
+function! s:MyVisQ()
     let w:vc = 'u'
     let w:vp = 'u'
     exe "silent! normal! gv" . "\<Esc>"
@@ -1729,9 +1732,43 @@ inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
 
 " ---- if want vim menu ----
 
-nnoremap <RightMouse> :echo "Mouse 3 button"<CR>
-vnoremap <RightMouse> <C-\><C-n>:echo "Mouse 3 button"<CR>gv
-inoremap <RightMouse> <C-\><C-o>:echo "Mouse 3 button"<CR>
+let g:list3b = []
+let g:timer3b = -1
+function! My3BFilter(id, key)
+    call timer_stop(g:timer3b)
+    if a:key == 'q' || a:key == 'x' || a:key == '\<Esc>' || a:key == '\<C-c>'
+        call popup_close(a:id, 0)
+        " return > 0 to not pass on to callback ...
+        return 1
+    endif
+    " TODO: add options to open in split, vsplit, tab, hide buffer etc.
+    " pass to generic filter
+    return popup_filter_menu(a:id, a:key)
+endfunction
+
+function! My3BCallback(id, indx) abort
+    if a:indx <= 0
+        return
+    endif
+    call <SID>bufopen(g:list3b[a:indx-1])
+endfunction
+
+function! My3BClear(tid) abort
+    call feedkeys("\<Esc>", "m")
+endfunction
+
+function! s:My3BPopup(arg) abort
+    let g:timer3b = timer_start(10000, 'My3BClear')
+    call popup_menu(g:list3b, #{ filter: 'My3BFilter', callback: 'My3BCallback' })
+endfunction
+
+"nnoremap <RightMouse> :call <SID>My3BPopup(0)<CR>
+"vnoremap <RightMouse> <C-\><C-n>:call <SID>My3BPopup(1)<CR>gv
+"inoremap <RightMouse> <C-\><C-o>:echo "Mouse 3 button"<CR>
+
+nnoremap <RightMouse> <Nop>
+vnoremap <RightMouse> <Nop>
+inoremap <RightMouse> <Nop>
 
 nnoremap <2-RightMouse> <Nop>
 vnoremap <2-RightMouse> <Nop>
@@ -1745,41 +1782,44 @@ nnoremap <4-RightMouse> <Nop>
 vnoremap <4-RightMouse> <Nop>
 inoremap <4-RightMouse> <Nop>
 
-" --------------------------
+" ---------------
 
-nnoremap <C-RightMouse> "*P
-vnoremap <C-RightMouse> "*P
-inoremap <C-RightMouse> <C-o>"*P
+" terminal might use Btn3
+nnoremap <C-RightMouse> <Nop>
+vnoremap <C-RightMouse> <Nop>
+inoremap <C-RightMouse> <Nop>
 
-nnoremap <C-2-RightMouse> "*P
-vnoremap <C-2-RightMouse> "*P
-inoremap <C-2-RightMouse> <C-o>"*P
+nnoremap <C-2-RightMouse> <Nop>
+vnoremap <C-2-RightMouse> <Nop>
+inoremap <C-2-RightMouse> <Nop>
 
-nnoremap <C-3-RightMouse> "*P
-vnoremap <C-3-RightMouse> "*P
-inoremap <C-3-RightMouse> <C-o>"*P
+nnoremap <C-3-RightMouse> <Nop>
+vnoremap <C-3-RightMouse> <Nop>
+inoremap <C-3-RightMouse> <Nop>
 
-nnoremap <C-4-RightMouse> "*P
-vnoremap <C-4-RightMouse> "*P
-inoremap <C-4-RightMouse> <C-o>"*P
-
-nnoremap <A-RightMouse> "*p`]li <Esc>
-vnoremap <A-RightMouse> "*p`]li <Esc>
-inoremap <A-RightMouse> <C-o>"*p 
-
-nnoremap <A-2-RightMouse> "*p`]li <Esc>
-vnoremap <A-2-RightMouse> "*p`]li <Esc>
-inoremap <A-2-RightMouse> <C-o>"*p 
-
-nnoremap <A-3-RightMouse> "*p`]li <Esc>
-vnoremap <A-3-RightMouse> "*p`]li <Esc>
-inoremap <A-3-RightMouse> <C-o>"*p 
-
-nnoremap <A-4-RightMouse> "*p`]li <Esc>
-vnoremap <A-4-RightMouse> "*p`]li <Esc>
-inoremap <A-4-RightMouse> <C-o>"*p 
+nnoremap <C-4-RightMouse> <Nop>
+vnoremap <C-4-RightMouse> <Nop>
+inoremap <C-4-RightMouse> <Nop>
 
 " ---------------
+
+nnoremap <A-RightMouse> "*p
+vnoremap <A-RightMouse> "*p
+inoremap <A-RightMouse> <C-o>"*p
+
+nnoremap <A-2-RightMouse> "*p
+vnoremap <A-2-RightMouse> "*p
+inoremap <A-2-RightMouse> <C-o>"*p
+
+nnoremap <A-3-RightMouse> "*p
+vnoremap <A-3-RightMouse> "*p
+inoremap <A-3-RightMouse> <C-o>"*p
+
+nnoremap <A-4-RightMouse> "*p
+vnoremap <A-4-RightMouse> "*p
+inoremap <A-4-RightMouse> <C-o>"*p
+
+" --------------------------
 
 " or when you release the mouse button ...
 ":noremap <silent> <LeftRelease> "+y<LeftRelease>
@@ -1806,7 +1846,7 @@ inoremap <C-LeftDrag> <LeftDrag>
 " DoubleClick for word (lbvhe)
 nnoremap <2-LeftMouse> mvviwygv
 vnoremap <2-LeftMouse> <Esc>mvviwygv
-inoremap <2-LeftMouse> <C-\><C-o>:let @i="2"<CR><C-\><C-o>:call GetWord(1)<CR>
+inoremap <2-LeftMouse> <C-\><C-o>:let @i="2"<CR><C-\><C-o>:call <SID>GetWord(1)<CR><Esc>
 
 " TripleClick for next larger entity, not whole line (lBvhE)
 "nnoremap <silent> <3-LeftMouse> mvviWygv
@@ -1836,14 +1876,14 @@ inoremap <C-LeftMouse> <LeftMouse>
 
 nnoremap <C-2-LeftMouse> mvVygv
 vnoremap <C-2-LeftMouse> <Esc>mvVygv
-inoremap <C-2-LeftMouse> <C-\><C-o>:let @i="2"<CR><C-\><C-o>:call GetWord2(1)<CR>
+inoremap <C-2-LeftMouse> <C-\><C-o>:let @i="2"<CR><C-\><C-o>:call <SID>GetWord2(1)<CR>
 
 " if visual selection is only one line then auto yank it ...
-function YankIfOnlyOneLine()
+function s:YankIfOnlyOneLine()
     let [line_start, column_start] = getpos("'<")[1:2]
     let [line_end, column_end] = getpos("'>")[1:2]
     if line_end == line_start
-        call YankIt("*y", 1)
+        call <SID>YankIt("*y", 1)
     endif
     if @k=="1"
         let @k="0"
@@ -1851,12 +1891,12 @@ function YankIfOnlyOneLine()
     endif
     execute 'normal! gv'
 endfunction
-vnoremap <LeftRelease> <LeftRelease><C-\><C-n>:call YankIfOnlyOneLine()<CR>
-inoremap <LeftMouse> <C-\><C-o>:let @k="1"<CR><LeftMouse>
+"vnoremap <LeftRelease> <LeftRelease><C-\><C-n>:call <SID>YankIfOnlyOneLine()<CR>
+"inoremap <LeftMouse> <C-\><C-o>:let @k="1"<CR><LeftMouse>
 
 " C-TripleClick for whole line
-nnoremap <C-3-LeftMouse> <LeftMouse>:call GetLine(1)<CR>
-vnoremap <C-3-LeftMouse> <LeftMouse><C-\><C-n>:call GetLine(1)<CR>
+nnoremap <C-3-LeftMouse> <LeftMouse>:call <SID>GetLine(1)<CR>
+vnoremap <C-3-LeftMouse> <LeftMouse><C-\><C-n>:call <SID>GetLine(1)<CR>
 " TODO: 3-click in insert mode is difficult
 "inoremap <silent> <C-3-LeftMouse> <LeftMouse><C-\><C-o>:call GetLine(1)<CR>
 
@@ -1872,10 +1912,21 @@ vnoremap <C-3-LeftMouse> <LeftMouse><C-\><C-n>:call GetLine(1)<CR>
 
 " NOTE: single click after double ...
 
-nnoremap <silent> <A-2-LeftMouse> <LeftMouse>:call GetWord(2)<CR>
+nnoremap <A-2-LeftMouse> mvviwygv
+nnoremap <A-3-LeftMouse> mvviWygv
+nnoremap <A-4-LeftMouse> mvVygv
+
+vnoremap <A-2-LeftMouse> <Esc>mvviwygv
+vnoremap <A-3-LeftMouse> <Esc>mvviWygv
+vnoremap <A-4-LeftMouse> <Esc>mvVygv
+
+"vnoremap <silent> <A-2-LeftMouse> mv<Esc>viwygv<C-\><C-n>:sleep 651m<CR>`v
+"vnoremap <silent> <A-3-LeftMouse> mv<Esc>viWygv<C-\><C-n>:sleep 651m<CR>`v
+
+"nnoremap <silent> <A-2-LeftMouse> <LeftMouse>:call GetWord(2)<CR>
 "nnoremap <expr> <A-LeftMouse> (@j=="0") ? '<LeftMouse>' : '<LeftMouse>:call GetPath(2,1)<CR>'
 
-vnoremap <silent> <A-2-LeftMouse> <LeftMouse><C-\><C-n>:call GetWord(2)<CR>
+"vnoremap <silent> <A-2-LeftMouse> <LeftMouse><C-\><C-n>:call GetWord(2)<CR>
 "inoremap <silent> <A-2-LeftMouse> <LeftMouse><C-\><C-o>:call GetWord(2)<CR>
 
 "nnoremap <silent> <expr> <A-2-LeftMouse> (@j=="0") ? '<LeftMouse>:let @j="1"<bar>:call GetWord(2)<CR>' : '<LeftMouse>:call GetPath(2,1)<CR>'
@@ -1887,9 +1938,9 @@ vnoremap <silent> <A-2-LeftMouse> <LeftMouse><C-\><C-n>:call GetWord(2)<CR>
 "vnoremap <expr> <A-3-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-n>:let @j="1"<bar>:call GetWord(2)<CR>' : '<LeftMouse><C-\><C-n>:call GetPath(2,1)<CR>'
 "vnoremap <expr> <A-4-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-n>:let @j="1"<bar>:call GetWord(2)<CR>' : '<LeftMouse><C-\><C-n>:call GetPath(2,1)<CR>'
 
-inoremap <expr> <A-2-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call GetWord(2)<CR>' : '<LeftMouse><C-\><C-o>:call GetPath(2,1)<CR>'
-inoremap <expr> <A-3-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call GetWord(2)<CR>' : '<LeftMouse><C-\><C-o>:call GetPath(2,1)<CR>'
-inoremap <expr> <A-4-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call GetWord(2)<CR>' : '<LeftMouse><C-\><C-o>:call GetPath(2,1)<CR>'
+inoremap <expr> <A-2-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>'
+inoremap <expr> <A-3-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>'
+inoremap <expr> <A-4-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>'
 
 " TODO: or could select and copy whole line ?
 " NOTE: need to set z reg to 'c' also ... (this y is not YankIt)
@@ -1903,17 +1954,14 @@ inoremap <expr> <A-4-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<ba
 " YankIt() now leaves cursor at end position ...
 "vnoremap <expr> <A-LeftRelease> (@i=="1") ? '<LeftRelease><C-\><C-n>:let @i="0"<bar>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR><Esc>i' : '<LeftRelease><C-\><C-n>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR>'
 "vnoremap <expr> <A-LeftRelease> (@i=="1") ? '<LeftRelease><C-\><C-n>:let @i="0"<bar>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<CR><Esc>i' : '<LeftRelease><C-\><C-n>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<CR>'
-vnoremap <expr> <A-LeftRelease> (@i=="1") ? '<LeftRelease><C-\><C-n>:let @i="0"<bar>:call YankIt("*y", 2)<CR><Esc>i' : '<LeftRelease><C-\><C-n>:call YankIt("*y", 2)<CR>'
+"vmap <expr> <A-LeftRelease> (@i=="1") ? '<LeftRelease><C-\><C-n>:<C-u>sleep 551m<bar>:let @i="0"<bar>:call YankIt("*y", 2)<CR><Esc>i' : '<LeftRelease><C-\><C-n>:<C-u>sleep 551m<bar>:call YankIt("*y", 2)<CR>'
+
+vmap <A-LeftRelease> "*ygv
+"vnoremap <A-2-LeftRelease>  <Nop>
+"vnoremap <A-3-LeftRelease>  <Nop>
+"vnoremap <A-4-LeftRelease>  <Nop>
 
 inoremap <A-LeftMouse> <C-\><C-o>:let @i="1"<CR><LeftMouse>
-
-vnoremap <A-2-LeftRelease>  <Nop>
-vnoremap <A-3-LeftRelease>  <Nop>
-vnoremap <A-4-LeftRelease>  <Nop>
-
-" no-op
-"nnoremap <silent> <M-LeftMouse> <Nop>
-"vnoremap <silent> <M-LeftMouse> <Nop>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Word commands NOTE: selection is USUALLY copied to clipboard
@@ -1931,12 +1979,12 @@ vnoremap <silent> <Leader>wS <C-\><C-n>mvviWygv
 
 " grab file path (ie w / and w/o :)
 " NOTE: also copy to clipboard (since its not a mouse click event) ?
-nnoremap <silent> <Leader>wp mv:call GetPath(0,0)<CR>ygv
-vnoremap <silent> <Leader>wp mv<C-\><C-n>:call GetPath(0,0)<CR>ygv
+nnoremap <silent> <Leader>wp mv:call <SID>GetPath(0,0)<CR>ygv
+vnoremap <silent> <Leader>wp mv<C-\><C-n>:call <SID>GetPath(0,0)<CR>ygv
 
 " grab url path (ie w / and w :) but really about the same as \wS
-nnoremap <silent> <Leader>wP mv:call GetPath(0,1)<CR>ygv
-vnoremap <silent> <Leader>wP mv<C-\><C-n>:call GetPath(0,1)<CR>ygv
+nnoremap <silent> <Leader>wP mv:call <SID>GetPath(0,1)<CR>ygv
+vnoremap <silent> <Leader>wP mv<C-\><C-n>:call <SID>GetPath(0,1)<CR>ygv
 
 " yank/copy word under cursor
 " `] to go to end of word/block, but `v to go back to orig pos
@@ -2360,7 +2408,7 @@ vnoremap <silent> <expr> <C-U> (line('.') == line('w$')) ? 'M' : '<C-U>'
 
 " ---------
 
-function! NoremapNormalCmd(key, preserve_omni, ...)
+function! s:NoremapNormalCmd(key, preserve_omni, ...)
   let cmd = ''
   let icmd = ''
   for x in a:000
@@ -2393,7 +2441,7 @@ inoremap <expr> <End>  pumvisible() ? '<End>'  : '<C-\><C-o>g<End>'
 
 " ---------
 
-"call NoremapNormalCmd("<C-j>",    0, "1<C-D>")
+"call <SID>NoremapNormalCmd("<C-j>",    0, "1<C-D>")
 nnoremap <expr> <C-Down> ((line('$') - line('w$')) < 1) ? 'j' : '<C-e>j'
 nnoremap <expr> <C-j>    ((line('$') - line('w$')) < 1) ? 'j' : '<C-e>j'
 
@@ -2403,7 +2451,7 @@ vnoremap <expr> <C-j>    ((line('$') - line('w$')) < 1) ? 'j' : '<C-e>j'
 inoremap <silent> <expr> <C-j>     pumvisible() ? '<C-j>'    : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-D>")<CR>'
 inoremap <silent> <expr> <C-Down>  pumvisible() ? '<C-Down>' : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-D>")<CR>'
 
-"call NoremapNormalCmd("<C-k>",    0, "1<C-U>")
+"call <SID>NoremapNormalCmd("<C-k>",    0, "1<C-U>")
 nnoremap <C-Up> <C-y>k
 nnoremap <C-k>  <C-y>k
 
@@ -2463,7 +2511,7 @@ vnoremap <A-ScrollWheelDown> 40j$
 
 " -------------------
 
-function! MapScrollKeys()
+function! s:MapScrollKeys()
   let g:half = winheight(0) / 2
   if (g:half < 1)
     g:half = 1
@@ -2489,28 +2537,28 @@ function! MapScrollKeys()
   inoremap  <silent> <expr> <PageUp>     pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp2("<C-V><C-U>")<CR>'
 endfunction
 
-call MapScrollKeys()
+call <SID>MapScrollKeys()
 
-autocmd VimResized * call MapScrollKeys()
+autocmd VimResized * call <SID>MapScrollKeys()
 
 " ---------
 
 " if in Insert mode with no input/movement for 10 sec then revert to Normal mode ...
 set updatetime=10000
-function! IdleToNormalMode()
+function! s:IdleToNormalMode()
     let mymode = mode()
     if mymode ==# 'i' || mymode ==# 'R'
         call feedkeys("\<Esc>", "m")
         echo "Exiting Insert mode after idle timeout ..."
     endif
 endfunction
-autocmd CursorHoldI * call IdleToNormalMode()
+autocmd CursorHoldI * call <SID>IdleToNormalMode()
 
-function! ClearCmdWindow()
+function! s:ClearCmdWindow()
     echo ""
 endfunction
 " nice but can clear asyncrun status in cmdline ...
-autocmd CursorHold * call ClearCmdWindow()
+autocmd CursorHold * call <SID>ClearCmdWindow()
 
 " ---------
 
@@ -2980,7 +3028,7 @@ endfunction
 
 "================================================================
 
-function MySearch(meth) abort
+function s:MySearch(meth) abort
   if (a:meth == 0)
     let promptstr = 's-buf:/'
   elseif (a:meth == 1)
@@ -3034,7 +3082,7 @@ function MySearch(meth) abort
   set hlsearch
 endfunction
 
-function MyVisSearch(meth) abort
+function s:MyVisSearch(meth) abort
   let string=@s
   if (len(string) == 0)
     " should we reset @/ ?
@@ -3085,23 +3133,23 @@ nnoremap <Leader>sN :let @/=""<bar>:set hlsearch<CR>?
 vnoremap <Leader>sN y<Esc>:let @/=""<bar>:set hlsearch<CR>?<C-r>"
 
 " search buffer with results in qf list
-nnoremap <silent> <Leader>sb :call MySearch(0)<CR>
-vnoremap <silent> <Leader>sb "sy<Esc>:call MyVisSearch(0)<CR>
+nnoremap <silent> <Leader>sb :call <SID>MySearch(0)<CR>
+vnoremap <silent> <Leader>sb "sy<Esc>:call <SID>MyVisSearch(0)<CR>
 " search dir with results in qf list
-nnoremap <silent> <Leader>sd :call MySearch(2)<CR>
-vnoremap <silent> <Leader>sd "sy<Esc>:call MyVisSearch(2)<CR>
+nnoremap <silent> <Leader>sd :call <SID>MySearch(2)<CR>
+vnoremap <silent> <Leader>sd "sy<Esc>:call <SID>MyVisSearch(2)<CR>
 " search globally (root/project/git dir) with results in qf list
-nnoremap <silent> <Leader>sg :call MySearch(1)<CR>
-vnoremap <silent> <Leader>sg "sy<Esc>:call MyVisSearch(1)<CR>
+nnoremap <silent> <Leader>sg :call <SID>MySearch(1)<CR>
+vnoremap <silent> <Leader>sg "sy<Esc>:call <SID>MyVisSearch(1)<CR>
 
 " search dir (root/project/git dir) with results in fzf/Ag list
 " same as :Ag ...
-nnoremap <silent> <Leader>s. :call MySearch(4)<CR>
-vnoremap <silent> <Leader>s. "sy<Esc>:call MyVisSearch(4)<CR>
+nnoremap <silent> <Leader>s. :call <SID>MySearch(4)<CR>
+vnoremap <silent> <Leader>s. "sy<Esc>:call <SID>MyVisSearch(4)<CR>
 " search globally (root/project/git dir) with results in fzf/Ag list
 " same as :Agit ...
-nnoremap <silent> <Leader>s/ :call MySearch(3)<CR>
-vnoremap <silent> <Leader>s/ "sy<Esc>:call MyVisSearch(3)<CR>
+nnoremap <silent> <Leader>s/ :call <SID>MySearch(3)<CR>
+vnoremap <silent> <Leader>s/ "sy<Esc>:call <SID>MyVisSearch(3)<CR>
 
 "================================================================
 
@@ -3109,7 +3157,7 @@ let g:orig_pos = getcurpos()
 let g:click_start = reltime()
 
 " to grab a word - like file path below
-function GetWord(arg) abort
+function s:GetWord(arg) abort
   " 0 selects in visual mode - (0)ygv is like (1)
   " 1 selects in visual mode and yanks
   " 2 selects, yanks and returns to previous mode
@@ -3137,7 +3185,7 @@ function GetWord(arg) abort
 endfunction
 
 " to grab a file path (ie /path/to/file.ext:345) ...
-function GetPath(arg,ws) abort
+function s:GetPath(arg,ws) abort
   " 0 selects in visual mode - (0)ygv is like (1)
   " 1 selects in visual mode and yanks
   " 2 selects, yanks and returns to previous mode
@@ -3151,12 +3199,12 @@ function GetPath(arg,ws) abort
     let @j="0"
     let elapsed_time = reltimefloat(reltime(g:click_start))
     if elapsed_time >= 2.1
-      call GetWord(a:arg)
+      call <SID>GetWord(a:arg)
       return
     endif
     let curr_pos = getcurpos()
     if curr_pos != g:orig_pos
-      call GetWord(a:arg)
+      call <SID>GetWord(a:arg)
       return
     endif
   endif
@@ -3187,7 +3235,7 @@ function GetPath(arg,ws) abort
 endfunction
 
 " to grab a WORD
-function GetWord2(arg) abort
+function s:GetWord2(arg) abort
   " 0 selects in visual mode - (0)ygv is like (1)
   " 1 selects in visual mode and yanks
   " 2 selects, yanks and returns to previous mode
@@ -3199,12 +3247,12 @@ function GetWord2(arg) abort
     let @j="0"
     let elapsed_time = reltimefloat(reltime(g:click_start))
     if elapsed_time >= 2.1
-      call GetWord(a:arg)
+      call <SID>GetWord(a:arg)
       return
     endif
     let curr_pos = getcurpos()
     if curr_pos != g:orig_pos
-      call GetWord(a:arg)
+      call <SID>GetWord(a:arg)
       return
     endif
   endif
@@ -3231,7 +3279,7 @@ function GetWord2(arg) abort
 endfunction
 
 " to grab a line
-function GetLine(arg) abort
+function s:GetLine(arg) abort
   " 0 selects in visual mode - (0)ygv is like (1)
   " 1 selects in visual mode and yanks
   " 2 selects, yanks and returns to previous mode
@@ -3243,12 +3291,12 @@ function GetLine(arg) abort
     let @j="0"
     let elapsed_time = reltimefloat(reltime(g:click_start))
     if elapsed_time >= 2.1
-      call GetWord(a:arg)
+      call <SID>GetWord(a:arg)
       return
     endif
     let curr_pos = getcurpos()
     if curr_pos != g:orig_pos
-      call GetWord(a:arg)
+      call <SID>GetWord(a:arg)
       return
     endif
   endif
@@ -3273,8 +3321,8 @@ endfunction
 "================================================================
 
 " limit quickfix height ...
-au FileType qf call AdjustWindowHeight(5, 10)
-function! AdjustWindowHeight(minheight, maxheight)
+au FileType qf call <SID>AdjustWindowHeight(5, 10)
+function! s:AdjustWindowHeight(minheight, maxheight)
   let l = 1
   let n_lines = 0
   let w_width = winwidth(0)
@@ -3290,8 +3338,8 @@ endfunction
 " https://gist.github.com/juanpabloaj/5845848
 
 " automatically quit Vim if quickfix window is the last ...
-au BufEnter * call MyWindow()
-function! MyWindow()
+au BufEnter * call <SID>MyWindow()
+function! s:MyWindow()
   " if the window is quickfix go on
   if &buftype=="quickfix"
     " if this window is last on screen quit without warning
@@ -3309,8 +3357,8 @@ function! MyWindow()
   endif
 endfunction
 
-au BufWinEnter * call MyWindow2()
-function! MyWindow2()
+au BufWinEnter * call <SID>MyWindow2()
+function! s:MyWindow2()
   if &buftype=="quickfix"
     " qf highlight on
     "hi QuickFixLine cterm=None ctermbg=60
@@ -3442,7 +3490,7 @@ endif " quickfix quit/close
 " -----------------------------
 
 " move current window into a tab
-function WinToTab()
+function s:WinToTab()
     "there is only one window
     if tabpagenr('$') == 1 && winnr('$') == 1
         return
@@ -3459,9 +3507,9 @@ function WinToTab()
         tabm -
     endif
 endfunc
-nnoremap <silent> <unique> <Leader>tw :call WinToTab()<CR>
+nnoremap <silent> <unique> <Leader>tw :call <SID>WinToTab()<CR>
 
-function! MergeTab()
+function! s:MergeTab()
     let bufnums = tabpagebuflist()
     hide tabclose
     "topleft vsplit
@@ -3474,7 +3522,7 @@ function! MergeTab()
     quit
     wincmd j
 endfunction
-"command! MergeTab call MergeTab()
+"command! MergeTab call <SID>MergeTab()
 
 " NOTE: also :Tabmerge and <Leader>tm, <Leader>tM
 
@@ -3487,7 +3535,7 @@ endfunction
 " -----------------------------
 
 " : in visual mode (can still use <C-w>:)
-vnoremap : <C-\><C-n>:<C-u>call MyVisQ()<CR>:
+vnoremap : <C-\><C-n>:<C-u>call <SID>MyVisQ()<CR>:
 "vnoremap : <C-w>:
 
 noremap <C-a> 0
@@ -3906,11 +3954,11 @@ vnoremap <silent> U  u
 vmap <silent> u <Nop>
 
 " toggle search highlight
-nnoremap <silent> <Leader>hl :set hlsearch! hlsearch?<bar>:redraw!<CR>
+nnoremap <silent> <Leader>hl :set hlsearch! hlsearch?<CR>
 hi Search ctermbg=58
 
 " TODO: remap q to turn off hlsearch ? - but as is for gv etc.
-nnoremap <silent> <expr> q (&filetype != 'GV') ? ':set nohlsearch<bar>:redraw!<CR>' : 'q'
+nnoremap <silent> <expr> q (&filetype == 'GV') ? 'q' : (&hlsearch) ? ':set nohlsearch<CR>' : 'redraw'
 
 " does this make sense ? (q to cancel select/visual)
 " NOTE: this is done above now in MyVisQ()
