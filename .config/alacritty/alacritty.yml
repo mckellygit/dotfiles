@@ -1,0 +1,92 @@
+
+key_bindings:
+  - { key: V,        mods: Control|Shift,   action: Paste     }
+  - { key: C,        mods: Control|Shift,   action: Copy      }
+  - { key: Back,     mods: Control,         chars: "\x1b\x7f" }
+  - { key: Insert,   mods: Control,         chars: "\x1b\x31" }
+  - { key: Back,     mods: Control|Shift,   chars: "\x1b\x32" }
+  - { key: Equals,   mods: Control,         chars: "\x1b\x33" }
+  - { key: Space,    mods: Control|Shift,   chars: "\x1b\x34" }
+  - { key: Home,     mods: Control,         chars: "\x1b\x35" }
+  - { key: End,      mods: Control,         chars: "\x1b\x36" }
+
+mouse_bindings:
+  - { mouse: Middle, action: None }
+
+mouse:
+  double_click: { threshold: 300 }
+  triple_click: { threshold: 300 }
+  hide_when_typing: true
+
+selection:
+  semantic_escape_chars: ",│`|:\"' ()[]{}<>"
+  save_to_clipboard: false
+
+window:
+  dimensions:
+    columns: 164
+    lines: 46
+
+  position:
+    x: 780
+    y: 850
+
+  padding:
+    x: 4
+    y: 4
+
+  dynamic_padding: false
+
+  decorations: full
+
+scrolling: 
+  history: 0
+
+colors:
+  primary:
+    background: '0x2e2e26'
+    foreground: '0xffd1b7'
+
+background_opacity: 0.95
+
+tabspaces: 4
+
+draw_bold_text_with_bright_colors: true
+
+visual_bell:
+  duration: 0
+
+font:
+  normal:
+    family: Liberation Mono
+
+  size: 10.0
+
+  offset:
+    x: 1
+    y: 0
+
+cursor:
+  #   - ▇ Block
+  #   - _ Underline
+  #   - | Beam
+  style: Block
+
+debug:
+  # Should display the render timer
+  render_timer: false
+
+  # Keep the log file after quitting Alacritty.
+  persistent_logging: false
+
+  # Log level
+  #
+  # Values for `log_level`:
+  #   - None
+  #   - Error
+  #   - Warn
+  #   - Info
+  #   - Debug
+  #   - Trace
+  log_level: Info
+

@@ -1402,7 +1402,6 @@ set mouse=a
 "set clipboard^=unnamed
 "set clipboard^=unnamedplus
 set clipboard^=unnamed
-set clipboard^=unnamedplus
 " ------------------------------
 " NOTE: removing autoselect means visual selection is not automatically copied to unnamed clipboard (*)
 "       also removing autoselectml makes things fail weirdly
@@ -1765,6 +1764,23 @@ endfunction
 "nnoremap <RightMouse> :call <SID>My3BPopup(0)<CR>
 "vnoremap <RightMouse> <C-\><C-n>:call <SID>My3BPopup(1)<CR>gv
 "inoremap <RightMouse> <C-\><C-o>:echo "Mouse 3 button"<CR>
+
+function MyInsert()
+    let m = mode(1)
+    let om = 0
+    if m == 'niI' || m == 'niR' || m == 'niV' || m == 'i' || m == 'ic' || m == 'ix'
+        let om = 1
+    elseif m == 'v' || m == 'V' || m == '\<C-v>'
+        let om = 2
+    endif
+    if om == 1
+        exe 'normal "*p'
+    elseif m == 2
+        exe 'normal "*p'
+    else
+        exe 'normal "*p'
+    endif
+endfunction
 
 nnoremap <RightMouse> <Nop>
 vnoremap <RightMouse> <Nop>
@@ -3954,11 +3970,11 @@ vnoremap <silent> U  u
 vmap <silent> u <Nop>
 
 " toggle search highlight
-nnoremap <silent> <Leader>hl :set hlsearch! hlsearch?<CR>
+nnoremap <silent> <Leader>hl :silent set hlsearch! hlsearch?<CR>
 hi Search ctermbg=58
 
 " TODO: remap q to turn off hlsearch ? - but as is for gv etc.
-nnoremap <silent> <expr> q (&filetype == 'GV') ? 'q' : (&hlsearch) ? ':set nohlsearch<CR>' : 'redraw'
+nnoremap <silent> <expr> q (&filetype == 'GV') ? 'q' : (&hlsearch) ? ':silent set nohlsearch<CR>' : 'redraw'
 
 " does this make sense ? (q to cancel select/visual)
 " NOTE: this is done above now in MyVisQ()

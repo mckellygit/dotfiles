@@ -250,6 +250,7 @@ URxvt.scrollTtyOutput: false
 URxvt.scrollWithBuffer: true
 ! scroll back to the bottom on keypress
 URxvt.scrollTtyKeypress: true
+
 *.foreground:  #ffd1b7
 !!*.background:  #2e2e26
 urxvt*depth: 32
@@ -302,7 +303,7 @@ URxvt.keysym.Control-minus:     resize-font:smaller
 URxvt.keysym.Control-plus:      resize-font:bigger
 
 !! no-op is command:\000
-URxvt.keysym.S-BackSpace:       command:\000
+URxvt.keysym.S-BackSpace:       string:\177
 
 !!URxvt.keysym.Shift-Up: command:\033]720;1\007
 !!URxvt.keysym.Shift-Down: command:\033]721;1\007
