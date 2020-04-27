@@ -25,7 +25,7 @@ selection:
 window:
   dimensions:
     columns: 164
-    lines: 46
+    lines: 48
 
   position:
     x: 780
@@ -47,7 +47,7 @@ colors:
     background: '0x2e2e26'
     foreground: '0xffd1b7'
 
-background_opacity: 0.95
+background_opacity: 0.96
 
 tabspaces: 4
 
@@ -60,7 +60,7 @@ font:
   normal:
     family: Liberation Mono
 
-  size: 10.0
+  size: 13.5
 
   offset:
     x: 1
