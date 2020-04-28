@@ -3970,11 +3970,12 @@ vnoremap <silent> U  u
 vmap <silent> u <Nop>
 
 " toggle search highlight
-nnoremap <silent> <Leader>hl :silent set hlsearch! hlsearch?<CR>
+nnoremap <silent> <Leader>hl :set hlsearch! hlsearch?<CR>
 hi Search ctermbg=58
 
 " TODO: remap q to turn off hlsearch ? - but as is for gv etc.
-nnoremap <silent> <expr> q (&filetype == 'GV') ? 'q' : (&hlsearch) ? ':silent set nohlsearch<CR>' : 'redraw'
+
+nnoremap <silent> <expr> q (&filetype == 'GV') ? 'q' : (&hlsearch) ? ':set nohlsearch<CR>' : ':redraw<CR>'
 
 " does this make sense ? (q to cancel select/visual)
 " NOTE: this is done above now in MyVisQ()

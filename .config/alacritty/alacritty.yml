@@ -47,6 +47,26 @@ colors:
     background: '0x2e2e26'
     foreground: '0xffd1b7'
 
+  normal:
+    black:    '0x000000'
+    red:      '0xb22222'
+    green:    '0x008000'
+    yellow:   '0x999900'
+    blue:     '0x0066ff'
+    magenta:  '0xba55d3'
+    cyan:     '0x009999'
+    white:    '0xc7c7c7'
+
+  bright:
+    black:    '0x808080'
+    red:      '0xdf0000'
+    green:    '0x00d700'
+    yellow:   '0xffd700'
+    blue:     '0x5f87d7'
+    magenta:  '0x875faf'
+    cyan:     '0x00ffff'
+    white:    '0xffffff'
+
 background_opacity: 0.96
 
 tabspaces: 4
