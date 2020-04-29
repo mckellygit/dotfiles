@@ -24,6 +24,9 @@ selection:
   semantic_escape_chars: ",│`|:\"' ()[]{}<>"
   save_to_clipboard: false
 
+# INFO: to prevent inconsistent DPR, set it explcitly ...
+#   WINIT_HIDPI_FACTOR=1.22 alacritty
+
 font:
   normal:
     family: Liberation Mono
