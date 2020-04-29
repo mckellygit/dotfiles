@@ -1,14 +1,16 @@
 
 key_bindings:
-  - { key: V,        mods: Control|Shift,   action: Paste     }
-  - { key: C,        mods: Control|Shift,   action: Copy      }
-  - { key: Back,     mods: Control,         chars: "\x1b\x7f" }
-  - { key: Insert,   mods: Control,         chars: "\x1b\x31" }
-  - { key: Back,     mods: Control|Shift,   chars: "\x1b\x32" }
-  - { key: Equals,   mods: Control,         chars: "\x1b\x33" }
-  - { key: Space,    mods: Control|Shift,   chars: "\x1b\x34" }
-  - { key: Home,     mods: Control,         chars: "\x1b\x35" }
-  - { key: End,      mods: Control,         chars: "\x1b\x36" }
+  - { key: V,        mods: Control|Shift,   action: Paste             }
+  - { key: C,        mods: Control|Shift,   action: Copy              }
+  - { key: Back,     mods: Control,         chars: "\x1b\x7f"         }
+  - { key: Insert,   mods: Control,         chars: "\x1b\x31"         }
+  - { key: Back,     mods: Control|Shift,   chars: "\x1b\x32"         }
+  - { key: Equals,   mods: Control,         chars: "\x1b\x33"         }
+  - { key: Space,    mods: Control|Shift,   chars: "\x1b\x34"         }
+  - { key: Home,     mods: Control,         chars: "\x1b\x35"         }
+  - { key: End,      mods: Control,         chars: "\x1b\x36"         }
+  - { key: Add,      mods: Control|Shift,   action: IncreaseFontSize  }
+  - { key: Minus,    mods: Control,         action: DecreaseFontSize  }
 
 mouse_bindings:
   - { mouse: Middle, action: None }
@@ -29,7 +31,7 @@ font:
   size: 13.5
 
   offset:
-    x: 1
+    x: 0
     y: 0
 
 window:
