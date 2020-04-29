@@ -1682,17 +1682,22 @@ endfunction
 " to disable scrolljump when pasting at last row ...
 " not sure to use nmap or nnoremap ?
 " not sure to use " or + or * register ?
-"function! MyPasteNoJump() abort
-"  nmap <silent> <buffer> p p
-"  let &scrolljump=1
-"  execute "silent! normal \"*p"
-"  "execute "normal p"
-"  let &scrolljump=-50
-"  nmap <silent> <buffer> p :call MyPasteNoJump()<CR>
-"endfunction
+function! s:MyPasteNoJump() abort
+  nmap <silent> <buffer> p p
+  let prevsj=&scrolljump
+  let &scrolljump=1
+  execute "silent! normal \"*p"
+  "execute "normal p"
+  let &scrolljump=prevsj
+  nmap <silent> <buffer> p :call <SID>MyPasteNoJump()<CR>
+endfunction
 " to match UnconditionalPaste, dont modify p
 "nmap <silent> <buffer> p :call MyPasteNoJump()<CR>
+
 vmap <buffer> p <C-\><C-n>p
+vmap <buffer> P <C-\><C-n>P`[
+
+nmap <silent> P P`[
 
 " ---------------
 
@@ -1936,8 +1941,8 @@ vnoremap <A-2-LeftMouse> <Esc>mvviwygv
 vnoremap <A-3-LeftMouse> <Esc>mvviWygv
 vnoremap <A-4-LeftMouse> <Esc>mvVygv
 
-"vnoremap <silent> <A-2-LeftMouse> mv<Esc>viwygv<C-\><C-n>:sleep 651m<CR>`v
-"vnoremap <silent> <A-3-LeftMouse> mv<Esc>viWygv<C-\><C-n>:sleep 651m<CR>`v
+"vnoremap <silent> <A-2-LeftMouse> mv<Esc>viwygv<C-\><C-n>:sleep 651m<CR>`v<Esc>
+"vnoremap <silent> <A-3-LeftMouse> mv<Esc>viWygv<C-\><C-n>:sleep 651m<CR>`v<Esc>
 
 "nnoremap <silent> <A-2-LeftMouse> <LeftMouse>:call GetWord(2)<CR>
 "nnoremap <expr> <A-LeftMouse> (@j=="0") ? '<LeftMouse>' : '<LeftMouse>:call GetPath(2,1)<CR>'
