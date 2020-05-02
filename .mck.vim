@@ -615,9 +615,7 @@ function! s:bufopen(e)
 endfunction
 
 let g:blist = []
-let g:btimer = -1
 function! MylsFilter(id, key)
-    call timer_stop(g:btimer)
     if a:key == 'q' || a:key == 'x' || a:key == '\<Esc>' || a:key == '\<C-c>'
         call popup_close(a:id, 0)
         " return > 0 to not pass on to callback ...
@@ -645,8 +643,7 @@ function! s:MylsPopup(arg) abort
         " shouldn't happen now that buflist always returns something ...
         let g:blist = [ '0 - No listed buffers ...' ]
     endif
-    let g:btimer = timer_start(10000, 'MylsClear')
-    call popup_menu(g:blist, #{ title: ' Buffers:', filter: 'MylsFilter', callback: 'MylsCallback' })
+    call popup_menu(g:blist, #{ title: ' Buffers:', filter: 'MylsFilter', callback: 'MylsCallback', time: 10000 })
 endfunction
 
 " fzf#run() example ...
@@ -1125,6 +1122,9 @@ if &term=~"kitty"
   let &t_ut=''
 endif
 
+" TODO: set some unused terminfo var ...
+"set t_f9=123
+
 if &term=="xterm"
   set t_Co=8
   set t_Sb=^[[4%dm
@@ -1356,8 +1356,8 @@ if &t_Co > 2 || has("gui_running")
 endif
 
 " NOTE: if want terminal default background (opacity etc.) ...
-let g:opaqbg=1
-hi Normal cterm=none ctermbg=none
+let g:opaqbg=0
+"hi Normal cterm=none ctermbg=none
 nnoremap <silent> <expr> <Leader>bg (g:opaqbg == 1) ? ':hi Normal cterm=none ctermbg=235<bar>let g:opaqbg=0<CR>' : ':hi Normal cterm=none ctermbg=none<bar>let g:opaqbg=1<CR>'
 
 " always show tabs
@@ -1702,13 +1702,13 @@ nmap <silent> P P`[
 " ---------------
 
 " set paste mode, paste, set nopaste mode
-function! WrapForTmux(s)
+function! WrapForTmux(as)
   if !exists('$TMUX')
-    return a:s
+    return a:as
   endif
   let tmux_start = "\<Esc>Ptmux;"
   let tmux_end = "\<Esc>\\"
-  return tmux_start . substitute(a:s, "\<Esc>", "\<Esc>\<Esc>", 'g') . tmux_end
+  return tmux_start . substitute(a:as, "\<Esc>", "\<Esc>\<Esc>", 'g') . tmux_end
 endfunction
 
 let &t_SI .= WrapForTmux("\<Esc>[?2004h")
@@ -1726,7 +1726,7 @@ function! XTermPasteBegin()
   return ""
 endfunction
 
-inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
+"inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
 
 " ------------------------------
 
@@ -1736,17 +1736,18 @@ inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
 
 " ---- if want vim menu ----
 
-let g:list3b = []
-let g:timer3b = -1
+let g:list3b = ['Copy', 'Paste', 'Quit']
 function! My3BFilter(id, key)
-    call timer_stop(g:timer3b)
     if a:key == 'q' || a:key == 'x' || a:key == '\<Esc>' || a:key == '\<C-c>'
         call popup_close(a:id, 0)
         " return > 0 to not pass on to callback ...
         return 1
+    elseif a:key == "\<LeftMouse>"
+        call popup_close(a:id, 0)
+        " return > 0 to not pass on to callback ...
+        return 1
     endif
-    " TODO: add options to open in split, vsplit, tab, hide buffer etc.
-    " pass to generic filter
+    "echo "key = " . a:key
     return popup_filter_menu(a:id, a:key)
 endfunction
 
@@ -1754,7 +1755,7 @@ function! My3BCallback(id, indx) abort
     if a:indx <= 0
         return
     endif
-    call <SID>bufopen(g:list3b[a:indx-1])
+    "echo "indx = " . a:indx
 endfunction
 
 function! My3BClear(tid) abort
@@ -1762,30 +1763,15 @@ function! My3BClear(tid) abort
 endfunction
 
 function! s:My3BPopup(arg) abort
-    let g:timer3b = timer_start(10000, 'My3BClear')
-    call popup_menu(g:list3b, #{ filter: 'My3BFilter', callback: 'My3BCallback' })
+    if a:arg == 1
+        exe 'normal gv'
+    endif
+    call popup_menu(g:list3b, #{ filter: 'My3BFilter', callback: 'My3BCallback', mapping: 0, close: 'none', time: 10000 })
 endfunction
 
 "nnoremap <RightMouse> :call <SID>My3BPopup(0)<CR>
 "vnoremap <RightMouse> <C-\><C-n>:call <SID>My3BPopup(1)<CR>gv
 "inoremap <RightMouse> <C-\><C-o>:echo "Mouse 3 button"<CR>
-
-function MyInsert()
-    let m = mode(1)
-    let om = 0
-    if m == 'niI' || m == 'niR' || m == 'niV' || m == 'i' || m == 'ic' || m == 'ix'
-        let om = 1
-    elseif m == 'v' || m == 'V' || m == '\<C-v>'
-        let om = 2
-    endif
-    if om == 1
-        exe 'normal "*p'
-    elseif m == 2
-        exe 'normal "*p'
-    else
-        exe 'normal "*p'
-    endif
-endfunction
 
 nnoremap <RightMouse> <Nop>
 vnoremap <RightMouse> <Nop>
@@ -2522,6 +2508,9 @@ inoremap <silent> <expr> <ScrollWheelUp>     pumvisible() ? '<ScrollWheelUp>' : 
 " do we bother to look at reg to see if its V for this ?
 vnoremap <ScrollWheelUp>     5k0
 vnoremap <ScrollWheelDown>   5j$
+" C-Wheel is often font scaling but ...
+vnoremap <C-ScrollWheelUp>   20k0
+vnoremap <C-ScrollWheelDown> 20j$
 vnoremap <A-ScrollWheelUp>   40k0
 vnoremap <A-ScrollWheelDown> 40j$
 
@@ -3044,6 +3033,11 @@ function LessInitFunc() abort
 " set laststatus=1
   set statusline=%f\%=[\ %L\ ][\ %3.3p%%\ ]
   hi StatusLine ctermbg=237 ctermfg=2
+  " NOTE: if want terminal default background (opacity etc.) ...
+  let g:opaqbg=1
+  hi Normal cterm=none ctermbg=none
+  nnoremap <silent> <expr> <Leader>bg (g:opaqbg == 1) ? ':hi Normal cterm=none ctermbg=235<bar>let g:opaqbg=0<CR>' : ':hi Normal cterm=none ctermbg=none<bar>let g:opaqbg=1<CR>'
+
 endfunction
 " less as a pager --
 
