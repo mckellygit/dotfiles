@@ -2526,7 +2526,15 @@ vnoremap <A-ScrollWheelDown> 40j$
 "inoremap <silent> <A-ScrollWheelUp>   <C-\><C-o>40k
 "inoremap <silent> <A-ScrollWheelDown> <C-\><C-o>40j
 
-" -------------------
+" ---------
+
+" NOTE: tmux maps A-Up/Down to 5k/5j ...
+" <Esc>[1;3A is <M-Up> (Alt-Up)
+" <Esc>[1;3B is <M-Down> (Alt-Up)
+"noremap <M-Up>   5k
+"noremap <M-Down> 5j
+
+" ---------
 
 function! s:MapScrollKeys()
   let g:half = winheight(0) / 2
@@ -2626,31 +2634,18 @@ noremap <silent> <Leader>cz zz
 
 " move lines or selected text up/down
 
-" wanted C-S-j,k but that is not different than C-j,k
-" <Esc>j,k is Alt-j,k
-" <Esc>[1;3A is <M-Up> (Alt-Up)
-" NOTE: some of these mappings start with <Esc> and keys pressed
-"       quickly enough could be incorrectly interpreted as a mapping
-" TODO: look into Terminator plugin for these sequences ...
-nnoremap <M-Down> :m .+1<CR>==
-nnoremap <M-Up>   :m .-2<CR>==
-vnoremap <M-Down> :m '>+1<CR>gv=gv
-vnoremap <M-Up>   :m '<-2<CR>gv=gv
-inoremap <M-Down> <Esc>:m .+1<CR>==gi
-inoremap <M-Up>   <Esc>:m .-2<CR>==gi
-
+" NOTE: these mappings start with <Esc> and keys pressed quickly
+"       enough could be incorrectly interpreted as a mapping
+" TODO: look into alternate esc-seq for these sequences ...
 "nnoremap <M-j> :m .+1<CR>==
 "nnoremap <M-k> :m .-2<CR>==
-"inoremap <M-j> <Esc>:m .+1<CR>==gi
-"inoremap <M-k> <Esc>:m .-2<CR>==gi
 "vnoremap <M-j> :m '>+1<CR>gv=gv
 "vnoremap <M-k> :m '<-2<CR>gv=gv
+"inoremap <M-j> <Esc>:m .+1<CR>==gi
+"inoremap <M-k> <Esc>:m .-2<CR>==gi
 
-"nnoremap ,<Up>   :<C-u>silent! move-2<CR>==
-"nnoremap ,<Down> :<C-u>silent! move+<CR>==
-"xnoremap ,<Up>   :<C-u>silent! '<,'>move-2<CR>gv=gv
-"xnoremap ,<Down> :<C-u>silent! '<,'>move'>+<CR>gv=gv
-
+" NOTE: C-S-Left/Right mapped to tab prev/next ...
+" NOTE: C-S-Up/Down too easily pressed ...
 "function! MoveLineAndInsert(n)       " -x=up x lines; +x=down x lines
 "    let n_move = (a:n < 0 ? a:n-1 : '+'.a:n)
 "    let pos = getcurpos()
@@ -2661,8 +2656,20 @@ inoremap <M-Up>   <Esc>:m .-2<CR>==gi
 "        startinsert
 "    endtry
 "endfunction
-"inoremap <C-S-Up> <Esc>`^:silent! call MoveLineAndInsert(-1)<CR>
+"inoremap <C-S-Up>   <Esc>`^:silent! call MoveLineAndInsert(-1)<CR>
 "inoremap <C-S-Down> <Esc>`^:silent! call MoveLineAndInsert(+1)<CR>
+
+"nnoremap ,<Up>   :<C-u>silent! move-2<CR>==
+"nnoremap ,<Down> :<C-u>silent! move+<CR>==
+"xnoremap ,<Up>   :<C-u>silent! '<,'>move-2<CR>gv=gv
+"xnoremap ,<Down> :<C-u>silent! '<,'>move'>+<CR>gv=gv
+
+nnoremap  z<Down>  :m .+1<CR>==
+nnoremap  z<Up>    :m .-2<CR>==
+vnoremap  z<Down>  :m '>+1<CR>gv=gv
+vnoremap  z<Up>    :m '<-2<CR>gv=gv
+inoremap  z<Down>  <Esc>:m .+1<CR>==gi
+inoremap  z<Up>    <Esc>:m .-2<CR>==gi
 
 " -----------------------------
 
@@ -4101,6 +4108,7 @@ inoremap <silent> <C-S-Right> <Esc>:tabnext<CR>
 "vnoremap <silent> <M-.>  <Esc>:tabnext<CR>
 "inoremap <silent> <M-.>  <Esc>:tabnext<CR>
 
+" NOTE: C-S-Up/Down used for moving lines ...
 " prev tab
 "nnoremap <silent> <M-Left>      :tabprevious<CR>
 "tnoremap <silent> <M-Left> <C-w>:tabprevious<CR>
