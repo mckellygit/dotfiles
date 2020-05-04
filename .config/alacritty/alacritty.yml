@@ -1,16 +1,46 @@
 
 key_bindings:
-  - { key: V,        mods: Control|Shift,   action: Paste             }
-  - { key: C,        mods: Control|Shift,   action: Copy              }
-  - { key: Back,     mods: Control,         chars: "\x1b\x7f"         }
-  - { key: Insert,   mods: Control,         chars: "\x1b\x31"         }
-  - { key: Back,     mods: Control|Shift,   chars: "\x1b\x32"         }
-  - { key: Equals,   mods: Control,         chars: "\x1b\x33"         }
-  - { key: Space,    mods: Control|Shift,   chars: "\x1b\x34"         }
-  - { key: Home,     mods: Control,         chars: "\x1b\x35"         }
-  - { key: End,      mods: Control,         chars: "\x1b\x36"         }
-  - { key: Add,      mods: Control|Shift,   action: IncreaseFontSize  }
-  - { key: Minus,    mods: Control,         action: DecreaseFontSize  }
+  - { key: Back,      mods: Control,         chars: "\x1b\x7f"        }
+  - { key: Insert,    mods: Control,         chars: "\x1b\x31"        }
+  - { key: Back,      mods: Control|Shift,   chars: "\x1b\x32"        }
+  - { key: Equals,    mods: Control,         chars: "\x1b\x33"        }
+  - { key: Space,     mods: Control|Shift,   chars: "\x1b\x34"        }
+  - { key: Home,      mods: Control,         chars: "\x1b\x35"        }
+  - { key: End,       mods: Control,         chars: "\x1b\x36"        }
+
+  - { key: Back,      mods: Shift,           chars: "\x7f"            }
+
+  - { key: V,         mods: Control|Shift,   action: Paste            }
+  - { key: C,         mods: Control|Shift,   action: Copy             }
+  - { key: X,         mods: Control|Shift,   chars: "\x1b\x39"        }
+
+  - { key: Add,       mods: Control|Shift,   action: IncreaseFontSize }
+  - { key: Underline, mods: Control|Shift,   action: DecreaseFontSize }
+
+  - { key: Up,        mods: Control,         chars: "\x1b[1;5A"       }
+  - { key: Down,      mods: Control,         chars: "\x1b[1;5B"       }
+  - { key: Left,      mods: Control,         chars: "\x1b[1;5D"       }
+  - { key: Right,     mods: Control,         chars: "\x1b[1;5C"       }
+
+  - { key: Up,        mods: Shift,           chars: "\x1b[1;2A"       }
+  - { key: Down,      mods: Shift,           chars: "\x1b[1;2B"       }
+  - { key: Left,      mods: Shift,           chars: "\x1b[1;2D"       }
+  - { key: Right,     mods: Shift,           chars: "\x1b[1;2C"       }
+
+  - { key: Up,        mods: Control|Shift,   chars: "\x1b[1;6A"       }
+  - { key: Down,      mods: Control|Shift,   chars: "\x1b[1;6B"       }
+  - { key: Left,      mods: Control|Shift,   chars: "\x1b[1;6D"       }
+  - { key: Right,     mods: Control|Shift,   chars: "\x1b[1;6C"       }
+
+  - { key: Up,        mods: Alt,             chars: "\x1b[1;3A"       }
+  - { key: Down,      mods: Alt,             chars: "\x1b[1;3B"       }
+  - { key: Left,      mods: Alt,             chars: "\x1b[1;3D"       }
+  - { key: Right,     mods: Alt,             chars: "\x1b[1;3C"       }
+
+  - { key: Up,        mods: Alt|Shift,       chars: "\x1b[1;4A"       }
+  - { key: Down,      mods: Alt|Shift,       chars: "\x1b[1;4B"       }
+  - { key: Left,      mods: Alt|Shift,       chars: "\x1b[1;4D"       }
+  - { key: Right,     mods: Alt|Shift,       chars: "\x1b[1;4C"       }
 
 mouse_bindings:
   - { mouse: Middle, action: None }

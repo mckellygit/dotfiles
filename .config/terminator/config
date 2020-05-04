@@ -40,6 +40,8 @@
   esc_five = <Control>Home
 # Ctrl-End
   esc_six = <Control>End
+# Ctrl-Shift-X
+  esc_nine = <Control><Shift>X
 [layouts]
   [[default]]
     [[[child0]]]
@@ -49,8 +51,8 @@
       maximised = False
       order = 0
       parent = ""
-      position = 723:647
-      size = 2440, 1360
+      position = 780:780
+      size = 2160, 1300
       type = Window
     [[[terminal1]]]
       order = 0

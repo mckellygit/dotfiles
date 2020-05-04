@@ -1182,7 +1182,7 @@ noremap <silent> <Esc>5 gg
 noremap <silent> <Esc>6 G
 
 " toggle line wrap
-nnoremap <silent> <Leader>lw :set nowrap! nowrap?<CR>
+nnoremap <silent> <Leader>lw :silent set nowrap! nowrap?<CR>
 
 " show registers (x is next on stack)
 nnoremap <silent> <Leader>rg :reg *,x<CR>
@@ -1551,16 +1551,66 @@ endfunction
 vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? 'mv"*y`vi' : (mode() =~ '\<C-v>') ? '"*y' : 'mv"*y`v'
 vnoremap <silent> <expr> y     (&buftype == 'terminal') ? 'mv"*y`vi' : (mode() =~ '\<C-v>') ? '"*y' : 'mv"*y`v'
 
-" tmux maps <C-S-c> to M-7
-vnoremap <silent> <Esc>7 "*y
-" tmux maps <C-S-v> to M-7
-nnoremap <silent> <expr> <Esc>8 (&buftype == 'terminal') ? '<Nop>' : '"*p'
-" tmux maps <C-S-x> to M-7
-vnoremap <silent> <expr> <Esc>9 (&buftype == 'terminal') ? '<Nop>' : '"*d'
+" ---------------
+
+" C-Insert, C-S-v paste ...
+
+" original <C-Insert> map - vi may not differentiate between C-Insert and Insert ...
+"nnoremap <expr> <C-Insert> (&buftype == 'terminal') ? '\<Nop>' : 'P'
+"vnoremap <expr> <C-Insert> (&buftype == 'terminal') ? '\<Nop>' : '\<Esc>P'
+"inoremap <C-Insert> <C-r>*
+"cnoremap <C-Insert> <C-r>*
+"tnoremap <C-Insert> <C-w>"*
+
+" Terminator plugin (and tmux) ctrl-insert maps to <Esc>1 (<M-1>) for paste
+nnoremap <expr> <Esc>1 (&buftype == 'terminal') ? '\<Nop>' : 'P'
+vnoremap <expr> <Esc>1 (&buftype == 'terminal') ? '\<Nop>' : '\<Esc>P'
+inoremap <Esc>1 <C-r>*
+" or <C-o>p ?
+cnoremap <Esc>1 <C-r>*
+tnoremap <Esc>1 <C-w>"*
+
+" original - vi often cannot differentiate between C-S-v and C-v ...
+"nnoremap <expr> <C-S-v> (&buftype == 'terminal') ? '\<Nop>' : 'P'
+"vnoremap <expr> <C-S-v> (&buftype == 'terminal') ? '\<Nop>' : '\<Esc>P'
+"inoremap <C-S-v> <C-r>*
+"cnoremap <C-S-v> <C-r>*
+"tnoremap <C-S-v> <C-w>"*
+
+" some terminal configs (urxvt) map C-S-v => M-8 (but tmux sends M-1 to vi)
+nnoremap <expr> <Esc>8 (&buftype == 'terminal') ? '\<Nop>' : 'P'
+vnoremap <expr> <Esc>8 (&buftype == 'terminal') ? '\<Nop>' : '\<Esc>P'
+inoremap <Esc>8 <C-r>*
+cnoremap <Esc>8 <C-r>*
+tnoremap <Esc>8 <C-w>"*
+
+" C-S-c copy ...
+
+" original - vi often cannot differentiate between C-S-c and C-c ...
+"nnoremap <C-S-c> <Nop>
+"vnoremap <C-S-c> "*y
+"inoremap <C-S-c> <Nop>
+
+" some terminal configs (urxvt) map C-S-c => M-7
+nnoremap <Esc>7 <Nop>
+vnoremap <Esc>7 "*y
+inoremap <Esc>7 <Nop>
+
+" C-S-x cut ...
+
+" original - vi often cannot differentiate between C-S-x and C-x ...
+"nnoremap <C-S-x> <Nop>
+"vnoremap <expr> <C-S-x> (&buftype == 'terminal') ? '\<Nop>' : '"*d'
+"inoremap <C-S-x> <Nop>
+
+" some terminal configs (urxvt) map C-S-x => M-9
+nnoremap <Esc>9 <Nop>
+vnoremap <expr> <Esc>9 (&buftype == 'terminal') ? '\<Nop>' : '"*d'
+inoremap <Esc>9 <Nop>
 
 " cut selection
 "vnoremap <silent> <C-x> "*d<LeftRelease>
-vnoremap <silent> <C-x> "*d
+vnoremap <expr> <C-x> (&buftype == 'terminal') ? '\<Nop>' : '"*d'
 
 " ---------------
 
@@ -2113,14 +2163,6 @@ nnoremap <silent> <Leader>D "_D
 " like visual-mode D (del whole selection) but w/o saving what was deleted to clipboard (what was selected was already saved)
 vnoremap <silent> <Leader>D "_x
 
-" Terminator plugin (and tmux) ctrl-insert maps to <Esc>1 for paste (ie like C-v / C-S-v)
-nnoremap <Esc>1 P
-vnoremap <Esc>1 <Esc>P
-inoremap <Esc>1 <C-r>*
-" or <C-o>p ?
-cnoremap <Esc>1 <C-r>*
-tnoremap <Esc>1 <C-w>"*
-
 " -------------------
 
 " ctrl-del to delete from cursor to beg of word, to match backward-kill-word ...
@@ -2220,10 +2262,10 @@ endfunction
 "nnoremap <silent> L lzl
 "vnoremap <silent> H zhh
 "vnoremap <silent> L lzl
-nnoremap <M-Left>  zhh
-nnoremap <M-Right> lzl
-vnoremap <M-Left>  zhh
-vnoremap <M-Right> lzl
+nnoremap <silent> z<Left>  10zh10h
+nnoremap <silent> z<Right> 10zl10l
+vnoremap <silent> z<Left>  10zh10h
+vnoremap <silent> z<Right> 10zl10l
 
 " ---------
 
@@ -2528,11 +2570,17 @@ vnoremap <A-ScrollWheelDown> 40j$
 
 " ---------
 
-" NOTE: tmux maps A-Up/Down to 5k/5j ...
-" <Esc>[1;3A is <M-Up> (Alt-Up)
-" <Esc>[1;3B is <M-Down> (Alt-Up)
-"noremap <M-Up>   5k
-"noremap <M-Down> 5j
+" move by 5/10 ...
+" NOTE: probably already mapped in tmux ...
+
+noremap  <C-S-Up>    5k
+noremap  <C-S-Down>  5j
+noremap  <C-S-Left>  10h
+noremap  <C-S-Right> 10l
+inoremap <C-S-Up>    <C-\><C-o>5k
+inoremap <C-S-Down>  <C-\><C-o>5j
+inoremap <C-S-Left>  <C-\><C-o>10h
+inoremap <C-S-Right> <C-\><C-o>10l
 
 " ---------
 
@@ -2588,14 +2636,14 @@ autocmd CursorHold * call <SID>ClearCmdWindow()
 " ---------
 
 " tmux uses these to navigate panes
-noremap <S-Down>  <Nop>
 noremap <S-Up>    <Nop>
+noremap <S-Down>  <Nop>
 noremap <S-Left>  <Nop>
 noremap <S-Right> <Nop>
 
 " X might use these to scroll ...
-noremap <S-PageDown> <Nop>
 noremap <S-PageUp>   <Nop>
+noremap <S-PageDown> <Nop>
 
 " ---------
 
@@ -2644,8 +2692,6 @@ noremap <silent> <Leader>cz zz
 "inoremap <M-j> <Esc>:m .+1<CR>==gi
 "inoremap <M-k> <Esc>:m .-2<CR>==gi
 
-" NOTE: C-S-Left/Right mapped to tab prev/next ...
-" NOTE: C-S-Up/Down too easily pressed ...
 "function! MoveLineAndInsert(n)       " -x=up x lines; +x=down x lines
 "    let n_move = (a:n < 0 ? a:n-1 : '+'.a:n)
 "    let pos = getcurpos()
@@ -2656,8 +2702,8 @@ noremap <silent> <Leader>cz zz
 "        startinsert
 "    endtry
 "endfunction
-"inoremap <C-S-Up>   <Esc>`^:silent! call MoveLineAndInsert(-1)<CR>
-"inoremap <C-S-Down> <Esc>`^:silent! call MoveLineAndInsert(+1)<CR>
+"inoremap ,<Up>   <Esc>`^:silent! call MoveLineAndInsert(-1)<CR>
+"inoremap ,<Down> <Esc>`^:silent! call MoveLineAndInsert(+1)<CR>
 
 "nnoremap ,<Up>   :<C-u>silent! move-2<CR>==
 "nnoremap ,<Down> :<C-u>silent! move+<CR>==
@@ -4083,46 +4129,52 @@ endfunction
 
 tnoremap <silent> <C-d> <C-w>:call <SID>TermQuit()<CR>
 
-" NOTE: some of these mappings start with <Esc> and keys pressed
-"       quickly enough could be incorrectly interpreted as a mapping
-" TODO: look into Terminator plugin for these sequences ...
+" NOTE: M-L,R,U,D used for tab nav ...
 
-"execute "set <M-.>=\e."
-"execute "set <M-'>=\e'"
+" NOTE: C-S-Left/Right/Up/Down move by 5 ...
+" NOTE: S-L,R,U,D was used by tmux for window nav ...
+" NOTE: some terminals work with A/M-L/R but some need esc seq ...
 
-"execute "set <M-,>=\e,"
-"execute "set <M-;>=\e;"
+" MapFastKeycode: helper for fast keycode mappings
+" makes use of unused vim keycodes <[S-]F15> to <[S-]F37>
+function! <SID>MapFastKeycode(key, keycode)
+    if s:fast_i == 46
+        echohl WarningMsg
+        echomsg "Unable to map ".a:key.": out of spare keycodes"
+        echohl None
+        return
+    endif
+    let vkeycode = '<'.(s:fast_i/23==0 ? '' : 'S-').'F'.(15+s:fast_i%23).'>'
+    exec 'set '.vkeycode.'='.a:keycode
+    exec 'map '.vkeycode.' '.a:key
+    let s:fast_i += 1
+endfunction
+let s:fast_i = 0
+
+"call <SID>MapFastKeycode('<M-Left>',  "\e[1;5C")
+"call <SID>MapFastKeycode('<M-Right>', "\e[1;5D")
+
+" prev tab
+"nnoremap <silent> <Esc>[1;5C       :tabprevious<CR>
+"vnoremap <silent> <Esc>[1;5C  <Esc>:tabprevious<CR>
+"inoremap <silent> <Esc>[1;5C  <Esc>:tabprevious<CR>
+"tnoremap <silent> <Esc>[1;5C  <C-w>:tabprevious<CR>
+
+nnoremap <silent> <M-Left>      :tabprevious<CR>
+vnoremap <silent> <M-Left> <Esc>:tabprevious<CR>
+inoremap <silent> <M-Left> <Esc>:tabprevious<CR>
+tnoremap <silent> <M-Left> <C-w>:tabprevious<CR>
 
 " next tab
-"nnoremap <silent> <M-Right>      :tabnext<CR>
-"tnoremap <silent> <M-Right> <C-w>:tabnext<CR>
-"vnoremap <silent> <M-Right> <Esc>:tabnext<CR>
-"inoremap <silent> <M-Right> <Esc>:tabnext<CR>
-nnoremap <silent> <C-S-Right>      :tabnext<CR>
-tnoremap <silent> <C-S-Right> <C-w>:tabnext<CR>
-vnoremap <silent> <C-S-Right> <C-\><C-n>:tabnext<CR>
-inoremap <silent> <C-S-Right> <Esc>:tabnext<CR>
-" Alt-. (>)
-"tnoremap <silent> <Esc>. <C-w>:tabnext<CR>
-"nnoremap <silent> <M-.>       :tabnext<CR>
-"vnoremap <silent> <M-.>  <Esc>:tabnext<CR>
-"inoremap <silent> <M-.>  <Esc>:tabnext<CR>
+"nnoremap <silent> <Esc>[1;5D      :tabnext<CR>
+"vnoremap <silent> <Esc>[1;5D <Esc>:tabnext<CR>
+"inoremap <silent> <Esc>[1;5D <Esc>:tabnext<CR>
+"tnoremap <silent> <Esc>[1;5D <C-w>:tabnext<CR>
 
-" NOTE: C-S-Up/Down used for moving lines ...
-" prev tab
-"nnoremap <silent> <M-Left>      :tabprevious<CR>
-"tnoremap <silent> <M-Left> <C-w>:tabprevious<CR>
-"vnoremap <silent> <M-Left> <Esc>:tabprevious<CR>
-"inoremap <silent> <M-Left> <Esc>:tabprevious<CR>
-nnoremap <silent> <C-S-Left>      :tabprevious<CR>
-tnoremap <silent> <C-S-Left> <C-w>:tabprevious<CR>
-vnoremap <silent> <C-S-Left> <C-\><C-n>:tabprevious<CR>
-inoremap <silent> <C-S-Left> <Esc>:tabprevious<CR>
-" Alt-, (<)
-"tnoremap <silent> <Esc>, <C-w>:tabprevious<CR>
-"nnoremap <silent> <M-,>       :tabprevious<CR>
-"vnoremap <silent> <M-,>  <Esc>:tabprevious<CR>
-"inoremap <silent> <M-,>  <Esc>:tabprevious<CR>
+nnoremap <silent> <M-Right>      :tabnext<CR>
+vnoremap <silent> <M-Right> <Esc>:tabnext<CR>
+inoremap <silent> <M-Right> <Esc>:tabnext<CR>
+tnoremap <silent> <M-Right> <C-w>:tabnext<CR>
 
 nnoremap <silent> <C-t> :tabnext<CR>
 vnoremap <silent> <C-t> <C-\><C-n>:tabnext<CR>
@@ -4133,17 +4185,11 @@ vnoremap <silent> <C-t> <C-\><C-n>:tabnext<CR>
 " NOTE: <C-w><Left>,<Right> is for moving between window splits
 "nnoremap <silent> <C-w><C-Left>  :tabprevious<CR>
 "nnoremap <silent> <C-w><C-Right> :tabnext<CR>
+
 nnoremap <silent> <C-w><C-Left>  <C-w>h
 nnoremap <silent> <C-w><C-Right> <C-w>l
 nnoremap <silent> <C-w><C-Up>    <C-w>k
 nnoremap <silent> <C-w><C-Down>  <C-w>j
-
-" TODO: M-L,R,U,D used for horizontal scroll above ...
-" NOTE: S-L,R,U,D was used by tmux for window nav ...
-"nnoremap <silent> <S-Left>       <C-w><Left>
-"nnoremap <silent> <S-Right>      <C-w><Right>
-"nnoremap <silent> <S-Up>         <C-w><Up>
-"nnoremap <silent> <S-Down>       <C-w><Down>
 
 " -----------------------------
 
