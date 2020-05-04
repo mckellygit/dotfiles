@@ -177,9 +177,10 @@ Plugin 'Konfekt/vim-alias'
 "
 " tab/buffer
 "Plugin 'ap/vim-buftabline'
-"
 " bufexplorer
 "Plugin 'jlanzarotta/bufexplorer'
+" lightline buffer ...
+"Plugin 'mengelbrecht/lightline-bufferline'
 "
 " start screen
 Plugin 'mhinz/vim-startify'
@@ -290,10 +291,10 @@ let g:lightline = {
         \ 'n'     : 'Nm',
         \ 'i'     : 'In',
         \ 'R'     : 'Re',
-        \ 'v'     : 'Vi',
+        \ 'v'     : 'Vc',
         \ 'V'     : 'Vl',
         \ "\<C-v>": 'Vb',
-        \ 'c'     : 'Co',
+        \ 'c'     : 'Nm',
         \ 's'     : 'Se',
         \ 'S'     : 'Sl',
         \ "\<C-s>": 'Sb',
@@ -1057,6 +1058,12 @@ let g:gruvbox_contrast_dark = 'medium'
 " echodoc -----------
 let g:echodoc#enable_at_startup = 1
 " echodoc -----------
+
+" lightline-bufferline ---
+"let g:lightline.tabline          = {'left': [['buffers']], 'right': [['close']]}
+"let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
+"let g:lightline.component_type   = {'buffers': 'tabsel'}
+" lightline-bufferline ---
 
 " vimade -----------
 let g:vimade = {}
