@@ -1129,8 +1129,16 @@ if &term=~"kitty"
   let &t_ut=''
 endif
 
-" TODO: set some unused terminfo var ...
+" set some unused terminfo var ...
 "set t_f9=123
+
+" ------------------------------
+" TODO: seems we need to force xterm* if alacritty ?
+if &term=="alacritty"
+  set term=xterm-256color
+endif
+" TODO: seems we need to force xterm* if alacritty ?
+" ------------------------------
 
 if &term=="xterm"
   set t_Co=8
@@ -1161,8 +1169,12 @@ delmarks v
 " See https://sunaku.github.io/tmux-select-pane.html for documentation.
 "let progname = substitute($VIM, '.*[/\\]', '', '')
 "set title titlestring=%{progname}\ %f\ +%l\ #%{tabpagenr()}.%{winnr()}
-set title titlestring=mck-vim
-if &term =~ '^screen' && !has('nvim') | exe "set t_ts=\e]2; t_fs=\7" | endif
+if !empty($TMUX_PANE) && !has('nvim')
+  if (&term =~ "^screen" || &term =~ "^tmux")
+    set title titlestring=mck-vim
+    exec "set t_ts=\e]2; t_fs=\7"
+  endif
+endif
 
 " visual/audio bell (terminator light bulb) off ...
 set belloff=error,backspace,esc
@@ -1172,7 +1184,7 @@ if has("mouse_sgr")
   set ttymouse=sgr
 else
   set ttymouse=xterm2
-end
+endif
 
 " search options
 set wrapscan
