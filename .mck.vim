@@ -1438,11 +1438,12 @@ set clipboard^=autoselectml guioptions+=A
 
 " ------------------------------
 
+" NOTE: use MapFastKeycode(<Fxx>, ...) to remove explicit leading <Esc> from mappings ...
 " need enough time for mapped / <Leader> key sequences
 "set timeoutlen=1000 ttimeoutlen=0
 "set notimeout ttimeout timeoutlen=100
 set timeout timeoutlen=700
-set ttimeout ttimeoutlen=2
+set ttimeout ttimeoutlen=7
 "set nottimeout
 
 "set esckeys
@@ -1460,6 +1461,26 @@ vnoremap S <Nop>
 
 " dont do this, it messes up viw ...
 "vnoremap i <Nop>
+
+" ------------------------------
+
+" MapFastKeycode: helper for fast keycode mappings
+" makes use of unused vim keycodes <[S-]F15> to <[S-]F37>
+let s:fast_i = 0
+function! s:MapFastKeycode(key, keycode)
+    " use only S-F15-37 ...
+    if s:fast_i == 23
+        echohl WarningMsg
+        echomsg "Unable to map ".a:key.": out of spare keycodes"
+        echohl None
+        return
+    endif
+    " use only S-F15-37 ...
+    let vkeycode = '<'.(s:fast_i/23==0 ? 'S-' : '').'F'.(15+s:fast_i%23).'>'
+    exec 'set '.vkeycode.'='.a:keycode
+    exec 'map '.vkeycode.' '.a:key
+    let s:fast_i += 1
+endfunction
 
 " ----------- yank / cut / paste -----------
 
@@ -1582,12 +1603,13 @@ vnoremap <silent> <expr> y     (&buftype == 'terminal') ? 'mv"*y`vi' : (mode() =
 "tnoremap <C-Insert> <C-w>"*
 
 " Terminator plugin (and tmux) ctrl-insert maps to <Esc>1 (<M-1>) for paste
-nnoremap <expr> <Esc>1 (&buftype == 'terminal') ? '\<Nop>' : 'P'
-vnoremap <expr> <Esc>1 (&buftype == 'terminal') ? '\<Nop>' : '\<Esc>P'
-inoremap <Esc>1 <C-r>*
+call <SID>MapFastKeycode('<F31>',  "\e1")
+nnoremap <expr> <F31> (&buftype == 'terminal') ? '\<Nop>' : 'P'
+vnoremap <expr> <F31> (&buftype == 'terminal') ? '\<Nop>' : '\<Esc>P'
+inoremap <F31> <C-r>*
 " or <C-o>p ?
-cnoremap <Esc>1 <C-r>*
-tnoremap <Esc>1 <C-w>"*
+cnoremap <F31> <C-r>*
+tnoremap <F31> <C-w>"*
 
 " original - vi often cannot differentiate between C-S-v and C-v ...
 "nnoremap <expr> <C-S-v> (&buftype == 'terminal') ? '\<Nop>' : 'P'
@@ -1597,11 +1619,12 @@ tnoremap <Esc>1 <C-w>"*
 "tnoremap <C-S-v> <C-w>"*
 
 " some terminal configs (urxvt) map C-S-v => M-8 (but tmux sends M-1 to vi)
-nnoremap <expr> <Esc>8 (&buftype == 'terminal') ? '\<Nop>' : 'P'
-vnoremap <expr> <Esc>8 (&buftype == 'terminal') ? '\<Nop>' : '\<Esc>P'
-inoremap <Esc>8 <C-r>*
-cnoremap <Esc>8 <C-r>*
-tnoremap <Esc>8 <C-w>"*
+call <SID>MapFastKeycode('<F33>',  "\e8")
+nnoremap <expr> <F33> (&buftype == 'terminal') ? '\<Nop>' : 'P'
+vnoremap <expr> <F33> (&buftype == 'terminal') ? '\<Nop>' : '\<Esc>P'
+inoremap <F33> <C-r>*
+cnoremap <F33> <C-r>*
+tnoremap <F33> <C-w>"*
 
 " C-S-c copy ...
 
@@ -1611,9 +1634,10 @@ tnoremap <Esc>8 <C-w>"*
 "inoremap <C-S-c> <Nop>
 
 " some terminal configs (urxvt) map C-S-c => M-7
-nnoremap <Esc>7 <Nop>
-vnoremap <Esc>7 "*y
-inoremap <Esc>7 <Nop>
+call <SID>MapFastKeycode('<F32>',  "\e7")
+nnoremap <F32> <Nop>
+vnoremap <F32> "*y
+inoremap <F32> <Nop>
 
 " C-S-x cut ...
 
@@ -1623,9 +1647,10 @@ inoremap <Esc>7 <Nop>
 "inoremap <C-S-x> <Nop>
 
 " some terminal configs (urxvt) map C-S-x => M-9
-nnoremap <Esc>9 <Nop>
-vnoremap <expr> <Esc>9 (&buftype == 'terminal') ? '\<Nop>' : '"*d'
-inoremap <Esc>9 <Nop>
+call <SID>MapFastKeycode('<F34>',  "\e9")
+nnoremap <F34> <Nop>
+vnoremap <expr> <F34> (&buftype == 'terminal') ? '\<Nop>' : '"*d'
+inoremap <F34> <Nop>
 
 " cut selection
 "vnoremap <silent> <C-x> "*d<LeftRelease>
@@ -2186,37 +2211,51 @@ vnoremap <silent> <Leader>D "_x
 
 " ctrl-del to delete from cursor to beg of word, to match backward-kill-word ...
 "nnoremap <silent> <Esc>[3;5~ "_d<C-Left>
-nnoremap <silent> <Esc>[3;5~ "_db
-vnoremap <silent> <Esc>[3;5~ <Esc>"_dbv
-inoremap <silent> <Esc>[3;5~ <Esc>"_dbi
+"nnoremap <silent> <Esc>[3;5~ "_db
+"vnoremap <silent> <Esc>[3;5~ <Esc>"_dbv
+"inoremap <silent> <Esc>[3;5~ <Esc>"_dbi
 " cannot use ctrl-w as that is for window nav
+call <SID>MapFastKeycode('<C-DEL>',  "\e[3;5~")
+nnoremap <silent> <C-DEL> "_db
+vnoremap <silent> <C-DEL> <Esc>"_dbv
+inoremap <silent> <C-DEL> <Esc>"_dbi
 
 " shift-del to delete from curor to end of word, to match kill-word ...
-nnoremap <silent> <Esc>[3;2~ "_dw
-vnoremap <silent> <Esc>[3;2~ "_dwv
-inoremap <silent> <Esc>[3;2~ "_dwi
+"nnoremap <silent> <Esc>[3;2~ "_dw
+"vnoremap <silent> <Esc>[3;2~ "_dwv
+"inoremap <silent> <Esc>[3;2~ "_dwi
 " also skip alt-d
+call <SID>MapFastKeycode('<S-DEL>',  "\e[3;2~")
+nnoremap <silent> <S-DEL> "_dw
+vnoremap <silent> <S-DEL> "_dwv
+inoremap <silent> <S-DEL> "_dwi
 
 " ctrl-shift-del to delete whole word under cursor
 "nnoremap <silent> <Esc>[3;6~ B"_dW
-nnoremap <silent> <Esc>[3;6~ "_diw
-vnoremap <silent> <Esc>[3;6~ <Esc>"_diwv
-inoremap <silent> <Esc>[3;6~ <Esc>"_diwi
+"nnoremap <silent> <Esc>[3;6~ "_diw
+"vnoremap <silent> <Esc>[3;6~ <Esc>"_diwv
+"inoremap <silent> <Esc>[3;6~ <Esc>"_diwi
+call <SID>MapFastKeycode('<C-S-DEL>',  "\e[3;6~")
+nnoremap <silent> <C-S-DEL> "_diw
+vnoremap <silent> <C-S-DEL> <Esc>"_diwv
+inoremap <silent> <C-S-DEL> <Esc>"_diwi
 
 " alt-del to delete whole word under cursor
-nnoremap <silent> <Esc>[3;3~ "_diw
-vnoremap <silent> <Esc>[3;3~ <Esc>"_diwv
-inoremap <silent> <Esc>[3;3~ <Esc>"_diwi
+"nnoremap <silent> <Esc>[3;3~ "_diw
+"vnoremap <silent> <Esc>[3;3~ <Esc>"_diwv
+"inoremap <silent> <Esc>[3;3~ <Esc>"_diwi
+call <SID>MapFastKeycode('<M-DEL>',  "\e[3;3~")
 nnoremap <silent> <M-DEL> "_diw
 vnoremap <silent> <M-DEL> <Esc>"_diwv
 inoremap <silent> <M-DEL> <Esc>"_diwi
+
+" M-S-DEL ?
+call <SID>MapFastKeycode('<M-S-DEL>',  "\e[3;4~")
 
 " TODO: if shift-BS is ever recognized ...
 nnoremap <silent> <S-BS> X
 vnoremap <silent> <S-BS> <Esc>Xv
 inoremap <silent> <S-BS> <Esc>Xi
-
-" -------------------
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
@@ -4153,22 +4192,6 @@ tnoremap <silent> <C-d> <C-w>:call <SID>TermQuit()<CR>
 " NOTE: C-S-Left/Right/Up/Down move by 5 ...
 " NOTE: S-L,R,U,D was used by tmux for window nav ...
 " NOTE: some terminals work with A/M-L/R but some need esc seq ...
-
-" MapFastKeycode: helper for fast keycode mappings
-" makes use of unused vim keycodes <[S-]F15> to <[S-]F37>
-function! <SID>MapFastKeycode(key, keycode)
-    if s:fast_i == 46
-        echohl WarningMsg
-        echomsg "Unable to map ".a:key.": out of spare keycodes"
-        echohl None
-        return
-    endif
-    let vkeycode = '<'.(s:fast_i/23==0 ? '' : 'S-').'F'.(15+s:fast_i%23).'>'
-    exec 'set '.vkeycode.'='.a:keycode
-    exec 'map '.vkeycode.' '.a:key
-    let s:fast_i += 1
-endfunction
-let s:fast_i = 0
 
 "call <SID>MapFastKeycode('<M-Left>',  "\e[1;5C")
 "call <SID>MapFastKeycode('<M-Right>', "\e[1;5D")

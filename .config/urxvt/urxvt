@@ -308,6 +308,12 @@ URxvt.keysym.C-S-space:         string:\033\064
 URxvt.keysym.C-Home:            string:\033\065
 URxvt.keysym.C-End:             string:\033\066
 
+URxvt.keysym.Control-Delete:    string:\033[3;5~
+URxvt.keysym.Shift-Delete:      string:\033[3;2~
+URxvt.keysym.C-S-Delete:        string:\033[3;6~
+URxvt.keysym.Meta-Delete:       string:\033[3;3~
+URxvt.keysym.Shift-Meta-Delete: string:\033[3;4~
+
 !!URxvt.keysym.Shift-Control-C:   string:\033\067
 !!URxvt.keysym.Shift-Control-V:   string:\033\070
 URxvt.keysym.Shift-Control-X:   string:\033\071
