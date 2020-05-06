@@ -222,7 +222,7 @@ URxvt.boldFont: xft:DejaVu Sans Mono:pixelsize=21:weight=bold:antialias=true
 
 URxvt.letterSpace: 0
 URxvt.lineSpace: 0
-URxvt.geometry: 168x48+800+850
+URxvt.geometry: 164x48+800+850
 URxvt*externalBorder: 1
 URxvt.internalBorder: 6
 URxvt.borderColor: #262626
@@ -338,6 +338,8 @@ URxvt.keysym.S-BackSpace:       string:\177
 
 !! ==========================================
 !! ==========================================
+
+Xcursor.size: 32
 
 !! perl extensions, misc ...
 

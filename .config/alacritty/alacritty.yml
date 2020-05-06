@@ -8,6 +8,9 @@ key_bindings:
   - { key: Home,      mods: Control,         chars: "\x1b\x35"        }
   - { key: End,       mods: Control,         chars: "\x1b\x36"        }
 
+  - { key: Home,                             chars: "\x1b[1~"         }
+  - { key: End,                              chars: "\x1b[4~"         }
+
   - { key: Back,      mods: Shift,           chars: "\x7f"            }
 
   - { key: V,         mods: Control|Shift,   action: Paste            }
@@ -41,6 +44,12 @@ key_bindings:
   - { key: Down,      mods: Alt|Shift,       chars: "\x1b[1;4B"       }
   - { key: Left,      mods: Alt|Shift,       chars: "\x1b[1;4D"       }
   - { key: Right,     mods: Alt|Shift,       chars: "\x1b[1;4C"       }
+
+  - { key: Delete,    mods: Control,         chars: "\x1b[3;5~"       }
+  - { key: Delete,    mods: Shift,           chars: "\x1b[3;2~"       }
+  - { key: Delete,    mods: Control|Shift,   chars: "\x1b[3;6~"       }
+  - { key: Delete,    mods: Alt,             chars: "\x1b[3;3~"       }
+  - { key: Delete,    mods: Alt|Shift,       chars: "\x1b[3;4~"       }
 
 mouse_bindings:
   - { mouse: Middle, action: None }

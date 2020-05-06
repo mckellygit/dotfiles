@@ -242,7 +242,7 @@ endfunction
 " use ag (silver-searcher) instead of ack, if possible
 if executable('ag')
   " NOTE: ag can miss some matches without -U --hidden ...
-  let g:ackprg = 'ag --vimgrep -U --hidden '
+  let g:ackprg = 'ag --vimgrep -U --hidden -- '
 endif
 " example: (cdo/cfdo ldo/lfdo [!])
 " :Ack foo
@@ -251,7 +251,7 @@ endif
 let g:ackhighlight = 1
 let g:ack_use_dispatch = 1
 "set grepprg=ack\ -k
-set grepprg=ag\ --vimgrep\ -U\ --hidden
+set grepprg=ag\ --vimgrep\ -U\ --hidden\ --\ 
 set grepformat=%f:%l:%c:%m
 " open :grep output in qf ...
 autocmd QuickFixCmdPost *grep* cwindow
@@ -553,13 +553,13 @@ endfunction
 command! -bang -nargs=+ -complete=dir Agits call s:ag_in(<bang>0, <f-args>)
 "
 command! -bang -nargs=* Ag
-  \ call fzf#vim#grep('ag -U --hidden --nogroup --column --color '.shellescape(<q-args>),
+  \ call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(<q-args>),
   \ 1,
   \ fzf#vim#with_preview(),
   \ <bang>0)
 "
 command! -bang -nargs=* Agit
-  \ call fzf#vim#grep('ag -U --hidden --nogroup --column --color '.shellescape(<q-args>).' '.s:find_git_root(),
+  \ call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(<q-args>).' '.s:find_git_root(),
   \ 1,
   \ fzf#vim#with_preview('up:50%:hidden', 'p'),
   \ <bang>0)
@@ -1588,43 +1588,36 @@ endfunction
 "     lnum == 1 ? "top" : lnum == 1000 ? "last" : lnum
 
 " copy (yank) selection, stay at end unless rectangular region ...
-vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? 'mv"*y`vi' : (mode() =~ '\<C-v>') ? '"*y' : 'mv"*y`v'
-vnoremap <silent> <expr> y     (&buftype == 'terminal') ? 'mv"*y`vi' : (mode() =~ '\<C-v>') ? '"*y' : 'mv"*y`v'
+vnoremap <silent> <expr> <C-c> (mode() =~ '\<C-v>') ? '"*y' : 'mv"*y`v'
+vnoremap <silent> <expr> y     (mode() =~ '\<C-v>') ? '"*y' : 'mv"*y`v'
 
 " ---------------
 
 " C-Insert, C-S-v paste ...
 
 " original <C-Insert> map - vi may not differentiate between C-Insert and Insert ...
-"nnoremap <expr> <C-Insert> (&buftype == 'terminal') ? '\<Nop>' : 'P'
-"vnoremap <expr> <C-Insert> (&buftype == 'terminal') ? '\<Nop>' : '\<Esc>P'
+"nnoremap <expr> <C-Insert> (&buftype == 'terminal') ? '\<Nop>' : 'p'
+"vnoremap <expr> <C-Insert> (&buftype == 'terminal') ? '\<Nop>' : '\<Esc>p'
 "inoremap <C-Insert> <C-r>*
 "cnoremap <C-Insert> <C-r>*
 "tnoremap <C-Insert> <C-w>"*
 
-" Terminator plugin (and tmux) ctrl-insert maps to <Esc>1 (<M-1>) for paste
-call <SID>MapFastKeycode('<F31>',  "\e1")
-nnoremap <expr> <F31> (&buftype == 'terminal') ? '\<Nop>' : 'P'
-vnoremap <expr> <F31> (&buftype == 'terminal') ? '\<Nop>' : '\<Esc>P'
-inoremap <F31> <C-r>*
-" or <C-o>p ?
-cnoremap <F31> <C-r>*
-tnoremap <F31> <C-w>"*
-
 " original - vi often cannot differentiate between C-S-v and C-v ...
-"nnoremap <expr> <C-S-v> (&buftype == 'terminal') ? '\<Nop>' : 'P'
-"vnoremap <expr> <C-S-v> (&buftype == 'terminal') ? '\<Nop>' : '\<Esc>P'
+"nnoremap <expr> <C-S-v> (&buftype == 'terminal') ? '\<Nop>' : 'p'
+"vnoremap <expr> <C-S-v> (&buftype == 'terminal') ? '\<Nop>' : '\<Esc>p'
 "inoremap <C-S-v> <C-r>*
 "cnoremap <C-S-v> <C-r>*
 "tnoremap <C-S-v> <C-w>"*
 
-" some terminal configs (urxvt) map C-S-v => M-8 (but tmux sends M-1 to vi)
-call <SID>MapFastKeycode('<F33>',  "\e8")
-nnoremap <expr> <F33> (&buftype == 'terminal') ? '\<Nop>' : 'P'
-vnoremap <expr> <F33> (&buftype == 'terminal') ? '\<Nop>' : '\<Esc>P'
-inoremap <F33> <C-r>*
-cnoremap <F33> <C-r>*
-tnoremap <F33> <C-w>"*
+" Terminator plugin (and tmux) ctrl-insert maps to <Esc>1 (<M-1>) for paste
+" some terminal configs (urxvt) map C-S-v => M-1 (was M-8) (and tmux sends M-1 to vi)
+call <SID>MapFastKeycode('<F31>',  "\e1")
+nnoremap <expr> <F31> (&buftype == 'terminal') ? '\<Nop>' : 'p'
+vnoremap <expr> <F31> (&buftype == 'terminal') ? '\<Nop>' : '\<Esc>p'
+inoremap <F31> <C-r>*
+" or <C-o>p ?
+cnoremap <F31> <C-r>*
+tnoremap <F31> <C-w>"*
 
 " C-S-c copy ...
 
@@ -1636,7 +1629,7 @@ tnoremap <F33> <C-w>"*
 " some terminal configs (urxvt) map C-S-c => M-7
 call <SID>MapFastKeycode('<F32>',  "\e7")
 nnoremap <F32> <Nop>
-vnoremap <F32> "*y
+vnoremap <expr> <F32> (mode() =~ '\<C-v>') ? '"*y' : 'mv"*y`v'
 inoremap <F32> <Nop>
 
 " C-S-x cut ...
@@ -1647,10 +1640,10 @@ inoremap <F32> <Nop>
 "inoremap <C-S-x> <Nop>
 
 " some terminal configs (urxvt) map C-S-x => M-9
-call <SID>MapFastKeycode('<F34>',  "\e9")
-nnoremap <F34> <Nop>
-vnoremap <expr> <F34> (&buftype == 'terminal') ? '\<Nop>' : '"*d'
-inoremap <F34> <Nop>
+call <SID>MapFastKeycode('<F33>',  "\e9")
+nnoremap <F33> <Nop>
+vnoremap <expr> <F33> (&buftype == 'terminal') ? '\<Nop>' : '"*d'
+inoremap <F33> <Nop>
 
 " cut selection
 "vnoremap <silent> <C-x> "*d<LeftRelease>
