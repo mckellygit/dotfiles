@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+/usr/local/kitty.app/bin/kitty >&/dev/null &!
+PID=$!
+
+# Window ID of the process...pray that there's     
+# only one window! Otherwise this might break.
+# We also need to wait for the process to spawn
+# a window.
+WID=$(wmctrl -lp 2>/dev/null | grep " $PID " | awk '{print $1}')
+while [[ "$WID" == "" ]]; do
+    sleep 0.2
+    WID=$(wmctrl -lp 2>/dev/null | grep " $PID " | awk '{print $1}')
+done
+
+# Set the size and location of the window
+# See man wmctrl for more info
+wmctrl -i -r $WID -b remove,maximized_vert
+wmctrl -i -r $WID -b remove,maximized_horz
+wmctrl -i -r $WID -e 0,800,880,-1,-1
