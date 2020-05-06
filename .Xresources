@@ -261,6 +261,14 @@ URxvt.background: [96]#2e2e26
 !!urxvt*transparent: true
 !!urxvt*shading: 30
 
+Xcursor.size: 32
+
+!! % xdpyinfo | grep -B 2 resol
+!! screen #0:
+!!   dimensions:    3840x2160 pixels (1016x572 millimeters)
+!!   resolution:    96x96 dots per inch
+Xft.dpi: 96
+
 !! ==========================================
 
 !! keybindings
@@ -338,8 +346,6 @@ URxvt.keysym.S-BackSpace:       string:\177
 
 !! ==========================================
 !! ==========================================
-
-Xcursor.size: 32
 
 !! perl extensions, misc ...
 
