@@ -162,7 +162,7 @@ alias stop-rdm='rc -q'
 alias stop_rdm='rc -q'
 
 # also could use -u or -U instead of --all-text
-alias ag='\ag --all-text --hidden'
+alias ag='\ag --all-text --hidden -- '
 
 alias radssh='python -m radssh.shell $@'
 #alias radssh='python ~/radssh/plugins/shell1.py $@'

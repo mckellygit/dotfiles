@@ -2077,8 +2077,19 @@ vnoremap <C-3-LeftMouse> <LeftMouse><C-\><C-n>:call <SID>GetLine(1)<CR>
 " ------------------------------
 " TODO: inside A-2-LeftMouse functions, check for 3rd click ...
 "    let c = getchar()
-"    if c == "\<LeftMouse>" && v:mouse_win > 0
+"    if c == '\<LeftMouse>' && v:mouse_win > 0
 " ------------------------------
+
+function! s:Delay(arg) abort
+    if a:arg == 1
+        " wish we could prevent flicker ...
+        silent exe "normal! gv"
+    endif
+    echo "copied to clipboard ..."
+    redraw
+    sleep 551m
+    redraw!
+endfunction
 
 " M- same as C- (was viW)
 " NOTE: copy/yank and returns to normal mode
@@ -2086,13 +2097,13 @@ vnoremap <C-3-LeftMouse> <LeftMouse><C-\><C-n>:call <SID>GetLine(1)<CR>
 
 " NOTE: single click after double ...
 
-nnoremap <A-2-LeftMouse> mvviwygv
-nnoremap <A-3-LeftMouse> mvviWygv
-nnoremap <A-4-LeftMouse> mvVygv
+nnoremap <A-2-LeftMouse> mvviwy:call <SID>Delay(1)<CR><Esc>
+nnoremap <A-3-LeftMouse> mvviWy:call <SID>Delay(1)<CR><Esc>
+nnoremap <A-4-LeftMouse> mvVy:call <SID>Delay(1)<CR><Esc>
 
-vnoremap <A-2-LeftMouse> <Esc>mvviwygv
-vnoremap <A-3-LeftMouse> <Esc>mvviWygv
-vnoremap <A-4-LeftMouse> <Esc>mvVygv
+vnoremap <A-2-LeftMouse> <Esc>mvviwy:call <SID>Delay(1)<CR><Esc>
+vnoremap <A-3-LeftMouse> <Esc>mvviWy:call <SID>Delay(1)<CR><Esc>
+vnoremap <A-4-LeftMouse> <Esc>mvVy:call <SID>Delay(1)<CR><Esc>
 
 "vnoremap <silent> <A-2-LeftMouse> mv<Esc>viwygv<C-\><C-n>:sleep 651m<CR>`v<Esc>
 "vnoremap <silent> <A-3-LeftMouse> mv<Esc>viWygv<C-\><C-n>:sleep 651m<CR>`v<Esc>
@@ -2130,7 +2141,9 @@ inoremap <expr> <A-4-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<ba
 "vnoremap <expr> <A-LeftRelease> (@i=="1") ? '<LeftRelease><C-\><C-n>:let @i="0"<bar>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<CR><Esc>i' : '<LeftRelease><C-\><C-n>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<CR>'
 "vmap <expr> <A-LeftRelease> (@i=="1") ? '<LeftRelease><C-\><C-n>:<C-u>sleep 551m<bar>:let @i="0"<bar>:call YankIt("*y", 2)<CR><Esc>i' : '<LeftRelease><C-\><C-n>:<C-u>sleep 551m<bar>:call YankIt("*y", 2)<CR>'
 
-vmap <A-LeftRelease> "*ygv
+"vmap <A-LeftRelease> "*ygv
+vmap <A-LeftRelease> "*y:call <SID>Delay(0)<CR><Esc>
+
 "vnoremap <A-2-LeftRelease>  <Nop>
 "vnoremap <A-3-LeftRelease>  <Nop>
 "vnoremap <A-4-LeftRelease>  <Nop>
@@ -2174,28 +2187,30 @@ vnoremap <silent> <Leader>yw <C-\><C-n>mvviwygv
 nnoremap <silent> <Leader>* :set hlsearch<CR>*
 nnoremap <silent> <Leader># :set hlsearch<CR>#
 
-nnoremap <silent> <Leader>wf viw"sy:set hlsearch<CR>/<C-r>s<CR>
-nnoremap <silent> <Leader>wF viw"sy:set hlsearch<CR>?<C-r>s<CR>
+nnoremap <silent> <Leader>wf viw"sybb:set hlsearch<CR>/<C-r>s<CR>
+nnoremap <silent> <Leader>wF viw"syw:set hlsearch<CR>?<C-r>s<CR>
 
-" search for word under curor (copying selection to clipboard)
+" search for word under cursor (copying selection to clipboard)
 " NOTE: *, # search for whole \<word\> which may not always be desired
 "nnoremap <silent> <Leader>wg viwy:set hlsearch<CR>*
 "nnoremap <silent> <Leader>wG viwy:set hlsearch<CR>#
-nnoremap <silent> <Leader>wg viwy:set hlsearch<CR>/<C-r>*<CR>
-nnoremap <silent> <Leader>wG viwy:set hlsearch<CR>?<C-r>*<CR>
+nnoremap <silent> <Leader>wg viwybb:set hlsearch<CR>/<C-r>*<CR>
+nnoremap <silent> <Leader>wG viwyw:set hlsearch<CR>?<C-r>*<CR>
 " -----------------------------------------------------
 
 " search for visual selection
 " if register is regex with literal metachars then :let @/=escape(@", '.*\\$^')
 "vnoremap <silent> <Leader>wf y <Bar> <Esc>:let @/=@"<CR> <Bar> 2n
 " (without copying selection to clipboard)
-vnoremap <silent> <Leader>wf "sy<C-\><C-n>:set hlsearch<CR>/<C-r>s<CR>
-vnoremap <silent> <Leader>wF "sy<C-\><C-n>:set hlsearch<CR>?<C-r>s<CR>
+vnoremap <silent> <Leader>wf "sybb<C-\><C-n>:set hlsearch<CR>/<C-r>s<CR>
+vnoremap <silent> <Leader>wF "syw<C-\><C-n>:set hlsearch<CR>?<C-r>s<CR>
+
 " to match normal mode (copying selection to clipboard)
-vnoremap <silent> <Leader>wg y<C-\><C-n>:set hlsearch<CR>/<C-r>*<CR>
-vnoremap <silent> <Leader>wG y<C-\><C-n>:set hlsearch<CR>?<C-r>*<CR>
+vnoremap <silent> <Leader>wg ybb<C-\><C-n>:set hlsearch<CR>/<C-r>*<CR>
+vnoremap <silent> <Leader>wG yw<C-\><C-n>:set hlsearch<CR>?<C-r>*<CR>
 
 " and the *, # (without copying selection to clipboard)
+" NOTE: *, # search for whole \<word\> which may not always be desired
 vnoremap <silent> * "sy<C-\><C-n>:set hlsearch<CR>/<C-r>s<CR>
 vnoremap <silent> # "sy<C-\><C-n>:set hlsearch<CR>?<C-r>s<CR>
 
@@ -2299,10 +2314,13 @@ inoremap <silent> <A-Del> <Esc>"_diwi
 
 " A-S-Del ?
 
+" NOTE: S-BS in terminals often mapped to BS/Del ...
+noremap  <silent> <S-BS> <BS>
+inoremap <silent> <S-BS> <BS>
 " TODO: if shift-BS is ever recognized ...
-nnoremap <silent> <S-BS> X
-vnoremap <silent> <S-BS> <Esc>Xv
-inoremap <silent> <S-BS> <Esc>Xi
+"nnoremap <silent> <S-BS> X
+"vnoremap <silent> <S-BS> <Esc>Xv
+"inoremap <silent> <S-BS> <Esc>Xi
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related

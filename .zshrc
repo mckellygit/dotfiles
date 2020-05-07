@@ -308,7 +308,7 @@ alias stop-rdm='rc -q'
 alias stop_rdm='rc -q'
 
 # also could use -u or -U instead of --all-text
-alias ag='\ag --all-text --hidden'
+alias ag='\ag --all-text --hidden -- '
 
 # ------------------
 
