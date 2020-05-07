@@ -1165,15 +1165,13 @@ delmarks v
 
 " do not change terminal window title ...
 "set notitle
-
+" NOTE: set title to inform tmux this is vim ...
 " See https://sunaku.github.io/tmux-select-pane.html for documentation.
 "let progname = substitute($VIM, '.*[/\\]', '', '')
 "set title titlestring=%{progname}\ %f\ +%l\ #%{tabpagenr()}.%{winnr()}
-if !empty($TMUX_PANE) && !has('nvim')
-  if (&term =~ "^screen" || &term =~ "^tmux")
-    set title titlestring=mck-vim
-    exec "set t_ts=\e]2; t_fs=\7"
-  endif
+set title titlestring=@v:\ %f
+if (&term =~ "^screen" || &term =~ "^tmux") && !has('nvim')
+  exec "set t_ts=\e]2; t_fs=\7"
 endif
 
 " visual/audio bell (terminator light bulb) off ...
@@ -1193,12 +1191,6 @@ set smartcase
 set shortmess-=s
 " and dont forget <Leader>hl for hlsearch toggle
 " and we set WarningMsg highlight color below for wrap warning
-
-" to match vless and tmux
-" terminator <C-Home> mapped to <Esc>5
-noremap <silent> <Esc>5 gg
-" terminator <C-End> mapped to <Esc>6
-noremap <silent> <Esc>6 G
 
 " toggle line wrap
 nnoremap <silent> <Leader>lw :silent set nowrap! nowrap?<CR>
@@ -1439,10 +1431,11 @@ set clipboard^=autoselectml guioptions+=A
 " ------------------------------
 
 " NOTE: use MapFastKeycode(<Fxx>, ...) to remove explicit leading <Esc> from mappings ...
-" need enough time for mapped / <Leader> key sequences
+" then with no mappings starting with <Esc> we can increase ttimeoutlen for mapped and
+" <Leader> key sequences without having a delay on <Esc> ...
 "set timeoutlen=1000 ttimeoutlen=0
 "set notimeout ttimeout timeoutlen=100
-set timeout timeoutlen=700
+set timeout timeoutlen=1500
 set ttimeout ttimeoutlen=7
 "set nottimeout
 
@@ -1468,19 +1461,84 @@ vnoremap S <Nop>
 " makes use of unused vim keycodes <[S-]F15> to <[S-]F37>
 let s:fast_i = 0
 function! s:MapFastKeycode(key, keycode)
-    " use only S-F15-37 ...
-    if s:fast_i == 23
+    if s:fast_i == 42
         echohl WarningMsg
         echomsg "Unable to map ".a:key.": out of spare keycodes"
         echohl None
         return
     endif
-    " use only S-F15-37 ...
-    let vkeycode = '<'.(s:fast_i/23==0 ? 'S-' : '').'F'.(15+s:fast_i%23).'>'
+    let vkeycode = '<'.(s:fast_i/23==0 ? '' : 'S-').'F'.(15+s:fast_i%23).'>'
     exec 'set '.vkeycode.'='.a:keycode
     exec 'map '.vkeycode.' '.a:key
+    exec 'imap '.vkeycode.' '.a:key
+    exec 'cmap '.vkeycode.' '.a:key
+    exec 'tmap '.vkeycode.' '.a:key
     let s:fast_i += 1
 endfunction
+
+" reserve S-F34 - S-F37 for special use
+
+" NOTE: only for term =~ ^screen || ^tmux || ^xterm || ^alacritty || ^rxvt || ^urxvt ?
+
+call <SID>MapFastKeycode('<C-Up>',         "\e[1;5A")
+call <SID>MapFastKeycode('<C-Down>',       "\e[1;5B")
+call <SID>MapFastKeycode('<C-Left>',       "\e[1;5D")
+call <SID>MapFastKeycode('<C-Right>',      "\e[1;5C")
+
+call <SID>MapFastKeycode('<S-Up>',         "\e[1;2A")
+call <SID>MapFastKeycode('<S-Down>',       "\e[1;2B")
+call <SID>MapFastKeycode('<S-Left>',       "\e[1;2D")
+call <SID>MapFastKeycode('<S-Right>',      "\e[1;2C")
+
+call <SID>MapFastKeycode('<C-S-Up>',       "\e[1;6A")
+call <SID>MapFastKeycode('<C-S-Down>',     "\e[1;6B")
+call <SID>MapFastKeycode('<C-S-Left>',     "\e[1;6D")
+call <SID>MapFastKeycode('<C-S-Right>',    "\e[1;6C")
+
+call <SID>MapFastKeycode('<A-Up>',         "\e[1;3A")
+call <SID>MapFastKeycode('<A-Down>',       "\e[1;3B")
+call <SID>MapFastKeycode('<A-Left>',       "\e[1;3D")
+call <SID>MapFastKeycode('<A-Right>',      "\e[1;3C")
+
+"call <SID>MapFastKeycode('<A-S-Up>',       "\e[1;4A")
+"call <SID>MapFastKeycode('<A-S-Down>',     "\e[1;4B")
+"call <SID>MapFastKeycode('<A-S-Left>',     "\e[1;4D")
+"call <SID>MapFastKeycode('<A-S-Right>',    "\e[1;4C")
+
+call <SID>MapFastKeycode('<C-Insert>',     "\e[2;5~")
+call <SID>MapFastKeycode('<S-Insert>',     "\e[2;2~")
+call <SID>MapFastKeycode('<C-S-Insert>',   "\e[2;6~")
+"call <SID>MapFastKeycode('<A-Insert>',     "\e[2;3~")
+"call <SID>MapFastKeycode('<A-S-Insert>',   "\e[2;4~")
+
+call <SID>MapFastKeycode('<C-Del>',        "\e[3;5~")
+call <SID>MapFastKeycode('<S-Del>',        "\e[3;2~")
+call <SID>MapFastKeycode('<C-S-Del>',      "\e[3;6~")
+call <SID>MapFastKeycode('<A-Del>',        "\e[3;3~")
+"call <SID>MapFastKeycode('<A-S-Del>',      "\e[3;4~")
+
+call <SID>MapFastKeycode('<C-Home>',       "\e[1;5H")
+call <SID>MapFastKeycode('<C-End>',        "\e[1;5F")
+"call <SID>MapFastKeycode('<A-Home>',       "\e[1;3H")
+"call <SID>MapFastKeycode('<A-End>',        "\e[1;3F")
+
+call <SID>MapFastKeycode('<C-PageUp>',     "\e[5;5~")
+"call <SID>MapFastKeycode('<C-S-PageUp>',   "\e[5;6~")
+call <SID>MapFastKeycode('<A-PageUp>',     "\e[5;3~")
+
+call <SID>MapFastKeycode('<C-PageDown>',   "\e[6;5~")
+"call <SID>MapFastKeycode('<C-S-PageDown>', "\e[6;6~")
+call <SID>MapFastKeycode('<A-PageDown>',   "\e[6;3~")
+
+" ------------------------------
+
+" to match vless and tmux
+" terminator <C-Home> mapped to <Esc>5 (M-5)
+"noremap <silent> <Esc>5 gg
+noremap <silent> <C-Home> gg
+" terminator <C-End> mapped to <Esc>6 (M-6)
+"noremap <silent> <Esc>6 G
+noremap <silent> <C-End> G
 
 " ----------- yank / cut / paste -----------
 
@@ -1593,60 +1651,74 @@ vnoremap <silent> <expr> y     (mode() =~ '\<C-v>') ? '"*y' : 'mv"*y`v'
 
 " ---------------
 
-" C-Insert, C-S-v paste ...
+" C-S-v / C-Insert / M-1 / C-S-Insert / M-2 paste ...
 
-" original <C-Insert> map - vi may not differentiate between C-Insert and Insert ...
-"nnoremap <expr> <C-Insert> (&buftype == 'terminal') ? '\<Nop>' : 'p'
-"vnoremap <expr> <C-Insert> (&buftype == 'terminal') ? '\<Nop>' : '\<Esc>p'
-"inoremap <C-Insert> <C-r>*
-"cnoremap <C-Insert> <C-r>*
-"tnoremap <C-Insert> <C-w>"*
-
-" original - vi often cannot differentiate between C-S-v and C-v ...
+" cannot differentiate between C-S-v and C-v ...
 "nnoremap <expr> <C-S-v> (&buftype == 'terminal') ? '\<Nop>' : 'p'
 "vnoremap <expr> <C-S-v> (&buftype == 'terminal') ? '\<Nop>' : '\<Esc>p'
 "inoremap <C-S-v> <C-r>*
 "cnoremap <C-S-v> <C-r>*
 "tnoremap <C-S-v> <C-w>"*
 
-" Terminator plugin (and tmux) ctrl-insert maps to <Esc>1 (<M-1>) for paste
-" some terminal configs (urxvt) map C-S-v => M-1 (was M-8) (and tmux sends M-1 to vi)
-call <SID>MapFastKeycode('<F31>',  "\e1")
-nnoremap <expr> <F31> (&buftype == 'terminal') ? '\<Nop>' : 'p'
-vnoremap <expr> <F31> (&buftype == 'terminal') ? '\<Nop>' : '\<Esc>p'
-inoremap <F31> <C-r>*
+" <C-Insert> paste after
+nnoremap <expr> <C-Insert> (&buftype == 'terminal') ? '\<Nop>' : 'p'
+vnoremap <expr> <C-Insert> (&buftype == 'terminal') ? '\<Nop>' : '\<Esc>p'
+inoremap <C-Insert> <C-r>*
+cnoremap <C-Insert> <C-r>*
+tnoremap <C-Insert> <C-w>"*
+
+" <M-1> paste after
+call <SID>MapFastKeycode('<S-F34>',  "\e1")
+nnoremap <expr> <S-F34> (&buftype == 'terminal') ? '\<Nop>' : 'p'
+vnoremap <expr> <S-F34> (&buftype == 'terminal') ? '\<Nop>' : '\<Esc>p'
+inoremap <S-F34> <C-r>*
 " or <C-o>p ?
-cnoremap <F31> <C-r>*
-tnoremap <F31> <C-w>"*
+cnoremap <S-F34> <C-r>*
+tnoremap <S-F34> <C-w>"*
 
-" C-S-c copy ...
+" <C-S-Insert> paste before
+nnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '\<Nop>' : 'P`['
+vnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '\<Nop>' : '\<Esc>P`['
+inoremap <C-S-Insert> <C-r>*<C-\><C-o>b
+cnoremap <C-S-Insert> <C-r>*<C-\><C-o>b
+tnoremap <C-S-Insert> <C-w>"*<C-w>b
 
-" original - vi often cannot differentiate between C-S-c and C-c ...
+" <M-2> paste before
+call <SID>MapFastKeycode('<S-F35>',  "\e2")
+nnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '\<Nop>' : 'P`['
+vnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '\<Nop>' : '\<Esc>P`['
+inoremap <C-S-Insert> <C-r>*<C-\><C-o>b
+cnoremap <C-S-Insert> <C-r>*<C-\><C-o>b
+tnoremap <C-S-Insert> <C-w>"*<C-w>b
+
+" C-S-c / M-7 copy ...
+
+" cannot differentiate between C-S-c and C-c ...
 "nnoremap <C-S-c> <Nop>
 "vnoremap <C-S-c> "*y
 "inoremap <C-S-c> <Nop>
 
 " some terminal configs (urxvt) map C-S-c => M-7
-call <SID>MapFastKeycode('<F32>',  "\e7")
-nnoremap <F32> <Nop>
-vnoremap <expr> <F32> (mode() =~ '\<C-v>') ? '"*y' : 'mv"*y`v'
-inoremap <F32> <Nop>
+call <SID>MapFastKeycode('<S-F36>',  "\e7")
+nnoremap <S-F36> <Nop>
+vnoremap <expr> <S-F36> (mode() =~ '\<C-v>') ? '"*y' : 'mv"*y`v'
+inoremap <S-F36> <Nop>
 
-" C-S-x cut ...
+" C-S-x / M-9 cut ...
 
-" original - vi often cannot differentiate between C-S-x and C-x ...
+" cannot differentiate between C-S-x and C-x ...
 "nnoremap <C-S-x> <Nop>
 "vnoremap <expr> <C-S-x> (&buftype == 'terminal') ? '\<Nop>' : '"*d'
 "inoremap <C-S-x> <Nop>
 
-" some terminal configs (urxvt) map C-S-x => M-9
-call <SID>MapFastKeycode('<F33>',  "\e9")
-nnoremap <F33> <Nop>
-vnoremap <expr> <F33> (&buftype == 'terminal') ? '\<Nop>' : '"*d'
-inoremap <F33> <Nop>
+call <SID>MapFastKeycode('<S-F37>',  "\e9")
+nnoremap <S-F37> <Nop>
+vnoremap <expr> <S-F37> (&buftype == 'terminal') ? '\<Nop>' : '"*d'
+inoremap <S-F37> <Nop>
 
 " cut selection
 "vnoremap <silent> <C-x> "*d<LeftRelease>
+nnoremap <C-x> <Nop>
 vnoremap <expr> <C-x> (&buftype == 'terminal') ? '\<Nop>' : '"*d'
 
 " ---------------
@@ -1820,6 +1892,7 @@ function! XTermPasteBegin()
   return ""
 endfunction
 
+" TODO: use this outside of tmux ?
 "inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
 
 " ------------------------------
@@ -2130,7 +2203,7 @@ vnoremap <silent> # "sy<C-\><C-n>:set hlsearch<CR>?<C-r>s<CR>
 nnoremap x "_x
 nnoremap X "_X
 " same for delete
-nnoremap <DEL> "_x
+nnoremap <Del> "_x
 " but miss the xp swap chars, this works but adds an annoying (timeoutlen) delay to the single typed x
 "noremap xp xp
 "noremap Xp Xp
@@ -2203,47 +2276,28 @@ vnoremap <silent> <Leader>D "_x
 " -------------------
 
 " ctrl-del to delete from cursor to beg of word, to match backward-kill-word ...
-"nnoremap <silent> <Esc>[3;5~ "_d<C-Left>
-"nnoremap <silent> <Esc>[3;5~ "_db
-"vnoremap <silent> <Esc>[3;5~ <Esc>"_dbv
-"inoremap <silent> <Esc>[3;5~ <Esc>"_dbi
 " cannot use ctrl-w as that is for window nav
-call <SID>MapFastKeycode('<C-DEL>',  "\e[3;5~")
-nnoremap <silent> <C-DEL> "_db
-vnoremap <silent> <C-DEL> <Esc>"_dbv
-inoremap <silent> <C-DEL> <Esc>"_dbi
+nnoremap <silent> <C-Del> "_db
+vnoremap <silent> <C-Del> <Esc>"_dbv
+inoremap <silent> <C-Del> <Esc>"_dbi
 
 " shift-del to delete from curor to end of word, to match kill-word ...
-"nnoremap <silent> <Esc>[3;2~ "_dw
-"vnoremap <silent> <Esc>[3;2~ "_dwv
-"inoremap <silent> <Esc>[3;2~ "_dwi
 " also skip alt-d
-call <SID>MapFastKeycode('<S-DEL>',  "\e[3;2~")
-nnoremap <silent> <S-DEL> "_dw
-vnoremap <silent> <S-DEL> "_dwv
-inoremap <silent> <S-DEL> "_dwi
+nnoremap <silent> <S-Del> "_dw
+vnoremap <silent> <S-Del> "_dwv
+inoremap <silent> <S-Del> "_dwi
 
 " ctrl-shift-del to delete whole word under cursor
-"nnoremap <silent> <Esc>[3;6~ B"_dW
-"nnoremap <silent> <Esc>[3;6~ "_diw
-"vnoremap <silent> <Esc>[3;6~ <Esc>"_diwv
-"inoremap <silent> <Esc>[3;6~ <Esc>"_diwi
-call <SID>MapFastKeycode('<C-S-DEL>',  "\e[3;6~")
-nnoremap <silent> <C-S-DEL> "_diw
-vnoremap <silent> <C-S-DEL> <Esc>"_diwv
-inoremap <silent> <C-S-DEL> <Esc>"_diwi
+nnoremap <silent> <C-S-Del> "_diw
+vnoremap <silent> <C-S-Del> <Esc>"_diwv
+inoremap <silent> <C-S-Del> <Esc>"_diwi
 
 " alt-del to delete whole word under cursor
-"nnoremap <silent> <Esc>[3;3~ "_diw
-"vnoremap <silent> <Esc>[3;3~ <Esc>"_diwv
-"inoremap <silent> <Esc>[3;3~ <Esc>"_diwi
-call <SID>MapFastKeycode('<M-DEL>',  "\e[3;3~")
-nnoremap <silent> <M-DEL> "_diw
-vnoremap <silent> <M-DEL> <Esc>"_diwv
-inoremap <silent> <M-DEL> <Esc>"_diwi
+nnoremap <silent> <A-Del> "_diw
+vnoremap <silent> <A-Del> <Esc>"_diwv
+inoremap <silent> <A-Del> <Esc>"_diwi
 
-" M-S-DEL ?
-call <SID>MapFastKeycode('<M-S-DEL>',  "\e[3;4~")
+" A-S-Del ?
 
 " TODO: if shift-BS is ever recognized ...
 nnoremap <silent> <S-BS> X
@@ -2506,6 +2560,27 @@ function! s:Saving_scrollVUp2(cmd)
   let &scroll = save_scroll
 endfunction
 
+function! s:Saving_scrollVDn4(cmd)
+  if (line('.') == line("w0"))
+    execute "keepjumps normal! M"
+    return
+  endif
+  let save_scroll = &scroll
+  " want normal! here
+  execute "keepjumps normal!" . g:full2x . a:cmd
+  let &scroll = save_scroll
+endfunction
+
+function! s:Saving_scrollVUp4(cmd)
+  if (line('.') == line("w$"))
+    execute "keepjumps normal! M"
+    return
+  endif
+  let save_scroll = &scroll
+  " want normal! here
+  execute "keepjumps normal!" . g:full2x . a:cmd
+  let &scroll = save_scroll
+endfunction
 " ---------
 
 nnoremap <silent> <expr> <C-D> (line('.') == line('w0')) ? 'M' : '<C-D>'
@@ -2575,9 +2650,9 @@ inoremap <silent> <expr> <C-Up>    pumvisible() ? '<C-Up>' : '<C-\><C-o>:call <S
 " A- to speed up scrolling ...
 
 nnoremap <silent> <expr> <ScrollWheelDown>   (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
-nnoremap <silent> <expr> <A-ScrollWheelDown> (line('.') == line('w0')) ? '96j' : ((line('$') - line('w$')) < 96) ? 'mfG`f96j' : '96<C-e>96j'
 " C-Wheel is often font scaling but ...
-nnoremap <silent> <expr> <C-ScrollWheelDown> (line('.') == line('w0')) ? '48j' : ((line('$') - line('w$')) < 48) ? 'mfG`f48j' : '48<C-e>48j'
+nnoremap <silent> <expr> <C-ScrollWheelDown> (line('.') == line('w0')) ? '24j' : ((line('$') - line('w$')) < 24) ? 'mfG`f24j' : '24<C-e>24j'
+nnoremap <silent> <expr> <A-ScrollWheelDown> (line('.') == line('w0')) ? '48j' : ((line('$') - line('w$')) < 48) ? 'mfG`f48j' : '48<C-e>48j'
 
 " see below
 "vnoremap <silent>        <ScrollWheelDown> <C-\><C-n>:call <SID>Saving_scrollV("gv10<C-V><C-D>")<CR>
@@ -2585,9 +2660,9 @@ nnoremap <silent> <expr> <C-ScrollWheelDown> (line('.') == line('w0')) ? '48j' :
 inoremap <silent> <expr> <ScrollWheelDown>   pumvisible() ? '<ScrollWhellDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-D>")<CR>'
 
 nnoremap <silent> <expr> <ScrollWheelUp>     (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
-nnoremap <silent> <expr> <A-ScrollWheelUp>   (line('.') == line('w$')) ? '96k' : '96<C-y>96k'
 " C-Wheel is often font scaling but ...
-nnoremap <silent> <expr> <C-ScrollWheelUp>   (line('.') == line('w$')) ? '48k' : '48<C-y>48k'
+nnoremap <silent> <expr> <C-ScrollWheelUp>   (line('.') == line('w$')) ? '24k' : '24<C-y>24k'
+nnoremap <silent> <expr> <A-ScrollWheelUp>   (line('.') == line('w$')) ? '48k' : '48<C-y>48k'
 
 " see below
 "vnoremap <silent>        <ScrollWheelUp>   <C-\><C-n>:call <SID>Saving_scrollV("gv10<C-V><C-U>")<CR>
@@ -2609,10 +2684,10 @@ inoremap <silent> <expr> <ScrollWheelUp>     pumvisible() ? '<ScrollWheelUp>' : 
 vnoremap <ScrollWheelUp>     5k0
 vnoremap <ScrollWheelDown>   5j$
 " C-Wheel is often font scaling but ...
-vnoremap <C-ScrollWheelUp>   20k0
-vnoremap <C-ScrollWheelDown> 20j$
-vnoremap <A-ScrollWheelUp>   40k0
-vnoremap <A-ScrollWheelDown> 40j$
+vnoremap <C-ScrollWheelUp>   24k0
+vnoremap <C-ScrollWheelDown> 24j$
+vnoremap <A-ScrollWheelUp>   48k0
+vnoremap <A-ScrollWheelDown> 48j$
 
 "inoremap <silent> <ScrollWheelUp>     <C-\><C-o>5k
 "inoremap <silent> <ScrollWheelDown>   <C-\><C-o>5j
@@ -2641,6 +2716,7 @@ function! s:MapScrollKeys()
     g:half = 1
   endif
   let g:full = g:half + g:half
+  let g:full2x = g:full + g:full
 
   " TODO: could add same if at top then M logic to imap <C-f> ...
 
@@ -2650,17 +2726,25 @@ function! s:MapScrollKeys()
   noremap            <expr> <C-b> (line('.') == line('w$')) ? 'M' : '<C-U>'
   inoremap  <silent> <expr> <C-b> pumvisible() ? '<C-b>' : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
 
+  noremap            <expr> <PageDown>   (line('.') == line('w0')) ? 'M' : '<C-D><C-D>'
+  inoremap  <silent> <expr> <PageDown>   pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn2("<C-V><C-D>")<CR>'
+  noremap            <expr> <PageUp>     (line('.') == line('w$')) ? 'M' : '<C-U><C-U>'
+  inoremap  <silent> <expr> <PageUp>     pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp2("<C-V><C-U>")<CR>'
+
   noremap            <expr> <C-PageDown> (line('.') == line('w0')) ? 'M' : '<C-D>'
   inoremap  <silent> <expr> <C-PageDown> pumvisible() ? '<C-PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
   noremap            <expr> <C-PageUp>   (line('.') == line('w$')) ? 'M' : '<C-U>'
   inoremap  <silent> <expr> <C-PageUp>   pumvisible() ? '<C-PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
 
-  noremap            <expr> <PageDown>   (line('.') == line('w0')) ? 'M' : '<C-D><C-D>'
-  inoremap  <silent> <expr> <PageDown>   pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn2("<C-V><C-D>")<CR>'
-  noremap            <expr> <PageUp>     (line('.') == line('w$')) ? 'M' : '<C-U><C-U>'
-  inoremap  <silent> <expr> <PageUp>     pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp2("<C-V><C-U>")<CR>'
+  noremap            <expr> <A-PageDown> (line('.') == line('w0')) ? 'M' : '<C-D><C-D><C-D><C-D>'
+  inoremap  <silent> <expr> <A-PageDown> pumvisible() ? '<C-PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn4("<C-V><C-D>")<CR>'
+  noremap            <expr> <A-PageUp>   (line('.') == line('w$')) ? 'M' : '<C-U><C-U><C-U><C-U>'
+  inoremap  <silent> <expr> <A-PageUp>   pumvisible() ? '<C-PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp4("<C-V><C-U>")<CR>'
 endfunction
 
+let g:half = 24
+let g:full = 48
+let g:full2x = 96
 call <SID>MapScrollKeys()
 
 autocmd VimResized * call <SID>MapScrollKeys()
@@ -4034,7 +4118,7 @@ nmap <silent> <expr> <Return> (&buftype == 'terminal') ? 'i' : '<Return>'
 "tnoremap <silent> <PageUp> <C-\><C-n>
 " ctrl-x-] like tmux enter copy-mode-vi (ctrl-s-])
 tnoremap <silent> <C-x>]   <C-\><C-n>
-nnoremap <silent> <expr> <C-x>] (&buftype == 'terminal') ? 'i' : '<C-x>]'
+nnoremap <silent> <expr> <C-x>] (&buftype == 'terminal') ? 'i' : '<Nop>'
 
 " not needed any more and it causes sign column to disappear on
 " popups that are terminal windows ...
@@ -4186,26 +4270,13 @@ tnoremap <silent> <C-d> <C-w>:call <SID>TermQuit()<CR>
 " NOTE: S-L,R,U,D was used by tmux for window nav ...
 " NOTE: some terminals work with A/M-L/R but some need esc seq ...
 
-"call <SID>MapFastKeycode('<M-Left>',  "\e[1;5C")
-"call <SID>MapFastKeycode('<M-Right>', "\e[1;5D")
-
 " prev tab
-"nnoremap <silent> <Esc>[1;5C       :tabprevious<CR>
-"vnoremap <silent> <Esc>[1;5C  <Esc>:tabprevious<CR>
-"inoremap <silent> <Esc>[1;5C  <Esc>:tabprevious<CR>
-"tnoremap <silent> <Esc>[1;5C  <C-w>:tabprevious<CR>
-
 nnoremap <silent> <M-Left>      :tabprevious<CR>
 vnoremap <silent> <M-Left> <Esc>:tabprevious<CR>
 inoremap <silent> <M-Left> <Esc>:tabprevious<CR>
 tnoremap <silent> <M-Left> <C-w>:tabprevious<CR>
 
 " next tab
-"nnoremap <silent> <Esc>[1;5D      :tabnext<CR>
-"vnoremap <silent> <Esc>[1;5D <Esc>:tabnext<CR>
-"inoremap <silent> <Esc>[1;5D <Esc>:tabnext<CR>
-"tnoremap <silent> <Esc>[1;5D <C-w>:tabnext<CR>
-
 nnoremap <silent> <M-Right>      :tabnext<CR>
 vnoremap <silent> <M-Right> <Esc>:tabnext<CR>
 inoremap <silent> <M-Right> <Esc>:tabnext<CR>
@@ -4369,14 +4440,6 @@ if &term =~ "^screen" || &term =~ "^tmux"
   exec "set <xDown>=\e[1;*B"
   exec "set <xRight>=\e[1;*C"
   exec "set <xLeft>=\e[1;*D"
-  " not needed
-  "map  <Esc>[B <Down>
-  "map  [1;5A   <C-Up>
-  "map  [1;5B   <C-Down>
-  "map  [1;2D   <S-Left>
-  "map  [1;2C   <S-Right>
-  "cmap [1;2D   <S-Left>
-  "cmap [1;2C   <S-Right>
 endif
 
 " -----------------------------

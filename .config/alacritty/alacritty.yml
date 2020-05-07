@@ -1,24 +1,24 @@
 
 key_bindings:
+  # special -------
   - { key: Back,      mods: Control,         chars: "\x1b\x7f"        }
-  - { key: Insert,    mods: Control,         chars: "\x1b\x31"        }
+  - { key: Back,      mods: Shift,           chars: "\x7f"            }
   - { key: Back,      mods: Control|Shift,   chars: "\x1b\x32"        }
   - { key: Equals,    mods: Control,         chars: "\x1b\x33"        }
   - { key: Space,     mods: Control|Shift,   chars: "\x1b\x34"        }
-  - { key: Home,      mods: Control,         chars: "\x1b\x35"        }
-  - { key: End,       mods: Control,         chars: "\x1b\x36"        }
-
-  - { key: Home,                             chars: "\x1b[1~"         }
-  - { key: End,                              chars: "\x1b[4~"         }
-
-  - { key: Back,      mods: Shift,           chars: "\x7f"            }
+  - { key: X,         mods: Control|Shift,   chars: "\x1b\x39"        }
+  # special -------
 
   - { key: V,         mods: Control|Shift,   action: Paste            }
   - { key: C,         mods: Control|Shift,   action: Copy             }
-  - { key: X,         mods: Control|Shift,   chars: "\x1b\x39"        }
 
   - { key: Add,       mods: Control|Shift,   action: IncreaseFontSize }
   - { key: Underline, mods: Control|Shift,   action: DecreaseFontSize }
+
+  - { key: Home,      mods: Control,         chars: "\x1b[1;5H"       }
+  - { key: End,       mods: Control,         chars: "\x1b[1;5F"       }
+  - { key: Home,      mods: Alt,             chars: "\x1b[1;3H"       }
+  - { key: End,       mods: Alt,             chars: "\x1b[1;3F"       }
 
   - { key: Up,        mods: Control,         chars: "\x1b[1;5A"       }
   - { key: Down,      mods: Control,         chars: "\x1b[1;5B"       }
@@ -44,6 +44,20 @@ key_bindings:
   - { key: Down,      mods: Alt|Shift,       chars: "\x1b[1;4B"       }
   - { key: Left,      mods: Alt|Shift,       chars: "\x1b[1;4D"       }
   - { key: Right,     mods: Alt|Shift,       chars: "\x1b[1;4C"       }
+
+  - { key: PageUp,    mods: Control,         chars: "\x1b[5;5~"       }
+  - { key: PageUp,    mods: Control|Shift,   chars: "\x1b[5;6~"       }
+  - { key: PageUp,    mods: Alt,             chars: "\x1b[5;3~"       }
+
+  - { key: PageDown,  mods: Control,         chars: "\x1b[6;5~"       }
+  - { key: PageDown,  mods: Control|Shift,   chars: "\x1b[6;6~"       }
+  - { key: PageDown,  mods: Alt,             chars: "\x1b[6;3~"       }
+
+  - { key: Insert,    mods: Control,         chars: "\x1b[2;5~"       }
+  - { key: Insert,    mods: Shift,           chars: "\x1b[2;2~"       }
+  - { key: Insert,    mods: Control|Shift,   chars: "\x1b[2;6~"       }
+  - { key: Insert,    mods: Alt,             chars: "\x1b[2;3~"       }
+  - { key: Insert,    mods: Alt|Shift,       chars: "\x1b[2;4~"       }
 
   - { key: Delete,    mods: Control,         chars: "\x1b[3;5~"       }
   - { key: Delete,    mods: Shift,           chars: "\x1b[3;2~"       }

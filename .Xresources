@@ -276,8 +276,31 @@ Xft.dpi: 96
 URxvt.iso14755:                 false
 URxvt.iso14755_52:              false
 
-URxvt.keysym.Home:              string:\033[1~
-URxvt.keysym.End:               string:\033[4~
+!! special ------
+URxvt.keysym.C-BackSpace:       string:\033\177
+URxvt.keysym.S-BackSpace:       string:\177
+URxvt.keysym.C-S-BackSpace:     string:\033\062
+URxvt.keysym.C-equal:           string:\033\063
+URxvt.keysym.C-S-space:         string:\033\064
+URxvt.keysym.Shift-Control-X:   string:\033\071
+!! special ------
+
+URxvt.keysym.Shift-Control-V:   eval:paste_clipboard
+URxvt.keysym.Shift-Control-C:   eval:selection_to_clipboard
+!!URxvt.keysym.C-S-0x56:          eval:paste_clipboard
+!!URxvt.keysym.C-S-0x43:          eval:selection_to_clipboard
+URxvt.keysym.Control-Meta-c:    builtin-string:
+URxvt.keysym.Control-Meta-v:    builtin-string:
+
+URxvt.keysym.C-S-plus:          font-size:increase
+URxvt.keysym.C-S-underscore:    font-size:decrease
+URxvt.keysym.C-0:               font-size:reset
+URxvt.keysym.C-minus:           builtin-string:
+
+URxvt.keysym.Control-Home:      string:\033[1;5H
+URxvt.keysym.Control-End:       string:\033[1;5F
+URxvt.keysym.Meta-Home:         string:\033[1;3H
+URxvt.keysym.Meta-End:          string:\033[1;3F
 
 URxvt.keysym.Control-Up:        string:\033[1;5A
 URxvt.keysym.Control-Down:      string:\033[1;5B
@@ -306,15 +329,21 @@ URxvt.keysym.Shift-Meta-Down:   string:\033[1;4B
 URxvt.keysym.Shift-Meta-Left:   string:\033[1;4D
 URxvt.keysym.Shift-Meta-Right:  string:\033[1;4C
 
-!! keysym.C-S-Meta: ... ?
+!! Prior == PgUp
+URxvt.keysym.Control-Prior:     string:\033[5;5~
+URxvt.keysym.C-S-Prior:         string:\033[5;6~
+URxvt.keysym.Meta-Prior:        string:\033[5;3~
 
-URxvt.keysym.C-BackSpace:       string:\033\177
-URxvt.keysym.C-Insert:          string:\033\061
-URxvt.keysym.C-S-BackSpace:     string:\033\062
-URxvt.keysym.C-equal:           string:\033\063
-URxvt.keysym.C-S-space:         string:\033\064
-URxvt.keysym.C-Home:            string:\033\065
-URxvt.keysym.C-End:             string:\033\066
+!! Next == PgDown
+URxvt.keysym.Control-Next:      string:\033[6;5~
+URxvt.keysym.C-S-Next:          string:\033[6;6~
+URxvt.keysym.Meta-Next:         string:\033[6;3~
+
+URxvt.keysym.Control-Insert:    string:\033[2;5~
+URxvt.keysym.Shift-Insert:      string:\033[2;2~
+URxvt.keysym.C-S-Insert:        string:\033[2;6~
+URxvt.keysym.Meta-Insert:       string:\033[2;3~
+URxvt.keysym.Shift-Meta-Insert: string:\033[2;4~
 
 URxvt.keysym.Control-Delete:    string:\033[3;5~
 URxvt.keysym.Shift-Delete:      string:\033[3;2~
@@ -322,24 +351,7 @@ URxvt.keysym.C-S-Delete:        string:\033[3;6~
 URxvt.keysym.Meta-Delete:       string:\033[3;3~
 URxvt.keysym.Shift-Meta-Delete: string:\033[3;4~
 
-!!URxvt.keysym.Shift-Control-C:   string:\033\067
-!!URxvt.keysym.Shift-Control-V:   string:\033\070
-URxvt.keysym.Shift-Control-X:   string:\033\071
-URxvt.keysym.Shift-Control-V:   eval:paste_clipboard
-URxvt.keysym.Shift-Control-C:   eval:selection_to_clipboard
-!!URxvt.keysym.C-S-0x56:          eval:paste_clipboard
-!!URxvt.keysym.C-S-0x43:          eval:selection_to_clipboard
-
-URxvt.keysym.Control-Meta-c:    builtin-string:
-URxvt.keysym.Control-Meta-v:    builtin-string:
-
-URxvt.keysym.C-S-plus:          font-size:increase
-URxvt.keysym.C-S-underscore:    font-size:decrease
-URxvt.keysym.C-0:               font-size:reset
-URxvt.keysym.C-minus:           builtin-string:
-
 !! no-op is command:\000
-URxvt.keysym.S-BackSpace:       string:\177
 
 !!URxvt.keysym.Shift-Up: command:\033]720;1\007
 !!URxvt.keysym.Shift-Down: command:\033]721;1\007
