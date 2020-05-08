@@ -1540,22 +1540,23 @@ noremap <silent> <C-Home> gg
 "noremap <silent> <Esc>6 G
 noremap <silent> <C-End> G
 
-map <silent> <S-Insert> <Nop>
+" dont really need/use S-Ins or A-H/E
+map  <silent> <S-Insert> <Nop>
 imap <silent> <S-Insert> <Esc>l
 cmap <silent> <S-Insert> <Nop>
 tmap <silent> <S-Insert> <Nop>
 
-map <silent> <A-Insert> <Nop>
+map  <silent> <A-Insert> <Nop>
 imap <silent> <A-Insert> <Nop>
 cmap <silent> <A-Insert> <Nop>
 tmap <silent> <A-Insert> <Nop>
 
-map <silent> <A-Home> 0
+map  <silent> <A-Home> 0
 imap <silent> <A-Home> <C-o>0
 cmap <silent> <A-Home> <Nop>
 tmap <silent> <A-Home> <Nop>
 
-map <silent> <A-End> $
+map  <silent> <A-End> $
 imap <silent> <A-End> <C-o>$
 cmap <silent> <A-End> <Nop>
 tmap <silent> <A-End> <Nop>
