@@ -1651,45 +1651,44 @@ vnoremap <silent> <expr> y     (mode() =~ '\<C-v>') ? '"*y' : 'mv"*y`v'
 
 " ---------------
 
-" C-S-v / C-Insert / M-1 / C-S-Insert / M-2 paste ...
+" C-S-v / C-Insert / M-1 / C-S-Insert / M-8 paste ...
 
 " cannot differentiate between C-S-v and C-v ...
-"nnoremap <expr> <C-S-v> (&buftype == 'terminal') ? '\<Nop>' : 'p'
-"vnoremap <expr> <C-S-v> (&buftype == 'terminal') ? '\<Nop>' : '\<Esc>p'
+"nnoremap <expr> <C-S-v> (&buftype == 'terminal') ? '<Nop>' : 'p'
+"vnoremap <expr> <C-S-v> (&buftype == 'terminal') ? '<Nop>' : '<Esc>p'
 "inoremap <C-S-v> <C-r>*
 "cnoremap <C-S-v> <C-r>*
 "tnoremap <C-S-v> <C-w>"*
 
 " <C-Insert> paste after
-nnoremap <expr> <C-Insert> (&buftype == 'terminal') ? '\<Nop>' : 'p'
-vnoremap <expr> <C-Insert> (&buftype == 'terminal') ? '\<Nop>' : '\<Esc>p'
+nnoremap <expr> <C-Insert> (&buftype == 'terminal') ? '<Nop>' : 'p'
+vnoremap <expr> <C-Insert> (&buftype == 'terminal') ? '<Nop>' : '<Esc>p'
 inoremap <C-Insert> <C-r>*
 cnoremap <C-Insert> <C-r>*
 tnoremap <C-Insert> <C-w>"*
 
-" <M-1> paste after
+" <M-1> paste after [menu?]
 call <SID>MapFastKeycode('<S-F34>',  "\e1")
-nnoremap <expr> <S-F34> (&buftype == 'terminal') ? '\<Nop>' : 'p'
-vnoremap <expr> <S-F34> (&buftype == 'terminal') ? '\<Nop>' : '\<Esc>p'
+nnoremap <expr> <S-F34> (&buftype == 'terminal') ? '<Nop>' : 'p'
+vnoremap <expr> <S-F34> (&buftype == 'terminal') ? '<Nop>' : '<Esc>p'
 inoremap <S-F34> <C-r>*
-" or <C-o>p ?
 cnoremap <S-F34> <C-r>*
 tnoremap <S-F34> <C-w>"*
 
 " <C-S-Insert> paste before
-nnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '\<Nop>' : 'P`['
-vnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '\<Nop>' : '\<Esc>P`['
-inoremap <C-S-Insert> <C-r>*<C-\><C-o>b
-cnoremap <C-S-Insert> <C-r>*<C-\><C-o>b
-tnoremap <C-S-Insert> <C-w>"*<C-w>b
+nnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '<Nop>' : 'P`['
+vnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '<Nop>' : '<Esc>P`['
+inoremap <C-S-Insert> <C-o>mp<C-r>*<C-o>`p
+cnoremap <C-S-Insert> <C-r>*
+tnoremap <C-S-Insert> <C-w>"*
 
-" <M-2> paste before
-call <SID>MapFastKeycode('<S-F35>',  "\e2")
-nnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '\<Nop>' : 'P`['
-vnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '\<Nop>' : '\<Esc>P`['
-inoremap <C-S-Insert> <C-r>*<C-\><C-o>b
-cnoremap <C-S-Insert> <C-r>*<C-\><C-o>b
-tnoremap <C-S-Insert> <C-w>"*<C-w>b
+" <M-8> paste before [menu?]
+call <SID>MapFastKeycode('<S-F35>',  "\e8")
+nnoremap <expr> <S-F35> (&buftype == 'terminal') ? '<Nop>' : 'P'
+vnoremap <expr> <S-F35> (&buftype == 'terminal') ? '<Nop>' : '<Esc>P'
+inoremap <S-F35> <C-r>*
+cnoremap <S-F35> <C-r>*
+tnoremap <S-F35> <C-w>"*
 
 " C-S-c / M-7 copy ...
 
@@ -1708,18 +1707,18 @@ inoremap <S-F36> <Nop>
 
 " cannot differentiate between C-S-x and C-x ...
 "nnoremap <C-S-x> <Nop>
-"vnoremap <expr> <C-S-x> (&buftype == 'terminal') ? '\<Nop>' : '"*d'
+"vnoremap <expr> <C-S-x> (&buftype == 'terminal') ? '<Nop>' : '"*d'
 "inoremap <C-S-x> <Nop>
 
 call <SID>MapFastKeycode('<S-F37>',  "\e9")
 nnoremap <S-F37> <Nop>
-vnoremap <expr> <S-F37> (&buftype == 'terminal') ? '\<Nop>' : '"*d'
+vnoremap <expr> <S-F37> (&buftype == 'terminal') ? '<Nop>' : '"*d'
 inoremap <S-F37> <Nop>
 
 " cut selection
 "vnoremap <silent> <C-x> "*d<LeftRelease>
 nnoremap <C-x> <Nop>
-vnoremap <expr> <C-x> (&buftype == 'terminal') ? '\<Nop>' : '"*d'
+vnoremap <expr> <C-x> (&buftype == 'terminal') ? '<Nop>' : '"*d'
 
 " ---------------
 
