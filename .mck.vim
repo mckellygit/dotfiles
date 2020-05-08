@@ -1705,8 +1705,8 @@ tnoremap <C-S-Insert> <C-w>"*
 
 " <M-8> paste before [menu?]
 call <SID>MapFastKeycode('<S-F35>',  "\e8")
-nnoremap <expr> <S-F35> (&buftype == 'terminal') ? '<Nop>' : 'P'
-vnoremap <expr> <S-F35> (&buftype == 'terminal') ? '<Nop>' : '<Esc>P'
+nnoremap <expr> <S-F35> (&buftype == 'terminal') ? '<Nop>' : 'P`]'
+vnoremap <expr> <S-F35> (&buftype == 'terminal') ? '<Nop>' : '<Esc>P`]'
 inoremap <S-F35> <C-r>*
 cnoremap <S-F35> <C-r>*
 tnoremap <S-F35> <C-w>"*
