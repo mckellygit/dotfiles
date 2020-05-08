@@ -1508,7 +1508,7 @@ call <SID>MapFastKeycode('<A-Right>',      "\e[1;3C")
 call <SID>MapFastKeycode('<C-Insert>',     "\e[2;5~")
 call <SID>MapFastKeycode('<S-Insert>',     "\e[2;2~")
 call <SID>MapFastKeycode('<C-S-Insert>',   "\e[2;6~")
-"call <SID>MapFastKeycode('<A-Insert>',     "\e[2;3~")
+call <SID>MapFastKeycode('<A-Insert>',     "\e[2;3~")
 "call <SID>MapFastKeycode('<A-S-Insert>',   "\e[2;4~")
 
 call <SID>MapFastKeycode('<C-Del>',        "\e[3;5~")
@@ -1519,8 +1519,8 @@ call <SID>MapFastKeycode('<A-Del>',        "\e[3;3~")
 
 call <SID>MapFastKeycode('<C-Home>',       "\e[1;5H")
 call <SID>MapFastKeycode('<C-End>',        "\e[1;5F")
-"call <SID>MapFastKeycode('<A-Home>',       "\e[1;3H")
-"call <SID>MapFastKeycode('<A-End>',        "\e[1;3F")
+call <SID>MapFastKeycode('<A-Home>',       "\e[1;3H")
+call <SID>MapFastKeycode('<A-End>',        "\e[1;3F")
 
 call <SID>MapFastKeycode('<C-PageUp>',     "\e[5;5~")
 "call <SID>MapFastKeycode('<C-S-PageUp>',   "\e[5;6~")
@@ -1539,6 +1539,26 @@ noremap <silent> <C-Home> gg
 " terminator <C-End> mapped to <Esc>6 (M-6)
 "noremap <silent> <Esc>6 G
 noremap <silent> <C-End> G
+
+map <silent> <S-Insert> <Nop>
+imap <silent> <S-Insert> <Esc>l
+cmap <silent> <S-Insert> <Nop>
+tmap <silent> <S-Insert> <Nop>
+
+map <silent> <A-Insert> <Nop>
+imap <silent> <A-Insert> <Nop>
+cmap <silent> <A-Insert> <Nop>
+tmap <silent> <A-Insert> <Nop>
+
+map <silent> <A-Home> 0
+imap <silent> <A-Home> <C-o>0
+cmap <silent> <A-Home> <Nop>
+tmap <silent> <A-Home> <Nop>
+
+map <silent> <A-End> $
+imap <silent> <A-End> <C-o>$
+cmap <silent> <A-End> <Nop>
+tmap <silent> <A-End> <Nop>
 
 " ----------- yank / cut / paste -----------
 
