@@ -25,8 +25,23 @@ fi
 autoload -Uz compinit
 compinit
 
-# Completion for kitty
-#kitty + complete setup zsh | source /dev/stdin
+if [ "$TERM" = "xterm-kitty" ] ; then
+# Completion for kitty - needs to be after compinit ...
+  kitty + complete setup zsh | source /dev/stdin
+  # install does not put xterm-kitty into standard terminfo dir
+  # so we need to find it on an ssh ...
+  # see note about this in kitty docs
+  # kitty +kitten ssh <server> ...
+  # -or-
+  # infocmp xterm-kitty | ssh <server> tic -x -o \~/.terminfo /dev/stdin
+  if [ -z "$TERMINFO" ] ; then
+    if [ -s /usr/local/kitty.app/lib/kitty/terminfo/x/xterm-kitty ]; then
+        export TERMINFO=/usr/local/kitty.app/lib/kitty/terminfo
+    else
+        export TERM=xterm-256color
+    fi
+  fi
+fi
 
 # End of lines added by compinstall
 
@@ -58,15 +73,17 @@ setopt PROMPTSUBST
 # word separators
 # WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
 
-random_title=$[$RANDOM%100]
+# random_title=$[$RANDOM%100]
 # precmd () { print -Pn "\e]2;%n@%M.$random_title\a" }
 # precmd () { print -Pn "\e]2;%n@%M" }
 # precmd () { print -Pn "\e]0;%M:%12<..<%~%<<%%\a" }
 # precmd () { if [[ -n "$SSH_CLIENT" ]] ; then PS1='%F{007}ssh%f-%F{100}%n@%m%f:%F{150}%12<..<%~%<<%f%% '; print -Pn '\e]0;ssh-%M:%12<..<%~%<<%\a'; else ; PS1='%F{100}%n@%m%f:%F{150}%12<..<%~%<<%f%% '; print -Pn '\e]0;%M:%12<..<%~%<<%\a' ; fi ; if [[ -n "$TMUX_PANE" ]] ; then tmux set-window-option automatic-rename on; fi }
-# dont print hostname in tmux if not ssh (remote)
-# TODO: this breaks kitty terminal ...
-if [ "$TERM" != "xterm-kitty" ] ; then
-  precmd () { if [[ -n "$SSH_CLIENT" ]] ; then PS1='%F{007}ssh%f-%F{100}%n@%m%f:%F{150}%12<..<%~%<<%f%% '; print -Pn '\e]0;ssh-%M:%12<..<%~%<<%\a'; else ; PS1='%F{100}%n@%m%f:%F{150}%12<..<%~%<<%f%% '; print -Pn '\e]0;%12<..<%~%<<%\a' ; fi ; if [[ -n "$TMUX_PANE" ]] ; then tmux set-window-option automatic-rename on; fi }
+
+# kitty hangs on print if we try to set title with '%12<..<%~%<<%' so use xterm-kitty for now ...
+if [ "$TERM" = "xterm-kitty" ] ; then
+  precmd () { if [[ -n "$SSH_CLIENT" ]] ; then PS1='%F{007}ssh%f-%F{100}%n@%m%f:%F{150}%12<..<%~%<<%f%% '; print -Pn '\e]2;ssh-%M:xterm-kitty\a'; else ; PS1='%F{100}%n@%m%f:%F{150}%12<..<%~%<<%f%% '; print -Pn '\e]2;xterm-kitty\a' ; fi ; if [[ -n "$TMUX_PANE" ]] ; then tmux set-window-option automatic-rename on; fi }
+else
+  precmd () { if [[ -n "$SSH_CLIENT" ]] ; then PS1='%F{007}ssh%f-%F{100}%n@%m%f:%F{150}%12<..<%~%<<%f%% '; print -Pn '\e]2;ssh-%M:%12<..<%~%<<%\a'; else ; PS1='%F{100}%n@%m%f:%F{150}%12<..<%~%<<%f%% '; print -Pn '\e]2;%12<..<%~%<<%\a' ; fi ; if [[ -n "$TMUX_PANE" ]] ; then tmux set-window-option automatic-rename on; fi }
 fi
 
 # skip SHARE_HISTORY

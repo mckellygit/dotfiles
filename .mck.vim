@@ -1169,7 +1169,7 @@ delmarks v
 " See https://sunaku.github.io/tmux-select-pane.html for documentation.
 "let progname = substitute($VIM, '.*[/\\]', '', '')
 "set title titlestring=%{progname}\ %f\ +%l\ #%{tabpagenr()}.%{winnr()}
-set title titlestring=@v:\ %f
+set title titlestring=@v:%f
 if (&term =~ "^screen" || &term =~ "^tmux") && !has('nvim')
   exec "set t_ts=\e]2; t_fs=\7"
 endif
@@ -2105,7 +2105,8 @@ function! s:Delay(arg) abort
         " wish we could prevent flicker ...
         silent exe "normal! gv"
     endif
-    echo "copied to clipboard ..."
+    echo "copied to clipboard"
+    "echohl Deusgray | echo "copied to clipboard" | echohl None
     redraw
     sleep 551m
     redraw!
@@ -2117,13 +2118,13 @@ endfunction
 
 " NOTE: single click after double ...
 
-nnoremap <A-2-LeftMouse> mvviwy:call <SID>Delay(1)<CR><Esc>
-nnoremap <A-3-LeftMouse> mvviWy:call <SID>Delay(1)<CR><Esc>
-nnoremap <A-4-LeftMouse> mvVy:call <SID>Delay(1)<CR><Esc>
+nnoremap <silent> <A-2-LeftMouse> mvviwy:call <SID>Delay(1)<CR><Esc>
+nnoremap <silent> <A-3-LeftMouse> mvviWy:call <SID>Delay(1)<CR><Esc>
+nnoremap <silent> <A-4-LeftMouse> mvVy:call <SID>Delay(1)<CR><Esc>
 
-vnoremap <A-2-LeftMouse> <Esc>mvviwy:call <SID>Delay(1)<CR><Esc>
-vnoremap <A-3-LeftMouse> <Esc>mvviWy:call <SID>Delay(1)<CR><Esc>
-vnoremap <A-4-LeftMouse> <Esc>mvVy:call <SID>Delay(1)<CR><Esc>
+vnoremap <silent> <A-2-LeftMouse> <Esc>mvviwy:call <SID>Delay(1)<CR><Esc>
+vnoremap <silent> <A-3-LeftMouse> <Esc>mvviWy:call <SID>Delay(1)<CR><Esc>
+vnoremap <silent> <A-4-LeftMouse> <Esc>mvVy:call <SID>Delay(1)<CR><Esc>
 
 "vnoremap <silent> <A-2-LeftMouse> mv<Esc>viwygv<C-\><C-n>:sleep 651m<CR>`v<Esc>
 "vnoremap <silent> <A-3-LeftMouse> mv<Esc>viWygv<C-\><C-n>:sleep 651m<CR>`v<Esc>
@@ -2162,7 +2163,7 @@ inoremap <expr> <A-4-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<ba
 "vmap <expr> <A-LeftRelease> (@i=="1") ? '<LeftRelease><C-\><C-n>:<C-u>sleep 551m<bar>:let @i="0"<bar>:call YankIt("*y", 2)<CR><Esc>i' : '<LeftRelease><C-\><C-n>:<C-u>sleep 551m<bar>:call YankIt("*y", 2)<CR>'
 
 "vmap <A-LeftRelease> "*ygv
-vmap <A-LeftRelease> "*y:call <SID>Delay(0)<CR><Esc>
+vmap <silent> <A-LeftRelease> "*y:call <SID>Delay(0)<CR><Esc>
 
 "vnoremap <A-2-LeftRelease>  <Nop>
 "vnoremap <A-3-LeftRelease>  <Nop>
