@@ -1460,9 +1460,10 @@ vnoremap S <Nop>
 
 " MapFastKeycode: helper for fast keycode mappings
 " makes use of unused vim keycodes <[S-]F15> to <[S-]F37>
+" reserve S-F33 - S-F37 below, 41 remain available ...
 let s:fast_i = 0
 function! s:MapFastKeycode(key, keycode)
-    if s:fast_i == 42
+    if s:fast_i == 41
         echohl WarningMsg
         echomsg "Unable to map ".a:key.": out of spare keycodes"
         echohl None
@@ -1476,8 +1477,6 @@ function! s:MapFastKeycode(key, keycode)
     exec 'tmap '.vkeycode.' '.a:key
     let s:fast_i += 1
 endfunction
-
-" reserve S-F34 - S-F37 for special use
 
 " NOTE: only for term =~ ^screen || ^tmux || ^xterm || ^alacritty || ^rxvt || ^urxvt ?
 
@@ -2122,6 +2121,11 @@ endfunction
 nnoremap <silent> <A-2-LeftMouse> mvviwy:call <SID>Delay(1)<CR><Esc>
 nnoremap <silent> <A-3-LeftMouse> mvviWy:call <SID>Delay(1)<CR><Esc>
 nnoremap <silent> <A-4-LeftMouse> mvVy:call <SID>Delay(1)<CR><Esc>
+
+" NOTE: tmux maps A-Triple to M-b to be able to know its a triple-click ...
+call <SID>MapFastKeycode('<S-F33>',  "\eb")
+nnoremap <silent> <S-F33> mvviWy:call <SID>Delay(1)<CR><Esc>
+vnoremap <silent> <S-F33> <Esc>mvviWy:call <SID>Delay(1)<CR><Esc>
 
 vnoremap <silent> <A-2-LeftMouse> <Esc>mvviwy:call <SID>Delay(1)<CR><Esc>
 vnoremap <silent> <A-3-LeftMouse> <Esc>mvviWy:call <SID>Delay(1)<CR><Esc>
