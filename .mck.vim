@@ -1169,7 +1169,8 @@ delmarks v
 " See https://sunaku.github.io/tmux-select-pane.html for documentation.
 "let progname = substitute($VIM, '.*[/\\]', '', '')
 "set title titlestring=%{progname}\ %f\ +%l\ #%{tabpagenr()}.%{winnr()}
-set title titlestring=@v:%f
+set titleold=
+set title titlestring=@v:%.12t
 if (&term =~ "^screen" || &term =~ "^tmux") && !has('nvim')
   exec "set t_ts=\e]2; t_fs=\7"
 endif
