@@ -2340,6 +2340,7 @@ inoremap <silent> <A-Del> <Esc>"_diwi
 
 " A-S-Del ?
 
+"nnoremap <Char-0x07F> <BS>
 " NOTE: S-BS in terminals often mapped to BS/Del ...
 noremap  <silent> <S-BS> <BS>
 inoremap <silent> <S-BS> <BS>
