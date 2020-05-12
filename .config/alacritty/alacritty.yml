@@ -1,13 +1,16 @@
 
 env:
   # TERM env customization.
-  #
-  # If this property is not set, alacritty will set it to xterm-256color.
-  #
+  # If this property is not set, alacritty will set it to this.
+  # Otherwise it would be set to 'alacritty' which is fine but for ssh
+  # into hosts where it is not installed and for some yet unknown reason
+  # TERM=alacritty inside vim does not work well (can also set term inside vim)
   # Note that some xterm terminfo databases don't declare support for italics.
   # You can verify this by checking for the presence of `smso` and `sitm` in
   # `infocmp xterm-256color`.
-  TERM: xterm-256color
+  # NOTE: inside of tmux TERM is set to tmux/screen-256color ...
+  TERM: alacritty
+  # TERM: xterm-256color
 
 dpi:
   x: 96.0

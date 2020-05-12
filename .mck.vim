@@ -1125,7 +1125,10 @@ set background=dark
 set t_Co=256
 
 " bg color fill-in for kitty term
-if &term=~"kitty"
+"if &term=~"kitty"
+" if we set term for kitty from xterm-kitty to xterm-256color
+" then we need to also set this ...
+if &term=~"xterm"
   let &t_ut=''
 endif
 
@@ -1138,6 +1141,7 @@ if &term=="alacritty"
   set term=xterm-256color
 endif
 " TODO: seems we need to force xterm* if alacritty ?
+" NOTE: we can set TERM in alacritty to xterm-256color
 " ------------------------------
 
 if &term=="xterm"
