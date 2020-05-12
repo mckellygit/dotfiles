@@ -206,7 +206,10 @@
 *fadeColor:              #808080
 *pointerColorBackground: #586e75
 *pointerColorForeground: #93a1a1
-*.cursorColor:           #a49b88
+!!*.cursorColor:           #a49b88
+*.cursorColor:           #d78700
+
+Xcursor.size: 32
 
 !! ==========================================
 !! ==========================================
@@ -260,8 +263,6 @@ urxvt*depth: 32
 URxvt.background: [96]#2e2e26
 !!urxvt*transparent: true
 !!urxvt*shading: 30
-
-Xcursor.size: 32
 
 !! % xdpyinfo | grep -B 2 resol
 !! screen #0:

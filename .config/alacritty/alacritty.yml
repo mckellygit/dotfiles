@@ -1,4 +1,18 @@
 
+env:
+  # TERM env customization.
+  #
+  # If this property is not set, alacritty will set it to xterm-256color.
+  #
+  # Note that some xterm terminfo databases don't declare support for italics.
+  # You can verify this by checking for the presence of `smso` and `sitm` in
+  # `infocmp xterm-256color`.
+  TERM: xterm-256color
+
+dpi:
+  x: 96.0
+  y: 96.0
+
 key_bindings:
   # special -------
   - { key: Back,      mods: Control,         chars: "\x1b\x7f"        }
@@ -112,6 +126,8 @@ dynamic_title: true
 scrolling: 
   history: 0
 
+custom_cursor_colors: true
+
 colors:
   primary:
     background: '0x2e2e26'
@@ -137,6 +153,10 @@ colors:
     cyan:     '0x00ffff'
     white:    '0xffffff'
 
+  cursor:
+    cursor:   '0xd78700'
+    text:     '0x111111'
+
 background_opacity: 0.96
 
 tabspaces: 4
@@ -151,6 +171,19 @@ cursor:
   #   - _ Underline
   #   - | Beam
   style: Block
+
+url:
+  # URL launcher
+  #
+  # This program is executed when clicking on a text which is recognized as a URL.
+  # The URL is always added to the command as the last parameter.
+  launcher: xdg-open
+
+  # URL modifiers
+  #
+  # These are the modifiers that need to be held down for opening URLs when clicking
+  # on them. The available modifiers are documented in the key binding section.
+  #modifiers: Control|Shift
 
 debug:
   # Should display the render timer
