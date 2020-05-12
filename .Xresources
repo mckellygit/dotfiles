@@ -362,6 +362,10 @@ URxvt.keysym.Shift-Meta-Delete: string:\033[3;4~
 
 !! perl extensions, misc ...
 
+!! also see: https://github.com/muennich/urxvt-perls
+
+!!URxvt.perl-lib: ~/urxvt-perl
+!!URxvt.perl-lib: /usr/lib/x86_64-linux-gnu/urxvt
 !!URxvt.perl-ext-common: default,matcher,font-size,selection-to-clipbaord
 !! Open urls in browser with Control-Click
 !!URxvt.urlLauncher: /usr/bin/firefox
@@ -371,23 +375,23 @@ URxvt.matcher.button: C1
 !!URxvt.keysym.Control-0x2d: perl:font-size:decrease
 !! Copy Paste & Other Extensions
 !!URxvt.perl-ext-common: default,clipboard,url-select,keyboard-select
-URxvt.perl-ext-common: default, matcher
+URxvt.perl-ext-common: default,matcher
 !!URxvt.keysym.M-c: perl:clipboard:copy
 !!URxvt.keysym.M-v: perl:clipboard:paste
 !!URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
 !!URxvt.keysym.M-Escape: perl:keyboard-select:activate
 !!URxvt.keysym.M-s: perl:keyboard-select:search
 !!URxvt.keysym.M-u: perl:url-select:select_next
-URxvt.urlLauncher: chrome
+URxvt.urlLauncher: xdg-open
 URxvt.underlineURLs: true
 URxvt.urlButton: 1
 
-URxvt.copyCommand:   xsel -i -p --rmlastnl --sc 0
-URxvt.pasteCommand:  xsel -o -p --rmlastnl --sc 0
+URxvt.copyCommand:  xsel -i -c --rmlastnl --sc 0
+URxvt.pasteCommand: xsel -o -c --rmlastnl --sc 0
 
-URxvt.autocopy: false
-URxvt.copycmd:  xsel -ib
-URxvt.pastecmd: xsel -ob
+URxvt.clipboard.autocopy: false
+URxvt.clipboard.copycmd:  xsel -i -c --rmlastnl --sc 0
+URxvt.clipboard.pastecmd: xsel -o -c --rmlastnl --sc 0
 
 !! ==========================================
 

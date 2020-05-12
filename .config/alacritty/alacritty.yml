@@ -1,9 +1,12 @@
 
+# example configuration:
+#    https://github.com/alacritty/alacritty/blob/master/alacritty.yml
+
 env:
   # TERM env customization.
   # If this property is not set, alacritty will set it to this.
   # Otherwise it would be set to 'alacritty' which is fine but for ssh
-  # into hosts where it is not installed and for some yet unknown reason
+  # to hosts where it is not installed and for some yet unknown reason
   # TERM=alacritty inside vim does not work well (can also set term inside vim)
   # Note that some xterm terminfo databases don't declare support for italics.
   # You can verify this by checking for the presence of `smso` and `sitm` in
@@ -90,6 +93,20 @@ mouse:
   triple_click: { threshold: 300 }
   hide_when_typing: true
 
+  url:
+    # URL launcher
+    #
+    # This program is executed when clicking on a text which is recognized as a URL.
+    # The URL is always added to the command as the last parameter.
+    launcher: xdg-open
+
+    # URL modifiers
+    #
+    # These are the modifiers that need to be held down for opening URLs when clicking
+    # on them. The available modifiers are documented in the key binding section.
+    #modifiers: Control|Shift
+    modifiers: Control
+
 selection:
   semantic_escape_chars: ",│`|:\"' ()[]{}<>"
   save_to_clipboard: false
@@ -124,6 +141,7 @@ window:
 
   decorations: full
 
+# Allow terminal applications to change Alacritty's window title.
 dynamic_title: true
 
 scrolling: 
@@ -174,19 +192,6 @@ cursor:
   #   - _ Underline
   #   - | Beam
   style: Block
-
-url:
-  # URL launcher
-  #
-  # This program is executed when clicking on a text which is recognized as a URL.
-  # The URL is always added to the command as the last parameter.
-  launcher: xdg-open
-
-  # URL modifiers
-  #
-  # These are the modifiers that need to be held down for opening URLs when clicking
-  # on them. The available modifiers are documented in the key binding section.
-  #modifiers: Control|Shift
 
 debug:
   # Should display the render timer
