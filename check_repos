@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cd ~/Downloads
-for d in parcellite xclip FlameGraph ethq byobu perf-tools xsel tmux vim rtags cgdb ccache
+for d in parcellite FlameGraph byobu perf-tools xsel tmux vim rtags cgdb ccache kitty terminator alacritty zsh-autosuggestions
 do
     echo "checking $d ..."
     cd $d
@@ -15,10 +15,22 @@ do
         echo ""
     fi
 done
-cd vim_bundles
+
+echo "checking ~/.fzf ..."
+cd ~/.fzf
+rc=$?
+if [[ $rc -eq 0 ]] ; then
+    git remote -v
+    git pull
+    git smu
+    echo " --- "
+    echo ""
+fi
+
+cd ~/Downloads/vim_bundles
 ./update.sh
 
 echo ""
-echo "Also check git:     zsh, zsh-autosuggestions ..."
-echo "Also check non-git: readline, gdb, ncurses ..."
+echo "Also check git:     ack, ag, fd, zsh, byobu, CopyQ, rxvt-unicode, CMake ..."
+echo "Also check non-git: gcc/g++, clang/clang++/llvm, gdb, readline, ncurses ..."
 echo ""
