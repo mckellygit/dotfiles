@@ -44,7 +44,7 @@ if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
     debian_chroot=$(cat /etc/debian_chroot)
 fi
 
-# if we are xterm then try xterm-256color
+# if we are just xterm then try xterm-256color
 if [ -n "$TERM" ] ; then
     if [ "$TERM" = "xterm" ] ; then
         export TERM=xterm-256color

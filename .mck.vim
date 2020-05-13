@@ -1136,11 +1136,11 @@ endif
 "set t_f9=123
 
 " ------------------------------
-" TODO: seems we need to force xterm* if alacritty ?
-if &term=="alacritty"
-  set term=xterm-256color
-endif
-" TODO: seems we need to force xterm* if alacritty ?
+" NOTE: seems we need to force xterm* if alacritty ?
+"if &term=="alacritty"
+"  set term=xterm-256color
+"endif
+" NOTE: seems we need to force xterm* if alacritty ?
 " NOTE: we can set TERM in alacritty to xterm-256color
 " ------------------------------
 
@@ -1150,6 +1150,10 @@ if &term=="xterm"
   set t_Sf=^[[3%dm
   "highlight Comment ctermfg=blue
 endif
+
+" can prevent some strange chars in terminator ...
+set t_TI=
+set t_TE=
 
 "let g:solarized_termcolors=256
 "colorscheme solarized
@@ -3325,17 +3329,17 @@ function s:MySearch(meth) abort
     " expand to full path (avoid problems with cd/lcd in au QuickFixCmdPre)
     let files = map(files, "shellescape(fnamemodify(v:val, ':p'))")
     "execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) join(files) ' 2>/dev/null'
-    execute 'AsyncRun! -strip ag --vimgrep ' shellescape(string, 1) join(files) ' 2>/dev/null'
+    execute 'AsyncRun! -strip ag --vimgrep -- ' shellescape(string, 1) join(files) ' 2>/dev/null'
   elseif (a:meth == 1)
     "execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
-    execute 'AsyncRun! -strip ag --vimgrep -U --hidden ' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
+    execute 'AsyncRun! -strip ag --vimgrep -U --hidden -- ' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
   elseif (a:meth == 2)
     "execute 'AsyncRun! -strip -cwd ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) ' 2>/dev/null'
-    execute 'AsyncRun! -strip ag --vimgrep -U --hidden ' shellescape(string, 1) ' 2>/dev/null'
+    execute 'AsyncRun! -strip ag --vimgrep -U --hidden -- ' shellescape(string, 1) ' 2>/dev/null'
   elseif (a:meth == 3)
-    call fzf#vim#grep('ag -U --hidden --nogroup --column --color '.shellescape(string, 1).' '.s:find_git_root(), 1, fzf#vim#with_preview('up:50%:hidden', 'p'), 0)
+    call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root(), 1, fzf#vim#with_preview('up:50%:hidden', 'p'), 0)
   elseif (a:meth == 4)
-    call fzf#vim#grep('ag -U --hidden --nogroup --column --color '.shellescape(string, 1), 1, fzf#vim#with_preview(), 0)
+    call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1), 1, fzf#vim#with_preview(), 0)
   endif
   let @/=string
   set hlsearch
@@ -3362,17 +3366,17 @@ function s:MyVisSearch(meth) abort
     " expand to full path (avoid problems with cd/lcd in au QuickFixCmdPre)
     let files = map(files, "shellescape(fnamemodify(v:val, ':p'))")
     "execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) join(files) ' 2>/dev/null'
-    execute 'AsyncRun! -strip ag --vimgrep ' shellescape(string, 1) join(files) ' 2>/dev/null'
+    execute 'AsyncRun! -strip ag --vimgrep -- ' shellescape(string, 1) join(files) ' 2>/dev/null'
   elseif (a:meth == 1)
     "execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
-    execute 'AsyncRun! -strip ag --vimgrep -U --hidden ' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
+    execute 'AsyncRun! -strip ag --vimgrep -U --hidden -- ' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
   elseif (a:meth == 2)
     "execute 'AsyncRun! -strip -cwd ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) ' 2>/dev/null'
-    execute 'AsyncRun! -strip ag --vimgrep -U --hidden ' shellescape(string, 1) ' 2>/dev/null'
+    execute 'AsyncRun! -strip ag --vimgrep -U --hidden -- ' shellescape(string, 1) ' 2>/dev/null'
   elseif (a:meth == 3)
-    call fzf#vim#grep('ag -U --hidden --nogroup --column --color '.shellescape(string, 1).' '.s:find_git_root(), 1, fzf#vim#with_preview('up:50%:hidden', 'p'), 0)
+    call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root(), 1, fzf#vim#with_preview('up:50%:hidden', 'p'), 0)
   elseif (a:meth == 4)
-    call fzf#vim#grep('ag -U --hidden --nogroup --column --color '.shellescape(string, 1), 1, fzf#vim#with_preview(), 0)
+    call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1), 1, fzf#vim#with_preview(), 0)
   endif
   let @/=string
   set hlsearch
