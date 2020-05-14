@@ -503,9 +503,16 @@ let g:findroot_not_for_subdir = 1
 " findroot ------------
 
 " fzf -----------------
+" TODO: bug in fzf.vim and latest vim where popup causes error
+"let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.5, 'yoffset': 0.8, 'xoffset': 0.8 } }
+" use tmux popup ...
+let g:fzf_layout = { 'tmux': '-p -x R -y S -w 80% -h 80%' }
+" use vim split ...
+"let g:fzf_layout = { 'down': '~45%' }
+
 " always show preview window ...
-let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.5, 'yoffset': 0.8, 'xoffset': 0.8 } }
 let g:fzf_preview_window = 'right:60%'
+
 autocmd VimEnter,BufEnter * silent! lcd %:p:h
 " add \fz mapping also
 noremap <silent> <Leader>fz <C-\><C-n>:FZFProjectFiles<CR>
