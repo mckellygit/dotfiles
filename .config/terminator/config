@@ -55,6 +55,7 @@
       size = 2136, 1240
       type = Window
     [[[terminal1]]]
+      title = terminator
       order = 0
       parent = child0
       profile = default
@@ -72,6 +73,7 @@
       size = 1700, 940
       type = Window
     [[[terminal1]]]
+      title = terminator
       order = 0
       parent = child0
       profile = laptop
