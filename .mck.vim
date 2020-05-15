@@ -504,13 +504,16 @@ let g:findroot_not_for_subdir = 1
 
 " fzf -----------------
 " TODO: bug in fzf.vim and latest vim where popup causes error
-"let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.5, 'yoffset': 0.8, 'xoffset': 0.8 } }
+if 0
+    let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.5, 'yoffset': 0.8, 'xoffset': 0.8 } }
+else
 if &term =~ "^screen" || &term =~ "^tmux"
     " use tmux popup ...
     let g:fzf_layout = { 'tmux': '-p -x R -y S -w 80% -h 80%' }
 else
     " use vim split ...
     let g:fzf_layout = { 'down': '~45%' }
+endif
 endif
 
 " always show preview window ...
