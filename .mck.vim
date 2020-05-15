@@ -1419,6 +1419,8 @@ set history=20
 " show the cursor position all the time
 set ruler		
 
+set selection=inclusive
+
 " -------- mouse / cut - paste - clipboard --------
 
 " to disable mouse in visual mode
