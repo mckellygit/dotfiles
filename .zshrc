@@ -200,8 +200,12 @@ bindkey "\e[3;5~" my-kill-word
 # del current WHOLE word, but also if at end del backward word
 function my-delete-word() {
 # local WORDCHARS="${WORDCHARS:s#/#}"
-  zle forward-word
-  zle backward-kill-word
+  if [[ $BUFFER[$CURSOR] == " " ]] ; then
+    zle my-kill-word
+  else
+    zle forward-word
+    zle backward-kill-word
+  fi
 }
 zle -N my-delete-word
 
@@ -324,7 +328,7 @@ alias stop_rdm='rc -q'
 alias ag='\ag --all-text --hidden -- '
 
 # cannot override builtin git diff with git cmds/aliases so do it this way ...
-git() { if [[ $1 == "diff" ]]; then command git dless ; else command git "$@"; fi; }
+git() { if [[ $1 == "diff" ]]; then shift ; command git dless "$@" ; else command git "$@"; fi }
 
 # ------------------
 

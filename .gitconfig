@@ -36,6 +36,8 @@
 	dt = difftool
 	vdiff = difftool
 	difff = dless
+    olddiff = diff
+    oldiff = diff
 	dif = dless
 	dles = dless
 #	git diff does not use alternate screen, no matter what PAGER, GIT_PAGER, etc. are

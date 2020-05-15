@@ -503,8 +503,7 @@ let g:findroot_not_for_subdir = 1
 " findroot ------------
 
 " fzf -----------------
-" TODO: bug in fzf.vim and latest vim where popup causes error
-if 0
+if 1 " use vim popup ...
     let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.5, 'yoffset': 0.8, 'xoffset': 0.8 } }
 else
 if &term =~ "^screen" || &term =~ "^tmux"
@@ -1563,7 +1562,7 @@ noremap <silent> <C-Home> gg
 "noremap <silent> <Esc>6 G
 noremap <silent> <C-End> G
 
-" dont really need/use S-Ins or A-H/E
+" NOTE: dont really need/use S-Ins or A-H/E
 map  <silent> <S-Insert> <Nop>
 imap <silent> <S-Insert> <Esc>l
 cmap <silent> <S-Insert> <Nop>
@@ -2339,27 +2338,82 @@ vnoremap <silent> <Leader>D "_x
 
 " -------------------
 
-" ctrl-del to delete from cursor to beg of word, to match backward-kill-word ...
-" cannot use ctrl-w as that is for window nav
-nnoremap <silent> <C-Del> "_db
-vnoremap <silent> <C-Del> <Esc>"_dbv
-inoremap <silent> <C-Del> <Esc>"_dbi
+function s:SDel()
+    if col('.') == 1
+        execute 'normal! "_dW'
+    elseif col('.') != col('$')-1
+        execute 'normal! "_db'
+    else
+        "let lastchar = matchstr(getline('.'), '\%' . col('.') . 'c.')
+        let lastchar = nr2char(strgetchar(getline('.')[col('.') - 1:], 0))
+        if lastchar == ' '
+            execute 'normal! "_dvb'
+        else
+            execute 'normal! "_diw'
+        endif
+    endif
+endfunction
 
-" shift-del to delete from curor to end of word, to match kill-word ...
+function s:CDel()
+    if col('.') == 1 && col('$') == 1
+        execute 'normal! "_dW'
+    elseif col('.') != col('$')-1
+        execute 'normal! "_de'
+    else
+        "let lastchar = matchstr(getline('.'), '\%' . col('.') . 'c.')
+        let lastchar = nr2char(strgetchar(getline('.')[col('.') - 1:], 0))
+        if lastchar == ' '
+            execute 'normal! "_dvb'
+        else
+            execute 'normal! "_diw'
+        endif
+    endif
+endfunction
+
+function s:CSDel()
+    if col('.') == 1 && col('$') == 1
+        execute 'normal! "_dW'
+    elseif col('.') != col('$')-1
+        execute 'normal! lb"_dW'
+    else
+        "let lastchar = matchstr(getline('.'), '\%' . col('.') . 'c.')
+        let lastchar = nr2char(strgetchar(getline('.')[col('.') - 1:], 0))
+        if lastchar == ' '
+            execute 'normal! "_dvb'
+        else
+            execute 'normal! "_diw'
+        endif
+    endif
+endfunction
+
+" shift-del to delete from cursor to beg of word, like backward-kill-word ...
+"nnoremap <silent> <expr> <S-Del> (col('.') == 1) ? '"_dW' : (col('.') != col('$')-1) ? '"_db' : ':call <SID>SDel()<CR>'
+nnoremap <silent> <expr> <S-Del> (col('.') == 1) ? '"_dW' : (col('.') != col('$')-1) ? '"_db' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
+" NOTE: *-Del in v-mode does not make much sense, Del deletes entire selection etc ...
+vnoremap <silent>        <S-Del> <Del>
+inoremap <silent> <expr> <S-Del> (col('.') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<C-o>"_db' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
+
+" ctrl-del to delete from cursor to end of word, to match kill-word ...
 " also skip alt-d
-nnoremap <silent> <S-Del> "_dw
-vnoremap <silent> <S-Del> "_dwv
-inoremap <silent> <S-Del> "_dwi
+"nnoremap <silent> <expr> <C-Del> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? '"_de' : ':call <SID>CDel()<CR>'
+nnoremap <silent> <expr> <C-Del> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? '"_de' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
+" NOTE: *-Del in v-mode does not make much sense, Del deletes entire selection etc ...
+vnoremap <silent>        <C-Del> <Del>
+inoremap <silent> <expr> <C-Del> (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<C-o>"_de' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
 
 " ctrl-shift-del to delete whole word under cursor
-nnoremap <silent> <C-S-Del> "_diw
-vnoremap <silent> <C-S-Del> <Esc>"_diwv
-inoremap <silent> <C-S-Del> <Esc>"_diwi
+"nnoremap <silent> <expr> <C-S-Del> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? 'lb"_dW' : ':call <SID>CSDel()<CR>'
+nnoremap <silent> <expr> <C-S-Del> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? 'lb"_dW' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
+" NOTE: *-Del in v-mode does not make much sense, Del deletes entire selection etc ...
+vnoremap <silent>        <C-S-Del> <Del>
+inoremap <silent> <expr> <C-S-Del> (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<Esc>llb"_dWi' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
 
+" NOTE: dont really need/use A-Del
 " alt-del to delete whole word under cursor
-nnoremap <silent> <A-Del> "_diw
-vnoremap <silent> <A-Del> <Esc>"_diwv
-inoremap <silent> <A-Del> <Esc>"_diwi
+nnoremap <silent> <expr> <A-Del> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? 'lb"_dW' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
+" NOTE: *-Del in v-mode does not make much sense, Del deletes entire selection etc ...
+vnoremap <silent>        <A-Del> <Del>
+inoremap <silent> <expr> <A-Del> (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<Esc>llb"_dWi' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
 
 " A-S-Del ?
 
@@ -2367,10 +2421,7 @@ inoremap <silent> <A-Del> <Esc>"_diwi
 " NOTE: S-BS in terminals often mapped to BS/Del ...
 noremap  <silent> <S-BS> <BS>
 inoremap <silent> <S-BS> <BS>
-" TODO: if shift-BS is ever recognized ...
-"nnoremap <silent> <S-BS> X
-"vnoremap <silent> <S-BS> <Esc>Xv
-"inoremap <silent> <S-BS> <Esc>Xi
+" TODO: if shift-BS is ever reliably recognized have it delete curr/prev word ...
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
