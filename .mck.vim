@@ -4406,15 +4406,16 @@ vnoremap <silent> <C-t> <C-\><C-n>:tabnext<CR>
 
 " moving between windows, somtimes hard to let go of ctrl before arrow ...
 " these could map to same cmds: <C-w><C-Left> -> <C-w><Left>
-" or to navigate tabs ...
-" NOTE: <C-w><Left>,<Right> is for moving between window splits
-"nnoremap <silent> <C-w><C-Left>  :tabprevious<CR>
-"nnoremap <silent> <C-w><C-Right> :tabnext<CR>
-
-nnoremap <silent> <C-w><C-Left>  <C-w>h
-nnoremap <silent> <C-w><C-Right> <C-w>l
-nnoremap <silent> <C-w><C-Up>    <C-w>k
-nnoremap <silent> <C-w><C-Down>  <C-w>j
+" NOTE: for some reason <C-w><C-arrow> does not work, use esc codes ...
+nnoremap <silent> <C-w><C-[>[1;5D <C-w>h
+nnoremap <silent> <C-w><C-[>[1;5C <C-w>l
+nnoremap <silent> <C-w><C-[>[1;5A <C-w>k
+nnoremap <silent> <C-w><C-[>[1;5B <C-w>j
+" but leave these anyway
+nnoremap <silent> <C-w><C-Left>   <C-w>h
+nnoremap <silent> <C-w><C-Right>  <C-w>l
+nnoremap <silent> <C-w><C-Up>     <C-w>k
+nnoremap <silent> <C-w><C-Down>   <C-w>j
 
 " -----------------------------
 

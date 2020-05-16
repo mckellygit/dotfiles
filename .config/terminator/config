@@ -31,12 +31,13 @@
 
 # some others that collide ...
   toggle_scrollbar = None
-  resize_down = None
   move_tab_right = None
   move_tab_left = None
   toggle_zoom = None
-  zoom_in = <Primary><Shift>plus
-  zoom_out = <Primary><Shift>underscore
+  zoom_in = <Primary>plus
+  zoom_out = <Primary>underscore
+  resize_up = <Shift><Super>Up
+  resize_down = <Shift><Super>Down
 
 # from plugins/ctrlbs.py ...
 # NOTE: these bindngs do not start with "key_"
@@ -115,7 +116,7 @@
     background_type = transparent
 #   cursor_color = "#6a6863"
 #   cursor_color = "#73684C"
-    cursor_color = "#a49b88"
+    cursor_color = "#d78700"
     font = Liberation Mono 13
 #   foreground_color = "#fba61b"
 #   foreground_color = "#fbb51b"
@@ -139,7 +140,7 @@
     background_type = transparent
 #   cursor_color = "#6a6863"
 #   cursor_color = "#73684C"
-    cursor_color = "#a49b88"
+    cursor_color = "#d78700"
     font = Liberation Mono 13
 #   foreground_color = "#fba61b"
 #   foreground_color = "#fbb51b"
