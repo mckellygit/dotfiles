@@ -4390,16 +4390,16 @@ tnoremap <silent> <C-d> <C-w>:call <SID>TermQuit()<CR>
 " NOTE: some terminals work with A/M-L/R but some need esc seq ...
 
 " prev tab
-nnoremap <silent> <M-Left>      :tabprevious<CR>
-vnoremap <silent> <M-Left> <Esc>:tabprevious<CR>
-inoremap <silent> <M-Left> <Esc>:tabprevious<CR>
-tnoremap <silent> <M-Left> <C-w>:tabprevious<CR>
+nnoremap <silent> <A-Left>      :tabprevious<CR>
+vnoremap <silent> <A-Left> <Esc>:tabprevious<CR>
+inoremap <silent> <A-Left> <Esc>:tabprevious<CR>
+tnoremap <silent> <A-Left> <C-w>:tabprevious<CR>
 
 " next tab
-nnoremap <silent> <M-Right>      :tabnext<CR>
-vnoremap <silent> <M-Right> <Esc>:tabnext<CR>
-inoremap <silent> <M-Right> <Esc>:tabnext<CR>
-tnoremap <silent> <M-Right> <C-w>:tabnext<CR>
+nnoremap <silent> <A-Right>      :tabnext<CR>
+vnoremap <silent> <A-Right> <Esc>:tabnext<CR>
+inoremap <silent> <A-Right> <Esc>:tabnext<CR>
+tnoremap <silent> <A-Right> <C-w>:tabnext<CR>
 
 nnoremap <silent> <C-t> :tabnext<CR>
 vnoremap <silent> <C-t> <C-\><C-n>:tabnext<CR>
