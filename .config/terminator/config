@@ -6,15 +6,15 @@
 # handle_size = 2
   title_font = Liberation Mono 13
   title_hide_sizetext = True
-  title_transmit_bg_color = "#d85f00"
+  title_transmit_bg_color = "#7a4d48"
   title_transmit_fg_color = "#f6f3ea"
   title_use_system_font = False
 [keybindings]
 # these were Ctrl-Page Up/Down and are disabled for tmux to use
-  next_tab = ""
-  prev_tab = ""
+  next_tab = None
+  prev_tab = None
 # full_screen was F11 - sometimes back from screenlock gets into fullscreen ...
-  full_screen = ""
+  full_screen = None
 # these were Alt-Up/Down and are disabled for tmux to use
   go_up = <Super>Up
   go_down = <Super>Down
@@ -26,22 +26,42 @@
   go_prev = <Shift><Super>p
   resize_left = <Shift><Super>Left
   resize_right = <Shift><Super>Right
-# from ctrlbs plugin
-  esc_delete = <Control>BackSpace
-  esc_one = <Control>Insert
-  esc_two = <Control><Shift>BackSpace
-# Ctrl-Shft-\
-# esc_thr = <Control>bar
-# Ctrl-=
-  esc_thr = <Control>equal
-# Ctrl-Shft-space
-  esc_four = <Control><Shift>space
-# Ctrl-Home
-  esc_five = <Control>Home
-# Ctrl-End
-  esc_six = <Control>End
-# Ctrl-Shift-X
-  esc_nine = <Control><Shift>X
+
+# NOTE: <Primary> == <Control>
+
+# some others that collide ...
+  toggle_scrollbar = None
+  resize_down = None
+  move_tab_right = None
+  move_tab_left = None
+  toggle_zoom = None
+  zoom_in = <Primary><Shift>plus
+  zoom_out = <Primary><Shift>underscore
+
+# from plugins/ctrlbs.py ...
+# NOTE: these bindngs do not start with "key_"
+#       but the plugin functions MUST start with "key_"
+
+  ctrl_back = <Primary>BackSpace
+  shft_back = <Shift>BackSpace
+  ctrl_shft_back = <Primary><Shift>BackSpace
+
+  ctrl_equal = <Primary>equal
+
+  ctrl_shft_space = <Primary><Shift>space
+
+  ctrl_shft_x = <Primary><Shift>x
+
+  ctrl_ins = <Primary>Insert
+  shft_ins = <Shift>Insert
+  ctrl_shft_ins = <Primary><Shift>Insert
+
+  ctrl_del = <Primary>Delete
+  shft_del = <Shift>Delete
+  ctrl_shft_del = <Primary><Shift>Delete
+
+# TODO: Alt+Scrollwheel not working ...
+
 [layouts]
   [[default]]
     [[[child0]]]
@@ -87,7 +107,7 @@
 #   Terminal bell (light bulb)
     icon_bell = True
     alternate_screen_scroll = True
-    background_color = "#2e2e2e"
+    background_color = "#2e2e26"
 #   background_color = "#252525"
 #   background_color = "#393232"
     background_darkness = 0.96
@@ -111,7 +131,7 @@
 #   Terminal bell (light bulb)
     icon_bell = True
     alternate_screen_scroll = True
-    background_color = "#2e2e2e"
+    background_color = "#2e2e26"
 #   background_color = "#252525"
 #   background_color = "#393232"
     background_darkness = 0.96

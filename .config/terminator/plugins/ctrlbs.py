@@ -7,36 +7,54 @@ from terminatorlib.terminal import Terminal
 # monkey patch on startup.
 available = AVAILABLE = []
 
-def key_esc_delete(self):
+# NOTE: all functions and labels defined MUST start with "key_" string
+#       and the corresponding mapping in ../config does NOT have "key_"
+
+def key_ctrl_back(self):
     self.vte.feed_child('\x1b\x7f', 2)
-
-def key_esc_one(self):
-    self.vte.feed_child('\x1b\x31', 2)
-
-def key_esc_two(self):
+def key_shft_back(self):
+    self.vte.feed_child('\x7f', 1)
+def key_ctrl_shft_back(self):
     self.vte.feed_child('\x1b\x32', 2)
 
-def key_esc_thr(self):
+def key_ctrl_equal(self):
     self.vte.feed_child('\x1b\x33', 2)
 
-def key_esc_four(self):
+def key_ctrl_shft_space(self):
     self.vte.feed_child('\x1b\x34', 2)
 
-def key_esc_five(self):
-    self.vte.feed_child('\x1b\x35', 2)
-
-def key_esc_six(self):
-    self.vte.feed_child('\x1b\x36', 2)
-
-def key_esc_nine(self):
+def key_ctrl_shft_x(self):
     self.vte.feed_child('\x1b\x39', 2)
 
-setattr(Terminal, 'key_esc_delete', key_esc_delete)
-setattr(Terminal, 'key_esc_one',    key_esc_one)
-setattr(Terminal, 'key_esc_two',    key_esc_two)
-setattr(Terminal, 'key_esc_thr',    key_esc_thr)
-setattr(Terminal, 'key_esc_four',   key_esc_four)
-setattr(Terminal, 'key_esc_five',   key_esc_five)
-setattr(Terminal, 'key_esc_six',    key_esc_six)
-setattr(Terminal, 'key_esc_nine',   key_esc_nine)
+def key_ctrl_ins(self):
+    self.vte.feed_child('\x1b\x5b\x32\x3b\x35\x7e', 6)
+def key_shft_ins(self):
+    self.vte.feed_child('\x1b\x5b\x32\x3b\x32\x7e', 6)
+def key_ctrl_shft_ins(self):
+    self.vte.feed_child('\x1b\x5b\x32\x3b\x36\x7e', 6)
+
+def key_ctrl_del(self):
+    self.vte.feed_child('\x1b\x5b\x33\x3b\x35\x7e', 6)
+def key_shft_del(self):
+    self.vte.feed_child('\x1b\x5b\x33\x3b\x32\x7e', 6)
+def key_ctrl_shft_del(self):
+    self.vte.feed_child('\x1b\x5b\x33\x3b\x36\x7e', 6)
+
+setattr(Terminal, 'key_ctrl_back',       key_ctrl_back)
+setattr(Terminal, 'key_shft_back',       key_shft_back)
+setattr(Terminal, 'key_ctrl_shft_back',  key_ctrl_shft_back)
+
+setattr(Terminal, 'key_ctrl_equal',      key_ctrl_equal)
+
+setattr(Terminal, 'key_ctrl_shft_space', key_ctrl_shft_space)
+
+setattr(Terminal, 'key_ctrl_shft_x',     key_ctrl_shft_x)
+
+setattr(Terminal, 'key_ctrl_ins',        key_ctrl_ins)
+setattr(Terminal, 'key_shft_ins',        key_shft_ins)
+setattr(Terminal, 'key_ctrl_shft_ins',   key_ctrl_shft_ins)
+
+setattr(Terminal, 'key_ctrl_del',        key_ctrl_del)
+setattr(Terminal, 'key_shft_del',        key_shft_del)
+setattr(Terminal, 'key_ctrl_shft_del',   key_ctrl_shft_del)
 
