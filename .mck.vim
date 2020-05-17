@@ -1578,7 +1578,7 @@ function! ZoomToTab()
   endif
 endfunction
 
-map <leader>+ :call ZoomToTab()<CR>
+map <Leader>+ :call ZoomToTab()<CR>
 
 " ------------------------------
 
