@@ -1579,6 +1579,7 @@ function! ZoomToTab()
 endfunction
 
 map <Leader>+ :call ZoomToTab()<CR>
+map <C-w>z    :call ZoomToTab()<CR>
 
 " ------------------------------
 
