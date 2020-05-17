@@ -1554,6 +1554,34 @@ call <SID>MapFastKeycode('<A-PageDown>',   "\e[6;3~")
 
 " ------------------------------
 
+" resize windows
+
+map w<Up>     <C-w>5+
+map w<Down>   <C-w>5-
+map w<Right>  <C-w>5<
+map w<Left>   <C-w>5>
+
+" ------------------------------
+
+function! ZoomToTab()
+  if tabpagewinnr(tabpagenr(), '$') > 1
+    " Zoom in when this tab has more than one window
+    tab split
+  elseif tabpagenr('$') > 1
+    " Zoom out when this tab is not the last tab
+    if tabpagenr() < tabpagenr('$')
+      tabclose
+      tabprevious
+    else
+      tabclose
+    endif
+  endif
+endfunction
+
+map <leader>+ :call ZoomToTab()<CR>
+
+" ------------------------------
+
 " to match vless and tmux
 " terminator <C-Home> mapped to <Esc>5 (M-5)
 "noremap <silent> <Esc>5 gg
