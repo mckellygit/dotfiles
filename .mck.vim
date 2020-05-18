@@ -1561,7 +1561,7 @@ call <SID>MapFastKeycode('<A-PageDown>',   "\e[6;3~")
 
 " resize windows
 " NOTE: do not use w<Up> mapping, as then all
-" 'w' cmds (including dw) take ttimeoutlen ...
+" 'w' cmds (including dw) take timeoutlen ...
 
 map <Leader>w<Up>     <C-w>5+
 map <Leader>w<Down>   <C-w>5-
