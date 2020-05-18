@@ -1131,6 +1131,10 @@ nnoremap <silent> <buffer> K :call man#get_page_from_cword('horizontal', v:count
 vnoremap <silent> <buffer> K <C-\><C-n>:call man#get_page_from_cword('horizontal', v:count)<CR>
 " vim-man ----------
 
+" ====================================================
+" ====================================================
+" ====================================================
+
 " improves color highlighing with dark terminals
 set background=dark
 " tmux default term set to screen-256color
@@ -1445,9 +1449,8 @@ set mouse=a
 " should we use " or + or * reg ?
 " NOTE: using both seems to mess things up,
 "       parcellite/diodon/clipit/copyq etc. could sync
-"set clipboard^=unnamed
-"set clipboard^=unnamedplus
 set clipboard^=unnamed
+set clipboard^=unnamedplus
 " ------------------------------
 " NOTE: removing autoselect means visual selection is not automatically copied to unnamed clipboard (*)
 "       also removing autoselectml makes things fail weirdly
@@ -1482,6 +1485,10 @@ vnoremap S <Nop>
 
 " dont do this, it messes up viw ...
 "vnoremap i <Nop>
+
+" to get all of top/bottom lines ...
+map 1G 1G0
+map G G$
 
 " ------------------------------
 
