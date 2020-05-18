@@ -1408,6 +1408,11 @@ highlight PmenuSel ctermbg=136
 
 " -----------------------------
 
+" if yaml syntax too slow ...
+"autocmd FileType yaml setlocal syntax=OFF
+
+" -----------------------------
+
 set fileformat=unix
 
 set bs=2		" allow backspacing over everything in ins mode
@@ -1555,13 +1560,17 @@ call <SID>MapFastKeycode('<A-PageDown>',   "\e[6;3~")
 " ------------------------------
 
 " resize windows
+" NOTE: do not use w<Up> mapping, as then all
+" 'w' cmds (including dw) take ttimeoutlen ...
 
-map w<Up>     <C-w>5+
-map w<Down>   <C-w>5-
-map w<Right>  <C-w>5<
-map w<Left>   <C-w>5>
+map <Leader>w<Up>     <C-w>5+
+map <Leader>w<Down>   <C-w>5-
+map <Leader>w<Right>  <C-w>5<
+map <Leader>w<Left>   <C-w>5>
 
 " ------------------------------
+
+" zoom current window to new full size tab ...
 
 function! ZoomToTab()
   if tabpagewinnr(tabpagenr(), '$') > 1
@@ -1578,8 +1587,10 @@ function! ZoomToTab()
   endif
 endfunction
 
-map <Leader>+ :call ZoomToTab()<CR>
-map <C-w>z    :call ZoomToTab()<CR>
+" use ++ to have a 2 char <Leader> mapping
+map <Leader>++ :call ZoomToTab()<CR>
+
+map <C-w>z     :call ZoomToTab()<CR>
 
 " ------------------------------
 
@@ -1888,7 +1899,8 @@ endfunction
 
 " if leaving cmd-mode and we return to vis-mode then clear any modeless-selection
 " TODO: can we also clear cmd-line ? how ?
-autocmd CmdlineLeave * call MyCmdLeave()
+"autocmd CmdlineLeave * call MyCmdLeave()
+" skip for now - could cause flashing or extra work on mappings ...
 function! MyCmdLeave()
     redraw!
 endfunction

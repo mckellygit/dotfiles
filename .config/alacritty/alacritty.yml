@@ -32,8 +32,18 @@ key_bindings:
   - { key: V,         mods: Control|Shift,   action: Paste            }
   - { key: C,         mods: Control|Shift,   action: Copy             }
 
+  # cannot seem to get these quite right.  key pad -/+ work ok ...
+  - { key: Equals,    mods: Control|Shift,   action: ReceiveChar      }
+  - { key: Add,       mods: Control,         action: ReceiveChar      }
   - { key: Add,       mods: Control|Shift,   action: IncreaseFontSize }
-  - { key: Underline, mods: Control|Shift,   action: DecreaseFontSize }
+
+  - { key: Subtract,  mods: Control,         action: ReceiveChar      }
+  - { key: Subtract,  mods: Control|Shift,   action: DecreaseFontSize }
+  - { key: Minus,     mods: Control,         action: ReceiveChar      }
+  - { key: Minus,     mods: Control|Shift,   action: ReceiveChar      }
+  - { key: Underline, mods: Control,         action: DecreaseFontSize }
+  - { key: Underline, mods: Control|Shift,   action: ReceiveChar      }
+  # --------------------------------------------------------------
 
   - { key: Home,      mods: Control,         chars: "\x1b[1;5H"       }
   - { key: End,       mods: Control,         chars: "\x1b[1;5F"       }
