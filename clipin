@@ -1,0 +1,19 @@
+#!/bin/bash
+
+str=$(cat)
+rc=$(echo "$str" | copyq copy -)
+if [[ $rc == "true" ]] ; then
+    exit 0
+fi
+sleep 0.01
+rc=$(echo "$str" | copyq copy -)
+if [[ $rc == "true" ]] ; then
+    exit 0
+fi
+sleep 0.01
+rc=$(echo "$str" | copyq copy -)
+if [[ $rc == "true" ]] ; then
+    exit 0
+fi
+echo "Error copying stdin to clipboard"
+exit 1

@@ -1478,17 +1478,24 @@ set ttimeout ttimeoutlen=7
 "cnoremap <C-^> <C-\>
 
 " s/S is confusing, use cl/cc instead
-nnoremap s <Nop>
-vnoremap s <Nop>
-nnoremap S <Nop>
-vnoremap S <Nop>
+"nnoremap s <Nop>
+"vnoremap s <Nop>
+"nnoremap S <Nop>
+"vnoremap S <Nop>
+
+" use S as a left-handed . (dot) ...
+nnoremap S .
+vnoremap S .
+
+" dont exit this way ...
+noremap ZZ <Nop>
 
 " dont do this, it messes up viw ...
 "vnoremap i <Nop>
 
 " to get all of top/bottom lines ...
-map 1G 1G0
-map G G$
+noremap 1G 1G0
+noremap G G$
 
 " ------------------------------
 
@@ -4004,9 +4011,6 @@ function! s:QuitIfOnlyNoNameLeft() abort
         execute "tabclose!"
     endif
 endfunction
-
-" dont exit this way ...
-map ZZ <Nop>
 
 " close all windows and write then quit
 " no imap for this

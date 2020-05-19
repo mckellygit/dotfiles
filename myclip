@@ -1,0 +1,100 @@
+#!/bin/bash
+
+have_o=0
+have_sc=0
+have_rmnl=0
+sc_val=""
+have_args=0
+while [[ $# -ge 1 ]] ; do
+    have_args=1
+    if [[ $1 == '-o' || $1 == '--o' ]] ; then
+        have_o=1
+        shift
+    elif [[ $1 == '-rmlastnl' || $1 == '--rmlastnl' ]] ; then
+        have_o=1
+        have_rmnl=1
+        shift
+    elif [[ $1 == '-sc' || $1 == '--sc' ]] ; then
+        shift
+        if [[ $# -ge 1 ]] ; then
+            have_o=1
+            have_sc=1
+            sc_val=$1
+            shift
+        else
+            echo "Error, -sc arg requires value [-1,0,1]"
+            exit 1
+        fi
+    else
+        shift
+    fi
+done
+
+if [[ $have_args -eq 1 ]] ; then
+    if [[ $have_o -eq 0 && $have_sc -eq 0 && $have_rmnl -eq 0 ]] ; then
+        echo "Error, args not valid"
+        exit 1
+    fi
+fi
+
+add=0
+if [[ $have_sc -eq 1 ]] ; then
+    if [[ $sc_val == "-1" ]] ; then
+        add=$sc_val
+    elif [[ $sc_val == "0" ]] ; then
+        add=$sc_val
+    elif [[ $sc_val  == "1" ]] ; then
+        add=$sc_val
+    else
+        if [[ ! -s $sc_val ]] ; then 
+            add=1
+        else 
+            add=$(cat $sc_val | tr -d '\n')
+        fi
+    fi
+fi
+
+# ===================================
+# ===================================
+# ===================================
+
+if [[ $have_o -eq 0 ]] ; then
+    str=$(cat)
+    rc=$(echo "$str" | copyq copy -)
+    if [[ $rc == "true" ]] ; then
+        exit 0
+    fi
+    sleep 0.01
+    rc=$(echo "$str" | copyq copy -)
+    if [[ $rc == "true" ]] ; then
+        exit 0
+    fi
+    sleep 0.01
+    rc=$(echo "$str" | copyq copy -)
+    if [[ $rc == "true" ]] ; then
+        exit 0
+    fi
+    echo "Error copying stdin to clipboard"
+    exit 1
+fi
+
+# -----------------------------------
+
+pre=""
+pos=""
+if [[ ${add} -eq -1 ]] ; then
+    pre=" "
+elif [[ ${add} -eq 1 ]] ; then
+    pos=" "
+fi
+
+cb=$(copyq clipboard)
+rc=$?
+
+if [[ $have_rmnl -eq 0 ]] ; then
+    echo "${pre}${cb}${pos}"
+else
+    echo -n "${pre}${cb}${pos}"
+fi
+
+exit $rc
