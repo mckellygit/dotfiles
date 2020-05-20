@@ -3,6 +3,8 @@
 have_o=0
 have_sc=0
 have_rmnl=0
+have_dash=0
+have_text=0
 sc_val=""
 have_args=0
 while [[ $# -ge 1 ]] ; do
@@ -25,17 +27,25 @@ while [[ $# -ge 1 ]] ; do
             echo "Error, -sc arg requires value [-1,0,1] or file"
             exit 1
         fi
+    elif [[ $1 == '-' ]] ; then
+        have_dash=1
+        shift
     else
+        have_text=1
+        escapedtext=$(printf %q "$@")
         shift
     fi
 done
 
-if [[ $have_args -eq 1 ]] ; then
-    if [[ $have_o -eq 0 && $have_sc -eq 0 && $have_rmnl -eq 0 ]] ; then
-        echo "Error, args not valid"
-        exit 1
-    fi
+# ===================================
+
+if [[ $have_args -eq 0 || $have_dash -eq 1 ]] ; then
+    exec copyq >/dev/null 2>/dev/null copy -
+elif [[ $have_text -eq 1 ]] ; then
+    exec copyq >/dev/null 2>/dev/null copy $escapedtext
 fi
+
+# ===================================
 
 add=0
 if [[ $have_sc -eq 1 ]] ; then
@@ -59,16 +69,6 @@ if [[ $have_sc -eq 1 ]] ; then
         fi
     fi
 fi
-
-# ===================================
-# ===================================
-# ===================================
-
-if [[ $have_o -eq 0 ]] ; then
-    exec copyq >/dev/null 2>/dev/null copy -
-fi
-
-# -----------------------------------
 
 pre=""
 pos=""

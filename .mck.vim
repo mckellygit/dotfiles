@@ -207,8 +207,9 @@ Plugin 'chrisbra/Colorizer'
 " man pages
 Plugin 'vim-utils/vim-man'
 "
-" system clipboard
-Plugin 'christoomey/vim-system-copy'
+" system copy clipboard (**modified++)
+"Plugin 'christoomey/vim-system-copy'
+Plugin 'mckellyln/vim-system-copy'
 "
 "" All of your Plugins must be added before the following line
 call vundle#end()         " required
@@ -1134,28 +1135,33 @@ nnoremap <silent> <buffer> K :call man#get_page_from_cword('horizontal', v:count
 vnoremap <silent> <buffer> K <C-\><C-n>:call man#get_page_from_cword('horizontal', v:count)<CR>
 " vim-man ----------
 
-" vim-system-clipboard ---
-let g:system_copy#copy_command='clipin'
-let g:system_copy#paste_command='xsel -o -b'
-let g:system_copy_silent = 0
-
+" vim-system-copy --
 if 1
-    vmap ty <Plug>SystemCopy
-    nmap ty <Plug>SystemCopy
-    vnoremap tx x
-    vmap x     tygv"_tx
-    vmap d     tygv"_tx
-    vmap <Del> tygv"_tx
+    let g:use_system_copy = 1
+    let g:system_copy#copy_command='clipin'
+    let g:system_copy#paste_command='xsel -o -p'
+    let g:system_copy_silent = 1
+    vmap ty     <Plug>SystemCopy
+    nmap ty     <Plug>SystemCopy
+    vmap tx     <Plug>SystemCut
+    nmap tx     <Plug>SystemCut
+    vmap x      tx
+    vmap d      tx
+    vmap <Del>  tx
 else
     vnoremap ty y
     nnoremap ty y
     vnoremap tx x
+    nnoremap tx x
+    vmap x      tx
+    vmap d      tx
+    vmap <Del>  tx
 endif
 
 " copy (yank) selection, stay at end unless rectangular region ...
 vmap <silent> <expr> <C-c> (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
 vmap <silent> <expr> y     (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
-" vim-system-clipboard ---
+" vim-system-copy --
 
 " ====================================================
 " ====================================================
@@ -1445,6 +1451,7 @@ highlight PmenuSel ctermbg=136
 
 set fileformat=unix
 
+set ch=1        " set cmdheight to 1
 set bs=2		" allow backspacing over everything in ins mode
 set noai		" always set autoindenting off
 set nobackup    " do not keep a backup file
@@ -1687,7 +1694,8 @@ tmap <silent> <A-End> <Nop>
 " ----------------------
 " explicit force load @* to clipboard ...
 function! ForceLoadNammedReg() abort
-    call system("xsel -i -b --rmlastnl --sc 0  ", @*)
+    "silent call system("xsel -i -b --rmlastnl --sc 0", getreg('*'))
+    silent call system("clipin", getreg('*'))
     echohl DiffText | echo "--- copied @* to clipboard ---" | echohl None
     sleep 551m
     redraw!
@@ -1789,31 +1797,31 @@ endfunction
 "tnoremap <C-S-v> <C-w>"*
 
 " <C-Insert> paste after
-nnoremap <expr> <C-Insert> (&buftype == 'terminal') ? '<Nop>' : 'p'
-vnoremap <expr> <C-Insert> (&buftype == 'terminal') ? '<Nop>' : '<Esc>p'
+nnoremap <expr> <C-Insert> (&buftype == 'terminal') ? '<Nop>' : '"*p'
+vnoremap <expr> <C-Insert> (&buftype == 'terminal') ? '<Nop>' : '<Esc>"*p'
 inoremap <C-Insert> <C-r>*
 cnoremap <C-Insert> <C-r>*
 tnoremap <C-Insert> <C-w>"*
 
 " <M-1> paste after [menu?]
 call <SID>MapFastKeycode('<S-F34>',  "\e1")
-nnoremap <expr> <S-F34> (&buftype == 'terminal') ? '<Nop>' : 'p'
-vnoremap <expr> <S-F34> (&buftype == 'terminal') ? '<Nop>' : '<Esc>p'
+nnoremap <expr> <S-F34> (&buftype == 'terminal') ? '<Nop>' : '"*p'
+vnoremap <expr> <S-F34> (&buftype == 'terminal') ? '<Nop>' : '<Esc>"*p'
 inoremap <S-F34> <C-r>*
 cnoremap <S-F34> <C-r>*
 tnoremap <S-F34> <C-w>"*
 
 " <C-S-Insert> paste before
-nnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '<Nop>' : 'P`['
-vnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '<Nop>' : '<Esc>P`['
+nnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '<Nop>' : '"*P`['
+vnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '<Nop>' : '<Esc>"*P`['
 inoremap <C-S-Insert> <C-o>mp<C-r>*<C-o>`p
 cnoremap <C-S-Insert> <C-r>*
 tnoremap <C-S-Insert> <C-w>"*
 
 " <M-8> paste before [menu?]
 call <SID>MapFastKeycode('<S-F35>',  "\e8")
-nnoremap <expr> <S-F35> (&buftype == 'terminal') ? '<Nop>' : 'P`]'
-vnoremap <expr> <S-F35> (&buftype == 'terminal') ? '<Nop>' : '<Esc>P`]'
+nnoremap <expr> <S-F35> (&buftype == 'terminal') ? '<Nop>' : '"*P`]'
+vnoremap <expr> <S-F35> (&buftype == 'terminal') ? '<Nop>' : '<Esc>"*P`]'
 inoremap <S-F35> <C-r>*
 cnoremap <S-F35> <C-r>*
 tnoremap <S-F35> <C-w>"*
@@ -1944,12 +1952,11 @@ endfunction
 
 " if leaving cmd-mode and we return to vis-mode then clear any modeless-selection
 " TODO: can we also clear cmd-line ? how ?
-" skip for now - could cause flashing or extra work on mappings ...
-autocmd CmdlineLeave * call MyCmdLeave()
+" skip for now - could cause flashing or extra work ...
+"autocmd CmdlineLeave * call MyCmdLeave()
 function! MyCmdLeave()
     if !empty(getcmdline())
-        echo ""
-        "redraw!
+        redraw!
     endif
 endfunction
 
@@ -1991,10 +1998,11 @@ endfunction
 " to match UnconditionalPaste, dont modify p
 "nmap <silent> <buffer> p :call MyPasteNoJump()<CR>
 
-vmap <buffer> p <C-\><C-n>p
-vmap <buffer> P <C-\><C-n>P`[
+vnoremap <buffer> p <C-\><C-n>"*p
+vnoremap <buffer> P <C-\><C-n>"*P`[
 
-nmap <silent> P P`[
+nnoremap <silent> P "*P`[
+nnoremap <silent> p "*p
 
 " ---------------
 
@@ -2216,15 +2224,13 @@ function! s:Delay(arg) abort
         silent exe "normal! gv"
         redraw
     endif
-    if exists("g:system_copy_silent")
-        if g:system_copy_silent == 0
-            echohl String | echon 'Copied to clipboard using: ' . g:system_copy#copy_command | echohl None
-        endif
+    if exists("g:use_system_copy") && g:use_system_copy > 0
+        echohl String | echon 'Copied to clipboard using: ' . g:system_copy#copy_command | echohl None
     else
-        echo "copied to clipboard"
+        echohl String | echon 'copied to clipboard' | echohl None
     endif
     sleep 551m
-    redraw!
+    echo ""
 endfunction
 
 " M- same as C- (was viW)
