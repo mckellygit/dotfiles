@@ -207,6 +207,9 @@ Plugin 'chrisbra/Colorizer'
 " man pages
 Plugin 'vim-utils/vim-man'
 "
+" system clipboard
+Plugin 'christoomey/vim-system-copy'
+"
 "" All of your Plugins must be added before the following line
 call vundle#end()         " required
 filetype plugin indent on " required
@@ -1131,6 +1134,29 @@ nnoremap <silent> <buffer> K :call man#get_page_from_cword('horizontal', v:count
 vnoremap <silent> <buffer> K <C-\><C-n>:call man#get_page_from_cword('horizontal', v:count)<CR>
 " vim-man ----------
 
+" vim-system-clipboard ---
+let g:system_copy#copy_command='clipin'
+let g:system_copy#paste_command='xsel -o -b'
+let g:system_copy_silent = 0
+
+if 1
+    vmap ty <Plug>SystemCopy
+    nmap ty <Plug>SystemCopy
+    vnoremap tx x
+    vmap x     tygv"_tx
+    vmap d     tygv"_tx
+    vmap <Del> tygv"_tx
+else
+    vnoremap ty y
+    nnoremap ty y
+    vnoremap tx x
+endif
+
+" copy (yank) selection, stay at end unless rectangular region ...
+vmap <silent> <expr> <C-c> (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
+vmap <silent> <expr> y     (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
+" vim-system-clipboard ---
+
 " ====================================================
 " ====================================================
 " ====================================================
@@ -1659,16 +1685,25 @@ tmap <silent> <A-End> <Nop>
 " NOTE: == may be case-INSENSITIVE, as its not ==#
 
 " ----------------------
-" explicit force load */named clipboard ...
+" explicit force load @* to clipboard ...
 function! ForceLoadNammedReg() abort
-    call system("xsel -i --rmlastnl --sc 0 -p", @*)
+    call system("xsel -i -b --rmlastnl --sc 0  ", @*)
+    echohl DiffText | echo "--- copied @* to clipboard ---" | echohl None
+    sleep 551m
+    redraw!
 endfunction
-nnoremap <silent> <Leader>lr :<C-U>call ForceLoadNammedReg()<CR>
+nnoremap <silent> <Leader>lr :call ForceLoadNammedReg()<CR>
+vnoremap <silent> <Leader>lr :<C-u>call ForceLoadNammedReg()<CR>
 " ----------------------
 
 " ----------------------
-" swap reg with prev ...
-nnoremap <silent> <Leader>sr :let @y=@* <bar> :let @*=@x <bar> :let @x=@y <bar> echohl DiffText <bar> echo "--- registers swapped ---" <bar> echohl None <bar> sleep 551m <bar> redraw! <CR>
+" copy @* to @x ...
+nnoremap <silent> <Leader>zc :let @x=@* <bar> echohl DiffText <bar> echo "--- register copied ---" <bar> echohl None <bar> sleep 551m <bar> redraw! <CR>
+vnoremap <silent> <Leader>zc :<C-u>let @x=@* <bar> echohl DiffText <bar> echo "--- register copied ---" <bar> echohl None <bar> sleep 551m <bar> redraw! <CR>
+
+" swap @* with @x ...
+nnoremap <silent> <Leader>zx :let @y=@* <bar> :let @*=@x <bar> :let @x=@y <bar> echohl DiffText <bar> echo "--- registers swapped ---" <bar> echohl None <bar> sleep 551m <bar> redraw! <CR>
+vnoremap <silent> <Leader>zx :<C-u>let @y=@* <bar> :<C-u>let @*=@x <bar> :<C-u>let @x=@y <bar> echohl DiffText <bar> echo "--- registers swapped ---" <bar> echohl None <bar> sleep 551m <bar> redraw! <CR>
 " ----------------------
 
 " ----------- yank / cut / paste -----------
@@ -1742,10 +1777,6 @@ endfunction
 " example of nested conditionals from :h expr1
 "     lnum == 1 ? "top" : lnum == 1000 ? "last" : lnum
 
-" copy (yank) selection, stay at end unless rectangular region ...
-vnoremap <silent> <expr> <C-c> (mode() =~ '\<C-v>') ? '"*y' : 'mv"*y`v'
-vnoremap <silent> <expr> y     (mode() =~ '\<C-v>') ? '"*y' : 'mv"*y`v'
-
 " ---------------
 
 " C-S-v / C-Insert / M-1 / C-S-Insert / M-8 paste ...
@@ -1797,7 +1828,7 @@ tnoremap <S-F35> <C-w>"*
 " some terminal configs (urxvt) map C-S-c => M-7
 call <SID>MapFastKeycode('<S-F36>',  "\e7")
 nnoremap <S-F36> <Nop>
-vnoremap <expr> <S-F36> (mode() =~ '\<C-v>') ? '"*y' : 'mv"*y`v'
+vmap <expr> <S-F36> (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
 inoremap <S-F36> <Nop>
 
 " C-S-x / M-9 cut ...
@@ -1809,13 +1840,13 @@ inoremap <S-F36> <Nop>
 
 call <SID>MapFastKeycode('<S-F37>',  "\e9")
 nnoremap <S-F37> <Nop>
-vnoremap <expr> <S-F37> (&buftype == 'terminal') ? '<Nop>' : '"*d'
+vmap <expr> <S-F37> (&buftype == 'terminal') ? '<Nop>' : 'tx'
 inoremap <S-F37> <Nop>
 
 " cut selection
 "vnoremap <silent> <C-x> "*d<LeftRelease>
 nnoremap <C-x> <Nop>
-vnoremap <expr> <C-x> (&buftype == 'terminal') ? '<Nop>' : '"*d'
+vmap <expr> <C-x> (&buftype == 'terminal') ? '<Nop>' : 'tx'
 
 " ---------------
 
@@ -1913,10 +1944,13 @@ endfunction
 
 " if leaving cmd-mode and we return to vis-mode then clear any modeless-selection
 " TODO: can we also clear cmd-line ? how ?
-"autocmd CmdlineLeave * call MyCmdLeave()
 " skip for now - could cause flashing or extra work on mappings ...
+autocmd CmdlineLeave * call MyCmdLeave()
 function! MyCmdLeave()
-    redraw!
+    if !empty(getcmdline())
+        echo ""
+        "redraw!
+    endif
 endfunction
 
 " ---------------
@@ -2115,8 +2149,8 @@ inoremap <C-LeftDrag> <LeftDrag>
 " see mousetime for double-click delay
 
 " DoubleClick for word (lbvhe)
-nnoremap <2-LeftMouse> mvviwygv
-vnoremap <2-LeftMouse> <Esc>mvviwygv
+nmap <2-LeftMouse> mvviwtygv
+vmap <2-LeftMouse> <Esc>mvviwtygv
 inoremap <2-LeftMouse> <C-\><C-o>:let @i="2"<CR><C-\><C-o>:call <SID>GetWord(1)<CR><Esc>
 
 " TripleClick for next larger entity, not whole line (lBvhE)
@@ -2126,13 +2160,13 @@ inoremap <2-LeftMouse> <C-\><C-o>:let @i="2"<CR><C-\><C-o>:call <SID>GetWord(1)<
 " NOTE: Use GetPath instead of lBvhE ...
 "nnoremap <3-LeftMouse> <LeftMouse>:call GetPath(1,1)<CR>
 "vnoremap <3-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath(1,1)<CR>
-nnoremap <3-LeftMouse> mvviWygv
-vnoremap <3-LeftMouse> <Esc>mvviWygv
+nmap <3-LeftMouse> mvviWtygv
+vmap <3-LeftMouse> <Esc>mvviWtygv
 " TODO: 3-click in insert mode is handled in vmode with @i==2
 
 " QuadrupleClick too confusing
-nnoremap <4-LeftMouse> mvVygv
-vnoremap <4-LeftMouse> <Esc>mvVygv
+nmap <4-LeftMouse> mvVtygv
+vmap <4-LeftMouse> <Esc>mvVtygv
 inoremap <4-LeftMouse> <Nop>
 
 " change C-LeftMouse searching tags file for symbol under cursor
@@ -2145,8 +2179,8 @@ nnoremap <C-LeftMouse> <LeftMouse>
 vnoremap <C-LeftMouse> <LeftMouse>
 inoremap <C-LeftMouse> <LeftMouse>
 
-nnoremap <C-2-LeftMouse> mvVygv
-vnoremap <C-2-LeftMouse> <Esc>mvVygv
+nmap <C-2-LeftMouse> mvVtygv
+vmap <C-2-LeftMouse> <Esc>mvVtygv
 inoremap <C-2-LeftMouse> <C-\><C-o>:let @i="2"<CR><C-\><C-o>:call <SID>GetWord2(1)<CR>
 
 " if visual selection is only one line then auto yank it ...
@@ -2179,12 +2213,16 @@ vnoremap <C-3-LeftMouse> <LeftMouse><C-\><C-n>:call <SID>GetLine(1)<CR>
 
 function! s:Delay(arg) abort
     if a:arg == 1
-        " wish we could prevent flicker ...
         silent exe "normal! gv"
+        redraw
     endif
-    echo "copied to clipboard"
-    "echohl Deusgray | echo "copied to clipboard" | echohl None
-    redraw
+    if exists("g:system_copy_silent")
+        if g:system_copy_silent == 0
+            echohl String | echon 'Copied to clipboard using: ' . g:system_copy#copy_command | echohl None
+        endif
+    else
+        echo "copied to clipboard"
+    endif
     sleep 551m
     redraw!
 endfunction
@@ -2195,18 +2233,18 @@ endfunction
 
 " NOTE: single click after double ...
 
-nnoremap <silent> <A-2-LeftMouse> mvviwy:call <SID>Delay(1)<CR><Esc>
-nnoremap <silent> <A-3-LeftMouse> mvviWy:call <SID>Delay(1)<CR><Esc>
-nnoremap <silent> <A-4-LeftMouse> mvVy:call <SID>Delay(1)<CR><Esc>
+nmap <silent> <A-2-LeftMouse> mvviwty:call <SID>Delay(1)<CR><Esc>
+nmap <silent> <A-3-LeftMouse> mvviWty:call <SID>Delay(1)<CR><Esc>
+nmap <silent> <A-4-LeftMouse> mvVty:call <SID>Delay(1)<CR><Esc>
 
 " NOTE: tmux maps A-Triple to M-b to be able to know its a triple-click ...
 call <SID>MapFastKeycode('<S-F33>',  "\eb")
-nnoremap <silent> <S-F33> mvviWy:call <SID>Delay(1)<CR><Esc>
-vnoremap <silent> <S-F33> <Esc>mvviWy:call <SID>Delay(1)<CR><Esc>
+nmap <silent> <S-F33> mvviWty:call <SID>Delay(1)<CR><Esc>
+vmap <silent> <S-F33> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
 
-vnoremap <silent> <A-2-LeftMouse> <Esc>mvviwy:call <SID>Delay(1)<CR><Esc>
-vnoremap <silent> <A-3-LeftMouse> <Esc>mvviWy:call <SID>Delay(1)<CR><Esc>
-vnoremap <silent> <A-4-LeftMouse> <Esc>mvVy:call <SID>Delay(1)<CR><Esc>
+vmap <silent> <A-2-LeftMouse> <Esc>mvviwty:call <SID>Delay(1)<CR><Esc>
+vmap <silent> <A-3-LeftMouse> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
+vmap <silent> <A-4-LeftMouse> <Esc>mvVty:call <SID>Delay(1)<CR><Esc>
 
 "vnoremap <silent> <A-2-LeftMouse> mv<Esc>viwygv<C-\><C-n>:sleep 651m<CR>`v<Esc>
 "vnoremap <silent> <A-3-LeftMouse> mv<Esc>viWygv<C-\><C-n>:sleep 651m<CR>`v<Esc>
@@ -2245,7 +2283,7 @@ inoremap <expr> <A-4-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<ba
 "vmap <expr> <A-LeftRelease> (@i=="1") ? '<LeftRelease><C-\><C-n>:<C-u>sleep 551m<bar>:let @i="0"<bar>:call YankIt("*y", 2)<CR><Esc>i' : '<LeftRelease><C-\><C-n>:<C-u>sleep 551m<bar>:call YankIt("*y", 2)<CR>'
 
 "vmap <A-LeftRelease> "*ygv
-vmap <silent> <A-LeftRelease> "*y:call <SID>Delay(0)<CR><Esc>
+vmap <silent> <A-LeftRelease> tygv:<C-u>call <SID>Delay(0)<CR><Esc>
 
 "vnoremap <A-2-LeftRelease>  <Nop>
 "vnoremap <A-3-LeftRelease>  <Nop>
@@ -2259,30 +2297,30 @@ inoremap <A-LeftMouse> <C-\><C-o>:let @i="1"<CR><LeftMouse>
 
 " highlight word under cursor (lbvhe)
 " NOTE: also copy to clipboard (since its not a mouse click event) ?
-nnoremap <silent> <Leader>ws mvviwygv
-vnoremap <silent> <Leader>ws <C-\><C-n>mvviwygv
+nmap <silent> <Leader>ws mvviwtygv
+vmap <silent> <Leader>ws <C-\><C-n>mvviwtygv
 
 " highlight WORD under cursor (lBvhE) (does not use iskeyword)
 " NOTE: also copy to clipboard (since its not a mouse click event) ?
-nnoremap <silent> <Leader>wS mvviWygv
-vnoremap <silent> <Leader>wS <C-\><C-n>mvviWygv
+nmap <silent> <Leader>wS mvviWtygv
+vmap <silent> <Leader>wS <C-\><C-n>mvviWtygv
 
 " grab file path (ie w / and w/o :)
 " NOTE: also copy to clipboard (since its not a mouse click event) ?
-nnoremap <silent> <Leader>wp mv:call <SID>GetPath(0,0)<CR>ygv
-vnoremap <silent> <Leader>wp mv<C-\><C-n>:call <SID>GetPath(0,0)<CR>ygv
+nmap <silent> <Leader>wp mv:call <SID>GetPath(0,0)<CR>tygv
+vmap <silent> <Leader>wp mv<C-\><C-n>:call <SID>GetPath(0,0)<CR>tygv
 
 " grab url path (ie w / and w :) but really about the same as \wS
-nnoremap <silent> <Leader>wP mv:call <SID>GetPath(0,1)<CR>ygv
-vnoremap <silent> <Leader>wP mv<C-\><C-n>:call <SID>GetPath(0,1)<CR>ygv
+nmap <silent> <Leader>wP mv:call <SID>GetPath(0,1)<CR>tygv
+vmap <silent> <Leader>wP mv<C-\><C-n>:call <SID>GetPath(0,1)<CR>tygv
 
 " yank/copy word under cursor
 " `] to go to end of word/block, but `v to go back to orig pos
-nnoremap <silent> <Leader>wy mvviwy`v
-vnoremap <silent> <Leader>wy <C-\><C-n>mvviwygv
+nmap <silent> <Leader>wy mvviwty`v
+vmap <silent> <Leader>wy <C-\><C-n>mvviwtygv
 " to match vim yw ...
-nnoremap <silent> <Leader>yw mvviwy`v
-vnoremap <silent> <Leader>yw <C-\><C-n>mvviwygv
+nmap <silent> <Leader>yw mvviwty`v
+vmap <silent> <Leader>yw <C-\><C-n>mvviwtygv
 
 " -----------------------------------------------------
 " search for word under cursor (without copying selection to clipboard)
@@ -2297,8 +2335,8 @@ nnoremap <silent> <Leader>wF viw"syw:set hlsearch<CR>?<C-r>s<CR>
 " NOTE: *, # search for whole \<word\> which may not always be desired
 "nnoremap <silent> <Leader>wg viwy:set hlsearch<CR>*
 "nnoremap <silent> <Leader>wG viwy:set hlsearch<CR>#
-nnoremap <silent> <Leader>wg viwybb:set hlsearch<CR>/<C-r>*<CR>
-nnoremap <silent> <Leader>wG viwyw:set hlsearch<CR>?<C-r>*<CR>
+nmap <silent> <Leader>wg viwtybb:set hlsearch<CR>/<C-r>*<CR>
+nmap <silent> <Leader>wG viwtyw:set hlsearch<CR>?<C-r>*<CR>
 " -----------------------------------------------------
 
 " search for visual selection
@@ -2309,8 +2347,8 @@ vnoremap <silent> <Leader>wf "sybb<C-\><C-n>:set hlsearch<CR>/<C-r>s<CR>
 vnoremap <silent> <Leader>wF "syw<C-\><C-n>:set hlsearch<CR>?<C-r>s<CR>
 
 " to match normal mode (copying selection to clipboard)
-vnoremap <silent> <Leader>wg ybb<C-\><C-n>:set hlsearch<CR>/<C-r>*<CR>
-vnoremap <silent> <Leader>wG yw<C-\><C-n>:set hlsearch<CR>?<C-r>*<CR>
+vmap <silent> <Leader>wg tybb<C-\><C-n>:set hlsearch<CR>/<C-r>*<CR>
+vmap <silent> <Leader>wG tyw<C-\><C-n>:set hlsearch<CR>?<C-r>*<CR>
 
 " and the *, # (without copying selection to clipboard)
 " NOTE: *, # search for whole \<word\> which may not always be desired
@@ -2326,11 +2364,11 @@ nnoremap <Del> "_x
 "noremap xp xp
 "noremap Xp Xp
 " so use Leader ...
-noremap <silent> <Leader>xp xp
-noremap <silent> <Leader>xP Xp
+nnoremap <silent> <Leader>xp "fx"fp
+nnoremap <silent> <Leader>xP "fX"fp
 " c(har)s(swap) - swap char mapping that doesn't start with x ...
-noremap cs xp
-noremap cS Xp
+nnoremap cs "fx"fp
+nnoremap cS "fX"fp
 
 " do we want the same for delete-word ?  Probably not ...
 "noremap dw "_dw
@@ -3511,10 +3549,10 @@ nnoremap <silent> <Leader>sq :AsyncStop!<CR>
 vnoremap <silent> <Leader>sq <C-\><C-n>:AsyncStop!<CR>
 " search normally
 nnoremap <Leader>sn :let @/=""<bar>:set hlsearch<CR>/
-vnoremap <Leader>sn y<Esc>:let @/=""<bar>:set hlsearch<CR>/<C-r>"
+vnoremap <Leader>sn "sy<Esc>:let @/=""<bar>:set hlsearch<CR>/<C-r>"
 " search normally
 nnoremap <Leader>sN :let @/=""<bar>:set hlsearch<CR>?
-vnoremap <Leader>sN y<Esc>:let @/=""<bar>:set hlsearch<CR>?<C-r>"
+vnoremap <Leader>sN "sy<Esc>:let @/=""<bar>:set hlsearch<CR>?<C-r>"
 
 " search buffer with results in qf list
 nnoremap <silent> <Leader>sb :call <SID>MySearch(0)<CR>
@@ -3550,15 +3588,15 @@ function s:GetWord(arg) abort
     let g:orig_pos = getcurpos()
   endif
   if a:arg == 1
-    execute 'normal! mvviwygv'
+    execute 'normal mvviwtygv'
   else
-    execute 'normal! mvviw'
+    execute 'normal mvviw'
   endif
   if a:arg > 1
     redraw
     "echo "copied to clipboard"
     sleep 551m
-    execute 'normal! y`v'
+    execute 'normal ty`v'
     "redraw!
     if &buftype == "terminal"
       " NOTE: should we go back to live terminal mode ?
@@ -3600,16 +3638,16 @@ function s:GetPath(arg,ws) abort
   endif
   setlocal iskeyword+=/,.,-
   if a:arg == 1
-    execute 'normal! mvviwygv'
+    execute 'normal mvviwtygv'
   else
-    execute 'normal! mvviw'
+    execute 'normal mvviw'
   endif
   let &iskeyword = l:oldiskeyword
   if a:arg > 1
     redraw
     "echo "copied to clipboard"
     sleep 551m
-    execute 'normal! y`v'
+    execute 'normal ty`v'
     redraw
     if &buftype == "terminal"
       " NOTE: should we go back to live terminal mode ?
@@ -3644,16 +3682,16 @@ function s:GetWord2(arg) abort
   setlocal iskeyword-=:
   setlocal iskeyword+=/,.,-
   if a:arg == 1
-    execute 'normal! mvviWygv'
+    execute 'normal mvviWtygv'
   else
-    execute 'normal! mvviW'
+    execute 'normal mvviW'
   endif
   let &iskeyword = l:oldiskeyword
   if a:arg > 1
     redraw
     "echo "copied to clipboard"
     sleep 551m
-    execute 'normal! y`v'
+    execute 'normal ty`v'
     redraw
     if &buftype == "terminal"
       " NOTE: should we go back to live terminal mode ?
@@ -3685,15 +3723,15 @@ function s:GetLine(arg) abort
     endif
   endif
   if a:arg == 1
-    execute 'normal! mvVygv'
+    execute 'normal mvVtygv'
   else
-    execute 'normal! mvV'
+    execute 'normal mvV'
   endif
   if a:arg > 1
     redraw
     "echo "copied to clipboard"
     sleep 551m
-    execute 'normal! y`v'
+    execute 'normal ty`v'
     redraw
     if &buftype == "terminal"
       " NOTE: should we go back to live terminal mode ?

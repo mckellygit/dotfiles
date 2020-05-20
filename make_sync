@@ -1,5 +1,6 @@
 #!/bin/bash
 
+sudo date
 make -j$NCPUS
 rc=$?
 if [[ $rc -ne 0 ]] ; then

@@ -22,7 +22,7 @@ while [[ $# -ge 1 ]] ; do
             sc_val=$1
             shift
         else
-            echo "Error, -sc arg requires value [-1,0,1]"
+            echo "Error, -sc arg requires value [-1,0,1] or file"
             exit 1
         fi
     else
@@ -46,10 +46,16 @@ if [[ $have_sc -eq 1 ]] ; then
     elif [[ $sc_val  == "1" ]] ; then
         add=$sc_val
     else
-        if [[ ! -s $sc_val ]] ; then 
-            add=1
-        else 
-            add=$(cat $sc_val | tr -d '\n')
+        # if not -1, 0, 1 then some path with / in it ...
+        if [[ "$sc_val" == *\/* ]] ; then
+            if [[ ! -s $sc_val ]] ; then
+                add=1
+            else
+                add=$(cat $sc_val | tr -d '\n')
+            fi
+        else
+            echo "Error, -sc arg requires value [-1,0,1] or file"
+            exit 1
         fi
     fi
 fi
@@ -59,23 +65,7 @@ fi
 # ===================================
 
 if [[ $have_o -eq 0 ]] ; then
-    str=$(cat)
-    rc=$(echo "$str" | copyq copy -)
-    if [[ $rc == "true" ]] ; then
-        exit 0
-    fi
-    sleep 0.01
-    rc=$(echo "$str" | copyq copy -)
-    if [[ $rc == "true" ]] ; then
-        exit 0
-    fi
-    sleep 0.01
-    rc=$(echo "$str" | copyq copy -)
-    if [[ $rc == "true" ]] ; then
-        exit 0
-    fi
-    echo "Error copying stdin to clipboard"
-    exit 1
+    exec copyq >/dev/null 2>/dev/null copy -
 fi
 
 # -----------------------------------
@@ -88,13 +78,14 @@ elif [[ ${add} -eq 1 ]] ; then
     pos=" "
 fi
 
-cb=$(copyq clipboard)
-rc=$?
+echo -n "$pre"
 
 if [[ $have_rmnl -eq 0 ]] ; then
-    echo "${pre}${cb}${pos}"
+    copyq clipboard
 else
-    echo -n "${pre}${cb}${pos}"
+    copyq clipboard | sed -z '$s/\n$//'
 fi
 
-exit $rc
+echo -n "$pos"
+
+exit 0
