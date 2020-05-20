@@ -46,6 +46,9 @@ Plugin 'inkarkat/vim-UnconditionalPaste'
 " . (dot) repeat in visual-mode
 Plugin 'inkarkat/vim-visualrepeat'
 "
+" many useful vim lib routines
+"Plugin 'LucHermitte/lh-vim-lib'
+"
 " bracketed paste mode ?
 "Plugin 'ConradIrwin/vim-bracketed-paste'
 "
@@ -1138,7 +1141,7 @@ vnoremap <silent> <buffer> K <C-\><C-n>:call man#get_page_from_cword('horizontal
 " vim-system-copy --
 if 1
     let g:use_system_copy = 1
-    let g:system_copy#copy_command='clipin'
+    let g:system_copy#copy_command='myclip'
     let g:system_copy#paste_command='xsel -o -p'
     let g:system_copy_silent = 1
     vmap ty     <Plug>SystemCopy
@@ -1695,7 +1698,7 @@ tmap <silent> <A-End> <Nop>
 " explicit force load @* to clipboard ...
 function! ForceLoadNammedReg() abort
     "silent call system("xsel -i -b --rmlastnl --sc 0", getreg('*'))
-    silent call system("clipin", getreg('*'))
+    silent call system("myclip", getreg('*'))
     echohl DiffText | echo "--- copied @* to clipboard ---" | echohl None
     sleep 551m
     redraw!
@@ -2038,6 +2041,54 @@ endfunction
 
 " mouse paste
 
+nnoremap <MiddleMouse> <Nop>
+vnoremap <MiddleMouse> <Nop>
+inoremap <MiddleMouse> <Nop>
+
+nnoremap <2-MiddleMouse> <Nop>
+vnoremap <2-MiddleMouse> <Nop>
+inoremap <2-MiddleMouse> <Nop>
+
+nnoremap <3-MiddleMouse> <Nop>
+vnoremap <3-MiddleMouse> <Nop>
+inoremap <3-MiddleMouse> <Nop>
+
+nnoremap <4-MiddleMouse> <Nop>
+vnoremap <4-MiddleMouse> <Nop>
+inoremap <4-MiddleMouse> <Nop>
+
+nnoremap <C-MiddleMouse> <Nop>
+vnoremap <C-MiddleMouse> <Nop>
+inoremap <C-MiddleMouse> <Nop>
+
+nnoremap <C-2-MiddleMouse> <Nop>
+vnoremap <C-2-MiddleMouse> <Nop>
+inoremap <C-2-MiddleMouse> <Nop>
+
+nnoremap <C-3-MiddleMouse> <Nop>
+vnoremap <C-3-MiddleMouse> <Nop>
+inoremap <C-3-MiddleMouse> <Nop>
+
+nnoremap <C-4-MiddleMouse> <Nop>
+vnoremap <C-4-MiddleMouse> <Nop>
+inoremap <C-4-MiddleMouse> <Nop>
+
+nnoremap <A-MiddleMouse> <Nop>
+vnoremap <A-MiddleMouse> <Nop>
+inoremap <A-MiddleMouse> <Nop>
+
+nnoremap <A-2-MiddleMouse> <Nop>
+vnoremap <A-2-MiddleMouse> <Nop>
+inoremap <A-2-MiddleMouse> <Nop>
+
+nnoremap <A-3-MiddleMouse> <Nop>
+vnoremap <A-3-MiddleMouse> <Nop>
+inoremap <A-3-MiddleMouse> <Nop>
+
+nnoremap <A-4-MiddleMouse> <Nop>
+vnoremap <A-4-MiddleMouse> <Nop>
+inoremap <A-4-MiddleMouse> <Nop>
+
 " could add `[ to go back to orig col ...
 
 " ---- if want vim menu ----
@@ -2157,9 +2208,9 @@ inoremap <C-LeftDrag> <LeftDrag>
 " see mousetime for double-click delay
 
 " DoubleClick for word (lbvhe)
-nmap <2-LeftMouse> mvviwtygv
-vmap <2-LeftMouse> <Esc>mvviwtygv
-inoremap <2-LeftMouse> <C-\><C-o>:let @i="2"<CR><C-\><C-o>:call <SID>GetWord(1)<CR><Esc>
+nmap <2-LeftMouse> mvviwty<C-o>gv
+vmap <2-LeftMouse> <Esc>mvviwty<C-o>gv
+inoremap <silent> <2-LeftMouse> <C-\><C-o>:let @i="2"<CR><C-\><C-o>:call <SID>GetWord(1)<CR>
 
 " TripleClick for next larger entity, not whole line (lBvhE)
 "nnoremap <silent> <3-LeftMouse> mvviWygv
@@ -2168,13 +2219,13 @@ inoremap <2-LeftMouse> <C-\><C-o>:let @i="2"<CR><C-\><C-o>:call <SID>GetWord(1)<
 " NOTE: Use GetPath instead of lBvhE ...
 "nnoremap <3-LeftMouse> <LeftMouse>:call GetPath(1,1)<CR>
 "vnoremap <3-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath(1,1)<CR>
-nmap <3-LeftMouse> mvviWtygv
-vmap <3-LeftMouse> <Esc>mvviWtygv
-" TODO: 3-click in insert mode is handled in vmode with @i==2
+nmap <3-LeftMouse> mvviWty<C-o>gv
+vmap <3-LeftMouse> <Esc>mvviWty<C-o>gv
+inoremap <silent> <expr> <3-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(1)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(1,1)<CR>'
 
-" QuadrupleClick too confusing
-nmap <4-LeftMouse> mvVtygv
-vmap <4-LeftMouse> <Esc>mvVtygv
+" QuadrupleClick for whole line
+nmap <4-LeftMouse> mvVty<C-o>gv
+vmap <4-LeftMouse> <Esc>mvVty<C-o>gv
 inoremap <4-LeftMouse> <Nop>
 
 " change C-LeftMouse searching tags file for symbol under cursor
@@ -2187,9 +2238,9 @@ nnoremap <C-LeftMouse> <LeftMouse>
 vnoremap <C-LeftMouse> <LeftMouse>
 inoremap <C-LeftMouse> <LeftMouse>
 
-nmap <C-2-LeftMouse> mvVtygv
-vmap <C-2-LeftMouse> <Esc>mvVtygv
-inoremap <C-2-LeftMouse> <C-\><C-o>:let @i="2"<CR><C-\><C-o>:call <SID>GetWord2(1)<CR>
+nmap <C-2-LeftMouse> mvviwty<C-o>gv
+vmap <C-2-LeftMouse> <Esc>mvviwty<C-o>gv
+inoremap <silent> <C-2-LeftMouse> <C-\><C-o>:let @i="2"<CR><C-\><C-o>:call <SID>GetWord(1)<CR>
 
 " if visual selection is only one line then auto yank it ...
 function s:YankIfOnlyOneLine()
@@ -2207,11 +2258,15 @@ endfunction
 "vnoremap <LeftRelease> <LeftRelease><C-\><C-n>:call <SID>YankIfOnlyOneLine()<CR>
 "inoremap <LeftMouse> <C-\><C-o>:let @k="1"<CR><LeftMouse>
 
-" C-TripleClick for whole line
-nnoremap <C-3-LeftMouse> <LeftMouse>:call <SID>GetLine(1)<CR>
-vnoremap <C-3-LeftMouse> <LeftMouse><C-\><C-n>:call <SID>GetLine(1)<CR>
-" TODO: 3-click in insert mode is difficult
-"inoremap <silent> <C-3-LeftMouse> <LeftMouse><C-\><C-o>:call GetLine(1)<CR>
+" TripleClick for next larger entity, not whole line (lBvhE)
+nmap <C-3-LeftMouse> mvviWty<C-o>gv
+vmap <C-3-LeftMouse> <Esc>mvviWty<C-o>gv
+inoremap <silent> <expr> <C-3-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(1)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(1,1)<CR>'
+
+" QuadrupleClick for whole line
+nmap <C-4-LeftMouse> mvVty<C-o>gv
+vmap <C-4-LeftMouse> <Esc>mvVty<C-o>gv
+inoremap <C-4-LeftMouse> <Nop>
 
 " ------------------------------
 " TODO: inside A-2-LeftMouse functions, check for 3rd click ...
@@ -2239,24 +2294,25 @@ endfunction
 
 " NOTE: single click after double ...
 
-nmap <silent> <A-2-LeftMouse> mvviwty:call <SID>Delay(1)<CR><Esc>
-nmap <silent> <A-3-LeftMouse> mvviWty:call <SID>Delay(1)<CR><Esc>
-nmap <silent> <A-4-LeftMouse> mvVty:call <SID>Delay(1)<CR><Esc>
+nmap <silent> <A-2-LeftMouse> mvviwty<C-o>:call <SID>Delay(1)<CR><Esc>
+nmap <silent> <A-3-LeftMouse> mvviWty<C-o>:call <SID>Delay(1)<CR><Esc>
+nmap <silent> <A-4-LeftMouse> mvVty<C-o>:call <SID>Delay(1)<CR><Esc>
 
 " NOTE: tmux maps A-Triple to M-b to be able to know its a triple-click ...
 call <SID>MapFastKeycode('<S-F33>',  "\eb")
-nmap <silent> <S-F33> mvviWty:call <SID>Delay(1)<CR><Esc>
-vmap <silent> <S-F33> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
+nmap <silent> <S-F33> mvviWty<C-o>:call <SID>Delay(1)<CR><Esc>
+vmap <silent> <S-F33> <Esc>mvviWty<C-o>:call <SID>Delay(1)<CR><Esc>
+inoremap <silent> <expr> <S-F33> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>'
 
-vmap <silent> <A-2-LeftMouse> <Esc>mvviwty:call <SID>Delay(1)<CR><Esc>
-vmap <silent> <A-3-LeftMouse> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
-vmap <silent> <A-4-LeftMouse> <Esc>mvVty:call <SID>Delay(1)<CR><Esc>
+vmap <silent> <A-2-LeftMouse> <Esc>mvviwty<C-o>:call <SID>Delay(1)<CR><Esc>
+vmap <silent> <A-3-LeftMouse> <Esc>mvviWty<C-o>:call <SID>Delay(1)<CR><Esc>
+vmap <silent> <A-4-LeftMouse> <Esc>mvVty<C-o>:call <SID>Delay(1)<CR><Esc>
 
 "vnoremap <silent> <A-2-LeftMouse> mv<Esc>viwygv<C-\><C-n>:sleep 651m<CR>`v<Esc>
 "vnoremap <silent> <A-3-LeftMouse> mv<Esc>viWygv<C-\><C-n>:sleep 651m<CR>`v<Esc>
 
 "nnoremap <silent> <A-2-LeftMouse> <LeftMouse>:call GetWord(2)<CR>
-"nnoremap <expr> <A-LeftMouse> (@j=="0") ? '<LeftMouse>' : '<LeftMouse>:call GetPath(2,1)<CR>'
+"imap <expr> <A-LeftMouse> (@j=="0") ? '<A-LeftMouse>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>'
 
 "vnoremap <silent> <A-2-LeftMouse> <LeftMouse><C-\><C-n>:call GetWord(2)<CR>
 "inoremap <silent> <A-2-LeftMouse> <LeftMouse><C-\><C-o>:call GetWord(2)<CR>
@@ -2270,9 +2326,13 @@ vmap <silent> <A-4-LeftMouse> <Esc>mvVty:call <SID>Delay(1)<CR><Esc>
 "vnoremap <expr> <A-3-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-n>:let @j="1"<bar>:call GetWord(2)<CR>' : '<LeftMouse><C-\><C-n>:call GetPath(2,1)<CR>'
 "vnoremap <expr> <A-4-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-n>:let @j="1"<bar>:call GetWord(2)<CR>' : '<LeftMouse><C-\><C-n>:call GetPath(2,1)<CR>'
 
-inoremap <expr> <A-2-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>'
-inoremap <expr> <A-3-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>'
-inoremap <expr> <A-4-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>'
+"imap <silent> <expr> <A-2-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>'
+imap <silent> <A-2-LeftMouse> <LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>
+imap <silent> <A-3-LeftMouse> <LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>
+imap <silent> <A-4-LeftMouse> <Nop>
+
+"imap <silent> <expr> <A-3-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>'
+"inoremap <silent> <expr> <A-4-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>'
 
 " TODO: or could select and copy whole line ?
 " NOTE: need to set z reg to 'c' also ... (this y is not YankIt)
@@ -2289,13 +2349,13 @@ inoremap <expr> <A-4-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<ba
 "vmap <expr> <A-LeftRelease> (@i=="1") ? '<LeftRelease><C-\><C-n>:<C-u>sleep 551m<bar>:let @i="0"<bar>:call YankIt("*y", 2)<CR><Esc>i' : '<LeftRelease><C-\><C-n>:<C-u>sleep 551m<bar>:call YankIt("*y", 2)<CR>'
 
 "vmap <A-LeftRelease> "*ygv
-vmap <silent> <A-LeftRelease> tygv:<C-u>call <SID>Delay(0)<CR><Esc>
+vmap <silent> <A-LeftRelease> ty<C-o>gv:<C-u>call <SID>Delay(0)<CR><Esc>
 
 "vnoremap <A-2-LeftRelease>  <Nop>
 "vnoremap <A-3-LeftRelease>  <Nop>
 "vnoremap <A-4-LeftRelease>  <Nop>
 
-inoremap <A-LeftMouse> <C-\><C-o>:let @i="1"<CR><LeftMouse>
+inoremap <silent> <A-LeftMouse> <C-\><C-o>:let @i="1"<CR><LeftMouse>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Word commands NOTE: selection is USUALLY copied to clipboard
@@ -2392,17 +2452,14 @@ nnoremap cS "fX"fp
 " optional - add lb to get back to beginning of word ?
 " wc is already window close, use wx (word exchange)
 
-" exchange whole word (from beg) with clipboard
-" (need embedded <CR> instead of <bar> here)
-nnoremap <silent> <Leader>wx :let @0=@*<CR>ciw<C-r>0<Esc>:let @"=@0<bar>:let @*=@0<CR>
+" exchange silent word (from beg) with clipboard
+" (need silent <CR> instead of <bar> here)
+nnoremap <silent> <Leader>wx "_ciw<C-r>*<Esc>
 " vis-mode of this doesnt really make sense
-"vnoremap <silent> <Leader>wx <C-\><C-n>:let @0=@*<CR>ciw<C-r>0<Esc>:let @"=@0<bar>:let @*=@0<CR>
 
 " replace at cursor pos with clipboard (not from beg of word like \we above)
-" (need embedded <CR> instead of <bar> here)
-nnoremap <silent> <Leader>wr :let @0=@*<CR>cw<C-r>0<Esc>:let @"=@0<bar>:let @*=@0<CR>
+nnoremap <silent> <Leader>wr "_cw<C-r>*<Esc>
 " vis-mode of this doesnt really make sense
-"vnoremap <silent> <Leader>wr <C-\><C-n>:let @0=@*<CR>cw<C-r>0<Esc>:let @"=@0<bar>:let @*=@0<CR>
 
 " zap (delete) whole word under cursor but w/o saving deleted word to clipboard
 "nnoremap <silent> <Leader>wz lb"_dw
@@ -2411,8 +2468,8 @@ nnoremap <silent> <Leader>wz "_diw
 vnoremap <silent> <Leader>wz <C-\><C-n>"_diw
 
 " zap whole word w/ saving deleted word to clipboard
-nnoremap <silent> <Leader>wZ diw:let @0=@"<bar>:let @*=@0<CR>
-vnoremap <silent> <Leader>wZ <C-\><C-n>diw:let @0=@"<bar>:let @*=@0<CR>
+nnoremap <silent> <Leader>wZ "_diw
+vnoremap <silent> <Leader>wZ <C-\><C-n>"_diw
 
 " change word starting at cursor, like vi
 nnoremap <silent> <Leader>we ce
@@ -2423,8 +2480,8 @@ nnoremap <silent> <Leader>wd "_dw
 vnoremap <silent> <Leader>wd <C-\><C-n>"_dw
 
 " delete word at cursor pos, but w/ saving deleted word to clipboard
-nnoremap <silent> <Leader>wD dw:let @0=@"<bar>:let @*=@0<CR>
-vnoremap <silent> <Leader>wD <C-\><C-n>dw:let @0=@"<bar>:let @*=@0<CR>
+nnoremap <silent> <Leader>wD "_dw
+vnoremap <silent> <Leader>wD <C-\><C-n>"_dw
 
 " new whole word (from beg) [cannot use wc]
 nnoremap <silent> <Leader>wn ciw
@@ -3626,7 +3683,7 @@ function s:GetPath(arg,ws) abort
   if @j!="0"
     let @j="0"
     let elapsed_time = reltimefloat(reltime(g:click_start))
-    if elapsed_time >= 2.1
+    if elapsed_time >= 2000.1
       call <SID>GetWord(a:arg)
       return
     endif
@@ -3674,7 +3731,7 @@ function s:GetWord2(arg) abort
   if @j!="0"
     let @j="0"
     let elapsed_time = reltimefloat(reltime(g:click_start))
-    if elapsed_time >= 2.1
+    if elapsed_time >= 2000.1
       call <SID>GetWord(a:arg)
       return
     endif
@@ -3718,7 +3775,7 @@ function s:GetLine(arg) abort
   if @j!="0"
     let @j="0"
     let elapsed_time = reltimefloat(reltime(g:click_start))
-    if elapsed_time >= 2.1
+    if elapsed_time >= 2000.1
       call <SID>GetWord(a:arg)
       return
     endif
