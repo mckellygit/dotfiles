@@ -1537,21 +1537,28 @@ noremap G G$
 
 " MapFastKeycode: helper for fast keycode mappings
 " makes use of unused vim keycodes <[S-]F15> to <[S-]F37>
-" reserve S-F33 - S-F37 below, 41 remain available ...
+" reserve S-F32 - S-F37 below, 41 remain available ...
 let s:fast_i = 0
 function! s:MapFastKeycode(key, keycode)
-    if s:fast_i == 41
+    if s:fast_i == 40
         echohl WarningMsg
         echomsg "Unable to map ".a:key.": out of spare keycodes"
         echohl None
         return
     endif
+    " NOTE: tmux focus plugin uses F24, F25 which is index 9, 10
+    if s:fast_i == 9
+        let s:fast_i += 2
+    endif
     let vkeycode = '<'.(s:fast_i/23==0 ? '' : 'S-').'F'.(15+s:fast_i%23).'>'
-    exec 'set '.vkeycode.'='.a:keycode
-    exec 'map '.vkeycode.' '.a:key
-    exec 'imap '.vkeycode.' '.a:key
-    exec 'cmap '.vkeycode.' '.a:key
-    exec 'tmap '.vkeycode.' '.a:key
+    " skip over existing mappings ...
+    if !hasmapto('vkeycode', 'nvoict') && (maparg('vkeycode', 'nvoict') ==# '' || maparg('vkeycode', 'nvoict') ==# '<Nop>')
+        exec 'set '.vkeycode.'='.a:keycode
+        exec 'map '.vkeycode.' '.a:key
+        exec 'imap '.vkeycode.' '.a:key
+        exec 'cmap '.vkeycode.' '.a:key
+        exec 'tmap '.vkeycode.' '.a:key
+    endif
     let s:fast_i += 1
 endfunction
 
@@ -2210,7 +2217,7 @@ inoremap <C-LeftDrag> <LeftDrag>
 " DoubleClick for word (lbvhe)
 nmap <2-LeftMouse> mvviwty<C-o>gv
 vmap <2-LeftMouse> <Esc>mvviwty<C-o>gv
-inoremap <silent> <2-LeftMouse> <C-\><C-o>:let @i="2"<CR><C-\><C-o>:call <SID>GetWord(1)<CR>
+imap <silent> <2-LeftMouse> <C-\><C-o>:let @i="2"<CR><C-\><C-o>:call <SID>GetWord(1)<CR>
 
 " TripleClick for next larger entity, not whole line (lBvhE)
 "nnoremap <silent> <3-LeftMouse> mvviWygv
@@ -2221,7 +2228,7 @@ inoremap <silent> <2-LeftMouse> <C-\><C-o>:let @i="2"<CR><C-\><C-o>:call <SID>Ge
 "vnoremap <3-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath(1,1)<CR>
 nmap <3-LeftMouse> mvviWty<C-o>gv
 vmap <3-LeftMouse> <Esc>mvviWty<C-o>gv
-inoremap <silent> <expr> <3-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(1)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(1,1)<CR>'
+imap <silent> <expr> <3-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(1)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(1,1)<CR>'
 
 " QuadrupleClick for whole line
 nmap <4-LeftMouse> mvVty<C-o>gv
@@ -2234,13 +2241,15 @@ inoremap <4-LeftMouse> <Nop>
 "nnoremap <silent> <C-LeftMouse> <Nop>
 "vnoremap <silent> <C-LeftMouse> <Nop>
 "inoremap <silent> <C-LeftMouse> <Nop>
-nnoremap <C-LeftMouse> <LeftMouse>
-vnoremap <C-LeftMouse> <LeftMouse>
-inoremap <C-LeftMouse> <LeftMouse>
+nmap <C-LeftMouse> <LeftMouse>
+vmap <C-LeftMouse> <LeftMouse>
+"imap <C-LeftMouse> <LeftMouse>
 
-nmap <C-2-LeftMouse> mvviwty<C-o>gv
-vmap <C-2-LeftMouse> <Esc>mvviwty<C-o>gv
-inoremap <silent> <C-2-LeftMouse> <C-\><C-o>:let @i="2"<CR><C-\><C-o>:call <SID>GetWord(1)<CR>
+" TODO: previous Ctrl mappings ...
+" --------------------------------
+"nmap <C-2-LeftMouse> mvviwty<C-o>gv
+"vmap <C-2-LeftMouse> <Esc>mvviwty<C-o>gv
+"inoremap <silent> <C-2-LeftMouse> <C-\><C-o>:let @i="2"<CR><C-\><C-o>:call <SID>GetWord(1)<CR>
 
 " if visual selection is only one line then auto yank it ...
 function s:YankIfOnlyOneLine()
@@ -2259,14 +2268,37 @@ endfunction
 "inoremap <LeftMouse> <C-\><C-o>:let @k="1"<CR><LeftMouse>
 
 " TripleClick for next larger entity, not whole line (lBvhE)
-nmap <C-3-LeftMouse> mvviWty<C-o>gv
-vmap <C-3-LeftMouse> <Esc>mvviWty<C-o>gv
-inoremap <silent> <expr> <C-3-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(1)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(1,1)<CR>'
+"nmap <C-3-LeftMouse> mvviWty<C-o>gv
+"vmap <C-3-LeftMouse> <Esc>mvviWty<C-o>gv
+"inoremap <silent> <expr> <C-3-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(1)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(1,1)<CR>'
 
 " QuadrupleClick for whole line
-nmap <C-4-LeftMouse> mvVty<C-o>gv
-vmap <C-4-LeftMouse> <Esc>mvVty<C-o>gv
-inoremap <C-4-LeftMouse> <Nop>
+"nmap <C-4-LeftMouse> mvVty<C-o>gv
+"vmap <C-4-LeftMouse> <Esc>mvVty<C-o>gv
+"inoremap <C-4-LeftMouse> <Nop>
+" --------------------------------
+
+" TODO: use Alt mapping where we leave vis-mode upon release ...
+nmap <silent> <C-2-LeftMouse> mvviwty<C-o>:call <SID>Delay(1)<CR><Esc>
+nmap <silent> <C-3-LeftMouse> mvviWty<C-o>:call <SID>Delay(1)<CR><Esc>
+nmap <silent> <C-4-LeftMouse> mvVty<C-o>:call <SID>Delay(1)<CR><Esc>
+
+" NOTE: tmux maps C-Triple to M-c to be able to know its a triple-click ...
+call <SID>MapFastKeycode('<S-F32>',  "\ec")
+nmap <silent> <S-F32> mvviWty<C-o>:call <SID>Delay(1)<CR><Esc>
+vmap <silent> <S-F32> <Esc>mvviWty<C-o>:call <SID>Delay(1)<CR><Esc>
+imap <silent> <expr> <S-F32> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>'
+
+vmap <silent> <C-2-LeftMouse> <Esc>mvviwty<C-o>:call <SID>Delay(1)<CR><Esc>
+vmap <silent> <C-3-LeftMouse> <Esc>mvviWty<C-o>:call <SID>Delay(1)<CR><Esc>
+vmap <silent> <C-4-LeftMouse> <Esc>mvVty<C-o>:call <SID>Delay(1)<CR><Esc>
+
+imap <silent> <C-2-LeftMouse> <LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>
+imap <silent> <C-3-LeftMouse> <LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>
+imap <silent> <C-4-LeftMouse> <Nop>
+
+vmap <silent> <C-LeftRelease> ty<C-o>gv:<C-u>call <SID>Delay(0)<CR><Esc>
+imap <silent> <C-LeftMouse> <C-\><C-o>:let @i="1"<CR><LeftMouse>
 
 " ------------------------------
 " TODO: inside A-2-LeftMouse functions, check for 3rd click ...
@@ -2302,7 +2334,7 @@ nmap <silent> <A-4-LeftMouse> mvVty<C-o>:call <SID>Delay(1)<CR><Esc>
 call <SID>MapFastKeycode('<S-F33>',  "\eb")
 nmap <silent> <S-F33> mvviWty<C-o>:call <SID>Delay(1)<CR><Esc>
 vmap <silent> <S-F33> <Esc>mvviWty<C-o>:call <SID>Delay(1)<CR><Esc>
-inoremap <silent> <expr> <S-F33> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>'
+imap <silent> <expr> <S-F33> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>'
 
 vmap <silent> <A-2-LeftMouse> <Esc>mvviwty<C-o>:call <SID>Delay(1)<CR><Esc>
 vmap <silent> <A-3-LeftMouse> <Esc>mvviWty<C-o>:call <SID>Delay(1)<CR><Esc>
@@ -2355,7 +2387,7 @@ vmap <silent> <A-LeftRelease> ty<C-o>gv:<C-u>call <SID>Delay(0)<CR><Esc>
 "vnoremap <A-3-LeftRelease>  <Nop>
 "vnoremap <A-4-LeftRelease>  <Nop>
 
-inoremap <silent> <A-LeftMouse> <C-\><C-o>:let @i="1"<CR><LeftMouse>
+imap <silent> <A-LeftMouse> <C-\><C-o>:let @i="1"<CR><LeftMouse>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Word commands NOTE: selection is USUALLY copied to clipboard
