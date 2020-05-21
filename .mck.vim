@@ -3070,7 +3070,8 @@ endfunction
 autocmd CursorHoldI * call <SID>IdleToNormalMode()
 
 function! s:ClearCmdWindow()
-    echo ""
+    echo "\r\r"
+    echo ''
 endfunction
 " nice but can clear asyncrun status in cmdline ...
 autocmd CursorHold * call <SID>ClearCmdWindow()
