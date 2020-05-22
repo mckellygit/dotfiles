@@ -1139,7 +1139,7 @@ vnoremap <silent> <buffer> K <C-\><C-n>:call man#get_page_from_cword('horizontal
 " vim-man ----------
 
 " vim-system-copy -- CLIPBOARD
-if 1
+if 0
     let g:use_system_copy = 1
     let g:system_copy#copy_command='myclip'
     let g:system_copy#paste_command='myclip -o'
@@ -1481,12 +1481,11 @@ set mouse=a
 " use shift + left click to get back to previous (mouse=~a)
 
 " clipboard '+' (XA_CLIPBOARD:unnamedplus)
-" primary   '*' (XA_PRIMARY:unnamed)
-" should we use " or + or * reg ?
-" NOTE: using both seems to mess things up,
-"       parcellite/diodon/clipit/copyq etc. could sync
+" selection '*' (XA_PRIMARY:unnamed)
+" NOTE: should we use " or + or * reg or both ?
+" *I think* if we add + then orig selection regtype is lost
 set clipboard^=unnamed
-set clipboard^=unnamedplus
+"set clipboard^=unnamedplus
 " ------------------------------
 " NOTE: removing autoselect means visual selection is not automatically copied to unnamed clipboard (*)
 "       also removing autoselectml makes things fail weirdly
@@ -3091,6 +3090,8 @@ endfunction
 autocmd CursorHoldI * call <SID>IdleToNormalMode()
 
 function! s:ClearCmdWindow()
+    "exe 'normal :'
+    "redraw!
     echo "\r\r"
     echo ''
 endfunction
