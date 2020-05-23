@@ -1483,11 +1483,14 @@ set mouse=a
 " selection '*' (XA_PRIMARY:unnamed)
 " clipboard '+' (XA_CLIPBOARD:unnamedplus)
 " NOTE: should we use none (") or * or + or both * and + ?
-" NOTE: with copyq it seems using/adding unnamedplus causes problems
-"       and using unnamed works well, but puts data into clipboard
-"       instead of selection which seems opposite of documentation
+" NOTE: with copyq (and perhaps others?) using both can cause problems
+"       but using just unnamed works well.
+" NOTE: at exit, vim clears the selection!  An autocmd can be added to copy.
+"       but its fundamental that the clipboard remains and the selection
+"       is transient and valid only while the app is running ...
 set clipboard^=unnamed
 set clipboard-=unnamedplus
+
 " ------------------------------
 " NOTE: removing autoselect means visual selection is not automatically copied to unnamed clipboard (*)
 "       also removing autoselectml makes things fail weirdly
@@ -1523,6 +1526,8 @@ set ttimeout ttimeoutlen=7
 " use S as a left-handed . (dot) ...
 nnoremap S .
 vnoremap S .
+nnoremap s <Nop>
+vnoremap s <Nop>
 
 " dont exit this way ...
 noremap ZZ <Nop>
@@ -2489,6 +2494,8 @@ nnoremap <silent> <Leader>xP "fX"fp
 " c(har)s(swap) - swap char mapping that doesn't start with x ...
 nnoremap cs "fx"fp
 nnoremap cS "fX"fp
+nnoremap sc "fx"fp
+nnoremap sC "fX"fp
 
 " do we want the same for delete-word ?  Probably not ...
 "noremap dw "_dw
@@ -2545,6 +2552,9 @@ vnoremap <silent> <Leader>wn <C-\><C-n>ciw
 nnoremap <silent> <Leader>D "_D
 " like visual-mode D (del whole selection) but w/o saving what was deleted to clipboard (what was selected was already saved)
 vnoremap <silent> <Leader>D "_x
+
+" yank from cursor to end of line (similar to D deleting from cursor to end of line)
+nnoremap <silent> Y y$
 
 " -------------------
 

@@ -369,7 +369,7 @@ URxvt.keysym.Shift-Meta-Delete: string:\033[3;4~
 !!URxvt.perl-ext-common: default,matcher,font-size,selection-to-clipbaord
 !! Open urls in browser with Control-Click
 !!URxvt.urlLauncher: /usr/bin/firefox
-URxvt.matcher.button: C1
+URxvt.matcher.button: S1
 !! Change font size on Control-Plus/Minus
 !!URxvt.keysym.Control-0x2b: perl:font-size:increase
 !!URxvt.keysym.Control-0x2d: perl:font-size:decrease
