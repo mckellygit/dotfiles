@@ -1480,16 +1480,21 @@ set mouse=a
 
 " use shift + left click to get back to previous (mouse=~a)
 
-" selection '*' (XA_PRIMARY:unnamed)
-" clipboard '+' (XA_CLIPBOARD:unnamedplus)
-" NOTE: should we use none (") or * or + or both * and + ?
-" NOTE: with copyq (and perhaps others?) using both can cause problems
-"       but using just unnamed works well.
-" NOTE: at exit, vim clears the selection!  An autocmd can be added to copy.
-"       but its fundamental that the clipboard remains and the selection
-"       is transient and valid only while the app is running ...
+" selection '*' (XA_PRIMARY:unnamed) (ie mouse 'middle-click')
+" clipboard '+' (XA_CLIPBOARD:unnamedplus) (ie ctrl-shift-c/v, cut/paste)
+" NOTE: Should we use none or * or + or both * and + ?
+" NOTE: With copyq (and perhaps others?) using both can cause problems,
+"       but * alone works well.  Copyq syncs * (selection) to + (clipboard).
+" NOTE: At exit, vim clears the selection.  An autocmd (below) can refill it,
+"       but its traditional that the clipboard remains after app exits, and
+"       the selection is 'transient' and valid only while the app is running.
 set clipboard^=unnamed
 set clipboard-=unnamedplus
+
+" if also want selection preserved after exit ...
+if executable("copyq")
+    autocmd VimLeave * silent call system("setsid -w copyq clipboard  | copyq copySelection -")
+endif
 
 " ------------------------------
 " NOTE: removing autoselect means visual selection is not automatically copied to unnamed clipboard (*)
