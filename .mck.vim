@@ -212,7 +212,7 @@ Plugin 'vim-utils/vim-man'
 "
 " system copy clipboard (**modified++)
 "Plugin 'christoomey/vim-system-copy'
-Plugin 'mckellyln/vim-system-copy'
+"Plugin 'mckellyln/vim-system-copy'
 "
 "" All of your Plugins must be added before the following line
 call vundle#end()         " required
@@ -1144,21 +1144,21 @@ if 0
     let g:system_copy#copy_command='myclip'
     let g:system_copy#paste_command='myclip -o'
     let g:system_copy_silent = 1
-    vmap ty     <Plug>SystemCopy
-    nmap ty     <Plug>SystemCopy
-    vmap tx     <Plug>SystemCut
-    nmap tx     <Plug>SystemCut
-    vmap x      tx
-    vmap d      tx
-    vmap <Del>  tx
+    vmap     ty    <Plug>SystemCopy
+    vmap     tx    <Plug>SystemCut
+    vmap     x     tx
+    vmap     d     tx
+    vmap     <Del> tx
+    nnoremap ty    <Nop>
+    nnoremap tx    <Nop>
 else
-    vnoremap ty y
-    nnoremap ty y
-    vnoremap tx x
-    nnoremap tx x
-    vmap x      tx
-    vmap d      tx
-    vmap <Del>  tx
+    vnoremap ty    y
+    vnoremap tx    x
+    vmap     x     tx
+    vmap     d     tx
+    vmap     <Del> tx
+    nnoremap ty    <Nop>
+    nnoremap tx    <Nop>
 endif
 
 " copy (yank) selection, stay at end unless rectangular region ...
@@ -1483,9 +1483,11 @@ set mouse=a
 " clipboard '+' (XA_CLIPBOARD:unnamedplus)
 " selection '*' (XA_PRIMARY:unnamed)
 " NOTE: should we use " or + or * reg or both ?
-" *I think* if we add + then orig selection regtype is lost
+" NOTE: with copyq it seems using/adding unnamedplus causes problems
+"       and using unnamed works well, but puts data into clipboard
+"       instead of selection which seems opposite of odcumentation
 set clipboard^=unnamed
-"set clipboard^=unnamedplus
+set clipboard-=unnamedplus
 " ------------------------------
 " NOTE: removing autoselect means visual selection is not automatically copied to unnamed clipboard (*)
 "       also removing autoselectml makes things fail weirdly
@@ -2314,10 +2316,10 @@ function! s:Delay(arg) abort
         let clipcmd = ''
         let clipstr = &clipboard
         let cliplst = split(clipstr, ",")
-        if index(cliplst, 'unnamed')
+        if index(cliplst, 'unnamed') != -1
             let clipcmd .= 'unamed'
         endif
-        if index(cliplst, 'unnamedplus')
+        if index(cliplst, 'unnamedplus') != -1
             let clipcmd .= ',unamed+'
         endif
     endif
@@ -4531,8 +4533,8 @@ vnoremap <silent> <Leader>tk <C-\><C-n>:tabonly<CR>
 "vnoremap <silent> <Leader>wc <C-\><C-n>:conf q<CR>
 nnoremap <silent> <Leader>wq           :conf q<CR>
 vnoremap <silent> <Leader>wq <C-\><C-n>:conf q<CR>
-nmap <silent> <Leader>qq           :conf q<CR>
-vmap <silent> <Leader>qq <C-\><C-n>:conf q<CR>
+nmap <silent> <Leader>qq           :conf q<CR>:<CR>
+vmap <silent> <Leader>qq <C-\><C-n>:conf q<CR>:<CR>
 " window keep current and close all others
 nnoremap <silent> <Leader>wk           :only<CR>
 vnoremap <silent> <Leader>wk <C-\><C-n>:only<CR>
