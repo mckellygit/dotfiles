@@ -1480,12 +1480,12 @@ set mouse=a
 
 " use shift + left click to get back to previous (mouse=~a)
 
-" clipboard '+' (XA_CLIPBOARD:unnamedplus)
 " selection '*' (XA_PRIMARY:unnamed)
-" NOTE: should we use " or + or * reg or both ?
+" clipboard '+' (XA_CLIPBOARD:unnamedplus)
+" NOTE: should we use none (") or * or + or both * and + ?
 " NOTE: with copyq it seems using/adding unnamedplus causes problems
 "       and using unnamed works well, but puts data into clipboard
-"       instead of selection which seems opposite of odcumentation
+"       instead of selection which seems opposite of documentation
 set clipboard^=unnamed
 set clipboard-=unnamedplus
 " ------------------------------
