@@ -1492,9 +1492,23 @@ set clipboard^=unnamed
 set clipboard-=unnamedplus
 
 " if also want selection preserved after exit ...
-if executable("copyq")
-    autocmd VimLeave * silent call system("setsid -w copyq clipboard  | copyq copySelection -")
-endif
+function! s:PreserveSelection() abort
+    if executable("copyq") && !exists('$VIM_SKIP_REFILL_SELECTION')
+        let clipb = 0
+        let cliplst = split(&clipboard, ",")
+        if index(cliplst, 'unnamed') != -1
+            let clipb += 1
+        endif
+        if index(cliplst, 'unnamedplus') != -1
+            let clipb += 2
+        endif
+        " only if copyq is avail and clipboard does not have unnamedplus ...
+        if clipb <= 1
+            silent call system("setsid -w copyq clipboard  | copyq copySelection -")
+        endif
+    endif
+endfunction
+autocmd VimLeave * silent call <SID>PreserveSelection()
 
 " ------------------------------
 " NOTE: removing autoselect means visual selection is not automatically copied to unnamed clipboard (*)
