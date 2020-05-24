@@ -1504,7 +1504,7 @@ function! s:PreserveSelection() abort
         endif
         " only if copyq is avail and clipboard does not have unnamedplus ...
         if clipb <= 1
-            silent call system("setsid -w copyq clipboard  | copyq copySelection -")
+            silent call system("setsid -w copyq clipboard | copyq copySelection -")
         endif
     endif
 endfunction
