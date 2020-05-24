@@ -2354,7 +2354,10 @@ function! s:Delay(arg) abort
             let clipcmd .= 'unamed'
         endif
         if index(cliplst, 'unnamedplus') != -1
-            let clipcmd .= ',unamed+'
+            if !empty(clipcmd)
+                let clipcmd .= ','
+            endif
+            let clipcmd .= 'unamedplus'
         endif
     endif
     if exists("g:use_system_copy") && g:use_system_copy > 0
