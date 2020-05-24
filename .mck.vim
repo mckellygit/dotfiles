@@ -1502,6 +1502,9 @@ function! s:PreserveClipboard() abort
         if index(cliplst, 'unnamedplus') != -1
             silent call system("setsid -w copyq copy -", getreg('+'))
         endif
+        " or could have just -
+        "silent call system("setsid -w xsel -i -b", getreg('+'))
+        " since copyq would have then synced + to * ...
     endif
 endfunction
 autocmd VimLeave * silent call <SID>PreserveClipboard()

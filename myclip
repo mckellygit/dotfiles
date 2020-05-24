@@ -41,10 +41,14 @@ done
 
 
 if [[ $have_args -eq 0 || $have_dash -eq 1 ]] ; then
+    # could have just -
     #exec xsel -i -b
+    # since copyq would have then synced clipboard to selection ...
     exec copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input())"
 elif [[ $have_text -eq 1 ]] ; then
+    # could have just -
     #echo "$escapedtext" | xsel -i -b
+    # since copyq would have then synced clipboard to selection ...
     echo "$escapedtext" | copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input())"
     exit 0
 fi
