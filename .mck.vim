@@ -1138,7 +1138,7 @@ nnoremap <silent> <buffer> K :call man#get_page_from_cword('horizontal', v:count
 vnoremap <silent> <buffer> K <C-\><C-n>:call man#get_page_from_cword('horizontal', v:count)<CR>
 " vim-man ----------
 
-" vim-system-copy -- CLIPBOARD
+" vim-system-copy --- CLIPBOARD ---
 if 0
     let g:use_system_copy = 1
     let g:system_copy#copy_command='myclip'
@@ -1164,7 +1164,7 @@ endif
 " copy (yank) selection, stay at end unless rectangular region ...
 vmap <silent> <expr> <C-c> (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
 vmap <silent> <expr> y     (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
-" vim-system-copy -- CLIPBOARD
+" vim-system-copy --- CLIPBOARD ---
 
 " ====================================================
 " ====================================================
@@ -1478,37 +1478,34 @@ set selection=inclusive
 " all modes / full support
 set mouse=a
 
-" use shift + left click to get back to previous (mouse=~a)
+" use shift + left click to get terminal selection (mouse=~a)
 
-" selection '*' (XA_PRIMARY:unnamed) (ie mouse 'middle-click')
-" clipboard '+' (XA_CLIPBOARD:unnamedplus) (ie ctrl-shift-c/v, cut/paste)
-" NOTE: Should we use none or * or + or both * and + ?
-" NOTE: With copyq (and perhaps others?) using both can cause problems,
-"       but * alone works well.  Copyq syncs * (selection) to + (clipboard).
-" NOTE: At exit, vim clears the selection.  An autocmd (below) can refill it,
-"       but its traditional that the clipboard remains after app exits, and
-"       the selection is 'transient' and valid only while the app is running.
-set clipboard^=unnamed
-set clipboard-=unnamedplus
+" --- CLIPBOARD ---
+" selection '*' (XA_PRIMARY/unnamed) (ie mouse 'middle-click')
+" clipboard '+' (XA_CLIPBOARD/unnamedplus) (ie ctrl-shift-c/v, cut/paste)
+" Should we use none or * or + or both * and + ?
+" NOTE: With a clipboard mgr, using both _may_ cause problems.
+"       Use * and have clipboard mgr sync to + and then vim will
+"       clear * (selection) at exit; we can optionally restore *
+"       Use + and have clipboard mgr sync to * and then vim will
+"       clear + (clipboard) at exit; we can optionally restore +
+set clipboard-=unnamed
+set clipboard^=unnamedplus
 
-" if also want selection preserved after exit ...
-function! s:PreserveSelection() abort
-    if executable("copyq") && !exists('$VIM_SKIP_REFILL_SELECTION')
-        let clipb = 0
+" if want clipboard preserved after exit ...
+function! s:PreserveClipboard() abort
+    if executable("copyq") && !exists('$VIM_SKIP_PRESERVE_CLIPBOARD')
         let cliplst = split(&clipboard, ",")
         if index(cliplst, 'unnamed') != -1
-            let clipb += 1
+            silent call system("setsid -w copyq copySelection -", getreg('*'))
         endif
         if index(cliplst, 'unnamedplus') != -1
-            let clipb += 2
-        endif
-        " only if copyq is avail and clipboard does not have unnamedplus ...
-        if clipb <= 1
-            silent call system("setsid -w copyq clipboard | copyq copySelection -")
+            silent call system("setsid -w copyq copy -", getreg('+'))
         endif
     endif
 endfunction
-autocmd VimLeave * silent call <SID>PreserveSelection()
+autocmd VimLeave * silent call <SID>PreserveClipboard()
+" --- CLIPBOARD ---
 
 " ------------------------------
 " NOTE: removing autoselect means visual selection is not automatically copied to unnamed clipboard (*)
@@ -1722,16 +1719,16 @@ tmap <silent> <A-End> <Nop>
 " should we use " or + or * reg ? And what with clipboard setting ?
 
 " NOTE: substitute() to remove trailing nl char if present which can happen in visual-line mode (v/V/c/l) ...
-" perhaps let @* = substitute(@a, "\\_s\\+$", "", "") (trailing tabs, spaces, nl, etc.) or substitute(@a, "\\n\\+$", "", "") (just trailing nl)
+" perhaps let @+ = substitute(@a, "\\_s\\+$", "", "") (trailing tabs, spaces, nl, etc.) or substitute(@a, "\\n\\+$", "", "") (just trailing nl)
 " perhaps also this works :call setreg('*', '', 'c') ?
 " NOTE: == may be case-INSENSITIVE, as its not ==#
 
 " ----------------------
-" explicit force load @* to clipboard ...
+" explicit force load @+ to clipboard ...
 function! ForceLoadNammedReg() abort
     "silent call system("xsel -i -b --rmlastnl --sc 0", getreg('*'))
-    silent call system("myclip", getreg('*'))
-    echohl DiffText | echo "--- copied @* to clipboard ---" | echohl None
+    silent call system("myclip", getreg('+'))
+    echohl DiffText | echo "--- copied @+ to clipboard ---" | echohl None
     sleep 551m
     redraw!
 endfunction
@@ -1740,14 +1737,25 @@ vnoremap <silent> <Leader>lr :<C-u>call ForceLoadNammedReg()<CR>
 " ----------------------
 
 " ----------------------
-" copy @* to @x ...
-nnoremap <silent> <Leader>zc :let @x=@* <bar> echohl DiffText <bar> echo "--- register copied ---" <bar> echohl None <bar> sleep 551m <bar> redraw! <CR>
-vnoremap <silent> <Leader>zc :<C-u>let @x=@* <bar> echohl DiffText <bar> echo "--- register copied ---" <bar> echohl None <bar> sleep 551m <bar> redraw! <CR>
+" copy @+ to @x ...
+nnoremap <silent> <Leader>zc :let @x=@+ <bar> echohl DiffText <bar> echo "--- register copied ---" <bar> echohl None <bar> sleep 551m <bar> redraw! <CR>
+vnoremap <silent> <Leader>zc :<C-u>let @x=@+ <bar> echohl DiffText <bar> echo "--- register copied ---" <bar> echohl None <bar> sleep 551m <bar> redraw! <CR>
 
-" swap @* with @x ...
-nnoremap <silent> <Leader>zx :let @y=@* <bar> :let @*=@x <bar> :let @x=@y <bar> echohl DiffText <bar> echo "--- registers swapped ---" <bar> echohl None <bar> sleep 551m <bar> redraw! <CR>
-vnoremap <silent> <Leader>zx :<C-u>let @y=@* <bar> :<C-u>let @*=@x <bar> :<C-u>let @x=@y <bar> echohl DiffText <bar> echo "--- registers swapped ---" <bar> echohl None <bar> sleep 551m <bar> redraw! <CR>
-" ----------------------
+function! s:SwapReg()
+    call setreg('y', getreg('+'), getregtype('+'))
+    call setreg('+', getreg('x'), getregtype('x'))
+    call setreg('x', getreg('y'), getregtype('y'))
+    echohl DiffText | echo "--- registers swapped ---" | echohl None
+    sleep 551m
+    redraw!
+endfunction
+
+" swap @+ with @x ...
+nnoremap <silent> <Leader>zx :call <SID>SwapReg()<CR>
+vnoremap <silent> <Leader>zx <Esc>:<C-u>call <SID>SwapReg()<CR>gv
+
+" replace highlighted selection with x reg (usually after swapping + with x (<Leader>zx))
+vnoremap <silent> <Leader>zp "_x"xP<Esc>
 
 " ----------- yank / cut / paste -----------
 
@@ -1761,16 +1769,16 @@ function! s:YankIt(cmd, arg) abort
     let oldz = 0
     let @z = visualmode()
     if "" !=# @z
-        let @m = substitute(@*, "\\n\\+$", "", "")
-        if @m!=#@* " if not identical then had trailing nl ...
+        let @m = substitute(@+, "\\n\\+$", "", "")
+        if @m!=#@+ " if not identical then had trailing nl ...
             let @z="V"
-            let @*=@m
+            let @+=@m
         endif
     else
         let oldz = 1
     endif
     let @x=@y " prev in reg x ...
-    let @y=@*
+    let @y=@+
     " dont del v mark, as some cmds use this to return to orig pos
     "delmarks v
     if &buftype == "terminal" && a:arg >= 1
@@ -1811,10 +1819,10 @@ function! s:CutIt(cmd) abort
     exe "silent! normal! gv\"" . a:cmd . "\<Esc>"
     let @z = visualmode()
     if "V" ==# @z
-        let @* = substitute(@*, "\\n\\+$", "", "")
+        let @+ = substitute(@+, "\\n\\+$", "", "")
     endif
     let @x=@y " prev in reg x ...
-    let @y=@*
+    let @y=@+
 endfunction
 
 " example of nested conditionals from :h expr1
@@ -1827,39 +1835,39 @@ endfunction
 " cannot differentiate between C-S-v and C-v ...
 "nnoremap <expr> <C-S-v> (&buftype == 'terminal') ? '<Nop>' : 'p'
 "vnoremap <expr> <C-S-v> (&buftype == 'terminal') ? '<Nop>' : '<Esc>p'
-"inoremap <C-S-v> <C-r>*
-"cnoremap <C-S-v> <C-r>*
-"tnoremap <C-S-v> <C-w>"*
+"inoremap <C-S-v> <C-r>+
+"cnoremap <C-S-v> <C-r>+
+"tnoremap <C-S-v> <C-w>"+
 
 " <C-Insert> paste after
-nnoremap <expr> <C-Insert> (&buftype == 'terminal') ? '<Nop>' : '"*p'
-vnoremap <expr> <C-Insert> (&buftype == 'terminal') ? '<Nop>' : '<Esc>"*p'
-inoremap <C-Insert> <C-r>*
-cnoremap <C-Insert> <C-r>*
-tnoremap <C-Insert> <C-w>"*
+nnoremap <expr> <C-Insert> (&buftype == 'terminal') ? '<Nop>' : 'p'
+vnoremap <expr> <C-Insert> (&buftype == 'terminal') ? '<Nop>' : '<Esc>p'
+inoremap <C-Insert> <C-r>+
+cnoremap <C-Insert> <C-r>+
+tnoremap <C-Insert> <C-w>"+
 
 " <M-1> paste after [menu?]
 call <SID>MapFastKeycode('<S-F34>',  "\e1")
-nnoremap <expr> <S-F34> (&buftype == 'terminal') ? '<Nop>' : '"*p'
-vnoremap <expr> <S-F34> (&buftype == 'terminal') ? '<Nop>' : '<Esc>"*p'
-inoremap <S-F34> <C-r>*
-cnoremap <S-F34> <C-r>*
-tnoremap <S-F34> <C-w>"*
+nnoremap <expr> <S-F34> (&buftype == 'terminal') ? '<Nop>' : 'p'
+vnoremap <expr> <S-F34> (&buftype == 'terminal') ? '<Nop>' : '<Esc>p'
+inoremap <S-F34> <C-r>+
+cnoremap <S-F34> <C-r>+
+tnoremap <S-F34> <C-w>"+
 
 " <C-S-Insert> paste before
-nnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '<Nop>' : '"*P`['
-vnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '<Nop>' : '<Esc>"*P`['
-inoremap <C-S-Insert> <C-o>mp<C-r>*<C-o>`p
-cnoremap <C-S-Insert> <C-r>*
-tnoremap <C-S-Insert> <C-w>"*
+nnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '<Nop>' : 'P`['
+vnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '<Nop>' : '<Esc>P`['
+inoremap <C-S-Insert> <C-o>mp<C-r>+<C-o>`p
+cnoremap <C-S-Insert> <C-r>+
+tnoremap <C-S-Insert> <C-w>"+
 
 " <M-8> paste before [menu?]
 call <SID>MapFastKeycode('<S-F35>',  "\e8")
-nnoremap <expr> <S-F35> (&buftype == 'terminal') ? '<Nop>' : '"*P`]'
-vnoremap <expr> <S-F35> (&buftype == 'terminal') ? '<Nop>' : '<Esc>"*P`]'
-inoremap <S-F35> <C-r>*
-cnoremap <S-F35> <C-r>*
-tnoremap <S-F35> <C-w>"*
+nnoremap <expr> <S-F35> (&buftype == 'terminal') ? '<Nop>' : 'P`]'
+vnoremap <expr> <S-F35> (&buftype == 'terminal') ? '<Nop>' : '<Esc>P`]'
+inoremap <S-F35> <C-r>+
+cnoremap <S-F35> <C-r>+
+tnoremap <S-F35> <C-w>"+
 
 " C-S-c / M-7 copy ...
 
@@ -2004,7 +2012,7 @@ endfunction
 "inoremap <silent> <C-q> <C-r>+
 " <C-q> does not seem to get through as its stty start ...
 " NOTE: does not work as a map as expected because it is interpreted as <Esc>p ...
-"inoremap <silent> <M-p> <C-r>*
+"inoremap <silent> <M-p> <C-r>+
 
 " change default to paste before (at) cursor
 " instead of after cursor
@@ -2025,7 +2033,7 @@ function! s:MyPasteNoJump() abort
   nmap <silent> <buffer> p p
   let prevsj=&scrolljump
   let &scrolljump=1
-  execute "silent! normal \"*p"
+  execute "silent! normal p"
   "execute "normal p"
   let &scrolljump=prevsj
   nmap <silent> <buffer> p :call <SID>MyPasteNoJump()<CR>
@@ -2033,11 +2041,10 @@ endfunction
 " to match UnconditionalPaste, dont modify p
 "nmap <silent> <buffer> p :call MyPasteNoJump()<CR>
 
-vnoremap <buffer> p <C-\><C-n>"*p
-vnoremap <buffer> P <C-\><C-n>"*P`[
+vnoremap <buffer> p <C-\><C-n>p
+vnoremap <buffer> P <C-\><C-n>P`[
 
-nnoremap <silent> P "*P`[
-nnoremap <silent> p "*p
+nnoremap <silent> P P`[
 
 " ---------------
 
@@ -2199,21 +2206,21 @@ inoremap <C-4-RightMouse> <Nop>
 
 " ---------------
 
-nnoremap <A-RightMouse> "*p
-vnoremap <A-RightMouse> "*p
-inoremap <A-RightMouse> <C-o>"*p
+nnoremap <A-RightMouse> p
+vnoremap <A-RightMouse> p
+inoremap <A-RightMouse> <C-o>p
 
-nnoremap <A-2-RightMouse> "*p
-vnoremap <A-2-RightMouse> "*p
-inoremap <A-2-RightMouse> <C-o>"*p
+nnoremap <A-2-RightMouse> p
+vnoremap <A-2-RightMouse> p
+inoremap <A-2-RightMouse> <C-o>p
 
-nnoremap <A-3-RightMouse> "*p
-vnoremap <A-3-RightMouse> "*p
-inoremap <A-3-RightMouse> <C-o>"*p
+nnoremap <A-3-RightMouse> p
+vnoremap <A-3-RightMouse> p
+inoremap <A-3-RightMouse> <C-o>p
 
-nnoremap <A-4-RightMouse> "*p
-vnoremap <A-4-RightMouse> "*p
-inoremap <A-4-RightMouse> <C-o>"*p
+nnoremap <A-4-RightMouse> p
+vnoremap <A-4-RightMouse> p
+inoremap <A-4-RightMouse> <C-o>p
 
 " --------------------------
 
@@ -2479,8 +2486,8 @@ nnoremap <silent> <Leader>wF viw"syw:set hlsearch<CR>?<C-r>s<CR>
 " NOTE: *, # search for whole \<word\> which may not always be desired
 "nnoremap <silent> <Leader>wg viwy:set hlsearch<CR>*
 "nnoremap <silent> <Leader>wG viwy:set hlsearch<CR>#
-nmap <silent> <Leader>wg viwtybb:set hlsearch<CR>/<C-r>*<CR>
-nmap <silent> <Leader>wG viwtyw:set hlsearch<CR>?<C-r>*<CR>
+nmap <silent> <Leader>wg viwtybb:set hlsearch<CR>/<C-r>+<CR>
+nmap <silent> <Leader>wG viwtyw:set hlsearch<CR>?<C-r>+<CR>
 " -----------------------------------------------------
 
 " search for visual selection
@@ -2491,8 +2498,8 @@ vnoremap <silent> <Leader>wf "sybb<C-\><C-n>:set hlsearch<CR>/<C-r>s<CR>
 vnoremap <silent> <Leader>wF "syw<C-\><C-n>:set hlsearch<CR>?<C-r>s<CR>
 
 " to match normal mode (copying selection to clipboard)
-vmap <silent> <Leader>wg tybb<C-\><C-n>:set hlsearch<CR>/<C-r>*<CR>
-vmap <silent> <Leader>wG tyw<C-\><C-n>:set hlsearch<CR>?<C-r>*<CR>
+vmap <silent> <Leader>wg tybb<C-\><C-n>:set hlsearch<CR>/<C-r>+<CR>
+vmap <silent> <Leader>wG tyw<C-\><C-n>:set hlsearch<CR>?<C-r>+<CR>
 
 " and the *, # (without copying selection to clipboard)
 " NOTE: *, # search for whole \<word\> which may not always be desired
@@ -2534,11 +2541,11 @@ nnoremap sC "fX"fp
 
 " exchange silent word (from beg) with clipboard
 " (need silent <CR> instead of <bar> here)
-nnoremap <silent> <Leader>wx "_ciw<C-r>*<Esc>
+nnoremap <silent> <Leader>wx "_ciw<C-r>+<Esc>
 " vis-mode of this doesnt really make sense
 
 " replace at cursor pos with clipboard (not from beg of word like \we above)
-nnoremap <silent> <Leader>wr "_cw<C-r>*<Esc>
+nnoremap <silent> <Leader>wr "_cw<C-r>+<Esc>
 " vis-mode of this doesnt really make sense
 
 " zap (delete) whole word under cursor but w/o saving deleted word to clipboard

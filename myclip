@@ -41,10 +41,10 @@ done
 
 
 if [[ $have_args -eq 0 || $have_dash -eq 1 ]] ; then
-    #exec xsel -i -p
+    #exec xsel -i -b
     exec copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input())"
 elif [[ $have_text -eq 1 ]] ; then
-    #echo "$escapedtext" | xsel -i -p
+    #echo "$escapedtext" | xsel -i -b
     echo "$escapedtext" | copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input())"
     exit 0
 fi
