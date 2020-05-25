@@ -2518,11 +2518,12 @@ nnoremap X "_X
 " same for delete
 nnoremap <Del> "_x
 " but miss the xp swap chars, this works but adds an annoying (timeoutlen) delay to the single typed x
-"noremap xp xp
-"noremap Xp Xp
+"nnoremap xp "fx"fp
+"nnoremap Xp "fX"fp
 " so use Leader ...
 nnoremap <silent> <Leader>xp "fx"fp
 nnoremap <silent> <Leader>xP "fX"fp
+" could also nnoremap x <Nop> and nnoremap xx "_x to get xx to del char ...
 " c(har)s(swap) - swap char mapping that doesn't start with x ...
 nnoremap cs "fx"fp
 nnoremap cS "fX"fp
