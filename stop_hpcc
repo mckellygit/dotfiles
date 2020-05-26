@@ -93,7 +93,7 @@ fi
 if [ ${do_clean} -eq 1 ] ; then
     echo "About to remove all hpcc logs and cores ..."
     sudo find /var/log/HPCCSystems/ -name "*.log" -and \( -not -name "hpcc-init.log" \) -exec rm {} \;
-    sudo find /var/lib/HPCCSystems/ -name "core.*" -exec rm {} \;
+    sudo find /var/lib/HPCCSystems/ -name "core*" -exec rm {} \;
 fi
 
 if [ ${do_kill} -eq 1 ] ; then

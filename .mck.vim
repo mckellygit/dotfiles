@@ -1707,57 +1707,51 @@ tmap <silent> <A-End> <Nop>
 
 " ----------- yank / cut / paste -----------
 
-":vmap <silent> <C-c> "+y
-"vnoremap <silent> <C-c> "+y<LeftRelease>
-" y`] to goto end of block, or even better
-" gv<Esc> leave cursor at last pos
-"vnoremap <silent> <C-c> "+ygv<Esc>
-" leave normal mode with <C-c>/yank, like tmux
-"vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '"+ygv<Esc>i' : '"+ygv<Esc>'
-"vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '"+ygv<Esc>i' : '"+ygv<Esc>'
-" if X11 Forwarding is not on/allowed then perhaps vim copy to + and * does not work over ssh ?
-"vnoremap <silent> <expr> <C-c> (&buftype == 'terminal') ? '""y <Bar> :<C-u>call system("xsel -i -b -t 5000", @")<CR> <Bar> gv<Esc>i' : '""y <Bar> :<C-u>call system("xsel -i -b -t 5000", @")<CR> <Bar> gv<Esc>'
-"vnoremap <silent> <expr> y     (&buftype == 'terminal') ? '""y <Bar> :<C-u>call system("xsel -i -b -t 5000", @")<CR> <Bar> gv<Esc>i' : '""y <Bar> :<C-u>call system("xsel -i -b -t 5000", @")<CR> <Bar> gv<Esc>'
-
-" should we use " or + or * reg ? And what with clipboard setting ?
-
-" NOTE: substitute() to remove trailing nl char if present which can happen in visual-line mode (v/V/c/l) ...
-" perhaps let @+ = substitute(@a, "\\_s\\+$", "", "") (trailing tabs, spaces, nl, etc.) or substitute(@a, "\\n\\+$", "", "") (just trailing nl)
-" perhaps also this works :call setreg('*', '', 'c') ?
-" NOTE: == may be case-INSENSITIVE, as its not ==#
-
-" ----------------------
 " explicit force load @+ to clipboard ...
 function! ForceLoadNammedReg() abort
-    "silent call system("xsel -i -b --rmlastnl --sc 0", getreg('*'))
-    silent call system("myclip", getreg('+'))
-    echohl DiffText | echo "--- copied @+ to clipboard ---" | echohl None
+    "silent call system("setsid -w xsel -i -b --rmlastnl --sc 0", getreg('+'))
+    silent call system("setsid -w myclip", getreg('+'))
+    echohl DiffText | echo "@+ -> clipboard ; register copied" | echohl None
     sleep 551m
     redraw!
 endfunction
 nnoremap <silent> <Leader>lr :call ForceLoadNammedReg()<CR>
 vnoremap <silent> <Leader>lr :<C-u>call ForceLoadNammedReg()<CR>
-" ----------------------
 
 " ----------------------
+
+function! s:CopyReg(arg)
+    call setreg('x', getreg('+'), getregtype('+'))
+    if a:arg == 1
+        echohl DiffText | echo "@+ -> @x ; register copied" | echohl None
+        sleep 551m
+        redraw!
+    endif
+endfunction
+
 " copy @+ to @x ...
-nnoremap <silent> <Leader>zc :let @x=@+ <bar> echohl DiffText <bar> echo "--- register copied ---" <bar> echohl None <bar> sleep 551m <bar> redraw! <CR>
-vnoremap <silent> <Leader>zc :<C-u>let @x=@+ <bar> echohl DiffText <bar> echo "--- register copied ---" <bar> echohl None <bar> sleep 551m <bar> redraw! <CR>
+nnoremap <silent> <Leader>zc :call <SID>CopyReg(1)<CR>
+vnoremap <silent> <Leader>zc <Esc>:<C-u>call <SID>CopyReg(1)<CR>gv
 
-function! s:SwapReg()
+" ----------------------
+
+function! s:SwapReg(arg)
     call setreg('y', getreg('+'), getregtype('+'))
     call setreg('+', getreg('x'), getregtype('x'))
     call setreg('x', getreg('y'), getregtype('y'))
-    echohl DiffText | echo "--- registers swapped ---" | echohl None
-    sleep 551m
-    redraw!
+    if a:arg == 1
+        echohl DiffText | echo "@+ <-> @x ; registers swapped" | echohl None
+        sleep 551m
+        redraw!
+    endif
 endfunction
 
 " swap @+ with @x ...
-nnoremap <silent> <Leader>zx :call <SID>SwapReg()<CR>
-vnoremap <silent> <Leader>zx <Esc>:<C-u>call <SID>SwapReg()<CR>gv
+nnoremap <silent> <Leader>zx :call <SID>SwapReg(1)<CR>
+vnoremap <silent> <Leader>zx <Esc>:<C-u>call <SID>SwapReg(1)<CR>gv
 
 " replace highlighted selection with x reg (usually after swapping + with x (<Leader>zx))
+" NOTE: see all visual mode 'p' mapping for similar method ...
 vnoremap <silent> <Leader>zp "_x"xP<Esc>
 
 " ----------- yank / cut / paste -----------
@@ -2009,6 +2003,7 @@ endfunction
 " ---------------
 
 " insert/paste
+
 " this removes the <C-v> literal input mode
 "inoremap <silent> <C-v> <C-r>+
 " use <C-q> instead
@@ -2016,38 +2011,32 @@ endfunction
 " <C-q> does not seem to get through as its stty start ...
 " NOTE: does not work as a map as expected because it is interpreted as <Esc>p ...
 "inoremap <silent> <M-p> <C-r>+
+" NOTE: use <C-Insert> or <C-S-v> instead ...
 
-" change default to paste before (at) cursor
-" instead of after cursor
+" should we change default to paste before (at) cursor
+" instead of after cursor ?
 " good for words but can be strange for lines
-" skipping now - see unconditional-paste plugin
-"vnoremap <silent> p P
+" skip for now - see unconditional-paste plugin
+" TODO: could use an <expr> and getregtype('+') to know what is being pasted ...
 "nnoremap <silent> p P
-"vnoremap <silent> P p
 "nnoremap <silent> P p
 
-" Make p in Visual mode replace the selected text with the " register.
-"vnoremap p <Esc>:let current_reg = @"<CR>gvdi<C-R>=current_reg<CR><Esc>
-
 " to disable scrolljump when pasting at last row ...
-" not sure to use nmap or nnoremap ?
-" not sure to use " or + or * register ?
-function! s:MyPasteNoJump() abort
-  nmap <silent> <buffer> p p
+function! s:MyPasteNoJump(cmd) abort
   let prevsj=&scrolljump
   let &scrolljump=1
-  execute "silent! normal p"
-  "execute "normal p"
+  execute "normal! " . a:cmd
   let &scrolljump=prevsj
-  nmap <silent> <buffer> p :call <SID>MyPasteNoJump()<CR>
 endfunction
-" to match UnconditionalPaste, dont modify p
-"nmap <silent> <buffer> p :call MyPasteNoJump()<CR>
-
-vnoremap <buffer> p <C-\><C-n>p
-vnoremap <buffer> P <C-\><C-n>P`[
+"nnoremap <silent> <buffer> p :call <SID>MyPasteNoJump('p')<CR>
+"nnoremap <silent> <buffer> P :call <SID>MyPasteNoJump('P`[')<CR>
 
 nnoremap <silent> P P`[
+
+" Make p in Visual mode replace the selected text with the previous + register.
+" NOTE: see also <Leader>zx / <Leader>zp above ...
+vnoremap <silent> <buffer> p :<C-u>call <SID>SwapReg(0)<CR>gv"_x"xP
+vnoremap <silent> <buffer> P :<C-u>call <SID>SwapReg(0)<CR>gv"_x"xP
 
 " ---------------
 
@@ -2518,16 +2507,17 @@ nnoremap X "_X
 " same for delete
 nnoremap <Del> "_x
 " but miss the xp swap chars, this works but adds an annoying (timeoutlen) delay to the single typed x
-"nnoremap xp "fx"fp
-"nnoremap Xp "fX"fp
+"nnoremap xp "fx"fph
+"nnoremap Xp "fX"fph
 " so use Leader ...
-nnoremap <silent> <Leader>xp "fx"fp
-nnoremap <silent> <Leader>xP "fX"fp
-" could also nnoremap x <Nop> and nnoremap xx "_x to get xx to del char ...
-" c(har)s(swap) - swap char mapping that doesn't start with x ...
-nnoremap cs "fx"fp
+nnoremap <silent> <Leader>xp "fx"fph
+nnoremap <silent> <Leader>xP "fX"fph
+" could perhaps nnoremap x <Nop> and nnoremap xx "_x to use xx to delete char instead ...
+" c(har)s(wap) - swap char mapping that doesn't start with x ...
+nnoremap cs "fx"fph
 nnoremap cS "fX"fp
-nnoremap sc "fx"fp
+" since s is mapped to <Nop> above we can also use s(wap)c(char) ...
+nnoremap sc "fx"fph
 nnoremap sC "fX"fp
 
 " do we want the same for delete-word ?  Probably not ...
