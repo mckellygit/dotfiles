@@ -1,6 +1,13 @@
 $include /etc/inputrc
 # bash v4.4 with readline v7.0 supports bracketed paste
-set enable-bracketed-paste on
+# but disable in cgdb for now, until figure out how to fix
+# it seems B-P is on (or works) no matter what this is set to ...
+$if Bash
+  set enable-bracketed-paste on
+$endif
+$if cgdb
+  set enable-bracketed-paste off
+$endif
 #
 "\C-n": nop
 #

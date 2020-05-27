@@ -115,6 +115,65 @@ export LSAN_OPTIONS="detect_leaks=0 exitcode=0"
 
 # --------------------
 
+# Ins - no-op
+function noop() { }
+zle -N noop
+
+function viinsplus() {
+    zle -K viins
+    ((CURSOR+=0))
+}
+zle -N viinsplus
+
+function vicmdplus() {
+    zle -K vicmd
+    ((CURSOR+=0))
+}
+zle -N vicmdplus
+
+# remove <Esc> mapping to go into vm-cmd-mode and make it <C-x> instead
+bindkey -rM viins '^['
+# map <Esc> to something so there is no wait for addl chars ...
+bindkey  -M viins '^[' noop
+bindkey  -M viins "\e[2~" vicmdplus
+bindkey -rM viins '^X'
+bindkey  -M viins '^X' vicmdplus
+bindkey -rM vicmd '^['
+bindkey -sM vicmd '^[' 'i'
+bindkey -sM vicmd "\e[2~" 'i'
+
+function zle-keymap-select {
+  if [[ ${KEYMAP} == vicmd ]] || [[ $1 = 'block' ]]; then
+    if [[ $#BUFFER -gt 0 ]] ; then
+    #  for n in {1..$#BUFFER} ; do
+    #    if [[ $BUFFER[n] != " " ]] ; then
+    #      echo -ne '\e[5 q'
+    #      break
+    #    fi
+    #  done
+       echo -ne '\e[3 q'
+    fi
+  elif [[ ${KEYMAP} == main ]] || [[ ${KEYMAP} == viins ]] || [[ ${KEYMAP} = '' ]] || [[ $1 = 'beam' ]]; then
+    echo -ne '\e[2 q'
+  fi
+}
+zle -N zle-keymap-select
+
+zle-line-init() {
+    zle -K viins # initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
+    echo -ne "\e[2 q"
+}
+zle -N zle-line-init
+
+echo -ne '\e[2 q' # Use block shape cursor on startup.
+preexec() { echo -ne '\e[2 q' ;} # Use block shape cursor for each new prompt.
+
+# Edit line in vim with ctrl-e:
+#autoload edit-command-line; zle -N edit-command-line
+#bindkey '^x' edit-command-line
+
+# --------------------
+
 autoload -U select-word-style
 select-word-style bash
 # perhaps same thing as above
@@ -129,42 +188,49 @@ bindkey '\eOA' up-line-or-beginning-search
 bindkey '\e[A' up-line-or-beginning-search
 bindkey '\eOB' down-line-or-beginning-search
 bindkey '\e[B' down-line-or-beginning-search
-bindkey '^a' beginning-of-line
-bindkey '^e' end-of-line
 bindkey -M menuselect '^[[Z' reverse-menu-complete
 bindkey '^I' expand-or-complete-prefix
 
 # Home
-bindkey "\e[1~" beginning-of-line
+bindkey -M viins '^a' beginning-of-line
+bindkey -M vicmd '^a' beginning-of-line
+bindkey -M viins "\e[H" beginning-of-line
+bindkey -M vicmd "\e[H" beginning-of-line
+bindkey -M viins "\e[1~" beginning-of-line
+bindkey -M vicmd "\e[1~" beginning-of-line
 # End
-bindkey "\e[4~" end-of-line
+bindkey -M viins '^e' end-of-line
+bindkey -M vicmd '^e' end-of-line
+bindkey -M viins "\e[F" end-of-line
+bindkey -M vicmd "\e[F" end-of-line
+bindkey -M viins "\e[4~" end-of-line
+bindkey -M vicmd "\e[4~" end-of-line
 
 # Ctrl-Home
-bindkey "\e5" beginning-of-line
+bindkey -M viins "\e[1;5H" beginning-of-line
+bindkey -M vicmd "\e[1;5H" beginning-of-line
 # Ctrl-End
-bindkey "\e6" end-of-line
+bindkey -M viins "\e[1;5F" end-of-line
+bindkey -M vicmd "\e[1;5F" end-of-line
 
 # Ctrl-Left
-bindkey "\e[1;5D" backward-word
+bindkey -M viins "\e[1;5D" backward-word
+bindkey -M vicmd "\e[1;5D" backward-word
 # Ctrl-Right
-bindkey "\e[1;5C" forward-word
+bindkey -M viins "\e[1;5C" forward-word
+bindkey -M vicmd "\e[1;5C" forward-word
 
 # Alt-d kill word
-bindkey "\ed" kill-word
+bindkey -M viins "\ed" kill-word
+bindkey -M vicmd "\ed" kill-word
 
 # --------------------
 
-# Ins - no-op
-function noop() {
-}
-zle -N noop
-bindkey "\e[2~" noop
-
-# -------
-
 # Shift-DEL - backward kill word
-bindkey "\e[3;2~" backward-kill-word
-bindkey "^w"  backward-kill-word
+bindkey -M viins "\e[3;2~" backward-kill-word
+bindkey -M vicmd "\e[3;2~" backward-kill-word
+bindkey -M viins "^w"  backward-kill-word
+bindkey -M vicmd "^w"  backward-kill-word
 #bindkey '^P' backward-kill-word
 
 # -------
@@ -191,7 +257,8 @@ zle -N my-kill-word
 #zstyle ':zle:my-kill-word' word-style space
 
 # Ctrl-DEL - del current word, but also if at end del backward word
-bindkey "\e[3;5~" my-kill-word
+bindkey -M viins "\e[3;5~" my-kill-word
+bindkey -M vicmd "\e[3;5~" my-kill-word
 # same for ^x
 #bindkey "^x" my-kill-word
 
@@ -213,9 +280,11 @@ zle -N my-delete-word
 #zstyle ':zle:my-delete-word' word-style space
 
 # Ctrl-Shift-DEL - del current WHOLE word, but also if at end del backward word
-bindkey "\e[3;6~" my-delete-word
+bindkey -M viins "\e[3;6~" my-delete-word
+bindkey -M vicmd "\e[3;6~" my-delete-word
 # same for Alt-DEL
-bindkey "\e[3;3~" my-delete-word
+bindkey -M viins "\e[3;3~" my-delete-word
+bindkey -M vicmd "\e[3;3~" my-delete-word
 
 # seems to do the same thing as my-delete-word
 autoload delete-whole-word-match
@@ -237,7 +306,8 @@ function my-delete-char() {
 }
 zle -N my-delete-char
 # DEL - delete current char, but also if at end then del backward char
-bindkey "\e[3~" my-delete-char
+bindkey -M viins "\e[3~" my-delete-char
+bindkey -M vicmd "\e[3~" my-delete-char
 
 # --------------------
 

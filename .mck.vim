@@ -1685,6 +1685,7 @@ noremap <silent> <C-Home> gg
 noremap <silent> <C-End> G
 
 " NOTE: dont really need/use S-Ins or A-H/E
+" NOTE: <S-Insert> vmap is used below
 map  <silent> <S-Insert> <Nop>
 imap <silent> <S-Insert> <Esc>l
 cmap <silent> <S-Insert> <Nop>
@@ -1838,7 +1839,8 @@ endfunction
 
 " <C-Insert> paste after
 nnoremap <expr> <C-Insert> (&buftype == 'terminal') ? '<Nop>' : 'p'
-vnoremap <expr> <C-Insert> (&buftype == 'terminal') ? '<Nop>' : '<Esc>p'
+" NOTE: <C-Insert> vmapped below ...
+"vnoremap <expr> <C-Insert> (&buftype == 'terminal') ? '<Nop>' : '<Esc>p'
 inoremap <C-Insert> <C-r>+
 cnoremap <C-Insert> <C-r>+
 tnoremap <C-Insert> <C-w>"+
@@ -1853,7 +1855,8 @@ tnoremap <S-F34> <C-w>"+
 
 " <C-S-Insert> paste before
 nnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '<Nop>' : 'P`['
-vnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '<Nop>' : '<Esc>P`['
+" NOTE: <C-S-Insert> vmapped below ...
+"vnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '<Nop>' : '<Esc>P`['
 inoremap <C-S-Insert> <C-o>mp<C-r>+<C-o>`p
 cnoremap <C-S-Insert> <C-r>+
 tnoremap <C-S-Insert> <C-w>"+
@@ -2028,17 +2031,27 @@ function! s:MyPasteNoJump(cmd) abort
   execute "normal! " . a:cmd
   let &scrolljump=prevsj
 endfunction
-"nnoremap <silent> <buffer> p :call <SID>MyPasteNoJump('p')<CR>
-"nnoremap <silent> <buffer> P :call <SID>MyPasteNoJump('P`[')<CR>
+"nnoremap <silent> <buffer> <expr> p (&buftype == 'terminal') ? '<Nop>' : ':call <SID>MyPasteNoJump('p')<CR>'
+"nnoremap <silent> <buffer> <expr> P (&buftype == 'terminal') ? '<Nop>' : ':call <SID>MyPasteNoJump('P`[')<CR>'
 
-nnoremap <silent> P P`[
+nnoremap <silent> <buffer> <expr> P (&buftype == 'terminal') ? '<Nop>' : 'P`['
 
 " Make p in Visual mode replace the selected text with the previous + register.
 " NOTE: see also <Leader>zx / <Leader>zp above ...
-vnoremap <silent> <buffer> p :<C-u>call <SID>SwapReg(0)<CR>gv"_x"xP
-vnoremap <silent> <buffer> P :<C-u>call <SID>SwapReg(0)<CR>gv"_x"xP
+vnoremap <silent> <buffer> <expr> p (&buftype == 'terminal') ? '<Nop>' : ':<C-u>call <SID>SwapReg(0)<CR>gv"_x"xP'
+vnoremap <silent> <buffer> <expr> P (&buftype == 'terminal') ? '<Nop>' : ':<C-u>call <SID>SwapReg(0)<CR>gv"_x"xP'
+
+" <S-Insert> as a vis-mode 'replace' ...
+vnoremap <silent> <buffer> <expr> <S-Insert>   (&buftype == 'terminal') ? '<Nop>' : 's'
+" NOTE: these are used instead of <C-Insert>, <C-S-Insert> vmappings above ...
+vnoremap <silent> <buffer> <expr> <C-Insert>   (&buftype == 'terminal') ? '<Nop>' : ':<C-u>call <SID>SwapReg(0)<CR>gv"_x"xP'
+vnoremap <silent> <buffer> <expr> <C-S-Insert> (&buftype == 'terminal') ? '<Nop>' : ':<C-u>call <SID>SwapReg(0)<CR>gv"_x"xP'
 
 " ---------------
+
+" ---------------------------------------------------------------------------------
+" TODO: TMUX <C-Insert> in terminal does not use bracketed-paste, but <C-S-v> is ok
+" ---------------------------------------------------------------------------------
 
 " set paste mode, paste, set nopaste mode
 function! WrapForTmux(as)
@@ -2050,14 +2063,18 @@ function! WrapForTmux(as)
   return tmux_start . substitute(a:as, "\<Esc>", "\<Esc>\<Esc>", 'g') . tmux_end
 endfunction
 
+" active cursor ...
+
+" change cursor to beam in Insert mode ...
+let &t_SI = "\e[5 q"
+let &t_EI = "\e[2 q"
+" ---------------
+
 let &t_SI .= WrapForTmux("\<Esc>[?2004h")
 let &t_EI .= WrapForTmux("\<Esc>[?2004l")
 
 " tmux:
 "   set -ga terminal-overrides '*:Ss=\E[%p1%d q:Se=\E[ q'
-" vim:
-"   let &t_SI = "\e[5 q"
-"   let &t_EI = "\e[2 q"
 
 function! XTermPasteBegin()
   set pastetoggle=<Esc>[201~
@@ -4457,13 +4474,13 @@ endif
 
 " -----------
 
-" terminal in cur tab
-nnoremap <silent> <Leader>zs           :terminal ++close ++norestore ++kill=term ++curwin<CR>
-vnoremap <silent> <Leader>zs <C-\><C-n>:terminal ++close ++norestore ++kill=term ++curwin<CR>
-" terminal in new tab
+" terminal in cur tab NOTE: added <C-w>:se scl=no<CR> at end to turn off signcolumn in terminal only ...
+nnoremap <silent> <Leader>zs           :terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
+vnoremap <silent> <Leader>zs <C-\><C-n>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
+" terminal in new tab NOTE: added <C-w>:se scl=no<CR> at end to turn off signcolumn in terminal only ...
 noremap <silent> zt <Nop>
-nnoremap <silent> <Leader>zt           :$tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR>
-vnoremap <silent> <Leader>zt <C-\><C-n>:$tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR>
+nnoremap <silent> <Leader>zt           :$tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
+vnoremap <silent> <Leader>zt <C-\><C-n>:$tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
 " terminal in new tab when already in a terminal
 tnoremap <silent> <C-x>t <C-w>:$tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR>
 " window in new tab when already in a terminal
@@ -4482,9 +4499,9 @@ nmap <silent> <expr> <Return> (&buftype == 'terminal') ? 'i' : '<Return>'
 tnoremap <silent> <C-x>]   <C-\><C-n>
 nnoremap <silent> <expr> <C-x>] (&buftype == 'terminal') ? 'i' : '<Nop>'
 
-" not needed any more and it causes sign column to disappear on
-" popups that are terminal windows ...
-"au TerminalOpen * set signcolumn=no
+" this causes sign column to disappear on popups that are terminal windows ...
+"au TerminalOpen * setlocal signcolumn=no
+" fixed by adding <C-w>:se scl=no<CR> on end of :terminal cmd mappings above
 
 " -----------
 
