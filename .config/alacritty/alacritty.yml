@@ -127,7 +127,7 @@ font:
   normal:
     family: Liberation Mono
 
-  size: 13.5
+  size: 16.5
 
   offset:
     x: 0
@@ -188,8 +188,6 @@ colors:
     text:     '0x111111'
 
 background_opacity: 0.96
-
-tabspaces: 4
 
 draw_bold_text_with_bright_colors: true
 

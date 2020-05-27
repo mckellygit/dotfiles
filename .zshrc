@@ -142,6 +142,10 @@ bindkey -rM vicmd '^['
 bindkey -sM vicmd '^[' 'i'
 bindkey -sM vicmd "\e[2~" 'i'
 
+# S-Insert no-op ...
+bindkey  -M viins "\e[2;2~" noop
+bindkey  -M vicmd "\e[2;2~" noop
+
 function zle-keymap-select {
   if [[ ${KEYMAP} == vicmd ]] || [[ $1 = 'block' ]]; then
     if [[ $#BUFFER -gt 0 ]] ; then

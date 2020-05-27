@@ -39,17 +39,18 @@ done
 
 # ===================================
 
+# NOTE: copyq requires copySelection(); add() to set selection and add to item list
 
 if [[ $have_args -eq 0 || $have_dash -eq 1 ]] ; then
     # could have just -
-    #exec xsel -i -b
+    exec xsel -i -b
     # since copyq would have then synced clipboard to selection ...
-    exec copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input())"
+    #exec copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input()); add(input())"
 elif [[ $have_text -eq 1 ]] ; then
     # could have just -
-    #echo "$escapedtext" | xsel -i -b
+    echo "$escapedtext" | xsel -i -b
     # since copyq would have then synced clipboard to selection ...
-    echo "$escapedtext" | copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input())"
+    #echo "$escapedtext" | copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input(); add(input())"
     exit 0
 fi
 
