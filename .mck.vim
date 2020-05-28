@@ -1648,10 +1648,21 @@ call <SID>MapFastKeycode('<A-PageDown>',   "\e[6;3~")
 " NOTE: do not use w<Up> mapping, as then all
 " 'w' cmds (including dw) take timeoutlen ...
 
-map <Leader>w<Up>     <C-w>5+
-map <Leader>w<Down>   <C-w>5-
-map <Leader>w<Right>  <C-w>5<
-map <Leader>w<Left>   <C-w>5>
+" Up/Down/Left/Right confusing as its really larger/smaller not directional
+" use +/-/,/.
+map <Leader>w+   <C-w>5+
+" also map = same, as its easier than +
+map <Leader>w=   <C-w>5+
+
+map <Leader>w-   <C-w>5-
+
+map <Leader>w,   <C-w>5<
+" also map < same
+map <Leader>w<   <C-w>5<
+
+map <Leader>w.   <C-w>5>
+" also map > same
+map <Leader>w>   <C-w>5>
 
 " ------------------------------
 
@@ -1708,6 +1719,37 @@ map  <silent> <A-End> $
 imap <silent> <A-End> <C-o>$
 cmap <silent> <A-End> <Nop>
 tmap <silent> <A-End> <Nop>
+
+" ------------------------------
+
+" This code from Vim tips to restore window exactly as it was
+
+" Save current view settings on a per-window, per-buffer basis.
+function! AutoSaveWinView()
+    if !exists("w:SavedBufView")
+        let w:SavedBufView = {}
+    endif
+    let w:SavedBufView[bufnr("%")] = winsaveview()
+endfunction
+
+" Restore current view settings.
+function! AutoRestoreWinView()
+    let buf = bufnr("%")
+    if exists("w:SavedBufView") && has_key(w:SavedBufView, buf)
+        let v = winsaveview()
+        let atStartOfFile = v.lnum == 1 && v.col == 0
+        if atStartOfFile && !&diff
+            call winrestview(w:SavedBufView[buf])
+        endif
+        unlet w:SavedBufView[buf]
+    endif
+endfunction
+
+" When switching buffers, preserve window view.
+if v:version >= 700
+    autocmd BufLeave * call AutoSaveWinView()
+    autocmd BufEnter * call AutoRestoreWinView()
+endif
 
 " ----------- yank / cut / paste -----------
 
