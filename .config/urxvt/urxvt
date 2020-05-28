@@ -298,6 +298,9 @@ URxvt.keysym.C-S-underscore:    font-size:decrease
 URxvt.keysym.C-0:               font-size:reset
 URxvt.keysym.C-minus:           builtin-string:
 
+!! NOTE: Home (khome) can be: ^[[H or ^[[1~ or ^[[7~
+!! NOTE: End  (kend)  can be: ^[[F or ^[[4~ or ^[[8~
+
 URxvt.keysym.Control-Home:      string:\033[1;5H
 URxvt.keysym.Control-End:       string:\033[1;5F
 URxvt.keysym.Meta-Home:         string:\033[1;3H

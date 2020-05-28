@@ -1626,6 +1626,9 @@ call <SID>MapFastKeycode('<C-S-Del>',      "\e[3;6~")
 call <SID>MapFastKeycode('<A-Del>',        "\e[3;3~")
 "call <SID>MapFastKeycode('<A-S-Del>',      "\e[3;4~")
 
+" NOTE: <Home> (khome) can be: ^[[H or ^[[1~ or ^[[7~
+" NOTE: <End>  (kend)  can be: ^[[F or ^[[4~ or ^[[8~
+
 call <SID>MapFastKeycode('<C-Home>',       "\e[1;5H")
 call <SID>MapFastKeycode('<C-End>',        "\e[1;5F")
 call <SID>MapFastKeycode('<A-Home>',       "\e[1;3H")

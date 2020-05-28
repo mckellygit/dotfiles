@@ -43,6 +43,9 @@ key_bindings:
   - { key: Add,       mods: Control,         chars: "\x2b"            }
   # reset some defaults ---
 
+  # NOTE: Home (khome) can be: ^[[H or ^[[1~ or ^[[7~
+  # NOTE: End  (kend)  can be: ^[[F or ^[[4~ or ^[[8~
+
   - { key: Home,      mods: Control,         chars: "\x1b[1;5H"       }
   - { key: End,       mods: Control,         chars: "\x1b[1;5F"       }
   - { key: Home,      mods: Alt,             chars: "\x1b[1;3H"       }
