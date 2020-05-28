@@ -115,9 +115,15 @@ export LSAN_OPTIONS="detect_leaks=0 exitcode=0"
 
 # --------------------
 
-# Ins - no-op
+# no-op utility zle function
 function noop() { }
 zle -N noop
+
+# S-Insert no-op ...
+bindkey  -M viins "\e[2;2~" noop
+bindkey  -M vicmd "\e[2;2~" noop
+
+# --------------------
 
 function viinsplus() {
     zle -K viins
@@ -131,46 +137,111 @@ function vicmdplus() {
 }
 zle -N vicmdplus
 
-# remove <Esc> mapping to go into vm-cmd-mode and make it <C-x> instead
+# remove <Esc> mapping to go into vm-cmd-mode and make it <C-x>, <Insert>
 bindkey -rM viins '^['
 # map <Esc> to something so there is no wait for addl chars ...
-bindkey  -M viins '^[' noop
+bindkey  -M viins '^['    noop
+# <Insert> toggle
 bindkey  -M viins "\e[2~" vicmdplus
+# <C-x> toggle
 bindkey -rM viins '^X'
-bindkey  -M viins '^X' vicmdplus
+bindkey  -M viins '^X'    vicmdplus
+# <Esc>
 bindkey -rM vicmd '^['
-bindkey -sM vicmd '^[' 'i'
+bindkey -sM vicmd '^['    'i'
+# <C-x> toggle
+bindkey -sM vicmd '^X'    'i'
+# <Insert> toggle
 bindkey -sM vicmd "\e[2~" 'i'
 
-# S-Insert no-op ...
-bindkey  -M viins "\e[2;2~" noop
-bindkey  -M vicmd "\e[2;2~" noop
+# --------------------
 
-function zle-keymap-select {
-  if [[ ${KEYMAP} == vicmd ]] || [[ $1 = 'block' ]]; then
-    if [[ $#BUFFER -gt 0 ]] ; then
-    #  for n in {1..$#BUFFER} ; do
-    #    if [[ $BUFFER[n] != " " ]] ; then
-    #      echo -ne '\e[5 q'
-    #      break
-    #    fi
-    #  done
-       echo -ne '\e[3 q'
+readonly ZLE_VI_MODE_CMD=0
+readonly ZLE_VI_MODE_INS=1
+readonly ZLE_VI_MODE_REP=2
+readonly ZLE_VI_MODE_OTH=3
+
+function zle-vi-mode {
+    if [[ $KEYMAP == vicmd ]]; then
+        echo -n $ZLE_VI_MODE_CMD
+    elif [[ $KEYMAP == (viins|main) ]] && [[ $ZLE_STATE == *insert* ]]; then
+        echo -n $ZLE_VI_MODE_INS
+    elif [[ $KEYMAP == (viins|main) ]] && [[ $ZLE_STATE == *overwrite* ]]; then
+        echo -n $ZLE_VI_MODE_REP
+    else
+        echo -n $ZLE_VI_MODE_OTH
     fi
-  elif [[ ${KEYMAP} == main ]] || [[ ${KEYMAP} == viins ]] || [[ ${KEYMAP} = '' ]] || [[ $1 = 'beam' ]]; then
-    echo -ne '\e[2 q'
-  fi
 }
+
+function zle-backward-delete-char-fix {
+    case "$(zle-vi-mode)" in
+        $ZLE_VI_MODE_REP)
+            if [[ $CURSOR -le $MARK ]]; then
+                CURSOR=$(( $(($CURSOR-1)) > 0 ? $(($CURSOR-1)) : 0 ))
+                MARK=$CURSOR
+            else
+                zle undo
+            fi
+            ;;
+        *)
+            zle backward-delete-char
+            ;;
+    esac
+}
+
+zle -N zle-backward-delete-char-fix
+
+## Change cursor shape according to the current Vi-mode.
+function zle-line-init zle-keymap-select {
+    case "$(zle-vi-mode)" in
+        $ZLE_VI_MODE_CMD)
+            echo -ne '\e[3 q' ;; # cursor -> underline
+        $ZLE_VI_MODE_INS)
+            echo -ne '\e[2 q' ;; # cursor -> block
+        $ZLE_VI_MODE_REP)
+            echo -ne '\e[2 q'    # cursor -> block
+            MARK=$CURSOR
+            ;;
+        *)
+            ;;
+    esac
+}
+
+zle -N zle-line-init
 zle -N zle-keymap-select
 
-zle-line-init() {
-    zle -K viins # initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
-    echo -ne "\e[2 q"
-}
-zle -N zle-line-init
+bindkey '^?' zle-backward-delete-char-fix
+bindkey '^h' zle-backward-delete-char-fix
 
-echo -ne '\e[2 q' # Use block shape cursor on startup.
-preexec() { echo -ne '\e[2 q' ;} # Use block shape cursor for each new prompt.
+# --------------------
+
+# echo -ne '\e[2 q'                # Use block shape cursor on startup.
+# preexec() { echo -ne '\e[2 q' ;} # Use block shape cursor for each new prompt.
+
+#function zle-keymap-select {
+#  if [[ ${KEYMAP} == vicmd ]] || [[ $1 = 'block' ]]; then
+#    if [[ $#BUFFER -gt 0 ]] ; then
+#    #  for n in {1..$#BUFFER} ; do
+#    #    if [[ $BUFFER[n] != " " ]] ; then
+#    #      echo -ne '\e[5 q'
+#    #      break
+#    #    fi
+#    #  done
+#       echo -ne '\e[3 q'
+#    fi
+#  elif [[ ${KEYMAP} == main ]] || [[ ${KEYMAP} == viins ]] || [[ ${KEYMAP} = '' ]] || [[ $1 = 'beam' ]]; then
+#    echo -ne '\e[2 q'
+#  fi
+#}
+#zle -N zle-keymap-select
+#
+#zle-line-init() {
+#    zle -K viins # initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
+#    echo -ne "\e[2 q"
+#}
+#zle -N zle-line-init
+
+# --------------------
 
 # Edit line in vim with ctrl-e:
 #autoload edit-command-line; zle -N edit-command-line
