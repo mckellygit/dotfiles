@@ -40,6 +40,7 @@ done
 # ===================================
 
 # NOTE: copyq requires copySelection(); add() to set selection and add to item list
+# NOTE: if input is empty copyq does NOT clear out clipboard and selection, but xsel does
 
 if [[ $have_args -eq 0 || $have_dash -eq 1 ]] ; then
     # could have just -
