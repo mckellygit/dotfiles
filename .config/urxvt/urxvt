@@ -367,9 +367,12 @@ URxvt.keysym.Shift-Meta-Delete: string:\033[3;4~
 
 !! also see: https://github.com/muennich/urxvt-perls
 
+!! NOTE: edit <perl-lib>/perl/selection-popup, option-popup and change:
+!!       button 3 + ControlMask -> button 3 + ShiftMask
+!!       button 2 + ControlMask -> button 2 + Mod1Mask
 !!URxvt.perl-lib: ~/urxvt-perl
 !!URxvt.perl-lib: /usr/lib/x86_64-linux-gnu/urxvt
-!!URxvt.perl-ext-common: default,matcher,font-size,selection-to-clipbaord
+!!URxvt.perl-ext-common: default,matcher,font-size,selection-to-clipboard
 !! Open urls in browser with Control-Click
 !!URxvt.urlLauncher: /usr/bin/firefox
 URxvt.matcher.button: S1
@@ -385,9 +388,11 @@ URxvt.perl-ext-common: default,matcher
 !!URxvt.keysym.M-Escape: perl:keyboard-select:activate
 !!URxvt.keysym.M-s: perl:keyboard-select:search
 !!URxvt.keysym.M-u: perl:url-select:select_next
+URxvt.urlButton: 1
 URxvt.urlLauncher: xdg-open
 URxvt.underlineURLs: true
-URxvt.urlButton: 1
+!! if want urls colored differently, bold etc.
+!!URxvt.matcher.rend.0: Uline Bold fg5
 
 URxvt.copyCommand:  xsel -i -c --rmlastnl --sc 0
 URxvt.pasteCommand: xsel -o -c --rmlastnl --sc 0
