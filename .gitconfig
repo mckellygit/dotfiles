@@ -81,3 +81,5 @@
 	trustExitCode = true
 [fetch]
 	prune = true
+[pull]
+    rebase = false
