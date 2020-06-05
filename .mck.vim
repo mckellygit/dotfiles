@@ -1219,8 +1219,16 @@ set lazyredraw
 
 set confirm
 
+set noshowmode
+
 " remove prev visual mark
 delmarks v
+
+" persistent undo between sessions ...
+"set undodir=~/.vim/undodir
+
+" dont save to ~/.vim/.netrwhist
+let g:netrw_dirhistmax = 0
 
 " do not change terminal window title ...
 "set notitle
@@ -1458,8 +1466,10 @@ set ch=1        " set cmdheight to 1
 set bs=2		" allow backspacing over everything in ins mode
 set noai		" always set autoindenting off
 set nobackup    " do not keep a backup file
-" read/write .viminfo file, don't store more than 20 reg
-set viminfo='20,\"20,f20 
+" read/write .viminfo file, don't save/restore registers -
+" NOTE: do not want to overwrite existing */+ registers
+"       as that is the current selection/clipboard
+set viminfo='20,:10,<0
 " keep 20 lines of command line history
 set history=20	
 " :help 'viminfo' (with quotes) for more info
@@ -1489,10 +1499,17 @@ set mouse=a
 "       clear * (selection) at exit; we can optionally restore *
 "       Use + and have clipboard mgr sync to * and then vim will
 "       clear + (clipboard) at exit; we can optionally restore +
-set clipboard-=unnamed
-set clipboard^=unnamedplus
+" NOTE: one issue with this is that + and * are loaded at start up
+"       (even if registers are not saved!) so exiting vim can change
+"       the clipboard without having actually selected anything ...
+"       ATM - it seems best to use unnamed and let copyq copy to the
+"       clipboard and that will not be cleared at exit.
+"       OR - could initially load + and * from clipboard and can then
+"       always restore at exit
+set clipboard^=unnamed
+set clipboard-=unnamedplus
 
-" if want clipboard preserved after exit ...
+" force clipboard preserve at exit ...
 function! s:PreserveClipboard() abort
     if executable("copyq") && !exists('$VIM_SKIP_PRESERVE_CLIPBOARD')
         let cliplst = split(&clipboard, ",")
@@ -1502,12 +1519,36 @@ function! s:PreserveClipboard() abort
         if index(cliplst, 'unnamedplus') != -1
             silent call system("setsid -w copyq copy -", getreg('+'))
         endif
+        " clear regs
+        "set clipboard-=unnamed
+        "set clipboard-=unnamedplus
+        "call setreg('+', [])
+        "call setreg('*', [])
         " or could have just -
         "silent call system("setsid -w xsel -i -b", getreg('+'))
         " since copyq would have then synced + to * ...
     endif
 endfunction
 autocmd VimLeave * silent call <SID>PreserveClipboard()
+
+" initially set + and * regs, even if clipboard empty ...
+" otherwise they can get loaded from elsewhere
+" if we are preserving clipboard at exit then we need to load it
+" at startup also
+function s:InitializeClipboard()
+    if executable("copyq") && !exists('$VIM_SKIP_PRESERVE_CLIPBOARD')
+        let regplus = system("copyq clipboard")
+        if empty(regplus)
+            call setreg('+', [])
+            call setreg('*', [])
+        else
+            call setreg('+', regplus)
+            call setreg('*', regplus)
+        endif
+        "set clipboard^=unnamedplus
+    endif
+endfunction
+autocmd VimEnter * silent call <SID>InitializeClipboard()
 " --- CLIPBOARD ---
 
 " ------------------------------
@@ -4487,14 +4528,6 @@ function! Diffstart()
     call Xdiff()
   endif
 endfunction
-
-set noshowmode
-
-" persistent undo between sessions ...
-"set undodir=~/.vim/undodir
-
-" dont save to ~/.vim/.netrwhist
-let g:netrw_dirhistmax = 0
 
 " -----------
 
