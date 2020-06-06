@@ -1469,7 +1469,7 @@ set nobackup    " do not keep a backup file
 " read/write .viminfo file, don't save/restore registers -
 " NOTE: do not want to overwrite existing */+ registers
 "       as that is the current selection/clipboard
-set viminfo='20,:10,<0
+set viminfo='20,:20
 " keep 20 lines of command line history
 set history=20	
 " :help 'viminfo' (with quotes) for more info
@@ -1494,6 +1494,7 @@ set mouse=a
 
 " selection '*' (XA_PRIMARY/unnamed) (ie mouse 'middle-click')
 " clipboard '+' (XA_CLIPBOARD/unnamedplus) (ie ctrl-shift-c/v, cut/paste)
+
 " Should we use none or * or + or both * and + ?
 " NOTE: With a clipboard mgr, using both _may_ cause problems.
 "       Use * and have clipboard mgr sync to + and then vim will
@@ -1504,10 +1505,7 @@ set mouse=a
 " NOTE: one issue with preserving clipboard at vim exit is that
 "       + and * are loaded at start up (even if registers are not saved!)
 "       so exiting vim can change the clipboard without having actually
-"       selected anything ...
-
-"       ATM - it seems best to use unnamed and let copyq copy to the
-"       clipboard and that will not be cleared at exit.
+"       selected anything - so initialize + and * at startup also ...
 
 set clipboard^=unnamed
 set clipboard-=unnamedplus
@@ -1515,20 +1513,14 @@ set clipboard-=unnamedplus
 " preserve clipboard(s) at exit ...
 function! s:PreserveClipboard() abort
     if executable("copyq") && !exists('$VIM_SKIP_PRESERVE_CLIPBOARD')
-        let cliplst = split(&clipboard, ",")
-        if index(cliplst, 'unnamed') != -1
-            silent call system("setsid -w copyq >/dev/null 2>/dev/null copySelection -", getreg('*'))
-        endif
-        if index(cliplst, 'unnamedplus') != -1
-            silent call system("setsid -w copyq copy >/dev/null 2>/dev/null -", getreg('+'))
-        endif
+        silent call system("setsid -w copyq >/dev/null 2>/dev/null copySelection -", getreg('*'))
+        silent call system("setsid -w copyq >/dev/null 2>/dev/null copy -", getreg('+'))
         " clear regs ?
         "call setreg('+', [])
         "call setreg('*', [])
     endif
 endfunction
-" SKIP
-"autocmd VimLeave * silent call <SID>PreserveClipboard()
+autocmd VimLeave * silent call <SID>PreserveClipboard()
 
 " initially set + and * regs, even if clipboard empty ...
 " otherwise they can get loaded from elsewhere
@@ -1536,18 +1528,17 @@ function s:InitializeClipboard()
     if executable("copyq") && !exists('$VIM_SKIP_PRESERVE_CLIPBOARD')
         let regplus = system("copyq clipboard")
         if empty(regplus)
-            echom "clearing out + and * registers"
+            "echom "clearing out + and * registers"
             call setreg('+', [])
             call setreg('*', [])
         else
-            echom "initializing + and * registers"
+            "echom "initializing + and * registers"
             call setreg('+', regplus)
             call setreg('*', regplus)
         endif
     endif
 endfunction
-" SKIP
-"autocmd VimEnter * call <SID>InitializeClipboard()
+autocmd VimEnter * call <SID>InitializeClipboard()
 
 " --- CLIPBOARD ---
 
