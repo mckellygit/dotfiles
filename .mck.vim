@@ -1478,6 +1478,18 @@ set ruler
 
 set selection=inclusive
 
+function s:CrossHairs() abort
+    set cursorline
+    set cursorcolumn
+    redraw
+    sleep 200m
+    while getchar(0)
+    endwhile
+    set nocursorline
+    set nocursorcolumn
+endfunction
+nmap <silent> ; :call <SID>CrossHairs()<CR>
+
 " -------- mouse / cut - paste - clipboard --------
 
 " to disable mouse in visual mode
