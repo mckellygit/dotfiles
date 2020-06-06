@@ -1491,6 +1491,7 @@ set mouse=a
 " use shift + left click to get terminal selection (mouse=~a)
 
 " --- CLIPBOARD ---
+
 " selection '*' (XA_PRIMARY/unnamed) (ie mouse 'middle-click')
 " clipboard '+' (XA_CLIPBOARD/unnamedplus) (ie ctrl-shift-c/v, cut/paste)
 " Should we use none or * or + or both * and + ?
@@ -1499,56 +1500,55 @@ set mouse=a
 "       clear * (selection) at exit; we can optionally restore *
 "       Use + and have clipboard mgr sync to * and then vim will
 "       clear + (clipboard) at exit; we can optionally restore +
-" NOTE: one issue with this is that + and * are loaded at start up
-"       (even if registers are not saved!) so exiting vim can change
-"       the clipboard without having actually selected anything ...
+"       And using both clears both at exit ...
+" NOTE: one issue with preserving clipboard at vim exit is that
+"       + and * are loaded at start up (even if registers are not saved!)
+"       so exiting vim can change the clipboard without having actually
+"       selected anything ...
+
 "       ATM - it seems best to use unnamed and let copyq copy to the
 "       clipboard and that will not be cleared at exit.
-"       OR - could initially load + and * from clipboard and can then
-"       always restore at exit
+
 set clipboard^=unnamed
 set clipboard-=unnamedplus
 
-" force clipboard preserve at exit ...
+" preserve clipboard(s) at exit ...
 function! s:PreserveClipboard() abort
     if executable("copyq") && !exists('$VIM_SKIP_PRESERVE_CLIPBOARD')
         let cliplst = split(&clipboard, ",")
         if index(cliplst, 'unnamed') != -1
-            silent call system("setsid -w copyq copySelection -", getreg('*'))
+            silent call system("setsid -w copyq >/dev/null 2>/dev/null copySelection -", getreg('*'))
         endif
         if index(cliplst, 'unnamedplus') != -1
-            silent call system("setsid -w copyq copy -", getreg('+'))
+            silent call system("setsid -w copyq copy >/dev/null 2>/dev/null -", getreg('+'))
         endif
-        " clear regs
-        "set clipboard-=unnamed
-        "set clipboard-=unnamedplus
+        " clear regs ?
         "call setreg('+', [])
         "call setreg('*', [])
-        " or could have just -
-        "silent call system("setsid -w xsel -i -b", getreg('+'))
-        " since copyq would have then synced + to * ...
     endif
 endfunction
-autocmd VimLeave * silent call <SID>PreserveClipboard()
+" SKIP
+"autocmd VimLeave * silent call <SID>PreserveClipboard()
 
 " initially set + and * regs, even if clipboard empty ...
 " otherwise they can get loaded from elsewhere
-" if we are preserving clipboard at exit then we need to load it
-" at startup also
 function s:InitializeClipboard()
     if executable("copyq") && !exists('$VIM_SKIP_PRESERVE_CLIPBOARD')
         let regplus = system("copyq clipboard")
         if empty(regplus)
+            echom "clearing out + and * registers"
             call setreg('+', [])
             call setreg('*', [])
         else
+            echom "initializing + and * registers"
             call setreg('+', regplus)
             call setreg('*', regplus)
         endif
-        "set clipboard^=unnamedplus
     endif
 endfunction
-autocmd VimEnter * silent call <SID>InitializeClipboard()
+" SKIP
+"autocmd VimEnter * call <SID>InitializeClipboard()
+
 " --- CLIPBOARD ---
 
 " ------------------------------
