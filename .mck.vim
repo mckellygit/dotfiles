@@ -128,7 +128,9 @@ Plugin 'mileszs/ack.vim'
 "
 " TODO: also look into ferret
 " for quickfix multi-file search/replace
+"-----------------------
 "Plugin 'wincent/ferret'
+"-----------------------
 "
 " colorscheme
 Plugin 'ajmwagar/vim-deus'
@@ -190,11 +192,11 @@ Plugin 'mhinz/vim-startify'
 "
 " search + highlight
 Plugin 'PeterRincker/vim-searchlight'
-" TODO: also look into: qxxxb/vim-searchhi
+" also look into: qxxxb/vim-searchhi
+" also look into: wincent/loupe
 "
 " fade inactive buffers
-" NOTE: disable for now - causes rtags popup to take forever ...
-"       recently works ok but many flashing redraws on pum up/down ...
+" NOTE: recently works ok but many flashing redraws on pum up/down ...
 "       may need au! CompleteChanged code to help ...
 Plugin 'TaDaa/vimade'
 " alternative ...
