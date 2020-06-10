@@ -3863,7 +3863,7 @@ function s:GetWord(arg) abort
       " NOTE: should we go back to live terminal mode ?
       exe "silent! normal! i"
     endif
-    " TODO - get we use getchar() here to get A-3-LeftMouse ?
+    " TODO: can we use getchar() here to get A-3-LeftMouse ?
   endif
 endfunction
 
