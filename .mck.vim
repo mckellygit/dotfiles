@@ -817,7 +817,7 @@ autocmd FileType GV nmap <buffer> <A-2-LeftMouse> <C-\><C-n>:<C-u>call feedkeys(
 autocmd FileType GV set foldlevelstart=1
 
 " make it more like a real vim session and not have qq exit ...
-"autocmd FileType GV nmap <silent> <buffer> qq :qa!<CR>
+autocmd FileType GV nmap <silent> <buffer> qq :qa!<CR>
 autocmd FileType GV nmap <silent> <buffer> <Leader>wq <C-\><C-n>:<C-u>call <SID>QuitIfOnlyNoNameLeft()<CR>
 autocmd FileType GV nmap <silent> <buffer> <Leader>qq <C-\><C-n>:<C-u>call <SID>QuitIfOnlyNoNameLeft()<CR>
 
