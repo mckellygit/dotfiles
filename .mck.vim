@@ -532,11 +532,14 @@ autocmd VimEnter,BufEnter * silent! lcd %:p:h
 noremap <silent> <Leader>fz <C-\><C-n>:FZFProjectFiles<CR>
 noremap <silent> <Leader>f/ <C-\><C-n>:FZFProjectFiles<CR>
 function! s:find_git_root()
-    " in a submodule dir this returns git root, otherwise returns empty
-    let gdir = system('git rev-parse --show-superproject-working-tree 2> /dev/null')[:-2]
-    if empty(gdir)
-        " not in a submodule, returns git root
-        let gdir = system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
+    let gdir = ''
+    if executable("git")
+        " in a submodule dir this returns git root, otherwise returns empty
+        let gdir = system('git rev-parse --show-superproject-working-tree 2> /dev/null')[:-2]
+        if empty(gdir)
+            " not in a submodule, returns git root
+            let gdir = system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
+        endif
     endif
     return gdir
 endfunction
@@ -1140,37 +1143,26 @@ nnoremap <silent> <buffer> K :call man#get_page_from_cword('horizontal', v:count
 vnoremap <silent> <buffer> K <C-\><C-n>:call man#get_page_from_cword('horizontal', v:count)<CR>
 " vim-man ----------
 
-" vim-system-copy --- CLIPBOARD ---
-if 0
-    let g:use_system_copy = 1
-    let g:system_copy#copy_command='myclip'
-    let g:system_copy#paste_command='myclip -o'
-    let g:system_copy_silent = 1
-    vmap     ty    <Plug>SystemCopy
-    vmap     tx    <Plug>SystemCut
-    vmap     x     tx
-    vmap     d     tx
-    vmap     <Del> tx
-    nnoremap ty    <Nop>
-    nnoremap tx    <Nop>
-else
-    vnoremap ty    y
-    vnoremap tx    x
-    vmap     x     tx
-    vmap     d     tx
-    vmap     <Del> tx
-    nnoremap ty    <Nop>
-    nnoremap tx    <Nop>
-endif
+" ====================================================
+" ====================================================
+" ====================================================
+
+" --- CLIPBOARD ---
+" save previous reg + to reg x for exchange/paste/etc
+vnoremap <silent> zy    y
+vnoremap <silent> ty    :<C-u>call setreg('x', getreg('*'), getregtype('*'))<CR>gvy
+vnoremap <silent> zx    x
+vnoremap <silent> tx    :<C-u>call setreg('x', getreg('*'), getregtype('*'))<CR>gvx
+vmap     <silent> x     tx
+vmap     <silent> d     tx
+vmap     <silent> <Del> tx
+nnoremap <silent> ty    <Nop>
+nnoremap <silent> tx    <Nop>
 
 " copy (yank) selection, stay at end unless rectangular region ...
 vmap <silent> <expr> <C-c> (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
 vmap <silent> <expr> y     (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
-" vim-system-copy --- CLIPBOARD ---
-
-" ====================================================
-" ====================================================
-" ====================================================
+" --- CLIPBOARD ---
 
 " improves color highlighing with dark terminals
 set background=dark
@@ -1527,11 +1519,14 @@ set clipboard-=unnamedplus
 " preserve clipboard(s) at exit ...
 function! s:PreserveClipboard() abort
     if executable("copyq") && !exists('$VIM_SKIP_PRESERVE_CLIPBOARD')
-        silent call system("setsid -w copyq >/dev/null 2>/dev/null copySelection -", getreg('*'))
-        silent call system("setsid -w copyq >/dev/null 2>/dev/null copy -", getreg('+'))
+        "silent call system("setsid -w copyq >/dev/null 2>/dev/null copySelection -", getreg('*'))
+        "silent call system("setsid -w copyq >/dev/null 2>/dev/null copy -", getreg('*'))
+        silent call system("setsid -w myclip", getreg('*'))
         " clear regs ?
         "call setreg('+', [])
         "call setreg('*', [])
+        call setreg('x', [])
+        call setreg('y', [])
     endif
 endfunction
 autocmd VimLeave * silent call <SID>PreserveClipboard()
@@ -1539,16 +1534,29 @@ autocmd VimLeave * silent call <SID>PreserveClipboard()
 " initially set + and * regs, even if clipboard empty ...
 " otherwise they can get loaded from elsewhere
 function s:InitializeClipboard()
-    if executable("copyq") && !exists('$VIM_SKIP_PRESERVE_CLIPBOARD')
-        let regplus = system("copyq clipboard")
-        if empty(regplus)
-            "echom "clearing out + and * registers"
-            call setreg('+', [])
-            call setreg('*', [])
-        else
-            "echom "initializing + and * registers"
-            call setreg('+', regplus)
-            call setreg('*', regplus)
+    if executable("copyq")
+        " TODO: if copyq not running then start it ...
+        if executable("pgrep")
+            let copyqpid = system('pgrep copyq')
+            if empty(copyqpid)
+                silent call system('setsid copyq &')
+                sleep 551m
+            endif
+        endif
+        if !exists('$VIM_SKIP_PRESERVE_CLIPBOARD')
+            "let clipdata = system("copyq clipboard")
+            let clipdata = system("myclip -o")
+            if empty(clipdata)
+                "echom "clearing out + and * registers"
+                call setreg('+', [])
+                call setreg('*', [])
+            else
+                "echom "initializing + and * registers"
+                call setreg('+', clipdata)
+                call setreg('*', clipdata)
+            endif
+            call setreg('x', [])
+            call setreg('y', [])
         endif
     endif
 endfunction
@@ -1561,6 +1569,7 @@ autocmd VimEnter * call <SID>InitializeClipboard()
 "       also removing autoselectml makes things fail weirdly
 "       this also affects getregtype("*") se we need to use visualmode() instead
 set clipboard-=autoselect
+set clipboard-=autoselectplus
 " add this to get decent mouse selection and copy to clipboard when in command-mode ...
 set clipboard^=autoselectml guioptions+=A
 
@@ -1663,7 +1672,8 @@ call <SID>MapFastKeycode('<A-Right>',      "\e[1;3C")
 call <SID>MapFastKeycode('<C-Insert>',     "\e[2;5~")
 call <SID>MapFastKeycode('<S-Insert>',     "\e[2;2~")
 call <SID>MapFastKeycode('<C-S-Insert>',   "\e[2;6~")
-call <SID>MapFastKeycode('<A-Insert>',     "\e[2;3~")
+" NOTE: <A-Insert> used by tmux for copyq toggle
+"call <SID>MapFastKeycode('<A-Insert>',     "\e[2;3~")
 "call <SID>MapFastKeycode('<A-S-Insert>',   "\e[2;4~")
 
 call <SID>MapFastKeycode('<C-Del>',        "\e[3;5~")
@@ -1751,6 +1761,7 @@ imap <silent> <S-Insert> <Esc>l
 cmap <silent> <S-Insert> <Nop>
 tmap <silent> <S-Insert> <Nop>
 
+" NOTE: <A-Insert> used by tmux for copyq toggle
 map  <silent> <A-Insert> <Nop>
 imap <silent> <A-Insert> <Nop>
 cmap <silent> <A-Insert> <Nop>
@@ -1799,11 +1810,11 @@ endif
 
 " ----------- yank / cut / paste -----------
 
-" explicit force load @+ to clipboard ...
+" explicit force load @* to clipboard ...
 function! ForceLoadNammedReg() abort
     "silent call system("setsid -w xsel -i -b --rmlastnl --sc 0", getreg('+'))
-    silent call system("setsid -w myclip", getreg('+'))
-    echohl DiffText | echo "@+ -> clipboard ; register copied" | echohl None
+    silent call system("setsid -w myclip", getreg('*'))
+    echohl DiffText | echo "@* -> clipboard ; register copied" | echohl None
     sleep 551m
     redraw!
 endfunction
@@ -1813,36 +1824,38 @@ vnoremap <silent> <Leader>lr :<C-u>call ForceLoadNammedReg()<CR>
 " ----------------------
 
 function! s:CopyReg(arg)
-    call setreg('x', getreg('+'), getregtype('+'))
+    call setreg('x', getreg('*'), getregtype('*'))
     if a:arg == 1
-        echohl DiffText | echo "@+ -> @x ; register copied" | echohl None
+        echohl DiffText | echo "@* -> @x ; register copied" | echohl None
         sleep 551m
         redraw!
     endif
 endfunction
 
-" copy @+ to @x ...
+" copy @* to @x ...
 nnoremap <silent> <Leader>zc :call <SID>CopyReg(1)<CR>
-vnoremap <silent> <Leader>zc <Esc>:<C-u>call <SID>CopyReg(1)<CR>gv
+vnoremap <silent> <Leader>zc :<C-u>call <SID>CopyReg(1)<CR>gv
 
 " ----------------------
 
 function! s:SwapReg(arg)
-    call setreg('y', getreg('+'), getregtype('+'))
-    call setreg('+', getreg('x'), getregtype('x'))
+    call setreg('y', getreg('*'), getregtype('*'))
+    call setreg('*', getreg('x'), getregtype('x'))
     call setreg('x', getreg('y'), getregtype('y'))
+    call setreg('y', [])
     if a:arg == 1
-        echohl DiffText | echo "@+ <-> @x ; registers swapped" | echohl None
+        echohl DiffText | echo "@* <-> @x ; registers swapped" | echohl None
         sleep 551m
         redraw!
     endif
 endfunction
 
-" swap @+ with @x ...
+" swap @* with @x ...
 nnoremap <silent> <Leader>zx :call <SID>SwapReg(1)<CR>
-vnoremap <silent> <Leader>zx <Esc>:<C-u>call <SID>SwapReg(1)<CR>gv
+vnoremap <silent> <Leader>zx :<C-u>call <SID>SwapReg(1)<CR>gv
 
 " replace highlighted selection with x reg (usually after swapping + with x (<Leader>zx))
+" NOTE: yanking now fills reg x with previous reg + ...
 " NOTE: see all visual mode 'p' mapping for similar method ...
 vnoremap <silent> <Leader>zp "_x"xP<Esc>
 
@@ -1932,33 +1945,33 @@ endfunction
 nnoremap <expr> <C-Insert> (&buftype == 'terminal') ? '<Nop>' : 'p'
 " NOTE: <C-Insert> vmapped below ...
 "vnoremap <expr> <C-Insert> (&buftype == 'terminal') ? '<Nop>' : '<Esc>p'
-inoremap <C-Insert> <C-r>+
-cnoremap <C-Insert> <C-r>+
-tnoremap <C-Insert> <C-w>"+
+inoremap <C-Insert> <C-r>*
+cnoremap <C-Insert> <C-r>*
+tnoremap <C-Insert> <C-w>"*
 
 " <M-1> paste after [menu?]
 call <SID>MapFastKeycode('<S-F34>',  "\e1")
 nnoremap <expr> <S-F34> (&buftype == 'terminal') ? '<Nop>' : 'p'
 vnoremap <expr> <S-F34> (&buftype == 'terminal') ? '<Nop>' : '<Esc>p'
-inoremap <S-F34> <C-r>+
-cnoremap <S-F34> <C-r>+
-tnoremap <S-F34> <C-w>"+
+inoremap <S-F34> <C-r>*
+cnoremap <S-F34> <C-r>*
+tnoremap <S-F34> <C-w>"*
 
 " <C-S-Insert> paste before
 nnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '<Nop>' : 'P`['
 " NOTE: <C-S-Insert> vmapped below ...
 "vnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '<Nop>' : '<Esc>P`['
-inoremap <C-S-Insert> <C-o>mp<C-r>+<C-o>`p
-cnoremap <C-S-Insert> <C-r>+
-tnoremap <C-S-Insert> <C-w>"+
+inoremap <C-S-Insert> <C-o>mp<C-r>*<C-o>`p
+cnoremap <C-S-Insert> <C-r>*
+tnoremap <C-S-Insert> <C-w>"*
 
 " <M-8> paste before [menu?]
 call <SID>MapFastKeycode('<S-F35>',  "\e8")
 nnoremap <expr> <S-F35> (&buftype == 'terminal') ? '<Nop>' : 'P`]'
 vnoremap <expr> <S-F35> (&buftype == 'terminal') ? '<Nop>' : '<Esc>P`]'
-inoremap <S-F35> <C-r>+
-cnoremap <S-F35> <C-r>+
-tnoremap <S-F35> <C-w>"+
+inoremap <S-F35> <C-r>*
+cnoremap <S-F35> <C-r>*
+tnoremap <S-F35> <C-w>"*
 
 " C-S-c / M-7 copy ...
 
@@ -2129,16 +2142,15 @@ nnoremap <silent> <buffer> <expr> P (&buftype == 'terminal') ? '<Nop>' : 'P`['
 
 " Make p in Visual mode replace the selected text with the previous + register.
 " NOTE: see also <Leader>zx / <Leader>zp above ...
-vnoremap <silent> <buffer> <expr> p (&buftype == 'terminal') ? '<Nop>' : ':<C-u>call <SID>SwapReg(0)<CR>gv"_x"xP'
-vnoremap <silent> <buffer> <expr> P (&buftype == 'terminal') ? '<Nop>' : ':<C-u>call <SID>SwapReg(0)<CR>gv"_x"xP'
+"vnoremap <silent> <buffer> <expr> p (&buftype == 'terminal') ? '<Nop>' : ':<C-u>call <SID>SwapReg(0)<CR>gv"_x"xP'
+vnoremap <silent> <buffer> <expr> p (&buftype == 'terminal') ? '<Nop>' : '"_x"*P'
+vnoremap <silent> <buffer> <expr> P (&buftype == 'terminal') ? '<Nop>' : '"_x"*P'
 
 " <S-Insert> as a vis-mode 'replace' ...
 vnoremap <silent> <buffer> <expr> <S-Insert>   (&buftype == 'terminal') ? '<Nop>' : 's'
 " NOTE: these are used instead of <C-Insert>, <C-S-Insert> vmappings above ...
-vnoremap <silent> <buffer> <expr> <C-Insert>   (&buftype == 'terminal') ? '<Nop>' : ':<C-u>call <SID>SwapReg(0)<CR>gv"_x"xP'
-vnoremap <silent> <buffer> <expr> <C-S-Insert> (&buftype == 'terminal') ? '<Nop>' : ':<C-u>call <SID>SwapReg(0)<CR>gv"_x"xP'
-
-" ---------------
+vnoremap <silent> <buffer> <expr> <C-Insert>   (&buftype == 'terminal') ? '<Nop>' : '"_x"*P'
+vnoremap <silent> <buffer> <expr> <C-S-Insert> (&buftype == 'terminal') ? '<Nop>' : '"_x"*P'
 
 " ---------------------------------------------------------------------------------
 " TODO: TMUX <C-Insert> in terminal does not use bracketed-paste, but <C-S-v> is ok
@@ -2551,22 +2563,23 @@ imap <silent> <A-LeftMouse> <C-\><C-o>:let @i="1"<CR><LeftMouse>
 
 " highlight word under cursor (lbvhe)
 " NOTE: also copy to clipboard (since its not a mouse click event) ?
-nmap <silent> <Leader>ws mvviwtygv
-vmap <silent> <Leader>ws <C-\><C-n>mvviwtygv
+"nmap <silent> <Leader>ws mv:call <SID>CopyReg(0)<CR>viwtygv
+nmap <silent> <Leader>ws mvviw
+vmap <silent> <Leader>ws <C-\><C-n>mvviw
 
 " highlight WORD under cursor (lBvhE) (does not use iskeyword)
 " NOTE: also copy to clipboard (since its not a mouse click event) ?
-nmap <silent> <Leader>wS mvviWtygv
-vmap <silent> <Leader>wS <C-\><C-n>mvviWtygv
+nmap <silent> <Leader>wS mvviW
+vmap <silent> <Leader>wS <C-\><C-n>mvviW
 
 " grab file path (ie w / and w/o :)
 " NOTE: also copy to clipboard (since its not a mouse click event) ?
-nmap <silent> <Leader>wp mv:call <SID>GetPath(0,0)<CR>tygv
-vmap <silent> <Leader>wp mv<C-\><C-n>:call <SID>GetPath(0,0)<CR>tygv
+nmap <silent> <Leader>wp mv:call <SID>GetPath(0,0)<CR>gv
+vmap <silent> <Leader>wp mv<C-\><C-n>:call <SID>GetPath(0,0)<CR>gv
 
 " grab url path (ie w / and w :) but really about the same as \wS
-nmap <silent> <Leader>wP mv:call <SID>GetPath(0,1)<CR>tygv
-vmap <silent> <Leader>wP mv<C-\><C-n>:call <SID>GetPath(0,1)<CR>tygv
+nmap <silent> <Leader>wP mv:call <SID>GetPath(0,1)<CR>gv
+vmap <silent> <Leader>wP mv<C-\><C-n>:call <SID>GetPath(0,1)<CR>gv
 
 " yank/copy word under cursor
 " `] to go to end of word/block, but `v to go back to orig pos
@@ -2589,8 +2602,8 @@ nnoremap <silent> <Leader>wF viw"syw:set hlsearch<CR>?<C-r>s<CR>
 " NOTE: *, # search for whole \<word\> which may not always be desired
 "nnoremap <silent> <Leader>wg viwy:set hlsearch<CR>*
 "nnoremap <silent> <Leader>wG viwy:set hlsearch<CR>#
-nmap <silent> <Leader>wg viwtybb:set hlsearch<CR>/<C-r>+<CR>
-nmap <silent> <Leader>wG viwtyw:set hlsearch<CR>?<C-r>+<CR>
+nmap <silent> <Leader>wg viwtybb:set hlsearch<CR>/<C-r>*<CR>
+nmap <silent> <Leader>wG viwtyw:set hlsearch<CR>?<C-r>*<CR>
 " -----------------------------------------------------
 
 " search for visual selection
@@ -2601,8 +2614,8 @@ vnoremap <silent> <Leader>wf "sybb<C-\><C-n>:set hlsearch<CR>/<C-r>s<CR>
 vnoremap <silent> <Leader>wF "syw<C-\><C-n>:set hlsearch<CR>?<C-r>s<CR>
 
 " to match normal mode (copying selection to clipboard)
-vmap <silent> <Leader>wg tybb<C-\><C-n>:set hlsearch<CR>/<C-r>+<CR>
-vmap <silent> <Leader>wG tyw<C-\><C-n>:set hlsearch<CR>?<C-r>+<CR>
+vmap <silent> <Leader>wg tybb<C-\><C-n>:set hlsearch<CR>/<C-r>*<CR>
+vmap <silent> <Leader>wG tyw<C-\><C-n>:set hlsearch<CR>?<C-r>*<CR>
 
 " and the *, # (without copying selection to clipboard)
 " NOTE: *, # search for whole \<word\> which may not always be desired
@@ -2646,12 +2659,12 @@ nnoremap sC "fX"fp
 
 " exchange silent word (from beg) with clipboard
 " (need silent <CR> instead of <bar> here)
-nnoremap <silent> <Leader>wx "_ciw<C-r>+<Esc>
-" vis-mode of this doesnt really make sense
+nnoremap <silent> <Leader>wx "_ciw<C-r>*<Esc>
+vnoremap <silent> <Leader>wx "_x"*P
 
 " replace at cursor pos with clipboard (not from beg of word like \we above)
-nnoremap <silent> <Leader>wr "_cw<C-r>+<Esc>
-" vis-mode of this doesnt really make sense
+nnoremap <silent> <Leader>wr "_cw<C-r>*<Esc>
+vnoremap <silent> <Leader>wr "_x"*P
 
 " zap (delete) whole word under cursor but w/o saving deleted word to clipboard
 "nnoremap <silent> <Leader>wz lb"_dw
