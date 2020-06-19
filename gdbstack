@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [[ $# -lt 1 ]] ; then
+    echo "Error, need pid arg"
+    exit 1
+fi
+
+pid=$1
+
+sudo gdb --batch --quiet -ex "set interactive-mode off" -ex "thread apply all bt" -ex "quit" /proc/$pid/exe $pid
+

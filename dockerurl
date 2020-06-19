@@ -1,0 +1,17 @@
+#!/bin/bash
+
+reg=$(docker info 2>/dev/null | grep Registry | grep https | awk '{print $2}')
+
+if [[ -n "$reg" ]] ; then
+    grep -q "$reg" ~/.docker/config.json
+    rc=$?
+    if [[ $rc -eq 0 ]] ; then
+        echo "docker logged in to url: $reg"
+        exit 0
+    else
+        echo "docker not logged in"
+        exit 1
+    fi
+fi
+
+
