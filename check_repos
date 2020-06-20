@@ -102,6 +102,17 @@ cd ~/Downloads/vim_bundles
 # vim:
 #   git clone https://github.com/vim/vim.git
 
+# nixnote:
+#   https://github.com/robert7/nixnote2.git
+#   NOTE: do not use baumgarr/nixnote2.git
+#   sudo add-apt-repository ppa:nixnote/nixnote2-stable
+#   sudo apt-get update
+#   sudo apt install nixnote2
+#   It installs a lot of qt dependencies
+#   Could use the AppImage instead of the ppa ...
+#   AppImage is from: https://github.com/robert7/nixnote2/releases/tag/continuous
+#   NixNote2-x86_64.AppImage
+
 echo ""
 echo "Also check git:     zsh, CMake ..."
 echo "Also check non-git: gcc/g++, gdb, readline, ncurses ..."
