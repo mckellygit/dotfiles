@@ -30,10 +30,79 @@ fi
 cd ~/Downloads/vim_bundles
 ./update.sh
 
-# ack - curl https://beyondgrep.com/ack-v3.3.1 > ~/bin/ack && chmod 0755 ~/bin/ack
-# ag  - silversearcher-ag apt pkg or git clone https://github.com/ggreer/the_silver_searcher.git
+# ack:
+#   sudo apt-get install ack-grep
+#   -or-
+#   curl https://beyondgrep.com/ack-v3.3.1 > ack
+#   chmod 0755 ack
+#   sud0 mv ack /usr/local/bin
+#   ln -s /usr/local/bin/ack /usr/local/bin/ack-grep
+
+# ag:
+#   sudo apt-get install silversearcher-ag
+#   -or-
+#   git clone https://github.com/ggreer/the_silver_searcher.git
+
+# CopyQ:
+#   git clone https://github.com/hluk/CopyQ.git
+#   -or-
+#   sudo add-apt-repository ppa:hluk/copyq
+#   sudo apt update
+#   sudo apt install copyq
+#   also:
+#   git clone https://github.com/hluk/copyq-commands.git
+
+# fd:
+#   download latest .deb from https://github.com/sharkdp/fd/releases
+#   sudo dpkg -i fd_8.0.0_amd64.deb
+
+# fzf:
+#   git clone https://github.com/junegunn/fzf.git ~/.fzf
+#   ~/.fzf/install
+
+# alacritty:
+#   download latest .deb from https://github.com/alacritty/alacritty/releases
+#   sudo dpkg -i Alacritty-v0.4.3-ubuntu_18_04_amd64.deb
+#   git clone https://github.com/alacritty/alacritty.git
+
+# rxvt:
+#   sudo apt-get install rxvt-unicode
+#   -or-
+#   git clone https://github.com/exg/rxvt-unicode.git
+
+# kitty:
+#   sudo -s
+#   curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin dest=/usr/local
+#   https://github.com/kovidgoyal/kitty.git
+
+# gnome sound output extension:
+#   sound-output-device-chooser@kgshank.net
+#   ~/.local/share/gnome-shell/extensions
+#   then alt+F2 (type 'r') to restart gnome-shell ...
+#   then go into go into tweak tool / extensions to activate ...
+
+# gcc-9
+#   g++-9 9.3.0-11ubuntu0~18.04.1 amd64 GNU C++ compiler
+
+# clang-9
+#   sudo apt-get install clang-9 clang-9-doc lldb-9 llvm-9-dev llvm-9-tools python-lldb-9 python3-lldb-9
+#   sudo apt-get install libclang-9-dev
+#   sudo apt-get install libclang-common-9-dev
+#   sudo apt-get install clang-tools-9
+#   sudo apt-get install clang-format-9
+#   if needed:
+#   sudo apt-get install clang-tools
+#   sudo apt-get install clang-format
+#   to list include paths, etc:
+#   llvm-config-9 --cxxflags
+
+# tmux:
+#   git clone https://github.com/tmux/tmux.git
+
+# vim:
+#   git clone https://github.com/vim/vim.git
 
 echo ""
-echo "Also check git:     ack, ag, zsh, rxvt-unicode, CMake ..."
-echo "Also check non-git: gcc/g++, clang/clang++/llvm, gdb, readline, ncurses ..."
+echo "Also check git:     zsh, CMake ..."
+echo "Also check non-git: gcc/g++, gdb, readline, ncurses ..."
 echo ""
