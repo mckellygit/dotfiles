@@ -29,6 +29,6 @@ done
 # See man wmctrl for more info
 wmctrl -i -r $WID -b remove,maximized_vert
 wmctrl -i -r $WID -b remove,maximized_horz
-wmctrl -i -r $WID -e 0,800,880,-1,-1
+wmctrl -i -r $WID -e 0,857,924,-1,-1
 
 wait
