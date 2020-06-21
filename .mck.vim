@@ -3256,15 +3256,23 @@ autocmd CursorHold * call <SID>ClearCmdWindow()
 
 " ---------
 
-" tmux uses these to navigate panes
-noremap <S-Up>    <Nop>
-noremap <S-Down>  <Nop>
-noremap <S-Left>  <Nop>
-noremap <S-Right> <Nop>
+" tmux uses these to navigate windows (prev, next)
+noremap  <S-Left>  <Nop>
+noremap  <S-Right> <Nop>
+inoremap <S-Left>  <Nop>
+inoremap <S-Right> <Nop>
 
-" X might use these to scroll ...
-noremap <S-PageUp>   <Nop>
-noremap <S-PageDown> <Nop>
+" NOTE: S-Up, Down are available ...
+noremap  <S-Up>    <Nop>
+noremap  <S-Down>  <Nop>
+inoremap <S-Up>    <Nop>
+inoremap <S-Down>  <Nop>
+
+" X might use these to scroll alt screen ...
+noremap  <S-PageUp>   <Nop>
+noremap  <S-PageDown> <Nop>
+inoremap <S-PageUp>   <Nop>
+inoremap <S-PageDown> <Nop>
 
 " ---------
 
@@ -4739,7 +4747,7 @@ endfunction
 
 tnoremap <silent> <C-d> <C-w>:call <SID>TermQuit()<CR>
 
-" NOTE: M-L,R,U,D used for tab nav ...
+" NOTE: M-L,R used for tab nav ...
 
 " NOTE: C-S-Left/Right/Up/Down move by 5 ...
 " NOTE: S-L,R,U,D was used by tmux for window nav ...
@@ -4756,6 +4764,12 @@ nnoremap <silent> <A-Right>      :tabnext<CR>
 vnoremap <silent> <A-Right> <Esc>:tabnext<CR>
 inoremap <silent> <A-Right> <Esc>:tabnext<CR>
 tnoremap <silent> <A-Right> <C-w>:tabnext<CR>
+
+" NOTE: M-Up, Down are available ...
+noremap  <A-Up>    <Nop>
+noremap  <A-Down>  <Nop>
+inoremap <A-Up>    <Nop>
+inoremap <A-Down>  <Nop>
 
 nnoremap <silent> <C-t> :tabnext<CR>
 vnoremap <silent> <C-t> <C-\><C-n>:tabnext<CR>
