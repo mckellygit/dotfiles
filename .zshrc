@@ -579,12 +579,13 @@ alias gitsubrecur='git submodule update --init --recursive'
 # CPACK_CMAKE_GENERATOR=Ninja may help run cpack on fewer targets
 
 # NOTE: sometimes need to remove these *source* dirs before building or can get npm-run-all not found or other npm type errors ...
-#       esp/src/build esp/src/lib esp/src/node_modules
-#       these dirs are listed in the .gitignore file so a clean -fd does not remove them
+#       rm -rf esp/src/build esp/src/lib esp/src/node_modules
+#       these dirs are listed in the .gitignore file so a git clean -fd ./esp/src does not remove them
+#       git clean -f -fd ./esp/src _may_ work with the two -f's ...
 
-alias cmakedbg='CC="ccache gcc" CXX="ccache g++" cmake    -DCMAKE_BUILD_TYPE=Debug          -DUSE_LIBMEMCACHED=OFF -DUSE_LIBXSLT=ON -DUSE_CPPUNIT=ON  -DUSE_CASSANDRA=OFF -DUSE_SHLIBDEPS=OFF -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DCPACK_CMAKE_GENERATOR=Ninja -DECLWATCH_BUILD_STRATEGY=IF_MISSING ../HPCC-Platform ; pushd ../HPCC-Platform && git clean -fd ./esp/src ; rm -rf ./esp/src/node_modules ./esp/src/lib ./esp/src/build ; popd ; ccache -C'
-alias cmakeprod='CC="ccache gcc" CXX="ccache g++" cmake   -DCMAKE_BUILD_TYPE=Release        -DUSE_LIBMEMCACHED=OFF -DUSE_LIBXSLT=ON -DUSE_CPPUNIT=OFF -DUSE_CASSANDRA=OFF -DUSE_SHLIBDEPS=ON  -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DCPACK_CMAKE_GENERATOR=Ninja -DECLWATCH_BUILD_STRATEGY=IF_MISSING ../HPCC-Platform ; pushd ../HPCC-Platform && git clean -fd ./esp/src ; rm -rf ./esp/src/node_modules ./esp/src/lib ./esp/src/build ; popd ; ccache -C'
-alias cmakereldbg='CC="ccache gcc" CXX="ccache g++" cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DUSE_LIBMEMCACHED=OFF -DUSE_LIBXSLT=ON -DUSE_CPPUNIT=ON  -DUSE_CASSANDRA=OFF -DUSE_SHLIBDEPS=OFF -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DCPACK_CMAKE_GENERATOR=Ninja -DECLWATCH_BUILD_STRATEGY=IF_MISSING ../HPCC-Platform ; pushd ../HPCC-Platform && git clean -fd ./esp/src ; rm -rf ./esp/src/node_modules ./esp/src/lib ./esp/src/build ; popd ; ccache -C'
+alias cmakedbg='CC="ccache gcc" CXX="ccache g++" cmake    -DCMAKE_BUILD_TYPE=Debug          -DUSE_LIBMEMCACHED=OFF -DUSE_LIBXSLT=ON -DUSE_CPPUNIT=ON  -DUSE_CASSANDRA=OFF -DUSE_SHLIBDEPS=OFF -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DCPACK_CMAKE_GENERATOR=Ninja -DECLWATCH_BUILD_STRATEGY=IF_MISSING ../HPCC-Platform ; pushd ../HPCC-Platform && git clean -f -fd ./esp/src ; rm -rf ./esp/src/node_modules ./esp/src/lib ./esp/src/build ; popd ; ccache -C'
+alias cmakeprod='CC="ccache gcc" CXX="ccache g++" cmake   -DCMAKE_BUILD_TYPE=Release        -DUSE_LIBMEMCACHED=OFF -DUSE_LIBXSLT=ON -DUSE_CPPUNIT=OFF -DUSE_CASSANDRA=OFF -DUSE_SHLIBDEPS=ON  -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DCPACK_CMAKE_GENERATOR=Ninja -DECLWATCH_BUILD_STRATEGY=IF_MISSING ../HPCC-Platform ; pushd ../HPCC-Platform && git clean -f -fd ./esp/src ; rm -rf ./esp/src/node_modules ./esp/src/lib ./esp/src/build ; popd ; ccache -C'
+alias cmakereldbg='CC="ccache gcc" CXX="ccache g++" cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DUSE_LIBMEMCACHED=OFF -DUSE_LIBXSLT=ON -DUSE_CPPUNIT=ON  -DUSE_CASSANDRA=OFF -DUSE_SHLIBDEPS=OFF -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DCPACK_CMAKE_GENERATOR=Ninja -DECLWATCH_BUILD_STRATEGY=IF_MISSING ../HPCC-Platform ; pushd ../HPCC-Platform && git clean -f -fd ./esp/src ; rm -rf ./esp/src/node_modules ./esp/src/lib ./esp/src/build ; popd ; ccache -C'
 
 alias Qt='~/qtcreator-3.5.1/bin/qtcreator &|'
 

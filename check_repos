@@ -49,6 +49,8 @@ cd ~/Downloads/vim_bundles
 #   sudo add-apt-repository ppa:hluk/copyq
 #   sudo apt update
 #   sudo apt install copyq
+#   -or-
+#   download latest .deb from https://github.com/hluk/CopyQ/releases
 #   also:
 #   git clone https://github.com/hluk/copyq-commands.git
 
@@ -110,7 +112,7 @@ cd ~/Downloads/vim_bundles
 #   sudo apt install nixnote2
 #   It installs a lot of qt dependencies
 #   Could use the AppImage instead of the ppa ...
-#   AppImage is from: https://github.com/robert7/nixnote2/releases/tag/continuous
+#   AppImage is from https://github.com/robert7/nixnote2/releases/tag/continuous
 #   NixNote2-x86_64.AppImage
 
 echo ""
