@@ -2574,12 +2574,12 @@ vmap <silent> <Leader>wS <C-\><C-n>mvviW
 
 " grab file path (ie w / and w/o :)
 " NOTE: also copy to clipboard (since its not a mouse click event) ?
-nmap <silent> <Leader>wp mv:call <SID>GetPath(0,0)<CR>gv
-vmap <silent> <Leader>wp mv<C-\><C-n>:call <SID>GetPath(0,0)<CR>gv
+nmap <silent> <Leader>wp mv:call <SID>GetPath(0,0)<CR>
+vmap <silent> <Leader>wp mv<C-\><C-n>:call <SID>GetPath(0,0)<CR>
 
 " grab url path (ie w / and w :) but really about the same as \wS
-nmap <silent> <Leader>wP mv:call <SID>GetPath(0,1)<CR>gv
-vmap <silent> <Leader>wP mv<C-\><C-n>:call <SID>GetPath(0,1)<CR>gv
+nmap <silent> <Leader>wP mv:call <SID>GetPath(0,1)<CR>
+vmap <silent> <Leader>wP mv<C-\><C-n>:call <SID>GetPath(0,1)<CR>
 
 " yank/copy word under cursor
 " `] to go to end of word/block, but `v to go back to orig pos
@@ -2699,6 +2699,33 @@ vnoremap <silent> <Leader>D "_x
 
 " yank from cursor to end of line (similar to D deleting from cursor to end of line)
 nnoremap <silent> Y y$
+
+" -------------------
+
+" trim trailing blanks ...
+function s:MyTrimTrailingBlanks(mov) abort
+    exe "normal g_"
+    if line(".") != line("$")
+        exe "normal l\"_D"
+    endif
+    if !empty(a:mov)
+        exe "normal " . a:mov
+        exe "normal g_"
+    endif
+endfunction
+
+nnoremap <silent> <Leader>lx :call <SID>MyTrimTrailingBlanks('')<CR>
+nnoremap <silent> <Leader>lk :call <SID>MyTrimTrailingBlanks('k')<CR>
+nnoremap <silent> <Leader>lj :call <SID>MyTrimTrailingBlanks('j')<CR>
+
+" trim all trailing blanks ...
+function s:MyTrimAllTrailingBlanks() abort
+    let l:save = winsaveview()
+    keeppatterns %s/\s\+$//e
+    call winrestview(l:save)
+endfunction
+
+command! TrimAllLines call <SID>MyTrimAllTrailingBlanks()
 
 " -------------------
 
@@ -3859,6 +3886,8 @@ vnoremap <silent> <Leader>s/ "sy<Esc>:call <SID>MyVisSearch(3)<CR>
 
 let g:orig_pos = getcurpos()
 let g:click_start = reltime()
+let @i="0"
+let @j="0"
 
 " to grab a word - like file path below
 function s:GetWord(arg) abort
