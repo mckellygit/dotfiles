@@ -1617,86 +1617,113 @@ noremap G G$
 
 " MapFastKeycode: helper for fast keycode mappings
 " makes use of unused vim keycodes <[S-]F15> to <[S-]F37>
-" reserve S-F32 - S-F37 below, 41 remain available ...
-let s:fast_i = 0
-function! s:MapFastKeycode(key, keycode)
-    if s:fast_i == 40
+" indx 15-37 for <F15-37>, indx 115-137 for <S-F15-37>
+function! s:MapFastKeycode(key, keycode, indx)
+    let lindx = a:indx
+    if lindx < 15
         echohl WarningMsg
-        echomsg "Unable to map ".a:key.": out of spare keycodes"
+        echomsg "Warning: key ".a:key." cannot be mapped, invalid indx:".lindx
+        echohl None
+        return
+    elseif lindx > 37 && lindx < 115
+        echohl WarningMsg
+        echomsg "Warning: key ".a:key." cannot be mapped, invalid indx:".lindx
+        echohl None
+        return
+    elseif lindx > 137
+        echohl WarningMsg
+        echomsg "Warning: key ".a:key." cannot be mapped, invalid indx:".lindx
         echohl None
         return
     endif
-    " NOTE: tmux focus plugin uses F24, F25 which is index 9, 10
-    if s:fast_i == 9
-        let s:fast_i += 2
+    if exists("g:loaded_tmux_focus_events") || exists("g:autoloaded_tmux_focus_events")
+        " NOTE: tmux focus plugin uses F24, F25
+        if lindx == 24 || lindx == 25
+            echohl WarningMsg
+            echomsg "Warning: key ".a:key." cannot be mapped - is reserved (tmux focus), indx:".lindx
+            echohl None
+            return
+        endif
     endif
-    let vkeycode = '<'.(s:fast_i/23==0 ? '' : 'S-').'F'.(15+s:fast_i%23).'>'
+    let vkeycode = '<F'.lindx.'>'
+    if lindx > 100
+        let lindx -= 100
+        let vkeycode = '<S-F'.lindx.'>'
+    endif
     " skip over existing mappings ...
     if !hasmapto('vkeycode', 'nvoict') && (maparg('vkeycode', 'nvoict') ==# '' || maparg('vkeycode', 'nvoict') ==# '<Nop>')
-        exec 'set '.vkeycode.'='.a:keycode
-        exec 'map '.vkeycode.' '.a:key
+        exec 'set  '.vkeycode.'='.a:keycode
+        exec 'map  '.vkeycode.' '.a:key
         exec 'imap '.vkeycode.' '.a:key
         exec 'cmap '.vkeycode.' '.a:key
         exec 'tmap '.vkeycode.' '.a:key
+    else
+        echohl WarningMsg
+        echomsg "Warning: key ".a:key." cannot be mapped - already has a mapping, indx:".lindx
+        echohl None
     endif
-    let s:fast_i += 1
 endfunction
 
 " NOTE: only for term =~ ^screen || ^tmux || ^xterm || ^alacritty || ^rxvt || ^urxvt ?
 
-call <SID>MapFastKeycode('<C-Up>',         "\e[1;5A")
-call <SID>MapFastKeycode('<C-Down>',       "\e[1;5B")
-call <SID>MapFastKeycode('<C-Left>',       "\e[1;5D")
-call <SID>MapFastKeycode('<C-Right>',      "\e[1;5C")
+call <SID>MapFastKeycode('<C-Up>',         "\e[1;5A", 15)
+call <SID>MapFastKeycode('<C-Down>',       "\e[1;5B", 16)
+call <SID>MapFastKeycode('<C-Left>',       "\e[1;5D", 17)
+call <SID>MapFastKeycode('<C-Right>',      "\e[1;5C", 18)
 
-call <SID>MapFastKeycode('<S-Up>',         "\e[1;2A")
-call <SID>MapFastKeycode('<S-Down>',       "\e[1;2B")
-call <SID>MapFastKeycode('<S-Left>',       "\e[1;2D")
-call <SID>MapFastKeycode('<S-Right>',      "\e[1;2C")
+call <SID>MapFastKeycode('<S-Up>',         "\e[1;2A", 19)
+call <SID>MapFastKeycode('<S-Down>',       "\e[1;2B", 20)
+call <SID>MapFastKeycode('<S-Left>',       "\e[1;2D", 21)
+call <SID>MapFastKeycode('<S-Right>',      "\e[1;2C", 22)
 
-call <SID>MapFastKeycode('<C-S-Up>',       "\e[1;6A")
-call <SID>MapFastKeycode('<C-S-Down>',     "\e[1;6B")
-call <SID>MapFastKeycode('<C-S-Left>',     "\e[1;6D")
-call <SID>MapFastKeycode('<C-S-Right>',    "\e[1;6C")
+call <SID>MapFastKeycode('<C-S-Up>',       "\e[1;6A", 23)
+" NOTE: need to skip F24, F25 for tmux focus plugin
+call <SID>MapFastKeycode('<C-S-Down>',     "\e[1;6B", 26)
+call <SID>MapFastKeycode('<C-S-Left>',     "\e[1;6D", 27)
+call <SID>MapFastKeycode('<C-S-Right>',    "\e[1;6C", 28)
 
-call <SID>MapFastKeycode('<A-Up>',         "\e[1;3A")
-call <SID>MapFastKeycode('<A-Down>',       "\e[1;3B")
-call <SID>MapFastKeycode('<A-Left>',       "\e[1;3D")
-call <SID>MapFastKeycode('<A-Right>',      "\e[1;3C")
+call <SID>MapFastKeycode('<A-Up>',         "\e[1;3A", 29)
+call <SID>MapFastKeycode('<A-Down>',       "\e[1;3B", 30)
+call <SID>MapFastKeycode('<A-Left>',       "\e[1;3D", 31)
+call <SID>MapFastKeycode('<A-Right>',      "\e[1;3C", 32)
 
-"call <SID>MapFastKeycode('<A-S-Up>',       "\e[1;4A")
-"call <SID>MapFastKeycode('<A-S-Down>',     "\e[1;4B")
-"call <SID>MapFastKeycode('<A-S-Left>',     "\e[1;4D")
-"call <SID>MapFastKeycode('<A-S-Right>',    "\e[1;4C")
+" NOTE: <A-S-U/D/L/R> used by tmux to resize panes
+"call <SID>MapFastKeycode('<A-S-Up>',       "\e[1;4A", xx)
+"call <SID>MapFastKeycode('<A-S-Down>',     "\e[1;4B", xx)
+"call <SID>MapFastKeycode('<A-S-Left>',     "\e[1;4D", xx)
+"call <SID>MapFastKeycode('<A-S-Right>',    "\e[1;4C", xx)
 
-call <SID>MapFastKeycode('<C-Insert>',     "\e[2;5~")
-call <SID>MapFastKeycode('<S-Insert>',     "\e[2;2~")
-call <SID>MapFastKeycode('<C-S-Insert>',   "\e[2;6~")
+call <SID>MapFastKeycode('<C-Insert>',     "\e[2;5~", 33)
+call <SID>MapFastKeycode('<S-Insert>',     "\e[2;2~", 34)
+call <SID>MapFastKeycode('<C-S-Insert>',   "\e[2;6~", 35)
 " NOTE: <A-Insert> used by tmux for copyq toggle
-"call <SID>MapFastKeycode('<A-Insert>',     "\e[2;3~")
-"call <SID>MapFastKeycode('<A-S-Insert>',   "\e[2;4~")
+"call <SID>MapFastKeycode('<A-Insert>',     "\e[2;3~", xx)
+"call <SID>MapFastKeycode('<A-S-Insert>',   "\e[2;4~", xx)
 
-call <SID>MapFastKeycode('<C-Del>',        "\e[3;5~")
-call <SID>MapFastKeycode('<S-Del>',        "\e[3;2~")
-call <SID>MapFastKeycode('<C-S-Del>',      "\e[3;6~")
-call <SID>MapFastKeycode('<A-Del>',        "\e[3;3~")
-"call <SID>MapFastKeycode('<A-S-Del>',      "\e[3;4~")
+call <SID>MapFastKeycode('<C-Del>',        "\e[3;5~", 36)
+call <SID>MapFastKeycode('<S-Del>',        "\e[3;2~", 37)
+" NOTE: start at 100 + 15 ...
+call <SID>MapFastKeycode('<C-S-Del>',      "\e[3;6~", 115)
+call <SID>MapFastKeycode('<A-Del>',        "\e[3;3~", 116)
+"call <SID>MapFastKeycode('<A-S-Del>',      "\e[3;4~", xxx)
 
 " NOTE: <Home> (khome) can be: ^[[H or ^[[1~ or ^[[7~
 " NOTE: <End>  (kend)  can be: ^[[F or ^[[4~ or ^[[8~
 
-call <SID>MapFastKeycode('<C-Home>',       "\e[1;5H")
-call <SID>MapFastKeycode('<C-End>',        "\e[1;5F")
-call <SID>MapFastKeycode('<A-Home>',       "\e[1;3H")
-call <SID>MapFastKeycode('<A-End>',        "\e[1;3F")
+call <SID>MapFastKeycode('<C-Home>',       "\e[1;5H", 117)
+call <SID>MapFastKeycode('<C-End>',        "\e[1;5F", 118)
+call <SID>MapFastKeycode('<A-Home>',       "\e[1;3H", 119)
+call <SID>MapFastKeycode('<A-End>',        "\e[1;3F", 120)
 
-call <SID>MapFastKeycode('<C-PageUp>',     "\e[5;5~")
-"call <SID>MapFastKeycode('<C-S-PageUp>',   "\e[5;6~")
-call <SID>MapFastKeycode('<A-PageUp>',     "\e[5;3~")
+call <SID>MapFastKeycode('<C-PageUp>',     "\e[5;5~", 121)
+call <SID>MapFastKeycode('<C-S-PageUp>',   "\e[5;6~", 122)
+call <SID>MapFastKeycode('<A-PageUp>',     "\e[5;3~", 123)
 
-call <SID>MapFastKeycode('<C-PageDown>',   "\e[6;5~")
-"call <SID>MapFastKeycode('<C-S-PageDown>', "\e[6;6~")
-call <SID>MapFastKeycode('<A-PageDown>',   "\e[6;3~")
+call <SID>MapFastKeycode('<C-PageDown>',   "\e[6;5~", 124)
+call <SID>MapFastKeycode('<C-S-PageDown>', "\e[6;6~", 125)
+call <SID>MapFastKeycode('<A-PageDown>',   "\e[6;3~", 126)
+
+" NOTE: addl mappings start at <S-F31> 131 ...
 
 " ------------------------------
 
@@ -1950,7 +1977,7 @@ cnoremap <C-Insert> <C-r>*
 tnoremap <C-Insert> <C-w>"*
 
 " <M-1> paste after [menu?]
-call <SID>MapFastKeycode('<S-F34>',  "\e1")
+call <SID>MapFastKeycode('<S-F34>',  "\e1", 134)
 nnoremap <expr> <S-F34> (&buftype == 'terminal') ? '<Nop>' : 'p'
 vnoremap <expr> <S-F34> (&buftype == 'terminal') ? '<Nop>' : '<Esc>p'
 inoremap <S-F34> <C-r>*
@@ -1966,7 +1993,7 @@ cnoremap <C-S-Insert> <C-r>*
 tnoremap <C-S-Insert> <C-w>"*
 
 " <M-8> paste before [menu?]
-call <SID>MapFastKeycode('<S-F35>',  "\e8")
+call <SID>MapFastKeycode('<S-F35>',  "\e8", 135)
 nnoremap <expr> <S-F35> (&buftype == 'terminal') ? '<Nop>' : 'P`]'
 vnoremap <expr> <S-F35> (&buftype == 'terminal') ? '<Nop>' : '<Esc>P`]'
 inoremap <S-F35> <C-r>*
@@ -1981,7 +2008,7 @@ tnoremap <S-F35> <C-w>"*
 "inoremap <C-S-c> <Nop>
 
 " some terminal configs (urxvt) map C-S-c => M-7
-call <SID>MapFastKeycode('<S-F36>',  "\e7")
+call <SID>MapFastKeycode('<S-F36>',  "\e7", 136)
 nnoremap <S-F36> <Nop>
 vmap <expr> <S-F36> (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
 inoremap <S-F36> <Nop>
@@ -1993,7 +2020,7 @@ inoremap <S-F36> <Nop>
 "vnoremap <expr> <C-S-x> (&buftype == 'terminal') ? '<Nop>' : '"*d'
 "inoremap <C-S-x> <Nop>
 
-call <SID>MapFastKeycode('<S-F37>',  "\e9")
+call <SID>MapFastKeycode('<S-F37>',  "\e9", 137)
 nnoremap <S-F37> <Nop>
 vmap <expr> <S-F37> (&buftype == 'terminal') ? '<Nop>' : 'tx'
 inoremap <S-F37> <Nop>
@@ -2428,7 +2455,7 @@ nmap <silent> <C-3-LeftMouse> mvviWty:call <SID>Delay(1)<CR><Esc>
 nmap <silent> <C-4-LeftMouse> mvVty:call <SID>Delay(1)<CR><Esc>
 
 " NOTE: tmux maps C-Triple to M-c to be able to know its a triple-click ...
-call <SID>MapFastKeycode('<S-F32>',  "\ec")
+call <SID>MapFastKeycode('<S-F32>',  "\ec", 132)
 nmap <silent> <S-F32> mvviWty:call <SID>Delay(1)<CR><Esc>
 vmap <silent> <S-F32> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
 imap <silent> <expr> <S-F32> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>'
@@ -2499,7 +2526,7 @@ nmap <silent> <A-3-LeftMouse> mvviWty:call <SID>Delay(1)<CR><Esc>
 nmap <silent> <A-4-LeftMouse> mvVty:call <SID>Delay(1)<CR><Esc>
 
 " NOTE: tmux maps A-Triple to M-b to be able to know its a triple-click ...
-call <SID>MapFastKeycode('<S-F33>',  "\eb")
+call <SID>MapFastKeycode('<S-F33>',  "\eb", 133)
 nmap <silent> <S-F33> mvviWty:call <SID>Delay(1)<CR><Esc>
 vmap <silent> <S-F33> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
 imap <silent> <expr> <S-F33> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>'
@@ -2699,6 +2726,10 @@ vnoremap <silent> <Leader>D "_x
 
 " yank from cursor to end of line (similar to D deleting from cursor to end of line)
 nnoremap <silent> Y y$
+
+" NOTE: <A-CR> (S-F31) to copy/end vis-mode to match tmux
+call <SID>MapFastKeycode('<S-F31>',  "\e\<cr>", 131)
+vmap <silent> <S-F31> mvty`v
 
 " -------------------
 
@@ -3241,11 +3272,19 @@ function! s:MapScrollKeys()
   noremap            <expr> <PageUp>     (line('.') == line('w$')) ? 'M' : '<C-U><C-U>'
   inoremap  <silent> <expr> <PageUp>     pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp2("<C-V><C-U>")<CR>'
 
+  " NOTE: tmux could send Up/Down cmds instead of this key ...
   noremap            <expr> <C-PageDown> (line('.') == line('w0')) ? 'M' : '<C-D>'
   inoremap  <silent> <expr> <C-PageDown> pumvisible() ? '<C-PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
   noremap            <expr> <C-PageUp>   (line('.') == line('w$')) ? 'M' : '<C-U>'
   inoremap  <silent> <expr> <C-PageUp>   pumvisible() ? '<C-PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
 
+  " NOTE: tmux could send Up/Down cmds instead of this key ...
+  noremap            <expr> <C-S-PageDown> (line('.') == line('w0')) ? 'M' : '10<C-e>10j'
+  inoremap  <silent> <expr> <C-S-PageDown> pumvisible() ? '<C-PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
+  noremap            <expr> <C-S-PageUp>   (line('.') == line('w$')) ? 'M' : '10<C-y>10k'
+  inoremap  <silent> <expr> <C-S-PageUp>   pumvisible() ? '<C-PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
+
+  " NOTE: tmux could send Up/Down cmds instead of this key ...
   noremap            <expr> <A-PageDown> (line('.') == line('w0')) ? 'M' : '<C-D><C-D><C-D><C-D>'
   inoremap  <silent> <expr> <A-PageDown> pumvisible() ? '<C-PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn4("<C-V><C-D>")<CR>'
   noremap            <expr> <A-PageUp>   (line('.') == line('w$')) ? 'M' : '<C-U><C-U><C-U><C-U>'
