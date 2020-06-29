@@ -30,6 +30,8 @@ fi
 cd ~/Downloads/vim_bundles
 ./update.sh
 
+# ---------------------
+
 # ack:
 #   sudo apt-get install ack-grep
 #   -or-
@@ -114,6 +116,17 @@ cd ~/Downloads/vim_bundles
 #   Could use the AppImage instead of the ppa ...
 #   AppImage is from https://github.com/robert7/nixnote2/releases/tag/continuous
 #   NixNote2-x86_64.AppImage
+
+# joplin:
+#   wget -O - https://raw.githubusercontent.com/laurent22/joplin/master/Joplin_install_and_update.sh | bash
+#   terminal:
+#       install Node 10+
+#       NPM_CONFIG_PREFIX=~/.joplin-bin npm install -g joplin
+#       ln -s ~/.joplin-bin/bin/joplin ~/bin/joplin
+#   chrome & firefox web-clipper
+#   notes stored in: ~/.config/joplin-desktop
+
+# ---------------------
 
 echo ""
 echo "Also check git:     zsh, CMake ..."
