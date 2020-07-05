@@ -117,6 +117,14 @@ cd ~/Downloads/vim_bundles
 #   AppImage is from https://github.com/robert7/nixnote2/releases/tag/continuous
 #   NixNote2-x86_64.AppImage
 
+# vivaldi:
+#   wget -qO- https://repo.vivaldi.com/archive/linux_signing_key.pub | sudo apt-key add -
+#   sudo add-apt-repository 'deb https://repo.vivaldi.com/archive/deb/ stable main'
+#   sudo apt update
+#   sudo apt install vivaldi-stable
+
+# standard notes
+
 # ---------------------
 
 echo ""
