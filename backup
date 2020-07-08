@@ -22,7 +22,7 @@ apt list --installed > ~/misc/apt.list
 # dont use -a for misc - keep older stuff around
 rsync -v -u -r --max-size=50M ~/misc ~/${bfolder}
 
-rsync -v -a --max-size=50M --exclude 'google-chrome' --exclude 'Code' --exclude 'Microsoft' --exclude 'teams-insiders' --exclude 'libreoffice' ~/.config ~/${bfolder}/home --delete
+rsync -v -a --max-size=50M --exclude 'google-chrome' --exclude 'vivaldi' --exclude 'Code' --exclude 'Microsoft' --exclude 'teams-insiders' --exclude 'libreoffice' ~/.config ~/${bfolder}/home --delete
 
 rsync -v -a ~/radssh --exclude 'sessions' ~/${bfolder}/home --delete
 rsync -v -a ~/.byobu   ~/${bfolder}/home --delete
