@@ -781,7 +781,10 @@ if exists('&signcolumn')  " Vim 7.4.2201
 endif
 nmap <Leader>gn <Plug>(GitGutterNextHunk)
 nmap <Leader>gp <Plug>(GitGutterPrevHunk)
-nmap <silent> <Leader>gg <C-\><C-n>:<C-u>call gitgutter#process_buffer(bufnr(''), 0)<CR>
+nmap <silent> <Leader>gg :<C-u>call gitgutter#process_buffer(bufnr(''), 0)<CR>
+
+" NOTE: ^L redraws but also updates git changes ...
+nmap <silent> <C-l> :redraw!<CR>:<C-u>call gitgutter#process_buffer(bufnr(''), 0)<CR>
 " gitgutter -----------
 
 " gitv -----------
