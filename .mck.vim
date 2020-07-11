@@ -74,6 +74,13 @@ Plugin 'mckellyln/vim-rtags'
 "Plugin 'yssl/QFEnter'
 Plugin 'mckellyln/QFEnter'
 "
+" qf grep / filter
+"Plugin 'sk1418/QFGrep'
+Plugin 'tommcdo/vim-lister'
+"
+" qf edit
+"Plugin 'itchyny/vim-qfedit'
+"
 " qf preview popup
 Plugin 'bfrg/vim-qf-preview'
 "Plugin 'ronakg/quickr-preview.vim'
@@ -117,20 +124,17 @@ Plugin 'junegunn/gv.vim'
 " fzf for fuzzy listing/searching
 "Plugin 'junegunn/fzf' " (not needed because its in ~/.fzf already)
 Plugin 'junegunn/fzf.vim'
-" ack (with ag (silver-searcher))
-Plugin 'mileszs/ack.vim'
 "
+" ack (with ag (silver-searcher))
+"Plugin 'mileszs/ack.vim'
 " search/replace across multiple files
 " (also can use :Ack + :cdo ...)
 "Plugin 'dkprice/vim-easygrep'
-" with regex patterns ...
+" together with regex patterns ...
 " Plugin 'othree/eregex.vim'
-"
-" TODO: also look into ferret
-" for quickfix multi-file search/replace
-"-----------------------
+" Quickfix multi-file search/replace (**modified++)
 "Plugin 'wincent/ferret'
-"-----------------------
+Plugin 'mckellyln/ferret'
 "
 " colorscheme
 Plugin 'ajmwagar/vim-deus'
@@ -184,6 +188,8 @@ Plugin 'Konfekt/vim-alias'
 "Plugin 'ap/vim-buftabline'
 " bufexplorer
 "Plugin 'jlanzarotta/bufexplorer'
+" buffergator
+"Plugin 'jeetsukumaran/vim-buffergator'
 " lightline buffer ...
 "Plugin 'mengelbrecht/lightline-bufferline'
 "
@@ -256,7 +262,8 @@ endif
 " example: (cdo/cfdo ldo/lfdo [!])
 " :Ack foo
 " :cdo s/foo/bar/g | update
-" Also look into Plugin 'dkprice/vim-easygrep'
+" There is also Plugin 'dkprice/vim-easygrep'
+" together with Plugin 'othree/eregex.vim'
 let g:ackhighlight = 1
 let g:ack_use_dispatch = 1
 "set grepprg=ack\ -k
@@ -265,6 +272,26 @@ set grepformat=%f:%l:%c:%m
 " open :grep output in qf ...
 autocmd QuickFixCmdPost *grep* cwindow
 " ack ------------
+
+" ferret ---------
+let g:FerretMap=0
+let g:FerretQFCommands=0
+let g:FerretQFOptions=0
+let g:FerretQFMap=1
+let g:FerretHlsearch=0
+let g:FerretExecutable='ag,ack'
+let g:FerretExecutableArguments = {
+  \   'ag': '--vimgrep -U --hidden -- ',
+  \   'ack': '-s -H --nopager --nocolor --nogroup --column --smart-case --follow '
+  \ }
+"nmap <leader>Fa <Plug>(FerretAck)
+"nmap <leader>Fl <Plug>(FerretLack)
+"nmap <leader>Fs <Plug>(FerretAckWord)
+"nmap <leader>Fr <Plug>(FerretAcks)
+" :Ack <string> - or use other cmds <Leader>s[b|d|g] to fill qf/ll ...
+" manipulate qf/ll to remove any entries not wanting to be used for substitution ...
+" :Acks /<old>/<new>/
+" ferret ---------
 
 " airline ---------
 "let g:airline#extensions#tabline#enabled = 1
@@ -557,12 +584,12 @@ noremap <silent> <Leader>f. <C-\><C-n>:Files<CR>
 "   :Ag! "foo bar"
 "command! -bang -nargs=+ -complete=file Ag call fzf#vim#ag_raw(<q-args>, <bang>0)
 " Raw version with preview
-command! -bang -nargs=+ -complete=file Ags call fzf#vim#ag_raw(<q-args>, fzf#vim#with_preview(), <bang>0)
+"command! -bang -nargs=+ -complete=file Ags call fzf#vim#ag_raw(<q-args>, fzf#vim#with_preview(), <bang>0)
 "
 " Agit: Start ag in the git/root directory
 " e.g.
 "   :Agit foo
-function! s:ag_in(bang, ...)
+function! s:ag_inM1(bang, ...)
   let gdir = s:find_git_root()
   "if !isdirectory(a:1)
   if !isdirectory(gdir)
@@ -574,7 +601,7 @@ function! s:ag_in(bang, ...)
   " If you don't want preview option, use this
   " call fzf#vim#ag(join(a:000[1:], ' '), {'dir': a:1}, a:bang)
 endfunction
-command! -bang -nargs=+ -complete=dir Agits call s:ag_in(<bang>0, <f-args>)
+"command! -bang -nargs=+ -complete=dir Agits call s:ag_inM1(<bang>0, <f-args>)
 "
 command! -bang -nargs=* Ag
   \ call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(<q-args>),
@@ -779,12 +806,12 @@ let g:gitgutter_sign_column_always = 1
 if exists('&signcolumn')  " Vim 7.4.2201
   set signcolumn=yes
 endif
-nmap <Leader>gn <Plug>(GitGutterNextHunk)
-nmap <Leader>gp <Plug>(GitGutterPrevHunk)
-nmap <silent> <Leader>gg :<C-u>call gitgutter#process_buffer(bufnr(''), 0)<CR>
+map <Leader>gn <Plug>(GitGutterNextHunk)
+map <Leader>gp <Plug>(GitGutterPrevHunk)
+map <silent> <Leader>gg <C-\><C-n>:<C-u>call gitgutter#process_buffer(bufnr(''), 0)<CR>
 
 " NOTE: ^L redraws but also updates git changes ...
-nmap <silent> <C-l> :redraw!<CR>:<C-u>call gitgutter#process_buffer(bufnr(''), 0)<CR>
+nmap <silent> <C-l> :call gitgutter#process_buffer(bufnr(''), 0)<bar>:redraw!<CR>
 " gitgutter -----------
 
 " gitv -----------
@@ -1051,7 +1078,9 @@ let c_no_curly_error = 1
 let g:asyncrun_silent = 0
 autocmd User AsyncRunPre echohl DiffAdd | echo 'AsyncRun started ...' | echohl None
 autocmd User AsyncRunStop if g:asyncrun_code != 0 | echohl DiffText | echo 'AsyncRun complete: [FAIL]' | echohl None |
-            \ else | echohl DiffAdd | echo 'AsyncRun complete: [OK]' | echohl None | copen | set nowrap | clearjumps | call lightline#update() | wincmd p | endif
+            \ else | echohl DiffAdd | echo 'AsyncRun complete: [OK]' | echohl None | copen | set nowrap | set cursorline | clearjumps | call lightline#update() | endif
+" NOTE: add '| wincmd p' to go back to orig window
+" NOTE: add '| set ma' after copen to make qf modifiable
 " asyncrun -----------
 
 " startify -----------
@@ -1485,7 +1514,7 @@ function s:CrossHairs() abort
     set nocursorline
     set nocursorcolumn
 endfunction
-nmap <silent> ; :call <SID>CrossHairs()<CR>
+nmap <silent> + :call <SID>CrossHairs()<CR>
 
 " -------- mouse / cut - paste - clipboard --------
 
@@ -1711,20 +1740,30 @@ call <SID>MapFastKeycode('<A-Del>',        "\e[3;3~", 116)
 "call <SID>MapFastKeycode('<A-S-Del>',      "\e[3;4~", xxx)
 
 " NOTE: <Home> (khome) can be: ^[[H or ^[[1~ or ^[[7~
-" NOTE: <End>  (kend)  can be: ^[[F or ^[[4~ or ^[[8~
-
 call <SID>MapFastKeycode('<C-Home>',       "\e[1;5H", 117)
-call <SID>MapFastKeycode('<C-End>',        "\e[1;5F", 118)
+" <S-Home>
+" <C-S-Home>
 call <SID>MapFastKeycode('<A-Home>',       "\e[1;3H", 119)
+" <A-S-Home>
+
+" NOTE: <End>  (kend)  can be: ^[[F or ^[[4~ or ^[[8~
+call <SID>MapFastKeycode('<C-End>',        "\e[1;5F", 118)
+" <S-End>
+" <C-S-End>
 call <SID>MapFastKeycode('<A-End>',        "\e[1;3F", 120)
+" <A-S-End>
 
 call <SID>MapFastKeycode('<C-PageUp>',     "\e[5;5~", 121)
+" <S-PageUp>
 call <SID>MapFastKeycode('<C-S-PageUp>',   "\e[5;6~", 122)
 call <SID>MapFastKeycode('<A-PageUp>',     "\e[5;3~", 123)
+" <A-S-PageUp>
 
 call <SID>MapFastKeycode('<C-PageDown>',   "\e[6;5~", 124)
+" <S-PageDown>
 call <SID>MapFastKeycode('<C-S-PageDown>', "\e[6;6~", 125)
 call <SID>MapFastKeycode('<A-PageDown>',   "\e[6;3~", 126)
+" <A-S-PageDown>
 
 " NOTE: addl mappings start at <S-F31> 131 ...
 
@@ -1796,16 +1835,29 @@ map  <silent> <A-Insert> <Nop>
 imap <silent> <A-Insert> <Nop>
 cmap <silent> <A-Insert> <Nop>
 tmap <silent> <A-Insert> <Nop>
+" <A-S-Insert> ?
 
+" <S-PageUp> ?
+" <A-S-PageUp> ?
+
+" <S-PageDown> ?
+" <A-S-PageDown> ?
+
+" <S-Home> ?
+" <C-S-Home> ?
 map  <silent> <A-Home> 0
 imap <silent> <A-Home> <C-o>0
 cmap <silent> <A-Home> <Nop>
 tmap <silent> <A-Home> <Nop>
+" <A-S-Home> ?
 
+" <S-End> ?
+" <C-S-End> ?
 map  <silent> <A-End> $
 imap <silent> <A-End> <C-o>$
 cmap <silent> <A-End> <Nop>
 tmap <silent> <A-End> <Nop>
+" <A-S-End> ?
 
 " ------------------------------
 
@@ -2840,7 +2892,7 @@ nnoremap <silent> <expr> <A-Del> (col('.') == 1 && col('$') == 1) ? '"_dW' : (co
 vnoremap <silent>        <A-Del> <Del>
 inoremap <silent> <expr> <A-Del> (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<Esc>llb"_dWi' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
 
-" A-S-Del ?
+" <A-S-Del> ?
 
 "nnoremap <Char-0x07F> <BS>
 " NOTE: S-BS in terminals often mapped to BS/Del ...
@@ -3914,6 +3966,15 @@ vnoremap <silent> <Leader>sd "sy<Esc>:call <SID>MyVisSearch(2)<CR>
 " search globally (root/project/git dir) with results in qf list
 nnoremap <silent> <Leader>sg :call <SID>MySearch(1)<CR>
 vnoremap <silent> <Leader>sg "sy<Esc>:call <SID>MyVisSearch(1)<CR>
+
+"au VimEnter * :Alias Acks   cdo
+"au VimEnter * :Alias Ackfs  cfdo
+"au VimEnter * :Alias LAcks  ldo
+"au VimEnter * :Alias LAckfs lfdo
+command! -nargs=+ -bang Acks   execute ':cdo<bang> '  . <q-args>
+command! -nargs=+ -bang Ackfs  execute ':cfdo<bang> ' . <q-args>
+command! -nargs=+ -bang LAcks  execute ':ldo<bang> '  . <q-args>
+command! -nargs=+ -bang LAckfs execute ':lfdo<bang> ' . <q-args>
 
 " search dir (root/project/git dir) with results in fzf/Ag list
 " same as :Ag ...

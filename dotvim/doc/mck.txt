@@ -2,8 +2,9 @@
 
 *mck-file*
 -------------------------------------------------
-<Leader>f. fzf list of current dir files
-<Leader>f/ fzf list of project dir files
+<Leader>f. fzf list of current dir files (:Files)
+<Leader>f/ fzf list of project dir files (:Files <git-root>)
+<Leader>fz same as <Leader>f/
 <Leader>ls fzf list of buffers - open in new tab
 <Leader>hb hide buffer
 <Leader>fb FileBeagle current dir
@@ -11,18 +12,20 @@
 <Leader>of switch to other file (.hpp/.cpp/etc)
 <Leader>gf open file at cursor pos
 <Leader>gt open file at cursor pos in new tab
+:Files [<root-dir>]
 
 *mck-git*
 -------------------------------------------------
 <Leader>gn next changed git block
 <Leader>gp prev changed git block
-<Leader>gg re-scan for git changes
+<Leader>gg re-scan for git changes (<C-L>)
 
 *mck-word*
 -------------------------------------------------
 <Leader>ws word select
 <Leader>wS WORD select
 <Leader>wp path select
+<Leader>wP url select
 <Leader>wy word yank
 <Leader>yw yank word
 <Leader>wf word find next
@@ -39,8 +42,8 @@
 <Leader>wn word new (change word)
 <Leader>xp swap chars with char after
 <Leader>xP swap chars with char before
-cs         swap chars with char after
-cS         swap chars with char before
+sc         swap chars with char after (cs)
+sC         swap chars with char before (cS)
 
 *mck-paste*
 -------------------------------------------------
@@ -68,46 +71,65 @@ cS         swap chars with char before
 
 *mck-search*
 -------------------------------------------------
+<Leader>hl toggle hlsearch
 <Leader>*  set hlsearch and search (*)
 <Leader>#  set hlsearch and search (#)
 <Leader>sx clear search buffer and stop async running search
 <Leader>sq stop async running search
 <Leader>sn search (/)
 <Leader>sN search (?)
-<Leader>sb search buffer files
-<Leader>sd search files in curr dir
-<Leader>sg search files in git root dir
-<Leader>s. search files in curr dir with fzf+ag
-<Leader>s/ search files in git root dir with fzf+ag
-<Leader>hl toggle hlsearch
+<Leader>sb search buffer files with quickfix
+<Leader>sd search files in curr dir with quickfix
+<Leader>sg search files in git root dir with quickfix
+<Leader>s. search files in curr dir with fzf+ag (:Ag)
+<Leader>s/ search files in git root dir with fzf+ag (:Agit)
+:Ag   <string> [<root-dir>] with fzf/ag
+:Agit <string> (<root-dir> set to <git-root>) with fzf/ag
+
+multi-line/file qf/ll replace
+-----------------------------
+ -> use <Leader>sb/d/g or any other method to create qf/ll entries
+ -> optionally delete entries in qf/ll to skip lines/files, then:
+:Acks  s/<old>/<new>/ [|update]
+:LAcks s/<old>/<new>/ [|update]
+(Acks:cdo) (Ackfs:cfdo) (LAcks:ldo) (LAckfs:lfdo)
+
+filter qf/ll entries
+--------------------
+:Qgrep <pattern>
+:Lgrep <pattern>
 
 *mck-terminal*
 -------------------------------------------------
 <Leader>zs shell terminal
 <Leader>zt shell terminal in a new tab
 
-*mck-tab* / window
+*mck-tab* / *mck-window*
 -------------------------------------------------
-<Leader>to  open new tab
-<Leader>tq  tab quit
-<Leader>tk  tab close all others
-<Leader>tn  next tab
-<Leader>tp  previous tab
-<Leader>tw  move current window into new tab
-<Leader>tm  merge current tab into Window to the left
-<Leader>tM  merge current tab into Window to the right
-<C-t>       next tab
-<C-S-Left>  previous tab
-<C-S-Right> next tab
-<C-w>w      next window (also Left, Right, Up, Down)
-<C-w>10+    resize window +10 lines   :res +10
-<C-w>10-    resize window -10 lines   :res -10
-<C-w>10>    resize window +10 columns :vertical res +10
-<C-w>10<    resize window -10 columns :vertical res -10
-<LeftDrag>  drag to move window divider
-<Leader>wq  confirm write and quit window
-<Leader>qq  confirm write and quit window/tab
-<Leader>wk  window close all others
+<Leader>to   open new tab
+<Leader>tq   tab quit
+<Leader>tk   tab close all others
+<Leader>tn   next tab
+<Leader>tp   previous tab
+<Leader>tw   move current window into new tab
+<Leader>tm   merge current tab into Window to the left
+<Leader>tM   merge current tab into Window to the right
+<C-t>        next tab
+<A-Left>     previous tab
+<A-Right>    next tab
+<C-w>w       next window
+<C-w><Left>  next window left
+<C-w><Right> next window right
+<C-w><Up>    next Window up
+<C-w><Down>  next window down
+<C-w>10+     resize window +10 lines   :res +10
+<C-w>10-     resize window -10 lines   :res -10
+<C-w>10<     resize window -10 columns :vertical res -10
+<C-w>10>     resize window +10 columns :vertical res +10
+<LeftDrag>   drag to move window divider
+<Leader>wq   confirm write and quit window
+<Leader>qq   confirm write and quit window/tab
+<Leader>wk   window close all others
 
 *mck-fold*
 -------------------------------------------------
@@ -142,6 +164,25 @@ cS         swap chars with char before
 
 *mck-misc*
 -------------------------------------------------
+<C-S>Left  move 10 left
+<C-S>Right move 10 right
+<C-S>Up    move 10 up
+<C-S>Down  move 10 down
+
+<C-S-PgUp> scroll 10 up
+<C-S-PgDn> scroll 10 down
+
+z<Left>    scroll horizontal 10 left
+z<Right>   scroll horizontal 10 right
+z<Up>      move selected line(s) up
+z<Down>    move selected line(s) down
+
+<Leader>lx trim trailing spaces
+<Leader>lj trim trailing spaces then move down 1 line
+<Leader>lk trim trailing spaces then move up 1 line
+
+ +         highlight cross-hair at cursor location
+
 <Leader>ct center text on screen
 <Leader>cz center line on screen
 
