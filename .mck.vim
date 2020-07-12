@@ -3855,15 +3855,15 @@ endfunction
 
 function s:MySearch(meth) abort
   if (a:meth == 0)
-    let promptstr = 's-buf:/'
+    let promptstr = 'sqf-buf:/'
   elseif (a:meth == 1)
-    let promptstr = 's-gbl:/'
+    let promptstr = 'sqf-gbl:/'
   elseif (a:meth == 2)
-    let promptstr = 's-dir:/'
+    let promptstr = 'sqf-dir:/'
   elseif (a:meth == 3)
-    let promptstr = 'a-gbl:/'
+    let promptstr = 'fzf-gbl:/'
   elseif (a:meth == 4)
-    let promptstr = 'a-dir:/'
+    let promptstr = 'fzf-dir:/'
   else
     redraw!
     return

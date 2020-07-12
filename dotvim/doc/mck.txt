@@ -12,6 +12,7 @@
 <Leader>of switch to other file (.hpp/.cpp/etc)
 <Leader>gf open file at cursor pos
 <Leader>gt open file at cursor pos in new tab
+<Leader>be bufexplorer [modified]
 :Files [<root-dir>]
 
 *mck-git*
@@ -78,13 +79,13 @@ sC         swap chars with char before (cS)
 <Leader>sq stop async running search
 <Leader>sn search (/)
 <Leader>sN search (?)
-<Leader>sb search buffer files with quickfix
-<Leader>sd search files in curr dir with quickfix
-<Leader>sg search files in git root dir with quickfix
-<Leader>s. search files in curr dir with fzf+ag (:Ag)
-<Leader>s/ search files in git root dir with fzf+ag (:Agit)
-:Ag   <string> [<root-dir>] with fzf/ag
-:Agit <string> (<root-dir> set to <git-root>) with fzf/ag
+<Leader>sb search buffer [saved] files {results to qf}
+<Leader>sd search files in curr dir {results to qf}
+<Leader>sg search files in <git-root> dir {results to qf}
+<Leader>s. search files in curr dir {fzf+ag window} (:Ag)
+<Leader>s/ search files in <git-root> dir {fzf+ag window} (:Agit)
+:Ag   <string> [<root-dir>] {fzf/ag window}
+:Agit <string> (<root-dir> set to <git-root>) {fzf/ag window}
 
 multi-line/file qf/ll replace
 -----------------------------
