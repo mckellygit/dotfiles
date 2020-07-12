@@ -3891,7 +3891,11 @@ function s:MySearch(meth) abort
     " expand to full path (avoid problems with cd/lcd in au QuickFixCmdPre)
     let files = map(files, "shellescape(fnamemodify(v:val, ':p'))")
     "execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) join(files) ' 2>/dev/null'
-    execute 'AsyncRun! -strip ag --vimgrep -- ' shellescape(string, 1) join(files) ' 2>/dev/null'
+    if empty(files)
+      redraw | echohl DiffText | echo "No buffers to search" | echohl None
+    else
+      execute 'AsyncRun! -strip ag --vimgrep -- ' shellescape(string, 1) join(files) ' 2>/dev/null'
+    endif
   elseif (a:meth == 1)
     "execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
     execute 'AsyncRun! -strip ag --vimgrep -U --hidden -- ' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
@@ -3928,7 +3932,11 @@ function s:MyVisSearch(meth) abort
     " expand to full path (avoid problems with cd/lcd in au QuickFixCmdPre)
     let files = map(files, "shellescape(fnamemodify(v:val, ':p'))")
     "execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) join(files) ' 2>/dev/null'
-    execute 'AsyncRun! -strip ag --vimgrep -- ' shellescape(string, 1) join(files) ' 2>/dev/null'
+    if empty(files)
+      redraw | echohl DiffText | echo "No buffers to search" | echohl None
+    else
+      execute 'AsyncRun! -strip ag --vimgrep -- ' shellescape(string, 1) join(files) ' 2>/dev/null'
+    endif
   elseif (a:meth == 1)
     "execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
     execute 'AsyncRun! -strip ag --vimgrep -U --hidden -- ' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'

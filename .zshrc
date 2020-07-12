@@ -470,7 +470,7 @@ alias stop-rdm='rc -q'
 alias stop_rdm='rc -q'
 
 # also could use -u or -U instead of --all-text
-alias ag='\ag --all-text --hidden -- '
+alias ag='\ag -U --hidden -- '
 
 # cannot override builtin git diff with git cmds/aliases so do it this way ...
 git() { if [[ $1 == "diff" ]]; then shift ; command git dless "$@" ; else command git "$@"; fi }
