@@ -480,7 +480,8 @@ function! BufExplorer()
     " Position the cursor in the newly displayed list on the line representing
     " the active buffer.  The active buffer is the line with the '%' character
     " in it.
-    execute search("%")
+    "mck execute search("%")
+    call search('%')
 endfunction
 
 " DisplayBufferList {{{2
