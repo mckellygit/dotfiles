@@ -520,34 +520,53 @@ function! s:MapKeys()
 
     nnoremap <script> <silent> <nowait> <buffer> <2-leftmouse> :call <SID>SelectBuffer()<CR>
     nnoremap <script> <silent> <nowait> <buffer> <CR>          :call <SID>SelectBuffer()<CR>
-    nnoremap <script> <silent> <nowait> <buffer> <Leader>h     :call <SID>ToggleHelp()<CR>
+    nnoremap <script> <silent> <nowait> <buffer> o             :call <SID>SelectBuffer()<CR>
+
+    nnoremap <script> <silent> <nowait> <buffer> t             :call <SID>SelectBuffer("tab")<CR>
     "nnoremap <script> <silent> <nowait> <buffer> <s-cr>        :call <SID>SelectBuffer("tab")<CR>
-    "nnoremap <script> <silent> <nowait> <buffer> a             :call <SID>ToggleFindActive()<CR>
+
     nnoremap <script> <silent> <nowait> <buffer> b             :call <SID>SelectBuffer("ask")<CR>
+
+    " some useful navigation mappings ...
+    nnoremap <script> <silent> <nowait> <buffer> <Space>       j
+    nnoremap <script> <silent> <nowait> <buffer> <Tab>         j
+    nnoremap <script> <silent> <nowait> <buffer> <BS>          k
+    nnoremap <script> <silent> <nowait> <buffer> <S-Tab>       k
+
+    nnoremap <script> <silent> <nowait> <buffer> <Leader>h     :call <SID>ToggleHelp()<CR>
+
     nnoremap <script> <silent> <nowait> <buffer> d             :call <SID>RemoveBuffer("delete")<CR>
     xnoremap <script> <silent> <nowait> <buffer> d             :call <SID>RemoveBuffer("delete")<CR>
+
     nnoremap <script> <silent> <nowait> <buffer> D             :call <SID>RemoveBuffer("wipe")<CR>
     xnoremap <script> <silent> <nowait> <buffer> D             :call <SID>RemoveBuffer("wipe")<CR>
+
     "nnoremap <script> <silent> <nowait> <buffer> f             :call <SID>SelectBuffer("split", "sb")<CR>
     "nnoremap <script> <silent> <nowait> <buffer> F             :call <SID>SelectBuffer("split", "st")<CR>
+    "nnoremap <script> <silent> <nowait> <buffer> v             :call <SID>SelectBuffer("split", "vr")<CR>
+    "nnoremap <script> <silent> <nowait> <buffer> V             :call <SID>SelectBuffer("split", "vl")<CR>
+
     nnoremap <script> <silent> <nowait> <buffer> m             :call <SID>MRUListShow()<CR>
-    nnoremap <script> <silent> <nowait> <buffer> o             :call <SID>SelectBuffer()<CR>
+
     nnoremap <script> <silent> <nowait> <buffer> p             :call <SID>ToggleSplitOutPathName()<CR>
+    nnoremap <script> <silent> <nowait> <buffer> R             :call <SID>ToggleShowRelativePath()<CR>
+
     nnoremap <script> <silent> <nowait> <buffer> q             :call <SID>Close()<CR>
     nnoremap <script> <silent> <nowait> <buffer> x             :call <SID>Close()<CR>
-    nnoremap <script> <silent> <nowait> <buffer> <Esc>         :call <SID>Close()<CR>
     nnoremap <script> <silent> <nowait> <buffer> <C-c>         :call <SID>Close()<CR>
     nnoremap <script> <silent> <nowait> <buffer> <Leader>wq    :call <SID>Close()<CR>
     nnoremap <script> <silent> <nowait> <buffer> <Leader>qq    :call <SID>Close()<CR>
+    " NOTE: cannot map <Esc> as its used for motion keys etc ...
+    "nnoremap <script> <silent> <nowait> <buffer> <Esc>         :call <SID>Close()<CR>
+
     nnoremap <script> <silent> <nowait> <buffer> r             :call <SID>SortReverse()<CR>
-    nnoremap <script> <silent> <nowait> <buffer> R             :call <SID>ToggleShowRelativePath()<CR>
     nnoremap <script> <silent> <nowait> <buffer> s             :call <SID>SortSelect()<CR>
     nnoremap <script> <silent> <nowait> <buffer> S             :call <SID>ReverseSortSelect()<CR>
-    nnoremap <script> <silent> <nowait> <buffer> t             :call <SID>SelectBuffer("tab")<CR>
+
     nnoremap <script> <silent> <nowait> <buffer> T             :call <SID>ToggleShowTabBuffer()<CR>
+
+    "nnoremap <script> <silent> <nowait> <buffer> a             :call <SID>ToggleFindActive()<CR>
     "nnoremap <script> <silent> <nowait> <buffer> u             :call <SID>ToggleShowUnlisted()<CR>
-    "nnoremap <script> <silent> <nowait> <buffer> v             :call <SID>SelectBuffer("split", "vr")<CR>
-    "nnoremap <script> <silent> <nowait> <buffer> V             :call <SID>SelectBuffer("split", "vl")<CR>
 
     for k in ["G", "n", "N", "L", "M", "H"]
         execute "nnoremap <buffer> <silent>" k ":keepjumps normal!" k."<CR>"
@@ -670,6 +689,10 @@ function! s:CreateHelp()
         "call add(header, '" u : toggle showing unlisted buffers')
         "call add(header, '" V : open buffer in another window on the left of the current')
         "call add(header, '" v : open buffer in another window on the right of the current')
+        call add(header, '" <Space> : <Down>')
+        call add(header, '" <BS>    : <Up>')
+        call add(header, '" <Tab>   : <Down>')
+        call add(header, '" <S-Tab> : <Up>')
     else
         call add(header, '" Press <Leader>h for Help')
     endif
