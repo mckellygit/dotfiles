@@ -97,8 +97,9 @@ multi-line/file qf/ll replace
 
 filter qf/ll entries
 --------------------
-:Qgrep <pattern>
-:Lgrep <pattern>
+:QFGrep[V]               prompt for <pattern> to grep/grep -v
+:QFgrepPat[V] <pattern>  grep/grep -v <pattern>
+:QFRestore               restore qf/ll to previous
 
 *mck-terminal*
 -------------------------------------------------

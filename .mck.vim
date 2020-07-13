@@ -75,8 +75,8 @@ Plugin 'mckellyln/vim-rtags'
 Plugin 'mckellyln/QFEnter'
 "
 " qf grep / filter
-"Plugin 'sk1418/QFGrep'
-Plugin 'tommcdo/vim-lister'
+Plugin 'sk1418/QFGrep'
+"Plugin 'tommcdo/vim-lister'
 "
 " qf edit
 "Plugin 'itchyny/vim-qfedit'
@@ -270,7 +270,7 @@ let g:ack_use_dispatch = 1
 set grepprg=ag\ --vimgrep\ -U\ --hidden\ --\ 
 set grepformat=%f:%l:%c:%m
 " open :grep output in qf ...
-autocmd QuickFixCmdPost *grep* cwindow
+autocmd QuickFixCmdPost ++nested *grep* cwindow
 " ack ------------
 
 " ferret ---------
@@ -1074,7 +1074,7 @@ let c_no_curly_error = 1
 " open quickfix (10 lines) when cmd ends
 " skip as we now copen at end ...
 "let g:asyncrun_open = 10
-" se we can see echoes at end ...
+" so we can see echoes at end ...
 let g:asyncrun_silent = 0
 autocmd User AsyncRunPre echohl DiffAdd | echo 'AsyncRun started ...' | echohl None
 autocmd User AsyncRunStop if g:asyncrun_code != 0 | echohl DiffText | echo 'AsyncRun complete: [FAIL]' | echohl None |
@@ -1289,8 +1289,76 @@ set shortmess-=s
 " toggle line wrap
 nnoremap <silent> <Leader>lw :silent set nowrap! nowrap?<CR>
 
-" show registers (x is next on stack)
-nnoremap <silent> <Leader>rg :reg *,x<CR>
+" ------------------------------
+
+" show registers in popup and copy selected to '*' (x is next on stack)
+function! s:reglist()
+    let l:rlist = []
+    redir => regout
+    silent reg *,+,x,y,z,\",0
+    redir END
+    if !empty(regout)
+        let l:rlist = split(regout, '\n')
+        call remove(l:rlist, 0)
+        " go thru all entries and trim to reasonable len
+        let wid = &co - 20
+        if wid < 10
+            wid = 10
+        endif
+        let l:tlist = []
+        for item in l:rlist
+            "let l:lix = strpart(item, 0, wid)
+            let l:lix = item[:wid]
+            call add(l:tlist, l:lix)
+        endfor
+        return l:tlist
+    endif
+endfunction
+
+let g:reglist = []
+function! MyregFilter(id, key)
+    if a:key == 'q' || a:key == 'x' || a:key == '\<Esc>' || a:key == '\<C-c>'
+        call popup_close(a:id, 0)
+        " return > 0 to not pass on to callback ...
+        return 1
+    endif
+    " TODO: add options to open in split, vsplit, tab, hide buffer etc.
+    " pass to generic filter
+    return popup_filter_menu(a:id, a:key)
+endfunction
+
+function! MyregCallback(id, indx) abort
+    if a:indx <= 0
+        return
+    endif
+    let l:rg = []
+    let l:rg = split(g:reglist[a:indx-1])
+    "let l:rrg = strpart(l:rg[1], 1, 1)
+    let l:rrg = l:rg[1][1:1]
+    echo "reg = " . l:rrg
+    if empty(l:rrg) || l:rrg ==# '*'
+        return
+    endif
+    call setreg('*', getreg(l:rrg), getregtype(l:rrg))
+endfunction
+
+function! MyregClear(tid) abort
+    call feedkeys("\<Esc>", "m")
+endfunction
+
+function! s:MyregPopup() abort
+    let g:reglist = <SID>reglist()
+    if empty(g:reglist)
+        " shouldn't happen now that buflist always returns something ...
+        let g:reglist = [ 'registers empty ...' ]
+    endif
+    call popup_menu(g:reglist, #{ title: ' Type Name Content ', filter: 'MyregFilter', callback: 'MyregCallback', time: 20000 })
+endfunction
+
+nnoremap <silent> <Leader>rg :call <SID>MyregPopup()<CR>
+"nnoremap <silent> <Leader>rg :reg *,+,x,y,z,\",0<CR>
+
+" ------------------------------
 
 " if added changes to search.c to ui_delay() after give_warning()
 "set matchtime=3
@@ -4164,17 +4232,35 @@ endfunction
 
 "================================================================
 
+" NOTE: make qf window full width ...
+" (otherwise its often below wrong window [ie on the right])
+au FileType qf wincmd J
+
 " limit quickfix height ...
 au FileType qf call <SID>AdjustWindowHeight(5, 10)
 function! s:AdjustWindowHeight(minheight, maxheight)
   let l = 1
   let n_lines = 0
-  let w_width = winwidth(0)
+  "let w_width = winwidth(0)
+  " full width qf ...
+  let w_width = &co
+  if &signcolumn == "yes"
+    let w_width -= 2
+  endif
+  " ------------------
+  let qfwrap = getwinvar(0, '&wrap')
+  " probably run before nowrap is set ...
+  let qfwrap = 0
+  " ------------------
   while l <= line('$')
     " number to float for division
-    let l_len = strlen(getline(l)) + 0.0
-    let line_width = l_len/w_width
-    let n_lines += float2nr(ceil(line_width))
+    if qfwrap > 0
+      let l_len = strlen(getline(l)) + 0.0
+      let line_width = l_len/w_width
+      let n_lines += float2nr(ceil(line_width))
+    else
+      let n_lines += 1
+    endif
     let l += 1
   endw
   exe max([min([n_lines, a:maxheight]), a:minheight]) . "wincmd _"
