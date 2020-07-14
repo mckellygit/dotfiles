@@ -1335,7 +1335,7 @@ function! MyregCallback(id, indx) abort
     let l:rg = split(g:reglist[a:indx-1])
     "let l:rrg = strpart(l:rg[1], 1, 1)
     let l:rrg = l:rg[1][1:1]
-    echo "reg = " . l:rrg
+    "echo 'reg = ' . l:rrg
     if empty(l:rrg) || l:rrg ==# '*'
         return
     endif
