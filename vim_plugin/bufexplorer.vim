@@ -1413,7 +1413,7 @@ call s:Set("g:bufExplorerShowDirectories", 1)           " (Dir's are added by co
 call s:Set("g:bufExplorerShowRelativePath", 0)          " Show listings with relative or absolute paths?
 call s:Set("g:bufExplorerShowTabBuffer", 0)             " Show only buffer(s) for this tab?
 call s:Set("g:bufExplorerShowUnlisted", 0)              " Show unlisted buffers?
-call s:Set("g:bufExplorerShowNoName", 0)                " Show 'No Name' buffers?
+call s:Set("g:bufExplorerShowNoName", 1)                " Show 'No Name' buffers?
 call s:Set("g:bufExplorerSortBy", "mru")                " Sorting methods are in s:sort_by:
 call s:Set("g:bufExplorerSplitBelow", &splitbelow)      " Should horizontal splits be below or above current window?
 call s:Set("g:bufExplorerSplitOutPathName", 1)          " Split out path and file name?
