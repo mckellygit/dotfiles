@@ -100,6 +100,13 @@ filter qf/ll entries
 :QFGrep[V]               prompt for <pattern> to grep/grep -v
 :QFgrepPat[V] <pattern>  grep/grep -v <pattern>
 :QFRestore               restore qf/ll to previous
+ - or -
+:Cfilt[!] /<pattern>/    grep [-v] <pattern>
+:Cold                    restore qf
+:Cnew                    previous qf
+:Lfilt[!] /<pattern>/    grep [-v] <pattern>
+:Lold                    restore ll
+:Lnew                    previous ll
 
 *mck-terminal*
 -------------------------------------------------

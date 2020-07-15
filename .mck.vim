@@ -77,6 +77,7 @@ Plugin 'mckellyln/QFEnter'
 " qf grep / filter
 Plugin 'sk1418/QFGrep'
 "Plugin 'tommcdo/vim-lister'
+" NOTE: built-in C/LFilter can also do this
 "
 " qf edit
 "Plugin 'itchyny/vim-qfedit'
@@ -4043,10 +4044,13 @@ vnoremap <silent> <Leader>sd "sy<Esc>:call <SID>MyVisSearch(2)<CR>
 nnoremap <silent> <Leader>sg :call <SID>MySearch(1)<CR>
 vnoremap <silent> <Leader>sg "sy<Esc>:call <SID>MyVisSearch(1)<CR>
 
-"au VimEnter * :Alias Acks   cdo
-"au VimEnter * :Alias Ackfs  cfdo
-"au VimEnter * :Alias LAcks  ldo
-"au VimEnter * :Alias LAckfs lfdo
+"aug ack_alias
+"  au!
+"  au VimEnter * :Alias Acks   cdo
+"  au VimEnter * :Alias Ackfs  cfdo
+"  au VimEnter * :Alias LAcks  ldo
+"  au VimEnter * :Alias LAckfs lfdo
+"aug END
 command! -nargs=+ -bang Acks   execute ':cdo<bang> '  . <q-args>
 command! -nargs=+ -bang Ackfs  execute ':cfdo<bang> ' . <q-args>
 command! -nargs=+ -bang LAcks  execute ':ldo<bang> '  . <q-args>
@@ -5181,7 +5185,17 @@ packadd termdebug
 " :Cfilter[!] /{pat}/
 " :Lfilter[!] /{pat}/
 
+" NOTE: QFGrep plugin can also do this
+
 packadd cfilter
+
+aug cfilter_alias
+  au!
+  au VimEnter * :Alias Cold  colder
+  au VimEnter * :Alias Cnew  cnewer
+  au VimEnter * :Alias Lold  lolder
+  au VimEnter * :Alias Lnew  lnewer
+aug END
 
 " -----------------------------
 
