@@ -541,7 +541,7 @@ let g:findroot_not_for_subdir = 1
 
 " fzf -----------------
 if 1 " use vim popup ...
-    let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.5, 'yoffset': 0.8, 'xoffset': 0.8 } }
+    let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.5, 'yoffset': 0.7, 'xoffset': 0.6 } }
 else
 if &term =~ "^screen" || &term =~ "^tmux"
     " use tmux popup ...
@@ -701,16 +701,31 @@ endfunction
 
 " fzf#run() example ...
 "noremap <silent> <Leader>lb <C-\><C-n>:<C-u>call fzf#run({
-"\   'source':  reverse(<sid>buflist()),
+"\   'source':  reverse(<sid>buflist(1)),
 "\   'sink':    function('<sid>bufopen'),
 "\   'options': '+m',
 "\   'window' : { 'width': 0.8, 'height': 0.3, 'yoffset': 0.8, 'xoffset': 0.8 },
-"\   'down':    len(<sid>buflist()) + 2
+"\   'down':    len(<sid>buflist(1)) + 2
 "\ })<CR>
 
+function s:Mylsfzf(arg) abort
+    call fzf#run({
+\       'source' : reverse(<sid>buflist(a:arg)),
+\       'sink'   : function('s:bufopen'),
+\       'window' : { 'width': 0.8, 'height': 0.4, 'yoffset': 0.7, 'xoffset': 0.6 }
+\   })
+endfunction
+
 " native vim popup ls ...
-noremap <silent> <Leader>ls <C-\><C-n>:<C-u>call <SID>MylsPopup(0)<CR>
-noremap <silent> <Leader>lb <C-\><C-n>:<C-u>call <SID>MylsPopup(1)<CR>
+"noremap <silent> <Leader>ls <C-\><C-n>:<C-u>call <SID>MylsPopup(0)<CR>
+"noremap <silent> <Leader>lb <C-\><C-n>:<C-u>call <SID>MylsPopup(1)<CR>
+
+" fzf terminal window ls ...
+noremap <silent> <Leader>ls <C-\><C-n>:<C-u>call <SID>Mylsfzf(0)<CR>
+noremap <silent> <Leader>lb <C-\><C-n>:<C-u>call <SID>Mylsfzf(1)<CR>
+
+" NOTE: seems like a better Buffers command than the fzf default ...
+command! Buffers call <SID>Mylsfzf(1)
 
 " hide buffer
 noremap <silent> <Leader>hb <C-\><C-n>:hide<CR>

@@ -14,6 +14,10 @@
 <Leader>gt open file at cursor pos in new tab
 <Leader>be bufexplorer [modified]
 :Files [<root-dir>]
+:GFiles
+:Buffers
+:Windows
+:Commands
 
 *mck-git*
 -------------------------------------------------
@@ -86,6 +90,11 @@ sC         swap chars with char before (cS)
 <Leader>s/ search files in <git-root> dir {fzf+ag window} (:Agit)
 :Ag   <string> [<root-dir>] {fzf/ag window}
 :Agit <string> (<root-dir> set to <git-root>) {fzf/ag window}
+:Files [<root-dir>]
+:GFiles
+:Buffers
+:Windows
+:Commands
 
 multi-line/file qf/ll replace
 -----------------------------
