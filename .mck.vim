@@ -716,6 +716,8 @@ function s:Mylsfzf(arg) abort
 \   })
 endfunction
 
+" TODO: why fzf#run() down: <val> and options: +m settings ?
+
 " native vim popup ls ...
 "noremap <silent> <Leader>ls <C-\><C-n>:<C-u>call <SID>MylsPopup(0)<CR>
 "noremap <silent> <Leader>lb <C-\><C-n>:<C-u>call <SID>MylsPopup(1)<CR>
@@ -1311,7 +1313,7 @@ nnoremap <silent> <Leader>lw :silent set nowrap! nowrap?<CR>
 function! s:reglist()
     let l:rlist = []
     redir => regout
-    silent reg *,+,x,y,z,\",0
+    silent reg *,+,x,y,z,\",0,1,2,%,/
     redir END
     if !empty(regout)
         let l:rlist = split(regout, '\n')
@@ -1371,8 +1373,34 @@ function! s:MyregPopup() abort
     call popup_menu(g:reglist, #{ title: ' Type Name Content ', filter: 'MyregFilter', callback: 'MyregCallback', time: 20000 })
 endfunction
 
-nnoremap <silent> <Leader>rg :call <SID>MyregPopup()<CR>
+function! s:MyregfzfCB(reg) abort
+    let l:rg = []
+    let l:rg = split(a:reg)
+    "let l:rrg = strpart(l:rg[1], 1, 1)
+    let l:rrg = l:rg[1][1:1]
+    "echo 'reg = ' . l:rrg
+    if empty(l:rrg) || l:rrg ==# '*'
+        return
+    endif
+    call setreg('*', getreg(l:rrg), getregtype(l:rrg))
+endfunction
+
+function s:Myregfzf() abort
+    call fzf#run({
+\       'source' : <sid>reglist(),
+\       'sink'   : function('s:MyregfzfCB'),
+\       'window' : { 'width': 0.8, 'height': 0.4, 'yoffset': 0.7, 'xoffset': 0.6 }
+\   })
+endfunction
+
+" orig cmdline reg ...
 "nnoremap <silent> <Leader>rg :reg *,+,x,y,z,\",0<CR>
+
+" native vim popup reg ...
+"nnoremap <silent> <Leader>rg :call <SID>MyregPopup()<CR>
+
+" fzf terminal window reg ...
+nnoremap <silent> <Leader>rg :call <SID>Myregfzf()<CR>
 
 " ------------------------------
 
