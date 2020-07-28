@@ -96,6 +96,22 @@ sC         swap chars with char before (cS)
 :Windows
 :Commands
 
+In qf/ll window
+---------------
+p       open preview window
+<Space> open preview window
+q       close preview window
+<C-c>   close preview window
+r       reset to orig preview line
+<Down>  next qf/ll preview
+<Up>    prev qf/ll preview
+<C-j>   scroll preview down
+<C-k>   scroll preview up
+<C-f>   scroll half-page down
+<C-b>   scroll half-page up
+<PageDown> scroll full-page down
+<PageUp>   scroll full-page up
+
 multi-line/file qf/ll replace
 -----------------------------
  -> use <Leader>sb/d/g or any other method to create qf/ll entries
