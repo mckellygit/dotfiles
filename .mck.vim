@@ -1053,12 +1053,25 @@ augroup qfpreview
     autocmd FileType qf nmap <buffer> p       <plug>(qf-preview-open)
 augroup END
 let g:qfpreview = {
-    \ 'close': 'q',
-    \ 'number': '1',
-    \ 'height': '15',
-    \ 'offset': '7',
+    \ 'top'   : "\<Home>",
+    \ 'bottom': "\<End>",
+    \ 'scrollup'  : "\<C-k>",
+    \ 'scrolldown': "\<C-j>",
+    \ 'halfpageup'  : "\<C-b>",
+    \ 'halfpagedown': "\<C-f>",
+    \ 'fullpageup'  : "\<PageUp>",
+    \ 'fullpagedown': "\<PageDown>",
+    \ 'next': "\<Down>",
+    \ 'previous': "\<Up>",
+    \ 'reset': "r",
+    \ 'close': "q",
+    \ 'number': "1",
+    \ 'height': "15",
+    \ 'offset': "7",
     \ 'sign': {'linehl': 'CursorLine'},
     \ }
+" TODO: add multiple mappings so that close could be q, x
+"       and next could be <Down>, j ...
 " vim-qf-preview ------
 
 " lastplace -----------
