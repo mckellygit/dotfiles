@@ -1,0 +1,8 @@
+#!/bin/bash
+
+gdir=$(gitdir)
+if [[ -n "$gdir" ]] ; then
+    cd $gdir || exit
+    git --no-pager gvdiff $1 $2 $3 $4
+fi
+

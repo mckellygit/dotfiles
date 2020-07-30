@@ -34,7 +34,7 @@
 [alias]
 	undo = "!f() { git reset --hard $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
 	dt = difftool
-	vdiff = difftool
+	gvdiff = difftool
     difff = dless
     olddiff = diff
     oldiff = diff
