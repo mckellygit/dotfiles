@@ -37,6 +37,7 @@ for f in \
 ../HPCC-Platform/rtl/eclrtl/eclrtl.hpp \
 ../HPCC-Platform/rtl/eclrtl/eclrtl_imp.hpp \
 ../HPCC-Platform/rtl/eclrtl/rtldistr.hpp \
+../HPCC-Platform/rtl/eclrtl/rtlconst.hpp \
 ../HPCC-Platform/rtl/eclrtl/rtlds_imp.hpp \
 ../HPCC-Platform/rtl/eclrtl/rtlfield.hpp \
 ../HPCC-Platform/rtl/eclrtl/rtlkey.hpp \
@@ -146,6 +147,17 @@ if [ -n "$tbbdir" ] ; then
 fi
 # -----------------
 
+output=$(sudo rsync --info=name1 -ai --update --existing $dir/libs/libpy3embed.so /opt/HPCCSystems/versioned/python3)
+#echo "output = $output"
+if [ -n "$output" -a "$output" != ".d..t...... ./" ] ; then
+    modified=1
+fi
+output=$(sudo rsync --info=name1 -ai --update --existing $dir/libs/libpy2embed.so /opt/HPCCSystems/versioned/python2)
+#echo "output = $output"
+if [ -n "$output" -a "$output" != ".d..t...... ./" ] ; then
+    modified=1
+fi
+
 output=$(sudo rsync --info=name1 -ai --update --existing $dir/libs/ /opt/HPCCSystems/plugins)
 #echo "output = $output"
 if [ -n "$output" -a "$output" != ".d..t...... ./" ] ; then
@@ -211,8 +223,10 @@ echo "rpath fixup ..."
 odir=${PWD}
 
 for bdir in \
-/opt/HPCCSystems/lib \
+/opt/HPCCSystems/versioned/python2 \
+/opt/HPCCSystems/versioned/python3 \
 /opt/HPCCSystems/plugins \
+/opt/HPCCSystems/lib \
 /opt/HPCCSystems/bin \
 /opt/HPCCSystems/sbin
 do
@@ -221,7 +235,7 @@ do
     ls -1 2>/dev/null | while read file
     do
 #       echo "file: $file"
-        (readelf -d $file | grep rpath | grep -q $dir) 2> /dev/null
+        (readelf -d $file | grep RUNPATH | grep -q "$dir") 2> /dev/null
         rc=$?
 #       echo "rc: $rc"
         if [ $rc -eq 0 ] ; then
