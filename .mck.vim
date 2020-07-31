@@ -483,23 +483,50 @@ function! MyLightlineColonKeyword()
   endif
 endfunction
 
+let g:asyncrun_prev = 'none'
+let g:asyncrun_last = localtime()
+
 function! MyLightlineAsyncRunStatus()
-  if &filetype ==# 'qf'
-    return ''
-  elseif &buftype ==# 'terminal'
-    return ''
-  elseif !&buflisted
-    return ''
-  else
-    if g:asyncrun_status == 'running'
-      return 'ar:run'
-    elseif g:asyncrun_status == 'success'
-      return 'ar:ok '
-    elseif g:asyncrun_status == 'failure'
-      return 'ar:no '
+    if &filetype ==# 'qf'
+        return ''
+    elseif &buftype ==# 'terminal'
+        return ''
+    elseif !&buflisted
+        return ''
     else
-      return 'ar:-- '
-  endif
+        if g:asyncrun_status == 'running'
+            let g:asyncrun_prev = 'none'
+            return 'ar:run'
+        elseif g:asyncrun_status == 'success'
+            if g:asyncrun_prev != 'success'
+                let g:asyncrun_prev = 'success'
+                let g:asyncrun_last = localtime()
+                return 'ar:ok '
+            else
+                let difftime = localtime() - g:asyncrun_last
+                if difftime >= 15
+                    return 'ar:n/a'
+                else
+                    return 'ar:ok '
+                endif
+            endif
+        elseif g:asyncrun_status == 'failure'
+            if g:asyncrun_prev != 'failure'
+                let g:asyncrun_prev = 'failure'
+                let g:asyncrun_last = localtime()
+                return 'ar:err'
+            else
+                let difftime = localtime() - g:asyncrun_last
+                if difftime >= 15
+                    return 'ar:n/a'
+                else
+                    return 'ar:err'
+                endif
+            endif
+        else
+            return 'ar:n/a'
+        endif
+    endif
 endfunction
 
 " modify tab active/inactive colors
