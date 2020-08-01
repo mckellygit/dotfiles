@@ -42,3 +42,5 @@ fi
 
 export ZPROFILE="loaded"
 
+
+export PATH="$HOME/.cargo/bin:$PATH"

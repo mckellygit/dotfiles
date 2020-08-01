@@ -520,11 +520,12 @@ export MYMPI=mpich
 #export MYMPI=openmpi
 #export MYMPI=mvapich
 
-path+=(~/${MYMPI}/bin)
-export MANPATH=${MANPATH}:~/${MYMPIi}/share/man
+#path+=(~/${MYMPI}/bin)
+#export MANPATH=${MANPATH}:~/${MYMPIi}/share/man
 
 path+=(~/bin)
 path+=(~/go/bin)
+path+=(~/.cargo/bin)
 path+=(/usr/local/go/bin)
 path+=(/usr/share/bcc/tools)
 export PATH
@@ -597,8 +598,6 @@ alias thor_regression='./ecl-test run --timeout -1 --target thor -e=embedded,3rd
 alias hthor_regression='./ecl-test run --target hthor -e=embedded,3rdparty'
 alias roxie_regression='./ecl-test run --target roxie -e=embedded,3rdparty'
 alias hpcc_regression='./ecl-test run --timeout -1 -e=embedded,3rdparty'
-
-export MANPATH=${MANPATH}:/usr/share/bcc/man
 
 # also look at ~/.selected_editor file
 export VISUAL=vim
@@ -785,3 +784,4 @@ bindkey "\e\n" autosuggest-execute
 
 # --------------------
 
+fpath+=${ZDOTDIR:-~}/.zsh_functions

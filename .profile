@@ -40,3 +40,5 @@ if [ -n "$SHELL" ]; then
     fi
 fi
 
+
+export PATH="$HOME/.cargo/bin:$PATH"

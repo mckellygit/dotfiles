@@ -153,8 +153,8 @@ window:
 
   decorations: full
 
-# Allow terminal applications to change Alacritty's window title.
-dynamic_title: true
+  # Allow terminal applications to change Alacritty's window title.
+  dynamic_title: true
 
 scrolling: 
   history: 0
@@ -194,7 +194,7 @@ background_opacity: 0.96
 
 draw_bold_text_with_bright_colors: true
 
-visual_bell:
+bell:
   duration: 0
 
 cursor:

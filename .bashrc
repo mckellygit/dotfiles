@@ -295,3 +295,4 @@ elif [[ -f /usr/share/bash-completion/completions/git ]] ; then
     source /usr/share/bash-completion/completions/git
 fi
 
+source ~/.bash_completion/alacritty
