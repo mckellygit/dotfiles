@@ -1795,6 +1795,7 @@ noremap ZZ <Nop>
 
 " to get all of top/bottom lines ...
 noremap 1G 1G0
+noremap gg 1G0
 noremap G G$
 
 " ------------------------------
@@ -3256,7 +3257,7 @@ vnoremap <expr> <C-Left>  VisAtStart(0) ? 'b' : 'ge'
 
 " ---------
 
-" N<C-D> and N<C-U> idiotically change the scroll setting
+" N<C-D> and N<C-U> changes the scroll setting ...
 function! s:Saving_scrollV(cmd)
   let save_scroll = &scroll
   " want normal! here
@@ -3331,10 +3332,15 @@ function! s:Saving_scrollVUp4(cmd)
 endfunction
 " ---------
 
-nnoremap <silent> <expr> <C-D> (line('.') == line('w0')) ? 'M' : '<C-D>'
-vnoremap <silent> <expr> <C-D> (line('.') == line('w0')) ? 'M' : '<C-D>'
-nnoremap <silent> <expr> <C-U> (line('.') == line('w$')) ? 'M' : '<C-U>'
-vnoremap <silent> <expr> <C-U> (line('.') == line('w$')) ? 'M' : '<C-U>'
+" could also remap these ...
+"nnoremap <silent> <expr> <C-D> (line('.') == line('w0')) ? g:hdn : '<C-D>'
+"vnoremap <silent> <expr> <C-D> (line('.') == line('w0')) ? g:hdn : '<C-D>'
+"nnoremap <silent> <expr> <C-U> (line('.') == line('w$')) ? g:hup : '<C-U>'
+"vnoremap <silent> <expr> <C-U> (line('.') == line('w$')) ? g:hup : '<C-U>'
+
+" to get back orig if needed
+"noremap <Leader><C-D> <C-D>
+"noremap <Leader><C-U> <C-U>
 
 " ---------
 
@@ -3357,9 +3363,11 @@ endfunction
 " ---------
 
 " Cursor moves by screen lines
+"nmap            k      gk
 noremap         <Up>   gk
 inoremap <expr> <Up>   pumvisible() ? '<Up>'   : '<C-\><C-o>gk'
 
+"nmap            j      gj
 noremap         <Down> gj
 inoremap <expr> <Down> pumvisible() ? '<Down>' : '<C-\><C-o>gj'
 
@@ -3371,22 +3379,30 @@ inoremap <expr> <End>  pumvisible() ? '<End>'  : '<C-\><C-o>g<End>'
 
 " ---------
 
-"call <SID>NoremapNormalCmd("<C-j>",    0, "1<C-D>")
-nnoremap <expr> <C-Down> ((line('$') - line('w$')) < 1) ? 'j' : '<C-e>j'
-nnoremap <expr> <C-j>    ((line('$') - line('w$')) < 1) ? 'j' : '<C-e>j'
+function AtTop(strict)
+    return winline() == 1
+endfunction
 
-vnoremap <expr> <C-Down> ((line('$') - line('w$')) < 1) ? 'j' : '<C-e>j'
-vnoremap <expr> <C-j>    ((line('$') - line('w$')) < 1) ? 'j' : '<C-e>j'
+function AtBot(strict)
+    return winline() == g:full
+endfunction
+
+"call <SID>NoremapNormalCmd("<C-j>",    0, "1<C-D>")
+noremap <silent> <expr> <C-Down> ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>j'
+noremap <silent> <expr> <C-j>    ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>j'
+
+"vnoremap <silent> <expr> <C-Down> ((line('$') - line('w$')) < 1) ? 'j' : '<C-e>j'
+"vnoremap <silent> <expr> <C-j>    ((line('$') - line('w$')) < 1) ? 'j' : '<C-e>j'
 
 inoremap <silent> <expr> <C-j>     pumvisible() ? '<C-j>'    : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-D>")<CR>'
 inoremap <silent> <expr> <C-Down>  pumvisible() ? '<C-Down>' : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-D>")<CR>'
 
 "call <SID>NoremapNormalCmd("<C-k>",    0, "1<C-U>")
-nnoremap <C-Up> <C-y>k
-nnoremap <C-k>  <C-y>k
+noremap <silent> <expr> <C-Up> AtBot(0) ? '<C-y>' : '<C-y>k'
+noremap <silent> <expr> <C-k>  AtBot(0) ? '<C-y>' : '<C-y>k'
 
-vnoremap <C-Up> <C-y>k
-vnoremap <C-k>  <C-y>k
+"vnoremap <silent>       <C-Up> <C-y>k
+"vnoremap <silent>       <C-k>  <C-y>k
 
 inoremap <silent> <expr> <C-k>     pumvisible() ? '<C-k>'  : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-U>")<CR>'
 inoremap <silent> <expr> <C-Up>    pumvisible() ? '<C-Up>' : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-U>")<CR>'
@@ -3447,16 +3463,52 @@ vnoremap <A-ScrollWheelDown> 48j$
 " move by 5/10 ...
 " NOTE: probably already mapped in tmux ...
 
-noremap  <C-S-Up>    5k
-noremap  <C-S-Down>  5j
-noremap  <C-S-Left>  10h
-noremap  <C-S-Right> 10l
-inoremap <C-S-Up>    <C-\><C-o>5k
-inoremap <C-S-Down>  <C-\><C-o>5j
-inoremap <C-S-Left>  <C-\><C-o>10h
-inoremap <C-S-Right> <C-\><C-o>10l
+nnoremap <C-S-Up>    5gk
+nnoremap <C-S-Down>  5gj
+nnoremap <C-S-Left>  10gh
+nnoremap <C-S-Right> 10gl
+inoremap <C-S-Up>    <C-\><C-o>5gk
+inoremap <C-S-Down>  <C-\><C-o>5gj
+inoremap <C-S-Left>  <C-\><C-o>10gh
+inoremap <C-S-Right> <C-\><C-o>10gl
 
 " ---------
+
+function s:CtrlF(multi) abort
+    setlocal scrolloff=10
+    let l:amt = a:multi * g:half
+    execute 'normal ' . l:amt . 'gj'
+    setlocal scrolloff=-1
+    "let rl = winheight(0) - winline()
+    "if (rl >= g:half)
+    "    if (rl > g:half + 10)
+    "        execute 'normal ' . g:half . 'gj'
+    "    else
+    "        let amt = rl + 1
+    "        execute 'normal ' . amt . 'gj'
+    "    endif
+    "else
+    "    execute 'normal ' . g:half . 'gj'
+    "endif
+endfunction
+
+function s:CtrlB(multi) abort
+    setlocal scrolloff=10
+    let l:amt = a:multi * g:half
+    execute 'normal ' . l:amt . 'gk'
+    setlocal scrolloff=-1
+    "let rl = winline()
+    "if (rl < g:half)
+    "    execute 'normal ' . g:half . 'gk'
+    "else
+    "    if (rl > g:half + 10)
+    "        execute 'normal ' . g:half . 'gk'
+    "    else
+    "        let amt = rl + 1
+    "        execute 'normal ' . amt . 'gk'
+    "    endif
+    "endif
+endfunction
 
 function! s:MapScrollKeys()
   let g:half = winheight(0) / 2
@@ -3466,36 +3518,56 @@ function! s:MapScrollKeys()
   let g:full = g:half + g:half
   let g:full2x = g:full + g:full
 
+  let g:hdn = g:half . 'gj'
+  let g:hup = g:half . 'gk'
+
   " TODO: could add same if at top then M logic to imap <C-f> ...
 
-  noremap            <expr> <C-f> (line('.') == line('w0')) ? 'M' : '<C-D>'
+  "noremap            <expr> <C-f> (line('.') == line('w0')) ? g:hdn : '<C-D>'
+  nnoremap <silent> <C-f> :call <SID>CtrlF(1)<CR>
+  execute 'vnoremap <silent> <C-f> ' . g:hdn
   inoremap  <silent> <expr> <C-f> pumvisible() ? '<C-f>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
 
-  noremap            <expr> <C-b> (line('.') == line('w$')) ? 'M' : '<C-U>'
+  "noremap            <expr> <C-b> (line('.') == line('w$')) ? g:hup : '<C-U>'
+  nnoremap <silent> <C-b> :call <SID>CtrlB(1)<CR>
+  execute 'vnoremap <silent> <C-b> ' . g:hup
   inoremap  <silent> <expr> <C-b> pumvisible() ? '<C-b>' : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
 
-  noremap            <expr> <PageDown>   (line('.') == line('w0')) ? 'M' : '<C-D><C-D>'
+  "noremap            <expr> <PageDown>   (line('.') == line('w0')) ? g:hdn : '<C-D><C-D>'
+  nnoremap <silent> <PageDown> :call <SID>CtrlF(2)<CR>
+  execute 'vnoremap <silent> <expr> <PageDown> (line(".") == line("w0")) ? "' . g:hdn . '" : "<C-D><C-D>"'
   inoremap  <silent> <expr> <PageDown>   pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn2("<C-V><C-D>")<CR>'
-  noremap            <expr> <PageUp>     (line('.') == line('w$')) ? 'M' : '<C-U><C-U>'
+  "noremap            <expr> <PageUp>     (line('.') == line('w$')) ? g:hup : '<C-U><C-U>'
+  nnoremap <silent> <PageUp> :call <SID>CtrlB(2)<CR>
+  execute 'vnoremap <silent> <expr> <PageUp> (line(".") == line("w$")) ? "' . g:hup . '" : "<C-U><C-U>"'
   inoremap  <silent> <expr> <PageUp>     pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp2("<C-V><C-U>")<CR>'
 
   " NOTE: tmux could send Up/Down cmds instead of this key ...
-  noremap            <expr> <C-PageDown> (line('.') == line('w0')) ? 'M' : '<C-D>'
-  inoremap  <silent> <expr> <C-PageDown> pumvisible() ? '<C-PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
-  noremap            <expr> <C-PageUp>   (line('.') == line('w$')) ? 'M' : '<C-U>'
-  inoremap  <silent> <expr> <C-PageUp>   pumvisible() ? '<C-PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
+  "noremap            <expr> <C-PageDown> (line('.') == line('w0')) ? g:hdn : '<C-D>'
+  nnoremap <silent> <C-PageDown> :call <SID>CtrlF(1)<CR>
+  execute 'vnoremap <silent> <expr> <C-PageDown> (line(".") == line("w0")) ? "' . g:hdn . '" : "<C-D>"'
+  inoremap  <silent> <expr> <C-PageDown> pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
+  "noremap            <expr> <C-PageUp>   (line('.') == line('w$')) ? g:hup : '<C-U>'
+  nnoremap <silent> <C-PageUp> :call <SID>CtrlB(2)<CR>
+  execute 'vnoremap <silent> <expr> <C-PageUp> (line(".") == line("w$")) ? "' . g:hup . '" : "<C-U>"'
+  inoremap  <silent> <expr> <C-PageUp>   pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
 
   " NOTE: tmux could send Up/Down cmds instead of this key ...
-  noremap            <expr> <C-S-PageDown> (line('.') == line('w0')) ? 'M' : '10<C-e>10j'
-  inoremap  <silent> <expr> <C-S-PageDown> pumvisible() ? '<C-PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
-  noremap            <expr> <C-S-PageUp>   (line('.') == line('w$')) ? 'M' : '10<C-y>10k'
-  inoremap  <silent> <expr> <C-S-PageUp>   pumvisible() ? '<C-PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
+  " TODO: wish <C-e>/<C-y> would scroll virtual lines ...
+  noremap   <silent> <expr> <C-S-PageDown> (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
+  inoremap  <silent> <expr> <C-S-PageDown> pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
+  noremap   <silent> <expr> <C-S-PageUp>   (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
+  inoremap  <silent> <expr> <C-S-PageUp>   pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
 
   " NOTE: tmux could send Up/Down cmds instead of this key ...
-  noremap            <expr> <A-PageDown> (line('.') == line('w0')) ? 'M' : '<C-D><C-D><C-D><C-D>'
-  inoremap  <silent> <expr> <A-PageDown> pumvisible() ? '<C-PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn4("<C-V><C-D>")<CR>'
-  noremap            <expr> <A-PageUp>   (line('.') == line('w$')) ? 'M' : '<C-U><C-U><C-U><C-U>'
-  inoremap  <silent> <expr> <A-PageUp>   pumvisible() ? '<C-PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp4("<C-V><C-U>")<CR>'
+  "noremap            <expr> <A-PageDown> (line('.') == line('w0')) ? g:hdn : '<C-D><C-D><C-D><C-D>'
+  nnoremap <silent> <A-PageDown> :call <SID>CtrlF(4)<CR>
+  execute 'vnoremap <silent> <expr> <A-PageDown> (line(".") == line("w0")) ? "' . g:hdn . '" : "<C-D><C-D><C-D><C-D>"'
+  inoremap  <silent> <expr> <A-PageDown> pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn4("<C-V><C-D>")<CR>'
+  "noremap            <expr> <A-PageUp>   (line('.') == line('w$')) ? g:hup : '<C-U><C-U><C-U><C-U>'
+  nnoremap <silent> <A-PageUp> :call <SID>CtrlB(4)<CR>
+  execute 'vnoremap <silent> <expr> <A-PageUp> (line(".") == line("w$")) ? "' . g:hup . '" : "<C-U><C-U><C-U><C-U>"'
+  inoremap  <silent> <expr> <A-PageUp>   pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp4("<C-V><C-U>")<CR>'
 endfunction
 
 let g:half = 24
@@ -3923,6 +3995,9 @@ nmap <Leader>pj <Plug>UnconditionalPasteJustJoinedAfter
 "nmap <C-y> <Plug>UnconditionalPasteCharBefore
 nnoremap <C-y> <Nop>
 vnoremap <C-y> <Nop>
+
+" to get back orig if needed
+noremap <Leader><C-y> <C-y>
 
 " also Pc
 nmap <Leader>pp <Plug>UnconditionalPasteCharBefore
@@ -4560,6 +4635,9 @@ noremap <C-a> 0
 " (but its been remapped to <C-j>)
 noremap <C-e> $
 
+" to get back orig if needed
+noremap <Leader><C-e> <C-e>
+
 " cmdline movement
 cnoremap <C-a> <Home>
 cnoremap <C-e> <End>
@@ -4818,8 +4896,8 @@ if &diff
   " and Bram said a fix is not planned ...
 
   " TODO: seems weird these dont work in diff ...
-  unmap <C-d>
-  unmap <C-u>
+  "unmap <C-d>
+  "unmap <C-u>
   unmap <C-f>
   unmap <C-b>
   inoremap <C-f> <C-\><C-o><C-f>
