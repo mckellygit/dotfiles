@@ -1,0 +1,4 @@
+#!/bin/bash
+
+git --no-pager log --color=always $1 $2 $3 $4 |& less -R +k -x4
+

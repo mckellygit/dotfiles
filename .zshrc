@@ -473,7 +473,8 @@ alias stop_rdm='rc -q'
 alias ag='\ag -U --hidden -- '
 
 # cannot override builtin git diff with git cmds/aliases so do it this way ...
-git() { if [[ $1 == "diff" ]]; then shift ; command git dless "$@" ; else command git "$@"; fi }
+# also add git log
+git() { if [[ $1 == "diff" ]]; then shift ; command git dless "$@" ; elif [[ $1 == "log" ]]; then shift ; command git llog "$@" ; else command git "$@"; fi }
 
 # ------------------
 

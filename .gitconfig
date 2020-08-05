@@ -67,7 +67,7 @@
     smu = !git submodule update --init --recursive
 #   parent = "!f() { c=$(git log --first-parent | grep commit | head -n 2 | tail -n 1 | awk '{print $2}'); git branch --contains $c; }; f"
     parent = !git log --first-parent --graph
-    ls = whatchanged
+#   ls = whatchanged
 #   git show - to describe last commit ...
 #   ls-changes = !git diff HEAD~1 --name-only
 [diff]
