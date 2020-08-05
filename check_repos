@@ -70,6 +70,16 @@ cd ~/Downloads/vim_bundles
 #   sudo mkdir -p /usr/local/share/man/man1
 #   sudo cp doc/fd.1 /usr/local/share/man/man1/fd.1
 
+# bat:
+#   download latest .deb from https://github.com/sharkdp/bat/releases
+#   sudo dpkg -i bat_0.15.4_amd64.deb
+#   -or-
+#   git clone --recursive https://github.com/sharkdp/bat.git
+#   rustup override set stable
+#   rustup update stable
+#   cargo build --bins
+#   cargo test
+
 # fzf:
 #   git clone https://github.com/junegunn/fzf.git ~/.fzf
 #   ~/.fzf/install
@@ -155,5 +165,5 @@ cd ~/Downloads/vim_bundles
 
 echo ""
 echo "Also check git:     zsh, CMake ..."
-echo "Also check non-git: gcc/g++, gdb, readline, ncurses ..."
+echo "Also check non-git: gcc/g++, gdb, readline, ncurses, bat ..."
 echo ""
