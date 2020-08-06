@@ -152,10 +152,12 @@ output=$(sudo rsync --info=name1 -ai --update --existing $dir/libs/libpy3embed.s
 if [ -n "$output" -a "$output" != ".d..t...... ./" ] ; then
     modified=1
 fi
-output=$(sudo rsync --info=name1 -ai --update --existing $dir/libs/libpy2embed.so /opt/HPCCSystems/versioned/python2)
-#echo "output = $output"
-if [ -n "$output" -a "$output" != ".d..t...... ./" ] ; then
-    modified=1
+if [ -s $dir/libs/libpy2embed.so ] ; then
+    output=$(sudo rsync --info=name1 -ai --update --existing $dir/libs/libpy2embed.so /opt/HPCCSystems/versioned/python2)
+    #echo "output = $output"
+    if [ -n "$output" -a "$output" != ".d..t...... ./" ] ; then
+        modified=1
+    fi
 fi
 
 output=$(sudo rsync --info=name1 -ai --update --existing $dir/libs/ /opt/HPCCSystems/plugins)
@@ -171,13 +173,13 @@ fi
 #   ../oss/esp/services/ws_sql/antlr3c/lib
 # if this is an LN build ...
 # with 7.2+ it has moved to a new dir ...
-if      [ -x $dir/../esp/services/ws_sql/antlr3c/lib/libantlr3c.so ] ; then
+if      [ -s $dir/../esp/services/ws_sql/antlr3c/lib/libantlr3c.so ] ; then
     antlrdir=$dir/../esp/services/ws_sql/antlr3c/lib/libantlr3c.so
-elif    [ -x $dir/../oss/esp/services/ws_sql/antlr3c/lib/libantlr3c.so ] ; then
+elif    [ -s $dir/../oss/esp/services/ws_sql/antlr3c/lib/libantlr3c.so ] ; then
     antlrdir=$dir/../oss/esp/services/ws_sql/antlr3c/lib/libantlr3c.so
-elif    [ -x $dir/../esp/services/ws_sql/libantlr3c-3.4/.libs/libantlr3c.so ] ; then
+elif    [ -s $dir/../esp/services/ws_sql/libantlr3c-3.4/.libs/libantlr3c.so ] ; then
     antlrdir=$dir/../esp/services/ws_sql/libantlr3c-3.4/.libs/libantlr3c.so
-elif    [ -x $dir/../oss/esp/services/ws_sql/libantlr3c-3.4/.libs/libantlr3c.so ] ; then
+elif    [ -s $dir/../oss/esp/services/ws_sql/libantlr3c-3.4/.libs/libantlr3c.so ] ; then
     antlrdir=$dir/../oss/esp/services/ws_sql/libantlr3c-3.4/.libs/libantlr3c.so
 else
     antlrdir=""
@@ -231,19 +233,21 @@ for bdir in \
 /opt/HPCCSystems/sbin
 do
 #   echo "bdir: $bdir"
-    cd $bdir
-    ls -1 2>/dev/null | while read file
-    do
-#       echo "file: $file"
-        (readelf -d $file | grep RUNPATH | grep -q "$dir") 2> /dev/null
-        rc=$?
-#       echo "rc: $rc"
-        if [ $rc -eq 0 ] ; then
-            #patchelf --force-rpath --set-rpath '/opt/HPCCSystems/lib:/opt/HPCCSystems/plugins:/opt/HPCCSystems/lib/external:/usr/local/lib' $file
-            patchelf --force-rpath --set-rpath '/opt/HPCCSystems/lib:/opt/HPCCSystems/plugins:/opt/HPCCSystems/lib/external' $file
-        fi
-    done
-    cd $odir
+    if [ -x $bdir ] ; then
+        cd $bdir
+        ls -1 2>/dev/null | while read file
+        do
+#           echo "file: $file"
+            (readelf -d $file | grep RUNPATH | grep -q "$dir") 2> /dev/null
+            rc=$?
+#           echo "rc: $rc"
+            if [ $rc -eq 0 ] ; then
+                #patchelf --force-rpath --set-rpath '/opt/HPCCSystems/lib:/opt/HPCCSystems/plugins:/opt/HPCCSystems/lib/external:/usr/local/lib' $file
+                patchelf --force-rpath --set-rpath '/opt/HPCCSystems/lib:/opt/HPCCSystems/plugins:/opt/HPCCSystems/lib/external' $file
+            fi
+        done
+        cd $odir
+    fi
 done
 
 exit 0
