@@ -871,6 +871,9 @@ autocmd FileType GV nmap <buffer> <C-t> O
 autocmd FileType GV nmap <buffer> <Return> O
 autocmd FileType GV nmap <buffer> o O
 autocmd FileType GV nmap <buffer> <Space> <Down>
+autocmd FileType GV nmap <buffer> <Tab> <Down>
+autocmd FileType GV nmap <buffer> <BS> <Up>
+autocmd FileType GV nmap <buffer> <S-Tab> <Up>
 autocmd FileType GV nmap <buffer> u <Up>
 autocmd FileType GV nmap <buffer> d <Down>
 autocmd FileType GV xmap <buffer> <Leader><Tab> O
@@ -878,6 +881,9 @@ autocmd FileType GV xmap <buffer> <C-t> O
 autocmd FileType GV xmap <buffer> <Return> O
 autocmd FileType GV xmap <buffer> o O
 autocmd FileType GV xmap <buffer> <Space> <Down>
+autocmd FileType GV xmap <buffer> <Tab> <Down>
+autocmd FileType GV xmap <buffer> <BS> <Up>
+autocmd FileType GV xmap <buffer> <S-Tab> <Up>
 autocmd FileType GV xmap <buffer> u <Up>
 autocmd FileType GV xmap <buffer> d <Down>
 

@@ -24,6 +24,11 @@
 <Leader>gn next changed git block
 <Leader>gp prev changed git block
 <Leader>gg re-scan for git changes (<C-L>)
+:Gblame    blame info
+:Gclog     list commits for this branch in qf
+:0Gclog    list commits for current file in qf
+:Gllog     list commits for this branch in ll
+:0Gllog    list commits for this branch in ll
 
 *mck-word*
 -------------------------------------------------

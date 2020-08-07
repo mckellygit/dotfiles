@@ -1,0 +1,11 @@
+bind diff      <Down>       move-down
+bind diff      <Up>         move-up
+bind generic   <Ctrl-F>     move-page-down
+bind generic   <Ctrl-B>     move-page-up
+bind generic   <Ctrl-J>     scroll-line-down
+bind generic   <Ctrl-K>     scroll-line-up
+bind generic   <Space>      next
+bind generic   <Backspace>  previous
+bind generic   <Tab>        next
+bind generic   <ShiftTab>   previous
+
