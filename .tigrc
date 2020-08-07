@@ -1,5 +1,6 @@
 bind diff      <Down>       move-down
 bind diff      <Up>         move-up
+bind diff      u            move-up
 bind generic   <Ctrl-F>     move-page-down
 bind generic   <Ctrl-B>     move-page-up
 bind generic   <Ctrl-J>     scroll-line-down
