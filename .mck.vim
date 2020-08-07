@@ -1802,7 +1802,8 @@ noremap ZZ <Nop>
 " to get all of top/bottom lines ...
 noremap 1G 1G0
 noremap gg 1G0
-noremap G G$
+noremap G G0
+vnoremap G G$
 
 " ------------------------------
 
