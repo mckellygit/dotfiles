@@ -1787,11 +1787,13 @@ set ttimeout ttimeoutlen=7
 "nnoremap S <Nop>
 "vnoremap S <Nop>
 
-" use S as a left-handed . (dot) ...
-nnoremap S .
-vnoremap S .
+" use <S-Tab> as a left-handed . (dot) ...
+nnoremap <S-Tab> .
+vnoremap <S-Tab> .
 nnoremap s <Nop>
 vnoremap s <Nop>
+nnoremap S <Nop>
+vnoremap S <Nop>
 
 " dont exit this way ...
 noremap ZZ <Nop>
@@ -3615,10 +3617,12 @@ inoremap <S-Left>  <Nop>
 inoremap <S-Right> <Nop>
 
 " NOTE: S-Up, Down are available ...
-noremap  <S-Up>    <Nop>
-noremap  <S-Down>  <Nop>
-inoremap <S-Up>    <Nop>
-inoremap <S-Down>  <Nop>
+" Perhaps same as <Up>/<Down> so we can repeat cmds
+" with <S-Tab> (.) without lifting <Shift> before <Down> ...
+noremap  <S-Up>    <Up>
+noremap  <S-Down>  <Down>
+inoremap <S-Up>    <Up>
+inoremap <S-Down>  <Down>
 
 " X might use these to scroll alt screen ...
 noremap  <S-PageUp>   <Nop>

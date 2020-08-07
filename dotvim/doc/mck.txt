@@ -28,7 +28,7 @@
 :Gclog     list commits for this branch in qf
 :0Gclog    list commits for current file in qf
 :Gllog     list commits for this branch in ll
-:0Gllog    list commits for this branch in ll
+:0Gllog    list commits for current file in ll
 
 *mck-word*
 -------------------------------------------------
@@ -130,7 +130,7 @@ filter qf/ll entries
 :QFGrep[V]               prompt for <pattern> to grep/grep -v
 :QFgrepPat[V] <pattern>  grep/grep -v <pattern>
 :QFRestore               restore qf/ll to previous
- - or -
+ - or - (builtin filter pkg)
 :Cfilt[!] /<pattern>/    grep [-v] <pattern>
 :Cold                    restore qf
 :Cnew                    previous qf
@@ -203,6 +203,8 @@ filter qf/ll entries
 
 *mck-misc*
 -------------------------------------------------
+<S-Tab>    repeat last change (.)
+
 <C-S>Left  move 10 left
 <C-S>Right move 10 right
 <C-S>Up    move 10 up
