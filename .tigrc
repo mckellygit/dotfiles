@@ -1,4 +1,5 @@
 set horizontal-scroll = 33%
+set history-size      = 0
 bind generic   <Down>       move-down
 bind generic   <Up>         move-up
 bind diff      u            move-up
