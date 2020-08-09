@@ -3996,12 +3996,6 @@ let fsnonewfiles=1
 " fswitch ---------------
 
 " unconditional-paste ---
-nmap <Leader>Pc <Plug>UnconditionalPasteCharBefore
-nmap <Leader>pc <Plug>UnconditionalPasteCharAfter
-
-nmap <Leader>Pj <Plug>UnconditionalPasteJustJoinedBefore
-nmap <Leader>pj <Plug>UnconditionalPasteJustJoinedAfter
-"
 " should we use <C-y> for paste ?
 "nmap <C-y> <Plug>UnconditionalPasteCharBefore
 nnoremap <C-y> <Nop>
@@ -4010,37 +4004,42 @@ vnoremap <C-y> <Nop>
 " to get back orig if needed
 noremap <Leader><C-y> <C-y>
 
-" also Pc
-nmap <Leader>pp <Plug>UnconditionalPasteCharBefore
-nmap <Leader>p0 <Plug>UnconditionalPasteCharBefore
-" also pc
+nmap <Leader>pc <Plug>UnconditionalPasteCharAfter
 nmap <Leader>p1 <Plug>UnconditionalPasteCharAfter
 
+nmap <Leader>Pc <Plug>UnconditionalPasteCharBefore
+nmap <Leader>p0 <Plug>UnconditionalPasteCharBefore
+
+nmap <Leader>pj <Plug>UnconditionalPasteJustJoinedAfter
+nmap <Leader>Pj <Plug>UnconditionalPasteJustJoinedBefore
+"
 " at end of line
 nmap <Leader>pe $<Plug>UnconditionalPasteCharAfter`]
-nmap <Leader>pE $A<Space><Esc><Plug>UnconditionalPasteCharAfter`]
+nmap <Leader>Pe $A<Space><Esc><Plug>UnconditionalPasteCharAfter`]
 " at beg of first word (^ not 0)
 nmap <Leader>pa ^<Plug>UnconditionalPasteCharBefore`]
-nmap <Leader>pA ^<Plug>UnconditionalPasteCharBefore`]li<Space><Esc>b
+nmap <Leader>Pa ^<Plug>UnconditionalPasteCharBefore`]li<Space><Esc>b
 
 " change l to i to match current indentation ...
 "nmap <Leader>Pl <Plug>UnconditionalPasteIndentedBefore
 "nmap <Leader>pl <Plug>UnconditionalPasteIndentedAfter
+" at orig offset
 nmap <Leader>pl <Plug>UnconditionalPasteLineAfter
-nmap <Leader>pL <Plug>UnconditionalPasteLineBefore
+nmap <Leader>Pl <Plug>UnconditionalPasteLineBefore
 "
-nmap <Leader>pb <Plug>UnconditionalPasteBlockAfter
-nmap <Leader>pB <Plug>UnconditionalPasteBlockBefore
-
+" indented
 nmap <Leader>pi <Plug>UnconditionalPasteIndentedAfter
-nmap <Leader>pI <Plug>UnconditionalPasteIndentedBefore
+nmap <Leader>Pi <Plug>UnconditionalPasteIndentedBefore
 
-" use . for more (>) and , for less (<)
+" use . for more (>) and , for less (<) indentation
 nmap <Leader>p. <Plug>UnconditionalPasteMoreIndentAfter
-nmap <Leader>p> <Plug>UnconditionalPasteMoreIndentBefore
+nmap <Leader>P. <Plug>UnconditionalPasteMoreIndentBefore
 
 nmap <Leader>p, <Plug>UnconditionalPasteLessIndentAfter
-nmap <Leader>p< <Plug>UnconditionalPasteLessIndentBefore
+nmap <Leader>P, <Plug>UnconditionalPasteLessIndentBefore
+
+nmap <Leader>pb <Plug>UnconditionalPasteBlockAfter
+nmap <Leader>Pb <Plug>UnconditionalPasteBlockBefore
 
 " slightly confusing and has some delay ...
 "nmap <Leader>P> <Plug>UnconditionalPasteShiftedBefore
