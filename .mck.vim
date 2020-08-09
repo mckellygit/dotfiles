@@ -1055,6 +1055,8 @@ command! GV2 call s:MyGV()
 
 " vigv alias ...
 " vigv='vim -R -c GV2 -c ":nnoremap <silent> <buffer> q <Nop>" -c ":cnoreabbrev <silent> <buffer> q Tabcloserightquit" -c ":cnoreabbrev <silent> <buffer> q! Tabcloserightquit" -c ":nnoremap <silent> <buffer> x <Nop>" -c ":cnoreabbrev <silent> <buffer> x Tabcloserightquit" -c ":se bt=nowrite|:tabn|:hide|:redraw!"'
+
+command! GVF execute ':0Gllog | wincmd p'
 " gv -----------
 
 " QFEnter -------------
