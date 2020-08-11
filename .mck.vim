@@ -1655,7 +1655,7 @@ set nobackup    " do not keep a backup file
 " read/write .viminfo file, don't save/restore registers -
 " NOTE: do not want to overwrite existing */+ registers
 "       as that is the current selection/clipboard
-set viminfo='20,:20,<0
+set viminfo='20,/20,:20,<0
 " keep 20 lines of command line history
 set history=20	
 " :help 'viminfo' (with quotes) for more info
