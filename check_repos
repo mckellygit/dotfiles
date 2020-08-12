@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cd ~/Downloads
-for d in FlameGraph perf-tools xsel CopyQ fd the_silver_searcher tmux vim rtags ccache cgdb tig alacritty zsh-autosuggestions byobu kitty
+for d in FlameGraph perf-tools xsel CopyQ fd the_silver_searcher tmux vim rtags ccache cgdb tig alacritty zsh-autosuggestions byobu
 do
     echo "checking $d ..."
     cd $d
@@ -117,11 +117,6 @@ cd ~/Downloads/vim_bundles
 #   -or-
 #   git clone https://github.com/exg/rxvt-unicode.git
 
-# kitty:
-#   sudo -s
-#   curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin dest=/usr/local
-#   https://github.com/kovidgoyal/kitty.git
-
 # gnome sound output extension:
 #   sound-output-device-chooser@kgshank.net
 #   ~/.local/share/gnome-shell/extensions
@@ -167,6 +162,12 @@ cd ~/Downloads/vim_bundles
 #   sudo apt install vivaldi-stable
 
 # standard notes
+#   TBD
+
+# kitty:
+#   sudo -s
+#   curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin dest=/usr/local
+#   https://github.com/kovidgoyal/kitty.git
 
 # ---------------------
 
