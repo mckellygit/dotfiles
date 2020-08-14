@@ -1883,8 +1883,9 @@ endfunction
 
 " NOTE: only for term =~ ^screen || ^tmux || ^xterm || ^alacritty || ^rxvt || ^urxvt ?
 
-" NOTE: if we use these then they do not work in popups
-"       do set <Up>/<Down>/<Home><End> here - use set <xHome> ...
+" NOTE: if we use these then they do not work in popups,
+"       do not map <Up>/<Down>/<Home><End> this way,
+"       use set <xUp>/<xDown>/<xHome>/<xEnd> as below
 "call <SID>MapFastKeycode('<C-Up>',         "\e[1;5A", 15)
 "call <SID>MapFastKeycode('<C-Down>',       "\e[1;5B", 16)
 "call <SID>MapFastKeycode('<C-Left>',       "\e[1;5D", 17)
@@ -5350,6 +5351,7 @@ endif
 
 " -----------------------------
 
+" NOTE: add ^xterm || ^rxvt || ^urxvt here ?
 " enable bracketed paste in terminal mode
 if &term =~ "^screen" || &term =~ "^tmux" || &term =~ "^alacritty"
   let &t_BE="\<Esc>[?2004h"
