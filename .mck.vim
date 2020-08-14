@@ -1097,8 +1097,8 @@ let g:qfpreview = {
     \ 'scrolldown': "\<C-Down>",
     \ 'halfpageup'  : "\<C-b>",
     \ 'halfpagedown': "\<C-f>",
-    \ 'fullpageup'  : "\<A-Up>",
-    \ 'fullpagedown': "\<A-Down>",
+    \ 'fullpageup'  : "u",
+    \ 'fullpagedown': "\<Space>",
     \ 'next': "\<Down>",
     \ 'previous': "\<Up>",
     \ 'reset': "r",
@@ -5197,8 +5197,8 @@ inoremap <silent> <A-Right> <Esc>:tabnext<CR>
 tnoremap <silent> <A-Right> <C-w>:tabnext<CR>
 
 " NOTE: M-Up, Down are available ...
-noremap  <A-Up>    <Nop>
-noremap  <A-Down>  <Nop>
+noremap  <A-Up>    <Up>
+noremap  <A-Down>  <Down>
 inoremap <A-Up>    <Nop>
 inoremap <A-Down>  <Nop>
 
