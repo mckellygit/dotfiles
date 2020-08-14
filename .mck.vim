@@ -303,6 +303,9 @@ let g:FerretExecutableArguments = {
 " lightline ----------
 " colorscheme and some tab mods
 let g:lightline = {
+    \ 'component': {
+    \   'lineinfo': '%7l:%-4v%<',
+    \ },
     \ 'colorscheme': 'wombat',
     \ 'active': {
     \   'left': [ [ 'mymode', 'paste' ],
@@ -1088,10 +1091,10 @@ augroup qfpreview
     autocmd FileType qf nmap <buffer> p       <plug>(qf-preview-open)
 augroup END
 let g:qfpreview = {
-    \ 'top'   : "\<Home>",
-    \ 'bottom': "\<End>",
-    \ 'scrollup'  : "\<C-k>",
-    \ 'scrolldown': "\<C-j>",
+    \ 'top'   : "\<C-Home>",
+    \ 'bottom': "\<C-End>",
+    \ 'scrollup'  : "\<C-Up>",
+    \ 'scrolldown': "\<C-Down>",
     \ 'halfpageup'  : "\<C-b>",
     \ 'halfpagedown': "\<C-f>",
     \ 'fullpageup'  : "\<PageUp>",
@@ -1100,11 +1103,14 @@ let g:qfpreview = {
     \ 'previous': "\<Up>",
     \ 'reset': "r",
     \ 'close': "q",
-    \ 'number': "1",
-    \ 'height': "15",
-    \ 'offset': "7",
+    \ 'number': 1,
+    \ 'height': 15,
+    \ 'offset': 7,
     \ 'sign': {'linehl': 'CursorLine'},
     \ }
+" NOTE: popup mappings do not seme to work if they
+"       from MapFastKeycode(), such as <C-Up>, <C-Home> ...
+"       but they do work ok if from set <xHome> ...
 " TODO: add multiple mappings so that close could be q, x
 "       and next could be <Down>, j ...
 " vim-qf-preview ------
@@ -1354,6 +1360,18 @@ set shortmess-=s
 
 " toggle line wrap
 nnoremap <silent> <Leader>lw :silent set nowrap! nowrap?<CR>
+
+" ------------------------------
+
+" normal viewing ...
+"set encoding=utf-8
+"set display-=uhex
+"set isprint=@,161-255
+
+" hex viewing ...
+"set encoding=latin1
+"set display+=uhex
+"set isprint=
 
 " ------------------------------
 
@@ -1662,6 +1680,9 @@ set history=20
 " show the cursor position all the time
 set ruler		
 
+" display parts of long lines when wrap is on
+set display+=lastline
+
 set selection=inclusive
 
 function s:CrossHairs() abort
@@ -1862,26 +1883,28 @@ endfunction
 
 " NOTE: only for term =~ ^screen || ^tmux || ^xterm || ^alacritty || ^rxvt || ^urxvt ?
 
-call <SID>MapFastKeycode('<C-Up>',         "\e[1;5A", 15)
-call <SID>MapFastKeycode('<C-Down>',       "\e[1;5B", 16)
-call <SID>MapFastKeycode('<C-Left>',       "\e[1;5D", 17)
-call <SID>MapFastKeycode('<C-Right>',      "\e[1;5C", 18)
+" NOTE: if we use these then they do not work in popups
+"       do set <Up>/<Down>/<Home><End> here - use set <xHome> ...
+"call <SID>MapFastKeycode('<C-Up>',         "\e[1;5A", 15)
+"call <SID>MapFastKeycode('<C-Down>',       "\e[1;5B", 16)
+"call <SID>MapFastKeycode('<C-Left>',       "\e[1;5D", 17)
+"call <SID>MapFastKeycode('<C-Right>',      "\e[1;5C", 18)
 
-call <SID>MapFastKeycode('<S-Up>',         "\e[1;2A", 19)
-call <SID>MapFastKeycode('<S-Down>',       "\e[1;2B", 20)
-call <SID>MapFastKeycode('<S-Left>',       "\e[1;2D", 21)
-call <SID>MapFastKeycode('<S-Right>',      "\e[1;2C", 22)
+"call <SID>MapFastKeycode('<S-Up>',         "\e[1;2A", 19)
+"call <SID>MapFastKeycode('<S-Down>',       "\e[1;2B", 20)
+"call <SID>MapFastKeycode('<S-Left>',       "\e[1;2D", 21)
+"call <SID>MapFastKeycode('<S-Right>',      "\e[1;2C", 22)
 
-call <SID>MapFastKeycode('<C-S-Up>',       "\e[1;6A", 23)
+"call <SID>MapFastKeycode('<C-S-Up>',       "\e[1;6A", 23)
 " NOTE: need to skip F24, F25 for tmux focus plugin
-call <SID>MapFastKeycode('<C-S-Down>',     "\e[1;6B", 26)
-call <SID>MapFastKeycode('<C-S-Left>',     "\e[1;6D", 27)
-call <SID>MapFastKeycode('<C-S-Right>',    "\e[1;6C", 28)
+"call <SID>MapFastKeycode('<C-S-Down>',     "\e[1;6B", 26)
+"call <SID>MapFastKeycode('<C-S-Left>',     "\e[1;6D", 27)
+"call <SID>MapFastKeycode('<C-S-Right>',    "\e[1;6C", 28)
 
-call <SID>MapFastKeycode('<A-Up>',         "\e[1;3A", 29)
-call <SID>MapFastKeycode('<A-Down>',       "\e[1;3B", 30)
-call <SID>MapFastKeycode('<A-Left>',       "\e[1;3D", 31)
-call <SID>MapFastKeycode('<A-Right>',      "\e[1;3C", 32)
+"call <SID>MapFastKeycode('<A-Up>',         "\e[1;3A", 29)
+"call <SID>MapFastKeycode('<A-Down>',       "\e[1;3B", 30)
+"call <SID>MapFastKeycode('<A-Left>',       "\e[1;3D", 31)
+"call <SID>MapFastKeycode('<A-Right>',      "\e[1;3C", 32)
 
 " NOTE: <A-S-U/D/L/R> used by tmux to resize panes
 "call <SID>MapFastKeycode('<A-S-Up>',       "\e[1;4A", xx)
@@ -1904,17 +1927,17 @@ call <SID>MapFastKeycode('<A-Del>',        "\e[3;3~", 116)
 "call <SID>MapFastKeycode('<A-S-Del>',      "\e[3;4~", xxx)
 
 " NOTE: <Home> (khome) can be: ^[[H or ^[[1~ or ^[[7~
-call <SID>MapFastKeycode('<C-Home>',       "\e[1;5H", 117)
+"call <SID>MapFastKeycode('<C-Home>',       "\e[1;5H", 117)
 " <S-Home>
 " <C-S-Home>
-call <SID>MapFastKeycode('<A-Home>',       "\e[1;3H", 119)
+"call <SID>MapFastKeycode('<A-Home>',       "\e[1;3H", 119)
 " <A-S-Home>
 
 " NOTE: <End>  (kend)  can be: ^[[F or ^[[4~ or ^[[8~
-call <SID>MapFastKeycode('<C-End>',        "\e[1;5F", 118)
+"call <SID>MapFastKeycode('<C-End>',        "\e[1;5F", 118)
 " <S-End>
 " <C-S-End>
-call <SID>MapFastKeycode('<A-End>',        "\e[1;3F", 120)
+"call <SID>MapFastKeycode('<A-End>',        "\e[1;3F", 120)
 " <A-S-End>
 
 call <SID>MapFastKeycode('<C-PageUp>',     "\e[5;5~", 121)
@@ -3621,6 +3644,8 @@ inoremap <S-Right> <Nop>
 " NOTE: S-Up, Down are available ...
 " Perhaps same as <Up>/<Down> so we can repeat cmds
 " with <S-Tab> (.) without lifting <Shift> before <Down> ...
+" NOTE: with <Up>/<Down> as a noremap these will be original
+"       and not gk/gj ...
 noremap  <S-Up>    <Up>
 noremap  <S-Down>  <Down>
 inoremap <S-Up>    <Up>
@@ -4659,7 +4684,7 @@ function! s:SkipTerminalsQuitCmd(cmd) abort
     let l:doquit = 1
     for b in getbufinfo()
         if b.listed
-            if getbufvar(b.bufnr, '&buftype') !=# 'terminal'
+            if getbufvar(b.bufnr, '&buftype') !=# 'terminal' && getbufvar(b.bufnr, '&buftype') !=# 'popup'
                 if !b.changed
                     execute "silent! bd " . b.bufnr
                 else
@@ -4688,7 +4713,7 @@ function! s:SkipTerminalsConfQA() abort
     let l:doquit = 1
     for b in getbufinfo()
         if b.listed
-            if getbufvar(b.bufnr, '&buftype') !=# 'terminal'
+            if getbufvar(b.bufnr, '&buftype') !=# 'terminal' && getbufvar(b.bufnr, '&buftype') !=# 'popup'
                 if !b.changed
                     execute "silent! bd " . b.bufnr
                 else
@@ -4797,7 +4822,7 @@ cnoreabbrev <silent> <expr> quital (getcmdtype() == ':' && getcmdline() =~ '\s*q
 cnoreabbrev <silent> <expr> quitall (getcmdtype() == ':' && getcmdline() =~ '\s*quitall\s*')  ? 'call <SID>SkipTerminalsConfQA()' : 'quitall'
 
 function! MyQuit(arg) abort
-    if &buftype != 'terminal'
+    if &buftype != 'terminal' && &buftype != 'popup'
         exe "conf " . a:arg
         redraw!
     else
@@ -5124,7 +5149,7 @@ function! s:TermQuit()
         if b.listed
             if bufnr('%') !=# b.bufnr
                 " not curr buffer
-                if getbufvar(b.bufnr, '&buftype') ==# 'terminal'
+                if getbufvar(b.bufnr, '&buftype') ==# 'terminal' || getbufvar(b.bufnr, '&buftype') ==# 'popup'
                     " another terminal
                     let skipquit = 1
                 else
@@ -5145,7 +5170,10 @@ function! s:TermQuit()
     "        return
     "    endif
     "endif
-    bwipe!
+    try
+        bwipe!
+    catch /E994:/
+    endtry
 endfunction
 
 tnoremap <silent> <C-d> <C-w>:call <SID>TermQuit()<CR>
@@ -5323,12 +5351,14 @@ endif
 " -----------------------------
 
 " enable bracketed paste in terminal mode
-if &term =~ "^screen" || &term =~ "^tmux"
+if &term =~ "^screen" || &term =~ "^tmux" || &term =~ "^alacritty"
   let &t_BE="\<Esc>[?2004h"
   let &t_BD="\<Esc>[?2004l"
   let &t_PS="\<Esc>[200~"
   let &t_PE="\<Esc>[201~"
   " tmux will send xterm-style keys when its xterm-keys option is on
+  exec "set <xHome>=\e[1;*H"
+  exec "set <xEnd>=\e[1;*F"
   exec "set <xUp>=\e[1;*A"
   exec "set <xDown>=\e[1;*B"
   exec "set <xRight>=\e[1;*C"
