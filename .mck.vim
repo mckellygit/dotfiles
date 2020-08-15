@@ -761,6 +761,9 @@ command! Buffers call <SID>Mylsfzf(1)
 
 " hide buffer
 noremap <silent> <Leader>hb <C-\><C-n>:hide<CR>
+
+" :BCommits git log options
+"let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
 " fzf -----------------
 
 " vinegar ------------
@@ -1059,7 +1062,8 @@ command! GV2 call s:MyGV()
 " vigv alias ...
 " vigv='vim -R -c GV2 -c ":nnoremap <silent> <buffer> q <Nop>" -c ":cnoreabbrev <silent> <buffer> q Tabcloserightquit" -c ":cnoreabbrev <silent> <buffer> q! Tabcloserightquit" -c ":nnoremap <silent> <buffer> x <Nop>" -c ":cnoreabbrev <silent> <buffer> x Tabcloserightquit" -c ":se bt=nowrite|:tabn|:hide|:redraw!"'
 
-command! GVF execute ':0Gllog | wincmd p'
+command! LC  execute 'tabnew | :Gllog  | wincmd p'
+command! LCF execute 'tabnew | :0Gllog | wincmd p'
 " gv -----------
 
 " QFEnter -------------
