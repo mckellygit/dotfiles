@@ -107,6 +107,8 @@ Plugin 'mckellyln/vim-filebeagle'
 "
 " fugitive for more git utils
 Plugin 'tpope/vim-fugitive'
+" for :Gbrowse to open GitHub urls
+"Plugin 'tpope/vim-rhubarb'
 "
 " dispatch make/etc utils
 Plugin 'tpope/vim-dispatch'
@@ -120,7 +122,8 @@ Plugin 'airblade/vim-gitgutter'
 " gitk like repo viewer
 "Plugin 'gregsexton/gitv'
 "Plugin 'sodapopcan/vim-twiggy'
-Plugin 'junegunn/gv.vim'
+"Plugin 'junegunn/gv.vim'
+Plugin 'mckellyln/gv.vim'
 "
 " fzf for fuzzy listing/searching
 "Plugin 'junegunn/fzf' " (not needed because its in ~/.fzf already)
@@ -907,7 +910,7 @@ autocmd FileType GV nmap <buffer> <A-2-LeftMouse> <C-\><C-n>:<C-u>call feedkeys(
 autocmd FileType GV set foldlevelstart=1
 
 " make it more like a real vim session and not have qq exit ...
-autocmd FileType GV nmap <silent> <buffer> qq :qa!<CR>
+"autocmd FileType GV nmap <silent> <buffer> qq :qa!<CR>
 autocmd FileType GV nmap <silent> <buffer> <Leader>wq <C-\><C-n>:<C-u>call <SID>QuitIfOnlyNoNameLeft()<CR>
 autocmd FileType GV nmap <silent> <buffer> <Leader>qq <C-\><C-n>:<C-u>call <SID>QuitIfOnlyNoNameLeft()<CR>
 
@@ -1000,7 +1003,7 @@ function! s:open(visual, ...)
   call s:scratch()
   if type == 'commit'
     execute 'e' escape(target, ' ')
-    nnoremap <silent> <buffer> gb :Gbrowse<cr>
+    "nnoremap <silent> <buffer> gb :Gbrowse<cr>
   elseif type == 'diff'
     call s:fill(target)
     setf diff
@@ -1024,6 +1027,11 @@ function! s:fill(cmd)
   normal! gg"_dd
   setlocal nomodifiable
 endfunction
+
+" TODO: skip GBrowse for now ...
+autocmd FileType GV nnoremap <silent> <buffer> gb   <Nop>
+autocmd FileType GV nnoremap <silent> <buffer> q    <Nop>
+autocmd FileType GV nnoremap <silent> <buffer> qq   :close<cr>
 
 " tab split
 autocmd FileType GV nnoremap <silent> <buffer> O    :call <sid>open(0, 1)<cr>
@@ -1062,6 +1070,16 @@ command! GV2 call s:MyGV()
 " vigv alias ...
 " vigv='vim -R -c GV2 -c ":nnoremap <silent> <buffer> q <Nop>" -c ":cnoreabbrev <silent> <buffer> q Tabcloserightquit" -c ":cnoreabbrev <silent> <buffer> q! Tabcloserightquit" -c ":nnoremap <silent> <buffer> x <Nop>" -c ":cnoreabbrev <silent> <buffer> x Tabcloserightquit" -c ":se bt=nowrite|:tabn|:hide|:redraw!"'
 
+function! s:MyGVF(args) abort
+    if !empty(a:args)
+        execute 'GV ' . a:args . ' -- ' . expand("%")
+    else
+        execute 'GV -- ' . expand("%")
+    endif
+endfunction
+
+command! -nargs=* GF  call s:MyGVF(<q-args>)
+command! -nargs=* GFP call s:MyGVF("-p")
 command! LC  execute 'tabnew | :Gllog  | wincmd p'
 command! LCF execute 'tabnew | :0Gllog | wincmd p'
 " gv -----------
