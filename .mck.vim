@@ -1064,11 +1064,11 @@ function! s:MyGV(args) abort
         return
     endif
     if !empty(a:args)
-        let l:alist = split(a:args, ' ')
+        let l:alist = split(a:args)
         let fname = l:alist[-1]
         call remove(l:alist, -1)
         if len(l:alist) >= 1
-            let l:argstr = join(l:alist, ' ')
+            let l:argstr = join(l:alist)
             execute 'GV ' . l:argstr . ' -- ' . fname
         else
             execute 'GV -- ' . fname
