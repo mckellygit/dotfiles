@@ -1044,7 +1044,7 @@ autocmd FileType GV nnoremap <silent> <buffer> <C-v> :call <sid>open(0)<cr>
 autocmd FileType GV nnoremap <silent> <buffer> <C-x> :call <sid>open(0, 1, 9)<cr>
 
 " to make vigv wrapper error more nicely in a non-git dir ..
-function! s:MyGV() abort
+function! s:MyGV(args) abort
     let errmsg = ''
     enew
     setlocal buftype=nofile hidden bufhidden=wipe noswapfile
@@ -1063,12 +1063,25 @@ function! s:MyGV() abort
         cquit
         return
     endif
-    execute 'GV'
+    if !empty(a:args)
+        let l:alist = split(a:args, ' ')
+        let fname = l:alist[-1]
+        call remove(l:alist, -1)
+        if len(l:alist) >= 1
+            let l:argstr = join(l:alist, ' ')
+            execute 'GV ' . l:argstr . ' -- ' . fname
+        else
+            execute 'GV -- ' . fname
+        endif
+    else
+        execute 'GV'
+    endif
 endfunction
-command! GV2 call s:MyGV()
+command! -nargs=* GV2 call s:MyGV(<q-args>)
 
-" vigv alias ...
-" vigv='vim -R -c GV2 -c ":nnoremap <silent> <buffer> q <Nop>" -c ":cnoreabbrev <silent> <buffer> q Tabcloserightquit" -c ":cnoreabbrev <silent> <buffer> q! Tabcloserightquit" -c ":nnoremap <silent> <buffer> x <Nop>" -c ":cnoreabbrev <silent> <buffer> x Tabcloserightquit" -c ":se bt=nowrite|:tabn|:hide|:redraw!"'
+" vigv shell function ...
+" could also add -c 'nnoremap qq :qa!<CR>'
+" vigv() { vim -R -c "GV2 $1 $2 $3" -c ":nnoremap <silent> <buffer> q <Nop>" -c ":cnoreabbrev <silent> <buffer> q Tabcloserightquit" -c ":cnoreabbrev <silent> <buffer> q! Tabcloserightquit" -c ":nnoremap <silent> <buffer> x <Nop>" -c ":cnoreabbrev <silent> <buffer> x Tabcloserightquit" -c ":se bt=nowrite|:tabn|:hide|:redraw!" }
 
 function! s:MyGVF(args) abort
     if !empty(a:args)

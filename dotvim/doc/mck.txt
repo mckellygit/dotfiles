@@ -26,11 +26,11 @@
 <Leader>gg re-scan for git changes (<C-L>)
 :GV        commits for this branch in tab
 :GF [-p]   commits [and contents] for this file in tab [:GFP]
-:LC        commits for this branch in ll
-:LCF       commits for this file in ll
 :Commits   commits for this branch in fzf
 :BCommits  commits for this file in fzf
 :Gblame    git blame info
+:LC        commits for this branch in ll
+:LCF       commits for this file in ll
 
 *mck-word*
 -------------------------------------------------
