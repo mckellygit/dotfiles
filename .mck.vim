@@ -1093,7 +1093,7 @@ endfunction
 
 command! -nargs=* GF  call s:MyGVF(<q-args>)
 command! -nargs=* GFP call s:MyGVF("-p")
-command! LC  execute 'tabnew | :Gllog  | wincmd p'
+command! LC  execute 'tabnew | :Gllog | redraw! | wincmd p'
 command! LCF execute 'tabnew ' . expand("%") ' | :0Gllog | redraw! | wincmd p'
 " gv -----------
 
