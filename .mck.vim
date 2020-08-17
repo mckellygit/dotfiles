@@ -1066,12 +1066,15 @@ function! s:MyGV(args) abort
     if !empty(a:args)
         let l:alist = split(a:args)
         let fname = l:alist[-1]
+        exec 'edit ' . fname
+        let fpath = expand("%:p")
+        "echomsg "fpath = " . fpath
         call remove(l:alist, -1)
         if len(l:alist) >= 1
             let l:argstr = join(l:alist)
-            execute 'GV ' . l:argstr . ' -- ' . fname
+            execute 'GV ' . l:argstr . ' -- ' . fpath
         else
-            execute 'GV -- ' . fname
+            execute 'GV -- ' . fpath
         endif
     else
         execute 'GV'
@@ -1084,6 +1087,13 @@ command! -nargs=* GV2 call s:MyGV(<q-args>)
 " vigv() { vim -R -c "GV2 $1 $2 $3" -c ":nnoremap <silent> <buffer> q <Nop>" -c ":cnoreabbrev <silent> <buffer> q Tabcloserightquit" -c ":cnoreabbrev <silent> <buffer> q! Tabcloserightquit" -c ":nnoremap <silent> <buffer> x <Nop>" -c ":cnoreabbrev <silent> <buffer> x Tabcloserightquit" -c ":se bt=nowrite|:tabn|:hide|:redraw!" }
 
 function! s:MyGVF(args) abort
+    let git_dir = s:find_git_root()
+    if empty(git_dir)
+        let errmsg = 'not in git repo'
+        call s:warn(errmsg)
+        return
+    endif
+    exec 'lcd ' . git_dir
     if !empty(a:args)
         execute 'GV ' . a:args . ' -- ' . expand("%")
     else
@@ -1093,8 +1103,33 @@ endfunction
 
 command! -nargs=* GF  call s:MyGVF(<q-args>)
 command! -nargs=* GFP call s:MyGVF("-p")
-command! LC  execute 'tabnew | :Gllog | redraw! | wincmd p'
-command! LCF execute 'tabnew ' . expand("%") ' | :0Gllog | redraw! | wincmd p'
+
+" -------------
+
+function! s:MyLC() abort
+    let git_dir = s:find_git_root()
+    if empty(git_dir)
+        let errmsg = 'not in git repo'
+        call s:warn(errmsg)
+        return
+    endif
+    exec 'lcd ' . git_dir
+    execute 'tabnew | :Gllog | redraw! | wincmd p'
+endfunction
+
+function! s:MyLCF() abort
+    let git_dir = s:find_git_root()
+    if empty(git_dir)
+        let errmsg = 'not in git repo'
+        call s:warn(errmsg)
+        return
+    endif
+    exec 'lcd ' . git_dir
+    execute 'tabnew ' . expand("%") ' | :0Gllog | redraw! | wincmd p'
+endfunction
+
+command! -nargs=0 LC  call s:MyLC()
+command! -nargs=0 LCF call s:MyLCF()
 " gv -----------
 
 " QFEnter -------------
@@ -4792,7 +4827,8 @@ function! s:QuitIfOnlyNoNameLeft() abort
         execute "qa!"
         execute 'normal! \<CR>'
     else
-        execute "tabclose!"
+        execute ":q!"
+        "execute "tabclose!"
     endif
 endfunction
 
