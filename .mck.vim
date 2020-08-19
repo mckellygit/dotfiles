@@ -4113,10 +4113,10 @@ nmap <Leader>Pj <Plug>UnconditionalPasteJustJoinedBefore
 "
 " at end of line
 nmap <Leader>pe $<Plug>UnconditionalPasteCharAfter`]
-nmap <Leader>Pe $A<Space><Esc><Plug>UnconditionalPasteCharAfter`]
+nmap <Leader>pE $A<Space><Esc><Plug>UnconditionalPasteCharAfter`]
 " at beg of first word (^ not 0)
 nmap <Leader>pa ^<Plug>UnconditionalPasteCharBefore`]
-nmap <Leader>Pa ^<Plug>UnconditionalPasteCharBefore`]li<Space><Esc>b
+nmap <Leader>pA ^<Plug>UnconditionalPasteCharBefore`]li<Space><Esc>b
 
 " change l to i to match current indentation ...
 "nmap <Leader>Pl <Plug>UnconditionalPasteIndentedBefore
@@ -4142,6 +4142,35 @@ nmap <Leader>Pb <Plug>UnconditionalPasteBlockBefore
 " slightly confusing and has some delay ...
 "nmap <Leader>P> <Plug>UnconditionalPasteShiftedBefore
 "nmap <Leader>p> <Plug>UnconditionalPasteShiftedAfter
+
+" paste indented line, like <Leader>pi/Pi, but with more indent logic
+function s:MyUPIndentBefore() abort
+    execute 'keepjumps normal! mx^'
+    let ccol = col('.')
+    execute 'keepjumps normal! k0^'
+    let pcol = col('.')
+    execute 'keepjumps normal! `x'
+    if pcol > ccol
+        call feedkeys('\P.')
+    else
+        call feedkeys('\Pi')
+    endif
+endfunction
+nmap <Leader>Px <C-\><C-n>:<C-u>call <SID>MyUPIndentBefore()<CR>
+
+function s:MyUPIndentAfter() abort
+    execute 'keepjumps normal! mx^'
+    let ccol = col('.')
+    execute 'keepjumps normal! j0^'
+    let ncol = col('.')
+    execute 'keepjumps normal! `x'
+    if ncol > ccol
+        call feedkeys('\p.')
+    else
+        call feedkeys('\pi')
+    endif
+endfunction
+nmap <Leader>px <C-\><C-n>:<C-u>call <SID>MyUPIndentAfter()<CR>
 " unconditional-paste ---
 
 " ansiesc ----------

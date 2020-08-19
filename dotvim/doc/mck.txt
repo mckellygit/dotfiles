@@ -59,27 +59,24 @@ sC         swap chars with char before (cS)
 
 *mck-paste*
 -------------------------------------------------
-<Leader>Pc paste char before cursor
-<Leader>pc paste char after cursor
-<Leader>Pj UnconditionalPasteJustJoinedBefore
+<Leader>pc paste as chars after cursor (p1)
+<Leader>Pc paste as chars before cursor (pp, p0)
+<Leader>pe paste as chars at end of line
+<Leader>pE paste as chars at end of line after added space
+<Leader>pa paste as chars at beg of line
+<Leader>pA paste as chars at beg of line then add space
+<Leader>pl paste as lines after current line
+<Leader>Pl paste as lines before current line
+<Leader>pi paste as lines after at same indent
+<Leader>pI paste as lines before at same indent
+<Leader>p. paste as lines after with more indent
+<Leader>p, paste as lines before with more indent
+<Leader>px paste as lines after using next line indent
+<Leader>Px paste as lines before using prev line indent
+<Leader>pb paste as block after cursor
+<Leader>Pb paste as block before cursor
 <Leader>pj UnconditionalPasteJustJoinedAfter
-<Leader>pp paste char before cursor
-<Leader>p0 paste char before cursor
-<Leader>p1 paste char after cursor
-<Leader>pe paste chars at end of line
-<Leader>pE paste chars at end after added space
-<Leader>pa paste chars at beg of line
-<Leader>pA paste chars at beg of line then add space
-<Leader>pl paste lines after current line
-<Leader>pL paste lines before current line
-<Leader>pb paste block after cursor pos
-<Leader>pB paste block before cursor pos
-<Leader>pi paste indent after
-<Leader>pI paste indent before
-<Leader>p. paste more indent after
-<Leader>p> paste more indent after
-<Leader>p, paste more indent before
-<Leader>p< paste more indent before
+<Leader>Pj UnconditionalPasteJustJoinedBefore
 
 *mck-search*
 -------------------------------------------------
