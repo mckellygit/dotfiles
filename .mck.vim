@@ -4116,7 +4116,8 @@ nmap <Leader>pe $<Plug>UnconditionalPasteCharAfter`]
 nmap <Leader>pE $A<Space><Esc><Plug>UnconditionalPasteCharAfter`]
 " at beg of first word (^ not 0)
 nmap <Leader>pa ^<Plug>UnconditionalPasteCharBefore`]
-nmap <Leader>pA ^<Plug>UnconditionalPasteCharBefore`]li<Space><Esc>b
+" NOTE: use <Esc>hlb instead of <Esc>b because M-b is mapped to A-3click in tmux ...
+nmap <Leader>pA ^<Plug>UnconditionalPasteCharBefore`]li<Space><Esc>hlb
 
 " change l to i to match current indentation ...
 "nmap <Leader>Pl <Plug>UnconditionalPasteIndentedBefore
