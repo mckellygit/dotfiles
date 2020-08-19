@@ -4066,7 +4066,8 @@ if $USER != 'root'
 else
   let g:rtagsAutoLaunchRdm=0
 endif
-noremap <C-]> <C-\><C-n>:<C-u>call rtags#JumpTo(g:SAME_WINDOW)<CR>
+nnoremap <buffer> <C-]> <C-\><C-n>:<C-u>call rtags#JumpTo(g:SAME_WINDOW)<CR>
+autocmd BufReadPost quickfix nnoremap <silent> <buffer> <C-]> <Return>
 " C-o to go back
 " C-t to go back (not implemented)
 " nmap <C-t> :call rtags#JumpBack()<bar>:echo<CR>
@@ -4074,8 +4075,8 @@ noremap <C-]> <C-\><C-n>:<C-u>call rtags#JumpTo(g:SAME_WINDOW)<CR>
 nnoremap <silent> <Leader>cc           :ccl<bar>lcl<bar>pcl<bar>:echo<CR>
 vnoremap <silent> <Leader>cc <C-\><C-n>:ccl<bar>lcl<bar>pcl<bar>:echo<CR>
 "noremap <silent> <Leader>cc :windo lcl<bar>ccl<bar>pcl<bar>:echo<CR>
-" qq to also close location list
-autocmd BufReadPost quickfix nnoremap <silent> <buffer> qq :ccl<bar>lcl<bar>pcl<bar>:echo<CR>
+" qq to also close location list, but we already have a q mapping ...
+"autocmd BufReadPost quickfix nnoremap <silent> <buffer> qq :ccl<bar>lcl<bar>pcl<bar>:echo<CR>
 " TODO: should qq from regular window also close these ?
 "
 " auto-reindex on file save ...
@@ -4147,29 +4148,33 @@ nmap <Leader>Pb <Plug>UnconditionalPasteBlockBefore
 
 " paste indented line, like <Leader>pi/Pi, but with more indent logic
 function s:MyUPIndentBefore() abort
-    execute 'keepjumps normal! mx^'
+    execute 'keepjumps normal mx^'
     let ccol = col('.')
-    execute 'keepjumps normal! k0^'
+    execute 'keepjumps normal k0^'
     let pcol = col('.')
-    execute 'keepjumps normal! `x'
+    execute 'keepjumps normal `x'
     if pcol > ccol
-        call feedkeys('\P.')
+        "call feedkeys('\P.')
+        execute "keepjumps normal \<Plug>UnconditionalPasteMoreIndentBefore"
     else
-        call feedkeys('\Pi')
+        "call feedkeys('\Pi')
+        execute "keepjumps normal \<Plug>UnconditionalPasteIndentedBefore"
     endif
 endfunction
 nmap <Leader>Px <C-\><C-n>:<C-u>call <SID>MyUPIndentBefore()<CR>
 
 function s:MyUPIndentAfter() abort
-    execute 'keepjumps normal! mx^'
+    execute 'keepjumps normal mx^'
     let ccol = col('.')
-    execute 'keepjumps normal! j0^'
+    execute 'keepjumps normal j0^'
     let ncol = col('.')
-    execute 'keepjumps normal! `x'
+    execute 'keepjumps normal `x'
     if ncol > ccol
-        call feedkeys('\p.')
+        "call feedkeys('\p.')
+        execute "keepjumps normal \<Plug>UnconditionalPasteMoreIndentAfter"
     else
-        call feedkeys('\pi')
+        "call feedkeys('\pi')
+        execute "keepjumps normal \<Plug>UnconditionalPasteIndentedAfter"
     endif
 endfunction
 nmap <Leader>px <C-\><C-n>:<C-u>call <SID>MyUPIndentAfter()<CR>

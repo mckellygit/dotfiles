@@ -13,6 +13,8 @@
 # shell.prompt=RadSSH $
 # shell.console=color
 # shell.console=formatters.ansi256
+# to get my ip/host color hash
+shell.console=formatters.ip_colorizer
 
 ### To see last few lines of output of in-flight jobs when pressing Ctrl-C
 ### set this parameter to the number of lines to retain. Can be very memory
@@ -39,7 +41,7 @@ logdir=~/radssh/sessions/session_%Y%m%d_%H%M%S
 ### Available modes: {stream, ordered, off}
 output_mode=ordered
 # If output_mode is ordered then addl quiet flag to not echo 'No Output' is:
-output_quiet=on
+ordered_placeholder=off
 
 # If only one host then go into tty session automatically
 auto_tty=on
@@ -47,7 +49,7 @@ auto_tty=on
 # as an example:
 #   export TERM=xterm-256color; tset
 #   alias rm='rm -i'
-tty_init_file=~/.radssh_ttyinit
+plugin.star_tty.rc_file=~/.radssh_ttyinit
 
 ### Can override character encoding (will use sys.stdout.encoding if not specified)
 character_encoding=UTF-8
@@ -78,7 +80,7 @@ quota.bytes=262144
 plugins=~/radssh/plugins
 ### Selectively disable plugins, if for some reason you want to
 ### avoid loading some system (or user) plugins that normally load
-# disable_plugins=
+disable_plugins=alias
 
 ### Options hostkey.verify and hostkey.known_hosts are obsoleted
 ### in favor of using standard SSH Config settings StrictHostKeyChecking
