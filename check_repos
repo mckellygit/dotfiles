@@ -45,7 +45,7 @@ cd ~/Downloads/vim_bundles
 #   -or-
 #   git clone https://github.com/ggreer/the_silver_searcher.git
 
-# CopyQ:
+# CopyQ: (also copyq-commands)
 #   git clone https://github.com/hluk/CopyQ.git
 #   -or-
 #   sudo add-apt-repository ppa:hluk/copyq

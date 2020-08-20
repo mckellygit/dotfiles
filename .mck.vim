@@ -4066,7 +4066,7 @@ if $USER != 'root'
 else
   let g:rtagsAutoLaunchRdm=0
 endif
-nnoremap <buffer> <C-]> <C-\><C-n>:<C-u>call rtags#JumpTo(g:SAME_WINDOW)<CR>
+nnoremap <C-]> <C-\><C-n>:<C-u>call rtags#JumpTo(g:SAME_WINDOW)<CR>
 autocmd BufReadPost quickfix nnoremap <silent> <buffer> <C-]> <Return>
 " C-o to go back
 " C-t to go back (not implemented)
