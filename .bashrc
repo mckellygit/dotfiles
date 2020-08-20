@@ -296,4 +296,8 @@ elif [[ -f /usr/share/bash-completion/completions/git ]] ; then
     source /usr/share/bash-completion/completions/git
 fi
 
-source ~/.bash_completion/alacritty
+# skip for now ...
+if [[ -f ~/.bash_completion/alacritty ]] ; then
+    source ~/.bash_completion/alacritty
+fi
+
