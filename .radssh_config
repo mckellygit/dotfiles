@@ -80,7 +80,7 @@ quota.bytes=262144
 plugins=~/radssh/plugins
 ### Selectively disable plugins, if for some reason you want to
 ### avoid loading some system (or user) plugins that normally load
-disable_plugins=alias
+#disable_plugins=alias
 
 ### Options hostkey.verify and hostkey.known_hosts are obsoleted
 ### in favor of using standard SSH Config settings StrictHostKeyChecking
