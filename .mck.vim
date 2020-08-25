@@ -128,6 +128,7 @@ Plugin 'mckellyln/gv.vim'
 " fzf for fuzzy listing/searching
 "Plugin 'junegunn/fzf' " (not needed because its in ~/.fzf already)
 Plugin 'junegunn/fzf.vim'
+" Plugin 'mattn/vim-fz'
 "
 " ack (with ag (silver-searcher))
 "Plugin 'mileszs/ack.vim'

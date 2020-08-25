@@ -162,7 +162,9 @@ alias stop-rdm='rc -q'
 alias stop_rdm='rc -q'
 
 # also could use -u or -U instead of --all-text
-alias ag='\ag -U --hidden -- '
+#alias ag='\ag -U --hidden -- '
+# skip -- as we might want to add -i for case-insensitive etc. ...
+alias ag='\ag -U --hidden '
 
 # cannot override builtin git diff with git cmds/aliases so do it this way ...
 # also add git log
