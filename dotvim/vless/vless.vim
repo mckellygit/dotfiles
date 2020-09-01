@@ -339,7 +339,8 @@ fun! QuitVless()
   redraw!
 endfun
 
-nnoremap <silent> Q :qa!<CR>
+nnoremap <silent> Q <Nop>
+nnoremap <silent> QQ :qa!<CR>
 "nnoremap <silent> q :call QuitVless()<CR>
 nnoremap <silent> <Leader>qq :call QuitVless()<CR>
 
