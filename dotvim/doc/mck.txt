@@ -223,6 +223,10 @@ z<Down>    move selected line(s) down
 
  +         highlight cross-hair at cursor location
 
+<Leader>sp choose window (-)
+
+<Leader>++ zoom window toggle (<C-w>z)
+
 <Leader>ct center text on screen
 <Leader>cz center line on screen
 

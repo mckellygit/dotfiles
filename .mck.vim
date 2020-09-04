@@ -227,6 +227,9 @@ Plugin 'vim-utils/vim-man'
 "Plugin 'christoomey/vim-system-copy'
 "Plugin 'mckellyln/vim-system-copy'
 "
+" choosewin
+Plugin 't9md/vim-choosewin'
+"
 "" All of your Plugins must be added before the following line
 call vundle#end()         " required
 filetype plugin indent on " required
@@ -1317,6 +1320,12 @@ au! CompleteDone    * call <SID>MyVimadeWinEnable()
 nnoremap <silent> <buffer> K :call man#get_page_from_cword('horizontal', v:count)<CR>
 vnoremap <silent> <buffer> K <C-\><C-n>:call man#get_page_from_cword('horizontal', v:count)<CR>
 " vim-man ----------
+
+" choosewin --------
+let g:choosewin_overlay_enable = 1
+nmap -          <Plug>(choosewin)
+nmap <Leader>sp <Plug>(choosewin)
+" choosewin --------
 
 " ====================================================
 " ====================================================

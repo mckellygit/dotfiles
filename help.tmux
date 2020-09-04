@@ -16,6 +16,10 @@ prefix <C-r>         - re-load conf file
 
 prefix <z>           - fzf popup
 
+prefix .             - copy cmdline to clipboard
+
+prefix <C-p>         - display pane ids
+
 Shift <F12>          - toggle function keys
 
 Ctrl-Shift <Space>   - window list
