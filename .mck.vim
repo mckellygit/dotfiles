@@ -153,6 +153,12 @@ Plugin 'morhetz/gruvbox'
 Plugin 'embear/vim-localvimrc'
 "
 " polygot syntax highlighting for many file types
+" NOTE: add disabled items BEFORE loading plugin
+" needed tmux to get around error in polygot/tmux.vim
+" and that is deprecated anyway (defaults in vim 8.0+)
+" .cap files are for me usually from tcpdump and not ruby
+" and c/c++ is covered in vim-cpp-modern ...
+let g:polyglot_disabled = ['tmux', 'c/c++', 'ruby']
 Plugin 'sheerun/vim-polyglot'
 " enhanced c++ syntax
 "Plugin 'octol/vim-cpp-enhanced-highlight'
@@ -1197,10 +1203,6 @@ endif
 " lastplace -----------
 
 " polygot -----------
-" needed to get around error in polygot/tmux.vim
-" and that is deprecated anyway (defaults in vim 8.0+)
-" .cap files are for me usually from tcpdump and not ruby ...
-let g:polyglot_disabled = ['tmux', 'c/c++', 'ruby']
 let g:cpp_class_scope_highlight = 1
 let g:cpp_member_variable_highlight = 1
 let g:cpp_class_decl_highlight = 1
