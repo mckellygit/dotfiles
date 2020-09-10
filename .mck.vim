@@ -220,7 +220,9 @@ Plugin 'TaDaa/vimade'
 "Plugin 'blueyed/vim-diminactive'
 "
 " focus
-Plugin 'tmux-plugins/vim-tmux-focus-events'
+if !exists('$VIM_TERMINAL')
+    Plugin 'tmux-plugins/vim-tmux-focus-events'
+endif
 "
 " ansi esc sequences
 "Plugin 'powerman/vim-plugin-AnsiEsc'
@@ -2530,8 +2532,10 @@ let &t_SI = "\e[5 q"
 let &t_EI = "\e[2 q"
 " ---------------
 
-let &t_SI .= WrapForTmux("\<Esc>[?2004h")
-let &t_EI .= WrapForTmux("\<Esc>[?2004l")
+if !exists('$VIM_TERMINAL')
+    let &t_SI .= WrapForTmux("\<Esc>[?2004h")
+    let &t_EI .= WrapForTmux("\<Esc>[?2004l")
+endif
 
 " tmux:
 "   set -ga terminal-overrides '*:Ss=\E[%p1%d q:Se=\E[ q'
