@@ -4951,6 +4951,8 @@ cnoreabbrev <silent> <expr> quital (getcmdtype() == ':' && getcmdline() =~ '\s*q
 cnoreabbrev <silent> <expr> quitall (getcmdtype() == ':' && getcmdline() =~ '\s*quitall\s*')  ? 'call <SID>SkipTerminalsConfQA()' : 'quitall'
 
 function! MyQuit(arg) abort
+    " just to clear the cmdline of this function ...
+    echo " "
     if &buftype != 'terminal' && &buftype != 'popup'
         exe "conf " . a:arg
         redraw!
