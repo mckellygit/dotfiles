@@ -1816,7 +1816,12 @@ function! s:PreserveClipboard() abort
     if executable("copyq") && !exists('$VIM_SKIP_PRESERVE_CLIPBOARD')
         "silent call system("setsid -w copyq >/dev/null 2>/dev/null copySelection -", getreg('*'))
         "silent call system("setsid -w copyq >/dev/null 2>/dev/null copy -", getreg('*'))
-        silent call system("setsid -w myclip", getreg('*'))
+        " trim(getreg('*'), '\n', 2)
+        " if contents have not changed then dont save as this will add a duplicate to the copyq list
+        "if @* != @"
+        "    silent call system("setsid -w myclip", getreg('*'))
+        "endif
+        silent call system("setsid -w myclip --rmlastnl ", getreg('*'))
         " clear regs ?
         "call setreg('+', [])
         "call setreg('*', [])
@@ -2165,7 +2170,7 @@ endif
 " explicit force load @* to clipboard ...
 function! ForceLoadNammedReg() abort
     "silent call system("setsid -w xsel -i -b --rmlastnl --sc 0", getreg('+'))
-    silent call system("setsid -w myclip", getreg('*'))
+    silent call system("setsid -w myclip --rmlastnl ", getreg('*'))
     echohl DiffText | echo "@* -> clipboard ; register copied" | echohl None
     sleep 551m
     redraw!
