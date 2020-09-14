@@ -5093,44 +5093,47 @@ endif
 " when $2 is a dir ...
 
 function! Diffstart()
-  if !&diff
-    return
-  endif
-  execute "normal 1G"
-  try
-     execute ":foldc!"
-  catch
-     return
-  endtry
-  execute "normal zj"
-  let l0=line('.')
-  if (l0 != 1)
-    return
-  endif
-  execute "normal j"
-  let l1=line('.')
-  if (l1 == 1)
-    call Xdiff()
-  endif
+    if !&diff
+        return
+    endif
+    execute "normal 1G"
+    try
+        execute ":foldc!"
+    catch
+        return
+    endtry
+    execute "normal zj"
+    let l0=line('.')
+    if (l0 != 1)
+        return
+    endif
+    execute "normal j"
+    let l1=line('.')
+    if (l1 == 1)
+        call Xdiff()
+    endif
 endfunction
 
 " -----------
 
 " :x to save (if modified) and go to next (w/o prompting) or exit
 function s:NextOrQuit() abort
-  update
-  " TODO: is it possible to check if buf has changed and prompt to save now instead of after all files ?
-  try
-    next
-  catch /E163:/
-    exit
-  catch /E165:/
-    exit
-  endtry
+    " just to clear the cmdline of this function ...
+    echo " "
+    update
+    " TODO: is it possible to check if buf has changed and prompt to save now instead of after all files ?
+    try
+        next
+    catch /E163:/
+        exit
+    catch /E165:/
+        exit
+    endtry
 endfunction
+
 if !&diff
-  cnoreabbrev <silent> <expr> x (getcmdtype() == ':' && getcmdline() =~ '\s*x\s*')  ? 'call <SID>NextOrQuit()' : 'x'
-  noremap <silent> <Leader>nf :call <SID>NextOrQuit()<CR>
+    cnoreabbrev <silent> <expr> x (getcmdtype() == ':' && getcmdline() =~ '\s*x\s*')  ? 'call <SID>NextOrQuit()' : 'x'
+    noremap <silent> <Leader>nf :call <SID>NextOrQuit()<CR>
 endif
 
 " could also look into autowrite for :n to write (if modified) ...
