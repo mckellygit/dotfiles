@@ -4781,7 +4781,7 @@ function! s:MergeTab()
 endfunction
 "command! MergeTab call <SID>MergeTab()
 
-" NOTE: also :Tabmerge and <Leader>tm, <Leader>tM
+" NOTE: also :Tabmerge and <Leader>tM, <Leader>tm
 
 " <C-w>t<C-w>K to split 2 vertical windows into horiz windows
 " <C-w>t<C-w>H to split 2 horiz windows into vertical windows
@@ -5336,8 +5336,29 @@ noremap  <A-Down>  <Down>
 inoremap <A-Up>    <Nop>
 inoremap <A-Down>  <Nop>
 
-nnoremap <silent> <C-t> :tabnext<CR>
-vnoremap <silent> <C-t> <C-\><C-n>:tabnext<CR>
+" additional tab nav <C-w>t or <C-w><C-t> to be like window nav ...
+nnoremap <silent> <C-w><S-Tab> :tabprevious<CR>
+vnoremap <silent> <C-w><S-Tab> <C-\><C-n>:tabprevious<CR>
+
+nnoremap <silent> <C-w>\       :tabnext<CR>
+nnoremap <silent> <C-w><C-\>   :tabnext<CR>
+vnoremap <silent> <C-w>\       <C-\><C-n>:tabnext<CR>
+vnoremap <silent> <C-w><C-\>   <C-\><C-n>:tabnext<CR>
+
+nnoremap <silent> <C-w><Tab>   :tabnext<CR>
+nnoremap <silent> <C-w><C-Tab> :tabnext<CR>
+vnoremap <silent> <C-w><Tab>   <C-\><C-n>:tabnext<CR>
+vnoremap <silent> <C-w><C-Tab> <C-\><C-n>:tabnext<CR>
+
+" some safety <C-w>? remaps, as these would close/quit many/all windows ...
+nnoremap <silent> <C-w>q     <Nop>
+nnoremap <silent> <C-w><C-q> <Nop>
+nnoremap <silent> <C-w>z     <Nop>
+nnoremap <silent> <C-w><C-z> <Nop>
+nnoremap <silent> <C-w>o     <Nop>
+nnoremap <silent> <C-w><C-o> <Nop>
+nnoremap <silent> <C-w>c     <Nop>
+nnoremap <silent> <C-w><C-c> <Nop>
 
 " moving between windows, somtimes hard to let go of ctrl before arrow ...
 " these could map to same cmds: <C-w><C-Left> -> <C-w><Left>
