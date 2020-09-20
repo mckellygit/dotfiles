@@ -1910,6 +1910,12 @@ vnoremap S <Nop>
 " dont exit this way ...
 noremap ZZ <Nop>
 
+" tag stack (<C-t>) remapped ...
+noremap <C-t> <Nop>
+" alternate <Leader> cmd for tag stack ...
+" (<Leader>t? is usually for tab-based cmds)
+noremap <Leader><C-t> <C-t>
+
 " dont do this, it messes up viw ...
 "vnoremap i <Nop>
 
@@ -4746,7 +4752,7 @@ endif " quickfix quit/close
 
 " -----------------------------
 
-" move current window into a tab
+" move current window into new tab
 function s:WinToTab()
     "there is only one window
     if tabpagenr('$') == 1 && winnr('$') == 1
@@ -5387,16 +5393,28 @@ cnoreabbrev <silent> <expr> hsplit (getcmdtype() == ':' && getcmdline() =~ '\s*h
 cnoreabbrev <silent> <expr> hnew   (getcmdtype() == ':' && getcmdline() =~ '\s*hnew\s*')    ? 'new'   : 'hnew'
 " TODO: look into vim-alias ...
 
-" split line vertical
-nnoremap <silent> <Leader>sV :vsplit<CR>
-" split line horizontal
-nnoremap <silent> <Leader>sH :split<CR>
-" to match tmux
-nnoremap <silent> <Leader>s\| :vnew<CR>
-nnoremap <silent> <Leader>s_  :new<CR>
-" split into new tab - but same file buffer
-nnoremap <silent> <Leader>sT :tab split<CR>
-" use <Leader>to to open a new tab ...
+" most <Leader>s? mappings are for search, but these h,v,t,<Tab> +shift are for splits ...
+
+" split buffer vertical
+nnoremap <silent> <Leader>sV       :vsplit<CR>
+" split buffer horizontal
+nnoremap <silent> <Leader>sH       :split<CR>
+" split buffer new tab
+nnoremap <silent> <Leader>s<S-Tab> :tab split<CR>
+" TODO should we also use sT ?
+nnoremap <silent> <Leader>sT       :tab split<CR>
+
+" new, empty splits - to match tmux
+nnoremap <silent> <Leader>s\|    :vnew<CR>
+nnoremap <silent> <Leader>s_     :new<CR>
+" and tab ...
+nnoremap <silent> <Leader>s<Tab> :$tabnew<CR>
+" (also matches <Leader>to)
+" also these ...
+nnoremap <silent> <Leader>sv     :vnew<CR>
+nnoremap <silent> <Leader>sh     :new<CR>
+" TODO should we also use st ?
+nnoremap <silent> <Leader>st     :$tabnew<CR>
 
 " -----------------------------
 

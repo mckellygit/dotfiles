@@ -150,8 +150,8 @@ filter qf/ll entries
 <Leader>tn   next tab
 <Leader>tp   previous tab
 <Leader>tw   move current window into new tab
-<Leader>tM   merge current tab into Window to the left
-<Leader>tm   merge current tab into Window to the right
+<Leader>tM   merge current tab into window to the left
+<Leader>tm   merge current tab into window to the right
 <A-Left>     previous tab
 <A-Right>    next tab
 <C-w><S-Tab> previous tab
@@ -159,7 +159,7 @@ filter qf/ll entries
 <C-w>w       next window
 <C-w><Left>  next window left
 <C-w><Right> next window right
-<C-w><Up>    next Window up
+<C-w><Up>    next window up
 <C-w><Down>  next window down
 <C-w>10+     resize window +10 lines   :res +10
 <C-w>10-     resize window -10 lines   :res -10
