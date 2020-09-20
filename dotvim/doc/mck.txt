@@ -1,5 +1,7 @@
 *mck* vimrc documentation
 
+<Leader> == '\'
+
 *mck-file*
 -------------------------------------------------
 <Leader>f. fzf list of current dir files (:Files)
