@@ -1,19 +1,34 @@
-set horizontal-scroll = 33%
-set history-size      = 0
+set horizontal-scroll  = 33%
+set history-size       = 0
+#set mouse              = yes
+#set mouse-scroll       = 10
+#set mouse-wheel-cursor = yes
+#
 bind generic   +            @sh -c "echo -n %(commit) | myclip -"
 bind generic   <Down>       move-down
 bind generic   <Up>         move-up
 bind diff      u            move-up
 bind stage     u            move-up
 bind status    u            move-up
+#
 bind generic   <Ctrl-F>     move-page-down
 bind generic   <Ctrl-B>     move-page-up
+#
 bind generic   <Ctrl-J>     scroll-line-down
 bind generic   <Ctrl-K>     scroll-line-up
+#
 bind generic   <Space>      next
 bind generic   <Backspace>  previous
+#
 bind generic   <Tab>        next
 bind generic   <ShiftTab>   previous
+#
+# <ScrollFwd> == <S-Down>
+bind generic   <ScrollFwd>  scroll-line-down
+# <ScrollBack> == <S-Up>
+bind generic   <ScrollBack> scroll-line-up
+#
+bind generic   -            none
 bind main      C            none
 bind reflog    C            none
 bind reflog    !            none
