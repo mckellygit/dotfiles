@@ -1,7 +1,7 @@
 set horizontal-scroll  = 33%
 set history-size       = 0
-#set mouse              = yes
-#set mouse-scroll       = 10
+set mouse              = yes
+set mouse-scroll       = 10
 #set mouse-wheel-cursor = yes
 #
 bind generic   +            @sh -c "echo -n %(commit) | myclip -"
