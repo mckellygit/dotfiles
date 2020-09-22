@@ -875,6 +875,11 @@ endif
 map <Leader>gn <Plug>(GitGutterNextHunk)
 map <Leader>gp <Plug>(GitGutterPrevHunk)
 map <silent> <Leader>gg <C-\><C-n>:<C-u>call gitgutter#process_buffer(bufnr(''), 0)<CR>
+aug gg_init
+  au!
+  " NOTE: force auto process git changes ...
+  au BufWinEnter * call gitgutter#process_buffer(bufnr(''), 0)
+aug END
 
 " NOTE: ^L redraws but also updates git changes ...
 nmap <silent> <C-l> :call gitgutter#process_buffer(bufnr(''), 0)<bar>:redraw!<CR>
@@ -3842,6 +3847,12 @@ if has("autocmd")
  "\   exe "normal! g'\"" |
  "\ endif
 
+ function s:CResetTabs()
+     if &filetype ==# 'c'
+         setlocal tabstop=4 expandtab shiftwidth=4 noai
+     endif
+ endfunction
+
  augroup cprog
   " Remove all cprog autocommands
   au!
@@ -3856,6 +3867,8 @@ if has("autocmd")
   " to get rid of <cr> adding more comment lines for cut-and-paste mostly ...
   " au FileType c,cpp setlocal comments-=:// comments+=f://
   au FileType c,cpp setlocal comments-=://
+  " NOTE: dont know where or why but tabstops are reset for .c file types ...
+  au BufWinEnter * call s:CResetTabs()
  augroup END
 
  augroup gzip
