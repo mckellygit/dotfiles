@@ -1,8 +1,61 @@
 # Lines configured by zsh-newuser-install
-HISTFILE=~/.histfile
-HISTSIZE=2000
-SAVEHIST=2000
+
+ZSH_HIST=~/.zsh_hist.$$
+flock ~/.histfile-lock cp ~/.histfile $ZSH_HIST
+HISTFILE=$ZSH_HIST
+HISTSIZE=1000
+SAVEHIST=1000
+
+# skip SHARE_HISTORY as then up-arrow goes thru other shells' history, not just our own, and that can be confusing ...
+# instead, update .histfile by merging session history periodically and at session exit and if update_zhist is run manually
+setopt APPEND_HISTORY INC_APPEND_HISTORY
+setopt HIST_IGNORE_DUPS HIST_IGNORE_ALL_DUPS HIST_EXPIRE_DUPS_FIRST HIST_SAVE_NO_DUPS HIST_FIND_NO_DUPS
+setopt EXTENDED_HISTORY
+
+setopt HIST_IGNORE_SPACE
+# save cmds to history that start with leading space(s)
+# unsetopt HIST_IGNORE_SPACE
+
+purge_old_zhfiles()
+{
+    zhfiles=$(ls -1 ~/.zsh_hist.* | awk -F. '{print $NF}' 2>/dev/null)
+    while read -r pid
+    do
+        kill -0 $pid >/dev/null 2>&1
+        rc=$?
+        if [[ $rc != 0 ]]
+        then
+            rm -f ~/.zsh_hist.${pid}
+        fi
+    done <<< "$zhfiles"
+}
+
+merge_zhist()
+{
+    merge_history
+}
+
+update_zhist()
+{
+    if [[ -n "$HISTFILE" ]]
+    then
+        merge_zhist
+    fi
+}
+
+PERIOD=30
+periodic()
+{
+    update_zhist
+    purge_old_zhfiles
+}
+
+trap "if [[ -n \"$HISTFILE\" ]] ; then merge_zhist ; rm -f $HISTFILE; fi" SIGINT SIGTERM SIGQUIT EXIT
+
+# --------------
+
 unsetopt beep
+
 # Esc to get into vi edit mode
 bindkey -v
 
@@ -81,14 +134,6 @@ setopt PROMPTSUBST
 # precmd () { if [[ -n "$SSH_CLIENT" ]] ; then PS1='%F{007}ssh%f-%F{100}%n@%m%f:%F{150}%12<..<%~%<<%f%% '; print -Pn '\e]0;ssh-%M:%12<..<%~%<<\a'; else ; PS1='%F{100}%n@%m%f:%F{150}%12<..<%~%<<%f%% '; print -Pn '\e]0;%M:%12<..<%~%<<\a' ; fi ; if [[ -n "$TMUX_PANE" ]] ; then tmux set-window-option automatic-rename on; fi }
 
   precmd () { if [[ -n "$SSH_CLIENT" ]] ; then PS1='%F{007}ssh%f-%F{100}%n@%m%f:%F{150}%12<..<%~%<<%f%% '; print -Pn '\e]2;ssh-%M:%12<..<%~%<<\a'; else ; PS1='%F{100}%n@%m%f:%F{150}%12<..<%~%<<%f%% '; print -Pn '\e]2;%12<..<%~%<<\a' ; fi ; if [[ -n "$TMUX_PANE" ]] ; then tmux set-window-option automatic-rename on; fi }
-
-# skip SHARE_HISTORY
-setopt APPEND_HISTORY INC_APPEND_HISTORY
-setopt HIST_IGNORE_DUPS HIST_IGNORE_ALL_DUPS HIST_EXPIRE_DUPS_FIRST HIST_SAVE_NO_DUPS HIST_FIND_NO_DUPS
-
-setopt HIST_IGNORE_SPACE
-# save cmds to history that start with leading space(s)
-# unsetopt HIST_IGNORE_SPACE
 
 # to show .dirs in tab completion ...
 setopt globdots

@@ -1,0 +1,22 @@
+#!/bin/bash
+
+if [[ $# -ge 1 ]] ; then
+    HISTFILE=~/.zsh_hist.$1
+else
+    if [[ -z "$HISTFILE" ]]
+    then
+        HISTFILE=~/.zsh_hist.$PPID
+    fi
+fi
+
+#echo "HISTFILE=$HISTFILE"
+
+if [[ -s $HISTFILE ]]
+then
+    (
+        flock 200
+        cat $HISTFILE ~/.histfile | awk -v date="WILL_NOT_APPEAR$(date +"%s")" '{if (sub(/\\$/,date)) printf "%s", $0; else print $0}' | LC_ALL=C sort -u | awk -v date="WILL_NOT_APPEAR$(date +"%s")" '{gsub('date',"\\\n"); print $0}' | tail -n 5000 > ~/.mrghist
+        mv ~/.mrghist ~/.histfile
+    ) 200>~/.histfile-lock
+fi
+
