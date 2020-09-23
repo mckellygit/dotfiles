@@ -4819,6 +4819,13 @@ noremap <C-a> 0
 " (but its been remapped to <C-j>)
 noremap <C-e> $
 
+" easier to type than ^
+noremap <Leader>l1 ^
+noremap <Leader>la ^
+" to match key pattern ...
+noremap <Leader>l2 $
+noremap <Leader>le $
+
 " to get back orig if needed
 noremap <Leader><C-e> <C-e>
 

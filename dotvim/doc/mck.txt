@@ -207,6 +207,12 @@ filter qf/ll entries
 -------------------------------------------------
 <S-Tab>    repeat last change (.)
 
+<C-a>      goto column 0    (0) (A-<Home>)
+<C-e>      goto end of line ($) (A-<End>)
+
+<Leader>la goto beg of line (^) (<Leader>l1)
+<Leader>la goto end of line ($) (<Leader>l2)
+
 <C-S>Left  move 10 left
 <C-S>Right move 10 right
 <C-S>Up    move 10 up
