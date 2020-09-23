@@ -1,7 +1,7 @@
 # Lines configured by zsh-newuser-install
 
 ZSH_HIST=~/.zsh_hist.$$
-flock ~/.histfile-lock cp ~/.histfile $ZSH_HIST
+flock ~/.histfile-lock cp -p ~/.histfile $ZSH_HIST
 HISTFILE=$ZSH_HIST
 HISTSIZE=1000
 SAVEHIST=1000
