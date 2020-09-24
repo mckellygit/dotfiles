@@ -928,8 +928,9 @@ autocmd FileType GV nmap <buffer> <A-2-LeftMouse> <C-\><C-n>:<C-u>call feedkeys(
 " start with folds open
 autocmd FileType GV set foldlevelstart=1
 
-" make it more like a real vim session and not have qq exit ...
-"autocmd FileType GV nmap <silent> <buffer> qq    :qa!<CR>
+" NOTE: qq to exit GV seems good ...
+autocmd FileType GV nmap <silent> <buffer> qq    :qa!<CR>
+" could make it more like a real vim session and not have qq exit ...
 "autocmd FileType GV nmap <silent> <buffer> <C-q> :qa!<CR>
 autocmd FileType GV nmap <silent> <buffer> <Leader>wq <C-\><C-n>:<C-u>call <SID>QuitIfOnlyNoNameLeft()<CR>
 autocmd FileType GV nmap <silent> <buffer> <Leader>qq <C-\><C-n>:<C-u>call <SID>QuitIfOnlyNoNameLeft()<CR>
@@ -1053,8 +1054,9 @@ endfunction
 autocmd FileType GV nnoremap <silent> <buffer> gb    <Nop>
 autocmd FileType GV nnoremap <silent> <buffer> q     <Nop>
 " NOTE: could also be :qa!<CR> (see above) ...
-autocmd FileType GV nnoremap <silent> <buffer> qq    :close<cr>
-autocmd FileType GV nnoremap <silent> <buffer> <C-q> :close<cr>
+"       this mapping is done in an nmap above ...
+"autocmd FileType GV nnoremap <silent> <buffer> qq    :close<cr>
+"autocmd FileType GV nnoremap <silent> <buffer> <C-q> :close<cr>
 
 " tab split
 autocmd FileType GV nnoremap <silent> <buffer> O    :call <sid>open(0, 1)<cr>
@@ -1106,7 +1108,7 @@ endfunction
 command! -nargs=* GV2 call s:MyGV(<q-args>)
 
 " vigv shell function ...
-" could also add -c 'nnoremap qq :qa!<CR>' and same for <C-q> but this is done above ...
+" could also add -c 'nnoremap qq :qa!<CR>' and perhaps same for <C-q> but this is done above ...
 " vigv() { vim -R -c "GV2 $1 $2 $3" -c ":nnoremap <silent> <buffer> q <Nop>" -c ":cnoreabbrev <silent> <buffer> q Tabcloserightquit" -c ":cnoreabbrev <silent> <buffer> q! Tabcloserightquit" -c ":nnoremap <silent> <buffer> x <Nop>" -c ":cnoreabbrev <silent> <buffer> x Tabcloserightquit" -c ":se bt=nowrite|:tabn|:hide|:redraw!" }
 
 function! s:MyGVF(args) abort

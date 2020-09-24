@@ -358,6 +358,7 @@ nnoremap <silent> Q  <Nop>
 nnoremap <silent> QQ :qa!<CR>
 "nnoremap <silent> q :call QuitVless()<CR>
 nnoremap <silent> <Leader>qq :call QuitVless()<CR>
+vnoremap <silent> <Leader>qq <Esc>:call QuitVless()<CR>
 
 fun! s:E444Msg()
   echohl DiffDelete
@@ -365,9 +366,10 @@ fun! s:E444Msg()
   echohl None
 endfun
 nnoremap <silent> q <Nop>
-nnoremap qq :call <SID>E444Msg()<CR>
+"nnoremap qq :call <SID>E444Msg()<CR>
 
-" NOTE: or could nnoremap qq :qa!<CR> and same for <C-q> ...
+" NOTE: make qq exit vless (but not <C-q>)
+nnoremap <silent> qq :call QuitVless()<CR>
 
 "cnoreabbrev <silent> <expr> q (getcmdtype() == ':' && getcmdline() =~ '\s*\<q\>\s*$') ? 'silent! call QuitVless()' : 'q'
 au VimEnter * :Alias! q call\ QuitVless()
