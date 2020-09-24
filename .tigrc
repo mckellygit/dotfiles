@@ -13,8 +13,8 @@ bind status    u            move-up
 #
 bind generic   <Ctrl-F>     move-half-page-down
 bind generic   <Ctrl-B>     move-half-page-up
-bind generic   <PageDown>   move-half-page-down
-bind generic   <PageUp>     move-half-page-up
+bind generic   <PageDown>   move-page-down
+bind generic   <PageUp>     move-page-up
 #
 bind generic   <Ctrl-J>     scroll-line-down
 bind generic   <Ctrl-K>     scroll-line-up
