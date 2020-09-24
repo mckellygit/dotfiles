@@ -834,6 +834,7 @@ autocmd BufReadPost quickfix nnoremap <buffer> - -
 " fugitive -----------
 autocmd FileType fugitiveblame nmap <buffer> <Leader>wq gq
 autocmd FileType fugitiveblame nmap <buffer> <Leader>qq gq
+autocmd FileType fugitiveblame nmap <buffer> <C-q>      gq
 autocmd FileType fugitiveblame nmap <buffer> <Leader><Tab> O
 autocmd FileType fugitiveblame nmap <buffer> <C-t> O
 " NOTE: FileType autocmd does not work for this map,
@@ -843,7 +844,8 @@ autocmd BufEnter fugitive://**    nmap <buffer> <Return> o
 
 autocmd FileType git              nmap <buffer> <Leader><Tab> O
 autocmd FileType git              nmap <buffer> <C-t> O
-autocmd FileType git              nmap <silent> <buffer> qq :close<cr>
+autocmd FileType git              nmap <silent> <buffer> qq    :close<cr>
+autocmd FileType git              nmap <silent> <buffer> <C-q> :close<cr>
 
 autocmd FileReadCmd fugitive://** nmap <buffer> <Leader><Tab> O
 autocmd FileReadCmd fugitive://** nmap <buffer> <C-t> O
@@ -927,7 +929,8 @@ autocmd FileType GV nmap <buffer> <A-2-LeftMouse> <C-\><C-n>:<C-u>call feedkeys(
 autocmd FileType GV set foldlevelstart=1
 
 " make it more like a real vim session and not have qq exit ...
-"autocmd FileType GV nmap <silent> <buffer> qq :qa!<CR>
+"autocmd FileType GV nmap <silent> <buffer> qq    :qa!<CR>
+"autocmd FileType GV nmap <silent> <buffer> <C-q> :qa!<CR>
 autocmd FileType GV nmap <silent> <buffer> <Leader>wq <C-\><C-n>:<C-u>call <SID>QuitIfOnlyNoNameLeft()<CR>
 autocmd FileType GV nmap <silent> <buffer> <Leader>qq <C-\><C-n>:<C-u>call <SID>QuitIfOnlyNoNameLeft()<CR>
 
@@ -1025,7 +1028,8 @@ function! s:open(visual, ...)
     call s:fill(target)
     setf diff
   endif
-  nnoremap <silent> <buffer> qq :close<cr>
+  nnoremap <silent> <buffer> qq    :close<cr>
+  nnoremap <silent> <buffer> <C-q> :close<cr>
   let bang = a:0 ? '!' : ''
   if exists('#User#GV'.bang)
     execute 'doautocmd <nomodeline> User GV'.bang
@@ -1046,9 +1050,11 @@ function! s:fill(cmd)
 endfunction
 
 " TODO: skip GBrowse for now ...
-autocmd FileType GV nnoremap <silent> <buffer> gb   <Nop>
-autocmd FileType GV nnoremap <silent> <buffer> q    <Nop>
-autocmd FileType GV nnoremap <silent> <buffer> qq   :close<cr>
+autocmd FileType GV nnoremap <silent> <buffer> gb    <Nop>
+autocmd FileType GV nnoremap <silent> <buffer> q     <Nop>
+" NOTE: could also be :qa!<CR> (see above) ...
+autocmd FileType GV nnoremap <silent> <buffer> qq    :close<cr>
+autocmd FileType GV nnoremap <silent> <buffer> <C-q> :close<cr>
 
 " tab split
 autocmd FileType GV nnoremap <silent> <buffer> O    :call <sid>open(0, 1)<cr>
@@ -1100,7 +1106,7 @@ endfunction
 command! -nargs=* GV2 call s:MyGV(<q-args>)
 
 " vigv shell function ...
-" could also add -c 'nnoremap qq :qa!<CR>'
+" could also add -c 'nnoremap qq :qa!<CR>' and same for <C-q> but this is done above ...
 " vigv() { vim -R -c "GV2 $1 $2 $3" -c ":nnoremap <silent> <buffer> q <Nop>" -c ":cnoreabbrev <silent> <buffer> q Tabcloserightquit" -c ":cnoreabbrev <silent> <buffer> q! Tabcloserightquit" -c ":nnoremap <silent> <buffer> x <Nop>" -c ":cnoreabbrev <silent> <buffer> x Tabcloserightquit" -c ":se bt=nowrite|:tabn|:hide|:redraw!" }
 
 function! s:MyGVF(args) abort
@@ -1920,6 +1926,10 @@ noremap <C-t> <Nop>
 " alternate <Leader> cmd for tag stack ...
 " (<Leader>t? is usually for tab-based cmds)
 noremap <Leader><C-t> <C-t>
+
+" <C-q> seems to start selection sometimes ...
+nmap <C-q> <Nop>
+vmap <C-q> q
 
 " dont do this, it messes up viw ...
 "vnoremap i <Nop>
@@ -3847,10 +3857,11 @@ if has("autocmd")
  "\   exe "normal! g'\"" |
  "\ endif
 
- function s:CResetTabs()
-     if &filetype ==# 'c'
+ function s:ResetTabs()
+     " and some other fts ...
+     "if &filetype ==# 'c'
          setlocal tabstop=4 expandtab shiftwidth=4 noai
-     endif
+     "endif
  endfunction
 
  augroup cprog
@@ -3868,7 +3879,8 @@ if has("autocmd")
   " au FileType c,cpp setlocal comments-=:// comments+=f://
   au FileType c,cpp setlocal comments-=://
   " NOTE: dont know where or why but tabstops are reset for .c file types ...
-  au BufWinEnter * call s:CResetTabs()
+  "       and some others ...
+  au BufWinEnter * call s:ResetTabs()
  augroup END
 
  augroup gzip

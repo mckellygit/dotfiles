@@ -24,7 +24,7 @@ if argc() > 0
   while 1
     if filereadable(argv(s:i))
       if s:i != 0
-	    sleep 3
+        sleep 3
       endif
       break
     endif
@@ -35,10 +35,12 @@ if argc() > 0
     else
       echomsg "Skipping unreadable file " . argv(s:i)
     endif
-    echo "\n"
     let s:i = s:i + 1
     if s:i == argc()
+      sleep 3
       quit
+    else
+      echo "\n"
     endif
     next
   endwhile
@@ -325,11 +327,24 @@ endfun
 
 " Quitting / Next file
 fun! QuitVless()
-  if argidx() + 1 >= argc()
-    " Don't quit at the end of the last file
-    quit
-  endif
-  next
+  while 1
+    if argidx() + 1 >= argc()
+      " Don't quit at the end of the last file
+      quit
+    endif
+    next
+    if filereadable(argv(argidx()))
+      break
+    endif
+    if isdirectory(argv(argidx()))
+      echomsg "Skipping directory " . argv(argidx())
+    elseif getftime(argv(argidx())) < 0
+      echomsg "Skipping non-existing file " . argv(argidx())
+    else
+      echomsg "Skipping unreadable file " . argv(argidx())
+    endif
+    sleep 3
+  endwhile
   if &wrap
     silent! normal! ggM0
   else
@@ -339,10 +354,20 @@ fun! QuitVless()
   redraw!
 endfun
 
-nnoremap <silent> Q <Nop>
+nnoremap <silent> Q  <Nop>
 nnoremap <silent> QQ :qa!<CR>
 "nnoremap <silent> q :call QuitVless()<CR>
 nnoremap <silent> <Leader>qq :call QuitVless()<CR>
+
+fun! s:E444Msg()
+  echohl DiffDelete
+  echo "E444: Cannot close last window"
+  echohl None
+endfun
+nnoremap <silent> q <Nop>
+nnoremap qq :call <SID>E444Msg()<CR>
+
+" NOTE: or could nnoremap qq :qa!<CR> and same for <C-q> ...
 
 "cnoreabbrev <silent> <expr> q (getcmdtype() == ':' && getcmdline() =~ '\s*\<q\>\s*$') ? 'silent! call QuitVless()' : 'q'
 au VimEnter * :Alias! q call\ QuitVless()
