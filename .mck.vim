@@ -1340,9 +1340,12 @@ vnoremap <silent> <buffer> K <C-\><C-n>:call man#get_page_from_cword('horizontal
 
 " choosewin --------
 let g:choosewin_overlay_enable = 1
-nmap -          <Plug>(choosewin)
+"nmap -          <Plug>(choosewin)
 nmap <Leader>sp <Plug>(choosewin)
 " choosewin --------
+
+" annoying ...
+nmap - <Nop>
 
 " ====================================================
 " ====================================================
@@ -5248,6 +5251,15 @@ vnoremap <silent> uu u
 vnoremap <silent> U  u
 vmap <silent> u <Nop>
 
+" NOTE: then in vless.vim we can unmap u ...
+"try
+"  nunmap u
+"  nunmap uu
+"  vunmap u
+"  vunmap uu
+"catch /E31:/
+"endtry
+
 " toggle search highlight
 nnoremap <silent> <Leader>hl :silent set hlsearch! hlsearch?<CR>
 hi Search ctermbg=58
@@ -5428,6 +5440,7 @@ cnoreabbrev <silent> <expr> hnew   (getcmdtype() == ':' && getcmdline() =~ '\s*h
 " TODO: look into vim-alias ...
 
 " most <Leader>s? mappings are for search, but these h,v,t,<Tab> +shift are for splits ...
+" there is also one more: <Leader>sp for select-pane (choosewin)
 
 " split buffer vertical
 nnoremap <silent> <Leader>sV       :vsplit<CR>

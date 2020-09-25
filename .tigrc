@@ -2,7 +2,7 @@ set horizontal-scroll  = 33%
 set history-size       = 0
 set mouse              = yes
 set mouse-scroll       = 10
-#set mouse-wheel-cursor = yes
+set mouse-wheel-cursor = no
 #
 bind generic   +            @sh -c "echo -n %(commit) | myclip -"
 bind generic   <Down>       move-down

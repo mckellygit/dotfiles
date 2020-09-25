@@ -221,7 +221,17 @@ map <C-N> <CR>
 "noremap <script> u <C-B><SID>L
 "noremap <script> <C-U> <C-U><SID>LM
 "call NoremapNormalCmd("u", 0, "<C-B>M")
+try
+  nunmap u
+  nunmap uu
+  vunmap u
+  vunmap uu
+catch /E31:/
+endtry
 call NoremapNormalCmd("<expr> u", 0, "(line('.') == line('w$')) ? 'M' : '<C-U>:set scroll=0\r'")
+
+" NOTE: could also map backspace to page up ...
+"call NoremapNormalCmd("<expr> <BS>", 0, "(line('.') == line('w$')) ? 'M' : '<C-U>:set scroll=0\r'")
 
 " ---------
 

@@ -184,16 +184,17 @@ filter qf/ll entries
 
 *mck-split*
 -------------------------------------------------
-<Leader>sV   vertical split
-<Leader>s|   vertical split new
-<Leader>sH   horizontal split
-<Leader>s_   horizontal split new
-<Leader>sT   tab split
-<C-w>t       makes topleft window current
-<C-w>K       moves curr window to topmost
-<C-w>H       moves curr window to leftmost
-<C-w>t<C-w>K to change 2 vertical split windows into horiz split
-<C-w>t<C-w>H to change 2 horiz split windows into vertical split
+<Leader>sV      vertical split
+<Leader>sH      horizontal split
+<Leader>sT      tab split (<Leader><S-Tab>)
+<Leader>s|      vertical split new buffer (<Leader>sv)
+<Leader>s_      horizontal split new buffer (<Leader>sh)
+<Leader>s<Tab>  tab split new buffer (<Leader>st)
+<C-w>t          makes topleft window current
+<C-w>K          moves curr window to topmost
+<C-w>H          moves curr window to leftmost
+<C-w>t<C-w>K    to change 2 vertical split windows into horiz split
+<C-w>t<C-w>H    to change 2 horiz split windows into vertical split
 
 *mck-quit*
 -------------------------------------------------
@@ -232,7 +233,7 @@ z<Down>    move selected line(s) down
 
  +         highlight cross-hair at cursor location
 
-<Leader>sp choose window (-)
+<Leader>sp choose window (select-pane)
 
 <Leader>++ zoom window toggle (<C-w>z)
 
