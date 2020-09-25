@@ -337,6 +337,8 @@ endfun
 
 " Quitting / Next file
 fun! QuitVless()
+  " just to clear the cmdline of this function ...
+  echo " "
   while 1
     if argidx() + 1 >= argc()
       " Don't quit at the end of the last file
