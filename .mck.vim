@@ -5313,11 +5313,11 @@ nnoremap <silent> <Leader>wk           :only<CR>
 vnoremap <silent> <Leader>wk <C-\><C-n>:only<CR>
 
 " next tab
-nnoremap <Leader>tn           :tabnext<CR>
-vnoremap <Leader>tn <C-\><C-n>:tabnext<CR>
+nnoremap <silent> <Leader>tn           :tabnext<CR>
+vnoremap <silent> <Leader>tn <C-\><C-n>:tabnext<CR>
 " prev tab
-nnoremap <Leader>tp           :tabprevious<CR>
-vnoremap <Leader>tp <C-\><C-n>:tabprevious<CR>
+nnoremap <silent> <Leader>tp           :tabprevious<CR>
+vnoremap <silent> <Leader>tp <C-\><C-n>:tabprevious<CR>
 
 " toggle fold
 noremap <Leader>ff za
