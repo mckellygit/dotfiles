@@ -7,9 +7,7 @@ set mouse-wheel-cursor = no
 bind generic   +            @sh -c "echo -n %(commit) | myclip -"
 bind generic   <Down>       move-down
 bind generic   <Up>         move-up
-bind diff      u            move-up
-bind stage     u            move-up
-bind status    u            move-up
+bind generic   u            previous
 #
 bind generic   <Ctrl-F>     move-half-page-down
 bind generic   <Ctrl-B>     move-half-page-up
