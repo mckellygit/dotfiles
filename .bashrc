@@ -185,6 +185,14 @@ alias make='make -j$NCPUS'
 
 alias fzf='fzf-tmux'
 
+# ------------------
+
+# kubernetes, helm etc.
+
+alias kc='kubectl'
+
+# ------------------
+
 sship()
 {
   if [ -n "$SSH_CLIENT" ] ; then
