@@ -2239,10 +2239,13 @@ endfunction
 nnoremap <silent> <Leader>zx :call <SID>SwapReg(1)<CR>
 vnoremap <silent> <Leader>zx :<C-u>call <SID>SwapReg(1)<CR>gv
 
-" replace highlighted selection with x reg (usually after swapping + with x (<Leader>zx))
-" NOTE: yanking now fills reg x with previous reg + ...
+" replace highlighted selection with x reg (usually after swapping * with x (<Leader>zx))
+" NOTE: yanking now fills reg x with previous reg * ...
 " NOTE: see all visual mode 'p' mapping for similar method ...
 vnoremap <silent> <Leader>zp "_x"xP<Esc>
+
+" only works for visual mode ...
+nnoremap <silent> <Leader>zp <Nop>
 
 " ----------- yank / cut / paste -----------
 
@@ -4218,7 +4221,7 @@ function s:MyUPIndentBefore() abort
         execute "keepjumps normal \<Plug>UnconditionalPasteIndentedBefore"
     endif
 endfunction
-nmap <Leader>Px <C-\><C-n>:<C-u>call <SID>MyUPIndentBefore()<CR>
+nmap <silent> <Leader>Px <C-\><C-n>:<C-u>call <SID>MyUPIndentBefore()<CR>
 
 function s:MyUPIndentAfter() abort
     execute 'keepjumps normal mx^'
@@ -4234,7 +4237,7 @@ function s:MyUPIndentAfter() abort
         execute "keepjumps normal \<Plug>UnconditionalPasteIndentedAfter"
     endif
 endfunction
-nmap <Leader>px <C-\><C-n>:<C-u>call <SID>MyUPIndentAfter()<CR>
+nmap <silent> <Leader>px <C-\><C-n>:<C-u>call <SID>MyUPIndentAfter()<CR>
 " unconditional-paste ---
 
 " ansiesc ----------
@@ -4839,9 +4842,11 @@ noremap <C-e> $
 " easier to type than ^
 noremap <Leader>l1 ^
 noremap <Leader>la ^
-" to match key pattern ...
+" to match same <Leader>l1 key pattern ...
 noremap <Leader>l2 $
 noremap <Leader>le $
+" for consistency ...
+noremap <Leader>l0 0
 
 " to get back orig if needed
 noremap <Leader><C-e> <C-e>

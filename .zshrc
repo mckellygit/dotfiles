@@ -543,6 +543,12 @@ alias fzf='fzf-tmux -p -x R -y S -w 80% -h 80%'
 
 # ------------------
 
+# kubernetes, helm etc.
+
+alias kc='kubectl'
+
+# ------------------
+
 # dont disappear on a non-exiting command ...
 # also note use of command
 # bash does this automatically

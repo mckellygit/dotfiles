@@ -208,7 +208,7 @@ filter qf/ll entries
 -------------------------------------------------
 <S-Tab>    repeat last change (.)
 
-<C-a>      goto column 0    (0) (A-<Home>)
+<C-a>      goto column 0    (0) (A-<Home>) (<Leader>l0)
 <C-e>      goto end of line ($) (A-<End>)
 
 <Leader>la goto beg of line (^) (<Leader>l1)
@@ -247,10 +247,11 @@ z<Down>    move selected line(s) down
 
 <Leader>lw toggle line wrap
 
-<Leader>rg show registers
-<Leader>sr swap history registers (2-entry stack)
-
-<Leader>lr explicit load clipboard into * (named) reg
+<Leader>rg show registers in fzf list for selecting
+<Leader>lr copy reg * to system clipboard
+<Leader>zc copy reg * to reg x
+<Leader>zx swap reg * with reg x
+<Leader>zp paste reg x into selection NOTE: visual mode only
 
 <Leader>uu undo all
 
