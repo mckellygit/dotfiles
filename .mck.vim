@@ -2126,12 +2126,12 @@ noremap <silent> <C-Home> gg
 "noremap <silent> <Esc>6 G
 noremap <silent> <C-End> G
 
-" NOTE: dont really need/use S-Ins or A-H/E
-" NOTE: <S-Insert> vmap is used below
-map  <silent> <S-Insert> <Nop>
-imap <silent> <S-Insert> <Esc>l
-cmap <silent> <S-Insert> <Nop>
-tmap <silent> <S-Insert> <Nop>
+" NOTE: <S-Insert> is mapped to paste below
+"   and <C-Insert> is vmapped to copy selection below
+nmap <silent> <C-Insert> <Nop>
+imap <silent> <C-Insert> <Esc>l
+cmap <silent> <C-Insert> <Nop>
+tmap <silent> <C-Insert> <Nop>
 
 " NOTE: <A-Insert> used by tmux for copyq toggle
 map  <silent> <A-Insert> <Nop>
@@ -2320,7 +2320,7 @@ endfunction
 
 " ---------------
 
-" C-S-v / C-Insert / M-1 / C-S-Insert / M-8 paste ...
+" C-S-v / S-Insert / M-1 / C-S-Insert / M-8 - paste ...
 
 " cannot differentiate between C-S-v and C-v ...
 "nnoremap <expr> <C-S-v> (&buftype == 'terminal') ? '<Nop>' : 'p'
@@ -2329,13 +2329,13 @@ endfunction
 "cnoremap <C-S-v> <C-r>+
 "tnoremap <C-S-v> <C-w>"+
 
-" <C-Insert> paste after
-nnoremap <expr> <C-Insert> (&buftype == 'terminal') ? '<Nop>' : 'p'
-" NOTE: <C-Insert> vmapped below ...
-"vnoremap <expr> <C-Insert> (&buftype == 'terminal') ? '<Nop>' : '<Esc>p'
-inoremap <C-Insert> <C-r>*
-cnoremap <C-Insert> <C-r>*
-tnoremap <C-Insert> <C-w>"*
+" <S-Insert> paste after
+nnoremap <expr> <S-Insert> (&buftype == 'terminal') ? '<Nop>' : 'p'
+" NOTE: <S-Insert> vmapped below ...
+"vnoremap <expr> <S-Insert> (&buftype == 'terminal') ? '<Nop>' : '<Esc>p'
+inoremap <S-Insert> <C-r>*
+cnoremap <S-Insert> <C-r>*
+tnoremap <S-Insert> <C-w>"*
 
 " <M-1> paste after [menu?]
 call <SID>MapFastKeycode('<S-F34>',  "\e1", 134)
@@ -2506,7 +2506,7 @@ endfunction
 " <C-q> does not seem to get through as its stty start ...
 " NOTE: does not work as a map as expected because it is interpreted as <Esc>p ...
 "inoremap <silent> <M-p> <C-r>+
-" NOTE: use <C-Insert> or <C-S-v> instead ...
+" NOTE: use <S-Insert> or <C-S-v> instead ...
 
 " should we change default to paste before (at) cursor
 " instead of after cursor ?
@@ -2534,14 +2534,21 @@ nnoremap <silent> <buffer> <expr> P (&buftype == 'terminal') ? '<Nop>' : 'P`['
 vnoremap <silent> <buffer> <expr> p (&buftype == 'terminal') ? '<Nop>' : '"_x"*P'
 vnoremap <silent> <buffer> <expr> P (&buftype == 'terminal') ? '<Nop>' : '"_x"*P'
 
-" <S-Insert> as a vis-mode 'replace' ...
-vnoremap <silent> <buffer> <expr> <S-Insert>   (&buftype == 'terminal') ? '<Nop>' : 's'
-" NOTE: these are used instead of <C-Insert>, <C-S-Insert> vmappings above ...
-vnoremap <silent> <buffer> <expr> <C-Insert>   (&buftype == 'terminal') ? '<Nop>' : '"_x"*P'
+" skip <S-Insert> as a vis-mode 'replace' ...
+"vnoremap <silent> <buffer> <expr> <S-Insert>   (&buftype == 'terminal') ? '<Nop>' : 's'
+
+vnoremap <silent> <buffer> <expr> <S-Insert>   (&buftype == 'terminal') ? '<Nop>' : '"_x"*P'
 vnoremap <silent> <buffer> <expr> <C-S-Insert> (&buftype == 'terminal') ? '<Nop>' : '"_x"*P'
 
+" NOTE: to match legacy editors/DOS/etc -
+"  <C-Insert> is copy
+"  <S-Insert> is paste (mapped below)
+"  <S-Del>    is cut (mapped below)
+vmap <silent> <expr> <C-Insert> (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
+vmap <silent> <S-Del> tx
+
 " ---------------------------------------------------------------------------------
-" TODO: TMUX <C-Insert> in terminal does not use bracketed-paste, but <C-S-v> is ok
+" NOTE: TMUX <C-Insert> in terminal does not use bracketed-paste, but <C-S-v> is ok
 " ---------------------------------------------------------------------------------
 
 " set paste mode, paste, set nopaste mode
