@@ -3695,6 +3695,16 @@ function! s:MapScrollKeys()
   execute 'vnoremap <silent> <C-b> ' . g:hup
   inoremap  <silent> <expr> <C-b> pumvisible() ? '<C-b>' : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
 
+  " to match tig etc, a <Leader> mapping for page-down,up ...
+  nnoremap <silent> <Leader>1 :call <SID>CtrlF(1)<CR>
+  execute 'vnoremap <silent> <Leader>1 ' . g:hdn
+  nnoremap <silent> <Leader>2 :call <SID>CtrlB(1)<CR>
+  execute 'vnoremap <silent> <Leader>2 ' . g:hup
+  " and shift of <Leader>1 for up ...
+  nnoremap <silent> \|!       :call <SID>CtrlB(1)<CR>
+  execute 'vnoremap <silent> \|! ' . g:hup
+  " -------------------
+
   "noremap            <expr> <PageDown>   (line('.') == line('w0')) ? g:hdn : '<C-D><C-D>'
   nnoremap <silent> <PageDown> :call <SID>CtrlF(2)<CR>
   execute 'vnoremap <silent> <expr> <PageDown> (line(".") == line("w0")) ? "' . g:hdn . '" : "<C-D><C-D>"'

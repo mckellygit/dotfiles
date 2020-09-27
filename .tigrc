@@ -15,9 +15,9 @@ bind diff      \F           :?diff --git
 bind diff      \c           :/^@@
 bind diff      \C           :?^@@
 bind diff      \d           scroll-page-down
-bind diff      \<Tab>       scroll-page-down
+bind diff      \1           scroll-page-down
 bind diff      \u           scroll-page-up
-bind diff      \`           scroll-page-up
+bind diff      \2           scroll-page-up
 bind generic   \qq          view-close
 #
 bind generic   <Ctrl-F>     move-half-page-down
