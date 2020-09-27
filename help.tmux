@@ -1,30 +1,42 @@
 ------- help -------
 
-prefix <Arrow>       - navigate panes
-prefix <C-z>         - toggle pane zoom
+prefix = <Ctrl-s>
 
-Alt-Shift <Arrow>    - resize panes
-Mouse-Drag border    - resize panes
+prefix <Arrow>          - navigate panes
+prefix <Ctrl-z>         - toggle pane zoom
 
-Shift <Left>,<Right> - navigate windows
-Ctrl <BS>            - navigate windows
-Ctrl-Shift <BS>      - navigate windows
-Ctrl <=>             - navigate windows
-Ctrl <Space>         - navigate windows
+Alt-Shift-<Arrow>       - resize panes
+Drag on window border   - resize panes
 
-prefix <C-r>         - re-load conf file
+Shift-<Left>,<Right>    - navigate windows
+Ctrl-<BS>               - navigate windows
+Ctrl-Shift <BS>         - navigate windows
+Ctrl-=                  - navigate windows
 
-prefix <z>           - fzf popup
+prefix <Ctrl-r>         - re-load conf file
 
-prefix .             - copy cmdline to clipboard
+prefix z                - fzf popup
 
-prefix <C-p>         - display pane ids
+prefix .                - copy cmdline to clipboard
 
-Shift <F12>          - toggle function keys
+prefix <Ctrl-p>         - display pane ids
 
-Ctrl-Shift <Space>   - window list
+Shift-<F12>             - toggle function keys
 
-prefix <C-a>         - cmd history
-prefix <C-x>         - execute cmd
-prefix <C-e>         - erase cmdline (like <C-u>)
+Ctrl-Shift-<Space>      - window list
 
+prefix <Ctrl-a>         - cmd history
+prefix <Ctrl-x>         - execute cmd
+prefix <Ctrl-e>         - clear cmdline (like <Ctrl-u>)
+
+In copy-mode:
+2-click rt status       - exit copy-mode
+Ctrl-2-click rt status  - exit copy-mode and paste selection (also Alt)
+
+2-click lt status       - exit copy-mode
+
+In normal-mode:
+2-click rt status       - paste selection
+Ctrl-2-click rt status  - execute cmdline (also Alt)
+
+2-click lt status       - clear cmdline (like <Ctrl-u>)
