@@ -3703,6 +3703,12 @@ function! s:MapScrollKeys()
   " and shift of <Leader>1 for up ...
   nnoremap <silent> \|!       :call <SID>CtrlB(1)<CR>
   execute 'vnoremap <silent> \|! ' . g:hup
+  " and partial shifts ...
+  nnoremap <silent> <Leader>! :call <SID>CtrlB(1)<CR>
+  execute 'vnoremap <silent> <Leader>! ' . g:hup
+  nnoremap <silent> \|1       :call <SID>CtrlB(1)<CR>
+  execute 'vnoremap <silent> \|1 ' . g:hup
+
   " -------------------
 
   "noremap            <expr> <PageDown>   (line('.') == line('w0')) ? g:hdn : '<C-D><C-D>'

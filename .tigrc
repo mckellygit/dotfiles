@@ -10,6 +10,7 @@ bind generic   <Up>         move-up
 bind generic   u            previous
 #
 # Leader mappings ...
+bind diff      \            none
 bind diff      \f           :/diff --git
 bind diff      \F           :?diff --git
 bind diff      \c           :/^@@
@@ -18,6 +19,12 @@ bind diff      \d           scroll-page-down
 bind diff      \1           scroll-page-down
 bind diff      \u           scroll-page-up
 bind diff      \2           scroll-page-up
+bind diff      |            none
+bind diff      |!           scroll-page-up
+# partial shifts ...
+bind diff      \!           scroll-page-up
+bind diff      |1           scroll-page-up
+#
 bind generic   \qq          view-close
 #
 bind generic   <Ctrl-F>     move-half-page-down
