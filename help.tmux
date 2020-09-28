@@ -8,7 +8,7 @@ prefix <Ctrl-z>         - toggle pane zoom
 Alt-Shift-<Arrow>       - resize panes
 Drag on window border   - resize panes
 
-Shift-<Left>,<Right>    - navigate windows
+Alt-<Left>,<Right>      - navigate windows
 Ctrl-<BS>               - navigate windows
 Ctrl-Shift <BS>         - navigate windows
 Ctrl-=                  - navigate windows

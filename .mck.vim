@@ -3779,11 +3779,23 @@ autocmd CursorHold * call <SID>ClearCmdWindow()
 
 " ---------
 
-" tmux uses these to navigate windows (prev, next)
-noremap  <S-Left>  <Nop>
-noremap  <S-Right> <Nop>
-inoremap <S-Left>  <Nop>
-inoremap <S-Right> <Nop>
+" NOTE: S-L,R used for tab nav ...
+
+" NOTE: C-S-Left/Right/Up/Down move by 5 ...
+" NOTE: A-L,R,U,D was used by tmux for window nav ...
+" NOTE: some terminals work with A/M-L/R but some need esc seq ...
+
+" prev tab
+nnoremap <silent> <S-Left>      :tabprevious<CR>
+vnoremap <silent> <S-Left> <Esc>:tabprevious<CR>
+inoremap <silent> <S-Left> <Esc>:tabprevious<CR>
+tnoremap <silent> <S-Left> <C-w>:tabprevious<CR>
+
+" next tab
+nnoremap <silent> <S-Right>      :tabnext<CR>
+vnoremap <silent> <S-Right> <Esc>:tabnext<CR>
+inoremap <silent> <S-Right> <Esc>:tabnext<CR>
+tnoremap <silent> <S-Right> <C-w>:tabnext<CR>
 
 " NOTE: S-Up, Down are available ...
 " Perhaps same as <Up>/<Down> so we can repeat cmds
@@ -5392,23 +5404,11 @@ endfunction
 
 tnoremap <silent> <C-d> <C-w>:call <SID>TermQuit()<CR>
 
-" NOTE: M-L,R used for tab nav ...
-
-" NOTE: C-S-Left/Right/Up/Down move by 5 ...
-" NOTE: S-L,R,U,D was used by tmux for window nav ...
-" NOTE: some terminals work with A/M-L/R but some need esc seq ...
-
-" prev tab
-nnoremap <silent> <A-Left>      :tabprevious<CR>
-vnoremap <silent> <A-Left> <Esc>:tabprevious<CR>
-inoremap <silent> <A-Left> <Esc>:tabprevious<CR>
-tnoremap <silent> <A-Left> <C-w>:tabprevious<CR>
-
-" next tab
-nnoremap <silent> <A-Right>      :tabnext<CR>
-vnoremap <silent> <A-Right> <Esc>:tabnext<CR>
-inoremap <silent> <A-Right> <Esc>:tabnext<CR>
-tnoremap <silent> <A-Right> <C-w>:tabnext<CR>
+" NOTE: tmux uses these to navigate windows (prev, next)
+noremap  <A-Left>  <Nop>
+noremap  <A-Right> <Nop>
+inoremap <A-Left>  <Nop>
+inoremap <A-Right> <Nop>
 
 " NOTE: M-Up, Down are available ...
 noremap  <A-Up>    <Up>
