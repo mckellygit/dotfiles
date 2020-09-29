@@ -21,12 +21,21 @@ dpi:
 
 key_bindings:
   # special -------
-  - { key: Back,      mods: Control,         chars: "\x1b\x7f"        }
   - { key: Back,      mods: Shift,           chars: "\x7f"            }
-  - { key: Back,      mods: Control|Shift,   chars: "\x1b\x32"        }
-  - { key: Equals,    mods: Control,         chars: "\x1b\x33"        }
-  - { key: Space,     mods: Control|Shift,   chars: "\x1b\x34"        }
-  - { key: X,         mods: Control|Shift,   chars: "\x1b\x39"        }
+  - { key: Back,      mods: Control|Shift,   chars: "\x7f"            }
+
+  - { key: Space,     mods: Control|Shift,   chars: "\x1b\x24"        }
+
+  - { key: X,         mods: Control|Shift,   chars: "\x1b\x28"        }
+
+  - { key: Back,      mods: Alt|Control,     chars: "\x1b\x40"        }
+  - { key: Equals,    mods: Alt|Control,     chars: "\x1b\x23"        }
+  - { key: Space,     mods: Alt|Control,     chars: "\x1b\x25"        }
+
+  - { key: Back,      mods: Control,         action: None             }
+  - { key: Equals,    mods: Control,         action: None             }
+  - { key: Minus,     mods: Control,         action: None             }
+  - { key: Minus,     mods: Alt|Control,     action: None             }
   # special -------
 
   - { key: V,         mods: Control|Shift,   action: Paste            }
@@ -38,7 +47,6 @@ key_bindings:
 
   # reset some defaults ---
   - { key: 11,        mods: Control,         action: ReceiveChar      }
-  - { key: Minus,     mods: Control,         chars: "\x2d"            }
   - { key: Subtract,  mods: Control,         chars: "\x2d"            }
   - { key: Add,       mods: Control,         chars: "\x2b"            }
   # reset some defaults ---

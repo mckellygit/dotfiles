@@ -2320,7 +2320,7 @@ endfunction
 
 " ---------------
 
-" C-S-v / S-Insert / M-1 / C-S-Insert / M-8 - paste ...
+" C-S-v / S-Insert / M-! / C-S-Insert / M-* - paste ...
 
 " cannot differentiate between C-S-v and C-v ...
 "nnoremap <expr> <C-S-v> (&buftype == 'terminal') ? '<Nop>' : 'p'
@@ -2337,8 +2337,8 @@ inoremap <S-Insert> <C-r>*
 cnoremap <S-Insert> <C-r>*
 tnoremap <S-Insert> <C-w>"*
 
-" <M-1> paste after [menu?]
-call <SID>MapFastKeycode('<S-F34>',  "\e1", 134)
+" <M-!> paste after [menu?]
+call <SID>MapFastKeycode('<S-F34>',  "\e!", 134)
 nnoremap <expr> <S-F34> (&buftype == 'terminal') ? '<Nop>' : 'p'
 vnoremap <expr> <S-F34> (&buftype == 'terminal') ? '<Nop>' : '<Esc>p'
 inoremap <S-F34> <C-r>*
@@ -2353,35 +2353,35 @@ inoremap <C-S-Insert> <C-o>mp<C-r>*<C-o>`p
 cnoremap <C-S-Insert> <C-r>*
 tnoremap <C-S-Insert> <C-w>"*
 
-" <M-8> paste before [menu?]
-call <SID>MapFastKeycode('<S-F35>',  "\e8", 135)
+" <M-*> paste before [menu?]
+call <SID>MapFastKeycode('<S-F35>',  "\e*", 135)
 nnoremap <expr> <S-F35> (&buftype == 'terminal') ? '<Nop>' : 'P`]'
 vnoremap <expr> <S-F35> (&buftype == 'terminal') ? '<Nop>' : '<Esc>P`]'
 inoremap <S-F35> <C-r>*
 cnoremap <S-F35> <C-r>*
 tnoremap <S-F35> <C-w>"*
 
-" C-S-c / M-7 copy ...
+" C-S-c / M-& copy ...
 
 " cannot differentiate between C-S-c and C-c ...
 "nnoremap <C-S-c> <Nop>
 "vnoremap <C-S-c> "*y
 "inoremap <C-S-c> <Nop>
 
-" some terminal configs (urxvt) map C-S-c => M-7
-call <SID>MapFastKeycode('<S-F36>',  "\e7", 136)
+" some terminal configs (urxvt) map C-S-c => M-&
+call <SID>MapFastKeycode('<S-F36>',  "\e&", 136)
 nnoremap <S-F36> <Nop>
 vmap <expr> <S-F36> (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
 inoremap <S-F36> <Nop>
 
-" C-S-x / M-9 cut ...
+" C-S-x / M-( cut ...
 
 " cannot differentiate between C-S-x and C-x ...
 "nnoremap <C-S-x> <Nop>
 "vnoremap <expr> <C-S-x> (&buftype == 'terminal') ? '<Nop>' : '"*d'
 "inoremap <C-S-x> <Nop>
 
-call <SID>MapFastKeycode('<S-F37>',  "\e9", 137)
+call <SID>MapFastKeycode('<S-F37>',  "\e(", 137)
 nnoremap <S-F37> <Nop>
 vmap <expr> <S-F37> (&buftype == 'terminal') ? '<Nop>' : 'tx'
 inoremap <S-F37> <Nop>
