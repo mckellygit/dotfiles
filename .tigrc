@@ -12,12 +12,12 @@ bind generic   u            previous
 # Leader mappings ...
 # use 2-key mapping as single \f,F and c,C cause input delays in vim ...
 bind generic   \            none
-bind diff      \;f          :/diff --git
-bind diff      \;F          :?diff --git
+bind diff      \;f          :/^diff --git
+bind diff      \;F          :?^diff --git
 bind diff      \;c          :/^@@
 bind diff      \;C          :?^@@
-bind stage     \;f          :/diff --git
-bind stage     \;F          :?diff --git
+bind stage     \;f          :/^diff --git
+bind stage     \;F          :?^diff --git
 bind stage     \;c          :/^@@
 bind stage     \;C          :?^@@
 bind generic   \d           scroll-page-down

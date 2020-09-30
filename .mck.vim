@@ -849,12 +849,12 @@ autocmd FileType git              nmap <silent> <buffer> <C-q> :close<cr>
 
 " git diff navigation like tig ...
 " NOTE: single <Leader>f,F and c,C causes input delays ...
-autocmd FileType git              nmap <silent> <buffer> <Leader>;f /diff --git<CR>
-autocmd FileType git              nmap <silent> <buffer> <Leader>;F ?diff --git<CR>
+autocmd FileType git              nmap <silent> <buffer> <Leader>;f /^diff --git<CR>
+autocmd FileType git              nmap <silent> <buffer> <Leader>;F ?^diff --git<CR>
 autocmd FileType git              nmap <silent> <buffer> <Leader>;c /^@@<CR>
 autocmd FileType git              nmap <silent> <buffer> <Leader>;C ?^@@<CR>
-autocmd FileType git              vmap <silent> <buffer> <Leader>;f /diff --git<CR>
-autocmd FileType git              vmap <silent> <buffer> <Leader>;F ?diff --git<CR>
+autocmd FileType git              vmap <silent> <buffer> <Leader>;f /^diff --git<CR>
+autocmd FileType git              vmap <silent> <buffer> <Leader>;F ?^diff --git<CR>
 autocmd FileType git              vmap <silent> <buffer> <Leader>;c /^@@<CR>
 autocmd FileType git              vmap <silent> <buffer> <Leader>;C ?^@@<CR>
 
