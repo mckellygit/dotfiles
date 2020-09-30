@@ -1831,7 +1831,8 @@ set clipboard-=unnamedplus
 
 " preserve clipboard(s) at exit ...
 function! s:PreserveClipboard() abort
-    if executable("copyq") && !exists('$VIM_SKIP_PRESERVE_CLIPBOARD')
+    if executable("copyq") && executable("myclip") && !exists('$SSH_CLIENT') && !exists('$VIM_SKIP_PRESERVE_CLIPBOARD')
+        " if copyq and myclip exe and not ssh shell and special vim_skip_preserve_clipboard env not set ...
         "silent call system("setsid -w copyq >/dev/null 2>/dev/null copySelection -", getreg('*'))
         "silent call system("setsid -w copyq >/dev/null 2>/dev/null copy -", getreg('*'))
         " trim(getreg('*'), '\n', 2)
@@ -1852,10 +1853,10 @@ autocmd VimLeave * silent call <SID>PreserveClipboard()
 " initially set + and * regs, even if clipboard empty ...
 " otherwise they can get loaded from elsewhere
 function s:InitializeClipboard()
-    if executable("copyq")
-        " TODO: if copyq not running then start it ...
+    if executable("copyq") && executable("myclip") && !exists('$SSH_CLIENT')
+        " if copyq and myclip exe and copyq not running and not ssh shell then start it ...
         if executable("pgrep")
-            let copyqpid = system('pgrep copyq')
+            let copyqpid = system('pgrep --exact copyq')
             if empty(copyqpid)
                 silent call system('setsid copyq &')
                 sleep 551m
@@ -2197,11 +2198,16 @@ endif
 
 " explicit force load @* to clipboard ...
 function! ForceLoadNammedReg() abort
-    "silent call system("setsid -w xsel -i -b --rmlastnl --sc 0", getreg('+'))
-    silent call system("setsid -w myclip --rmlastnl ", getreg('*'))
-    echohl DiffText | echo "@* -> clipboard ; register copied" | echohl None
-    sleep 551m
-    redraw!
+    if executable("copyq") && executable("myclip")
+        " if copyq and myclip exe ...
+        "silent call system("setsid -w xsel -i -b --rmlastnl --sc 0", getreg('+'))
+        silent call system("setsid -w myclip --rmlastnl ", getreg('*'))
+        echohl DiffText | echo "@* -> clipboard ; register copied" | echohl None
+        sleep 551m
+        redraw!
+    else
+        echohl WarningMsg | echo "copyq/myclip not found, cannot set clipboard" | echohl None
+    endif
 endfunction
 nnoremap <silent> <Leader>lr :call ForceLoadNammedReg()<CR>
 vnoremap <silent> <Leader>lr :<C-u>call ForceLoadNammedReg()<CR>
