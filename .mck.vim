@@ -847,6 +847,17 @@ autocmd FileType git              nmap <buffer> <C-t> O
 autocmd FileType git              nmap <silent> <buffer> qq    :close<cr>
 autocmd FileType git              nmap <silent> <buffer> <C-q> :close<cr>
 
+" git diff navigation like tig ...
+" NOTE: single <Leader>f,F and c,C causes input delays ...
+autocmd FileType git              nmap <silent> <buffer> <Leader>;f /diff --git<CR>
+autocmd FileType git              nmap <silent> <buffer> <Leader>;F ?diff --git<CR>
+autocmd FileType git              nmap <silent> <buffer> <Leader>;c /^@@<CR>
+autocmd FileType git              nmap <silent> <buffer> <Leader>;C ?^@@<CR>
+autocmd FileType git              vmap <silent> <buffer> <Leader>;f /diff --git<CR>
+autocmd FileType git              vmap <silent> <buffer> <Leader>;F ?diff --git<CR>
+autocmd FileType git              vmap <silent> <buffer> <Leader>;c /^@@<CR>
+autocmd FileType git              vmap <silent> <buffer> <Leader>;C ?^@@<CR>
+
 autocmd FileReadCmd fugitive://** nmap <buffer> <Leader><Tab> O
 autocmd FileReadCmd fugitive://** nmap <buffer> <C-t> O
 autocmd BufReadCmd  fugitive://** nmap <buffer> <Leader><Tab> O
