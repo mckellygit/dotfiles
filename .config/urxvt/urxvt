@@ -293,6 +293,9 @@ URxvt.keysym.C-BackSpace:        command:\000
 URxvt.keysym.C-equal:            command:\000
 URxvt.keysym.C-minus:            command:\000
 URxvt.keysym.Control-Meta-minus: command:\000
+
+!! NOTE: C-S-\ does not work
+URxvt.keysym.C-S-\:             string:\033\076
 !! special ------
 
 URxvt.keysym.Shift-Control-V:   eval:paste_clipboard
@@ -304,6 +307,7 @@ URxvt.keysym.Control-Meta-v:    builtin-string:
 
 URxvt.keysym.C-S-plus:          font-size:increase
 URxvt.keysym.C-S-underscore:    font-size:decrease
+!! NOTE: C-S-0 does not work
 URxvt.keysym.C-0:               font-size:reset
 
 !! NOTE: Home (khome) can be: ^[[H or ^[[1~ or ^[[7~
