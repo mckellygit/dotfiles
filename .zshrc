@@ -841,7 +841,7 @@ ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS=(forward-word emacs-forward-word vi-forwa
 # partial-accept - next word of suggestion ...
 #bindkey '^]' forward-word
 # terminals may have mapped C-S-\ to \e> ...
-bindkey "\e>" forward-word
+bindkey "\e|" forward-word
 bindkey '^\'  autosuggest-accept
 
 # Ctrl-Enter to execute suggestion

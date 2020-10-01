@@ -37,7 +37,7 @@ key_bindings:
   - { key: Minus,     mods: Control,         action: None             }
   - { key: Minus,     mods: Alt|Control,     action: None             }
 
-  - { key: 43,        mods: Control|Shift,   chars: "\x1b>"           }
+  - { key: 43,        mods: Control|Shift,   chars: "\x1b|"           }
   # special -------
 
   - { key: V,         mods: Control|Shift,   action: Paste            }

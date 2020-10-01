@@ -295,7 +295,7 @@ URxvt.keysym.C-minus:            command:\000
 URxvt.keysym.Control-Meta-minus: command:\000
 
 !! NOTE: C-S-\ does not work
-URxvt.keysym.C-S-\:             string:\033\076
+URxvt.keysym.C-S-\:             string:\033\174
 !! special ------
 
 URxvt.keysym.Shift-Control-V:   eval:paste_clipboard
