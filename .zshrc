@@ -376,6 +376,12 @@ zle -N my-kill-word
 # could use WORDCHARS above or this to select words ...
 #zstyle ':zle:my-kill-word' word-style space
 
+zstyle ':zle:my-delete-word' word-style space
+zstyle ':zle:my-kill-word' word-style space
+zstyle ':zle:forward-word' word-style space
+zstyle ':zle:backward-word' word-style space
+zstyle ':zle:kill-word' word-style space
+
 # Ctrl-DEL - del current word, but also if at end del backward word
 bindkey -M viins "\e[3;5~" my-kill-word
 bindkey -M vicmd "\e[3;5~" my-kill-word
@@ -833,8 +839,10 @@ ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS=(forward-word emacs-forward-word vi-forwa
 # Ctrl-End is already mapped above to end of line which acts like autosuggest-accept
 
 # partial-accept - next word of suggestion ...
-#bindkey '^\' forward-word
-bindkey '^\' autosuggest-accept
+#bindkey '^]' forward-word
+# terminals may have mapped C-S-\ to \e> ...
+bindkey "\e>" forward-word
+bindkey '^\'  autosuggest-accept
 
 # Ctrl-Enter to execute suggestion
 #bindkey '^\n' autosuggest-execute
