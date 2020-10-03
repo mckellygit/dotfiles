@@ -862,6 +862,23 @@ autocmd FileType git              vmap <silent> <buffer> <Leader>;F ?^diff --git
 autocmd FileType git              vmap <silent> <buffer> <Leader>;c /^@@<CR>
 autocmd FileType git              vmap <silent> <buffer> <Leader>;C ?^@@<CR>
 
+" ----------------
+
+" perhaps too confusing to git remap <Space>, <BS>, <C-Space>, <C-BS> ...
+" cannot map just <C-Space> and <C-BS> because <C-BS> is same as <BS> ...
+"autocmd FileType git noremap <silent> <buffer> <Space> :call <SID>CtrlF(1)<CR>
+"autocmd FileType git vnoremap <silent> <buffer> <Space> :call <SID>CtrlF(1)<CR>
+"autocmd FileType git noremap <silent> <buffer> <C-@> :call <SID>CtrlF(1)<CR>
+"autocmd FileType git vnoremap <silent> <buffer> <C-@> :call <SID>CtrlF(1)<CR>
+"autocmd FileType git noremap <silent> <buffer> <BS> :call <SID>CtrlB(1)<CR>
+"autocmd FileType git vnoremap <silent> <buffer> <BS> :call <SID>CtrlB(1)<CR>
+" <C-BS> same as <BS> ...
+
+autocmd FileType git noremap <silent> <expr> <buffer> <C-^><C-_> ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>j'
+autocmd FileType git noremap <silent> <expr> <buffer> <C-^><C-^> AtBot(0) ? '<C-y>' : '<C-y>k'
+
+" ----------------
+
 autocmd FileReadCmd fugitive://** nmap <buffer> <Leader><Tab> O
 autocmd FileReadCmd fugitive://** nmap <buffer> <C-t> O
 autocmd BufReadCmd  fugitive://** nmap <buffer> <Leader><Tab> O
@@ -943,10 +960,12 @@ autocmd FileType GV nmap <buffer> <A-2-LeftMouse> <C-\><C-n>:<C-u>call feedkeys(
 " start with folds open
 autocmd FileType GV set foldlevelstart=1
 
+autocmd FileType GV nmap <silent> <buffer> <C-@> <Space>
+autocmd FileType GV xmap <silent> <buffer> <C-@> <Space>
 autocmd FileType GV nmap <silent> <buffer> <C-^><C-_> <Space>
-autocmd FileType GV vmap <silent> <buffer> <C-^><C-_> <Space>
+autocmd FileType GV xmap <silent> <buffer> <C-^><C-_> <Space>
 autocmd FileType GV nmap <silent> <buffer> <C-^><C-^> <Up>
-autocmd FileType GV vmap <silent> <buffer> <C-^><C-^> <Up>
+autocmd FileType GV xmap <silent> <buffer> <C-^><C-^> <Up>
 
 " NOTE: qq to exit GV seems good ...
 autocmd FileType GV nmap <silent> <buffer> qq    :qa!<CR>
