@@ -50,7 +50,8 @@ periodic()
     purge_old_zhfiles
 }
 
-trap "if [[ -n \"$HISTFILE\" ]] ; then merge_zhist ; rm -f $HISTFILE; fi" SIGINT SIGTERM SIGQUIT EXIT
+# NOTE: dont add SIGINT here as then its not handled from ^c key press on cmdline ...
+trap "if [[ -n \"$HISTFILE\" ]] ; then merge_zhist ; rm -f $HISTFILE; fi" SIGTERM SIGQUIT EXIT
 
 # --------------
 
@@ -125,7 +126,8 @@ setopt PROMPT_SUBST
 setopt PROMPTSUBST
 
 # word separators
-# WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
+# default WORDCHARS='*?_-.[]~=/&;!#$%^(){}<>'
+WORDCHARS="${WORDCHARS:s#/#}"
 
 # random_title=$[$RANDOM%100]
 # precmd () { print -Pn "\e]2;%n@%M.$random_title\a" }
@@ -294,10 +296,20 @@ bindkey '^h' zle-backward-delete-char-fix
 
 # --------------------
 
-autoload -U select-word-style
-select-word-style bash
+# could use WORDCHARS above or this to select words ...
+#autoload -U select-word-style
+#select-word-style bash
 # perhaps same thing as above
-zstyle ':zle:*' skip-whitespace-first true
+#zstyle ':zle:*' skip-whitespace-first true
+#zstyle ':zle:*' word-style slash
+#zstyle ':zle:my-delete-word' word-style slash
+#zstyle ':zle:my-kill-word' word-style slash
+#zstyle ':zle:forward-word' word-style slash
+#zstyle ':zle:backward-word' word-style slash
+#zstyle ':zle:backward-kill-word' word-style slash
+#zstyle ':zle:kill-word' word-style slash
+
+# --------------------
 
 # to get up-arrow to put cursor at end of line instead of beginning ...
 autoload -Uz up-line-or-beginning-search
@@ -340,9 +352,15 @@ bindkey -M vicmd "\e[1;5D" backward-word
 bindkey -M viins "\e[1;5C" forward-word
 bindkey -M vicmd "\e[1;5C" forward-word
 
+# Ctrl-Down
+bindkey "\e[1;5B" down-line-or-beginning-search
+
 # Alt-d kill word
 bindkey -M viins "\ed" kill-word
 bindkey -M vicmd "\ed" kill-word
+
+#bindkey -M viins '^x' kill-whole-line
+#bindkey -M vicmd '^x' kill-whole-line
 
 # --------------------
 
@@ -373,15 +391,6 @@ function my-kill-word() {
 }
 zle -N my-kill-word
 
-# could use WORDCHARS above or this to select words ...
-#zstyle ':zle:my-kill-word' word-style space
-
-zstyle ':zle:my-delete-word' word-style space
-zstyle ':zle:my-kill-word' word-style space
-zstyle ':zle:forward-word' word-style space
-zstyle ':zle:backward-word' word-style space
-zstyle ':zle:kill-word' word-style space
-
 # Ctrl-DEL - del current word, but also if at end del backward word
 bindkey -M viins "\e[3;5~" my-kill-word
 bindkey -M vicmd "\e[3;5~" my-kill-word
@@ -402,9 +411,6 @@ function my-delete-word() {
 }
 zle -N my-delete-word
 
-# could use WORDCHARS above or this to select words ...
-#zstyle ':zle:my-delete-word' word-style space
-
 # Ctrl-Shift-DEL - del current WHOLE word, but also if at end del backward word
 bindkey -M viins "\e[3;6~" my-delete-word
 bindkey -M vicmd "\e[3;6~" my-delete-word
@@ -420,7 +426,6 @@ zle -N delete-whole-word-match
 
 # delete current char, but also if at end then del backward char
 function my-delete-char() {
-# local WORDCHARS="${WORDCHARS:s#/#}"
   pos1=$CURSOR
   len1=$#BUFFER
   zle delete-char
@@ -731,6 +736,34 @@ _fzf_compgen_dir() {
 #   esac
 # }
 
+# -----------------------
+
+my-fzfcmd() {
+  [ -n "$TMUX_PANE" ] &&
+    echo "fzf-tmux -p -x R -y S -w 65% -h 65% " || echo "fzf --height 50% "
+}
+
+my-fzf-history-widget() {
+  local selected num
+  setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2> /dev/null
+  selected=( $(fc -rl 1 | perl -ne 'print if !$seen{(/^\s*[0-9]+\**\s+(.*)/, $1)}++' | $(my-fzfcmd) +m +s -n 2.. --preview="" --tiebreak=index --bind=ctrl-r:toggle-sort --bind="ctrl-f:preview-page-down" --bind="ctrl-b:preview-page-up" --bind="page-up:page-up" --bind="page-down:page-down" --bind="alt-u:page-up" --bind="alt-d:page-down") )
+  local ret=$?
+  if [ -n "$selected" ]; then
+    num=$selected[1]
+    if [ -n "$num" ]; then
+      zle vi-fetch-history -n $num
+    fi
+  fi
+  zle reset-prompt
+  return $ret
+}
+zle     -N   my-fzf-history-widget
+
+# terminals may have mapped C-S-/ (C-/ is really C-_) to \e% ... (0x25)
+bindkey "\e%" my-fzf-history-widget
+
+# -----------------------
+
 export MANPAGER="less"
 alias manls="man -k . | fzf --prompt='Man> ' | awk '{print \$1}' | xargs -r man -P 'less'"
 
@@ -813,6 +846,21 @@ fi
 
 # --------------------
 
+function my-up-line-or-beginning-search() {
+  zle up-line-or-beginning-search
+  zle beginning-of-line
+}
+zle -N my-up-line-or-beginning-search
+
+function my-as-accept() {
+  if [[ $CURSOR == 0 ]]
+    zle end-of-line
+  then
+    zle autosuggest-accept
+  fi
+}
+zle -N my-as-accept
+
 # zsh-suggestions
 source ~/Downloads/zsh-autosuggestions/zsh-autosuggestions.zsh
 
@@ -821,9 +869,9 @@ export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 export ZSH_AUTOSUGGEST_USE_ASYNC=1
 
 #ZSH_AUTOSUGGEST_ACCEPT_WIDGETS=("${(@)ZSH_AUTOSUGGEST_ACCEPT_WIDGETS:#vi-forward-blank-word}")
-ZSH_AUTOSUGGEST_ACCEPT_WIDGETS=(forward-char vi-forward-char end-of-line vi-end-of-line)
+ZSH_AUTOSUGGEST_ACCEPT_WIDGETS=(forward-char vi-forward-char end-of-line vi-end-of-line up-line-or-beginning-search down-line-or-beginning-search)
 
-ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS=(forward-word emacs-forward-word vi-forward-word vi-forward-word-end vi-forward-blank-word vi-forward-blank-word-end vi-find-next-char vi-find-next-char-skip)
+ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS=(forward-word up-line-or-beginning-search down-line-or-beginning-search emacs-forward-word vi-forward-word vi-forward-word-end vi-forward-blank-word vi-forward-blank-word-end vi-find-next-char vi-find-next-char-skip)
 
 # autosuggest-accept: Accepts the current suggestion.
 # autosuggest-execute: Accepts and executes the current suggestion.
@@ -840,18 +888,26 @@ ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS=(forward-word emacs-forward-word vi-forwa
 
 # partial-accept - next word of suggestion ...
 #bindkey '^]' forward-word
-# terminals may have mapped C-S-\ to \e> ...
-bindkey "\e|" forward-word
-bindkey '^\'  autosuggest-accept
+# terminals may have mapped C-S-] to \e< ... (0x3c)
+bindkey "\e<" up-line-or-beginning-search
+# terminals may have mapped C-S-[ to \e, ... (0x2c)
+bindkey "\e," down-line-or-beginning-search
+# terminals may have mapped C-S-\ to \e; ... (0x3b)
+bindkey "\e;"  forward-word
+# terminals may have mapped C-S-/ to \e_ ... (0x5f)
+bindkey "\e_"  end-of-buffer-or-history
+# these all seem benign in vim ...
+# C-\
+bindkey '^\'   autosuggest-accept
 
 # Ctrl-Enter to execute suggestion
 #bindkey '^\n' autosuggest-execute
 # make it a no-op for safety
 #bindkey '^\n' noop
-bindkey '^\n' forward-word
+#bindkey '^\n' forward-word
 # safer to use Alt-Enter ...
 # Alt-Enter to execute - TODO: perhaps wish it was a no-op unless at end of cmd ...
-bindkey "\e\n" autosuggest-execute
+#bindkey "\e\n" autosuggest-execute
 
 # --------------------
 

@@ -279,23 +279,29 @@ URxvt.iso14755_52:              false
 
 !! special ------
 URxvt.keysym.S-BackSpace:       string:\177
-URxvt.keysym.C-S-BackSpace:     string:\177
+URxvt.keysym.C-BackSpace:       string:\036
 
-URxvt.keysym.C-S-space:         string:\033\044
+URxvt.keysym.C-S-BackSpace:     string:\033\075
+URxvt.keysym.C-S-space:         string:\033\042
 
 URxvt.keysym.Shift-Control-X:   string:\033\050
 
 URxvt.keysym.Control-Meta-BackSpace: string:\033\100
 URxvt.keysym.Control-Meta-equal:     string:\033\043
-URxvt.keysym.Control-Meta-space:     string:\033\045
+URxvt.keysym.Control-Meta-space:     string:\033\043
+URxvt.keysym.Control-Meta-backslash: string:\033\043
 
-URxvt.keysym.C-BackSpace:        command:\000
 URxvt.keysym.C-equal:            command:\000
 URxvt.keysym.C-minus:            command:\000
 URxvt.keysym.Control-Meta-minus: command:\000
 
-!! NOTE: C-S-\ does not work
-URxvt.keysym.C-S-\:             string:\033\174
+URxvt.keysym.C-S-bracketright:           string:\033\074
+URxvt.keysym.Control-Meta-bracketright:  command:\000
+URxvt.keysym.C-S-bracketleft:            string:\033\054
+URxvt.keysym.Control-Meta-bracketleft:   command:\000
+URxvt.keysym.C-S-backslash:              string:\033\073
+
+URxvt.keysym.C-S-slash:                  string:\033\137
 !! special ------
 
 URxvt.keysym.Shift-Control-V:   eval:paste_clipboard

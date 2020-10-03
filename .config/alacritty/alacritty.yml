@@ -22,22 +22,29 @@ dpi:
 key_bindings:
   # special -------
   - { key: Back,      mods: Shift,           chars: "\x7f"            }
-  - { key: Back,      mods: Control|Shift,   chars: "\x7f"            }
+  - { key: Back,      mods: Control,         chars: "\x1e"            }
 
-  - { key: Space,     mods: Control|Shift,   chars: "\x1b\x24"        }
+  - { key: Back,      mods: Control|Shift,   chars: "\x1b\x3d"        }
+  - { key: Space,     mods: Control|Shift,   chars: "\x1b\x22"        }
 
   - { key: X,         mods: Control|Shift,   chars: "\x1b\x28"        }
 
   - { key: Back,      mods: Alt|Control,     chars: "\x1b\x40"        }
   - { key: Equals,    mods: Alt|Control,     chars: "\x1b\x23"        }
-  - { key: Space,     mods: Alt|Control,     chars: "\x1b\x25"        }
+  - { key: Space,     mods: Alt|Control,     chars: "\x1b\x23"        }
+  - { key: 43,        mods: Alt|Control,     chars: "\x1b\x23"        }
 
-  - { key: Back,      mods: Control,         action: None             }
   - { key: Equals,    mods: Control,         action: None             }
   - { key: Minus,     mods: Control,         action: None             }
   - { key: Minus,     mods: Alt|Control,     action: None             }
 
-  - { key: 43,        mods: Control|Shift,   chars: "\x1b|"           }
+  - { key: 27,        mods: Control|Shift,   chars: "\x1b\x3c"        }
+  - { key: 27,        mods: Alt|Control,     action: None             }
+  - { key: 26,        mods: Control|Shift,   chars: "\x1b\x2c"        }
+  - { key: 26,        mods: Alt|Control,     action: None             }
+  - { key: 43,        mods: Control|Shift,   chars: "\x1b\x3b"        }
+
+  - { key: 53,        mods: Control|Shift,   chars: "\x1b\x5f"        }
   # special -------
 
   - { key: V,         mods: Control|Shift,   action: Paste            }

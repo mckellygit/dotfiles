@@ -237,8 +237,8 @@ z<Down>    move selected line(s) down
 
 <Leader>++ zoom window toggle (<C-w>z)
 
-<Leader>ct center text on screen
-<Leader>cz center line on screen
+<Leader>ct move cursor to center of screen
+<Leader>cz scroll until current line is at center of screen
 
 <Leader>cc close quickfix and location list
 <Leader>cx clear command line
