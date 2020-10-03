@@ -1,4 +1,14 @@
 #!/bin/bash
 
+gdir=""
+gdir=$(git rev-parse --show-superproject-working-tree 2> /dev/null)
+if [[ -z "${gdir}" ]]; then
+    gdir=$(git rev-parse --show-toplevel 2> /dev/null)
+fi
+if [[ -z "$gdir" ]]
+then
+    echo "fatal: not a git repository (or any of the parent directories): .git"
+    exit 1
+fi
 git --no-pager log -p --color=always $1 $2 $3 $4 |& less -R +k -x4
 
