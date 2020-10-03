@@ -942,12 +942,10 @@ autocmd FileType GV nmap <buffer> <A-2-LeftMouse> <C-\><C-n>:<C-u>call feedkeys(
 " start with folds open
 autocmd FileType GV set foldlevelstart=1
 
-" C-@ is often Ctrl-Space ...
-autocmd FileType GV nmap <silent> <buffer> <C-@> <Space>
-autocmd FileType GV vmap <silent> <buffer> <C-@> <Space>
-" C-P is often Ctrl-BS ...
-autocmd FileType GV nmap <silent> <buffer> <C-^> <Up>
-autocmd FileType GV vmap <silent> <buffer> <C-^> <Up>
+autocmd FileType GV nmap <silent> <buffer> <C-^><C-_> <Space>
+autocmd FileType GV vmap <silent> <buffer> <C-^><C-_> <Space>
+autocmd FileType GV nmap <silent> <buffer> <C-^><C-^> <Up>
+autocmd FileType GV vmap <silent> <buffer> <C-^><C-^> <Up>
 
 " NOTE: qq to exit GV seems good ...
 autocmd FileType GV nmap <silent> <buffer> qq    :qa!<CR>
@@ -3579,28 +3577,28 @@ function AtBot(strict)
 endfunction
 
 "call <SID>NoremapNormalCmd("<C-j>",    0, "1<C-D>")
-noremap <silent> <expr> <C-Down> ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>j'
-noremap <silent> <expr> <C-j>    ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>j'
-noremap <silent> <expr> <C-@>    ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>j'
+noremap <silent> <expr> <C-Down>   ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>j'
+noremap <silent> <expr> <C-j>      ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>j'
+noremap <silent> <expr> <C-^><C-_> ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>j'
 
 "vnoremap <silent> <expr> <C-Down> ((line('$') - line('w$')) < 1) ? 'j' : '<C-e>j'
 "vnoremap <silent> <expr> <C-j>    ((line('$') - line('w$')) < 1) ? 'j' : '<C-e>j'
 
-inoremap <silent> <expr> <C-Down>  pumvisible() ? '<C-Down>' : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-D>")<CR>'
-inoremap <silent> <expr> <C-j>     pumvisible() ? '<C-j>'    : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-D>")<CR>'
-inoremap <silent> <expr> <C-@>     pumvisible() ? '<C-j>'    : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <C-Down>   pumvisible() ? '<C-Down>' : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <C-j>      pumvisible() ? '<C-j>'    : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <C-^><C-_> pumvisible() ? '<C-j>'    : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-D>")<CR>'
 
 "call <SID>NoremapNormalCmd("<C-k>",    0, "1<C-U>")
-noremap <silent> <expr> <C-Up> AtBot(0) ? '<C-y>' : '<C-y>k'
-noremap <silent> <expr> <C-k>  AtBot(0) ? '<C-y>' : '<C-y>k'
-noremap <silent> <expr> <C-^>  AtBot(0) ? '<C-y>' : '<C-y>k'
+noremap <silent> <expr> <C-Up>     AtBot(0) ? '<C-y>' : '<C-y>k'
+noremap <silent> <expr> <C-k>      AtBot(0) ? '<C-y>' : '<C-y>k'
+noremap <silent> <expr> <C-^><C-^> AtBot(0) ? '<C-y>' : '<C-y>k'
 
 "vnoremap <silent>       <C-Up> <C-y>k
 "vnoremap <silent>       <C-k>  <C-y>k
 
-inoremap <silent> <expr> <C-Up>    pumvisible() ? '<C-Up>' : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-U>")<CR>'
-inoremap <silent> <expr> <C-k>     pumvisible() ? '<C-k>'  : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-U>")<CR>'
-inoremap <silent> <expr> <C-^>     pumvisible() ? '<C-k>'  : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <C-Up>     pumvisible() ? '<C-Up>' : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <C-k>      pumvisible() ? '<C-k>'  : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <C-^><C-^> pumvisible() ? '<C-k>'  : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-U>")<CR>'
 
 " ---------
 

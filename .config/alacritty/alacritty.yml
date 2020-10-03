@@ -22,10 +22,10 @@ dpi:
 key_bindings:
   # special -------
   - { key: Back,      mods: Shift,           chars: "\x7f"            }
-  - { key: Back,      mods: Control,         chars: "\x1e"            }
+  - { key: Back,      mods: Control,         chars: "\x7f"            }
 
-  - { key: Back,      mods: Control|Shift,   chars: "\x1b\x3d"        }
-  - { key: Space,     mods: Control|Shift,   chars: "\x1b\x22"        }
+  - { key: Back,      mods: Control|Shift,   chars: "\x1e\x1e"        }
+  - { key: Space,     mods: Control|Shift,   chars: "\x1e\x1f"        }
 
   - { key: X,         mods: Control|Shift,   chars: "\x1b\x28"        }
 

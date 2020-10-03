@@ -25,12 +25,15 @@ bind generic   \u           scroll-page-up
 bind generic   \1           move-half-page-down
 bind generic   \2           move-half-page-up
 #
-bind generic   <Ctrl-@>     move-down
-bind generic   <Ctrl-^>     move-up
-bind diff      <Ctrl-@>     scroll-line-down
-bind stage     <Ctrl-@>     scroll-line-down
-bind diff      <Ctrl-^>     scroll-line-up
-bind stage     <Ctrl-^>     scroll-line-up
+bind generic   <Ctrl-@>          move-down
+bind generic   <Ctrl-^><Ctrl-_>  move-down
+bind generic   <Ctrl-^><Ctrl-^>  move-up
+bind diff      <Ctrl-@>          scroll-line-down
+bind diff      <Ctrl-^><Ctrl-_>  scroll-line-down
+bind stage     <Ctrl-@>          scroll-line-down
+bind stage     <Ctrl-^><Ctrl-_>  scroll-line-down
+bind diff      <Ctrl-^><Ctrl-^>  scroll-line-up
+bind stage     <Ctrl-^><Ctrl-^>  scroll-line-up
 #
 bind generic   |            none
 bind generic   |!           move-half-page-up
