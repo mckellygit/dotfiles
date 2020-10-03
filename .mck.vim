@@ -960,8 +960,6 @@ autocmd FileType GV nmap <buffer> <A-2-LeftMouse> <C-\><C-n>:<C-u>call feedkeys(
 " start with folds open
 autocmd FileType GV set foldlevelstart=1
 
-autocmd FileType GV nmap <silent> <buffer> <C-@> <Space>
-autocmd FileType GV xmap <silent> <buffer> <C-@> <Space>
 autocmd FileType GV nmap <silent> <buffer> <C-^><C-_> <Space>
 autocmd FileType GV xmap <silent> <buffer> <C-^><C-_> <Space>
 autocmd FileType GV nmap <silent> <buffer> <C-^><C-^> <Up>
@@ -3899,6 +3897,8 @@ noremap <silent> <Leader>cz zz
 
 " NOTE: some terminals map <C-BS> to <C-^>
 " NOTE: with C-BS -> <C-^> we have C-_ left (0x1f) available
+
+nmap <silent> <C-@> <Space>
 
 " ------ scroll ------
 
