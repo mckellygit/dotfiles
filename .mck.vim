@@ -850,6 +850,7 @@ autocmd FileType git              nmap <buffer> <C-t> O
 autocmd FileType git              nmap <silent> <buffer> qq    :close<cr>
 autocmd FileType git              nmap <silent> <buffer> <C-q> :close<cr>
 
+" NOTE: fugitive git <C-n>, <C-p> mappings already do these
 " git diff navigation like tig ...
 " NOTE: single <Leader>f,F and c,C causes input delays ...
 autocmd FileType git              nmap <silent> <buffer> <Leader>;f /^diff --git<CR>

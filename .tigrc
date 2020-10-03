@@ -20,20 +20,24 @@ bind stage     \;f          :/^diff --git
 bind stage     \;F          :?^diff --git
 bind stage     \;c          :/^@@
 bind stage     \;C          :?^@@
+#
 bind generic   \d           scroll-page-down
 bind generic   \u           scroll-page-up
 bind generic   \1           move-half-page-down
 bind generic   \2           move-half-page-up
 #
-bind generic   <Ctrl-@>          move-down
+# match vim fugitive git mappings ...
+bind diff      <Ctrl-N>     :/^diff --git|^@@
+bind diff      <Ctrl-P>     :?^diff --git|^@@
+bind stage     <Ctrl-N>     :/^diff --git|^@@
+bind stage     <Ctrl-P>     :?^diff --git|^@@
+#
 bind generic   <Ctrl-^><Ctrl-_>  move-down
 bind generic   <Ctrl-^><Ctrl-^>  move-up
-bind diff      <Ctrl-@>          scroll-line-down
-bind diff      <Ctrl-^><Ctrl-_>  scroll-line-down
-bind stage     <Ctrl-@>          scroll-line-down
-bind stage     <Ctrl-^><Ctrl-_>  scroll-line-down
-bind diff      <Ctrl-^><Ctrl-^>  scroll-line-up
-bind stage     <Ctrl-^><Ctrl-^>  scroll-line-up
+bind diff      <Ctrl-^><Ctrl-_>  scroll-page-down
+bind stage     <Ctrl-^><Ctrl-_>  scroll-page-down
+bind diff      <Ctrl-^><Ctrl-^>  scroll-page-up
+bind stage     <Ctrl-^><Ctrl-^>  scroll-page-up
 #
 bind generic   |            none
 bind generic   |!           move-half-page-up
@@ -56,7 +60,9 @@ bind generic   <Ctrl-J>     scroll-line-down
 bind generic   <Ctrl-K>     scroll-line-up
 #
 bind generic   <Space>      next
+bind generic   <Ctrl-@>     next
 bind generic   <Backspace>  previous
+# note: C-Backspace is same as Backspace
 #
 bind generic   <Tab>        next
 bind generic   <ShiftTab>   previous
