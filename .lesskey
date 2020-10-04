@@ -3,5 +3,5 @@
  back-screen
 \340 forw-screen
  back-screen
- forw-line
- back-line
+ noaction 10j
+ noaction 10k
