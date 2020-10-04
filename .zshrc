@@ -487,12 +487,12 @@ alias dmesg='dmesg -kuxT'
 alias vdiff='vimdiff'
 
 # skip -X arg to less to get alternate screen so tmux mouse can scroll ...
-alias more='less -R'
+alias more='less -K -R'
 # there is also moar
 #alias more='moar'
 alias less-pyg='less-pyg'
 alias lessc='less-pyg'
-alias less='less -R'
+alias less='less -K -R'
 #export PAGER='less -RX'
 export PAGER='bat -p'
 #alias cat='ccat'

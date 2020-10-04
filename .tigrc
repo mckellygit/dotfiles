@@ -1,3 +1,6 @@
+#
+# tig rc file
+#
 set horizontal-scroll  = 33%
 set history-size       = 0
 set mouse              = yes
@@ -87,3 +90,6 @@ bind stage     !            none
 bind stash     A            none
 bind stash     P            none
 bind stash     !            none
+#
+color date              yellow  default
+#
