@@ -3468,7 +3468,7 @@ vnoremap <expr> <C-Left>  VisAtStart(0) ? 'b' : 'ge'
 function! s:Saving_scrollV(cmd)
   let save_scroll = &scroll
   " want normal! here
-  execute "keepjumps normal!" a:cmd
+  execute "keepjumps normal!" . a:cmd
   let &scroll = save_scroll
 endfunction
 
@@ -3537,6 +3537,7 @@ function! s:Saving_scrollVUp4(cmd)
   execute "keepjumps normal!" . g:full2x . a:cmd
   let &scroll = save_scroll
 endfunction
+
 " ---------
 
 " could also remap these ...
@@ -3597,7 +3598,7 @@ endfunction
 "call <SID>NoremapNormalCmd("<C-j>",    0, "1<C-D>")
 noremap <silent> <expr> <C-Down>   ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>j'
 noremap <silent> <expr> <C-j>      ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>j'
-noremap <silent> <expr> <C-^><C-_> ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>j'
+noremap <silent> <expr> <C-^><C-_> (line("$") - line("w$")) >= 10 ? '10<C-e>10j' : (line("$") - line("w$")) >= 9 ? '9<C-e>9j' : (line("$") - line("w$")) >= 8 ? '8<C-e>8j' : (line("$") - line("w$")) >= 7 ? '7<C-e>7j' : (line("$") - line("w$")) >= 6 ? '6<C-e>6j' : (line("$") - line("w$")) >= 5 ? '5<C-e>5j' : (line("$") - line("w$")) >= 4 ? '4<C-e>4j' : (line("$") - line("w$")) >= 3 ? '3<C-e>3j' : (line("$") - line("w$")) >= 2 ? '2<C-e>2j' :(line("$") - line("w$")) >= 1 ? '1<C-e>1j' : '\<Nop>'
 
 "vnoremap <silent> <expr> <C-Down> ((line('$') - line('w$')) < 1) ? 'j' : '<C-e>j'
 "vnoremap <silent> <expr> <C-j>    ((line('$') - line('w$')) < 1) ? 'j' : '<C-e>j'
@@ -3609,7 +3610,7 @@ inoremap <silent> <expr> <C-^><C-_> pumvisible() ? '<C-j>'    : '<C-\><C-o>:call
 "call <SID>NoremapNormalCmd("<C-k>",    0, "1<C-U>")
 noremap <silent> <expr> <C-Up>     AtBot(0) ? '<C-y>' : '<C-y>k'
 noremap <silent> <expr> <C-k>      AtBot(0) ? '<C-y>' : '<C-y>k'
-noremap <silent> <expr> <C-^><C-^> AtBot(0) ? '<C-y>' : '<C-y>k'
+noremap <silent> <expr> <C-^><C-^> (line("w0") - 1 - line("0")) >= 10 ? '10<C-y>10k' : (line("w0") - 1 - line("0")) >= 9 ? '9<C-y>9k' : (line("w0") - 1 - line("0")) >= 8 ? '8<C-y>8k' : (line("w0") - 1 - line("0")) >= 7 ? '7<C-y>7k' : (line("w0") - 1 - line("0")) >= 6 ? '6<C-y>6k' : (line("w0") - 1 - line("0")) >= 5 ? '5<C-y>5k' : (line("w0") - 1 - line("0")) >= 4 ? '4<C-y>4k' : (line("w0") - 1 - line("0")) >= 3 ? '3<C-y>3k' : (line("w0") - 1 - line("0")) >= 2 ? '2<C-y>2k' : (line("w0") - 1 - line("0")) >= 1 ? '1<C-y>1k' : '\<Nop>'
 
 "vnoremap <silent>       <C-Up> <C-y>k
 "vnoremap <silent>       <C-k>  <C-y>k
