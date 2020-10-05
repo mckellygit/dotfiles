@@ -73,8 +73,13 @@ Plugin 'mckellyln/vim-rtags'
 " echodoc function completion
 "Plugin 'Shougo/echodoc.vim'
 "
-" qf/loclist window in all windows/tabs (**modified++)
+" qf/loclist window in all windows/tabs
 "Plugin 'yssl/QFEnter'
+" only diff is if new tab from qf then orig tab focus
+" restores to before entering qf
+" (**modified++)
+"   restore quickfix window when tab mode
+"   mck - jump back to before qf in orig win ...
 Plugin 'mckellyln/QFEnter'
 "
 " qf grep / filter
@@ -874,8 +879,10 @@ autocmd FileType git              vmap <silent> <buffer> <Leader>;C ?^@@<CR>
 "autocmd FileType git vnoremap <silent> <buffer> <BS> :call <SID>CtrlB(1)<CR>
 " <C-BS> same as <BS> ...
 
+" C-S-Space
 autocmd FileType git noremap <silent> <expr> <buffer> <C-^><C-_> AtTop(0) ? ((line("$") - line("w$")) >= 10 ? '10<C-e>' : (line("$") - line("w$")) >= 9 ? '9<C-e>' : (line("$") - line("w$")) >= 8 ? '8<C-e>' : (line("$") - line("w$")) >= 7 ? '7<C-e>' : (line("$") - line("w$")) >= 6 ? '6<C-e>' : (line("$") - line("w$")) >= 5 ? '5<C-e>' : (line("$") - line("w$")) >= 4 ? '4<C-e>' : (line("$") - line("w$")) >= 3 ? '3<C-e>' : (line("$") - line("w$")) >= 2 ? '2<C-e>' :(line("$") - line("w$")) >= 1 ? '1<C-e>' : '\<Nop>') : ((line("$") - line("w$")) >= 10 ? '10<C-e>10j' : (line("$") - line("w$")) >= 9 ? '9<C-e>9j' : (line("$") - line("w$")) >= 8 ? '8<C-e>8j' : (line("$") - line("w$")) >= 7 ? '7<C-e>7j' : (line("$") - line("w$")) >= 6 ? '6<C-e>6j' : (line("$") - line("w$")) >= 5 ? '5<C-e>5j' : (line("$") - line("w$")) >= 4 ? '4<C-e>4j' : (line("$") - line("w$")) >= 3 ? '3<C-e>3j' : (line("$") - line("w$")) >= 2 ? '2<C-e>2j' :(line("$") - line("w$")) >= 1 ? '1<C-e>1j' : '\<Nop>')
 
+" C-S-BS
 autocmd FileType git noremap <silent> <buffer> <expr> <C-^><C-^> AtBot(0) ? ((line("w0") - 1 - line("0")) >= 10 ? '10<C-y>' : (line("w0") - 1 - line("0")) >= 9 ? '9<C-y>' : (line("w0") - 1 - line("0")) >= 8 ? '8<C-y>' : (line("w0") - 1 - line("0")) >= 7 ? '7<C-y>' : (line("w0") - 1 - line("0")) >= 6 ? '6<C-y>' : (line("w0") - 1 - line("0")) >= 5 ? '5<C-y>' : (line("w0") - 1 - line("0")) >= 4 ? '4<C-y>' : (line("w0") - 1 - line("0")) >= 3 ? '3<C-y>' : (line("w0") - 1 - line("0")) >= 2 ? '2<C-y>' : (line("w0") - 1 - line("0")) >= 1 ? '1<C-y>' : '\<Nop>') : ((line("w0") - 1 - line("0")) >= 10 ? '10<C-y>10k' : (line("w0") - 1 - line("0")) >= 9 ? '9<C-y>9k' : (line("w0") - 1 - line("0")) >= 8 ? '8<C-y>8k' : (line("w0") - 1 - line("0")) >= 7 ? '7<C-y>7k' : (line("w0") - 1 - line("0")) >= 6 ? '6<C-y>6k' : (line("w0") - 1 - line("0")) >= 5 ? '5<C-y>5k' : (line("w0") - 1 - line("0")) >= 4 ? '4<C-y>4k' : (line("w0") - 1 - line("0")) >= 3 ? '3<C-y>3k' : (line("w0") - 1 - line("0")) >= 2 ? '2<C-y>2k' : (line("w0") - 1 - line("0")) >= 1 ? '1<C-y>1k' : '\<Nop>')
 
 " ----------------
@@ -961,8 +968,10 @@ autocmd FileType GV nmap <buffer> <A-2-LeftMouse> <C-\><C-n>:<C-u>call feedkeys(
 " start with folds open
 autocmd FileType GV set foldlevelstart=1
 
+" C-S-Space
 autocmd FileType GV nmap <silent> <buffer> <C-^><C-_> <Space>
 autocmd FileType GV xmap <silent> <buffer> <C-^><C-_> <Space>
+" C-S-BS
 autocmd FileType GV nmap <silent> <buffer> <C-^><C-^> <Up>
 autocmd FileType GV xmap <silent> <buffer> <C-^><C-^> <Up>
 
@@ -1220,8 +1229,11 @@ endfunction
 " vim-qf-preview ------
 augroup qfpreview
     autocmd!
-    autocmd FileType qf nmap <buffer> <Space> <plug>(qf-preview-open)
-    autocmd FileType qf nmap <buffer> p       <plug>(qf-preview-open)
+    " C-Space
+    autocmd FileType qf nmap <buffer> <C-@> <plug>(qf-preview-open)
+    autocmd FileType qf nmap <buffer> p     <plug>(qf-preview-open)
+    " C-/ - to match fzf preview
+    autocmd FileType qf nmap <buffer> <C-_> <plug>(qf-preview-open)
 augroup END
 let g:qfpreview = {
     \ 'top'   : "\<C-Home>",
@@ -3599,6 +3611,7 @@ endfunction
 "call <SID>NoremapNormalCmd("<C-j>",    0, "1<C-D>")
 noremap <silent> <expr> <C-Down>   ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>j'
 noremap <silent> <expr> <C-j>      ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>j'
+" C-S-Space
 noremap <silent> <expr> <C-^><C-_> AtTop(0) ? ((line("$") - line("w$")) >= 10 ? '10<C-e>' : (line("$") - line("w$")) >= 9 ? '9<C-e>' : (line("$") - line("w$")) >= 8 ? '8<C-e>' : (line("$") - line("w$")) >= 7 ? '7<C-e>' : (line("$") - line("w$")) >= 6 ? '6<C-e>' : (line("$") - line("w$")) >= 5 ? '5<C-e>' : (line("$") - line("w$")) >= 4 ? '4<C-e>' : (line("$") - line("w$")) >= 3 ? '3<C-e>' : (line("$") - line("w$")) >= 2 ? '2<C-e>' :(line("$") - line("w$")) >= 1 ? '1<C-e>' : '\<Nop>') : ((line("$") - line("w$")) >= 10 ? '10<C-e>10j' : (line("$") - line("w$")) >= 9 ? '9<C-e>9j' : (line("$") - line("w$")) >= 8 ? '8<C-e>8j' : (line("$") - line("w$")) >= 7 ? '7<C-e>7j' : (line("$") - line("w$")) >= 6 ? '6<C-e>6j' : (line("$") - line("w$")) >= 5 ? '5<C-e>5j' : (line("$") - line("w$")) >= 4 ? '4<C-e>4j' : (line("$") - line("w$")) >= 3 ? '3<C-e>3j' : (line("$") - line("w$")) >= 2 ? '2<C-e>2j' :(line("$") - line("w$")) >= 1 ? '1<C-e>1j' : '\<Nop>')
 
 "vnoremap <silent> <expr> <C-Down> ((line('$') - line('w$')) < 1) ? 'j' : '<C-e>j'
@@ -3606,11 +3619,13 @@ noremap <silent> <expr> <C-^><C-_> AtTop(0) ? ((line("$") - line("w$")) >= 10 ? 
 
 inoremap <silent> <expr> <C-Down>   pumvisible() ? '<C-Down>' : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-D>")<CR>'
 inoremap <silent> <expr> <C-j>      pumvisible() ? '<C-j>'    : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-D>")<CR>'
+" C-S-Space
 inoremap <silent> <expr> <C-^><C-_> pumvisible() ? '<C-j>'    : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-D>")<CR>'
 
 "call <SID>NoremapNormalCmd("<C-k>",    0, "1<C-U>")
 noremap <silent> <expr> <C-Up>     AtBot(0) ? '<C-y>' : '<C-y>k'
 noremap <silent> <expr> <C-k>      AtBot(0) ? '<C-y>' : '<C-y>k'
+" C-S-BS
 noremap <silent> <expr> <C-^><C-^> AtBot(0) ? ((line("w0") - 1 - line("0")) >= 10 ? '10<C-y>' : (line("w0") - 1 - line("0")) >= 9 ? '9<C-y>' : (line("w0") - 1 - line("0")) >= 8 ? '8<C-y>' : (line("w0") - 1 - line("0")) >= 7 ? '7<C-y>' : (line("w0") - 1 - line("0")) >= 6 ? '6<C-y>' : (line("w0") - 1 - line("0")) >= 5 ? '5<C-y>' : (line("w0") - 1 - line("0")) >= 4 ? '4<C-y>' : (line("w0") - 1 - line("0")) >= 3 ? '3<C-y>' : (line("w0") - 1 - line("0")) >= 2 ? '2<C-y>' : (line("w0") - 1 - line("0")) >= 1 ? '1<C-y>' : '\<Nop>') : ((line("w0") - 1 - line("0")) >= 10 ? '10<C-y>10k' : (line("w0") - 1 - line("0")) >= 9 ? '9<C-y>9k' : (line("w0") - 1 - line("0")) >= 8 ? '8<C-y>8k' : (line("w0") - 1 - line("0")) >= 7 ? '7<C-y>7k' : (line("w0") - 1 - line("0")) >= 6 ? '6<C-y>6k' : (line("w0") - 1 - line("0")) >= 5 ? '5<C-y>5k' : (line("w0") - 1 - line("0")) >= 4 ? '4<C-y>4k' : (line("w0") - 1 - line("0")) >= 3 ? '3<C-y>3k' : (line("w0") - 1 - line("0")) >= 2 ? '2<C-y>2k' : (line("w0") - 1 - line("0")) >= 1 ? '1<C-y>1k' : '\<Nop>')
 
 "vnoremap <silent>       <C-Up> <C-y>k
@@ -3618,6 +3633,7 @@ noremap <silent> <expr> <C-^><C-^> AtBot(0) ? ((line("w0") - 1 - line("0")) >= 1
 
 inoremap <silent> <expr> <C-Up>     pumvisible() ? '<C-Up>' : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-U>")<CR>'
 inoremap <silent> <expr> <C-k>      pumvisible() ? '<C-k>'  : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-U>")<CR>'
+" C-S-BS
 inoremap <silent> <expr> <C-^><C-^> pumvisible() ? '<C-k>'  : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-U>")<CR>'
 
 " ---------
@@ -3897,10 +3913,13 @@ vnoremap <silent> <Leader>ct <C-\><C-n>:call <SID>GoToMID(1)<CR>
 noremap <silent> <C-_> zz
 noremap <silent> <Leader>cz zz
 
-" NOTE: some terminals map <C-BS> to <C-^>
-" NOTE: with C-BS -> <C-^> we have C-_ left (0x1f) available
+" NOTE: some terminals map <C-S-BS> to <C-^><C-^>
+" NOTE: some terminals map <C-S-Space> to <C-^><C-_>
+" NOTE: terminals could map <C-BS> to <C-_> or <C-_><C-_>
+"       if this is done then <C-_> -> zz above is lost
 
-nmap <silent> <C-@> <Space>
+" NOTE: C-Space in most terminals is C-@
+noremap <silent> <C-@> <Space>
 
 " ------ scroll ------
 
