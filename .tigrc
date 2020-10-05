@@ -91,5 +91,8 @@ bind stash     A            none
 bind stash     P            none
 bind stash     !            none
 #
-color date              yellow  default
+# colors: # white, black, green, magenta, blue, cyan, yellow, red, default
+color date         yellow  default
+color title-blur   white   black
+color title-focus  white   black    bold
 #
