@@ -477,6 +477,8 @@ export KEYTIMEOUT=1
 
 # --------------------
 
+alias bye='echo "dont leave :-("'
+
 alias ll='ls -ltr'
 alias lla='ls -lAtr'
 alias rm='rm -i'
