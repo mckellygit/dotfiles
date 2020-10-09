@@ -1,7 +1,10 @@
 # command
  forw-screen
  back-screen
-\340 forw-screen
- back-screen
- noaction 10j
- noaction 10k
+\    forw-screen
+   back-screen
+\  noaction 10j
+ noaction 10k
+\340 forw-line
+ back-line
+\e\e quit

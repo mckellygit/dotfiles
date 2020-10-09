@@ -170,6 +170,8 @@ zle -N noop
 bindkey  -M viins "\e[2;2~" noop
 bindkey  -M vicmd "\e[2;2~" noop
 
+# TODO: C-Insert ?
+
 # --------------------
 
 function viinsplus() {
@@ -259,6 +261,11 @@ zle -N zle-keymap-select
 
 bindkey '^?' zle-backward-delete-char-fix
 bindkey '^h' zle-backward-delete-char-fix
+
+# Ctrl-BS is ^^^? in some terminals
+
+bindkey '^^^?' zle-backward-delete-char-fix
+bindkey '^^^h' zle-backward-delete-char-fix
 
 # --------------------
 
@@ -354,6 +361,8 @@ bindkey -M vicmd "\e[1;5C" forward-word
 
 # Ctrl-Down
 bindkey "\e[1;5B" down-line-or-beginning-search
+# Ctrl-Up
+bindkey "\e[1;5A" up-line-or-beginning-search
 
 # Alt-d kill word
 bindkey -M viins "\ed" kill-word
@@ -361,6 +370,18 @@ bindkey -M vicmd "\ed" kill-word
 
 #bindkey -M viins '^x' kill-whole-line
 #bindkey -M vicmd '^x' kill-whole-line
+
+# Shift-Home
+bindkey -M viins "\e[1;2H" beginning-of-line
+bindkey -M vicmd "\e[1;2H" beginning-of-line
+# Shift-End
+bindkey -M viins "\e[1;2F" end-of-line
+bindkey -M vicmd "\e[1;2F" end-of-line
+
+# Shift-Down
+bindkey "\e[1;2B" down-line-or-beginning-search
+# Shift-Up
+bindkey "\e[1;2A" up-line-or-beginning-search
 
 # --------------------
 
@@ -546,7 +567,7 @@ git() { if [[ $1 == "diff" ]]; then shift ; command git dless "$@" ; elif [[ $1 
 # ------------------
 
 # -x S -y R are not supported values
-alias fzf='fzf-tmux -p -x R -y S -w 80% -h 80%'
+alias fzf='fzf-tmux -p -x C -y C -w 80% -h 65%'
 
 # to use tmux window instead of popup, add -d arg
 # ls -l | fzf -d
@@ -742,7 +763,7 @@ _fzf_compgen_dir() {
 
 my-fzfcmd() {
   [ -n "$TMUX_PANE" ] &&
-    echo "fzf-tmux -p -x R -y S -w 65% -h 65% " || echo "fzf --height 50% "
+    echo "fzf-tmux -p -x C -y C -w 80% -h 65% " || echo "fzf --height 50% "
 }
 
 my-fzf-history-widget() {
@@ -761,8 +782,8 @@ my-fzf-history-widget() {
 }
 zle     -N   my-fzf-history-widget
 
-# terminals may have mapped C-S-/ (C-/ is really C-_) to \e% ... (0x25)
-bindkey "\e%" my-fzf-history-widget
+# an unusual and vim harmless mapping from tmux for prefix-/
+bindkey "\e\"" my-fzf-history-widget
 
 # -----------------------
 
@@ -890,14 +911,22 @@ ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS=(forward-word up-line-or-beginning-search
 
 # partial-accept - next word of suggestion ...
 #bindkey '^]' forward-word
-# terminals may have mapped C-S-] to \e< ... (0x3c)
-bindkey "\e<" up-line-or-beginning-search
-# terminals may have mapped C-S-[ to \e, ... (0x2c)
-bindkey "\e," down-line-or-beginning-search
-# terminals may have mapped C-S-\ to \e; ... (0x3b)
-bindkey "\e;"  forward-word
-# terminals may have mapped C-S-/ to \e_ ... (0x5f)
-bindkey "\e_"  end-of-buffer-or-history
+# terminals may have mapped C-S-] to ^_]
+bindkey '^_]' up-line-or-beginning-search
+# terminals may have mapped C-S-[ to ^_[
+bindkey '^_[' down-line-or-beginning-search
+# terminals may have mapped C-S-\ to ^_\
+bindkey '^_\'  forward-word
+# also C-S-End ...
+bindkey "\e[1;6F" forward-word
+# and C-S-Home to beg line
+bindkey "\e[1;6H" backward-word
+# terminals may have mapped C-S-/ to ^_/
+bindkey '^_/'  end-of-buffer-or-history
+# terminals may have mapped C-S-<Space> to ^_<Space>
+bindkey '^_ ' noop
+# if we can get away with this ... just to keep cmdline quiet
+bindkey '^_' noop
 # these all seem benign in vim ...
 # C-\
 bindkey '^\'   autosuggest-accept
