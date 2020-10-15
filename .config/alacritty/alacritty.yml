@@ -34,10 +34,6 @@ key_bindings:
   - { key: Space,     mods: Alt|Control,     chars: "\x1b\x23"        }
   - { key: 43,        mods: Alt|Control,     action: None             }
 
-  - { key: Equals,    mods: Control,         action: None             }
-  - { key: Minus,     mods: Control,         action: None             }
-  - { key: Minus,     mods: Alt|Control,     action: None             }
-
   - { key: 26,        mods: Control|Shift,   chars: "\x1f\x5b"        }
   - { key: 26,        mods: Alt|Control,     action: None             }
   - { key: 27,        mods: Control|Shift,   chars: "\x1f\x5d"        }
@@ -45,6 +41,11 @@ key_bindings:
   - { key: 43,        mods: Control|Shift,   chars: "\x1f\x5c"        }
 
   - { key: 53,        mods: Control|Shift,   chars: "\x1f\x2f"        }
+
+  - { key: Key0,      mods: Control,         chars: "\x30"            }
+  - { key: Equals,    mods: Control,         chars: "\x3d"            }
+  - { key: Minus,     mods: Control,         chars: "\x1e\x2d"        }
+  - { key: Minus,     mods: Alt|Control,     action: None             }
 
   - { key: Return,    mods: Alt|Control,     action: None             }
   # special -------
@@ -55,12 +56,6 @@ key_bindings:
   - { key: 11,        mods: Control|Shift,   action: ResetFontSize    }
   - { key: 12,        mods: Control|Shift,   action: DecreaseFontSize }
   - { key: 13,        mods: Control|Shift,   action: IncreaseFontSize }
-
-  # reset some defaults ---
-  - { key: 11,        mods: Control,         action: ReceiveChar      }
-  - { key: 12,        mods: Control,         chars: "\x2d"            }
-  - { key: 13,        mods: Control,         chars: "\x2b"            }
-  # reset some defaults ---
 
   # NOTE: Home (khome) can be: ^[[H or ^[[1~ or ^[[7~
   # NOTE: End  (kend)  can be: ^[[F or ^[[4~ or ^[[8~

@@ -231,7 +231,7 @@ endtry
 call NoremapNormalCmd("<expr> u", 0, "(line('.') == line('w$')) ? 'M' : '<C-U>:set scroll=0\r'")
 
 " NOTE: could also map backspace to page up ...
-"call NoremapNormalCmd("<expr> <BS>", 0, "(line('.') == line('w$')) ? 'M' : '<C-U>:set scroll=0\r'")
+call NoremapNormalCmd("<expr> <BS>", 0, "(line('.') == line('w$')) ? 'M' : '<C-U>:set scroll=0\r'")
 
 " ---------
 

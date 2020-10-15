@@ -278,30 +278,32 @@ URxvt.iso14755:                 false
 URxvt.iso14755_52:              false
 
 !! special ------
-URxvt.keysym.S-BackSpace:       string:\177
-URxvt.keysym.C-BackSpace:       string:\177
+URxvt.keysym.S-BackSpace:               string:\177
+URxvt.keysym.C-BackSpace:               string:\036\177
 
-URxvt.keysym.C-S-BackSpace:     string:\036\036
-URxvt.keysym.C-S-space:         string:\036\037
+URxvt.keysym.C-S-BackSpace:             string:\037\177
+URxvt.keysym.C-S-space:                 string:\037\040
 
-URxvt.keysym.Shift-Control-X:   string:\033\050
+URxvt.keysym.Shift-Control-X:           string:\033\170
 
-URxvt.keysym.Control-Meta-BackSpace: string:\033\100
-URxvt.keysym.Control-Meta-equal:     string:\033\043
-URxvt.keysym.Control-Meta-space:     string:\033\043
-URxvt.keysym.Control-Meta-backslash: string:\033\043
+URxvt.keysym.Control-Meta-BackSpace:    string:\033\100
+URxvt.keysym.Control-Meta-equal:        string:\033\043
+URxvt.keysym.Control-Meta-space:        string:\033\043
+URxvt.keysym.Control-Meta-backslash:    command:\000
 
-URxvt.keysym.C-equal:            command:\000
-URxvt.keysym.C-minus:            command:\000
-URxvt.keysym.Control-Meta-minus: command:\000
+URxvt.keysym.C-S-bracketleft:           string:\037\133
+URxvt.keysym.Control-Meta-bracketleft:  command:\000
+URxvt.keysym.C-S-bracketright:          string:\037\135
+URxvt.keysym.Control-Meta-bracketright: command:\000
+URxvt.keysym.C-S-backslash:             string:\037\134
 
-URxvt.keysym.C-S-bracketright:           string:\033\074
-URxvt.keysym.Control-Meta-bracketright:  command:\000
-URxvt.keysym.C-S-bracketleft:            string:\033\054
-URxvt.keysym.Control-Meta-bracketleft:   command:\000
-URxvt.keysym.C-S-backslash:              string:\033\073
+URxvt.keysym.C-S-slash:                 string:\037\057
 
-URxvt.keysym.C-S-slash:                  string:\033\137
+URxvt.keysym.C-equal:                   string:\075
+URxvt.keysym.C-minus:                   string:\036\055
+URxvt.keysym.Control-Meta-minus:        command:\000
+
+URxvt.keysym.Control-Meta-Return:       command:\000
 !! special ------
 
 URxvt.keysym.Shift-Control-V:   eval:paste_clipboard
@@ -313,8 +315,9 @@ URxvt.keysym.Control-Meta-v:    builtin-string:
 
 URxvt.keysym.C-S-plus:          font-size:increase
 URxvt.keysym.C-S-underscore:    font-size:decrease
-!! NOTE: C-S-0 does not work
-URxvt.keysym.C-0:               font-size:reset
+URxvt.keysym.C-S-parenright:    font-size:reset
+
+URxvt.keysym.C-0:               string:\060
 
 !! NOTE: Home (khome) can be: ^[[H or ^[[1~ or ^[[7~
 !! NOTE: End  (kend)  can be: ^[[F or ^[[4~ or ^[[8~

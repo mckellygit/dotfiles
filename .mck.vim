@@ -1208,26 +1208,26 @@ endfunction
 " vim-qf-preview ------
 augroup qfpreview
     autocmd!
-    " C-Space
-    autocmd FileType qf nmap <buffer> <C-@> <plug>(qf-preview-open)
+    autocmd FileType qf nmap <buffer> <C-\> <plug>(qf-preview-open)
     autocmd FileType qf nmap <buffer> p     <plug>(qf-preview-open)
-    " C-/ - to match fzf preview
+    autocmd FileType qf nmap <buffer> ?     <plug>(qf-preview-open)
+    " C-/ (which is really <C-_>) - old fzf preview key
     " <C-_> used with another key so cannot use this alone without delay ...
     "autocmd FileType qf nmap <buffer> <C-_> <plug>(qf-preview-open)
 augroup END
 let g:qfpreview = {
     \ 'top'   : "\<C-Home>",
     \ 'bottom': "\<C-End>",
-    \ 'scrollup'  : "\<C-Up>",
-    \ 'scrolldown': "\<C-Down>",
+    \ 'scrollup'  : "\<C-k>",
+    \ 'scrolldown': "\<C-j>",
     \ 'halfpageup'  : "\<C-b>",
     \ 'halfpagedown': "\<C-f>",
-    \ 'fullpageup'  : "u",
+    \ 'fullpageup'  : "\<BS>",
     \ 'fullpagedown': "\<Space>",
     \ 'next': "\<Down>",
     \ 'previous': "\<Up>",
-    \ 'reset': "r",
-    \ 'close': "q",
+    \ 'reset': "\<C-r>",
+    \ 'close': "\<C-q>",
     \ 'number': 1,
     \ 'height': 15,
     \ 'offset': 7,
@@ -3882,9 +3882,14 @@ noremap  <silent> <S-BS> <BS>
 inoremap <silent> <S-BS> <BS>
 " TODO: if shift-BS is ever reliably recognized have it delete curr/prev word ...
 
+" TODO: MCK - does <C-BS> move up or scroll up ?  And same for <C-Space>
+
 " NOTE: terminals could map <C-BS> to <C-^><BS>
 noremap <silent> <C-^><BS>  <Up>
 noremap <silent> <C-^><DEL> <Up>
+
+noremap <silent> <C-^>- -
+inoremap <silent> <C-^>- -
 
 " NOTE: C-Space in most terminals is C-@
 noremap <silent> <C-@> <Down>
@@ -5286,7 +5291,7 @@ tnoremap <silent> <C-x>v <C-w>:$tabnew<CR>
 " <C-w><N> or <C-\><C-n> to get into normal mode
 " a or i get back into terminal mode
 " or <C-\><C-n> to toggle
-nnoremap <silent> <expr> <C-\><C-n> (&buftype == 'terminal') ? 'i' : '<C-\><C-n>'
+"nnoremap <silent> <expr> <C-\><C-n> (&buftype == 'terminal') ? 'i' : '<C-\><C-n>'
 " or <Return>, like tmux
 nmap <silent> <expr> <Return> (&buftype == 'terminal') ? 'i' : '<Return>'
 " to enter normal mode, like tmux
@@ -5503,11 +5508,11 @@ nnoremap <silent> <C-w><C-Up>     <C-w>k
 nnoremap <silent> <C-w><C-Down>   <C-w>j
 
 " move to next, previous window
-nnoremap <silent> <C-w><BS>       <C-w>w
-nnoremap <silent> <C-w><C-BS>     <C-w>w
-nnoremap <silent> <C-w><C-^><BS>  <C-w>w
-nnoremap <silent> <C-w><Space>    <C-w>W
-nnoremap <silent> <C-w><C-@>      <C-w>W
+"nnoremap <silent> <C-w><BS>       <C-w>w
+"nnoremap <silent> <C-w><C-BS>     <C-w>w
+"nnoremap <silent> <C-w><C-^><BS>  <C-w>w
+"nnoremap <silent> <C-w><Space>    <C-w>W
+"nnoremap <silent> <C-w><C-@>      <C-w>W
 
 " -----------------------------
 
@@ -5536,8 +5541,10 @@ nnoremap <silent> <Leader>s<S-Tab> :tab split<CR>
 nnoremap <silent> <Leader>sT       :tab split<CR>
 
 " new, empty splits - to match tmux
-nnoremap <silent> <Leader>s\|    :vnew<CR>
-nnoremap <silent> <Leader>s_     :new<CR>
+nnoremap <silent> <Leader>s\|     :vnew<CR>
+nnoremap <silent> <Leader>s<C-\>  :vnew<CR>
+nnoremap <silent> <Leader>s<C-^>- :new<CR>
+nnoremap <silent> <Leader>s_      :new<CR>
 " and tab ...
 nnoremap <silent> <Leader>s<Tab> :$tabnew<CR>
 " (also matches <Leader>to)
