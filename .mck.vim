@@ -857,6 +857,13 @@ autocmd FileType git              nmap <buffer> <C-t> O
 autocmd FileType git              nmap <silent> <buffer> qq    :close<cr>
 autocmd FileType git              nmap <silent> <buffer> <C-q> :close<cr>
 
+" TODO: MCK should we be like less here ?
+autocmd FileType git              nmap <silent> <buffer> <BS>    :call <SID>CtrlB(1)<CR>
+autocmd FileType git              nmap <silent> <buffer> <Space> :call <SID>CtrlF(1)<CR>
+autocmd FileType git              vmap <silent> <buffer> <BS>    <C-b>
+autocmd FileType git              vmap <silent> <buffer> <Space> <C-f>
+autocmd FileType git              nmap <silent> <buffer> u       <C-b>
+
 " NOTE: fugitive git <C-n>, <C-p> mappings already do these
 " git diff navigation like tig ...
 " NOTE: single <Leader>f,F and c,C causes input delays ...
@@ -5338,12 +5345,13 @@ nnoremap <Leader>uu           :call UndoAll()<CR>
 vnoremap <Leader>uu <C-\><C-n>:call UndoAll()<CR>
 
 " TODO: u is close to i so remap t to uu and/or U ?
-nnoremap <silent> uu u
-nnoremap <silent> U  u
-nmap <silent> u <Nop>
-vnoremap <silent> uu u
-vnoremap <silent> U  u
-vmap <silent> u <Nop>
+nnoremap <silent> <buffer> uu u
+nnoremap <silent> <buffer> U  u
+nmap     <silent> <buffer> u <Nop>
+
+vnoremap <silent> <buffer> uu u
+vnoremap <silent> <buffer> U  u
+vmap     <silent> <buffer> u <Nop>
 
 " NOTE: then in vless.vim we can unmap u ...
 "try
