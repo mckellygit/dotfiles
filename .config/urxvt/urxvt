@@ -354,15 +354,22 @@ URxvt.keysym.Shift-Meta-Down:   string:\033[1;4B
 URxvt.keysym.Shift-Meta-Left:   string:\033[1;4D
 URxvt.keysym.Shift-Meta-Right:  string:\033[1;4C
 
+URxvt.keysym.Control-Meta-Up:     string:\033[1;7A
+URxvt.keysym.Control-Meta-Down:   string:\033[1;7B
+URxvt.keysym.Control-Meta-Left:   string:\033[1;7D
+URxvt.keysym.Control-Meta-Right:  string:\033[1;7C
+
 !! Prior == PgUp
 URxvt.keysym.Control-Prior:     string:\033[5;5~
 URxvt.keysym.C-S-Prior:         string:\033[5;6~
 URxvt.keysym.Meta-Prior:        string:\033[5;3~
+URxvt.keysym.Control-Meta-Prior: string:\033[5;7~
 
 !! Next == PgDown
 URxvt.keysym.Control-Next:      string:\033[6;5~
 URxvt.keysym.C-S-Next:          string:\033[6;6~
 URxvt.keysym.Meta-Next:         string:\033[6;3~
+URxvt.keysym.Control-Meta-Next:  string:\033[6;7~
 
 URxvt.keysym.Control-Insert:    string:\033[2;5~
 URxvt.keysym.Shift-Insert:      string:\033[2;2~

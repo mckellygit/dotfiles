@@ -90,13 +90,20 @@ key_bindings:
   - { key: Left,      mods: Alt|Shift,       chars: "\x1b[1;4D"       }
   - { key: Right,     mods: Alt|Shift,       chars: "\x1b[1;4C"       }
 
+  - { key: Up,        mods: Alt|Control,     chars: "\x1b[1;7A"       }
+  - { key: Down,      mods: Alt|Control,     chars: "\x1b[1;7B"       }
+  - { key: Left,      mods: Alt|Control,     chars: "\x1b[1;7D"       }
+  - { key: Right,     mods: Alt|Control,     chars: "\x1b[1;7C"       }
+
   - { key: PageUp,    mods: Control,         chars: "\x1b[5;5~"       }
   - { key: PageUp,    mods: Control|Shift,   chars: "\x1b[5;6~"       }
   - { key: PageUp,    mods: Alt,             chars: "\x1b[5;3~"       }
+  - { key: PageUp,    mods: Alt|Control,     chars: "\x1b[5;7~"       }
 
   - { key: PageDown,  mods: Control,         chars: "\x1b[6;5~"       }
   - { key: PageDown,  mods: Control|Shift,   chars: "\x1b[6;6~"       }
   - { key: PageDown,  mods: Alt,             chars: "\x1b[6;3~"       }
+  - { key: PageDown,  mods: Alt|Control,     chars: "\x1b[6;7~"       }
 
   - { key: Insert,    mods: Control,         chars: "\x1b[2;5~"       }
   - { key: Insert,    mods: Shift,           chars: "\x1b[2;2~"       }
