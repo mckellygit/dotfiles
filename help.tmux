@@ -2,11 +2,12 @@
 
 prefix = <Ctrl-s>
 
-prefix <Arrow>          - navigate panes
-prefix <s>              - move to next window (<C-s>)
+prefix <arrow>          - navigate panes
+prefix <s>              - move to next pane (<C-s>)
 prefix <Ctrl-z>         - toggle pane zoom
+Alt-<Down>,<Up>         - navigate to next, previous pane
 
-Alt-Shift-<Arrow>       - resize panes
+Alt-Shift-<arrow>       - resize panes
 Drag on window border   - resize panes
 
 Alt-<Left>,<Right>      - navigate windows
