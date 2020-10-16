@@ -863,6 +863,9 @@ autocmd FileType git              nmap <silent> <buffer> <Space> :call <SID>Ctrl
 autocmd FileType git              vmap <silent> <buffer> <BS>    <C-b>
 autocmd FileType git              vmap <silent> <buffer> <Space> <C-f>
 autocmd FileType git              nmap <silent> <buffer> u       <C-b>
+autocmd FileType git              nmap <silent> <buffer> d       <C-f>
+autocmd FileType git              vmap <silent> <buffer> u       <C-b>
+autocmd FileType git              vmap <silent> <buffer> d       <C-f>
 
 " NOTE: fugitive git <C-n>, <C-p> mappings already do these
 " git diff navigation like tig ...
@@ -1628,7 +1631,10 @@ function s:Searchn() abort
   if (len(l:stext) == 0)
     return
   endif
-  nunmap <buffer> n
+  try
+    nunmap <buffer> n
+  catch /E31:/
+  endtry
   set nows
   try
     "exe "normal n"
@@ -1683,7 +1689,10 @@ function s:SearchN() abort
   if (len(l:stext) == 0)
     return
   endif
-  nunmap <buffer> N
+  try
+    nunmap <buffer> N
+  catch /E31:/
+  endtry
   set nows
   try
     "exe "normal N"
@@ -5208,10 +5217,13 @@ if &diff
   " and Bram said a fix is not planned ...
 
   " TODO: seems weird these dont work in diff ...
-  "unmap <C-d>
-  "unmap <C-u>
-  unmap <C-f>
-  unmap <C-b>
+  try
+    "unmap <C-d>
+    "unmap <C-u>
+    unmap <C-f>
+    unmap <C-b>
+  catch /E31:/
+  endtry
   inoremap <C-f> <C-\><C-o><C-f>
   inoremap <C-b> <C-\><C-o><C-b>
 else 
@@ -5355,10 +5367,10 @@ vmap     <silent> <buffer> u <Nop>
 
 " NOTE: then in vless.vim we can unmap u ...
 "try
-"  nunmap u
-"  nunmap uu
-"  vunmap u
-"  vunmap uu
+"  nunmap <buffer> u
+"  nunmap <buffer> uu
+"  vunmap <buffer> u
+"  vunmap <buffer> uu
 "catch /E31:/
 "endtry
 
