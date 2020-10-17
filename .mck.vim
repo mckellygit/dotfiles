@@ -3935,6 +3935,10 @@ noremap <silent> <C-^><DEL> <Up>
 noremap <silent> <C-^>- -
 inoremap <silent> <C-^>- -
 
+" NOTE: terminals could map <C-A-CR> to <C-^><CR>
+noremap <silent> <C-^><CR> <CR>
+inoremap <silent> <C-^><CR> <CR>
+
 " NOTE: C-Space in most terminals is C-@
 noremap <silent> <C-@> <Down>
 
