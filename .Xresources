@@ -303,7 +303,7 @@ URxvt.keysym.C-equal:                   string:\075
 URxvt.keysym.C-minus:                   string:\036\055
 URxvt.keysym.Control-Meta-minus:        command:\000
 
-URxvt.keysym.Control-Meta-Return:       command:\000
+URxvt.keysym.Control-Meta-Return:       string:\036\015
 !! special ------
 
 URxvt.keysym.Shift-Control-V:   eval:paste_clipboard

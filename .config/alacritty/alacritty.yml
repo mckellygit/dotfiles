@@ -47,7 +47,7 @@ key_bindings:
   - { key: Minus,     mods: Control,         chars: "\x1e\x2d"        }
   - { key: Minus,     mods: Alt|Control,     action: None             }
 
-  - { key: Return,    mods: Alt|Control,     action: None             }
+  - { key: Return,    mods: Alt|Control,     chars: "\x1e\x0d"        }
   # special -------
 
   - { key: V,         mods: Control|Shift,   action: Paste            }
