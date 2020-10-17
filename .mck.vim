@@ -369,6 +369,13 @@ let g:lightline = {
 
 " no mode for qf
 function! MyLightlineMode()
+  " dont wrapscan if in visual mode ...
+  let m = mode()
+  if m ==# 'v' || m ==# 'V' || m ==# ''
+      set nowrapscan
+  else
+      set wrapscan
+  endif
   if &filetype ==# 'qf'
     return ''
   "elseif &buftype ==# 'terminal'
@@ -1614,6 +1621,10 @@ nnoremap <silent> <Leader>rg :call <SID>Myregfzf()<CR>
 " if added changes to search.c to ui_delay() after give_warning()
 "set matchtime=3
 
+" make n always search forward and N backward
+vnoremap <expr> n 'Nn'[v:searchforward]
+vnoremap <expr> N 'nN'[v:searchforward]
+
 " if set nowrapscan then get -
 " E384: search hit TOP without match for: <search-exp>
 " E385: search hit BOTTOM without match for: <search-exp>
@@ -1624,8 +1635,8 @@ nnoremap <silent> <Leader>rg :call <SID>Myregfzf()<CR>
 " hack to pause a little on search wraps ...
 " causes too many redraws
 
-"nnoremap <buffer> <silent> n :call <SID>Searchn()<CR>
-"nnoremap <buffer> <silent> N :call <SID>SearchN()<CR>
+nnoremap <buffer> <silent> n :call <SID>Searchn()<CR>
+nnoremap <buffer> <silent> N :call <SID>SearchN()<CR>
 function s:Searchn() abort
   let l:stext=@/
   if (len(l:stext) == 0)
@@ -1657,6 +1668,10 @@ function s:Searchn() abort
       echo "E486: Pattern not found: " . l:stext
       echohl None
       sleep 200m
+      " eat typeahead ...
+      while getchar(0)
+      endwhile
+      redraw!
     endtry
   catch /E385:/
 "   echohl WarningMsg
@@ -1678,6 +1693,10 @@ function s:Searchn() abort
       echo "E486: Pattern not found: " . l:stext
       echohl None
       sleep 200m
+      " eat typeahead ...
+      while getchar(0)
+      endwhile
+      redraw!
     endtry
   endtry
   nnoremap <buffer> <silent> n :call <SID>Searchn()<CR>
@@ -1718,6 +1737,10 @@ function s:SearchN() abort
       echo "E486: Pattern not found: " . l:stext
       echohl None
       sleep 200m
+      " eat typeahead ...
+      while getchar(0)
+      endwhile
+      redraw!
     endtry
   catch /E385:/
 "   echohl WarningMsg
@@ -1736,6 +1759,10 @@ function s:SearchN() abort
       echo "E486: Pattern not found: " . l:stext
       echohl None
       sleep 200m
+      " eat typeahead ...
+      while getchar(0)
+      endwhile
+      redraw!
     endtry
   endtry
   nnoremap <buffer> <silent> N :call <SID>SearchN()<CR>
@@ -1837,6 +1864,7 @@ function s:CrossHairs() abort
     set cursorcolumn
     redraw
     sleep 200m
+    " eat typeahead ...
     while getchar(0)
     endwhile
     set nocursorline
