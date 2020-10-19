@@ -5264,6 +5264,7 @@ else
     au!
     au VimEnter * :Alias q call\ MyQuit("q")
     au VimEnter * :Alias q! call\ MyQuit("q!")
+    au VimEnter * :Alias PU PluginUpdate
   aug END
 endif
 
