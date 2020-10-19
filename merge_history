@@ -11,6 +11,12 @@ fi
 
 #echo "HISTFILE=$HISTFILE"
 
+# skip if from sudo ...
+if [[ -n "$SUDO_USER" && -n "$SUDO_UID" ]]
+then
+    exit
+fi
+
 if [[ -s $HISTFILE ]]
 then
     (
