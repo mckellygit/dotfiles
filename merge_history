@@ -17,6 +17,12 @@ then
     exit
 fi
 
+myid=$(id -u)
+if [[ $myid -eq 0 ]]
+then
+    exit
+fi
+
 if [[ -s $HISTFILE ]]
 then
     (
