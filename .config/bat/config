@@ -1,11 +1,17 @@
+--decorations="always"
+--color="always"
+--paging="always"
+--tabs="4"
+
 # Set the theme to "TwoDark"
 --theme="Monokai Extended"
 
 # Show line numbers, Git modifications and file header (but no grid)
---style="numbers,changes,header"
+#--style="numbers,changes,header"
+--style="plain"
 
 # Use italic text on the terminal (not supported on all terminals)
---italic-text=never
+#--italic-text=never
 
 # Add mouse scrolling support in less (does not work with older versions of "less")
 --pager="less -FRX"
