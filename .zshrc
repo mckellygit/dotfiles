@@ -508,14 +508,16 @@ alias rm='rm -i'
 #fi
 alias dmesg='dmesg -kuxT'
 alias vdiff='vimdiff'
+alias vdifff='vimdiff'
+alias vdif='vimdiff'
 
 # skip -X arg to less to get alternate screen so tmux mouse can scroll ...
-alias more='less -K -R'
+alias more='less -K -R -x4'
 # there is also moar
 #alias more='moar'
 alias less-pyg='less-pyg'
 alias lessc='less-pyg'
-alias less='less -K -R'
+alias less='less -K -R -x4'
 #export PAGER='less -RX'
 export PAGER='bat -p'
 #alias cat='ccat'
@@ -526,6 +528,7 @@ alias smesg='vless /var/log/syslog'
 
 alias tailrdm='tail -f /tmp/rdm-$LOGNAME.log'
 alias difff='diff'
+alias dif='diff'
 
 # gv.vim uses noremap so need to override q, x here, look into using :Alias ?
 # could also nnoremap qq qa!<CR> here
