@@ -790,8 +790,10 @@ bindkey "\e\"" my-fzf-history-widget
 
 # -----------------------
 
-export MANPAGER="less"
-alias manls="man -k . | fzf --prompt='Man> ' | awk '{print \$1}' | xargs -r man -P 'less'"
+#export MANPAGER="less"
+#alias manls="man -k . | fzf --prompt='Man> ' | awk '{print \$1}' | xargs -r man -P 'less'"
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+alias manls="man -k . | fzf --prompt='Man> ' | awk '{print \$1}' | xargs -r man -P 'sh -c \"col -bx | bat -l man -p\"'"
 
 # This can be slow, try it in byobu/tmux status bar ...
 # git repo info/status in prompt
