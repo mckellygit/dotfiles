@@ -1225,6 +1225,8 @@ endfunction
 augroup qfpreview
     autocmd!
     autocmd FileType qf nmap <buffer> <C-\> <plug>(qf-preview-open)
+    autocmd FileType qf nmap <buffer> p     <plug>(qf-preview-open)
+    autocmd FileType qf nmap <buffer> P     <plug>(qf-preview-open)
     autocmd FileType qf nmap <buffer> ?     <plug>(qf-preview-open)
     " C-/ (which is really <C-_>) - old fzf preview key
     " <C-_> used with another key so cannot use this alone without delay ...
