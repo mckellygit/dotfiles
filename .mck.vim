@@ -602,20 +602,19 @@ let g:findroot_not_for_subdir = 1
 " findroot ------------
 
 " fzf -----------------
-if 1 " use vim popup ...
-    let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.5, 'yoffset': 0.7, 'xoffset': 0.6 } }
+if 0 " use vim popup ...
+    let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.65, 'yoffset': 0.5, 'xoffset': 0.5 } }
 else
 if &term =~ "^screen" || &term =~ "^tmux"
     " use tmux popup ...
-    let g:fzf_layout = { 'tmux': '-p -x R -y S -w 80% -h 80%' }
+    let g:fzf_layout = { 'tmux': '-p -x C -y C -w 80% -h 65%' }
 else
     " use vim split ...
     let g:fzf_layout = { 'down': '~45%' }
 endif
 endif
 
-" always show preview window ...
-let g:fzf_preview_window = 'right:60%'
+let g:fzf_preview_window = ['right:60%:hidden', 'ctrl-\']
 
 autocmd VimEnter,BufEnter * silent! lcd %:p:h
 " add \fz mapping also
@@ -1226,7 +1225,6 @@ endfunction
 augroup qfpreview
     autocmd!
     autocmd FileType qf nmap <buffer> <C-\> <plug>(qf-preview-open)
-    autocmd FileType qf nmap <buffer> p     <plug>(qf-preview-open)
     autocmd FileType qf nmap <buffer> ?     <plug>(qf-preview-open)
     " C-/ (which is really <C-_>) - old fzf preview key
     " <C-_> used with another key so cannot use this alone without delay ...
@@ -1237,14 +1235,14 @@ let g:qfpreview = {
     \ 'bottom': "\<C-End>",
     \ 'scrollup'  : "\<C-k>",
     \ 'scrolldown': "\<C-j>",
-    \ 'halfpageup'  : "\<C-b>",
-    \ 'halfpagedown': "\<C-f>",
-    \ 'fullpageup'  : "\<BS>",
-    \ 'fullpagedown': "\<Space>",
+    \ 'halfpageup'  : "\<BS>",
+    \ 'halfpagedown': "\<Space>",
+    \ 'fullpageup'  : "\<C-b>",
+    \ 'fullpagedown': "\<C-f>",
     \ 'next': "\<Down>",
     \ 'previous': "\<Up>",
     \ 'reset': "\<C-r>",
-    \ 'close': "\<C-q>",
+    \ 'close': "\<C-\>",
     \ 'number': 1,
     \ 'height': 15,
     \ 'offset': 7,

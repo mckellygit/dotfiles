@@ -104,19 +104,18 @@ sC         swap chars with char before (cS)
 
 In qf/ll window
 ---------------
-p       open preview window
-<C-\>   open preview window
-<C-q>   close preview window
-<C-c>   close preview window
-<C-r>   reset to orig preview line
-<Down>  preview next qf/ll entry
-<Up>    preview prev qf/ll entry
-<C-j>   scroll one line down
-<C-k>   scroll one line up
-<C-f>   scroll half-page down
-<C-b>   scroll half-page up
-<Space> scroll full-page down
-<BS>    scroll full-page up
+<C-\>    toggle preview window
+?        open preview window
+<C-c>    close preview window (toggle: <C-\>)
+<C-r>    reset to orig preview line
+<Down>   preview next qf/ll entry
+<Up>     preview prev qf/ll entry
+<C-j>    scroll one line down
+<C-k>    scroll one line up
+<Space>  scroll half-page down
+<BS>     scroll half-page up
+<C-f>    scroll full-page down
+<C-b>    scroll full-page up
 
 multi-line/file qf/ll replace
 -----------------------------

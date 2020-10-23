@@ -18,10 +18,10 @@ Ctrl-Alt-<Space>        - navigate windows
 prefix <Ctrl-r>         - re-load tmux conf file
 
 prefix <z>              - fzf popup of files in cwd
-                            <C-\>      - preview file
+                            <C-\>      - toggle file preview
                             <C-k,j>    - preview up, down
                             <C-b,f>    - preview half-page up, down
-                            <BS,Space> - preview page up, down
+                            <C-u,d>    - preview page up, down
                             <C-q>      - quit (<C-c>, <Esc>)
 
 prefix <q>              - fzf popup of cmd history

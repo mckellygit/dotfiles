@@ -486,7 +486,7 @@ function bash-ctrl-d() {
   fi
 }
 zle -N bash-ctrl-d
-bindkey "^d" bash-ctrl-d
+bindkey '^d' bash-ctrl-d
 
 # --------------------
 
@@ -936,6 +936,8 @@ bindkey '^^' noop
 # these all seem benign in vim ...
 # C-\
 bindkey '^\'   autosuggest-accept
+
+bindkey "\e/" noop
 
 # Ctrl-Enter to execute suggestion
 #bindkey '^\n' autosuggest-execute
