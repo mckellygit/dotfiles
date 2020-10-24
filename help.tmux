@@ -44,6 +44,11 @@ prefix <Ctrl-a>         - cmd history   (<Up>)
 prefix <Ctrl-x>         - execute cmd   (<CR>)
 prefix <Ctrl-e>         - clear cmdline (<Ctrl-u>)
 
+prefix <|>              - vertical split new shell (prefix <C-\>)
+prefix <_>              - horizontal split new shell (prefix <C-->)
+
+prefix <->              - delete most recent tmux buffer
+
 Shift-<F12>             - toggle function keys
 
 In copy-mode:

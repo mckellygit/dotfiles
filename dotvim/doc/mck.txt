@@ -186,8 +186,8 @@ filter qf/ll entries
 <Leader>sV      vertical split
 <Leader>sH      horizontal split
 <Leader>sT      tab split (<Leader><S-Tab>)
-<Leader>s|      vertical split new buffer (<Leader>sv)
-<Leader>s_      horizontal split new buffer (<Leader>sh)
+<Leader>s|      vertical split new buffer (<Leader>sv, <Leader>s<C-\>)
+<Leader>s_      horizontal split new buffer (<Leader>sh, <Leader>s<C-->)
 <Leader>s<Tab>  tab split new buffer (<Leader>st)
 <C-w>t          makes topleft window current
 <C-w>K          moves curr window to topmost
