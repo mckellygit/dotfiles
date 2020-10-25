@@ -1,9 +1,7 @@
 #!/bin/bash
 
-# also look at lesspipe
-# pip install pygments
+LESSOPEN='|pygmentize -f terminal -g %s'
 
-export LESSOPEN='|pygmentize -f terminal -g %s'
-export LESS=-R
+# NOTE: smartless does not support LESSOPEN ...
+
 \less $@
-

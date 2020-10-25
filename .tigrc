@@ -84,6 +84,7 @@ bind refs      !            none
 bind status    M            none
 bind status    C            none
 bind status    !            none
+bind status    u            none
 bind stage     1            none
 bind stage     \            none
 bind stage     !            none

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+bat --paging never --color always --style plain "$1"
+

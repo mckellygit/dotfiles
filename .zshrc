@@ -512,20 +512,37 @@ alias vdifff='vimdiff'
 alias vdif='vimdiff'
 
 # skip -X arg to less to get alternate screen so tmux mouse can scroll ...
-alias more='less -K -R -x4'
+# and dont use -F without -X ...
+# use -S to not wrap long lines ...
+alias more='less'
 # there is also moar
 #alias more='moar'
-alias less-pyg='less-pyg'
+#alias less-pyg='less-pyg'
 alias lessc='less-pyg'
-alias less='less -K -R -x4'
+#alias less='less -K -iR -x4'
+#alias less='bat'
+
+# uses bat underneath to get bat syntax color but less driver with multiple files, etc.
+export LESSOPEN="|lessfilter %s"
+export LESS='-iR -K -x4 -c~'
+
+# number of lines to directly display before entering the pager
+export SMARTLESS_NUM_LINES=$((LINES-6))
+# the pager to be used
+export SMARTLESS_PAGER='less'
+# the default arguments to the pager
+export SMARTLESS_PAGER_ARGUMENTS='-iR -K -x4 -c~'
+
 #export PAGER='less -RX'
-export PAGER='bat -p'
+#export PAGER='bat -p'
+#export PAGER='less'
+#export BAT_PAGER='smartless'
 #alias cat='ccat'
 #alias cat='mckless -EXR:'
 #alias cat='bat --plain --paging=never'
-alias catc='bat --tabs 4 --paging never'
-alias smesg='vless /var/log/syslog'
+alias catc='bat --plain --tabs 4 --paging never'
 
+alias smesg='vless /var/log/syslog'
 alias tailrdm='tail -f /tmp/rdm-$LOGNAME.log'
 alias difff='diff'
 alias dif='diff'
