@@ -3929,8 +3929,8 @@ inoremap <silent> <S-BS> <BS>
 " TODO: MCK - does <C-BS> move up or scroll up ?  And same for <C-Space>
 
 " NOTE: terminals could map <C-BS> to <C-^><BS>
-noremap <silent> <C-^><BS>  <Up>
-noremap <silent> <C-^><DEL> <Up>
+noremap <silent> <C-^><BS>  gk
+noremap <silent> <C-^><DEL> gk
 
 noremap <silent> <C-^>- -
 inoremap <silent> <C-^>- -
@@ -3940,7 +3940,9 @@ noremap <silent> <C-^><CR> <CR>
 inoremap <silent> <C-^><CR> <CR>
 
 " NOTE: C-Space in most terminals is C-@
-noremap <silent> <C-@> <Down>
+noremap <silent> <C-@> gj
+" <Return> is nmapped above to gj also if not terminal ...
+vnoremap <silent> <buffer> <Return> gj
 
 " NOTE: some terminals map <C-S-BS> to <C-_><BS>
 " NOTE: some terminals map <C-S-Space> to <C-_><Space>
@@ -4971,7 +4973,7 @@ endfunction
 vnoremap : <C-\><C-n>:<C-u>call <SID>MyVisQ()<CR>:
 "vnoremap : <C-w>:
 
-noremap <C-a> 0
+noremap <C-a> ^
 " ctrl-e was scroll down one line so we lose that
 " (but its been remapped to <C-j>)
 noremap <C-e> $
@@ -5345,13 +5347,13 @@ tnoremap <silent> <C-x>v <C-w>:$tabnew<CR>
 " or <C-\><C-n> to toggle
 "nnoremap <silent> <expr> <C-\><C-n> (&buftype == 'terminal') ? 'i' : '<C-\><C-n>'
 " or <Return>, like tmux
-nmap <silent> <expr> <Return> (&buftype == 'terminal') ? 'i' : '<Return>'
+nmap <silent> <buffer> <expr> <Return> (&buftype == 'terminal') ? 'i' : 'gj'
 " to enter normal mode, like tmux
 " there is no alternate screen so this removes these from less/more/etc.
 "tnoremap <silent> <C-Up>   <C-\><C-n>
 "tnoremap <silent> <PageUp> <C-\><C-n>
 " ctrl-x-] like tmux enter copy-mode-vi (ctrl-s-])
-tnoremap <silent> <C-x>]   <C-\><C-n>
+tnoremap <silent> <C-x>] <C-\><C-n>
 "nnoremap <silent> <expr> <C-x>] (&buftype == 'terminal') ? 'i' : '<Nop>'
 
 " this causes sign column to disappear on popups that are terminal windows ...
