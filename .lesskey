@@ -7,4 +7,5 @@
  noaction 10k
 \340 forw-line
  back-line
+\e\n back-line
 \e\e quit

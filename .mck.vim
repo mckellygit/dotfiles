@@ -3169,9 +3169,10 @@ vnoremap <silent> <Leader>D "_x
 " yank from cursor to end of line (similar to D deleting from cursor to end of line)
 nnoremap <silent> Y y$
 
-" NOTE: <A-CR> (S-F31) to copy/end vis-mode to match tmux
-call <SID>MapFastKeycode('<S-F31>',  "\e\<cr>", 131)
-vmap <silent> <S-F31> mvty`v
+" NOTE: <A-Return> (S-F31) to copy/end vis-mode to match tmux
+call <SID>MapFastKeycode('<S-F31>',  "\e\<Return>", 131)
+"vmap <silent> <S-F31> mvty`v
+noremap <silent> <buffer> <S-F31> gk
 
 " -------------------
 
@@ -3935,14 +3936,15 @@ noremap <silent> <C-^><DEL> gk
 noremap <silent> <C-^>- -
 inoremap <silent> <C-^>- -
 
-" NOTE: terminals could map <C-A-CR> to <C-^><CR>
-noremap <silent> <C-^><CR> <CR>
-inoremap <silent> <C-^><CR> <CR>
+" NOTE: terminals could map <C-A-Return> to <C-^><CR>
+nmap <silent> <buffer> <C-^><Return> <Nop>
+vmap <silent> <buffer> <C-^><Return> mvty`v
+imap <silent> <buffer> <C-^><Return> <Nop>
 
 " NOTE: C-Space in most terminals is C-@
 noremap <silent> <C-@> gj
 " <Return> is nmapped above to gj also if not terminal ...
-vnoremap <silent> <buffer> <Return> gj
+vmap <silent> <buffer> <Return> gj
 
 " NOTE: some terminals map <C-S-BS> to <C-_><BS>
 " NOTE: some terminals map <C-S-Space> to <C-_><Space>
