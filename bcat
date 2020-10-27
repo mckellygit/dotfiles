@@ -2,6 +2,6 @@
 
 bat=$(which bat 2> /dev/null)
 if [[ -n "$bat" ]] ; then
-    exec bat --plain --paging=never $@
+    exec bat -A --plain --paging=never $@
 fi
 exec cat $@

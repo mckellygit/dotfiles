@@ -855,8 +855,10 @@ autocmd FileType fugitiveblame nmap <buffer> <Leader><Tab> O
 autocmd FileType fugitiveblame nmap <buffer> <C-t> O
 " NOTE: FileType autocmd does not work for this map,
 "       plugin probably overwrites it, this seems to work ...
-autocmd BufEnter *.fugitiveblame  nmap <buffer> <Return> o
-autocmd BufEnter fugitive://**    nmap <buffer> <Return> o
+autocmd BufEnter *.fugitiveblame  nmap <buffer> <Return> O
+autocmd BufEnter fugitive://**    nmap <buffer> <Return> O
+autocmd BufEnter *.fugitiveblame  nmap <buffer> <2-LeftMouse> O
+autocmd BufEnter fugitive://**    nmap <buffer> <2-LeftMouse> O
 
 autocmd FileType git              nmap <buffer> <Leader><Tab> O
 autocmd FileType git              nmap <buffer> <C-t> O

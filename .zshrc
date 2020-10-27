@@ -521,6 +521,7 @@ alias more='less'
 alias lessc='less-pyg'
 #alias less='less -K -iR -x4'
 #alias less='bat'
+alias less='smartless'
 
 # uses bat underneath to get bat syntax color but less driver with multiple files, etc.
 export LESSOPEN="|lessfilter %s"

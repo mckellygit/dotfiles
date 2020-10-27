@@ -52,8 +52,6 @@ fi
 # the pager to be used
 [ -z "$SMARTLESS_PAGER" ] && SMARTLESS_PAGER='less'
 
-# TODO: honor LESSOPEN ...
-
 # the default arguments to the pager
 [ -z "$SMARTLESS_PAGER_ARGUMENTS" ] && SMARTLESS_PAGER_ARGUMENTS='-iR'
 
@@ -99,8 +97,15 @@ if (( isfile > 1 )); then
 fi
 
 if (( isfile == 1 )); then
-  "${BASH_SOURCE[0]}" "${args[@]}" < "${file}"
-  exit $?
+  # if LESSOPEN is defined then try to use it ...
+  if [[ -n "$LESSOPEN" ]]; then
+    lpcmd=$(echo $LESSOPEN | sed 's/ %s//' | sed 's/|-/|/' | sed 's/||/|/' | awk -F\| '{print $2}')
+    ${lpcmd} ${file} | "${BASH_SOURCE[0]}" "${args[@]}"
+    exit $?
+  else
+    "${BASH_SOURCE[0]}" "${args[@]}" < "${file}"
+    exit $?
+  fi
 fi
 
 # Cleanup -H or --hold-pollute
