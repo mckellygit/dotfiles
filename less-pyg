@@ -2,6 +2,4 @@
 
 LESSOPEN='|pygmentize -f terminal -g %s'
 
-# NOTE: smartless does not support LESSOPEN ...
-
-\less $@
+smartless $@
