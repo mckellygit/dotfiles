@@ -3,7 +3,7 @@
 prefix = <Ctrl-s>
 
 prefix <arrow>          - navigate panes
-prefix <s>              - move to next pane (<C-s>)
+prefix <s>              - move to next pane (prefix <C-s>)
 prefix <Ctrl-z>         - toggle pane zoom
 Alt-<Down>,<Up>         - navigate to next, previous pane
 
@@ -17,18 +17,18 @@ Ctrl-Alt-<Space>        - navigate windows
 
 prefix <Ctrl-r>         - re-load tmux conf file
 
-prefix <z>              - fzf popup of files in cwd
+prefix <C-t>            - fzf popup of files in cwd
                             <C-\>      - toggle file preview
                             <C-k,j>    - preview up, down
                             <C-b,f>    - preview half-page up, down
                             <C-u,d>    - preview page up, down
                             <C-q>      - quit (<C-c>, <Esc>)
 
-prefix <q>              - fzf popup of cmd history
+prefix <C-r>            - fzf popup of cmd history
 
 prefix <.>              - copy cmdline to clipboard
 
-prefix <Ctrl-p>         - display pane ids
+prefix <n>              - display pane ids (prefix <C-n>)
 
 prefix <K>              - kill pane
 
@@ -48,6 +48,7 @@ prefix <|>              - vertical split new shell (prefix <C-\>)
 prefix <_>              - horizontal split new shell (prefix <C-->)
 
 prefix <->              - delete most recent tmux buffer
+prefix <=>              - choose buffer tree
 
 Shift-<F12>             - toggle function keys
 

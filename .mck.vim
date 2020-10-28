@@ -1510,6 +1510,7 @@ set shortmess-=s
 
 " toggle line wrap
 nnoremap <silent> <Leader>lw :silent set nowrap! nowrap?<CR>
+" there is also <Leader>lW for ALL windows - set below in diff section ...
 
 " ------------------------------
 
@@ -5217,8 +5218,8 @@ if &diff
   vmap  <silent> <Leader>qq <C-\><C-n>:qa<CR>
   aug diff_alias
       au!
-      au VimEnter * :Alias qa  cquit
-      au VimEnter * :Alias qa! cquit
+      au VimEnter * :Alias qa  call\ MyCQuit()
+      au VimEnter * :Alias qa! call\ MyCQuit()
   aug END
   " -----------
   " if no mods, then :x is like :q ...
@@ -5278,6 +5279,17 @@ endif
 if has("patch-8.1.0360")
   set diffopt+=internal,algorithm:patience
 endif
+
+" set wrap for vimdiff ...
+"au VimEnter * if &diff | execute 'windo setlocal wrap' | endif
+nnoremap <silent> <Leader>lW :silent windo setlocal nowrap! nowrap?<CR>
+
+function! MyCQuit()
+    " just to clear the cmdline of this function ...
+    echo " "
+    update
+    cquit 0
+endfunction
 
 " if want vimdiff to exit when files are equal
 "autocmd VimEnter * call Diffstart()

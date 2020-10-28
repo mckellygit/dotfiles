@@ -207,11 +207,11 @@ filter qf/ll entries
 -------------------------------------------------
 <S-Tab>    repeat last change (.)
 
-<C-a>      goto column 0    (0) (A-<Home>) (<Leader>l0)
-<C-e>      goto end of line ($) (A-<End>)
+<C-a>      goto beg of line (^) (<Leader>l1)
+<C-e>      goto end of line ($) (<Leader>l2)
 
-<Leader>la goto beg of line (^) (<Leader>l1)
-<Leader>la goto end of line ($) (<Leader>l2)
+<A-Home>   goto column 0    (0) (<Leader>l0)
+<A-End>    goto end of line ($)
 
 <C-S>Left  move 10 left
 <C-S>Right move 10 right
@@ -245,6 +245,7 @@ z<Down>    move selected line(s) down
 <Leader>cC toggle color syntax
 
 <Leader>lw toggle line wrap
+<Leader>lW toggle line wrap in ALL windows (ie vimdiff ...)
 
 <Leader>rg show registers in fzf list for selecting
 <Leader>lr copy reg * to system clipboard
