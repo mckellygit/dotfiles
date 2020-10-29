@@ -987,4 +987,6 @@ bindkey -s "\e," ","
 
 # --------------------
 
-fpath+=${ZDOTDIR:-~}/.zsh_functions
+#fpath+=${ZDOTDIR:-~}/.zsh_functions
+fpath=( ~/.zsh_functions "${fpath[@]}" )
+
