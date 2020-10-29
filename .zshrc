@@ -945,7 +945,15 @@ bindkey "\e[1;6F" forward-word
 # and C-S-Home to beg line
 bindkey "\e[1;6H" backward-word
 # terminals may have mapped C-S-/ to ^_/
-bindkey '^_/'  end-of-buffer-or-history
+# send break because end-of-history or kill-line dont reset history completely
+function ctrl-c-cmdline() {
+  if [[ $CURSOR != 0 || -n $BUFFER ]]
+  then
+      zle send-break
+  fi
+}
+zle -N ctrl-c-cmdline
+bindkey '^_/' ctrl-c-cmdline
 # terminals may have mapped C-S-<Space> to ^_<Space>
 bindkey '^_ ' noop
 # if we can get away with this ... just to keep cmdline quiet
@@ -955,7 +963,18 @@ bindkey '^^' noop
 # C-\
 bindkey '^\'   autosuggest-accept
 
-bindkey "\e/" noop
+bindkey -s "\e/" "/"
+
+function enter-cmdline() {
+  if [[ $CURSOR != 0 || -n $BUFFER ]]
+  then
+      zle accept-line
+  fi
+}
+zle -N enter-cmdline
+bindkey "\e<" enter-cmdline
+
+bindkey -s "\e," ","
 
 # Ctrl-Enter to execute suggestion
 #bindkey '^\n' autosuggest-execute
