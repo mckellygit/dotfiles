@@ -801,10 +801,25 @@ my-fzf-history-widget() {
   zle reset-prompt
   return $ret
 }
-zle     -N   my-fzf-history-widget
+zle -N my-fzf-history-widget
 
-# an unusual and vim harmless mapping from tmux for prefix-/
+# an unusual and vim harmless mapping from tmux for M-"
 bindkey "\e\"" my-fzf-history-widget
+
+my-fzf-files-widget() {
+  local selected
+  selected=( $(fd --color always --hidden --follow --exclude ".git" . | $(my-fzfcmd)) )
+  local ret=$?
+  if [ -n "$selected" ]; then
+    zle -U "$selected"
+  fi
+  zle reset-prompt
+  return $ret
+}
+zle -N my-fzf-files-widget
+
+# an unusual and vim harmless mapping from tmux for M-_
+bindkey "\e_" my-fzf-files-widget
 
 # -----------------------
 

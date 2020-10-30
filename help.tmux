@@ -3,8 +3,8 @@
 prefix = Ctrl-<s>
 
 prefix <arrow>          - navigate panes
-prefix Ctrl-<s>         - move to next pane (prefix <s> prev pane)
-prefix Ctrl-<z>         - toggle pane zoom (<z>)
+prefix <s>              - move to next pane (prefix Ctrl-<s> prev pane)
+prefix <z>              - toggle pane zoom (prefix Ctrl-<z>)
 Alt-<Up>,<Down>         - move to next, previous pane
 
 Alt-Shift-<arrow>       - resize panes
@@ -14,7 +14,7 @@ Alt-<Left>,<Right>      - move to next, prev window
 Ctrl-Alt-<BS>           - move to next window
 Ctrl-Alt-<Space>        - move to prev window (Ctrl-Alt-<=>)
 
-prefix Ctrl-<q>         - re-load tmux conf file (prefix <q>)
+prefix <q>              - re-load tmux conf file (prefix Ctrl-<q>)
 
 prefix Ctrl-<t>         - fzf popup of files in cwd
                             Ctrl-<\>      - toggle file preview
@@ -27,11 +27,14 @@ prefix Ctrl-<r>         - fzf popup of cmd history
 
 prefix <.>              - copy cmdline to clipboard
 
-prefix Ctrl-<n>         - display pane ids (prefix <n>)
+prefix <n>              - display pane ids (prefix Ctrl-<n>)
 
 prefix <K>              - kill pane
+prefix <S>              - kill server
+prefix Ctrl-<d>         - detach client
+prefix <D>              - choose-client
 
-prefix <w>              - tmux pane list
+prefix <w>              - tmux pane list (prefix Ctrl-<w>)
 prefix <y>              - fzf popup window list
 prefix <u>              - fzf popup pane list
 
