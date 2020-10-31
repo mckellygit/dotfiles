@@ -1624,6 +1624,9 @@ nnoremap <silent> <Leader>rg :call <SID>Myregfzf()<CR>
 " if added changes to search.c to ui_delay() after give_warning()
 "set matchtime=3
 
+" no incremental search ...
+set noincsearch
+
 " make n always search forward and N backward
 vnoremap <expr> n 'Nn'[v:searchforward]
 vnoremap <expr> N 'nN'[v:searchforward]
