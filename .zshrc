@@ -57,6 +57,9 @@ trap "if [[ -n \"$HISTFILE\" ]] ; then merge_zhist ; rm -f $HISTFILE; fi" SIGTER
 
 unsetopt beep
 
+# allow # on command line
+setopt interactivecomments
+
 # Esc to get into vi edit mode
 bindkey -v
 
@@ -1000,6 +1003,20 @@ function enter-cmdline() {
 }
 zle -N enter-cmdline
 bindkey "\e<" enter-cmdline
+
+function copy-cmdline() {
+    if [[ $CURSOR != 0 || -n $BUFFER ]]
+    then
+        whence -cp grab_cmdline >/dev/null 2>&1
+        rc=$?
+        if [[ $rc == 0 ]]
+        then
+            echo -n "$BUFFER" | grab_cmdline
+        fi
+    fi
+}
+zle -N copy-cmdline
+bindkey "\e=" copy-cmdline
 
 bindkey -s "\e," ","
 
