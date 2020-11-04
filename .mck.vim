@@ -607,7 +607,7 @@ if 0 " use vim popup ...
 else
 if &term =~ "^screen" || &term =~ "^tmux"
     " use tmux popup ...
-    let g:fzf_layout = { 'tmux': '-p -x C -y C -w 80% -h 65%' }
+    let g:fzf_layout = { 'tmux': '-p -x C -y 38% -w 80% -h 65%' }
 else
     " use vim split ...
     let g:fzf_layout = { 'down': '~45%' }
@@ -773,7 +773,7 @@ function s:Mylsfzf(arg) abort
     call fzf#run({
 \       'source' : reverse(<sid>buflist(a:arg)),
 \       'sink'   : function('s:bufopen'),
-\       'window' : { 'width': 0.8, 'height': 0.4, 'yoffset': 0.7, 'xoffset': 0.6 }
+\       'window' : { 'width': 0.8, 'height': 0.4, 'yoffset': 0.5, 'xoffset': 0.5 }
 \   })
 endfunction
 
@@ -1606,7 +1606,7 @@ function s:Myregfzf() abort
     call fzf#run({
 \       'source' : <sid>reglist(),
 \       'sink'   : function('s:MyregfzfCB'),
-\       'window' : { 'width': 0.8, 'height': 0.4, 'yoffset': 0.7, 'xoffset': 0.6 }
+\       'window' : { 'width': 0.8, 'height': 0.4, 'yoffset': 0.5, 'xoffset': 0.5 }
 \   })
 endfunction
 

@@ -1,0 +1,16 @@
+#!/bin/bash
+
+cmdline=`cat`
+
+if [[ -z "$cmdline" ]]
+then
+    exit
+fi
+
+echo -n "$cmdline" | tmux load-buffer -
+
+echo -n "$cmdline" | myclip
+
+tmux display-message "copied cmdline to clipboard"
+
+

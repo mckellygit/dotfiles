@@ -603,7 +603,7 @@ git() { if [[ $1 == "diff" ]]; then shift ; command git dless "$@" ; elif [[ $1 
 # ------------------
 
 # -x S -y R are not supported values
-alias fzf='fzf-tmux -p -x C -y C -w 80% -h 65%'
+alias fzf='fzf-tmux -p -x C -y 38 -w 80% -h 65%'
 
 # to use tmux window instead of popup, add -d arg
 # ls -l | fzf -d
@@ -799,7 +799,7 @@ _fzf_compgen_dir() {
 
 my-fzfcmd() {
   [ -n "$TMUX_PANE" ] &&
-    echo "fzf-tmux -p -x C -y C -w 80% -h 65% " || echo "fzf --height 50% "
+    echo "fzf-tmux -p -x C -y 38 -w 80% -h 65% " || echo "fzf --height 50% "
 }
 
 my-fzf-history-widget() {
