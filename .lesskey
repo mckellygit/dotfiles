@@ -8,4 +8,6 @@
 \340 forw-line
  back-line
 \e\n back-line
+\e back-line
+\e\  forw-line
 \e\e quit

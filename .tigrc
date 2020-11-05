@@ -62,6 +62,9 @@ bind generic   <PageUp>     move-page-up
 bind generic   <Ctrl-J>     scroll-line-down
 bind generic   <Ctrl-K>     scroll-line-up
 #
+bind generic   <Ctrl-[><Space>      scroll-line-down
+bind generic   <Ctrl-[><BackSpace>  scroll-line-up
+#
 bind generic   <Space>              next
 bind generic   <Ctrl-@>             move-down
 bind generic   <Backspace>          previous
@@ -70,10 +73,14 @@ bind generic   <Ctrl-^><Backspace>  move-up
 bind generic   <Tab>        next
 bind generic   <ShiftTab>   previous
 #
+# special ncurses codes and keynames added
+bind generic   <kDN5>       scroll-line-down
+bind generic   <kUP5>       scroll-line-up
+#
 # <ScrollFwd> == <S-Down>
-bind generic   <ScrollFwd>  scroll-line-down
+bind generic   <ScrollFwd>  next
 # <ScrollBack> == <S-Up>
-bind generic   <ScrollBack> scroll-line-up
+bind generic   <ScrollBack> previous
 #
 bind generic   -            none
 bind main      C            none

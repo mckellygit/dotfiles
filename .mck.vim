@@ -2140,7 +2140,8 @@ call <SID>MapFastKeycode('<C-S-PageDown>', "\e[6;6~", 125)
 call <SID>MapFastKeycode('<A-PageDown>',   "\e[6;3~", 126)
 " <A-S-PageDown>
 
-" NOTE: addl mappings start at <S-F31> 131 ...
+" NOTE: addl mappings start at <S-F29> 129 ...
+"       so we have 127, 128 left
 
 " ------------------------------
 
@@ -2903,7 +2904,7 @@ nmap <silent> <C-3-LeftMouse> mvviWty:call <SID>Delay(1)<CR><Esc>
 nmap <silent> <C-4-LeftMouse> mvVty:call <SID>Delay(1)<CR><Esc>
 
 " NOTE: tmux maps C-Triple to M-c to be able to know its a triple-click ...
-call <SID>MapFastKeycode('<S-F32>',  "\ec", 132)
+call <SID>MapFastKeycode('<S-F32>',  "\eC", 132)
 nmap <silent> <S-F32> mvviWty:call <SID>Delay(1)<CR><Esc>
 vmap <silent> <S-F32> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
 imap <silent> <expr> <S-F32> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>'
@@ -2974,7 +2975,7 @@ nmap <silent> <A-3-LeftMouse> mvviWty:call <SID>Delay(1)<CR><Esc>
 nmap <silent> <A-4-LeftMouse> mvVty:call <SID>Delay(1)<CR><Esc>
 
 " NOTE: tmux maps A-Triple to M-b to be able to know its a triple-click ...
-call <SID>MapFastKeycode('<S-F33>',  "\eb", 133)
+call <SID>MapFastKeycode('<S-F33>',  "\eB", 133)
 nmap <silent> <S-F33> mvviWty:call <SID>Delay(1)<CR><Esc>
 vmap <silent> <S-F33> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
 imap <silent> <expr> <S-F33> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>'
@@ -3179,6 +3180,13 @@ nnoremap <silent> Y y$
 call <SID>MapFastKeycode('<S-F31>',  "\e\<Return>", 131)
 "vmap <silent> <S-F31> mvty`v
 noremap <silent> <buffer> <S-F31> gk
+
+" <A-BS> is mapped to \eX in tmux - scroll up one line ...
+call <SID>MapFastKeycode('<S-F30>',  "\eX", 130)
+noremap <silent> <buffer> <S-F30> <C-y>k
+" <A-Space> is mapped to \eY in tmux - scroll down one line ...
+call <SID>MapFastKeycode('<S-F29>',  "\eY", 129)
+noremap <silent> <buffer> <S-F29> <C-e>j
 
 " -------------------
 

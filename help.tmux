@@ -52,7 +52,16 @@ prefix <=>              - choose buffer tree
 
 Shift-<F12>             - toggle function keys
 
+prefix <Enter>          - toggle copy-mode
+prefix <BS>             - enter copy-mode
+prefix <PageUp>         - enter copy-mode
+
 In copy-mode:
+<Alt-BS>                - scroll up
+<Alt-Space>             - scroll down
+<Alt-Enter>             - move up
+<Enter>                 - move down
+<Ctrl-Alt-Enter>        - exit copy-mode
 2-click rt status       - exit copy-mode (also Ctrl-<q>)
 Ctrl-2-click rt status  - exit copy-mode and paste selection (Alt-2-click)
 

@@ -221,6 +221,11 @@ filter qf/ll entries
 <C-S-PgUp> scroll 10 up
 <C-S-PgDn> scroll 10 down
 
+<A-BS>     scroll up
+<A-Space>  scroll down
+
+<A-Return> move up (opposite of <Return> in normal mode)
+
 z<Left>    scroll horizontal 10 left
 z<Right>   scroll horizontal 10 right
 z<Up>      move selected line(s) up
