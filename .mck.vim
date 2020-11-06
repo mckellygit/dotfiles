@@ -3183,10 +3183,10 @@ noremap <silent> <buffer> <S-F31> gk
 
 " <A-BS> is mapped to \eX in tmux - scroll up one line ...
 call <SID>MapFastKeycode('<S-F30>',  "\eX", 130)
-noremap <silent> <buffer> <S-F30> <C-y>k
+noremap <silent> <expr> <S-F30> AtBot(0) ? '<C-y>' : '<C-y>k'
 " <A-Space> is mapped to \eY in tmux - scroll down one line ...
 call <SID>MapFastKeycode('<S-F29>',  "\eY", 129)
-noremap <silent> <buffer> <S-F29> <C-e>j
+noremap <silent> <expr> <S-F29> ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>j'
 
 " -------------------
 
