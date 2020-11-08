@@ -1,0 +1,119 @@
+#!/bin/bash
+
+if [[ -z "$TMUX" ]]
+then
+    exit
+fi
+
+if [[ $# -ne 2 ]]
+then
+    exit
+fi
+
+ox=$1
+oy=$2
+
+tmux send-keys C-a
+tmux send-keys C-e
+ex=$(tmux run "echo #{cursor_x}")
+ey=$(tmux run "echo #{cursor_y}")
+ex=$((ex-1))
+
+tmux send-keys C-a
+bx=$(tmux run "echo #{cursor_x}")
+by=$(tmux run "echo #{cursor_y}")
+
+num_lines=$((ey-by))
+
+#echo "ex = $ex"
+#echo "ey = $ey"
+#echo "bx = $bx"
+#echo "by = $by"
+
+#echo "num_lines = $num_lines"
+
+if [[ $num_lines -eq 0 ]]
+then
+    num_cols=$((ex-bx))
+    if [[ $num_cols -eq 0 ]]
+    then
+        exit 0
+    fi
+fi
+
+prev_mode=$(tmux run "echo #{mode-style}")
+tmux set -g mode-style "bg=default,fg=default"
+pane_changed_hook=$(tmux show-hooks -gw pane-mode-changed | awk '{for (i=2; i<=NF; i++) printf " "$i}')
+if [[ -n "$pane_changed_hook" ]]
+then
+    tmux set-hook -g pane-mode-changed ""
+fi
+tmux copy-mode -H
+tmux send-keys v
+
+if [[ $num_lines -eq 0 ]]
+then
+    num_cols=$((ex-bx))
+    tmux send-keys -XN $num_cols cursor-right
+    tmux send-keys -X copy-pipe-and-cancel "tmux wait -S pipe"
+    tmux wait pipe
+    tmux set-buffer -n cmdx
+    tmux show-buffer -b cmdx | tr -d '\n' | tmux load-buffer -
+    tmux show-buffer | myclip
+    tmux delete-buffer -b cmdx
+
+    # go back to orig oy ...
+    #num_cols=$((ox-bx))
+    #tmux send-keys -N $num_cols Right
+    tmux send-keys C-e
+
+    tmux set -g mode-style "$prev_mode"
+    tmux set-hook -g pane-mode-changed "$pane_changed_hook"
+    tmux display-message "copied cmdlne to clipboard"
+    exit 0
+fi
+
+# multi-line ...
+
+o_lines=$((oy-by))
+
+tx=0
+l=0
+while [[ $l -le $num_lines ]]
+do
+    if [[ $l -eq $num_lines ]]
+    then
+        num_cols=$ex
+        tmux send-keys -X end-of-line
+        tmux send-keys -X copy-pipe-and-cancel "tmux wait -S pipe"
+        tmux wait pipe
+        tmux set-buffer -n cmdx
+        tmux show-buffer -b cmdx | tr -d '\n' | tmux load-buffer -
+        tmux show-buffer | myclip
+        tmux delete-buffer -b cmdx
+
+        # TODO: go back to orig ox, oy ...
+        #tx=$((tx+ox))
+        #mux send-keys -N $tx Right
+        #cho "tx = $tx"
+        tmux send-keys C-e
+
+        tmux set -g mode-style "$prev_mode"
+        tmux set-hook -g pane-mode-changed "$pane_changed_hook"
+        tmux display-message "copied cmdlne to clipboard"
+        exit 0
+    else
+        px=$(tmux run "echo #{copy_cursor_x}")
+        tmux send-keys -X end-of-line
+        mx=$(tmux run "echo #{copy_cursor_x}")
+        dx=$((mx-px))
+        tx=$((tx+mx))
+        tmux send-keys -X cursor-down
+        tmux send-keys -X cursor-right
+    fi
+    l=$((l+1))
+done
+
+tmux set -g mode-style "$prev_mode"
+exit 0
+
