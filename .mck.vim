@@ -1453,6 +1453,9 @@ endif
 " can prevent some strange chars in terminator ...
 set t_TI=
 set t_TE=
+" some terminals might want these also ...
+"set t_ti=
+"set t_te=
 
 "let g:solarized_termcolors=256
 "colorscheme solarized
