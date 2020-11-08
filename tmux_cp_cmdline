@@ -62,7 +62,7 @@ then
     tmux show-buffer | myclip
     tmux delete-buffer -b cmdx
 
-    # go back to orig oy ...
+    # TODO: MCK - back to orig oy ...
     #num_cols=$((ox-bx))
     #tmux send-keys -N $num_cols Right
     tmux send-keys C-e
@@ -92,7 +92,7 @@ do
         tmux show-buffer | myclip
         tmux delete-buffer -b cmdx
 
-        # TODO: go back to orig ox, oy ...
+        # TODO: MCK - back to orig ox, oy ...
         #tx=$((tx+ox))
         #mux send-keys -N $tx Right
         #cho "tx = $tx"
