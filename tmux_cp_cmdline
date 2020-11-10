@@ -35,7 +35,7 @@ num_lines=$((ey-by))
 if [[ $num_lines -eq 0 ]]
 then
     num_cols=$((ex-bx))
-    if [[ $num_cols -eq 0 ]]
+    if [[ $num_cols -lt 0 ]]
     then
         exit 0
     fi
