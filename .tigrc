@@ -73,9 +73,11 @@ bind generic   <Ctrl-^><Backspace>  move-up
 bind generic   <Tab>        next
 bind generic   <ShiftTab>   previous
 #
-# special ncurses codes and keynames added
-bind generic   <kDN5>       scroll-line-down
-bind generic   <kUP5>       scroll-line-up
+# extended ncurses codes and keynames
+bind generic   <Ctrl-Down>  scroll-line-down
+bind generic   <Ctrl-Up>    scroll-line-up
+#bind generic   <Alt-Down>   scroll-line-down
+#bind generic   <Alt-Up>     scroll-line-up
 #
 # <ScrollFwd> == <S-Down>
 bind generic   <ScrollFwd>  next
