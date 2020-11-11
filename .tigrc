@@ -74,17 +74,23 @@ bind generic   <Tab>        next
 bind generic   <ShiftTab>   previous
 #
 # extended ncurses codes and keynames
+#bind generic   <Esc>[1;5B   scroll-line-down
+#bind generic   <Esc>[1;5A   scroll-line-up
 bind generic   <Ctrl-Down>  scroll-line-down
 bind generic   <Ctrl-Up>    scroll-line-up
-bind generic   <Ctrl-Left>  scroll-left
-bind generic   <Ctrl-Right> scroll-right
-#bind generic   <Alt-Down>   scroll-line-down
-#bind generic   <Alt-Up>     scroll-line-up
+bind generic   <C-Left>     scroll-left
+bind generic   <C-Right>    scroll-right
+bind generic   <Alt-Down>   scroll-line-down
+bind generic   <Alt-Up>     scroll-line-up
+bind generic   <A-Left>     scroll-left
+bind generic   <A-Right>    scroll-right
 #
 # <ScrollFwd> == <S-Down>
 bind generic   <ScrollFwd>  next
 # <ScrollBack> == <S-Up>
 bind generic   <ScrollBack> previous
+bind main      <ShiftLeft>  scroll-left
+bind main      <ShiftRight> scroll-right
 #
 bind generic   -            none
 bind main      C            none

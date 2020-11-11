@@ -10,6 +10,13 @@ then
     echo "fatal: not a git repository (or any of the parent directories): .git"
     exit 1
 fi
+
+# if stdout is not a terminal its probably been redirected, so skip pager ...
+if [ ! -t 1 ] ; then
+    git --no-pager diff $1 $2 $3 $4
+    exit
+fi
+
 # the +k was to go up one line and force a redraw at the top of the terminal ...
 # use -c~ instead ...
 # git --no-pager diff --color=always $1 $2 $3 $4 |& less -iR -K -x4 -c~
