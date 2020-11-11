@@ -76,6 +76,8 @@ bind generic   <ShiftTab>   previous
 # extended ncurses codes and keynames
 bind generic   <Ctrl-Down>  scroll-line-down
 bind generic   <Ctrl-Up>    scroll-line-up
+bind generic   <Ctrl-Left>  scroll-left
+bind generic   <Ctrl-Right> scroll-right
 #bind generic   <Alt-Down>   scroll-line-down
 #bind generic   <Alt-Up>     scroll-line-up
 #
