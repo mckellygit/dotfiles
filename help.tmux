@@ -5,12 +5,10 @@ prefix = Ctrl-<s>
 prefix <arrow>          - navigate panes
 prefix <s>              - move to next pane (prefix Ctrl-<s> prev pane)
 prefix <z>              - toggle pane zoom (prefix Ctrl-<z>)
-Alt-<Up>,<Down>         - move to next, previous pane
 
 Alt-Shift-<arrow>       - resize panes
 Drag on window border   - resize panes
 
-Alt-<Left>,<Right>      - move to next, prev window
 Ctrl-Alt-<BS>           - move to next window
 Ctrl-Alt-<Space>        - move to prev window (Ctrl-Alt-<=>)
 
@@ -38,8 +36,8 @@ prefix <w>              - tmux pane list (prefix Ctrl-<w>)
 prefix <y>              - fzf popup window list
 prefix <u>              - fzf popup pane list
 
-Ctrl-Shift-<[>          - cmd history down (<Up>)
-Ctrl-Shift-<]>          - cmd history up   (<Down>)
+Ctrl-Shift-<]>          - cmd history up   (<Up>)
+Ctrl-Shift-<[>          - cmd history down (<Down>)
 Ctrl-Shift-</>          - clear cmdline    (Ctrl-<c>)
 
 prefix Ctrl-<x>         - execute cmd (<Enter>)

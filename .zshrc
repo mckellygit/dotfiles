@@ -995,6 +995,9 @@ bindkey '^\'   autosuggest-accept
 
 bindkey -s "\e/" "/"
 
+# Shift-Tab sometimes is ^[[Z - wierd
+bindkey "\e[Z" noop
+
 function enter-cmdline() {
   if [[ $CURSOR != 0 || -n $BUFFER ]]
   then

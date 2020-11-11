@@ -1990,8 +1990,18 @@ set ttimeout ttimeoutlen=7
 "set esckeys
 
 " use <S-Tab> as a left-handed . (dot) ...
-nnoremap <S-Tab> .
-vnoremap <S-Tab> .
+"nnoremap <S-Tab> .
+"vnoremap <S-Tab> .
+" SKIP: for now use <A-1> (S-F28) and along with that use
+"       <A-Up/Down/Right/Left> as app keys and not tmux ...
+
+nnoremap <buffer> <Tab> 4l
+vnoremap <buffer> <Tab> 4l
+
+" <S-Tab> as an undo or as a 4h ?
+nnoremap <buffer> <S-Tab> u
+vnoremap <buffer> <S-Tab> u
+
 " s/S is confusing, use cl/cc instead
 nnoremap s <Nop>
 vnoremap s <Nop>
@@ -2106,7 +2116,7 @@ endfunction
 call <SID>MapFastKeycode('<C-Insert>',     "\e[2;5~", 33)
 call <SID>MapFastKeycode('<S-Insert>',     "\e[2;2~", 34)
 call <SID>MapFastKeycode('<C-S-Insert>',   "\e[2;6~", 35)
-" NOTE: <A-Insert> used by tmux for copyq toggle
+" NOTE: <A-Insert> used by tmux/gnome for copyq toggle
 "call <SID>MapFastKeycode('<A-Insert>',     "\e[2;3~", xx)
 "call <SID>MapFastKeycode('<A-S-Insert>',   "\e[2;4~", xx)
 
@@ -2143,8 +2153,14 @@ call <SID>MapFastKeycode('<C-S-PageDown>', "\e[6;6~", 125)
 call <SID>MapFastKeycode('<A-PageDown>',   "\e[6;3~", 126)
 " <A-S-PageDown>
 
-" NOTE: addl mappings start at <S-F29> 129 ...
-"       so we have 127, 128 left
+" NOTE: addl mappings start at <S-F28> 128 ...
+"       so we have 127 left plus what is not used above ...
+
+" This used to be <S-Tab> but <A-1> seems better.
+" And with this, use <A-Up/Down/Right/Left> as app keys and not tmux ...
+call <SID>MapFastKeycode('<S-F28>', "\e1", 128)
+nmap <S-F28> .
+vmap <S-F28> .
 
 " ------------------------------
 
@@ -5543,13 +5559,13 @@ endfunction
 
 tnoremap <silent> <C-d> <C-w>:call <SID>TermQuit()<CR>
 
-" NOTE: tmux uses these to navigate windows (prev, next)
-noremap  <A-Left>  <Nop>
-noremap  <A-Right> <Nop>
+" NOTE: tmux used to use these to navigate windows (prev, next)
+noremap  <A-Left>  <Left>
+noremap  <A-Right> <Right>
 inoremap <A-Left>  <Nop>
 inoremap <A-Right> <Nop>
 
-" NOTE: M-Up, Down are available ...
+" NOTE: M-Up, Down are available ... not really
 noremap  <A-Up>    <Up>
 noremap  <A-Down>  <Down>
 inoremap <A-Up>    <Nop>
