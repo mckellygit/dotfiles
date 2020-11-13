@@ -1,6 +1,6 @@
 " Vim syntax file
 " Language:    ECL
-" Maintainer:    Mark Kelly <mark.kelly@lexisnexisrisk.com>
+" Maintainer:    Mark Kelly
 
 " quit when a syntax file was already loaded
 if exists("b:current_syntax")
