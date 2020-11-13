@@ -1,0 +1,43 @@
+#!/bin/bash
+
+gdir=""
+gdir=$(git rev-parse --show-superproject-working-tree 2> /dev/null)
+if [[ -z "${gdir}" ]]; then
+    gdir=$(git rev-parse --show-toplevel 2> /dev/null)
+fi
+if [[ -z "$gdir" ]]
+then
+    echo "fatal: not a git repository (or any of the parent directories): .git"
+    exit 1
+fi
+
+if [[ $# -lt 1 ]]
+then
+    name=$(git config --get user.name 2>/dev/null)
+    email=$(git config --get user.email 2>/dev/null)
+    if [[ -z "$name" && -z "$email" ]]
+    then
+        echo "warning: no git identity name/email found, choices are:"
+        grep -A 2 "\[user \"" ~/.gitconfig
+        exit 0
+    else
+        echo "name:  $name"
+        echo "email: $email"
+        git var -l | grep '^GIT_.*_IDENT'
+        exit 0
+    fi
+fi
+
+list=$(grep "\[user \"" ~/.gitconfig | awk -F\" '{print $2}')
+while read -r idx
+do
+    if [[ "$1" == "${idx}" ]] ; then
+        git config user.name "$(git config user.$1.name)"; git config user.email "$(git config user.$1.email)"; :
+        exit
+    fi
+done <<< "$list"
+
+echo "fatal: git identity: $1 not found in ~/.gitconfig"
+exit 1
+
+

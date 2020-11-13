@@ -1,6 +1,3 @@
-[user]
-	name = My Name
-	email = My Email Address
 [core]
 	autocrlf = input
 	whitespace = trailing-space,tab-in-indent
@@ -13,6 +10,8 @@
 	helper = cache --timeout=9600
 [checkout]
     defaultRemote = upstream
+[color]
+    ui = on
 [color "status"]
     added = 2
     changed = 160
@@ -67,6 +66,8 @@
     smu = !git submodule update --init --recursive
 #   parent = "!f() { c=$(git log --first-parent | grep commit | head -n 2 | tail -n 1 | awk '{print $2}'); git branch --contains $c; }; f"
     parent = !git log --first-parent --graph
+    whoami = "! git var -l | grep '^GIT_.*_IDENT'"
+    set-ident = "! git config user.name \"$(git config user.$1.name)\"; git config user.email \"$(git config user.$1.email)\"; :"
 #   ls = whatchanged
 #   git show - to describe last commit ...
 #   ls-changes = !git diff HEAD~1 --name-only
@@ -83,3 +84,11 @@
 	prune = true
 [pull]
     rebase = false
+[user]
+    useConfigOnly = true
+[user "ident1"]
+    name = My Name1
+    email = my email address1
+[user "ident2"]
+    name = My Name2
+    email = my email address2
