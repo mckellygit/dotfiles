@@ -1,6 +1,23 @@
+Host github.com
+    ForwardX11 no
+    ServerAliveInterval 120
+    ServerAliveCountMax 5
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_rsa
+
+Host github.com-mckelly
+    ForwardX11 no
+    ServerAliveInterval 120
+    ServerAliveCountMax 5
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_rsa_mckelly
+
 Host *
     ServerAliveInterval 120
     ServerAliveCountMax 5
     ForwardX11 yes
     ForwardX11Trusted yes
+    ForwardAgent yes
     HashKnownHosts no

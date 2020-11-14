@@ -4138,10 +4138,39 @@ if has("autocmd")
  "  autocmd BufReadPost * if line("'\"") && line("'\"") <= line("$") | exe "keepjumps normal `\"" | endif
  "endif
 
+ function! s:CheckDir()
+     let fname = expand("%:p")
+     if fname =~ "^fugitive://"
+         return
+     elseif fname =~ ".fugitiveblame"
+         return
+     elseif fname =~ "^git://"
+         return
+     endif
+     let dname = expand("%:p:h")
+     if !isdirectory(dname)
+         echo '"' . dname . '" dir does not exist, create? (y/n): '
+         let c = getchar()
+         while type(c) != 0
+             let c = getchar()
+         endwhile
+         let ans=nr2char(c)
+         if ans ==# 'y' || ans ==# 'Y'
+             "TODO mkdir -p dname ...
+             echom "mkdir " . dname " ..."
+         else
+             call <SID>ConfNextOrQuit()
+         endif
+     else
+         return
+     endif
+ endfunction
+
  " clear all jumps when starting new edit
  aug VimStartup
    au!
    autocmd VimEnter * :clearjumps
+   "autocmd BufWinEnter * call <SID>CheckDir()
  aug END
 
 endif " has("autocmd")
@@ -5244,8 +5273,8 @@ if &diff
   cnoreabbrev <silent> <expr> exi (getcmdtype() == ':' && getcmdline() =~ '\s*exi\s*') ? 'cquit' : 'exi'
   cuna exit
   cnoreabbrev <silent> <expr> exit (getcmdtype() == ':' && getcmdline() =~ '\s*exit\s*') ? 'cquit' : 'exit'
-  nmap  <silent> <Leader>qq           :qa<CR>
-  vmap  <silent> <Leader>qq <C-\><C-n>:qa<CR>
+  nmap  <silent> <Leader>qq           :conf q<CR>
+  vmap  <silent> <Leader>qq <C-\><C-n>:conf q<CR>
   aug diff_alias
       au!
       au VimEnter * :Alias qa  call\ MyCQuit()
@@ -5358,7 +5387,6 @@ function s:NextOrQuit() abort
     " just to clear the cmdline of this function ...
     echo " "
     update
-    " TODO: is it possible to check if buf has changed and prompt to save now instead of after all files ?
     try
         next
     catch /E163:/
@@ -5368,9 +5396,34 @@ function s:NextOrQuit() abort
     endtry
 endfunction
 
+function s:ConfNextOrQuit() abort
+    " check if buf has changed and prompt to save now instead of after all files ?
+    if &modified
+        echo "Buffer " . bufname("") . " modified, save now? (y/n): "
+        let c = getchar()
+        while type(c) != 0
+            let c = getchar()
+        endwhile
+        let ans=nr2char(c)
+        if ans ==# 'y' || ans ==# 'Y'
+            update
+        endif
+    else
+        " just to clear the cmdline of this function ...
+        echo " "
+    endif
+    try
+        next
+    catch /E163:/
+        conf q
+    catch /E165:/
+        conf q
+    endtry
+endfunction
+
 if !&diff
     cnoreabbrev <silent> <expr> x (getcmdtype() == ':' && getcmdline() =~ '\s*x\s*')  ? 'call <SID>NextOrQuit()' : 'x'
-    noremap <silent> <Leader>nf :call <SID>NextOrQuit()<CR>
+    noremap <silent> <Leader>nf :call <SID>ConfNextOrQuit()<CR>
 endif
 
 " could also look into autowrite for :n to write (if modified) ...
@@ -5496,8 +5549,12 @@ vnoremap <silent> <Leader>tk <C-\><C-n>:tabonly<CR>
 "vnoremap <silent> <Leader>wc <C-\><C-n>:conf q<CR>
 nnoremap <silent> <Leader>wq           :conf q<CR>
 vnoremap <silent> <Leader>wq <C-\><C-n>:conf q<CR>
-nmap <silent> <Leader>qq           :conf q<CR>:<CR>
-vmap <silent> <Leader>qq <C-\><C-n>:conf q<CR>:<CR>
+"nmap <silent> <Leader>qq           :conf q<CR>:<CR>
+"vmap <silent> <Leader>qq <C-\><C-n>:conf q<CR>:<CR>
+if !&diff
+    nmap <silent> <Leader>qq           :call <SID>ConfNextOrQuit()<CR>
+    vmap <silent> <Leader>qq <C-\><C-n>:call <SID>ConfNextOrQuit()<CR>
+endif
 " window keep current and close all others
 nnoremap <silent> <Leader>wk           :only<CR>
 vnoremap <silent> <Leader>wk <C-\><C-n>:only<CR>
