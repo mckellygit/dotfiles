@@ -509,7 +509,10 @@ bindkey '^d' bash-ctrl-d
 setopt NO_HUP
 #setopt NO_CHECK_JOBS
 
-export KEYTIMEOUT=1
+export KEYTIMEOUT=5
+
+# fzf
+export ESCDELAY=100
 
 # --------------------
 
