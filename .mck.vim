@@ -4138,33 +4138,33 @@ if has("autocmd")
  "  autocmd BufReadPost * if line("'\"") && line("'\"") <= line("$") | exe "keepjumps normal `\"" | endif
  "endif
 
- function! s:CheckDir()
-     let fname = expand("%:p")
-     if fname =~ "^fugitive://"
-         return
-     elseif fname =~ ".fugitiveblame"
-         return
-     elseif fname =~ "^git://"
-         return
-     endif
-     let dname = expand("%:p:h")
-     if !isdirectory(dname)
-         echo '"' . dname . '" dir does not exist, create? (y/n): '
-         let c = getchar()
-         while type(c) != 0
-             let c = getchar()
-         endwhile
-         let ans=nr2char(c)
-         if ans ==# 'y' || ans ==# 'Y'
-             "TODO mkdir -p dname ...
-             echom "mkdir " . dname " ..."
-         else
-             call <SID>ConfNextOrQuit()
-         endif
-     else
-         return
-     endif
- endfunction
+ "function! s:CheckDir()
+ "    let fname = expand("%:p")
+ "    if fname =~ "^fugitive://"
+ "        return
+ "    elseif fname =~ ".fugitiveblame"
+ "        return
+ "    elseif fname =~ "^git://"
+ "        return
+ "    endif
+ "    let dname = expand("%:p:h")
+ "    if !isdirectory(dname)
+ "        echo '"' . dname . '" dir does not exist, create? (y/n): '
+ "        let c = getchar()
+ "        while type(c) != 0
+ "            let c = getchar()
+ "        endwhile
+ "        let ans=nr2char(c)
+ "        if ans ==# 'y' || ans ==# 'Y'
+ "            "TODO mkdir -p dname ...
+ "            echom "mkdir " . dname " ..."
+ "        else
+ "            call <SID>ConfNextOrQuit()
+ "        endif
+ "    else
+ "        return
+ "    endif
+ "endfunction
 
  " clear all jumps when starting new edit
  aug VimStartup

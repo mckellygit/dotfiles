@@ -1,8 +1,8 @@
 [com/ubuntu/update-notifier]
-release-check-time=uint32 1602163126
+release-check-time=uint32 1605794240
 
 [io/github/Pithos]
-last-station-id='2943743822804062759'
+last-station-id='3862749000310231591'
 email='my email address'
 pandora-one=true
 volume=1.0
@@ -45,10 +45,16 @@ sleep-inactive-ac-type='suspend'
 sleep-inactive-battery-timeout=900
 
 [org/gnome/settings-daemon/plugins/color]
-night-light-schedule-automatic=false
+night-light-schedule-automatic=true
 night-light-schedule-to=0.0
 night-light-schedule-from=6.0
-night-light-enabled=false
+night-light-enabled=true
+night-light-temperature=uint32 5500
+
+[org/gnome/settings-daemon/plugins/media-keys]
+volume-mute='<Primary><Alt>slash'
+volume-down='<Primary><Alt>comma'
+volume-up='<Primary><Alt>period'
 
 [org/gnome/settings-daemon/plugins/xsettings]
 hinting='slight'
@@ -60,7 +66,7 @@ numlock-state='on'
 app-picker-view=uint32 1
 command-history=['r']
 enabled-extensions=['sound-output-device-chooser@kgshank.net', 'clipboard-indicator@tudmotu.com']
-favorite-apps=['org.gnome.Nautilus.desktop', 'rhythmbox.desktop', 'io.github.Pithos.desktop', 'libreoffice-writer.desktop', 'org.gnome.Software.desktop', 'update-manager.desktop', 'teams-insiders.desktop', 'code.desktop', 'google-chrome.desktop', 'org.remmina.Remmina.desktop', 'vivaldi-stable.desktop', 'firefox.desktop', 'nixnote2.desktop', 'Alacritty.desktop', 'rxvt-unicode.desktop', 'simple-scan.desktop']
+favorite-apps=['org.gnome.Nautilus.desktop', 'rhythmbox.desktop', 'io.github.Pithos.desktop', 'libreoffice-writer.desktop', 'org.gnome.Software.desktop', 'update-manager.desktop', 'yelp.desktop', 'teams-insiders.desktop', 'code.desktop', 'google-chrome.desktop', 'org.remmina.Remmina.desktop', 'vivaldi-stable.desktop', 'firefox.desktop', 'nixnote2.desktop', 'Alacritty.desktop', 'rxvt-unicode.desktop', 'simple-scan.desktop']
 
 [org/gnome/shell/extensions/sound-output-device-chooser]
 icon-theme='colored'
@@ -95,7 +101,7 @@ search-filter-time-type='last_modified'
 
 [org/gnome/nautilus/window-state]
 sidebar-width=244
-geometry='2321x873+36+32'
+geometry='2321x1289+36+32'
 maximized=false
 
 [org/gnome/nautilus/desktop]
@@ -110,7 +116,7 @@ info-last-device='wakeups'
 info-page-number=3
 
 [org/gnome/evince/default]
-window-ratio=(3.3484543010752685, 2.0708582834331337)
+window-ratio=(3.3501344086021501, 1.6145235361653272)
 
 [org/gnome/file-roller/listing]
 sort-method='name'
@@ -304,7 +310,7 @@ sources=[('xkb', 'us')]
 xkb-options=['ctrl:nocaps']
 
 [org/gnome/simple-scan]
-save-directory='/home/kellma02/Downloads'
+save-directory='/home/kellma02/pCloudDrive/hal9009/Documents/misc/LakeviewManchester/rocket'
 photo-dpi=600
 text-dpi=600
 document-type='text'
@@ -318,7 +324,7 @@ photo-x-resolution=640
 video-x-resolution=640
 
 [org/gnome/control-center]
-last-panel='keyboard'
+last-panel='display'
 
 [org/gnome/todo]
 view='grid'
@@ -400,12 +406,12 @@ center-new-windows=true
 experimental-features=['scale-monitor-framebuffer']
 
 [org/gnome/software]
-check-timestamp=int64 1602851211
+check-timestamp=int64 1605454203
 
 [org/gtk/settings/file-chooser]
 sort-column='name'
 sidebar-width=244
-window-position=(624, 303)
+window-position=(663, 338)
 show-size-column=true
 show-hidden=false
 window-size=(1231, 902)
@@ -424,6 +430,7 @@ display-sidebar=true
 photo-thumbnail-scale=360
 display-basic-properties=true
 display-photo-tags=true
+display-event-comments=false
 display-search-bar=false
 display-photo-titles=false
 show-welcome-dialog=false
@@ -469,14 +476,14 @@ saved-player-list=@as []
 
 [apps/update-manager]
 first-run=false
-launch-time=int64 1602674813
+launch-time=int64 1605058580
 window-height=400
 show-details=true
-launch-count=15
+launch-count=17
 window-width=1135
 
 [ca/desrt/dconf-editor]
-saved-view='/org/gnome/desktop/wm/keybindings/'
+saved-view='/org/gnome/settings-daemon/plugins/color/'
 window-height=1117
 window-width=1866
 window-is-maximized=false
