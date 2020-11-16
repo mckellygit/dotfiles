@@ -248,6 +248,9 @@ Plugin 'vim-utils/vim-man'
 " choosewin
 Plugin 't9md/vim-choosewin'
 "
+" floaterm
+Plugin 'voldikss/vim-floaterm'
+"
 "" All of your Plugins must be added before the following line
 call vundle#end()         " required
 filetype plugin indent on " required
@@ -602,7 +605,9 @@ let g:findroot_not_for_subdir = 1
 " findroot ------------
 
 " fzf -----------------
-if 0 " use vim popup ...
+if 1 " use vim popup ...
+    " NOTE: cannot use ctrl-\ key as vim terminal uses <C-\><C-n> to go into normal mode
+    "       (after <C-\> vim terminal always expects another key) ...
     let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.65, 'yoffset': 0.5, 'xoffset': 0.5 } }
 else
 if &term =~ "^screen" || &term =~ "^tmux"
@@ -614,7 +619,7 @@ else
 endif
 endif
 
-let g:fzf_preview_window = ['right:60%:hidden', 'ctrl-\']
+let g:fzf_preview_window = ['right:60%:hidden', 'ctrl-alt-p']
 
 autocmd VimEnter,BufEnter * silent! lcd %:p:h
 " add \fz mapping also
@@ -657,9 +662,9 @@ function! s:ag_inM1(bang, ...)
   if !isdirectory(gdir)
     throw 'not a valid directory: ' .. gdir
   endif
-  " Press `?' to enable preview window.
-  "call fzf#vim#ag(join(a:000[1:], ' '), fzf#vim#with_preview({'dir': a:1}, 'up:50%:hidden', '?'), a:bang)
-  call fzf#vim#ag(join(a:000[0:], ' '), fzf#vim#with_preview({'dir': gdir}, 'up:50%:hidden', 'p'), a:bang)
+  " Use 'ctrl-alt-p' to toggle preview window
+  "call fzf#vim#ag(join(a:000[1:], ' '), fzf#vim#with_preview({'dir': a:1}, 'up:50%:hidden', 'ctrl-alt-p'), a:bang)
+  call fzf#vim#ag(join(a:000[0:], ' '), fzf#vim#with_preview({'dir': gdir}, 'up:50%:hidden', 'ctrl-alt-p'), a:bang)
   " If you don't want preview option, use this
   " call fzf#vim#ag(join(a:000[1:], ' '), {'dir': a:1}, a:bang)
 endfunction
@@ -674,7 +679,7 @@ command! -bang -nargs=* Ag
 command! -bang -nargs=* Agit
   \ call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(<q-args>).' '.s:find_git_root(),
   \ 1,
-  \ fzf#vim#with_preview('up:50%:hidden', 'p'),
+  \ fzf#vim#with_preview('up:50%:hidden', 'ctrl-alt-p'),
   \ <bang>0)
 "
 " fzf env vars:
@@ -1226,19 +1231,22 @@ endfunction
 " vim-qf-preview ------
 augroup qfpreview
     autocmd!
-    autocmd FileType qf nmap <buffer> <C-\> <plug>(qf-preview-open)
-    autocmd FileType qf nmap <buffer> p     <plug>(qf-preview-open)
-    autocmd FileType qf nmap <buffer> P     <plug>(qf-preview-open)
-    autocmd FileType qf nmap <buffer> ?     <plug>(qf-preview-open)
+    " <S-F27> is terminal mapped to <C-A-p> above ...
+    autocmd FileType qf nmap <buffer> <S-F27> <plug>(qf-preview-open)
+    "autocmd FileType qf nmap <buffer> p     <plug>(qf-preview-open)
+    "autocmd FileType qf nmap <buffer> P     <plug>(qf-preview-open)
+    "autocmd FileType qf nmap <buffer> ?     <plug>(qf-preview-open)
     " C-/ (which is really <C-_>) - old fzf preview key
     " <C-_> used with another key so cannot use this alone without delay ...
     "autocmd FileType qf nmap <buffer> <C-_> <plug>(qf-preview-open)
 augroup END
+" Do we use <C-k>/<C-j> for scroll-up/down or <C-Up>/<C-Down> ?
+" NOTE: mappings here have to be a single key - cannot be an esc-code ...
 let g:qfpreview = {
     \ 'top'   : "\<C-Home>",
     \ 'bottom': "\<C-End>",
-    \ 'scrollup'  : "\<C-k>",
-    \ 'scrolldown': "\<C-j>",
+    \ 'scrollup'  : "\<C-Up>",
+    \ 'scrolldown': "\<C-Down>",
     \ 'halfpageup'  : "\<BS>",
     \ 'halfpagedown': "\<Space>",
     \ 'fullpageup'  : "\<C-b>",
@@ -1246,7 +1254,7 @@ let g:qfpreview = {
     \ 'next': "\<Down>",
     \ 'previous': "\<Up>",
     \ 'reset': "\<C-r>",
-    \ 'close': "\<C-\>",
+    \ 'close': "\<S-F27>",
     \ 'number': 1,
     \ 'height': 15,
     \ 'offset': 7,
@@ -1392,6 +1400,12 @@ let g:choosewin_overlay_enable = 1
 "nmap -          <Plug>(choosewin)
 nmap <Leader>sp <Plug>(choosewin)
 " choosewin --------
+
+" floaterm ---------
+let g:floaterm_autoclose = 2
+" NOTE: there is also <Leader>zs and <Leader>zt for terminals mapped above ...
+noremap <silent> <Leader>zf :FloatermToggle<CR>
+" floaterm ---------
 
 " annoying ...
 nmap - <Nop>
@@ -2153,14 +2167,19 @@ call <SID>MapFastKeycode('<C-S-PageDown>', "\e[6;6~", 125)
 call <SID>MapFastKeycode('<A-PageDown>',   "\e[6;3~", 126)
 " <A-S-PageDown>
 
-" NOTE: addl mappings start at <S-F28> 128 ...
-"       so we have 127 left plus what is not used above ...
+" NOTE: addl mappings start at <S-F27> 127 ...
+"       so we have what is not used above ...
 
 " This used to be <S-Tab> but <A-1> seems better.
 " And with this, use <A-Up/Down/Right/Left> as app keys and not tmux ...
 call <SID>MapFastKeycode('<S-F28>', "\e1", 128)
 nmap <S-F28> .
 vmap <S-F28> .
+
+" <C-A-p> for fzf preview ...
+call <SID>MapFastKeycode('<S-F27>', "\e", 127)
+" but unmap it in terminal so fzf can use it as ctrl-alt-p ...
+tnoremap <S-F27> <Esc><C-p>
 
 " ------------------------------
 
@@ -4537,7 +4556,7 @@ function s:MySearch(meth) abort
     "execute 'AsyncRun! -strip -cwd ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) ' 2>/dev/null'
     execute 'AsyncRun! -strip ag --vimgrep -U --hidden -- ' shellescape(string, 1) ' 2>/dev/null'
   elseif (a:meth == 3)
-    call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root(), 1, fzf#vim#with_preview('up:50%:hidden', 'p'), 0)
+    call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root(), 1, fzf#vim#with_preview('up:50%:hidden', 'ctrl-alt-p'), 0)
   elseif (a:meth == 4)
     call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1), 1, fzf#vim#with_preview(), 0)
   endif
@@ -4578,7 +4597,7 @@ function s:MyVisSearch(meth) abort
     "execute 'AsyncRun! -strip -cwd ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) ' 2>/dev/null'
     execute 'AsyncRun! -strip ag --vimgrep -U --hidden -- ' shellescape(string, 1) ' 2>/dev/null'
   elseif (a:meth == 3)
-    call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root(), 1, fzf#vim#with_preview('up:50%:hidden', 'p'), 0)
+    call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root(), 1, fzf#vim#with_preview('up:50%:hidden', 'ctrl-alt-p'), 0)
   elseif (a:meth == 4)
     call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1), 1, fzf#vim#with_preview(), 0)
   endif
@@ -5437,6 +5456,9 @@ vnoremap <silent> <Leader>zs <C-\><C-n>:terminal ++close ++norestore ++kill=term
 noremap <silent> zt <Nop>
 nnoremap <silent> <Leader>zt           :$tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
 vnoremap <silent> <Leader>zt <C-\><C-n>:$tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
+"
+" NOTE: there is also <Leader>zf for new floating terminal (floaterm)
+"
 " terminal in new tab when already in a terminal
 tnoremap <silent> <C-x>t <C-w>:$tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR>
 " window in new tab when already in a terminal
@@ -5614,7 +5636,8 @@ function! s:TermQuit()
     endtry
 endfunction
 
-tnoremap <silent> <C-d> <C-w>:call <SID>TermQuit()<CR>
+" DO NOT do this, it causes problems with popup shells ...
+"tnoremap <silent> <C-d> <C-w>:call <SID>TermQuit()<CR>
 
 " NOTE: tmux used to use these to navigate windows (prev, next)
 noremap  <A-Left>  <Left>

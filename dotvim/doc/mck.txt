@@ -5,8 +5,8 @@
 *mck-file*
 -------------------------------------------------
 <Leader>f. fzf list of current dir files (:Files)
-<Leader>f/ fzf list of project dir files (:Files <git-root>)
-<Leader>fz same as <Leader>f/
+<Leader>f/ fzf list of project dir files (:Files <git-root>) (<Leader>fz)
+    <C-A-p> toggle qf file preview
 <Leader>ls fzf list of buffers - open in new tab
 <Leader>hb hide buffer
 <Leader>fb FileBeagle current dir
@@ -97,6 +97,7 @@ sC         swap chars with char before (cS)
 :Ag   <string> [<root-dir>] {fzf/ag window}
 :Agit <string> (<root-dir> set to <git-root>) {fzf/ag window}
 :Files [<root-dir>]
+    <C-A-p> toggle qf file preview
 :GFiles
 :Buffers
 :Windows
@@ -104,9 +105,9 @@ sC         swap chars with char before (cS)
 
 In qf/ll window
 ---------------
-<C-\>    toggle preview window
+<C-A-p>  toggle preview window
 ?        open preview window
-<C-c>    close preview window (toggle: <C-\>)
+<C-c>    close preview window (toggle: <C-A-p>)
 <C-r>    reset to orig preview line
 <Down>   preview next qf/ll entry
 <Up>     preview prev qf/ll entry

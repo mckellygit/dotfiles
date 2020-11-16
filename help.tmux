@@ -15,11 +15,11 @@ Ctrl-Alt-<Space>        - move to prev window (Ctrl-Alt-<=>)
 prefix <q>              - re-load tmux conf file (prefix Ctrl-<q>)
 
 prefix Ctrl-<t>         - fzf popup of files in cwd
-                            Ctrl-<\>      - toggle file preview
-                            Ctrl-<k,j>    - preview up, down
-                            Ctrl-<b,f>    - preview half-page up, down
-                            Ctrl-<u,d>    - preview page up, down
-                            Ctrl-<q>      - quit (Ctrl-<c>, <Esc>)
+                            Ctrl-Alt-<p>   - toggle file preview
+                            Ctrl-<Up,Down> - preview up, down
+                            Ctrl-<b,f>     - preview half-page up, down
+                            Ctrl-<u,d>     - preview page up, down
+                            Ctrl-<q>       - quit (Ctrl-<c>, Ctrl-<g>, <Esc>)
 
 prefix Ctrl-<r>         - fzf popup of cmd history
 
