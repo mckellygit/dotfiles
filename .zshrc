@@ -756,7 +756,7 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # could make alt-c for dirs only (add -t d) - then it automatically chdir to there ...
 export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND -t d"
 # add --ansi because fd above uses --color=always ...
-export FZF_DEFAULT_OPTS='--ansi --preview "bat --style=numbers --color=always --line-range :250 {}" --bind="ctrl-alt-p:toggle-preview" --bind="ctrl-f:preview-half-page-down" --bind="ctrl-b:preview-half-page-up" --bind="ctrl-k:preview-up,ctrl-j:preview-down" --bind="ctrl-u:preview-page-up,ctrl-d:preview-page-down" --bind="page-up:page-up" --bind="page-down:page-down" --bind="alt-u:page-up" --bind="alt-d:page-down" --preview-window=right:hidden --color fg:242,bg:236,hl:65,fg+:15,bg+:239,hl+:108 --color info:108,prompt:109,spinner:108,pointer:168,marker:168'
+export FZF_DEFAULT_OPTS='--ansi --preview "bat --style=numbers --color=always --line-range :250 {}" --bind="ctrl-alt-p:toggle-preview" --bind="ctrl-f:preview-half-page-down" --bind="ctrl-b:preview-half-page-up" --bind="ctrl-k:preview-up,ctrl-j:preview-down" --bind="ctrl-u:preview-page-up,ctrl-d:preview-page-down" --bind="alt-bs:preview-up,alt-space:preview-down" --bind="page-up:page-up" --bind="page-down:page-down" --bind="alt-u:page-up" --bind="alt-d:page-down" --preview-window=right:hidden --color fg:242,bg:236,hl:65,fg+:15,bg+:239,hl+:108 --color info:108,prompt:109,spinner:108,pointer:168,marker:168'
 
 # Options to fzf command
 export FZF_COMPLETION_OPTS='+c -x'
@@ -993,8 +993,15 @@ bindkey '^_ ' noop
 bindkey '^_' noop
 bindkey '^^' noop
 # these all seem benign in vim ...
-# C-\
-bindkey '^\'   autosuggest-accept
+
+# C-\ - not a good key to use because in a terminal shell from vim
+#       this key is not sent - <C-\><C-n> is mapped to normal mode
+#       C-@ (C-Space) also does not work here ...
+#bindkey '^\'   autosuggest-accept
+bindkey '^\'   noop
+#bindkey "\e "  autosuggest-accept
+bindkey '^@^@' autosuggest-accept
+bindkey '^]'   autosuggest-accept
 
 bindkey -s "\e/" "/"
 

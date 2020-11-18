@@ -93,7 +93,8 @@ Plugin 'sk1418/QFGrep'
 "Plugin 'itchyny/vim-qfedit'
 "
 " qf preview popup
-Plugin 'bfrg/vim-qf-preview'
+Plugin 'mckelly2833/vim-qf-preview'
+"Plugin 'bfrg/vim-qf-preview'
 "Plugin 'ronakg/quickr-preview.vim'
 "Plugin 'skywind3000/vim-quickui'
 "
@@ -656,30 +657,30 @@ noremap <silent> <Leader>f. <C-\><C-n>:Files<CR>
 " Agit: Start ag in the git/root directory
 " e.g.
 "   :Agit foo
-function! s:ag_inM1(bang, ...)
-  let gdir = s:find_git_root()
-  "if !isdirectory(a:1)
-  if !isdirectory(gdir)
-    throw 'not a valid directory: ' .. gdir
-  endif
-  " Use 'ctrl-alt-p' to toggle preview window
-  "call fzf#vim#ag(join(a:000[1:], ' '), fzf#vim#with_preview({'dir': a:1}, 'up:50%:hidden', 'ctrl-alt-p'), a:bang)
-  call fzf#vim#ag(join(a:000[0:], ' '), fzf#vim#with_preview({'dir': gdir}, 'up:50%:hidden', 'ctrl-alt-p'), a:bang)
-  " If you don't want preview option, use this
-  " call fzf#vim#ag(join(a:000[1:], ' '), {'dir': a:1}, a:bang)
-endfunction
+"function! s:ag_inM1(bang, ...)
+"  let gdir = s:find_git_root()
+"  "if !isdirectory(a:1)
+"  if !isdirectory(gdir)
+"    throw 'not a valid directory: ' .. gdir
+"  endif
+"  " Use 'ctrl-alt-p' to toggle preview window
+"  "call fzf#vim#ag(join(a:000[1:], ' '), fzf#vim#with_preview({'dir': a:1}, 'up:50%:hidden', 'ctrl-alt-p'), a:bang)
+"  call fzf#vim#ag(join(a:000[0:], ' '), fzf#vim#with_preview({'dir': gdir}, 'up:50%:hidden', 'ctrl-alt-p'), a:bang)
+"  " If you don't want preview option, use this
+"  " call fzf#vim#ag(join(a:000[1:], ' '), {'dir': a:1}, a:bang)
+"endfunction
 "command! -bang -nargs=+ -complete=dir Agits call s:ag_inM1(<bang>0, <f-args>)
 "
 command! -bang -nargs=* Ag
   \ call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(<q-args>),
   \ 1,
-  \ fzf#vim#with_preview(),
+  \ fzf#vim#with_preview({'options': ['--bind=alt-d:page-down']}),
   \ <bang>0)
 "
 command! -bang -nargs=* Agit
   \ call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(<q-args>).' '.s:find_git_root(),
   \ 1,
-  \ fzf#vim#with_preview('up:50%:hidden', 'ctrl-alt-p'),
+  \ fzf#vim#with_preview({'options': ['--bind=alt-d:page-down']}, 'up:50%:hidden', 'ctrl-alt-p'),
   \ <bang>0)
 "
 " fzf env vars:
@@ -1232,33 +1233,43 @@ endfunction
 augroup qfpreview
     autocmd!
     " <S-F27> is terminal mapped to <C-A-p> above ...
+    " <S-F30> is terminal mapped to <A-BS> (via tmux for vim) ...
+    " <S-F29> is terminal mapped to <A-Space> (via tmux for vim) ...
     autocmd FileType qf nmap <buffer> <S-F27> <plug>(qf-preview-open)
-    "autocmd FileType qf nmap <buffer> p     <plug>(qf-preview-open)
-    "autocmd FileType qf nmap <buffer> P     <plug>(qf-preview-open)
-    "autocmd FileType qf nmap <buffer> ?     <plug>(qf-preview-open)
+    " NOTE: can not use <C-\> as that is reserved in terminal shell ...
     " C-/ (which is really <C-_>) - old fzf preview key
     " <C-_> used with another key so cannot use this alone without delay ...
     "autocmd FileType qf nmap <buffer> <C-_> <plug>(qf-preview-open)
 augroup END
 " Do we use <C-k>/<C-j> for scroll-up/down or <C-Up>/<C-Down> ?
 " NOTE: mappings here have to be a single key - cannot be an esc-code ...
+"       and for some as yet unknown reason <C-PageUp> and some others
+"       do not work here.  Just the <xUp> and <xHome> ...
 let g:qfpreview = {
-    \ 'top'   : "\<C-Home>",
-    \ 'bottom': "\<C-End>",
-    \ 'scrollup'  : "\<C-Up>",
-    \ 'scrolldown': "\<C-Down>",
-    \ 'halfpageup'  : "\<BS>",
-    \ 'halfpagedown': "\<Space>",
-    \ 'fullpageup'  : "\<C-b>",
-    \ 'fullpagedown': "\<C-f>",
-    \ 'next': "\<Down>",
-    \ 'previous': "\<Up>",
-    \ 'reset': "\<C-r>",
-    \ 'close': "\<S-F27>",
-    \ 'number': 1,
-    \ 'height': 15,
-    \ 'offset': 7,
-    \ 'sign': {'linehl': 'CursorLine'},
+    \ 'top'           : "\<C-Home>",
+    \ 'bottom'        : "\<C-End>",
+    \ 'scrollup'      : "\<C-k>",
+    \ 'scrollup2'     : "\<C-Up>",
+    \ 'scrollup3'     : "\<S-F30>",
+    \ 'scrolldown'    : "\<C-j>",
+    \ 'scrolldown2'   : "\<C-Down>",
+    \ 'scrolldown3'   : "\<S-F29>",
+    \ 'halfpageup'    : "\<BS>",
+    \ 'halfpageup2'   : "\<C-b>",
+    \ 'halfpagedown'  : "\<Space>",
+    \ 'halfpagedown2' : "\<C-f>",
+    \ 'fullpageup'    : "\<C-u>",
+    \ 'fullpagedown'  : "\<C-d>",
+    \ 'next'          : "\<Down>",
+    \ 'previous'      : "\<Up>",
+    \ 'reset'         : "\<C-r>",
+    \ 'close'         : "\<C-q>",
+    \ 'close2'        : "\<S-F27>",
+    \ 'close3'        : "\<Esc>",
+    \ 'number'        : 1,
+    \ 'height'        : 15,
+    \ 'offset'        : 7,
+    \ 'sign'          : {'linehl': 'CursorLine'},
     \ }
 " NOTE: popup mappings do not seem to work if they are
 "       from MapFastKeycode(), such as <C-Up>, <C-Home> ...
@@ -2006,15 +2017,16 @@ set ttimeout ttimeoutlen=7
 " use <S-Tab> as a left-handed . (dot) ...
 "nnoremap <S-Tab> .
 "vnoremap <S-Tab> .
-" SKIP: for now use <A-1> (S-F28) and along with that use
+" SKIP: for now use <A-a> (S-F28) and along with that use
 "       <A-Up/Down/Right/Left> as app keys and not tmux ...
+" And <A-e> for undo
 
 nnoremap <buffer> <Tab> 4l
 vnoremap <buffer> <Tab> 4l
 
 " <S-Tab> as an undo or as a 4h ?
-nnoremap <buffer> <S-Tab> u
-vnoremap <buffer> <S-Tab> u
+nnoremap <buffer> <S-Tab> 4h
+vnoremap <buffer> <S-Tab> 4h
 
 " s/S is confusing, use cl/cc instead
 nnoremap s <Nop>
@@ -2170,9 +2182,14 @@ call <SID>MapFastKeycode('<A-PageDown>',   "\e[6;3~", 126)
 " NOTE: addl mappings start at <S-F27> 127 ...
 "       so we have what is not used above ...
 
-" This used to be <S-Tab> but <A-1> seems better.
+" This used to be <S-Tab> but <A-e> seems better.
+call <SID>MapFastKeycode('<F32>', "\ee", 32)
+nnoremap <buffer> <F32> u
+vnoremap <buffer> <F32> u
+
+" This used to be <S-Tab> but <A-a> seems better.
 " And with this, use <A-Up/Down/Right/Left> as app keys and not tmux ...
-call <SID>MapFastKeycode('<S-F28>', "\e1", 128)
+call <SID>MapFastKeycode('<S-F28>', "\ea", 128)
 nmap <S-F28> .
 vmap <S-F28> .
 
@@ -3222,9 +3239,13 @@ noremap <silent> <buffer> <S-F31> gk
 " <A-BS> is mapped to \eX in tmux - scroll up one line ...
 call <SID>MapFastKeycode('<S-F30>',  "\eX", 130)
 noremap <silent> <expr> <S-F30> AtBot(0) ? '<C-y>' : '<C-y>k'
+" but unmap it in terminal so fzf can use it as alt-bs ...
+tnoremap <S-F30> <Esc><BS>
 " <A-Space> is mapped to \eY in tmux - scroll down one line ...
 call <SID>MapFastKeycode('<S-F29>',  "\eY", 129)
 noremap <silent> <expr> <S-F29> ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>j'
+" but unmap it in terminal so fzf can use it as alt-space ...
+tnoremap <S-F29> <Esc><Space>
 
 " -------------------
 
@@ -3360,7 +3381,8 @@ set tabstop=4
 " enter keys/cmds ...
 " Q to end recording
 " 20@x to playback for 20 times ...
-nnoremap <silent> Q q
+noremap Q <Nop>
+noremap <silent> <Leader>Q q
 nmap <silent> q <Nop>
 " NOTE: q will be re-mapped later on ...
 
@@ -4556,9 +4578,9 @@ function s:MySearch(meth) abort
     "execute 'AsyncRun! -strip -cwd ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) ' 2>/dev/null'
     execute 'AsyncRun! -strip ag --vimgrep -U --hidden -- ' shellescape(string, 1) ' 2>/dev/null'
   elseif (a:meth == 3)
-    call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root(), 1, fzf#vim#with_preview('up:50%:hidden', 'ctrl-alt-p'), 0)
+    call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root(), 1, fzf#vim#with_preview({'options': ['--bind=alt-d:page-down']}, 'up:50%:hidden', 'ctrl-alt-p'), 0)
   elseif (a:meth == 4)
-    call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1), 1, fzf#vim#with_preview(), 0)
+    call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1), 1, fzf#vim#with_preview({'options': ['--bind=alt-d:page-down']}), 0)
   endif
   let @/=string
   set hlsearch
@@ -4597,9 +4619,9 @@ function s:MyVisSearch(meth) abort
     "execute 'AsyncRun! -strip -cwd ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) ' 2>/dev/null'
     execute 'AsyncRun! -strip ag --vimgrep -U --hidden -- ' shellescape(string, 1) ' 2>/dev/null'
   elseif (a:meth == 3)
-    call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root(), 1, fzf#vim#with_preview('up:50%:hidden', 'ctrl-alt-p'), 0)
+    call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root(), 1, fzf#vim#with_preview({'options': ['--bind=alt-d:page-down']}, 'up:50%:hidden', 'ctrl-alt-p'), 0)
   elseif (a:meth == 4)
-    call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1), 1, fzf#vim#with_preview(), 0)
+    call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1), 1, fzf#vim#with_preview({'options': ['--bind=alt-d:page-down']}), 0)
   endif
   let @/=string
   set hlsearch
@@ -4823,6 +4845,8 @@ endfunction
 " NOTE: make qf window full width ...
 " (otherwise its often below wrong window [ie on the right])
 au FileType qf wincmd J
+
+"au FileType qf noremap <buffer> <C-q> :q<CR>
 
 " limit quickfix height ...
 au FileType qf call <SID>AdjustWindowHeight(5, 10)

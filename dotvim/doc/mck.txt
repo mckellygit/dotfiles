@@ -206,9 +206,9 @@ filter qf/ll entries
 
 *mck-misc*
 -------------------------------------------------
-<A-1>      repeat last change (.)
-
-<S-Tab>    undo
+<A-a>      repeat last change (.)
+<A-e>      undo
+<Leader>uu undo all
 
 <C-a>      goto beg of line (^) (<Leader>l1)
 <C-e>      goto end of line ($) (<Leader>l2)
@@ -261,5 +261,5 @@ z<Down>    move selected line(s) down
 <Leader>zx swap reg * with reg x
 <Leader>zp paste reg x into selection NOTE: visual mode only
 
-<Leader>uu undo all
+<Leader>Qx macro recording to reg <x> (playback: N@x)
 
