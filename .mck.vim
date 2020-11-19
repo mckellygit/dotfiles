@@ -1045,7 +1045,8 @@ function! s:type(visual)
 endfunction
 
 function! s:split(tab)
-  echom "split, tab: " a:tab
+  "echom "split, tab: " a:tab
+  "echo "splitting ..."
   if a:tab && a:tab != 2
     call s:tabnew()
   elseif getwinvar(winnr('$'), 'gv')
