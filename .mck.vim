@@ -870,6 +870,7 @@ autocmd FileType git              nmap <buffer> <Leader><Tab> O
 autocmd FileType git              nmap <buffer> <C-t> O
 autocmd FileType git              nmap <silent> <buffer> qq    :close<cr>
 autocmd FileType git              nmap <silent> <buffer> <C-q> :close<cr>
+autocmd FileType git              nmap <silent> <buffer> QQ    :close<cr>
 
 " TODO: MCK should we be like less here ?
 autocmd FileType git              nmap <silent> <buffer> <BS>    :call <SID>CtrlB(1)<CR>
@@ -962,6 +963,10 @@ autocmd FileType GV xmap <buffer> <BS> <Up>
 autocmd FileType GV xmap <buffer> <S-Tab> <Up>
 autocmd FileType GV xmap <buffer> u <Up>
 autocmd FileType GV xmap <buffer> d <Down>
+
+" or use ! ?
+autocmd FileType GV nmap <buffer> QQ O
+autocmd FileType GV xmap <buffer> QQ O
 
 autocmd FileType GV setlocal cursorline
 
@@ -1080,6 +1085,7 @@ function! s:open(visual, ...)
   endif
   nnoremap <silent> <buffer> qq    :close<cr>
   nnoremap <silent> <buffer> <C-q> :close<cr>
+  nnoremap <silent> <buffer> QQ    :close<cr>
   let bang = a:0 ? '!' : ''
   if exists('#User#GV'.bang)
     execute 'doautocmd <nomodeline> User GV'.bang
