@@ -15,3 +15,5 @@
 \e[1;5A  back-line
 \e[1;5C  noaction 10\e)
 \e[1;5D  noaction 10\e(
+\\1  forw-screen
+\\2  back-screen
