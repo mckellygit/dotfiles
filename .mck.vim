@@ -3849,18 +3849,16 @@ function! s:MapScrollKeys()
   inoremap  <silent> <expr> <C-b> pumvisible() ? '<C-b>' : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
 
   " to match tig etc, a <Leader> mapping for page-down,up ...
-  nnoremap <silent> <Leader>1 :call <SID>CtrlF(1)<CR>
+
+  " <leader><Tab>, <S-Tab> might have been good here but <Leader><Tab> is used in several places above ...
+
+  nnoremap <silent> <Leader>1 :<C-u>call <SID>CtrlF(1)<CR>
   execute 'vnoremap <silent> <Leader>1 ' . g:hdn
-  nnoremap <silent> <Leader>2 :call <SID>CtrlB(1)<CR>
+
+  nnoremap <silent> <Leader>2 :<C-u>call <SID>CtrlB(1)<CR>
   execute 'vnoremap <silent> <Leader>2 ' . g:hup
-  " and shift of <Leader>1 for up ...
-  nnoremap <silent> \|!       :call <SID>CtrlB(1)<CR>
-  execute 'vnoremap <silent> \|! ' . g:hup
-  " and partial shifts ...
-  nnoremap <silent> <Leader>! :call <SID>CtrlB(1)<CR>
-  execute 'vnoremap <silent> <Leader>! ' . g:hup
-  nnoremap <silent> \|1       :call <SID>CtrlB(1)<CR>
-  execute 'vnoremap <silent> \|1 ' . g:hup
+
+  " skip shifts and partial shifts of <Leader>1,2 ...
 
   " -------------------
 

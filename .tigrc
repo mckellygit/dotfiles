@@ -42,11 +42,12 @@ bind stage     <Ctrl-_><Space>      scroll-page-down
 bind diff      <Ctrl-_><Backspace>  scroll-page-up
 bind stage     <Ctrl-_><Backspace>  scroll-page-up
 #
-bind generic   |            none
-bind generic   |!           move-half-page-up
+#bind generic   |            none
+# shifts ...
+#bind generic   |!           move-half-page-up
 # partial shifts ...
-bind generic   \!           move-half-page-up
-bind generic   |1           move-half-page-up
+#bind generic   \!           move-half-page-up
+#bind generic   |1           move-half-page-up
 #
 bind generic   \qq          view-close
 #

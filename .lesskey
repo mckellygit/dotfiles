@@ -1,8 +1,8 @@
 # command
- forw-screen
- back-screen
-\    forw-screen
-   back-screen
+   forw-scroll
+   back-scroll
+\    forw-scroll
+   back-scroll
 \  noaction 10j
  noaction 10k
 \340 forw-line
@@ -15,5 +15,5 @@
 \e[1;5A  back-line
 \e[1;5C  noaction 10\e)
 \e[1;5D  noaction 10\e(
-\\1  forw-screen
-\\2  back-screen
+\\1  noaction 24^F
+\\2  noaction 24^B
