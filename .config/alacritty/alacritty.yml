@@ -219,10 +219,14 @@ bell:
   duration: 0
 
 cursor:
-  #   - ▇ Block
-  #   - _ Underline
-  #   - | Beam
-  style: Block
+  style:
+    #   - ▇ Block
+    #   - _ Underline
+    #   - | Beam
+    shape: Block
+    blinking: Always
+
+  blink_interval: 700
 
 debug:
   # Should display the render timer

@@ -988,7 +988,7 @@ function ctrl-c-cmdline() {
 zle -N ctrl-c-cmdline
 bindkey '^_/' ctrl-c-cmdline
 # terminals may have mapped C-S-<Space> to ^_<Space>
-bindkey '^_ ' noop
+bindkey '^_ ' autosuggest-accept
 # if we can get away with this ... just to keep cmdline quiet
 bindkey '^_' noop
 bindkey '^^' noop
@@ -1000,7 +1000,7 @@ bindkey '^^' noop
 #bindkey '^\'   autosuggest-accept
 bindkey '^\'   noop
 #bindkey "\e "  autosuggest-accept
-bindkey '^@^@' autosuggest-accept
+#bindkey '^@^@' autosuggest-accept
 bindkey '^]'   autosuggest-accept
 
 bindkey -s "\e/" "/"
