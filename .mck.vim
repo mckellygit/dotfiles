@@ -3239,7 +3239,7 @@ vnoremap <silent> <Leader>D "_x
 nnoremap <silent> Y y$
 
 " NOTE: <A-Return> (S-F31) to copy/end vis-mode to match tmux
-call <SID>MapFastKeycode('<S-F31>',  "\e\<Return>", 131)
+call <SID>MapFastKeycode('<S-F31>',  "\e", 131)
 "vmap <silent> <S-F31> mvty`v
 noremap <silent> <buffer> <S-F31> gk
 
