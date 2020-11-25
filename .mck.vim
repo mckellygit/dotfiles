@@ -2146,6 +2146,8 @@ endfunction
 "call <SID>MapFastKeycode('<A-S-Left>',     "\e[1;4D", xx)
 "call <SID>MapFastKeycode('<A-S-Right>',    "\e[1;4C", xx)
 
+" --------- x maps -----------
+
 call <SID>MapFastKeycode('<C-Insert>',     "\e[2;5~", 33)
 call <SID>MapFastKeycode('<S-Insert>',     "\e[2;2~", 34)
 call <SID>MapFastKeycode('<C-S-Insert>',   "\e[2;6~", 35)
@@ -3782,10 +3784,28 @@ nnoremap <C-S-Up>    5gk
 nnoremap <C-S-Down>  5gj
 nnoremap <C-S-Left>  10gh
 nnoremap <C-S-Right> 10gl
+vnoremap <C-S-Up>    5gk
+vnoremap <C-S-Down>  5gj
+vnoremap <C-S-Left>  10gh
+vnoremap <C-S-Right> 10gl
 inoremap <C-S-Up>    <C-\><C-o>5gk
 inoremap <C-S-Down>  <C-\><C-o>5gj
 inoremap <C-S-Left>  <C-\><C-o>10gh
 inoremap <C-S-Right> <C-\><C-o>10gl
+
+call <SID>MapFastKeycode('<F30>',  "\ek", 30)
+noremap <A-k> 5gk
+noremap <F30> 5gk
+call <SID>MapFastKeycode('<F31>',  "\ej", 31)
+noremap <A-j> 5gk
+noremap <F31> 5gj
+
+call <SID>MapFastKeycode('<F28>',  "\eK", 28)
+noremap <silent> <expr> <A-K> (line('.') == line('w$')) ? '5k' : '5<C-y>5k'
+noremap <silent> <expr> <F28> (line('.') == line('w$')) ? '5k' : '5<C-y>5k'
+call <SID>MapFastKeycode('<F31>',  "\eJ", 29)
+noremap <silent> <expr> <A-J> (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '5<C-e>5j'
+noremap <silent> <expr> <F29> (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '5<C-e>5j'
 
 " ---------
 

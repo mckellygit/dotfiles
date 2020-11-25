@@ -206,60 +206,65 @@ filter qf/ll entries
 
 *mck-misc*
 -------------------------------------------------
-<A-a>      repeat last change (.)
-<A-e>      undo
-<Leader>uu undo all
+<A-a>       repeat last change (.)
+<A-e>       undo
+<Leader>uu  undo all
 
-<C-a>      goto beg of line (^) (<Leader>l1)
-<C-e>      goto end of line ($) (<Leader>l2)
+<C-a>       goto beg of line (^) (<Leader>l1)
+<C-e>       goto end of line ($) (<Leader>l2)
 
-<A-Home>   goto column 0    (0) (<Leader>l0)
-<A-End>    goto end of line ($)
+<A-Home>    goto column 0    (0) (<Leader>l0)
+<A-End>     goto end of line ($)
 
-<C-S>Left  move 10 left
-<C-S>Right move 10 right
-<C-S>Up    move 10 up
-<C-S>Down  move 10 down
+<C-S-Left>  move 10 left
+<C-S-Right> move 10 right
+<C-S-Up>    move 10 up
+<C-S-Down>  move 10 down
 
-<C-S-PgUp> scroll 10 up
-<C-S-PgDn> scroll 10 down
+<C-S-PgUp>  scroll 10 up
+<C-S-PgDn>  scroll 10 down
 
-<A-BS>     scroll up
-<A-Space>  scroll down
+<A-BS>      scroll up
+<A-Space>   scroll down
 
-<A-Return> move up (opposite of <Return> in normal mode)
+<A-k>       move 5 up
+<A-j>       move 5 down
+<A-S-k>     scroll 5 up
+<A-S-j>     scroll 5 down
 
-z<Left>    scroll horizontal 10 left
-z<Right>   scroll horizontal 10 right
-z<Up>      move selected line(s) up
-z<Down>    move selected line(s) down
+<A-Return>  move up (opposite of <Return> in normal mode)
 
-<Leader>lx trim trailing spaces
-<Leader>lj trim trailing spaces then move down 1 line
-<Leader>lk trim trailing spaces then move up 1 line
+z<Left>     scroll horizontal 10 left
+z<Right>    scroll horizontal 10 right
+z<Up>       move selected line(s) up
+z<Down>     move selected line(s) down
 
- +         highlight cross-hair at cursor location
+<Leader>lx  trim trailing spaces
+<Leader>lj  trim trailing spaces then move down 1 line
+<Leader>lk  trim trailing spaces then move up 1 line
 
-<Leader>sp choose window (select-pane)
+ +          highlight cross-hair at cursor location
 
-<Leader>++ zoom window toggle (<C-w>z)
+<Leader>sp  choose window (select-pane)
 
-<Leader>ct move cursor to center of screen
-<Leader>cz scroll until current line is at center of screen
+<Leader>++  zoom window toggle (<C-w>z)
 
-<Leader>cc close quickfix and location list
-<Leader>cx clear command line
+<Leader>ct  move cursor to center of screen
+<Leader>cz  scroll until current line is at center of screen
 
-<Leader>cC toggle color syntax
+<Leader>cc  close quickfix and location list
+<Leader>cx  clear command line
 
-<Leader>lw toggle line wrap
-<Leader>lW toggle line wrap in ALL windows (ie vimdiff ...)
+<Leader>cC  toggle color syntax
 
-<Leader>rg show registers in fzf list for selecting
-<Leader>lr copy reg * to system clipboard
-<Leader>zc copy reg * to reg x
-<Leader>zx swap reg * with reg x
-<Leader>zp paste reg x into selection NOTE: visual mode only
+<Leader>lw  toggle line wrap
+<Leader>lW  toggle line wrap in ALL windows (ie vimdiff ...)
 
-<Leader>Qx macro recording to reg <x> (playback: N@x)
+<Leader>rg  show registers in fzf list for selecting
+<Leader>lr  copy reg * to system clipboard
+<Leader>zc  copy reg * to reg x
+<Leader>zx  swap reg * with reg x
+<Leader>zp  paste reg x into selection NOTE: visual mode only
+
+<Leader>Qx  macro recording to reg <x> (playback: N@x)
 

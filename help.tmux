@@ -55,11 +55,16 @@ prefix <BS>             - enter copy-mode
 prefix <PageUp>         - enter copy-mode
 
 In copy-mode:
-<Alt-BS>                - scroll up
-<Alt-Space>             - scroll down
-<Alt-Enter>             - move up
+Alt-<BS>                - scroll up
+Alt-<Space>             - scroll down
+Alt-<Enter>             - move up
 <Enter>                 - move down
-<Ctrl-Alt-Enter>        - exit copy-mode
+Alt-<k>                 - move 5 up
+Alt-<j>                 - move 5 down
+Alt-Shift-<k>           - scroll 5 up
+Alt-Shift-<j>           - scroll 5 down
+Ctrl-Shift-<arrow>      - move 10 <arrow>
+Ctrl-Alt-<Enter>        - exit copy-mode
 2-click rt status       - exit copy-mode (also Ctrl-<q>)
 Ctrl-2-click rt status  - exit copy-mode and paste selection (Alt-2-click)
 

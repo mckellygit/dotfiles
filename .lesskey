@@ -17,3 +17,7 @@
 \e[1;5D  noaction 10\e(
 \\1  noaction 24^F
 \\2  noaction 24^B
+\ej  noaction 5j
+\ek  noaction 5k
+\eJ  noaction 5^F
+\eK  noaction 5^B

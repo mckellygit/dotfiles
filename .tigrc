@@ -63,6 +63,11 @@ bind generic   <PageUp>     move-page-up
 bind generic   <Ctrl-J>     scroll-line-down
 bind generic   <Ctrl-K>     scroll-line-up
 #
+bind generic   <Ctrl-[>j    move-down
+bind generic   <Ctrl-[>k    move-up
+bind generic   <Ctrl-[>J    scroll-line-down
+bind generic   <Ctrl-[>K    scroll-line-up
+#
 bind generic   <Ctrl-[><Space>      scroll-line-down
 bind generic   <Ctrl-[><BackSpace>  scroll-line-up
 #
