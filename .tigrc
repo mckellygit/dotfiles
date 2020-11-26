@@ -49,6 +49,9 @@ bind stage     <Ctrl-_><Backspace>  scroll-page-up
 #bind generic   \!           move-half-page-up
 #bind generic   |1           move-half-page-up
 #
+bind generic   Q            none
+bind generic   q            none
+bind generic   qq           view-close-no-quit
 bind generic   \qq          view-close
 #
 bind generic   <Ctrl-D>     scroll-page-down
