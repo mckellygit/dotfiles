@@ -867,17 +867,17 @@ autocmd BufEnter fugitive://**    nmap <buffer> <Return> O
 autocmd BufEnter *.fugitiveblame  nmap <buffer> <2-LeftMouse> O
 
 autocmd BufEnter fugitive://**    nmap <buffer> <2-LeftMouse> O
-autocmd BufEnter fugitive://**    nmap <silent> <buffer> <Leader>qq  :close<cr>:tabfirst<cr>
-autocmd BufEnter fugitive://**    nmap <silent> <buffer> qq    :close<cr>:tabfirst<cr>
-autocmd BufEnter fugitive://**    nmap <silent> <buffer> <C-q> :close<cr>:tabfirst<cr>
-autocmd BufEnter fugitive://**    nmap <silent> <buffer> QQ    :close<cr>:tabfirst<cr>
+autocmd BufEnter fugitive://**    nmap <silent> <buffer> <Leader>qq  :close<cr>:tabprevious<cr>
+autocmd BufEnter fugitive://**    nmap <silent> <buffer> qq    :close<cr>:tabprevious<cr>
+autocmd BufEnter fugitive://**    nmap <silent> <buffer> <C-q> :close<cr>:tabprevious<cr>
+autocmd BufEnter fugitive://**    nmap <silent> <buffer> QQ    :close<cr>:tabprevious<cr>
 
 autocmd FileType git              nmap <buffer> <Leader><Tab> O
 autocmd FileType git              nmap <buffer> <C-t> O
-autocmd FileType git              nmap <silent> <buffer> <Leader>qq  :close<cr>:tabfirst<cr>
-autocmd FileType git              nmap <silent> <buffer> qq    :close<cr>:tabfirst<cr>
-autocmd FileType git              nmap <silent> <buffer> <C-q> :close<cr>:tabfirst<cr>
-autocmd FileType git              nmap <silent> <buffer> QQ    :close<cr>:tabfirst<cr>
+autocmd FileType git              nmap <silent> <buffer> <Leader>qq  :close<cr>:tabprevious<cr>
+autocmd FileType git              nmap <silent> <buffer> qq    :close<cr>:tabprevious<cr>
+autocmd FileType git              nmap <silent> <buffer> <C-q> :close<cr>:tabprevious<cr>
+autocmd FileType git              nmap <silent> <buffer> QQ    :close<cr>:tabprevious<cr>
 
 " TODO: MCK should we be like less here ?
 autocmd FileType git              nmap <silent> <buffer> <BS>    :call <SID>CtrlB(1)<CR>
