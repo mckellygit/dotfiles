@@ -1,6 +1,8 @@
 #
 # tig rc file
 #
+set vertical-split     = no
+set split-view-height  = 62%
 set horizontal-scroll  = 33%
 set history-size       = 0
 set mouse              = yes
