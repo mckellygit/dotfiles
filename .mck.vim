@@ -856,6 +856,7 @@ autocmd BufReadPost quickfix nnoremap <buffer> - -
 " fugitive -----------
 autocmd FileType fugitiveblame nmap <buffer> <Leader>wq gq
 autocmd FileType fugitiveblame nmap <buffer> <Leader>qq gq
+autocmd FileType fugitiveblame nmap <buffer> qq         gq
 autocmd FileType fugitiveblame nmap <buffer> <C-q>      gq
 autocmd FileType fugitiveblame nmap <buffer> <Leader><Tab> O
 autocmd FileType fugitiveblame nmap <buffer> <C-t> O
@@ -864,13 +865,19 @@ autocmd FileType fugitiveblame nmap <buffer> <C-t> O
 autocmd BufEnter *.fugitiveblame  nmap <buffer> <Return> O
 autocmd BufEnter fugitive://**    nmap <buffer> <Return> O
 autocmd BufEnter *.fugitiveblame  nmap <buffer> <2-LeftMouse> O
+
 autocmd BufEnter fugitive://**    nmap <buffer> <2-LeftMouse> O
+autocmd BufEnter fugitive://**    nmap <silent> <buffer> <Leader>qq  :close<cr>:tabfirst<cr>
+autocmd BufEnter fugitive://**    nmap <silent> <buffer> qq    :close<cr>:tabfirst<cr>
+autocmd BufEnter fugitive://**    nmap <silent> <buffer> <C-q> :close<cr>:tabfirst<cr>
+autocmd BufEnter fugitive://**    nmap <silent> <buffer> QQ    :close<cr>:tabfirst<cr>
 
 autocmd FileType git              nmap <buffer> <Leader><Tab> O
 autocmd FileType git              nmap <buffer> <C-t> O
-autocmd FileType git              nmap <silent> <buffer> qq    :close<cr>
-autocmd FileType git              nmap <silent> <buffer> <C-q> :close<cr>
-autocmd FileType git              nmap <silent> <buffer> QQ    :close<cr>
+autocmd FileType git              nmap <silent> <buffer> <Leader>qq  :close<cr>:tabfirst<cr>
+autocmd FileType git              nmap <silent> <buffer> qq    :close<cr>:tabfirst<cr>
+autocmd FileType git              nmap <silent> <buffer> <C-q> :close<cr>:tabfirst<cr>
+autocmd FileType git              nmap <silent> <buffer> QQ    :close<cr>:tabfirst<cr>
 
 " TODO: MCK should we be like less here ?
 autocmd FileType git              nmap <silent> <buffer> <BS>    :call <SID>CtrlB(1)<CR>
@@ -982,7 +989,7 @@ autocmd FileType GV nmap <buffer> <A-2-LeftMouse> <C-\><C-n>:<C-u>call feedkeys(
 autocmd FileType GV set foldlevelstart=1
 
 " NOTE: qq to exit GV seems good ...
-autocmd FileType GV nmap <silent> <buffer> qq    :qa!<CR>
+"autocmd FileType GV nmap <silent> <buffer> qq    :qa!<CR>
 " could make it more like a real vim session and not have qq exit ...
 "autocmd FileType GV nmap <silent> <buffer> <C-q> :qa!<CR>
 autocmd FileType GV nmap <silent> <buffer> <Leader>wq <C-\><C-n>:<C-u>call <SID>QuitIfOnlyNoNameLeft()<CR>
