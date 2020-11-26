@@ -61,8 +61,8 @@ Alt-<Enter>             - move up
 <Enter>                 - move down
 Alt-<k>                 - move 5 up
 Alt-<j>                 - move 5 down
-Alt-Shift-<k>           - scroll 5 up
-Alt-Shift-<j>           - scroll 5 down
+Ctrl-Alt-<k>            - scroll 5 up
+Ctrl-Alt-<j>            - scroll 5 down
 Ctrl-Shift-<arrow>      - move 10 <arrow>
 Ctrl-Alt-<Enter>        - exit copy-mode
 2-click rt status       - exit copy-mode (also Ctrl-<q>)

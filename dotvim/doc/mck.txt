@@ -229,8 +229,8 @@ filter qf/ll entries
 
 <A-k>       move 5 up
 <A-j>       move 5 down
-<A-S-k>     scroll 5 up
-<A-S-j>     scroll 5 down
+<C-A-k>     scroll 5 up
+<C-A-j>     scroll 5 down
 
 <A-Return>  move up (opposite of <Return> in normal mode)
 

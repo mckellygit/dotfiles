@@ -65,8 +65,13 @@ bind generic   <Ctrl-K>     scroll-line-up
 #
 bind generic   <Ctrl-[>j    move-down
 bind generic   <Ctrl-[>k    move-up
-bind generic   <Ctrl-[>J    scroll-line-down
-bind generic   <Ctrl-[>K    scroll-line-up
+bind generic   <Ctrl-_>j    scroll-line-down
+bind generic   <Ctrl-_>k    scroll-line-up
+#
+bind generic   <Ctrl-[><Enter> scroll-line-up
+bind generic   <Ctrl-^><Enter> scroll-line-up
+#
+bind generic   <Ctrl-[><Ctrl-[> view-close-no-quit
 #
 bind generic   <Ctrl-[><Space>      scroll-line-down
 bind generic   <Ctrl-[><BackSpace>  scroll-line-up

@@ -1263,12 +1263,16 @@ let g:qfpreview = {
     \ 'scrolldown3'   : "\<S-F29>",
     \ 'halfpageup'    : "\<BS>",
     \ 'halfpageup2'   : "\<C-b>",
+    \ 'halfpageup3'   : "\<F28>",
     \ 'halfpagedown'  : "\<Space>",
     \ 'halfpagedown2' : "\<C-f>",
+    \ 'halfpagedown3' : "\<F29>",
     \ 'fullpageup'    : "\<C-u>",
     \ 'fullpagedown'  : "\<C-d>",
     \ 'next'          : "\<Down>",
+    \ 'next2'         : "\<F31>",
     \ 'previous'      : "\<Up>",
+    \ 'previous2'     : "\<F30>",
     \ 'reset'         : "\<C-r>",
     \ 'close'         : "\<C-q>",
     \ 'close2'        : "\<S-F27>",
@@ -2195,16 +2199,24 @@ call <SID>MapFastKeycode('<A-PageDown>',   "\e[6;3~", 126)
 call <SID>MapFastKeycode('<F32>', "\ee", 32)
 nnoremap <buffer> <F32> u
 vnoremap <buffer> <F32> u
+cnoremap <F32> <Esc>e
+inoremap <F32> <Esc>e
+tnoremap <F32> <Esc>e
 
 " This used to be <S-Tab> but <A-a> seems better.
 " And with this, use <A-Up/Down/Right/Left> as app keys and not tmux ...
 call <SID>MapFastKeycode('<S-F28>', "\ea", 128)
 nmap <S-F28> .
 vmap <S-F28> .
+cnoremap <S-F28> <Esc>a
+inoremap <S-F28> <Esc>a
+tnoremap <S-F28> <Esc>a
 
 " <C-A-p> for fzf preview ...
-call <SID>MapFastKeycode('<S-F27>', "\e", 127)
+call <SID>MapFastKeycode('<S-F27>', "\e\<C-p>", 127)
 " but unmap it in terminal so fzf can use it as ctrl-alt-p ...
+cnoremap <S-F27> <Esc><C-p>
+inoremap <S-F27> <Esc><C-p>
 tnoremap <S-F27> <Esc><C-p>
 
 " ------------------------------
@@ -2483,24 +2495,24 @@ tnoremap <S-Insert> <C-w>"*
 call <SID>MapFastKeycode('<S-F34>',  "\e!", 134)
 nnoremap <expr> <S-F34> (&buftype == 'terminal') ? '<Nop>' : 'p'
 vnoremap <expr> <S-F34> (&buftype == 'terminal') ? '<Nop>' : '<Esc>p'
-inoremap <S-F34> <C-r>*
 cnoremap <S-F34> <C-r>*
+inoremap <S-F34> <C-r>*
 tnoremap <S-F34> <C-w>"*
 
 " <C-S-Insert> paste before
 nnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '<Nop>' : 'P`['
 " NOTE: <C-S-Insert> vmapped below ...
 "vnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '<Nop>' : '<Esc>P`['
-inoremap <C-S-Insert> <C-o>mp<C-r>*<C-o>`p
 cnoremap <C-S-Insert> <C-r>*
+inoremap <C-S-Insert> <C-o>mp<C-r>*<C-o>`p
 tnoremap <C-S-Insert> <C-w>"*
 
 " <M-*> paste before [menu?]
 call <SID>MapFastKeycode('<S-F35>',  "\e*", 135)
 nnoremap <expr> <S-F35> (&buftype == 'terminal') ? '<Nop>' : 'P`]'
 vnoremap <expr> <S-F35> (&buftype == 'terminal') ? '<Nop>' : '<Esc>P`]'
-inoremap <S-F35> <C-r>*
 cnoremap <S-F35> <C-r>*
+inoremap <S-F35> <C-r>*
 tnoremap <S-F35> <C-w>"*
 
 " C-S-c / M-& copy ...
@@ -2514,7 +2526,9 @@ tnoremap <S-F35> <C-w>"*
 call <SID>MapFastKeycode('<S-F36>',  "\e&", 136)
 nnoremap <S-F36> <Nop>
 vmap <expr> <S-F36> (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
-inoremap <S-F36> <Nop>
+cnoremap <S-F36> <Esc>&
+inoremap <S-F36> <Esc>&
+tnoremap <S-F36> <Esc>&
 
 " C-S-x / M-( cut ...
 
@@ -2526,7 +2540,9 @@ inoremap <S-F36> <Nop>
 call <SID>MapFastKeycode('<S-F37>',  "\e(", 137)
 nnoremap <S-F37> <Nop>
 vmap <expr> <S-F37> (&buftype == 'terminal') ? '<Nop>' : 'tx'
-inoremap <S-F37> <Nop>
+cnoremap <S-F37> <Esc>(
+inoremap <S-F37> <Esc>(
+tnoremap <S-F37> <Esc>(
 
 " cut selection
 "vnoremap <silent> <C-x> "*d<LeftRelease>
@@ -3241,19 +3257,27 @@ vnoremap <silent> <Leader>D "_x
 nnoremap <silent> Y y$
 
 " NOTE: <A-Return> (S-F31) to copy/end vis-mode to match tmux
-call <SID>MapFastKeycode('<S-F31>',  "\e", 131)
+call <SID>MapFastKeycode('<S-F31>',  "\e\<Return>", 131)
 "vmap <silent> <S-F31> mvty`v
 noremap <silent> <buffer> <S-F31> gk
+cnoremap <S-F32> <Esc><Return>
+inoremap <S-F32> <Esc><Return>
+tnoremap <S-F32> <Esc><Return>
 
 " <A-BS> is mapped to \eX in tmux - scroll up one line ...
 call <SID>MapFastKeycode('<S-F30>',  "\eX", 130)
 noremap <silent> <expr> <S-F30> AtBot(0) ? '<C-y>' : '<C-y>k'
 " but unmap it in terminal so fzf can use it as alt-bs ...
+cnoremap <S-F30> <Esc><BS>
+inoremap <S-F30> <Esc><BS>
 tnoremap <S-F30> <Esc><BS>
+
 " <A-Space> is mapped to \eY in tmux - scroll down one line ...
 call <SID>MapFastKeycode('<S-F29>',  "\eY", 129)
 noremap <silent> <expr> <S-F29> ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>j'
 " but unmap it in terminal so fzf can use it as alt-space ...
+cnoremap <S-F29> <Esc><Space>
+inoremap <S-F29> <Esc><Space>
 tnoremap <S-F29> <Esc><Space>
 
 " -------------------
@@ -3796,16 +3820,36 @@ inoremap <C-S-Right> <C-\><C-o>10gl
 call <SID>MapFastKeycode('<F30>',  "\ek", 30)
 noremap <A-k> 5gk
 noremap <F30> 5gk
+cnoremap <F30> <Esc>k
+inoremap <F30> <Esc>k
+tnoremap <F30> <Esc>k
+
 call <SID>MapFastKeycode('<F31>',  "\ej", 31)
 noremap <A-j> 5gk
 noremap <F31> 5gj
+cnoremap <F31> <Esc>j
+inoremap <F31> <Esc>j
+tnoremap <F31> <Esc>j
 
-call <SID>MapFastKeycode('<F28>',  "\eK", 28)
-noremap <silent> <expr> <A-K> (line('.') == line('w$')) ? '5k' : '5<C-y>5k'
-noremap <silent> <expr> <F28> (line('.') == line('w$')) ? '5k' : '5<C-y>5k'
-call <SID>MapFastKeycode('<F31>',  "\eJ", 29)
-noremap <silent> <expr> <A-J> (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '5<C-e>5j'
-noremap <silent> <expr> <F29> (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '5<C-e>5j'
+" some terminals might map C-A-k to C-_-k ...
+call <SID>MapFastKeycode('<F28>',  "\<C-_>k", 28)
+"noremap <silent> <expr> <C-_>k (line('.') == line('w$')) ? '5k' : '5<C-y>5k'
+"call <SID>MapFastKeycode('<F28>',  "\eK", 28)
+"noremap <silent> <expr> <A-K>  (line('.') == line('w$')) ? '5k' : '5<C-y>5k'
+noremap <silent> <expr> <F28>  (line('.') == line('w$')) ? '5k' : '5<C-y>5k'
+cnoremap <F28> <Esc><C-k>
+inoremap <F28> <Esc><C-k>
+tnoremap <F28> <Esc><C-k>
+
+" some terminals might map C-A-j to C-_-j ...
+call <SID>MapFastKeycode('<F29>',  "\<C-_>j", 29)
+"noremap <silent> <expr> <C-_>j (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '5<C-e>5j'
+"call <SID>MapFastKeycode('<F29>',  "\eJ", 29)
+"noremap <silent> <expr> <A-J>  (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '5<C-e>5j'
+noremap <silent> <expr> <F29>  (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '5<C-e>5j'
+cnoremap <F29> <Esc><C-j>
+inoremap <F29> <Esc><C-j>
+tnoremap <F29> <Esc><C-j>
 
 " ---------
 
@@ -4036,8 +4080,9 @@ noremap <silent> <C-^>- -
 inoremap <silent> <C-^>- -
 
 " NOTE: terminals could map <C-A-Return> to <C-^><CR>
-nmap <silent> <buffer> <C-^><Return> <Nop>
-vmap <silent> <buffer> <C-^><Return> mvty`v
+"nmap <silent> <buffer> <C-^><Return> <Nop>
+"vmap <silent> <buffer> <C-^><Return> mvty`v
+map <silent> <buffer> <C-^><Return> gk
 imap <silent> <buffer> <C-^><Return> <Nop>
 
 " NOTE: C-Space in most terminals is C-@
