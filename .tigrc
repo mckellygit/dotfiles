@@ -81,6 +81,9 @@ bind generic   <Ctrl-[><Ctrl-[> view-close-no-quit
 bind generic   <Ctrl-[><Space>      scroll-line-down
 bind generic   <Ctrl-[><BackSpace>  scroll-line-up
 #
+bind generic   <Ctrl-w>w            view-next
+bind generic   <Ctrl-w><Ctrl-w>     view-next
+#
 bind generic   <Space>              next
 bind generic   <Ctrl-@>             move-down
 bind generic   <Backspace>          previous
