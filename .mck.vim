@@ -4296,6 +4296,16 @@ inoremap  z<Up>    <Esc>:m .-2<CR>==gi
 
 " -----------------------------
 
+function! TTWS() abort
+    let l:save = winsaveview()
+    keeppatterns %s/\s\+$//e
+    call winrestview(l:save)
+endfunction
+command! TTWS call TTWS()
+command! TrimTrailingWhiteSpace call TTWS()
+
+" -----------------------------
+
 " Only do this part when compiled with support for autocommands.
 if has("autocmd")
 
