@@ -84,9 +84,11 @@ bind generic   <Ctrl-[><BackSpace>  scroll-line-up
 bind generic   <Ctrl-w>w            view-next
 bind generic   <Ctrl-w><Ctrl-w>     view-next
 #
-bind generic   <Space>              next
+bind main      <Space>              next
+bind generic   <Space>              scroll-page-down
 bind generic   <Ctrl-@>             move-down
-bind generic   <Backspace>          previous
+bind main      <Backspace>          previous
+bind generic   <Backspace>          scroll-page-up
 bind generic   <Ctrl-^><Backspace>  move-up
 #
 bind generic   <Tab>        next

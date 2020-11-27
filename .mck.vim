@@ -3858,11 +3858,121 @@ tnoremap <F29> <Esc><C-j>
 
 " ---------
 
-function s:CtrlF(multi) abort
+nnoremap <silent> <expr> gH winline() - 1 - &scrolloff > 0
+      \ ? ':normal! ' . (winline() - 1 - &scrolloff) . 'gkg^<CR>'
+      \ : 'g^'
+
+nnoremap <silent> <expr> gM winline() < (winheight(0)+1)/2
+      \ ? ':normal! ' . ((winheight(0)+1)/2 - winline()) . 'gjg^<CR>'
+      \ : winline() == (winheight(0)+1)/2
+      \         ? 'g^'
+      \         : ':normal! ' . (winline() - (winheight(0)+1)/2) . 'gkg^<CR>'
+
+nnoremap <silent> <expr> gL winheight(0) - winline() - &scrolloff > 0
+      \ ? ':normal! ' . (winheight(0) - winline() - &scrolloff) . 'gjg^<CR>'
+      \ : 'g^'
+
+" ---------
+
+function s:CtrlF_Experiment(multi) abort
+    let l:ol = line('.')
+    let l:owl = winline()
     if (line('.') == line("w0"))
-      execute "keepjumps normal! M"
-      return
+        execute "keepjumps normal! M"
+        let l:nl = line('.')
+        let l:nwl = winline()
+        if (l:owl == l:nwl && l:ol == l:nl)
+            execute 'keepjumps normal! ' . g:half . 'gj'
+        endif
+        return
     endif
+    let l:amt = a:multi * g:half + 1
+    let l:hgt = winheight(0)
+    let l:owl = winline()
+    let l:dff = l:hgt - l:owl
+    let prevsj=&scrolljump
+    let &scrolljump=1
+    let prevso=&scrolloff
+    let &scrolloff=l:dff
+    "if (l:dff < 10)
+    "    let l:nxt = 10 - l:dff
+    "    let l:owl = l:owl - l:nxt
+    "endif
+    execute 'keepjumps normal! ' . l:amt . 'gj'
+    "let l:nwl = winline()
+    "if (l:nwl < l:owl)
+    "    let l:dwl = l:owl - l:nwl
+    "    execute 'keepjumps normal! ' . l:dwl . 'gj'
+    "    let &scrolljump=prevsj
+    "    let &scrolloff=prevso
+    "    return
+    "endif
+    "let l:dff = l:hgt - l:nwl
+    "if (l:dff < 10)
+    "    let l:nxt = 10 - l:dff
+    "    execute 'keepjumps normal! ' . l:nxt . 'gk'
+    "endif
+    let &scrolljump=prevsj
+    let &scrolloff=prevso
+endfunction
+
+function s:CtrlB_Experiment(multi) abort
+    let l:ol = line('.')
+    let l:owl = winline()
+    if (line('.') == line("w$"))
+        execute "keepjumps normal! M"
+        let l:nl = line('.')
+        let l:nwl = winline()
+        if (l:owl == l:nwl && l:ol == l:nl)
+            execute 'keepjumps normal! ' . g:half . 'gk'
+        endif
+        return
+    endif
+    let l:amt = a:multi * g:half
+    let l:owl = winline()
+    let l:dff = l:owl
+    let prevsj=&scrolljump
+    let &scrolljump=1
+    let prevso=&scrolloff
+    let &scrolloff=l:dff
+    "if (l:dff < 10)
+    "    let l:nxt = 10 - l:dff
+    "    let l:owl = l:owl + l:nxt
+    "endif
+    execute 'keepjumps normal! ' . l:amt . 'gk'
+    "let l:nwl = winline()
+    "if (l:nwl > l:owl)
+    "    let l:dwl = l:nwl - l:owl
+    "    execute 'keepjumps normal! ' . l:dwl . 'gk'
+    "    let &scrolljump=prevsj
+    "    let &scrolloff=prevso
+    "    return
+    "endif
+    "let l:dff = l:nwl
+    "if (l:dff < 10)
+    "    let l:nxt = 10 - l:dff
+    "    execute 'keepjumps normal! ' . l:nxt . 'gj'
+    "endif
+    let &scrolljump=prevsj
+    let &scrolloff=prevso
+endfunction
+
+" ---------
+
+function s:CtrlF(multi) abort
+    let l:ol = line('.')
+    let l:owl = winline()
+    if (line('.') == line("w0"))
+        execute "keepjumps normal " . g:half . "gj"
+        return
+    endif
+    let l:dff = line('$') - line('.')
+    if (l:dff <= 10)
+        execute "keepjumps normal 5gj"
+        return
+    endif
+    let prevsj=&scrolljump
+    let &scrolljump=1
     let save_scroll = &scroll
     if (a:multi == 2)
         " want normal! here
@@ -3878,13 +3988,35 @@ function s:CtrlF(multi) abort
         execute "keepjumps normal! " . g:half . "\<C-d>"
     endif
     let &scroll = save_scroll
+    let l:hgt = winheight(0)
+    let l:nwl = winline()
+    let l:dff = l:hgt - l:nwl
+    if (l:dff < 10)
+        let l:nxt = 10 - l:dff
+        execute "keepjumps normal! " . l:nxt . "gk"
+    endif
+    let l:nl = line('.')
+    let l:nwl = winline()
+    if (l:owl == l:nwl && l:ol == l:nl)
+        execute "keepjumps normal 5gj"
+    endif
+    let &scrolljump=prevsj
 endfunction
 
 function s:CtrlB(multi) abort
+    let l:ol = line('.')
+    let l:owl = winline()
     if (line('.') == line("w$"))
-      execute "keepjumps normal! M"
-      return
+        execute "keepjumps normal " . g:half . "gk"
+        return
     endif
+    let l:dff = line('.')
+    if (l:dff <= 10)
+        execute "keepjumps normal 5gk"
+        return
+    endif
+    let prevsj=&scrolljump
+    let &scrolljump=1
     let save_scroll = &scroll
     if (a:multi == 2)
         " want normal! here
@@ -3900,7 +4032,21 @@ function s:CtrlB(multi) abort
         execute "keepjumps normal! " . g:half . "\<C-u>"
     endif
     let &scroll = save_scroll
+    let l:nwl = winline()
+    let l:dff = l:nwl
+    if (l:dff < 10)
+        let l:nxt = 10 - l:dff
+        execute "keepjumps normal! " . l:nxt . "gj"
+    endif
+    let l:nl = line('.')
+    let l:nwl = winline()
+    if (l:owl == l:nwl && l:ol == l:nl)
+        execute "keepjumps normal 5gk"
+    endif
+    let &scrolljump=prevsj
 endfunction
+
+" ---------
 
 function! s:MapScrollKeys()
   let g:half = winheight(0) / 2
