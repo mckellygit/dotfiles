@@ -1258,8 +1258,6 @@ augroup qfpreview
 augroup END
 " Do we use <C-k>/<C-j> for scroll-up/down or <C-Up>/<C-Down> ?
 " NOTE: mappings here have to be a single key - cannot be an esc-code ...
-"       and for some as yet unknown reason <C-PageUp> and some others
-"       do not work here.  Just the <xUp> and <xHome> ...
 let g:qfpreview = {
     \ 'top'           : "\<C-Home>",
     \ 'bottom'        : "\<C-End>",
@@ -1276,7 +1274,9 @@ let g:qfpreview = {
     \ 'halfpagedown2' : "\<C-f>",
     \ 'halfpagedown3' : "\<F29>",
     \ 'fullpageup'    : "\<C-u>",
+    \ 'fullpageup2'   : "\<S-F21>",
     \ 'fullpagedown'  : "\<C-d>",
+    \ 'fullpagedown2' : "\<S-F24>",
     \ 'next'          : "\<Down>",
     \ 'next2'         : "\<F31>",
     \ 'previous'      : "\<Up>",
@@ -1291,10 +1291,7 @@ let g:qfpreview = {
     \ 'sign'          : {'linehl': 'CursorLine'},
     \ }
 " NOTE: popup mappings do not seem to work if they are
-"       from MapFastKeycode(), such as <C-Up>, <C-Home> ...
-"       but they do work ok if from set <xUp>, <xHome> ...
-" TODO: add multiple mappings so that close could be q, x
-"       and next could be <Down>, j ...
+"       from MapFastKeycode() unless they use <Fxx> or <S-Fxx> ...
 " vim-qf-preview ------
 
 " lastplace -----------
@@ -2160,19 +2157,19 @@ endfunction
 
 " --------- x maps -----------
 
-call <SID>MapFastKeycode('<C-Insert>',     "\e[2;5~", 33)
-call <SID>MapFastKeycode('<S-Insert>',     "\e[2;2~", 34)
-call <SID>MapFastKeycode('<C-S-Insert>',   "\e[2;6~", 35)
+call <SID>MapFastKeycode('<F33>',     "\e[2;5~", 33) " C-Insert
+call <SID>MapFastKeycode('<F34>',     "\e[2;2~", 34) " S-Insert
+call <SID>MapFastKeycode('<F35>',     "\e[2;6~", 35) " C-S-Insert
 " NOTE: <A-Insert> used by tmux/gnome for copyq toggle
-"call <SID>MapFastKeycode('<A-Insert>',     "\e[2;3~", xx)
-"call <SID>MapFastKeycode('<A-S-Insert>',   "\e[2;4~", xx)
+"call <SID>MapFastKeycode('<A-Insert>',     "\e[2;3~", xx) " A-Insert
+"call <SID>MapFastKeycode('<A-S-Insert>',   "\e[2;4~", xx) " A-S-Insert
 
-call <SID>MapFastKeycode('<C-Del>',        "\e[3;5~", 36)
-call <SID>MapFastKeycode('<S-Del>',        "\e[3;2~", 37)
+call <SID>MapFastKeycode('<F36>',     "\e[3;5~", 36) " C-Del
+call <SID>MapFastKeycode('<F37>',     "\e[3;2~", 37) " S-Del
 " NOTE: start at 100 + 15 ...
-call <SID>MapFastKeycode('<C-S-Del>',      "\e[3;6~", 115)
-call <SID>MapFastKeycode('<A-Del>',        "\e[3;3~", 116)
-"call <SID>MapFastKeycode('<A-S-Del>',      "\e[3;4~", xxx)
+call <SID>MapFastKeycode('<S-F15>',   "\e[3;6~", 115) " C-S-Del
+call <SID>MapFastKeycode('<S-F16>',   "\e[3;3~", 116) " A-Del
+"call <SID>MapFastKeycode('<A-S-Del>',      "\e[3;4~", xxx) " A-S-Del
 
 " NOTE: <Home> (khome) can be: ^[[H or ^[[1~ or ^[[7~
 "call <SID>MapFastKeycode('<C-Home>',       "\e[1;5H", 117)
@@ -2188,23 +2185,23 @@ call <SID>MapFastKeycode('<A-Del>',        "\e[3;3~", 116)
 "call <SID>MapFastKeycode('<A-End>',        "\e[1;3F", 120)
 " <A-S-End>
 
-call <SID>MapFastKeycode('<C-PageUp>',     "\e[5;5~", 121)
+call <SID>MapFastKeycode('<S-F21>',   "\e[5;5~", 121) " C-PageUp
 " <S-PageUp>
-call <SID>MapFastKeycode('<C-S-PageUp>',   "\e[5;6~", 122)
-call <SID>MapFastKeycode('<A-PageUp>',     "\e[5;3~", 123)
+call <SID>MapFastKeycode('<S-F22>',   "\e[5;6~", 122) " C-S-PageUp
+call <SID>MapFastKeycode('<S-F23>',   "\e[5;3~", 123) " A-PageUp
 " <A-S-PageUp>
 
-call <SID>MapFastKeycode('<C-PageDown>',   "\e[6;5~", 124)
+call <SID>MapFastKeycode('<S-F24>',   "\e[6;5~", 124) " C-PageDown
 " <S-PageDown>
-call <SID>MapFastKeycode('<C-S-PageDown>', "\e[6;6~", 125)
-call <SID>MapFastKeycode('<A-PageDown>',   "\e[6;3~", 126)
+call <SID>MapFastKeycode('<S-F25>',   "\e[6;6~", 125) " C-S-PageDown
+call <SID>MapFastKeycode('<S-F26>',   "\e[6;3~", 126) " A-PageDown
 " <A-S-PageDown>
 
 " NOTE: addl mappings start at <S-F27> 127 ...
 "       so we have what is not used above ...
 
 " This used to be <S-Tab> but <A-e> seems better.
-call <SID>MapFastKeycode('<F32>', "\ee", 32)
+call <SID>MapFastKeycode('<F32>',  "\ee", 32)
 nnoremap <buffer> <F32> u
 vnoremap <buffer> <F32> u
 cnoremap <F32> <Esc>e
@@ -2213,7 +2210,7 @@ tnoremap <F32> <Esc>e
 
 " This used to be <S-Tab> but <A-a> seems better.
 " And with this, use <A-Up/Down/Right/Left> as app keys and not tmux ...
-call <SID>MapFastKeycode('<S-F28>', "\ea", 128)
+call <SID>MapFastKeycode('<S-F28>',  "\ea", 128)
 nmap <S-F28> .
 vmap <S-F28> .
 cnoremap <S-F28> <Esc>a
@@ -2221,7 +2218,7 @@ inoremap <S-F28> <Esc>a
 tnoremap <S-F28> <Esc>a
 
 " <C-A-p> for fzf preview ...
-call <SID>MapFastKeycode('<S-F27>', "\e\<C-p>", 127)
+call <SID>MapFastKeycode('<S-F27>',  "\e\<C-p>", 127)
 " but unmap it in terminal so fzf can use it as ctrl-alt-p ...
 cnoremap <S-F27> <Esc><C-p>
 inoremap <S-F27> <Esc><C-p>
@@ -2283,12 +2280,12 @@ noremap <silent> <C-Home> gg
 "noremap <silent> <Esc>6 G
 noremap <silent> <C-End> G
 
-" NOTE: <S-Insert> is mapped to paste below
-"   and <C-Insert> is vmapped to copy selection below
-nmap <silent> <C-Insert> <Nop>
-imap <silent> <C-Insert> <Esc>l
-cmap <silent> <C-Insert> <Nop>
-tmap <silent> <C-Insert> <Nop>
+" NOTE: <F34> is mapped to paste below
+"   and <F33> is vmapped to copy selection below
+nmap <silent> <F33> <Nop>
+imap <silent> <F33> <Esc>l
+cmap <silent> <F33> <Nop>
+tmap <silent> <F33> <Nop>
 
 " NOTE: <A-Insert> used by tmux for copyq toggle
 map  <silent> <A-Insert> <Nop>
@@ -2491,13 +2488,13 @@ endfunction
 "cnoremap <C-S-v> <C-r>+
 "tnoremap <C-S-v> <C-w>"+
 
-" <S-Insert> paste after
-nnoremap <expr> <S-Insert> (&buftype == 'terminal') ? '<Nop>' : 'p'
-" NOTE: <S-Insert> vmapped below ...
-"vnoremap <expr> <S-Insert> (&buftype == 'terminal') ? '<Nop>' : '<Esc>p'
-inoremap <S-Insert> <C-r>*
-cnoremap <S-Insert> <C-r>*
-tnoremap <S-Insert> <C-w>"*
+" <F34> paste after
+nnoremap <expr> <F34> (&buftype == 'terminal') ? '<Nop>' : 'p'
+" NOTE: <F34> vmapped below ...
+"vnoremap <expr> <F34> (&buftype == 'terminal') ? '<Nop>' : '<Esc>p'
+inoremap <F34> <C-r>*
+cnoremap <F34> <C-r>*
+tnoremap <F34> <C-w>"*
 
 " <M-!> paste after [menu?]
 call <SID>MapFastKeycode('<S-F34>',  "\e!", 134)
@@ -2507,13 +2504,13 @@ cnoremap <S-F34> <C-r>*
 inoremap <S-F34> <C-r>*
 tnoremap <S-F34> <C-w>"*
 
-" <C-S-Insert> paste before
-nnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '<Nop>' : 'P`['
-" NOTE: <C-S-Insert> vmapped below ...
-"vnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '<Nop>' : '<Esc>P`['
-cnoremap <C-S-Insert> <C-r>*
-inoremap <C-S-Insert> <C-o>mp<C-r>*<C-o>`p
-tnoremap <C-S-Insert> <C-w>"*
+" <F35> paste before
+nnoremap <expr> <F35> (&buftype == 'terminal') ? '<Nop>' : 'P`['
+" NOTE: <F35> vmapped below ...
+"vnoremap <expr> <F35> (&buftype == 'terminal') ? '<Nop>' : '<Esc>P`['
+cnoremap <F35> <C-r>*
+inoremap <F35> <C-o>mp<C-r>*<C-o>`p
+tnoremap <F35> <C-w>"*
 
 " <M-*> paste before [menu?]
 call <SID>MapFastKeycode('<S-F35>',  "\e*", 135)
@@ -2673,7 +2670,7 @@ endfunction
 " <C-q> does not seem to get through as its stty start ...
 " NOTE: does not work as a map as expected because it is interpreted as <Esc>p ...
 "inoremap <silent> <M-p> <C-r>+
-" NOTE: use <S-Insert> or <C-S-v> instead ...
+" NOTE: use <F34> or <C-S-v> instead ...
 
 " should we change default to paste before (at) cursor
 " instead of after cursor ?
@@ -2701,21 +2698,21 @@ nnoremap <silent> <buffer> <expr> P (&buftype == 'terminal') ? '<Nop>' : 'P`['
 vnoremap <silent> <buffer> <expr> p (&buftype == 'terminal') ? '<Nop>' : '"_x"*P'
 vnoremap <silent> <buffer> <expr> P (&buftype == 'terminal') ? '<Nop>' : '"_x"*P'
 
-" skip <S-Insert> as a vis-mode 'replace' ...
-"vnoremap <silent> <buffer> <expr> <S-Insert>   (&buftype == 'terminal') ? '<Nop>' : 's'
+" skip <F34> as a vis-mode 'replace' ...
+"vnoremap <silent> <buffer> <expr> <F34>   (&buftype == 'terminal') ? '<Nop>' : 's'
 
-vnoremap <silent> <buffer> <expr> <S-Insert>   (&buftype == 'terminal') ? '<Nop>' : '"_x"*P'
-vnoremap <silent> <buffer> <expr> <C-S-Insert> (&buftype == 'terminal') ? '<Nop>' : '"_x"*P'
+vnoremap <silent> <buffer> <expr> <F34>   (&buftype == 'terminal') ? '<Nop>' : '"_x"*P'
+vnoremap <silent> <buffer> <expr> <F35> (&buftype == 'terminal') ? '<Nop>' : '"_x"*P'
 
 " NOTE: to match legacy editors/DOS/etc -
-"  <C-Insert> is copy
-"  <S-Insert> is paste (mapped below)
-"  <S-Del>    is cut (mapped below)
-vmap <silent> <expr> <C-Insert> (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
-vmap <silent> <S-Del> tx
+"  <F33> is copy
+"  <F34> is paste (mapped below)
+"  <F37>    is cut (mapped below)
+vmap <silent> <expr> <F33> (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
+vmap <silent> <F37> tx
 
 " ---------------------------------------------------------------------------------
-" NOTE: TMUX <C-Insert> in terminal does not use bracketed-paste, but <C-S-v> is ok
+" NOTE: TMUX C-Insert in terminal does not use bracketed-paste, but <C-S-v> is ok
 " ---------------------------------------------------------------------------------
 
 " set paste mode, paste, set nopaste mode
@@ -3366,33 +3363,33 @@ function s:CSDel()
 endfunction
 
 " shift-del to delete from cursor to beg of word, like backward-kill-word ...
-"nnoremap <silent> <expr> <S-Del> (col('.') == 1) ? '"_dW' : (col('.') != col('$')-1) ? '"_db' : ':call <SID>SDel()<CR>'
-nnoremap <silent> <expr> <S-Del> (col('.') == 1) ? '"_dW' : (col('.') != col('$')-1) ? '"_db' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
+"nnoremap <silent> <expr> <F37> (col('.') == 1) ? '"_dW' : (col('.') != col('$')-1) ? '"_db' : ':call <SID>SDel()<CR>'
+nnoremap <silent> <expr> <F37> (col('.') == 1) ? '"_dW' : (col('.') != col('$')-1) ? '"_db' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
 " NOTE: *-Del in v-mode does not make much sense, Del deletes entire selection etc ...
-vnoremap <silent>        <S-Del> <Del>
-inoremap <silent> <expr> <S-Del> (col('.') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<C-o>"_db' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
+vnoremap <silent>        <F37> <Del>
+inoremap <silent> <expr> <F37> (col('.') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<C-o>"_db' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
 
 " ctrl-del to delete from cursor to end of word, to match kill-word ...
 " also skip alt-d
-"nnoremap <silent> <expr> <C-Del> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? '"_de' : ':call <SID>CDel()<CR>'
-nnoremap <silent> <expr> <C-Del> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? '"_de' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
+"nnoremap <silent> <expr> <F36> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? '"_de' : ':call <SID>CDel()<CR>'
+nnoremap <silent> <expr> <F36> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? '"_de' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
 " NOTE: *-Del in v-mode does not make much sense, Del deletes entire selection etc ...
-vnoremap <silent>        <C-Del> <Del>
-inoremap <silent> <expr> <C-Del> (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<C-o>"_de' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
+vnoremap <silent>        <F36> <Del>
+inoremap <silent> <expr> <F36> (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<C-o>"_de' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
 
 " ctrl-shift-del to delete whole word under cursor
-"nnoremap <silent> <expr> <C-S-Del> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? 'lb"_dW' : ':call <SID>CSDel()<CR>'
-nnoremap <silent> <expr> <C-S-Del> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? 'lb"_dW' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
+"nnoremap <silent> <expr> <S-F15> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? 'lb"_dW' : ':call <SID>CSDel()<CR>'
+nnoremap <silent> <expr> <S-F15> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? 'lb"_dW' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
 " NOTE: *-Del in v-mode does not make much sense, Del deletes entire selection etc ...
-vnoremap <silent>        <C-S-Del> <Del>
-inoremap <silent> <expr> <C-S-Del> (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<Esc>llb"_dWi' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
+vnoremap <silent>        <S-F15> <Del>
+inoremap <silent> <expr> <S-F15> (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<Esc>llb"_dWi' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
 
 " NOTE: dont really need/use A-Del
 " alt-del to delete whole word under cursor
-nnoremap <silent> <expr> <A-Del> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? 'lb"_dW' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
+nnoremap <silent> <expr> <S-F16> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? 'lb"_dW' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
 " NOTE: *-Del in v-mode does not make much sense, Del deletes entire selection etc ...
-vnoremap <silent>        <A-Del> <Del>
-inoremap <silent> <expr> <A-Del> (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<Esc>llb"_dWi' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
+vnoremap <silent>        <S-F16> <Del>
+inoremap <silent> <expr> <S-F16> (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<Esc>llb"_dWi' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
 
 " <A-S-Del> ?
 
@@ -3862,39 +3859,47 @@ tnoremap <F29> <Esc><C-j>
 " ---------
 
 function s:CtrlF(multi) abort
-    setlocal scrolloff=10
-    let l:amt = a:multi * g:half
-    execute 'normal ' . l:amt . 'gj'
-    setlocal scrolloff=-1
-    "let rl = winheight(0) - winline()
-    "if (rl >= g:half)
-    "    if (rl > g:half + 10)
-    "        execute 'normal ' . g:half . 'gj'
-    "    else
-    "        let amt = rl + 1
-    "        execute 'normal ' . amt . 'gj'
-    "    endif
-    "else
-    "    execute 'normal ' . g:half . 'gj'
-    "endif
+    if (line('.') == line("w0"))
+      execute "keepjumps normal! M"
+      return
+    endif
+    let save_scroll = &scroll
+    if (a:multi == 2)
+        " want normal! here
+        execute "keepjumps normal! " . g:half . "\<C-d>\<C-d>"
+    elseif (a:multi == 3)
+        " want normal! here
+        execute "keepjumps normal! " . g:half . "\<C-d>\<C-d>\<C-d>"
+    elseif (a:multi == 4)
+        " want normal! here
+        execute "keepjumps normal! " . g:half . "\<C-d>\<C-d>\<C-d>\<C-d>"
+    else
+        " want normal! here
+        execute "keepjumps normal! " . g:half . "\<C-d>"
+    endif
+    let &scroll = save_scroll
 endfunction
 
 function s:CtrlB(multi) abort
-    setlocal scrolloff=10
-    let l:amt = a:multi * g:half
-    execute 'normal ' . l:amt . 'gk'
-    setlocal scrolloff=-1
-    "let rl = winline()
-    "if (rl < g:half)
-    "    execute 'normal ' . g:half . 'gk'
-    "else
-    "    if (rl > g:half + 10)
-    "        execute 'normal ' . g:half . 'gk'
-    "    else
-    "        let amt = rl + 1
-    "        execute 'normal ' . amt . 'gk'
-    "    endif
-    "endif
+    if (line('.') == line("w$"))
+      execute "keepjumps normal! M"
+      return
+    endif
+    let save_scroll = &scroll
+    if (a:multi == 2)
+        " want normal! here
+        execute "keepjumps normal! " . g:half . "\<C-u>\<C-u>"
+    elseif (a:multi == 3)
+        " want normal! here
+        execute "keepjumps normal! " . g:half . "\<C-u>\<C-u>\<C-u>"
+    elseif (a:multi == 4)
+        " want normal! here
+        execute "keepjumps normal! " . g:half . "\<C-u>\<C-u>\<C-u>\<C-u>"
+    else
+        " want normal! here
+        execute "keepjumps normal! " . g:half . "\<C-u>"
+    endif
+    let &scroll = save_scroll
 endfunction
 
 function! s:MapScrollKeys()
@@ -3944,31 +3949,31 @@ function! s:MapScrollKeys()
   inoremap  <silent> <expr> <PageUp>     pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp2("<C-V><C-U>")<CR>'
 
   " NOTE: tmux could send Up/Down cmds instead of this key ...
-  "noremap            <expr> <C-PageDown> (line('.') == line('w0')) ? g:hdn : '<C-D>'
-  nnoremap <silent> <C-PageDown> :call <SID>CtrlF(1)<CR>
-  execute 'vnoremap <silent> <expr> <C-PageDown> (line(".") == line("w0")) ? "' . g:hdn . '" : "<C-D>"'
-  inoremap  <silent> <expr> <C-PageDown> pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
-  "noremap            <expr> <C-PageUp>   (line('.') == line('w$')) ? g:hup : '<C-U>'
-  nnoremap <silent> <C-PageUp> :call <SID>CtrlB(2)<CR>
-  execute 'vnoremap <silent> <expr> <C-PageUp> (line(".") == line("w$")) ? "' . g:hup . '" : "<C-U>"'
-  inoremap  <silent> <expr> <C-PageUp>   pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
+  "noremap            <expr> <S-F24> (line('.') == line('w0')) ? g:hdn : '<C-D>'
+  nnoremap <silent> <S-F24> :call <SID>CtrlF(1)<CR>
+  execute 'vnoremap <silent> <expr> <S-F24> (line(".") == line("w0")) ? "' . g:hdn . '" : "<C-D>"'
+  inoremap  <silent> <expr> <S-F24> pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
+  "noremap            <expr> <S-F21>   (line('.') == line('w$')) ? g:hup : '<C-U>'
+  nnoremap <silent> <S-F21> :call <SID>CtrlB(1)<CR>
+  execute 'vnoremap <silent> <expr> <S-F21> (line(".") == line("w$")) ? "' . g:hup . '" : "<C-U>"'
+  inoremap  <silent> <expr> <S-F21>   pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
 
   " NOTE: tmux could send Up/Down cmds instead of this key ...
   " TODO: wish <C-e>/<C-y> would scroll virtual lines ...
-  noremap   <silent> <expr> <C-S-PageDown> (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
-  inoremap  <silent> <expr> <C-S-PageDown> pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
-  noremap   <silent> <expr> <C-S-PageUp>   (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
-  inoremap  <silent> <expr> <C-S-PageUp>   pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
+  noremap   <silent> <expr> <S-F25> (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
+  inoremap  <silent> <expr> <S-F25> pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
+  noremap   <silent> <expr> <S-F22>   (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
+  inoremap  <silent> <expr> <S-F22>   pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
 
   " NOTE: tmux could send Up/Down cmds instead of this key ...
-  "noremap            <expr> <A-PageDown> (line('.') == line('w0')) ? g:hdn : '<C-D><C-D><C-D><C-D>'
-  nnoremap <silent> <A-PageDown> :call <SID>CtrlF(4)<CR>
-  execute 'vnoremap <silent> <expr> <A-PageDown> (line(".") == line("w0")) ? "' . g:hdn . '" : "<C-D><C-D><C-D><C-D>"'
-  inoremap  <silent> <expr> <A-PageDown> pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn4("<C-V><C-D>")<CR>'
-  "noremap            <expr> <A-PageUp>   (line('.') == line('w$')) ? g:hup : '<C-U><C-U><C-U><C-U>'
-  nnoremap <silent> <A-PageUp> :call <SID>CtrlB(4)<CR>
-  execute 'vnoremap <silent> <expr> <A-PageUp> (line(".") == line("w$")) ? "' . g:hup . '" : "<C-U><C-U><C-U><C-U>"'
-  inoremap  <silent> <expr> <A-PageUp>   pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp4("<C-V><C-U>")<CR>'
+  "noremap            <expr> <S-F26> (line('.') == line('w0')) ? g:hdn : '<C-D><C-D><C-D><C-D>'
+  nnoremap <silent> <S-F26> :call <SID>CtrlF(4)<CR>
+  execute 'vnoremap <silent> <expr> <S-F26> (line(".") == line("w0")) ? "' . g:hdn . '" : "<C-D><C-D><C-D><C-D>"'
+  inoremap  <silent> <expr> <S-F26> pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn4("<C-V><C-D>")<CR>'
+  "noremap            <expr> <S-F23>   (line('.') == line('w$')) ? g:hup : '<C-U><C-U><C-U><C-U>'
+  nnoremap <silent> <S-F23> :call <SID>CtrlB(4)<CR>
+  execute 'vnoremap <silent> <expr> <S-F23> (line(".") == line("w$")) ? "' . g:hup . '" : "<C-U><C-U><C-U><C-U>"'
+  inoremap  <silent> <expr> <S-F23>   pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp4("<C-V><C-U>")<CR>'
 endfunction
 
 let g:half = 24
