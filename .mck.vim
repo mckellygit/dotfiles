@@ -4075,13 +4075,29 @@ function! s:MapScrollKeys()
 
   " <leader><Tab>, <S-Tab> might have been good here but <Leader><Tab> is used in several places above ...
 
+  nnoremap <silent> <Leader>` :<C-u>call <SID>CtrlB(1)<CR>
+  execute 'vnoremap <silent> <Leader>` ' . g:hup
+
   nnoremap <silent> <Leader>1 :<C-u>call <SID>CtrlF(1)<CR>
   execute 'vnoremap <silent> <Leader>1 ' . g:hdn
 
-  nnoremap <silent> <Leader>2 :<C-u>call <SID>CtrlB(1)<CR>
-  execute 'vnoremap <silent> <Leader>2 ' . g:hup
+  " ok to unmap these ...
 
-  " skip shifts and partial shifts of <Leader>1,2 ...
+  noremap `` <Nop>
+  noremap `\ <Nop>
+  noremap <Leader>~ <Nop>
+
+  " but skip mapping shifts and partial shifts of <Leader>1,2 to also scroll ...
+
+  "noremap `\| <Nop>
+  "noremap \|`       <Nop>
+  "noremap \|~       <Nop>
+  "noremap <Leader>! <Nop>
+  "noremap \|1       <Nop>
+  "noremap \|!       <Nop>
+  "noremap <Leader>@ <Nop>
+  "noremap \|2       <Nop>
+  "noremap \|@       <Nop>
 
   " -------------------
 

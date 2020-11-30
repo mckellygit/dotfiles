@@ -15,8 +15,8 @@
 \e[1;5A  back-line
 \e[1;5C  noaction 10\e)
 \e[1;5D  noaction 10\e(
+\\`  noaction 24^B
 \\1  noaction 24^F
-\\2  noaction 24^B
 \ej  noaction 5j
 \ek  noaction 5k
 j  noaction 5^F

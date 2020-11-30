@@ -268,3 +268,6 @@ z<Down>     move selected line(s) down
 
 <Leader>Qx  macro recording to reg <x> (playback: N@x)
 
+<Leader>`   scroll half-page up
+<Leader>1   scroll half-page down
+

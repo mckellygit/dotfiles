@@ -18,7 +18,8 @@ pcmd=$(tmux display -p '#{pane_current_command}')
 
 if [ "${pcmd##*ssh*}" ] ; then
     gdir=$(tmux display -p '#{pane_current_path}')
-    ginfo=$(gitinfo ${gdir})
+    # if there is a hash, add a space after it so the #[default] below works correctly ...
+    ginfo=$(gitinfo ${gdir} | sed 's/\#/\# /')
 else
     # pcmd contains ssh substring ...
     ginfo="git:<n/a>"

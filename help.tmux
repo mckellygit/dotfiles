@@ -64,6 +64,8 @@ Alt-<j>                 - move 5 down
 Ctrl-Alt-<k>            - scroll 5 up
 Ctrl-Alt-<j>            - scroll 5 down
 Ctrl-Shift-<arrow>      - move 10 <arrow>
+<Leader>`               - scroll half-page up
+<Leader>1               - scroll half-page down
 Ctrl-Alt-<Enter>        - exit copy-mode
 2-click rt status       - exit copy-mode (also Ctrl-<q>)
 Ctrl-2-click rt status  - exit copy-mode and paste selection (Alt-2-click)
