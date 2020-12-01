@@ -4087,6 +4087,11 @@ function! s:MapScrollKeys()
   noremap `\ <Nop>
   noremap <Leader>~ <Nop>
 
+  " interesting | (pipe) cmd to go to screen column specified
+
+  nnoremap \| <Nop>
+  vnoremap \| <Nop>
+
   " but skip mapping shifts and partial shifts of <Leader>1,2 to also scroll ...
 
   "noremap `\| <Nop>
