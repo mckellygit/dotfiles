@@ -2,7 +2,7 @@
 
 prefix = Ctrl-<s>
 
-prefix <arrow>          - navigate panes
+prefix <arrow>          - navigate panes (prefix <C-arrow>, hjkl)
 prefix <s>              - move to next pane (prefix Ctrl-<s> prev pane)
 prefix <z>              - toggle pane zoom (prefix Ctrl-<z>)
 
