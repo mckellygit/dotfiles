@@ -49,7 +49,7 @@ night-light-schedule-automatic=true
 night-light-schedule-to=0.0
 night-light-schedule-from=6.0
 night-light-enabled=true
-night-light-temperature=uint32 5500
+night-light-temperature=uint32 5250
 
 [org/gnome/settings-daemon/plugins/media-keys]
 volume-mute='<Primary><Alt>slash'
