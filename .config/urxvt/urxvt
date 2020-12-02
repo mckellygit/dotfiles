@@ -278,8 +278,10 @@ URxvt.iso14755:                 false
 URxvt.iso14755_52:              false
 
 !! special ------
-URxvt.keysym.S-BackSpace:               string:\177
 URxvt.keysym.C-BackSpace:               string:\036\177
+URxvt.keysym.S-BackSpace:               string:\036\010
+URxvt.keysym.S-space:                   string:\036\040
+!!URxvt.keysym.S-BackSpace:               string:\177
 
 URxvt.keysym.C-S-BackSpace:             string:\037\177
 URxvt.keysym.C-S-space:                 string:\037\040

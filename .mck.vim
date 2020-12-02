@@ -4106,6 +4106,22 @@ function! s:MapScrollKeys()
 
   " -------------------
 
+  " S-BS in some terminals (via tmux) may be mapped to <C-^><C-h> in vim ...
+  nnoremap <silent> <C-^><C-h>   :<C-u>call <SID>CtrlB(1)<CR>
+  execute 'vnoremap <silent> <C-^><C-h> '   . g:hup
+  inoremap <C-^><C-h> <BS>
+  cnoremap <C-^><C-h> <BS>
+  tnoremap <C-^><C-h> <BS>
+
+  " S-Space in some terminals (via tmux) may be mapped to <C-^><Space> in vim ...
+  nnoremap <silent> <C-^><Space> :<C-u>call <SID>CtrlF(1)<CR>
+  execute 'vnoremap <silent> <C-^><Space> ' . g:hdn
+  inoremap <C-^><Space> <Space>
+  cnoremap <C-^><Space> <Space>
+  tnoremap <C-^><Space> <Space>
+
+  " -------------------
+
   "noremap            <expr> <PageDown>   (line('.') == line('w0')) ? g:hdn : '<C-D><C-D>'
   nnoremap <silent> <PageDown> :call <SID>CtrlF(2)<CR>
   execute 'vnoremap <silent> <expr> <PageDown> (line(".") == line("w0")) ? "' . g:hdn . '" : "<C-D><C-D>"'
