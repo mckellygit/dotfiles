@@ -376,9 +376,15 @@ function! MyLightlineMode()
   " dont wrapscan if in visual mode ...
   let m = mode()
   if m ==# 'v' || m ==# 'V' || m ==# ''
-      set nowrapscan
+    set nowrapscan
+    "let &sj=0
+    "let &so=10
   else
-      set wrapscan
+    set wrapscan
+    if m ==# 'n'
+      "let &sj=-50
+      "let &so=0
+    endif
   endif
   if &filetype ==# 'qf'
     return ''
@@ -3624,7 +3630,7 @@ function! s:Saving_scrollVUp1(cmd)
   endif
   let save_scroll = &scroll
   " want normal! here
-  execute "keepjumps normal!" . g:half . a:cmd
+  execute "keepjumps normal!" . g:hal1 . a:cmd
   let &scroll = save_scroll
 endfunction
 
@@ -3924,11 +3930,11 @@ function s:CtrlB_Experiment(multi) abort
         let l:nl = line('.')
         let l:nwl = winline()
         if (l:owl == l:nwl && l:ol == l:nl)
-            execute 'keepjumps normal! ' . g:half . 'gk'
+            execute 'keepjumps normal! ' . g:hal1 . 'gk'
         endif
         return
     endif
-    let l:amt = a:multi * g:half
+    let l:amt = a:multi * g:hal1
     let l:owl = winline()
     let l:dff = l:owl
     let prevsj=&scrolljump
@@ -4007,7 +4013,7 @@ function s:CtrlB(multi) abort
     let l:ol = line('.')
     let l:owl = winline()
     if (line('.') == line("w$"))
-        execute "keepjumps normal " . g:half . "gk"
+        execute "keepjumps normal " . g:hal1 . "gk"
         return
     endif
     let l:dff = line('.')
@@ -4020,16 +4026,16 @@ function s:CtrlB(multi) abort
     let save_scroll = &scroll
     if (a:multi == 2)
         " want normal! here
-        execute "keepjumps normal! " . g:half . "\<C-u>\<C-u>"
+        execute "keepjumps normal! " . g:hal1 . "\<C-u>\<C-u>"
     elseif (a:multi == 3)
         " want normal! here
-        execute "keepjumps normal! " . g:half . "\<C-u>\<C-u>\<C-u>"
+        execute "keepjumps normal! " . g:hal1 . "\<C-u>\<C-u>\<C-u>"
     elseif (a:multi == 4)
         " want normal! here
-        execute "keepjumps normal! " . g:half . "\<C-u>\<C-u>\<C-u>\<C-u>"
+        execute "keepjumps normal! " . g:hal1 . "\<C-u>\<C-u>\<C-u>\<C-u>"
     else
         " want normal! here
-        execute "keepjumps normal! " . g:half . "\<C-u>"
+        execute "keepjumps normal! " . g:hal1 . "\<C-u>"
     endif
     let &scroll = save_scroll
     let l:nwl = winline()
@@ -4053,23 +4059,35 @@ function! s:MapScrollKeys()
   if (g:half < 1)
     g:half = 1
   endif
-  let g:full = g:half + g:half
+  let g:full = winheight(0)
   let g:full2x = g:full + g:full
 
-  let g:hdn = g:half . 'gj'
-  let g:hup = g:half . 'gk'
+  " 47 / 2 = 23 but if we are at 24 then 23 up is 1 and 23 down is 47 - ok
+  " 46 / 2 = 23 but if we are at 23 then 23 up is 0 and 23 down is 46 - not ok, need to make up one less ...
+
+  let g:hal1 = g:half
+
+  " BUG:  gj in visual mode past screen bottom does NOT seem to cause scrolljump to jump properly ...
+  "       so add zz to make it consistent, but ...
+  " TODO: zz here causes empty bottom half of screen when at end of file ...
+  let g:hup = g:hal1 . 'gkzz'
+  let g:hdn = g:half . 'gjzz'
+
+  "let g:hup = g:hal1 . 'gkzz11<C-e>'
+  "let g:hdn = g:half . 'gjzz11<C-y>'
 
   " TODO: could add same if at top then M logic to imap <C-f> ...
 
   "noremap            <expr> <C-f> (line('.') == line('w0')) ? g:hdn : '<C-D>'
   nnoremap <silent> <C-f> :call <SID>CtrlF(1)<CR>
-  execute 'vnoremap <silent> <C-f> ' . g:hdn
   inoremap  <silent> <expr> <C-f> pumvisible() ? '<C-f>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
 
   "noremap            <expr> <C-b> (line('.') == line('w$')) ? g:hup : '<C-U>'
   nnoremap <silent> <C-b> :call <SID>CtrlB(1)<CR>
-  execute 'vnoremap <silent> <C-b> ' . g:hup
   inoremap  <silent> <expr> <C-b> pumvisible() ? '<C-b>' : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
+
+  execute 'vnoremap <silent> <C-f> ' . g:hdn
+  execute 'vnoremap <silent> <C-b> ' . g:hup
 
   " to match tig etc, a <Leader> mapping for page-down,up ...
 
@@ -4159,12 +4177,12 @@ function! s:MapScrollKeys()
   inoremap  <silent> <expr> <S-F23>   pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp4("<C-V><C-U>")<CR>'
 endfunction
 
+let g:hal1 = 24
 let g:half = 24
 let g:full = 48
 let g:full2x = 96
-call <SID>MapScrollKeys()
 
-autocmd VimResized * call <SID>MapScrollKeys()
+autocmd VimEnter,VimResized * call <SID>MapScrollKeys()
 
 " ---------
 
@@ -4263,7 +4281,7 @@ noremap <silent> <Leader>cz zz
 "nnoremap <Char-0x07F> <BS>
 " NOTE: S-BS in terminals often mapped to BS/Del ...
 noremap  <silent> <S-BS> <BS>
-inoremap <silent> <S-BS> <BS>
+inoremap          <S-BS> <BS>
 " TODO: if shift-BS is ever reliably recognized have it delete curr/prev word ...
 
 " TODO: MCK - does <C-BS> move up or scroll up ?  And same for <C-Space>
@@ -4273,13 +4291,15 @@ noremap <silent> <C-^><BS>  gk
 noremap <silent> <C-^><DEL> gk
 
 noremap <silent> <C-^>- -
-inoremap <silent> <C-^>- -
+inoremap         <C-^>- -
+cnoremap         <C-^>- -
+tnoremap         <C-^>- -
 
 " NOTE: terminals could map <C-A-Return> to <C-^><CR>
 "nmap <silent> <buffer> <C-^><Return> <Nop>
 "vmap <silent> <buffer> <C-^><Return> mvty`v
 map <silent> <buffer> <C-^><Return> gk
-imap <silent> <buffer> <C-^><Return> <Nop>
+imap         <buffer> <C-^><Return> <Nop>
 
 " NOTE: C-Space in most terminals is C-@
 noremap <silent> <C-@> gj
@@ -4328,8 +4348,9 @@ nnoremap  z<Down>  :m .+1<CR>==
 nnoremap  z<Up>    :m .-2<CR>==
 vnoremap  z<Down>  :m '>+1<CR>gv=gv
 vnoremap  z<Up>    :m '<-2<CR>gv=gv
-inoremap  z<Down>  <Esc>:m .+1<CR>==gi
-inoremap  z<Up>    <Esc>:m .-2<CR>==gi
+" NOTE: these cannot be z* mappings or it adds delay when inserting z ...
+"inoremap  z<Down>  <Esc>:m .+1<CR>==gi
+"inoremap  z<Up>    <Esc>:m .-2<CR>==gi
 
 " -----------------------------
 
