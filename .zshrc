@@ -103,6 +103,9 @@ fi
 
 # End of lines added by compinstall
 
+# tcp foo
+zmodload zsh/net/tcp
+
 zmodload -i zsh/complist
 
 zstyle ':completion:*' menu select
