@@ -4070,34 +4070,40 @@ function! s:MapScrollKeys()
   " BUG:  gj in visual mode past screen bottom does NOT seem to cause scrolljump to jump properly ...
   "       so add zz to make it consistent, but ...
   " TODO: zz here causes empty bottom half of screen when at end of file ...
-  let g:hup = g:hal1 . 'gkzz'
-  let g:hdn = g:half . 'gjzz'
 
+  "let g:hup = g:hal1 . 'gkzz'
+  "let g:hdn = g:half . 'gjzz'
+  "let g:hup = g:hal1 . 'gkzz3gk'
+  "let g:hdn = g:half . 'gjzz4gj'
   "let g:hup = g:hal1 . 'gkzz11<C-e>'
   "let g:hdn = g:half . 'gjzz11<C-y>'
+
+  let g:hup = ' (line("v") >= line(".")) ? "' . g:hal1 . 'gkzz6gk" : "' . g:hal1 . 'gkzz6gj"'
+  let g:hdn = ' (line("v") <= line(".")) ? "' . g:half . 'gjzz6gj" : "' . g:half . 'gjzz6gk"'
 
   " TODO: could add same if at top then M logic to imap <C-f> ...
 
   "noremap            <expr> <C-f> (line('.') == line('w0')) ? g:hdn : '<C-D>'
   nnoremap <silent> <C-f> :call <SID>CtrlF(1)<CR>
+  "vnoremap <silent> <expr> <C-f> (line('v') < line('.')) ? g:half . 'gjzz6gj' : g:half . 'gjzz6gk'
+  execute 'vnoremap <silent> <expr> <C-f> ' . g:hdn
   inoremap  <silent> <expr> <C-f> pumvisible() ? '<C-f>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
 
   "noremap            <expr> <C-b> (line('.') == line('w$')) ? g:hup : '<C-U>'
   nnoremap <silent> <C-b> :call <SID>CtrlB(1)<CR>
+  "vnoremap <silent> <expr> <C-b> (line('v') > line('.')) ? g:hal1 . 'gkzz6gk' : g:hal1 . 'gkzz6gj'
+  execute 'vnoremap <silent> <expr> <C-b> ' . g:hup
   inoremap  <silent> <expr> <C-b> pumvisible() ? '<C-b>' : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
-
-  execute 'vnoremap <silent> <C-f> ' . g:hdn
-  execute 'vnoremap <silent> <C-b> ' . g:hup
 
   " to match tig etc, a <Leader> mapping for page-down,up ...
 
   " <leader><Tab>, <S-Tab> might have been good here but <Leader><Tab> is used in several places above ...
 
   nnoremap <silent> <Leader>` :<C-u>call <SID>CtrlB(1)<CR>
-  execute 'vnoremap <silent> <Leader>` ' . g:hup
+  execute 'vnoremap <silent> <expr> <Leader>` ' . g:hup
 
   nnoremap <silent> <Leader>1 :<C-u>call <SID>CtrlF(1)<CR>
-  execute 'vnoremap <silent> <Leader>1 ' . g:hdn
+  execute 'vnoremap <silent> <expr> <Leader>1 ' . g:hdn
 
   " ok to unmap these ...
 
@@ -4126,14 +4132,14 @@ function! s:MapScrollKeys()
 
   " S-BS in some terminals (via tmux) may be mapped to <C-^><C-h> in vim ...
   nnoremap <silent> <C-^><C-h>   :<C-u>call <SID>CtrlB(1)<CR>
-  execute 'vnoremap <silent> <C-^><C-h> '   . g:hup
+  execute 'vnoremap <silent> <expr> <C-^><C-h> '   . g:hup
   inoremap <C-^><C-h> <BS>
   cnoremap <C-^><C-h> <BS>
   tnoremap <C-^><C-h> <BS>
 
   " S-Space in some terminals (via tmux) may be mapped to <C-^><Space> in vim ...
   nnoremap <silent> <C-^><Space> :<C-u>call <SID>CtrlF(1)<CR>
-  execute 'vnoremap <silent> <C-^><Space> ' . g:hdn
+  execute 'vnoremap <silent> <expr> <C-^><Space> ' . g:hdn
   inoremap <C-^><Space> <Space>
   cnoremap <C-^><Space> <Space>
   tnoremap <C-^><Space> <Space>
