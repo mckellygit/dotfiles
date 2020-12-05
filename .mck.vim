@@ -4067,6 +4067,18 @@ function! s:MapScrollKeys()
 
   let g:hal1 = g:half
 
+  let g:hu6 = g:hal1 - 6
+  if (g:hu6 < 1)
+      g:hu6 = 1
+  endif
+  let g:hu6a = g:hal1 + 6
+
+  let g:hd6 = g:half - 6
+  if (g:hd6 < 1)
+      g:hd6 = 1
+  endif
+  let g:hd6a = g:half + 6
+
   " BUG:  gj in visual mode past screen bottom does NOT seem to cause scrolljump to jump properly ...
   "       so add zz to make it consistent, but ...
   " TODO: zz here causes empty bottom half of screen when at end of file ...
@@ -4078,8 +4090,8 @@ function! s:MapScrollKeys()
   "let g:hup = g:hal1 . 'gkzz11<C-e>'
   "let g:hdn = g:half . 'gjzz11<C-y>'
 
-  let g:hup = ' (line("v") >= line(".")) ? "' . g:hal1 . 'gkzz6gk" : "' . g:hal1 . 'gkzz6gj"'
-  let g:hdn = ' (line("v") <= line(".")) ? "' . g:half . 'gjzz6gj" : "' . g:half . 'gjzz6gk"'
+  let g:hup = ' (line("v") >= line(".")) ? "' . g:hu6 . 'gkzz6gk" : "' . g:hu6a . 'gkzz6gj"'
+  let g:hdn = ' (line("v") <= line(".")) ? "' . g:hd6 . 'gjzz6gj" : "' . g:hd6a . 'gjzz6gk"'
 
   " TODO: could add same if at top then M logic to imap <C-f> ...
 
