@@ -3797,13 +3797,13 @@ inoremap <silent> <expr> <ScrollWheelUp>     pumvisible() ? '<ScrollWheelUp>' : 
 
 " NOTE: add selection to beg/end of next line ...
 " do we bother to look at reg to see if its V for this ?
-vnoremap <ScrollWheelUp>     5k0
-vnoremap <ScrollWheelDown>   5j$
+vnoremap <ScrollWheelUp>     5gkg0
+vnoremap <ScrollWheelDown>   5gjg$
 " C-Wheel is often font scaling but ...
-vnoremap <C-ScrollWheelUp>   24k0
-vnoremap <C-ScrollWheelDown> 24j$
-vnoremap <A-ScrollWheelUp>   48k0
-vnoremap <A-ScrollWheelDown> 48j$
+vnoremap <C-ScrollWheelUp>   24gkg0
+vnoremap <C-ScrollWheelDown> 24gjg$
+vnoremap <A-ScrollWheelUp>   48gkg0
+vnoremap <A-ScrollWheelDown> 48gjg$
 
 "inoremap <silent> <ScrollWheelUp>     <C-\><C-o>5k
 "inoremap <silent> <ScrollWheelDown>   <C-\><C-o>5j
@@ -5389,10 +5389,10 @@ noremap <C-a> ^
 noremap <C-e> $
 
 " easier to type than ^
-noremap <Leader>l1 ^
+noremap <Leader>l1 g^
 noremap <Leader>la ^
 " to match same <Leader>l1 key pattern ...
-noremap <Leader>l2 $
+noremap <Leader>l2 g$
 noremap <Leader>le $
 " for consistency ...
 noremap <Leader>l0 0
