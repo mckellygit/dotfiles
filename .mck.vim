@@ -873,17 +873,17 @@ autocmd BufEnter fugitive://**    nmap <buffer> <Return> O
 autocmd BufEnter *.fugitiveblame  nmap <buffer> <2-LeftMouse> O
 
 autocmd BufEnter fugitive://**    nmap <buffer> <2-LeftMouse> O
-autocmd BufEnter fugitive://**    nmap <silent> <buffer> <Leader>qq  :close<cr>:tabprevious<cr>
-autocmd BufEnter fugitive://**    nmap <silent> <buffer> qq    :close<cr>:tabprevious<cr>
-autocmd BufEnter fugitive://**    nmap <silent> <buffer> <C-q> :close<cr>:tabprevious<cr>
-autocmd BufEnter fugitive://**    nmap <silent> <buffer> QQ    :close<cr>:tabprevious<cr>
+autocmd BufEnter fugitive://**    nmap <silent> <buffer> <Leader>qq  :close<cr>:tabprevious<cr>:redraw!<cr>
+autocmd BufEnter fugitive://**    nmap <silent> <buffer> qq    :close<cr>:tabprevious<cr>:redraw!<cr>
+autocmd BufEnter fugitive://**    nmap <silent> <buffer> <C-q> :close<cr>:tabprevious<cr>:redraw!<cr>
+autocmd BufEnter fugitive://**    nmap <silent> <buffer> QQ    :close<cr>:tabprevious<cr>:redraw!<cr>
 
 autocmd FileType git              nmap <buffer> <Leader><Tab> O
 autocmd FileType git              nmap <buffer> <C-t> O
-autocmd FileType git              nmap <silent> <buffer> <Leader>qq  :close<cr>:tabprevious<cr>
-autocmd FileType git              nmap <silent> <buffer> qq    :close<cr>:tabprevious<cr>
-autocmd FileType git              nmap <silent> <buffer> <C-q> :close<cr>:tabprevious<cr>
-autocmd FileType git              nmap <silent> <buffer> QQ    :close<cr>:tabprevious<cr>
+autocmd FileType git              nmap <silent> <buffer> <Leader>qq  :close<cr>:tabprevious<cr>:redraw!<cr>
+autocmd FileType git              nmap <silent> <buffer> qq    :close<cr>:tabprevious<cr>:redraw!<cr>
+autocmd FileType git              nmap <silent> <buffer> <C-q> :close<cr>:tabprevious<cr>:redraw!<cr>
+autocmd FileType git              nmap <silent> <buffer> QQ    :close<cr>:tabprevious<cr>:redraw!<cr>
 
 " TODO: MCK should we be like less here ?
 autocmd FileType git              nmap <silent> <buffer> <BS>    :call <SID>CtrlB(1)<CR>
@@ -994,9 +994,26 @@ autocmd FileType GV nmap <buffer> <A-2-LeftMouse> <C-\><C-n>:<C-u>call feedkeys(
 " start with folds open
 autocmd FileType GV set foldlevelstart=1
 
+function QuitGV() abort
+    echohl Statement
+    echo "Last remaining view, really quit ? (q|y/n): "
+    echohl None
+    let c = getchar()
+    while type(c) != 0
+        let c = getchar()
+    endwhile
+    let ans=nr2char(c)
+    if ans ==# 'y' || ans ==# 'Y' || ans ==# 'q' || ans ==# 'Q'
+        quitall
+    else
+        redraw!
+    endif
+endfunction
+
 " NOTE: qq to exit GV seems good ...
 "autocmd FileType GV nmap <silent> <buffer> qq    :qa!<CR>
-autocmd FileType GV nmap <silent> <buffer> qq    :echohl Statement<CR>:echo "Can't close last remaining view with \'qq\'"<CR>:echohl None<CR>
+"autocmd FileType GV nmap <silent> <buffer> qq    :echohl Statement<CR>:echo "Can't close last remaining view with \'qq\'"<CR>:echohl None<CR>
+autocmd FileType GV nmap <silent> <buffer> qq    :call QuitGV()<CR>
 " could make it more like a real vim session and not have qq exit ...
 "autocmd FileType GV nmap <silent> <buffer> <C-q> :qa!<CR>
 autocmd FileType GV nmap <silent> <buffer> <Leader>wq <C-\><C-n>:<C-u>call <SID>QuitIfOnlyNoNameLeft()<CR>
