@@ -61,6 +61,7 @@ file=""
 args=()
 nextisarg=0
 haspattern=0
+wrap=1
 for var ; do
   if (( nextisarg == 1 )); then
     nextisarg=0
@@ -75,6 +76,10 @@ for var ; do
     if [[ $var == "-p" ]] ||
        [[ $var == "--pattern" ]]; then
       haspattern=1
+    fi
+    if [[ $var == "-S" ]] ||
+       [[ $var == "--chop-long-lines" ]]; then
+      wrap=0
     fi
     if [[ $var == "-b" ]] ||
        [[ $var == "-h" ]] ||
@@ -144,11 +149,22 @@ n=0
 lines=
 newline=$'\n'
 
+cols="$(tput cols)"
+mchars=$((nlines * cols))
+nchars=0
+atlimit=0
+
 # read and display enough lines to fill most of the terminal (nlines many lines)
 while [ $n -lt "${nlines}" ] && IFS= read -r line; do
   lines="${lines}${line}${newline}"
   line=''
   n=$((n + 1))
+  lchars=$(echo ${lines} | wc -m)
+  nchars=$((nchars + lchars))
+  if [[ $wrap -gt 0 && $nchars -ge $mchars ]]; then
+      atlimit=1
+      break
+  fi
 done
 
 # For input with no trailing `\nEOF`
@@ -157,15 +173,33 @@ if [ -n "${line}" ]; then
   lines="${lines}${line}"
 fi
 
+trap "if [[ $wrap -eq 0 ]] ; then printf '\033[?7h' ; fi" EXIT
+
 # if the input is longer, run the pager
-if IFS= read -r line; then
-  {
-    printf '%s' "${lines}"
+if IFS= read -r line || [[ $atlimit -gt 0 ]]; then
+# {
+#   printf '%s' "${lines}"
 #   dont echo extra info ...
 #   printf '\033[38;5;2m... (more shown in %s)\033[0m\n' "${SMARTLESS_PAGER}"
-  } >&2
-  { printf '%s%s\n' "${lines}" "${line}"; exec cat; } | exec "${SMARTLESS_PAGER}" "${SMARTLESS_PAGER_ARGUMENTS}" "${ARGS[@]}"
+# } >&2
+  {
+  if [[ $wrap -eq 0 ]]; then
+      printf '\033[?7l'
+  fi
+  { printf '%s%s\n' "${lines}" "${line}"; exec cat; } | "${SMARTLESS_PAGER}" "${SMARTLESS_PAGER_ARGUMENTS}" "${ARGS[@]}"
+  if [[ $wrap -eq 0 ]]; then
+      printf '\033[?7h'
+  fi
+  }
 else
   # TODO: ComponentTest: `printf '1\n2\n3' | smartless`
+  {
+  if [[ $wrap -eq 0 ]]; then
+      printf '\033[?7l'
+  fi
   printf '%s' "${lines}"
+  if [[ $wrap -eq 0 ]]; then
+      printf '\033[?7h'
+  fi
+  }
 fi
