@@ -1398,6 +1398,8 @@ let g:vimade.fadelevel = 0.6
 let g:vimade.fadepriority = 0
 let g:vimade.checkinterval = 300
 let g:vimade.enablefocusfading = 1
+" BUG: alactritty terminal with selected wrapped lines can sometimes flash w/o this -
+let g:vimade.usecursorhold = 1
 
 " to mitigate pum redraw/flash/lag with vimade -
 " (change in autoload/vimade.vim)
