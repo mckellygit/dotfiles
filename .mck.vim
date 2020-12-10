@@ -3699,9 +3699,9 @@ endfunction
 
 " could also remap these ...
 "nnoremap <silent> <expr> <C-D> (line('.') == line('w0')) ? g:hdn : '<C-D>'
-"vnoremap <silent> <expr> <C-D> (line('.') == line('w0')) ? g:hdn : '<C-D>'
+"vnoremap <silent> <expr> <C-D> (line('.') == line('w0')) ? g:hdn : '<C-D><C-l>'
 "nnoremap <silent> <expr> <C-U> (line('.') == line('w$')) ? g:hup : '<C-U>'
-"vnoremap <silent> <expr> <C-U> (line('.') == line('w$')) ? g:hup : '<C-U>'
+"vnoremap <silent> <expr> <C-U> (line('.') == line('w$')) ? g:hup : '<C-U><C-l>'
 
 " to get back orig if needed
 "noremap <Leader><C-D> <C-D>
@@ -4096,6 +4096,34 @@ function! s:MapScrollKeys()
   endif
   let g:hd6a = g:half + 6
 
+  " ------------
+
+  let g:fu6 = g:full - 6
+  if (g:fu6 < 1)
+      g:fu6 = 1
+  endif
+  let g:fu6a = g:full + 6
+
+  let g:fd6 = g:full - 6
+  if (g:fd6 < 1)
+      g:fd6 = 1
+  endif
+  let g:fd6a = g:full + 6
+
+  " ------------
+
+  let g:f2u6 = g:full2x - 6
+  if (g:f2u6 < 1)
+      g:f2u6 = 1
+  endif
+  let g:f2u6a = g:full2x + 6
+
+  let g:f2d6 = g:full2x - 6
+  if (g:f2d6 < 1)
+      g:f2d6 = 1
+  endif
+  let g:f2d6a = g:full2x + 6
+
   " BUG:  gj in visual mode past screen bottom does NOT seem to cause scrolljump to jump properly ...
   "       so add zz to make it consistent, but ...
   " TODO: zz here causes empty bottom half of screen when at end of file ...
@@ -4107,8 +4135,17 @@ function! s:MapScrollKeys()
   "let g:hup = g:hal1 . 'gkzz11<C-e>'
   "let g:hdn = g:half . 'gjzz11<C-y>'
 
-  let g:hup = ' (line("v") >= line(".")) ? "' . g:hu6 . 'gkzz6gk" : "' . g:hu6a . 'gkzz6gj"'
-  let g:hdn = ' (line("v") <= line(".")) ? "' . g:hd6 . 'gjzz6gj" : "' . g:hd6a . 'gjzz6gk"'
+  " BUG: sometimes scrolling up back into a selection highlights lines below the cursor
+  "      add <C-l> to help as a work-around ...
+
+  let g:hup = ' (line("v") >= line(".")) ? "' . g:hu6 . 'gkzz6gk<C-l>" : "' . g:hu6a . 'gkzz6gj<C-l>"'
+  let g:hdn = ' (line("v") <= line(".")) ? "' . g:hd6 . 'gjzz6gj<C-l>" : "' . g:hd6a . 'gjzz6gk<C-l>"'
+
+  let g:fup = ' (line("v") >= line(".")) ? "' . g:fu6 . 'gkzz6gk<C-l>" : "' . g:fu6a . 'gkzz6gj<C-l>"'
+  let g:fdn = ' (line("v") <= line(".")) ? "' . g:fd6 . 'gjzz6gj<C-l>" : "' . g:fd6a . 'gjzz6gk<C-l>"'
+
+  let g:f2up = ' (line("v") >= line(".")) ? "' . g:f2u6 . 'gkzz6gk<C-l>" : "' . g:f2u6a . 'gkzz6gj<C-l>"'
+  let g:f2dn = ' (line("v") <= line(".")) ? "' . g:f2d6 . 'gjzz6gj<C-l>" : "' . g:f2d6a . 'gjzz6gk<C-l>"'
 
   " TODO: could add same if at top then M logic to imap <C-f> ...
 
@@ -4177,21 +4214,27 @@ function! s:MapScrollKeys()
 
   "noremap            <expr> <PageDown>   (line('.') == line('w0')) ? g:hdn : '<C-D><C-D>'
   nnoremap <silent> <PageDown> :call <SID>CtrlF(2)<CR>
-  execute 'vnoremap <silent> <expr> <PageDown> (line(".") == line("w0")) ? "' . g:hdn . '" : "<C-D><C-D>"'
+  "execute 'vnoremap <silent> <expr> <PageDown> (line(".") != line("w0")) ? "<C-D><C-D><C-l>" : ' . g:hdn
+  execute 'vnoremap <silent> <expr> <PageDown> ' . g:fdn
   inoremap  <silent> <expr> <PageDown>   pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn2("<C-V><C-D>")<CR>'
+
   "noremap            <expr> <PageUp>     (line('.') == line('w$')) ? g:hup : '<C-U><C-U>'
   nnoremap <silent> <PageUp> :call <SID>CtrlB(2)<CR>
-  execute 'vnoremap <silent> <expr> <PageUp> (line(".") == line("w$")) ? "' . g:hup . '" : "<C-U><C-U>"'
+  "execute 'vnoremap <silent> <expr> <PageUp> (line(".") != line("w$")) ? "<C-U><C-U><C-l>" : ' . g:hup
+  execute 'vnoremap <silent> <expr> <PageUp> ' . g:fup
   inoremap  <silent> <expr> <PageUp>     pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp2("<C-V><C-U>")<CR>'
 
   " NOTE: tmux could send Up/Down cmds instead of this key ...
   "noremap            <expr> <S-F24> (line('.') == line('w0')) ? g:hdn : '<C-D>'
   nnoremap <silent> <S-F24> :call <SID>CtrlF(1)<CR>
-  execute 'vnoremap <silent> <expr> <S-F24> (line(".") == line("w0")) ? "' . g:hdn . '" : "<C-D>"'
+  "execute 'vnoremap <silent> <expr> <S-F24> (line(".") != line("w0")) ? "<C-D><C-l>" : ' . g:hdn
+  execute 'vnoremap <silent> <expr> <S-F24> ' . g:hdn
   inoremap  <silent> <expr> <S-F24> pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
+
   "noremap            <expr> <S-F21>   (line('.') == line('w$')) ? g:hup : '<C-U>'
   nnoremap <silent> <S-F21> :call <SID>CtrlB(1)<CR>
-  execute 'vnoremap <silent> <expr> <S-F21> (line(".") == line("w$")) ? "' . g:hup . '" : "<C-U>"'
+  "execute 'vnoremap <silent> <expr> <S-F21> (line(".") != line("w$")) ? "<C-U><C-l>" : ' . g:hup
+  execute 'vnoremap <silent> <expr> <S-F21> ' . g:hup
   inoremap  <silent> <expr> <S-F21>   pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
 
   " NOTE: tmux could send Up/Down cmds instead of this key ...
@@ -4203,12 +4246,16 @@ function! s:MapScrollKeys()
 
   " NOTE: tmux could send Up/Down cmds instead of this key ...
   "noremap            <expr> <S-F26> (line('.') == line('w0')) ? g:hdn : '<C-D><C-D><C-D><C-D>'
+
   nnoremap <silent> <S-F26> :call <SID>CtrlF(4)<CR>
-  execute 'vnoremap <silent> <expr> <S-F26> (line(".") == line("w0")) ? "' . g:hdn . '" : "<C-D><C-D><C-D><C-D>"'
+  "execute 'vnoremap <silent> <expr> <S-F26> (line(".") != line("w0")) ? "<C-D><C-D><C-D><C-D><C-l>" : ' . g:hdn
+  execute 'vnoremap <silent> <expr> <S-F26> ' . g:f2dn
   inoremap  <silent> <expr> <S-F26> pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn4("<C-V><C-D>")<CR>'
+
   "noremap            <expr> <S-F23>   (line('.') == line('w$')) ? g:hup : '<C-U><C-U><C-U><C-U>'
   nnoremap <silent> <S-F23> :call <SID>CtrlB(4)<CR>
-  execute 'vnoremap <silent> <expr> <S-F23> (line(".") == line("w$")) ? "' . g:hup . '" : "<C-U><C-U><C-U><C-U>"'
+  "execute 'vnoremap <silent> <expr> <S-F23> (line(".") != line("w$")) ? "<C-U><C-U><C-U><C-U><C-l>" : ' . g:hup
+  execute 'vnoremap <silent> <expr> <S-F23> ' . g:f2up
   inoremap  <silent> <expr> <S-F23>   pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp4("<C-V><C-U>")<CR>'
 endfunction
 
