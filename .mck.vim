@@ -3466,6 +3466,14 @@ au BufEnter,WinEnter,WinNew,VimResized * call <SID>MySetScrollJump(-50)
 au InsertEnter * call <SID>MySetScrollJump(1)
 au InsertLeave * let &scrolljump=-50
 
+" if enter insert mode with 'i' then Esc cursor moves back one
+" this is a work-around to prevent that ...
+" But check it does not break block paste in insert mode, etc.
+au InsertLeave * call cursor([getpos('.')[1], getpos('.')[2]+1])
+" Unfortunately if enter insert mode with 'a' then this moves forward one
+" a seldom used ...
+nnoremap a <Nop>
+
 function! s:MySetScrollJump(sjval)
     if mode() =~# 'i'
         let &scrolljump = 1
