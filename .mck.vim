@@ -1563,10 +1563,12 @@ endif
 set belloff=error,backspace,esc
 
 " issue with mouse in vim when beyond 220 cols ...
-if has("mouse_sgr")
-  set ttymouse=sgr
-else
-  set ttymouse=xterm2
+if !has("nvim")
+    if has("mouse_sgr")
+        set ttymouse=sgr
+    else
+        set ttymouse=xterm2
+    endif
 endif
 
 " search options
@@ -2040,7 +2042,9 @@ autocmd VimEnter * call <SID>InitializeClipboard()
 set clipboard-=autoselect
 set clipboard-=autoselectplus
 " add this to get decent mouse selection and copy to clipboard when in command-mode ...
-set clipboard^=autoselectml guioptions+=A
+if !has("nvim")
+    set clipboard^=autoselectml guioptions+=A
+endif
 
 " ------------------------------
 
@@ -6305,7 +6309,9 @@ aug END
 
 " when editing a file that is already edited with
 " another Vim instance, go to that Vim instance
-packadd! editexisting
+if !has("nvim")
+    packadd! editexisting
+endif
 
 " -----------------------------
 
