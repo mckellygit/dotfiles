@@ -93,7 +93,7 @@ Plugin 'sk1418/QFGrep'
 "Plugin 'itchyny/vim-qfedit'
 "
 " qf preview popup
-Plugin 'mckelly2833/vim-qf-preview'
+Plugin 'mckellygit/vim-qf-preview'
 "Plugin 'bfrg/vim-qf-preview'
 "Plugin 'ronakg/quickr-preview.vim'
 "Plugin 'skywind3000/vim-quickui'
