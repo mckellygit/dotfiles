@@ -21,4 +21,14 @@
 \ek  noaction 5k
 j  noaction 5^F
 k  noaction 5^B
+\e0  noaction 5^F
+\e9  noaction 5^B
 \n back-line
+\kh  noaction
+\ke  noaction
+\e[1;5H noaction g
+\e[1;7H noaction g
+\e[1;5F noaction G
+\e[1;7F noaction G
+qq   quit
+\\qq quit

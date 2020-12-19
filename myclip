@@ -1,6 +1,5 @@
 #!/bin/bash
 
-have_o=0
 have_sc=0
 have_rmnl=0
 have_dash=0
@@ -10,16 +9,13 @@ have_args=0
 while [[ $# -ge 1 ]] ; do
     have_args=1
     if [[ $1 == '-o' || $1 == '--o' ]] ; then
-        have_o=1
         shift
     elif [[ $1 == '-rmlastnl' || $1 == '--rmlastnl' ]] ; then
-        have_o=1
         have_rmnl=1
         shift
     elif [[ $1 == '-sc' || $1 == '--sc' ]] ; then
         shift
         if [[ $# -ge 1 ]] ; then
-            have_o=1
             have_sc=1
             sc_val=$1
             shift
@@ -30,10 +26,18 @@ while [[ $# -ge 1 ]] ; do
     elif [[ $1 == '-' ]] ; then
         have_dash=1
         shift
+    elif [[ $1 == '-i' ]] ; then
+        have_dash=1
+        shift
+    elif [[ $1 == '--' ]] ; then
+        shift
+        have_text=1
+        escapedtext=$(printf %q "$@")
+        break
     else
         have_text=1
         escapedtext=$(printf %q "$@")
-        shift
+        break
     fi
 done
 
@@ -42,16 +46,28 @@ done
 # NOTE: copyq requires copySelection(); addUnique() to set selection and add to item list
 # can also clear with xsel -bc ; xsel -pc
 
+#echo "have_rmnl = $have_rmnl"
+#echo "have_dash = $have_dash"
+
 if [[ $have_args -eq 0 || $have_dash -eq 1 ]] ; then
     # could have just -
     # exec xsel -i -b
     # since copyq would have then synced clipboard to selection ...
-    exec copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input()); text=input(); if (text.length>0) { addUnique(input()) }"
+    if [[ $have_rmnl -eq 1 && $have_dash -eq 1 ]] ; then
+        sed -z '$s/\n$//' | exec copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input()); text=input(); if (text.length>0) { addUnique(input()) }"
+    else
+        exec copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input()); text=input(); if (text.length>0) { addUnique(input()) }"
+    fi
+    exit 0
 elif [[ $have_text -eq 1 ]] ; then
     # could have just -
     #echo "$escapedtext" | xsel -i -b
     # since copyq would have then synced clipboard to selection ...
-    echo "$escapedtext" | copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input()); text=input(); if (text.length>0) { addUnique(input()) }"
+    if [[ $have_rmnl -eq 1 ]] ; then
+        echo -n "$escapedtext" | copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input()); text=input(); if (text.length>0) { addUnique(input()) }"
+    else
+        echo "$escapedtext" | copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input()); text=input(); if (text.length>0) { addUnique(input()) }"
+    fi
     exit 0
 fi
 
@@ -88,14 +104,27 @@ elif [[ ${add} -eq 1 ]] ; then
     pos=" "
 fi
 
-echo -n "$pre"
+# Enable bracketed paste: printf "\e[?2004h"
+# Wait for paste to start: you’ll see \e[200~ on STDIN.
+# Wait for paste to stop: you’ll see \e[201~ on STDIN.
+# Disable bracketed paste: printf "\e[?2004l"
+
+tmpclip=/dev/shm/myclip.$$
+
+trap "rm -f $tmpclip" EXIT
 
 if [[ $have_rmnl -eq 0 ]] ; then
-    copyq clipboard
+    copyq clipboard > $tmpclip 2>&1
 else
-    copyq clipboard | sed -z '$s/\n$//'
+    copyq clipboard | sed -z '$s/\n$//' > $tmpclip 2>&1
 fi
 
-echo -n "$pos"
+if [[ -s $tmpclip ]] ; then
+#   printf "\e[200~"
+    echo -n "$pre"
+    cat $tmpclip
+    echo -n "$pos"
+#   printf "\e[201~"
+fi
 
 exit 0

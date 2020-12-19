@@ -28,7 +28,7 @@ filetype off              " required
 "" set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 "
-" fzf from git install in ~/.fzf 
+" fzf from git install in ~/.fzf
 set rtp+=~/.fzf
 "
 " this files mappings for help, ~/.vim/doc/mck.txt ...
@@ -140,6 +140,8 @@ Plugin 'mckellyln/gv.vim'
 "Plugin 'junegunn/fzf' " (not needed because its in ~/.fzf already)
 Plugin 'junegunn/fzf.vim'
 " Plugin 'mattn/vim-fz'
+" Plugin 'liuchengxu/vim-clap'
+" Plugin 'Yggdroot/LeaderF'
 "
 " ack (with ag (silver-searcher))
 "Plugin 'mileszs/ack.vim'
@@ -251,6 +253,8 @@ Plugin 't9md/vim-choosewin'
 "
 " floaterm
 Plugin 'voldikss/vim-floaterm'
+" :Floaterms fzf list of floaterms
+Plugin 'voldikss/fzf-floaterm'
 "
 "" All of your Plugins must be added before the following line
 call vundle#end()         " required
@@ -604,7 +608,7 @@ au BufAdd * let &tabline = &tabline
 "let g:rooter_manual_only = 1
 " Dont do this, use autocmd and paths to fix FileBeagle and fzf/Files
 let g:rooter_silent_chdir = 0
-let g:rooter_use_lcd = 1
+let g:rooter_cd_cmd="cd"
 " rooter ----------
 
 " findroot ------------
@@ -628,7 +632,29 @@ endif
 
 let g:fzf_preview_window = ['right:60%:hidden', 'ctrl-alt-p']
 
-autocmd VimEnter,BufEnter * silent! lcd %:p:h
+" ------------
+
+" TODO: do we need to lcd to base dir of file ?
+"       it works well for going into sub-dirs, but
+"       it may NOT work well when file is ../ or ~/
+"autocmd VimEnter,BufEnter * silent! lcd %:p:h
+
+" Switch to the directory of the current file unless it breaks something.
+function! s:autochdir()
+    let can_autochdir = (!exists("v:vim_did_enter") || v:vim_did_enter) " Don't mess with vim on startup.
+    let can_autochdir = can_autochdir && !(&filetype ==# 'qf') " Not for some fts.
+    let can_autochdir = can_autochdir && filereadable(expand("%")) " Only change to real files.
+    if can_autochdir
+        silent! lcd %:p:h
+    endif
+endfunction
+augroup myautochdir
+    autocmd!
+    autocmd BufEnter * call s:autochdir()
+augroup END
+
+" ------------
+
 " add \fz mapping also
 noremap <silent> <Leader>fz <C-\><C-n>:FZFProjectFiles<CR>
 noremap <silent> <Leader>f/ <C-\><C-n>:FZFProjectFiles<CR>
@@ -732,9 +758,14 @@ function! s:bufopen(e)
     endif
     let l:winids = win_findbuf(l:bufid)
     if empty(l:winids)
-        " open hidden buffer in a new tab ...
-        " TODO: or hsplit or vsplit or in current window ...
-        execute 'tabnew|b'.l:bufid
+        if getbufvar(l:bufid, '&filetype') ==# 'floaterm'
+            " open hidden floaterm ...
+            FloatermToggle
+        else
+            " open hidden buffer in a new tab ...
+            " TODO: or hsplit or vsplit or in current window ...
+            execute 'tabnew|b'.l:bufid
+        endif
     else
         call win_gotoid(l:winids[0])
     endif
@@ -1281,7 +1312,42 @@ augroup qfpreview
 augroup END
 " Do we use <C-k>/<C-j> for scroll-up/down or <C-Up>/<C-Down> ?
 " NOTE: mappings here have to be a single key - cannot be an esc-code ...
-let g:qfpreview = {
+if has("nvim")
+    autocmd FileType qf nmap <buffer> <M-C-P> <plug>(qf-preview-open)
+    let g:qfpreview = {
+    \ 'top'           : "\<C-Home>",
+    \ 'bottom'        : "\<C-End>",
+    \ 'scrollup'      : "\<C-k>",
+    \ 'scrollup2'     : "\<C-Up>",
+    \ 'scrollup3'     : "\<M-X>",
+    \ 'scrolldown'    : "\<C-j>",
+    \ 'scrolldown2'   : "\<C-Down>",
+    \ 'scrolldown3'   : "\<M-Y>",
+    \ 'halfpageup'    : "\<BS>",
+    \ 'halfpageup2'   : "\<C-b>",
+    \ 'halfpageup3'   : "\<F28>",
+    \ 'halfpagedown'  : "\<Space>",
+    \ 'halfpagedown2' : "\<C-f>",
+    \ 'halfpagedown3' : "\<F29>",
+    \ 'fullpageup'    : "\<C-u>",
+    \ 'fullpageup2'   : "\<C-PageUp>",
+    \ 'fullpagedown'  : "\<C-d>",
+    \ 'fullpagedown2' : "\<C-PageDown>",
+    \ 'next'          : "\<Down>",
+    \ 'next2'         : "\<M-j>",
+    \ 'previous'      : "\<Up>",
+    \ 'previous2'     : "\<M-k>",
+    \ 'reset'         : "\<C-r>",
+    \ 'close'         : "\<C-q>",
+    \ 'close2'        : "\<M-C-P>",
+    \ 'close3'        : "\<Esc>",
+    \ 'number'        : 1,
+    \ 'height'        : 15,
+    \ 'offset'        : 7,
+    \ 'sign'          : {'linehl': 'CursorLine'},
+    \ }
+else
+    let g:qfpreview = {
     \ 'top'           : "\<C-Home>",
     \ 'bottom'        : "\<C-End>",
     \ 'scrollup'      : "\<C-k>",
@@ -1313,6 +1379,7 @@ let g:qfpreview = {
     \ 'offset'        : 7,
     \ 'sign'          : {'linehl': 'CursorLine'},
     \ }
+endif
 " NOTE: popup mappings do not seem to work if they are
 "       from MapFastKeycode() unless they use <Fxx> or <S-Fxx> ...
 " vim-qf-preview ------
@@ -1454,9 +1521,26 @@ nmap <Leader>sp <Plug>(choosewin)
 " choosewin --------
 
 " floaterm ---------
+function s:NoFloatermVless() abort
+    echohl Statement
+    echo "floaterm not available in vless"
+    echohl None
+endfunction
+
 let g:floaterm_autoclose = 2
+let g:floaterm_autoinsert = v:true
 " NOTE: there is also <Leader>zs and <Leader>zt for terminals mapped above ...
-noremap <silent> <Leader>zf :FloatermToggle<CR>
+if !exists("g:vless")
+    if exists('$TMUX_PANE_SKIP')
+        nnoremap <silent> <Leader>zf :call system("tmux popup -d '#{pane_current_path}' -xC -yC -w70% -h60% -KER \"tmux attach -t popup \|\| tmux new -s popup\"")<CR>
+    else
+        nnoremap <silent> <Leader>zf :FloatermToggle<CR>
+        "tnoremap <silent> <expr> <C-x><C-d> (win_gettype(win_getid()) ==# 'popup' \|\| win_gettype(win_getid()) ==# 'floating') ? '<C-\><C-n><C-w>:FloatermHide<CR>' : '<C-x>'
+        tnoremap <silent> <expr> <C-x><C-d> (&filetype ==# 'floaterm') ? '<C-\><C-n><C-w>:FloatermHide<CR>' : ''
+    endif
+else
+    nnoremap <Leader>zf :call <SID>NoFloatermVless()<CR>
+endif
 " floaterm ---------
 
 " annoying ...
@@ -1471,17 +1555,49 @@ nmap _ <Nop>
 " save previous reg + to reg x for exchange/paste/etc
 vnoremap <silent> zy    y
 vnoremap <silent> ty    :<C-u>call setreg('x', getreg('*'), getregtype('*'))<CR>gvy
+vnoremap <silent> zY    Y
+vnoremap <silent> tY    :<C-u>call setreg('x', getreg('*'), getregtype('*'))<CR>gvY
 vnoremap <silent> zx    x
 vnoremap <silent> tx    :<C-u>call setreg('x', getreg('*'), getregtype('*'))<CR>gvx
+vnoremap <silent> zX    X
+vnoremap <silent> tX    :<C-u>call setreg('x', getreg('*'), getregtype('*'))<CR>gvX
 vmap     <silent> x     tx
 vmap     <silent> d     tx
+vmap     <silent> X     tX
+vmap     <silent> D     tX
 vmap     <silent> <Del> tx
 nnoremap <silent> ty    <Nop>
+nnoremap <silent> tY    <Nop>
 nnoremap <silent> tx    <Nop>
+nnoremap <silent> tX    <Nop>
 
 " copy (yank) selection, stay at end unless rectangular region ...
-vmap <silent> <expr> <C-c> (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
-vmap <silent> <expr> y     (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
+"vmap <silent> <expr> <C-c> (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
+"vmap <silent> <expr> y     (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
+
+" TODO: if in normal mode in a terminal - do we exit normal mode on a yank ?
+
+vmap <silent> <expr> <C-c> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
+vmap <silent> <expr> y     (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
+vmap <silent> <expr> Y     (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ '\<C-v>') ? 'omvVtY`v' : 'mvtY`v'
+vmap <silent> <expr> <Leader>yy (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
+vmap <silent> <expr> <Leader>yY (mode() =~ '\<C-v>') ? 'omvVtY`v' : 'mvtY`v'
+
+if has("nvim")
+    let g:clipboard = {
+        \   'name': 'myclip',
+        \   'copy': {
+        \      '+': 'myclip -',
+        \      '*': 'myclip -',
+        \    },
+        \   'paste': {
+        \      '+': 'myclip --o',
+        \      '*': 'myclip --o',
+        \   },
+        \   'cache_enabled': 1,
+        \ }
+endif
+
 " --- CLIPBOARD ---
 
 " improves color highlighing with dark terminals
@@ -1557,6 +1673,46 @@ set titleold=
 set title titlestring=@v:%.12t
 if (&term =~ "^screen" || &term =~ "^tmux") && !has('nvim')
   exec "set t_ts=\e]2; t_fs=\7"
+endif
+
+" change title to @t:... for terminal, so S-Insert / C-S-v paste can
+" do something different (such as remove last empty NUL/NL for the terminal)
+au WinEnter * call <SID>MyUpdateTitle()
+if !has("nvim")
+    au TerminalOpen * call <SID>MyUpdateTitle()
+else
+    au TermEnter,TermOpen * call <SID>MyUpdateTitle()
+endif
+function! s:MyUpdateTitle()
+  set titleold=
+  if &buftype=="terminal"
+    set title titlestring=@t:%.12t
+  else
+    set title titlestring=@v:%.12t
+  endif
+  if (&term =~ "^screen" || &term =~ "^tmux") && !has('nvim')
+    exec "set t_ts=\e]2; t_fs=\7"
+  endif
+  " if want to force insert mode upon entering
+  "if mode() == 'n'
+  "    call feedkeys("i", 'i')
+  "endif
+endfunction
+
+if has("nvim")
+  augroup terminal_settings
+    autocmd!
+
+    "autocmd BufWinEnter,WinEnter term://* startinsert
+    "autocmd BufLeave term://* stopinsert
+
+    " Ignore various filetypes as those will close terminal automatically
+    " Ignore fzf, ranger, coc
+    autocmd TermClose term://*
+          \ if (expand('<afile>') !~ "fzf") && (expand('<afile>') !~ "ranger") && (expand('<afile>') !~ "coc") |
+          \   call nvim_input('<CR>')  |
+          \ endif
+  augroup END
 endif
 
 " visual/audio bell (terminator light bulb) off ...
@@ -1872,7 +2028,7 @@ set laststatus=2
 "" Format the status line
 "if has("statusline")
 "  set statusline=%<%F\ [%{&ff}]\ %h%m%r%=%{\"[\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\").\"]\ \"}%k\ %-14.(%l,%c%V%)\ %P
-"" set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L] 
+"" set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
 "" set statusline=%F%m%r%h%w[%L][%{&ff}]%y[%p%%][%04l,%04v]
 "  "              | | | | |  |   |      |  |     |    |
 "  "              | | | | |  |   |      |  |     |    + current column
@@ -1926,10 +2082,10 @@ set nobackup    " do not keep a backup file
 "       as that is the current selection/clipboard
 set viminfo='20,/20,:20,<0
 " keep 20 lines of command line history
-set history=20	
+set history=20
 " :help 'viminfo' (with quotes) for more info
 " show the cursor position all the time
-set ruler		
+set ruler
 
 " display parts of long lines when wrap is on
 set display+=lastline
@@ -1953,7 +2109,7 @@ nmap <silent> + :call <SID>CrossHairs()<CR>
 
 " to disable mouse in visual mode
 "set mouse-=a
-" to get mouse support and 
+" to get mouse support and
 " selection buffer copied automatically to clipboard
 "set mouse=nv
 " all modes / full support
@@ -1992,7 +2148,7 @@ function! s:PreserveClipboard() abort
         "if @* != @"
         "    silent call system("setsid -w myclip", getreg('*'))
         "endif
-        silent call system("setsid -w myclip --rmlastnl ", getreg('*'))
+        silent call system("setsid -w myclip -", getreg('*'))
         " clear regs ?
         "call setreg('+', [])
         "call setreg('*', [])
@@ -2016,7 +2172,7 @@ function s:InitializeClipboard()
         endif
         if !exists('$VIM_SKIP_PRESERVE_CLIPBOARD')
             "let clipdata = system("copyq clipboard")
-            let clipdata = system("myclip -o")
+            let clipdata = system("myclip --o")
             if empty(clipdata)
                 "echom "clearing out + and * registers"
                 call setreg('+', [])
@@ -2084,6 +2240,9 @@ vnoremap S <Nop>
 
 " dont exit this way ...
 noremap ZZ <Nop>
+
+" dont do this in visual mode ...
+vnoremap J <Nop>
 
 " tag stack (<C-t>) remapped ...
 noremap <C-t> <Nop>
@@ -2239,6 +2398,13 @@ vnoremap <buffer> <F32> u
 cnoremap <F32> <Esc>e
 inoremap <F32> <Esc>e
 tnoremap <F32> <Esc>e
+if has("nvim")
+    nnoremap <buffer> <M-e> u
+    vnoremap <buffer> <M-e> u
+    cnoremap <F32> <M-e>
+    inoremap <F32> <M-e>
+    tnoremap <F32> <M-e>
+endif
 
 " This used to be <S-Tab> but <A-a> seems better.
 " And with this, use <A-Up/Down/Right/Left> as app keys and not tmux ...
@@ -2248,6 +2414,13 @@ vmap <S-F28> .
 cnoremap <S-F28> <Esc>a
 inoremap <S-F28> <Esc>a
 tnoremap <S-F28> <Esc>a
+if has("nvim")
+    nmap <M-a> .
+    vmap <M-a> .
+    cnoremap <S-F28> <M-a>
+    inoremap <S-F28> <M-a>
+    tnoremap <S-F28> <M-a>
+endif
 
 " <C-A-p> for fzf preview ...
 call <SID>MapFastKeycode('<S-F27>',  "\e\<C-p>", 127)
@@ -2255,6 +2428,11 @@ call <SID>MapFastKeycode('<S-F27>',  "\e\<C-p>", 127)
 cnoremap <S-F27> <Esc><C-p>
 inoremap <S-F27> <Esc><C-p>
 tnoremap <S-F27> <Esc><C-p>
+if has("nvim")
+    cnoremap <S-F27> <M-C-P>
+    inoremap <S-F27> <M-C-P>
+    tnoremap <S-F27> <M-C-P>
+endif
 
 " ------------------------------
 
@@ -2314,10 +2492,14 @@ noremap <silent> <C-End> G
 
 " NOTE: <F34> is mapped to paste below
 "   and <F33> is vmapped to copy selection below
-nmap <silent> <F33> <Nop>
-imap <silent> <F33> <Esc>l
-cmap <silent> <F33> <Nop>
-tmap <silent> <F33> <Nop>
+nmap <silent> <F33>      <Nop>
+nmap <silent> <C-Insert> <Nop>
+imap <silent> <F33>      <Esc>l
+imap <silent> <C-Insert> <Esc>l
+cmap <silent> <F33>      <Nop>
+cmap <silent> <C-Insert> <Nop>
+tmap <silent> <F33>      <Nop>
+tmap <silent> <C-Insert> <Nop>
 
 " NOTE: <A-Insert> used by tmux for copyq toggle
 map  <silent> <A-Insert> <Nop>
@@ -2386,7 +2568,7 @@ function! ForceLoadNammedReg() abort
     if executable("copyq") && executable("myclip")
         " if copyq and myclip exe ...
         "silent call system("setsid -w xsel -i -b --rmlastnl --sc 0", getreg('+'))
-        silent call system("setsid -w myclip --rmlastnl ", getreg('*'))
+        silent call system("setsid -w myclip -", getreg('*'))
         echohl DiffText | echo "@* -> clipboard ; register copied" | echohl None
         sleep 551m
         redraw!
@@ -2521,36 +2703,58 @@ endfunction
 "tnoremap <C-S-v> <C-w>"+
 
 " <F34> paste after
-nnoremap <expr> <F34> (&buftype == 'terminal') ? '<Nop>' : 'p'
+nnoremap <expr> <F34>      (&buftype == 'terminal') ? '<Nop>' : 'p'
+nnoremap <expr> <S-Insert> (&buftype == 'terminal') ? '<Nop>' : 'p'
 " NOTE: <F34> vmapped below ...
 "vnoremap <expr> <F34> (&buftype == 'terminal') ? '<Nop>' : '<Esc>p'
-inoremap <F34> <C-r>*
-cnoremap <F34> <C-r>*
-tnoremap <F34> <C-w>"*
+inoremap <silent> <F34>      <C-\><C-o>:set paste<CR><C-r>*<C-\><C-o>:set nopaste<CR>
+inoremap <silent> <S-Insert> <C-\><C-o>:set paste<CR><C-r>*<C-\><C-o>:set nopaste<CR>
+cnoremap <F34>      <C-r>*
+cnoremap <S-Insert> <C-r>*
+tnoremap <F34>      <C-w>"*
+tnoremap <S-Insert> <C-w>"*
 
 " <M-!> paste after [menu?]
 call <SID>MapFastKeycode('<S-F34>',  "\e!", 134)
 nnoremap <expr> <S-F34> (&buftype == 'terminal') ? '<Nop>' : 'p'
 vnoremap <expr> <S-F34> (&buftype == 'terminal') ? '<Nop>' : '<Esc>p'
+inoremap <silent> <S-F34> <C-\><C-o>:set paste<CR><C-r>*<C-\><C-o>:set nopaste<CR>
 cnoremap <S-F34> <C-r>*
-inoremap <S-F34> <C-r>*
 tnoremap <S-F34> <C-w>"*
+if has("nvim")
+    nnoremap <expr> <M-!> (&buftype == 'terminal') ? '<Nop>' : 'p'
+    vnoremap <expr> <M-!> (&buftype == 'terminal') ? '<Nop>' : '<Esc>p'
+    inoremap <silent> <M-!> <C-\><C-o>:set paste<CR><C-r>*<C-\><C-o>:set nopaste<CR>
+    cnoremap <M-!> <C-r>*
+    tnoremap <M-!> <C-w>"*
+endif
 
 " <F35> paste before
-nnoremap <expr> <F35> (&buftype == 'terminal') ? '<Nop>' : 'P`['
+nnoremap <expr> <F35>        (&buftype == 'terminal') ? '<Nop>' : 'P`['
+nnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '<Nop>' : 'P`['
 " NOTE: <F35> vmapped below ...
 "vnoremap <expr> <F35> (&buftype == 'terminal') ? '<Nop>' : '<Esc>P`['
-cnoremap <F35> <C-r>*
-inoremap <F35> <C-o>mp<C-r>*<C-o>`p
-tnoremap <F35> <C-w>"*
+inoremap <silent> <F35>        <C-\><C-o>:set paste<CR><C-\><C-o>mp<C-r>*<C-\><C-o>:set nopaste<CR><C-\><C-o>`p
+inoremap <silent> <C-S-Insert> <C-\><C-o>:set paste<CR><C-\><C-o>mp<C-r>*<C-\><C-o>:set nopaste<CR><C-\><C-o>`p
+cnoremap <F35>        <C-r>*
+cnoremap <C-S-Insert> <C-r>*
+tnoremap <F35>        <C-w>"*
+tnoremap <C-S-Insert> <C-w>"*
 
 " <M-*> paste before [menu?]
 call <SID>MapFastKeycode('<S-F35>',  "\e*", 135)
 nnoremap <expr> <S-F35> (&buftype == 'terminal') ? '<Nop>' : 'P`]'
 vnoremap <expr> <S-F35> (&buftype == 'terminal') ? '<Nop>' : '<Esc>P`]'
+inoremap <silent> <S-F35> <C-\><C-o>:set paste<CR><C-r>*<C-\><C-o>:set nopaste<CR>
 cnoremap <S-F35> <C-r>*
-inoremap <S-F35> <C-r>*
 tnoremap <S-F35> <C-w>"*
+if has("nvim")
+    nnoremap <expr> <M-*> (&buftype == 'terminal') ? '<Nop>' : 'P`]'
+    vnoremap <expr> <M-*> (&buftype == 'terminal') ? '<Nop>' : '<Esc>P`]'
+    inoremap <silent> <M-*> <C-\><C-o>:set paste<CR><C-r>*<C-\><C-o>:set nopaste<CR>
+    cnoremap <M-*> <C-r>*
+    tnoremap <M-*> <C-w>"*
+endif
 
 " C-S-c / M-& copy ...
 
@@ -2566,6 +2770,13 @@ vmap <expr> <S-F36> (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
 cnoremap <S-F36> <Esc>&
 inoremap <S-F36> <Esc>&
 tnoremap <S-F36> <Esc>&
+if has("nvim")
+    nnoremap <M-&> <Nop>
+    vmap <expr> <M-&> (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
+    cnoremap <S-F36> <M-&>
+    inoremap <S-F36> <M-&>
+    tnoremap <S-F36> <M-&>
+endif
 
 " C-S-x / M-( cut ...
 
@@ -2580,6 +2791,13 @@ vmap <expr> <S-F37> (&buftype == 'terminal') ? '<Nop>' : 'tx'
 cnoremap <S-F37> <Esc>(
 inoremap <S-F37> <Esc>(
 tnoremap <S-F37> <Esc>(
+if has("nvim")
+    nnoremap <M-(> <Nop>
+    vmap <expr> <M-(> (&buftype == 'terminal') ? '<Nop>' : 'tx'
+    cnoremap <S-F37> <M-(>
+    inoremap <S-F37> <M-(>
+    tnoremap <S-F37> <M-(>
+endif
 
 " cut selection
 "vnoremap <silent> <C-x> "*d<LeftRelease>
@@ -2733,15 +2951,17 @@ vnoremap <silent> <buffer> <expr> P (&buftype == 'terminal') ? '<Nop>' : '"_x"*P
 " skip <F34> as a vis-mode 'replace' ...
 "vnoremap <silent> <buffer> <expr> <F34>   (&buftype == 'terminal') ? '<Nop>' : 's'
 
-vnoremap <silent> <buffer> <expr> <F34>   (&buftype == 'terminal') ? '<Nop>' : '"_x"*P'
+vnoremap <silent> <buffer> <expr> <F34> (&buftype == 'terminal') ? '<Nop>' : '"_x"*P'
 vnoremap <silent> <buffer> <expr> <F35> (&buftype == 'terminal') ? '<Nop>' : '"_x"*P'
 
 " NOTE: to match legacy editors/DOS/etc -
 "  <F33> is copy
 "  <F34> is paste (mapped below)
 "  <F37>    is cut (mapped below)
-vmap <silent> <expr> <F33> (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
-vmap <silent> <F37> tx
+vmap <silent> <expr> <F33>      (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
+vmap <silent> <expr> <C-Insert> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
+vmap <silent> <F37>   tx
+vmap <silent> <S-Del> tx
 
 " ---------------------------------------------------------------------------------
 " NOTE: TMUX C-Insert in terminal does not use bracketed-paste, but <C-S-v> is ok
@@ -2764,10 +2984,11 @@ let &t_SI = "\e[5 q"
 let &t_EI = "\e[2 q"
 " ---------------
 
-if !exists('$VIM_TERMINAL')
-    let &t_SI .= WrapForTmux("\<Esc>[?2004h")
-    let &t_EI .= WrapForTmux("\<Esc>[?2004l")
-endif
+" not needed anymore
+"if !exists('$VIM_TERMINAL')
+"   let &t_SI .= WrapForTmux("\<Esc>[?2004h")
+"   let &t_EI .= WrapForTmux("\<Esc>[?2004l")
+"endif
 
 " tmux:
 "   set -ga terminal-overrides '*:Ss=\E[%p1%d q:Se=\E[ q'
@@ -3025,6 +3246,11 @@ call <SID>MapFastKeycode('<S-F32>',  "\eC", 132)
 nmap <silent> <S-F32> mvviWty:call <SID>Delay(1)<CR><Esc>
 vmap <silent> <S-F32> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
 imap <silent> <expr> <S-F32> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>'
+if has("nvim")
+    nmap <silent> <M-C> mvviWty:call <SID>Delay(1)<CR><Esc>
+    vmap <silent> <M-C> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
+    imap <silent> <expr> <M-C> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>'
+endif
 
 vmap <silent> <C-2-LeftMouse> <Esc>mvviwty:call <SID>Delay(1)<CR><Esc>
 vmap <silent> <C-3-LeftMouse> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
@@ -3096,6 +3322,11 @@ call <SID>MapFastKeycode('<S-F33>',  "\eB", 133)
 nmap <silent> <S-F33> mvviWty:call <SID>Delay(1)<CR><Esc>
 vmap <silent> <S-F33> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
 imap <silent> <expr> <S-F33> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>'
+if has("nvim")
+    nmap <silent> <M-B> mvviWty:call <SID>Delay(1)<CR><Esc>
+    vmap <silent> <M-B> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
+    imap <silent> <expr> <M-B> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>'
+endif
 
 vmap <silent> <A-2-LeftMouse> <Esc>mvviwty:call <SID>Delay(1)<CR><Esc>
 vmap <silent> <A-3-LeftMouse> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
@@ -3297,9 +3528,15 @@ nnoremap <silent> Y y$
 call <SID>MapFastKeycode('<S-F31>',  "\e\<Return>", 131)
 "vmap <silent> <S-F31> mvty`v
 noremap <silent> <buffer> <S-F31> gk
-cnoremap <S-F32> <Esc><Return>
-inoremap <S-F32> <Esc><Return>
-tnoremap <S-F32> <Esc><Return>
+cnoremap <S-F31> <Esc><Return>
+inoremap <S-F31> <Esc><Return>
+tnoremap <S-F31> <Esc><Return>
+if has("nvim")
+    noremap <silent> <buffer> <M-Return> gk
+    cnoremap <S-F31> <M-Return>
+    inoremap <S-F31> <M-Return>
+    tnoremap <S-F31> <M-Return>
+endif
 
 " <A-BS> is mapped to \eX in tmux - scroll up one line ...
 call <SID>MapFastKeycode('<S-F30>',  "\eX", 130)
@@ -3308,6 +3545,12 @@ noremap <silent> <expr> <S-F30> AtBot(0) ? '<C-y>' : '<C-y>k'
 cnoremap <S-F30> <Esc><BS>
 inoremap <S-F30> <Esc><BS>
 tnoremap <S-F30> <Esc><BS>
+if has("nvim")
+    noremap <silent> <expr> <M-X> AtBot(0) ? '<C-y>' : '<C-y>k'
+    cnoremap <S-F30> <M-BS>
+    inoremap <S-F30> <M-BS>
+    tnoremap <S-F30> <M-BS>
+endif
 
 " <A-Space> is mapped to \eY in tmux - scroll down one line ...
 call <SID>MapFastKeycode('<S-F29>',  "\eY", 129)
@@ -3316,6 +3559,12 @@ noremap <silent> <expr> <S-F29> ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0)
 cnoremap <S-F29> <Esc><Space>
 inoremap <S-F29> <Esc><Space>
 tnoremap <S-F29> <Esc><Space>
+if has("nvim")
+    noremap <silent> <expr> <M-Y> ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>j'
+    cnoremap <S-F29> <M-Space>
+    inoremap <S-F29> <M-Space>
+    tnoremap <S-F29> <M-Space>
+endif
 
 " -------------------
 
@@ -3396,32 +3645,44 @@ endfunction
 
 " shift-del to delete from cursor to beg of word, like backward-kill-word ...
 "nnoremap <silent> <expr> <F37> (col('.') == 1) ? '"_dW' : (col('.') != col('$')-1) ? '"_db' : ':call <SID>SDel()<CR>'
-nnoremap <silent> <expr> <F37> (col('.') == 1) ? '"_dW' : (col('.') != col('$')-1) ? '"_db' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
+nnoremap <silent> <expr> <F37>   (col('.') == 1) ? '"_dW' : (col('.') != col('$')-1) ? '"_db' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
+nnoremap <silent> <expr> <S-Del> (col('.') == 1) ? '"_dW' : (col('.') != col('$')-1) ? '"_db' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
 " NOTE: *-Del in v-mode does not make much sense, Del deletes entire selection etc ...
-vnoremap <silent>        <F37> <Del>
-inoremap <silent> <expr> <F37> (col('.') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<C-o>"_db' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
+vnoremap <silent>        <F37>   <Del>
+vnoremap <silent>        <S-Del> <Del>
+inoremap <silent> <expr> <F37>   (col('.') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<C-o>"_db' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
+inoremap <silent> <expr> <S-Del> (col('.') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<C-o>"_db' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
 
 " ctrl-del to delete from cursor to end of word, to match kill-word ...
 " also skip alt-d
 "nnoremap <silent> <expr> <F36> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? '"_de' : ':call <SID>CDel()<CR>'
-nnoremap <silent> <expr> <F36> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? '"_de' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
+nnoremap <silent> <expr> <F36>   (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? '"_de' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
+nnoremap <silent> <expr> <C-Del> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? '"_de' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
 " NOTE: *-Del in v-mode does not make much sense, Del deletes entire selection etc ...
-vnoremap <silent>        <F36> <Del>
-inoremap <silent> <expr> <F36> (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<C-o>"_de' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
+vnoremap <silent>        <F36>   <Del>
+vnoremap <silent>        <C-Del> <Del>
+inoremap <silent> <expr> <F36>   (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<C-o>"_de' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
+inoremap <silent> <expr> <C-Del> (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<C-o>"_de' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
 
 " ctrl-shift-del to delete whole word under cursor
 "nnoremap <silent> <expr> <S-F15> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? 'lb"_dW' : ':call <SID>CSDel()<CR>'
-nnoremap <silent> <expr> <S-F15> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? 'lb"_dW' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
+nnoremap <silent> <expr> <S-F15>   (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? 'lb"_dW' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
+nnoremap <silent> <expr> <C-S-Del> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? 'lb"_dW' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
 " NOTE: *-Del in v-mode does not make much sense, Del deletes entire selection etc ...
-vnoremap <silent>        <S-F15> <Del>
-inoremap <silent> <expr> <S-F15> (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<Esc>llb"_dWi' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
+vnoremap <silent>        <S-F15>   <Del>
+vnoremap <silent>        <C-S-Del> <Del>
+inoremap <silent> <expr> <S-F15>   (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<Esc>llb"_dWi' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
+inoremap <silent> <expr> <C-S-Del> (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<Esc>llb"_dWi' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
 
 " NOTE: dont really need/use A-Del
 " alt-del to delete whole word under cursor
 nnoremap <silent> <expr> <S-F16> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? 'lb"_dW' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
+nnoremap <silent> <expr> <A-Del> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? 'lb"_dW' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
 " NOTE: *-Del in v-mode does not make much sense, Del deletes entire selection etc ...
 vnoremap <silent>        <S-F16> <Del>
+vnoremap <silent>        <A-Del> <Del>
 inoremap <silent> <expr> <S-F16> (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<Esc>llb"_dWi' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
+inoremap <silent> <expr> <A-Del> (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<Esc>llb"_dWi' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
 
 " <A-S-Del> ?
 
@@ -3431,7 +3692,7 @@ inoremap <silent> <expr> <S-F16> (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' 
 " Use spaces instead of tabs
 set expandtab
 "set noexpandtab
-"   
+
 " Be smart when using tabs ;)
 set smarttab
 
@@ -3860,6 +4121,11 @@ noremap <F30> 5gk
 cnoremap <F30> <Esc>k
 inoremap <F30> <Esc>k
 tnoremap <F30> <Esc>k
+if has("nvim")
+    cnoremap <F30> <M-k>
+    inoremap <F30> <M-k>
+    tnoremap <F30> <M-k>
+endif
 
 call <SID>MapFastKeycode('<F31>',  "\ej", 31)
 noremap <A-j> 5gk
@@ -3867,26 +4133,49 @@ noremap <F31> 5gj
 cnoremap <F31> <Esc>j
 inoremap <F31> <Esc>j
 tnoremap <F31> <Esc>j
+if has("nvim")
+    cnoremap <F31> <M-j>
+    inoremap <F31> <M-j>
+    tnoremap <F31> <M-j>
+endif
 
 " some terminals might map C-A-k to C-_-k ...
-call <SID>MapFastKeycode('<F28>',  "\<C-_>k", 28)
+"call <SID>MapFastKeycode('<F28>',  "\<C-_>k", 28)
+call <SID>MapFastKeycode('<F28>',  "\e9", 28)
 "noremap <silent> <expr> <C-_>k (line('.') == line('w$')) ? '5k' : '5<C-y>5k'
 "call <SID>MapFastKeycode('<F28>',  "\eK", 28)
 "noremap <silent> <expr> <A-K>  (line('.') == line('w$')) ? '5k' : '5<C-y>5k'
 noremap <silent> <expr> <F28>  (line('.') == line('w$')) ? '5k' : '5<C-y>5k'
-cnoremap <F28> <Esc><C-k>
-inoremap <F28> <Esc><C-k>
-tnoremap <F28> <Esc><C-k>
+if has("nvim")
+    cnoremap <F28> <M-C-K>
+    inoremap <F28> <M-C-K>
+    tnoremap <F28> <M-C-K>
+    tnoremap <M-9> <M-C-K>
+else
+    cnoremap <F28> <Esc><C-k>
+    inoremap <F28> <Esc><C-k>
+    tnoremap <F28> <Esc><C-k>
+    tnoremap <M-9> <Esc><C-k>
+endif
 
 " some terminals might map C-A-j to C-_-j ...
-call <SID>MapFastKeycode('<F29>',  "\<C-_>j", 29)
+"call <SID>MapFastKeycode('<F29>',  "\<C-_>j", 29)
+call <SID>MapFastKeycode('<F29>',  "\e0", 29)
 "noremap <silent> <expr> <C-_>j (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '5<C-e>5j'
 "call <SID>MapFastKeycode('<F29>',  "\eJ", 29)
 "noremap <silent> <expr> <A-J>  (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '5<C-e>5j'
 noremap <silent> <expr> <F29>  (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '5<C-e>5j'
-cnoremap <F29> <Esc><C-j>
-inoremap <F29> <Esc><C-j>
-tnoremap <F29> <Esc><C-j>
+if has("nvim")
+    cnoremap <F29> <M-C-J>
+    inoremap <F29> <M-C-J>
+    tnoremap <F29> <M-C-J>
+    tnoremap <M-0> <M-C-J>
+else
+    cnoremap <F29> <Esc><C-j>
+    inoremap <F29> <Esc><C-j>
+    tnoremap <F29> <Esc><C-j>
+    tnoremap <M-0> <Esc><C-j>
+endif
 
 " ---------
 
@@ -4005,6 +4294,7 @@ function s:CtrlF(multi) abort
     endif
     let prevsj=&scrolljump
     let &scrolljump=1
+    let &scrolloff=10
     let save_scroll = &scroll
     if (a:multi == 2)
         " want normal! here
@@ -4023,15 +4313,17 @@ function s:CtrlF(multi) abort
     let l:hgt = winheight(0)
     let l:nwl = winline()
     let l:dff = l:hgt - l:nwl
-    if (l:dff < 10)
-        let l:nxt = 10 - l:dff
-        execute "keepjumps normal! " . l:nxt . "gk"
-    endif
+"   to prevent flip-flopping ...
+"   if (l:dff < 10)
+"       let l:nxt = 10 - l:dff
+"       execute "keepjumps normal! " . l:nxt . "gk"
+"       let l:nwl = winline()
+"   endif
     let l:nl = line('.')
-    let l:nwl = winline()
     if (l:owl == l:nwl && l:ol == l:nl)
         execute "keepjumps normal 5gj"
     endif
+    let &scrolloff=0
     let &scrolljump=prevsj
 endfunction
 
@@ -4049,6 +4341,7 @@ function s:CtrlB(multi) abort
     endif
     let prevsj=&scrolljump
     let &scrolljump=1
+    let &scrolloff=10
     let save_scroll = &scroll
     if (a:multi == 2)
         " want normal! here
@@ -4066,15 +4359,17 @@ function s:CtrlB(multi) abort
     let &scroll = save_scroll
     let l:nwl = winline()
     let l:dff = l:nwl
-    if (l:dff < 10)
-        let l:nxt = 10 - l:dff
-        execute "keepjumps normal! " . l:nxt . "gj"
-    endif
+"   to prevent flip-flopping ...
+"   if (l:dff < 10)
+"       let l:nxt = 10 - l:dff
+"       execute "keepjumps normal! " . l:nxt . "gj"
+"       let l:nwl = winline()
+"   endif
     let l:nl = line('.')
-    let l:nwl = winline()
     if (l:owl == l:nwl && l:ol == l:nl)
         execute "keepjumps normal 5gk"
     endif
+    let &scrolloff=0
     let &scrolljump=prevsj
 endfunction
 
@@ -4147,14 +4442,25 @@ function! s:MapScrollKeys()
   " BUG: sometimes scrolling up back into a selection highlights lines below the cursor
   "      add <C-l> to help as a work-around ...
 
-  let g:hup = ' (line("v") >= line(".")) ? "' . g:hu6 . 'gkzz6gk<C-l>" : "' . g:hu6a . 'gkzz6gj<C-l>"'
-  let g:hdn = ' (line("v") <= line(".")) ? "' . g:hd6 . 'gjzz6gj<C-l>" : "' . g:hd6a . 'gjzz6gk<C-l>"'
+  if !has("nvim")
+      let g:hup = ' (line("v") >= line(".")) ? "' . g:hu6 . 'gkzz6gk<C-l>" : "' . g:hu6a . 'gkzz6gj<C-l>"'
+      let g:hdn = ' (line("v") <= line(".")) ? "' . g:hd6 . 'gjzz6gj<C-l>" : "' . g:hd6a . 'gjzz6gk<C-l>"'
 
-  let g:fup = ' (line("v") >= line(".")) ? "' . g:fu6 . 'gkzz6gk<C-l>" : "' . g:fu6a . 'gkzz6gj<C-l>"'
-  let g:fdn = ' (line("v") <= line(".")) ? "' . g:fd6 . 'gjzz6gj<C-l>" : "' . g:fd6a . 'gjzz6gk<C-l>"'
+      let g:fup = ' (line("v") >= line(".")) ? "' . g:fu6 . 'gkzz6gk<C-l>" : "' . g:fu6a . 'gkzz6gj<C-l>"'
+      let g:fdn = ' (line("v") <= line(".")) ? "' . g:fd6 . 'gjzz6gj<C-l>" : "' . g:fd6a . 'gjzz6gk<C-l>"'
 
-  let g:f2up = ' (line("v") >= line(".")) ? "' . g:f2u6 . 'gkzz6gk<C-l>" : "' . g:f2u6a . 'gkzz6gj<C-l>"'
-  let g:f2dn = ' (line("v") <= line(".")) ? "' . g:f2d6 . 'gjzz6gj<C-l>" : "' . g:f2d6a . 'gjzz6gk<C-l>"'
+      let g:f2up = ' (line("v") >= line(".")) ? "' . g:f2u6 . 'gkzz6gk<C-l>" : "' . g:f2u6a . 'gkzz6gj<C-l>"'
+      let g:f2dn = ' (line("v") <= line(".")) ? "' . g:f2d6 . 'gjzz6gj<C-l>" : "' . g:f2d6a . 'gjzz6gk<C-l>"'
+  else
+      let g:hup = ' (line("v") >= line(".")) ? "' . g:hu6 . 'gkzz6gk" : "' . g:hu6a . 'gkzz6gj"'
+      let g:hdn = ' (line("v") <= line(".")) ? "' . g:hd6 . 'gjzz6gj" : "' . g:hd6a . 'gjzz6gk"'
+
+      let g:fup = ' (line("v") >= line(".")) ? "' . g:fu6 . 'gkzz6gk" : "' . g:fu6a . 'gkzz6gj"'
+      let g:fdn = ' (line("v") <= line(".")) ? "' . g:fd6 . 'gjzz6gj" : "' . g:fd6a . 'gjzz6gk"'
+
+      let g:f2up = ' (line("v") >= line(".")) ? "' . g:f2u6 . 'gkzz6gk" : "' . g:f2u6a . 'gkzz6gj"'
+      let g:f2dn = ' (line("v") <= line(".")) ? "' . g:f2d6 . 'gjzz6gj" : "' . g:f2d6a . 'gjzz6gk"'
+  endif
 
   " TODO: could add same if at top then M logic to imap <C-f> ...
 
@@ -4235,37 +4541,53 @@ function! s:MapScrollKeys()
 
   " NOTE: tmux could send Up/Down cmds instead of this key ...
   "noremap            <expr> <S-F24> (line('.') == line('w0')) ? g:hdn : '<C-D>'
-  nnoremap <silent> <S-F24> :call <SID>CtrlF(1)<CR>
+  nnoremap <silent> <S-F24>      :call <SID>CtrlF(1)<CR>
+  nnoremap <silent> <C-PageDown> :call <SID>CtrlF(1)<CR>
   "execute 'vnoremap <silent> <expr> <S-F24> (line(".") != line("w0")) ? "<C-D><C-l>" : ' . g:hdn
-  execute 'vnoremap <silent> <expr> <S-F24> ' . g:hdn
-  inoremap  <silent> <expr> <S-F24> pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
+  execute 'vnoremap <silent> <expr> <S-F24> '      . g:hdn
+  execute 'vnoremap <silent> <expr> <C-PageDown> ' . g:hdn
+  inoremap  <silent> <expr> <S-F24>      pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
+  inoremap  <silent> <expr> <C-PageDown> pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
 
   "noremap            <expr> <S-F21>   (line('.') == line('w$')) ? g:hup : '<C-U>'
-  nnoremap <silent> <S-F21> :call <SID>CtrlB(1)<CR>
+  nnoremap <silent> <S-F21>    :call <SID>CtrlB(1)<CR>
+  nnoremap <silent> <C-PageUp> :call <SID>CtrlB(1)<CR>
   "execute 'vnoremap <silent> <expr> <S-F21> (line(".") != line("w$")) ? "<C-U><C-l>" : ' . g:hup
-  execute 'vnoremap <silent> <expr> <S-F21> ' . g:hup
-  inoremap  <silent> <expr> <S-F21>   pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
+  execute 'vnoremap <silent> <expr> <S-F21> '    . g:hup
+  execute 'vnoremap <silent> <expr> <C-PageUp> ' . g:hup
+  inoremap  <silent> <expr> <S-F21>      pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
+  inoremap  <silent> <expr> <C-PageUp>   pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
 
   " NOTE: tmux could send Up/Down cmds instead of this key ...
   " TODO: wish <C-e>/<C-y> would scroll virtual lines ...
-  noremap   <silent> <expr> <S-F25> (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
-  inoremap  <silent> <expr> <S-F25> pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
-  noremap   <silent> <expr> <S-F22>   (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
-  inoremap  <silent> <expr> <S-F22>   pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
+  noremap   <silent> <expr> <S-F25>        (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
+  noremap   <silent> <expr> <C-S-PageDown> (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
+  inoremap  <silent> <expr> <S-F25>        pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
+  inoremap  <silent> <expr> <C-S-PageDown> pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
+  noremap   <silent> <expr> <S-F22>        (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
+  noremap   <silent> <expr> <C-S-PageUp>   (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
+  inoremap  <silent> <expr> <S-F22>        pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
+  inoremap  <silent> <expr> <C-S-PageUp>   pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
 
   " NOTE: tmux could send Up/Down cmds instead of this key ...
   "noremap            <expr> <S-F26> (line('.') == line('w0')) ? g:hdn : '<C-D><C-D><C-D><C-D>'
 
-  nnoremap <silent> <S-F26> :call <SID>CtrlF(4)<CR>
+  nnoremap <silent> <S-F26>      :call <SID>CtrlF(4)<CR>
+  nnoremap <silent> <A-PageDown> :call <SID>CtrlF(4)<CR>
   "execute 'vnoremap <silent> <expr> <S-F26> (line(".") != line("w0")) ? "<C-D><C-D><C-D><C-D><C-l>" : ' . g:hdn
-  execute 'vnoremap <silent> <expr> <S-F26> ' . g:f2dn
-  inoremap  <silent> <expr> <S-F26> pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn4("<C-V><C-D>")<CR>'
+  execute 'vnoremap <silent> <expr> <S-F26> '      . g:f2dn
+  execute 'vnoremap <silent> <expr> <A-PageDown> ' . g:f2dn
+  inoremap  <silent> <expr> <S-F26>      pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn4("<C-V><C-D>")<CR>'
+  inoremap  <silent> <expr> <A-PageDown> pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn4("<C-V><C-D>")<CR>'
 
   "noremap            <expr> <S-F23>   (line('.') == line('w$')) ? g:hup : '<C-U><C-U><C-U><C-U>'
-  nnoremap <silent> <S-F23> :call <SID>CtrlB(4)<CR>
+  nnoremap <silent> <S-F23>    :call <SID>CtrlB(4)<CR>
+  nnoremap <silent> <A-PageUp> :call <SID>CtrlB(4)<CR>
   "execute 'vnoremap <silent> <expr> <S-F23> (line(".") != line("w$")) ? "<C-U><C-U><C-U><C-U><C-l>" : ' . g:hup
-  execute 'vnoremap <silent> <expr> <S-F23> ' . g:f2up
-  inoremap  <silent> <expr> <S-F23>   pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp4("<C-V><C-U>")<CR>'
+  execute 'vnoremap <silent> <expr> <S-F23> '    . g:f2up
+  execute 'vnoremap <silent> <expr> <A-PageUp> ' . g:f2up
+  inoremap  <silent> <expr> <S-F23>      pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp4("<C-V><C-U>")<CR>'
+  inoremap  <silent> <expr> <A-PageUp>   pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp4("<C-V><C-U>")<CR>'
 endfunction
 
 let g:hal1 = 24
@@ -4309,13 +4631,21 @@ autocmd CursorHold * call <SID>ClearCmdWindow()
 nnoremap <silent> <S-Left>      :tabprevious<CR>
 vnoremap <silent> <S-Left> <Esc>:tabprevious<CR>
 inoremap <silent> <S-Left> <Esc>:tabprevious<CR>
-tnoremap <silent> <S-Left> <C-w>:tabprevious<CR>
+if has("nvim")
+    tnoremap <silent> <S-Left> <C-\><C-n>:tabprevious<CR>
+else
+    tnoremap <silent> <S-Left> <C-w>:tabprevious<CR>
+endif
 
 " next tab
 nnoremap <silent> <S-Right>      :tabnext<CR>
 vnoremap <silent> <S-Right> <Esc>:tabnext<CR>
 inoremap <silent> <S-Right> <Esc>:tabnext<CR>
-tnoremap <silent> <S-Right> <C-w>:tabnext<CR>
+if has("nvim")
+    tnoremap <silent> <S-Right> <C-\><C-n>:tabnext<CR>
+else
+    tnoremap <silent> <S-Right> <C-w>:tabnext<CR>
+endif
 
 " NOTE: S-Up, Down are available ...
 " Perhaps same as <Up>/<Down> so we can repeat cmds
@@ -4394,7 +4724,8 @@ imap         <buffer> <C-^><Return> <Nop>
 
 " NOTE: C-Space in most terminals is C-@
 noremap <silent> <C-@> gj
-" <Return> is nmapped above to gj also if not terminal ...
+" <Return> was nmapped above to gj also if not terminal ...
+nmap <silent> <buffer> <Return> gj
 vmap <silent> <buffer> <Return> gj
 
 " NOTE: some terminals map <C-S-BS> to <C-_><BS>
@@ -4609,7 +4940,7 @@ endif " has("autocmd")
 "================================================================
 
 " NOTE: vim needs -python/3 support for YouCompleteMe and rtags
-" +python/dyn +python3/dyn 
+" +python/dyn +python3/dyn
 " ./configure --enable-pythoninterp=yes --enable-python3interp=yes
 
 "" YouCompleteMe --------
@@ -4629,8 +4960,13 @@ let g:clang_cpp_options = '-std=c++11 -DNDEBUG -Wno-inconsistent-missing-overrid
 " put this in the local .lvimrc now ...
 "let g:clang_compilation_database = '~/lnrs/wip/buildln/compile_commands.json'
 "let g:clang_compilation_database = '~/lnrs/wip/buildln'
-let g:clang_c_completeopt = 'longest,menuone,preview,popup'
-let g:clang_cpp_completeopt = 'longest,menuone,preview,popup'
+if has("nvim")
+    let g:clang_c_completeopt = 'longest,menuone,preview'
+    let g:clang_cpp_completeopt = 'longest,menuone,preview'
+else
+    let g:clang_c_completeopt = 'longest,menuone,preview,popup'
+    let g:clang_cpp_completeopt = 'longest,menuone,preview,popup'
+endif
 let g:clang_complete_copen = 1
 let g:clang_auto = 1
 let g:clang_load_if_clang_dotfile = 1
@@ -4704,7 +5040,7 @@ let g:localvimrc_persistent = 1
 "
 " or try universal-ctags
 " some optional things ...
-"" if you like to give the reference lookup without quickfix a try, 
+"" if you like to give the reference lookup without quickfix a try,
 "" remove the c- option in cscopequickfix below.
 "set cscopeprg=gtags-cscope
 "if has('cscope')
@@ -4799,7 +5135,8 @@ nmap <Leader>pc <Plug>UnconditionalPasteCharAfter
 nmap <Leader>p1 <Plug>UnconditionalPasteCharAfter
 
 nmap <Leader>Pc <Plug>UnconditionalPasteCharBefore
-nmap <Leader>p0 <Plug>UnconditionalPasteCharBefore
+nmap <Leader>p- <Plug>UnconditionalPasteCharBefore
+nmap <Leader>p0 <Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w
 
 nmap <Leader>pj <Plug>UnconditionalPasteJustJoinedAfter
 nmap <Leader>Pj <Plug>UnconditionalPasteJustJoinedBefore
@@ -4910,7 +5247,9 @@ function LessInitFunc() abort
   let g:opaqbg=1
   hi Normal cterm=none ctermbg=none
   nnoremap <silent> <expr> <Leader>bg (g:opaqbg == 1) ? ':hi Normal cterm=none ctermbg=235<bar>let g:opaqbg=0<CR>' : ':hi Normal cterm=none ctermbg=none<bar>let g:opaqbg=1<CR>'
-
+  if empty(bufname())
+      exec ":f vless:stdin"
+  endif
 endfunction
 " less as a pager --
 
@@ -5315,7 +5654,7 @@ hi ErrorMsg cterm=none ctermfg=White ctermbg=Red gui=none guifg=White guibg=Red
 hi WarningMsg cterm=none ctermfg=White ctermbg=Red gui=none guifg=White guibg=Red
 
 " let vim use terminal background ...
-" good if want to use tmux and have active window 
+" good if want to use tmux and have active window
 " different background color than others
 "if !has("gui_running")
 "  hi Normal ctermbg=none
@@ -5755,7 +6094,7 @@ if &diff
   endtry
   inoremap <C-f> <C-\><C-o><C-f>
   inoremap <C-b> <C-\><C-o><C-b>
-else 
+else
   aug not_diff_alias
   "!&diff
     au!
@@ -5778,7 +6117,7 @@ function! MyCQuit()
     " just to clear the cmdline of this function ...
     echo " "
     update
-    cquit 0
+    cquit 1
 endfunction
 
 " if want vimdiff to exit when files are equal
@@ -5815,6 +6154,12 @@ endfunction
 
 " :x to save (if modified) and go to next (w/o prompting) or exit
 function s:NextOrQuit() abort
+    if &buftype ==# 'terminal'
+        echohl Statement
+        echo "Unable to :quit terminal"
+        echohl None
+        return
+    endif
     " just to clear the cmdline of this function ...
     echo " "
     update
@@ -5829,6 +6174,12 @@ endfunction
 
 function s:ConfNextOrQuit() abort
     " check if buf has changed and prompt to save now instead of after all files ?
+    if &buftype ==# 'terminal'
+        echohl Statement
+        echo "Unable to :quit terminal"
+        echohl None
+        return
+    endif
     if &modified
         echo "Buffer " . bufname("") . " modified, save now? (y/n): "
         let c = getchar()
@@ -5846,8 +6197,10 @@ function s:ConfNextOrQuit() abort
     try
         next
     catch /E163:/
+        silent! FloatermKill!
         conf q
     catch /E165:/
+        silent! FloatermKill!
         conf q
     endtry
 endfunction
@@ -5862,32 +6215,49 @@ endif
 " -----------
 
 " terminal in cur tab NOTE: added <C-w>:se scl=no<CR> at end to turn off signcolumn in terminal only ...
-nnoremap <silent> <Leader>zs           :terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
-vnoremap <silent> <Leader>zs <C-\><C-n>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
+if has("nvim")
+    nnoremap <silent> <Leader>zs           :terminal<CR><C-w>:se scl=no<CR>i
+    vnoremap <silent> <Leader>zs <C-\><C-n>:terminal<CR><C-w>:se scl=no<CR>i
+else
+    nnoremap <silent> <Leader>zs           :terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
+    vnoremap <silent> <Leader>zs <C-\><C-n>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
+endif
 " terminal in new tab NOTE: added <C-w>:se scl=no<CR> at end to turn off signcolumn in terminal only ...
 noremap <silent> zt <Nop>
-nnoremap <silent> <Leader>zt           :$tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
-vnoremap <silent> <Leader>zt <C-\><C-n>:$tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
+if has("nvim")
+    nnoremap <silent> <Leader>zt           :$tabnew <Esc>:terminal<CR><C-w>:se scl=no<CR>i
+    vnoremap <silent> <Leader>zt <C-\><C-n>:$tabnew <Esc>:terminal<CR><C-w>:se scl=no<CR>i
+else
+    nnoremap <silent> <Leader>zt           :$tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
+    vnoremap <silent> <Leader>zt <C-\><C-n>:$tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
+endif
 "
 " NOTE: there is also <Leader>zf for new floating terminal (floaterm)
 "
 " terminal in new tab when already in a terminal
-tnoremap <silent> <C-x>t <C-w>:$tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR>
+if has("nvim")
+    tnoremap <silent> <C-x>t <C-\><C-n><C-w>:$tabnew <Esc>:terminal<CR><C-w>:se scl=no<CR>i
+    tnoremap <silent> <C-x>v <C-\><C-n><C-w>:$tabnew<CR>
+else
+    tnoremap <silent> <C-x>t <C-w>:$tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
+    tnoremap <silent> <C-x>v <C-w>:$tabnew<CR>
+endif
 " window in new tab when already in a terminal
-tnoremap <silent> <C-x>v <C-w>:$tabnew<CR>
 " <C-w><N> or <C-\><C-n> to get into normal mode
 " a or i get back into terminal mode
 " or <C-\><C-n> to toggle
 "nnoremap <silent> <expr> <C-\><C-n> (&buftype == 'terminal') ? 'i' : '<C-\><C-n>'
 " or <Return>, like tmux
-nmap <silent> <buffer> <expr> <Return> (&buftype == 'terminal') ? 'i' : 'gj'
+"nmap <silent> <buffer> <expr> <Return> (&buftype == 'terminal') ? 'i' : 'gj'
 " to enter normal mode, like tmux
 " there is no alternate screen so this removes these from less/more/etc.
 "tnoremap <silent> <C-Up>   <C-\><C-n>
 "tnoremap <silent> <PageUp> <C-\><C-n>
 " ctrl-x-] like tmux enter copy-mode-vi (ctrl-s-])
-tnoremap <silent> <C-x>] <C-\><C-n>
-"nnoremap <silent> <expr> <C-x>] (&buftype == 'terminal') ? 'i' : '<Nop>'
+tnoremap <silent> <C-x>]     <C-\><C-n>
+tnoremap <silent> <C-x><C-]> <C-\><C-n>
+nnoremap <silent> <expr> <C-x>]     (&buftype == 'terminal') ? 'i' : '<C-x>]'
+nnoremap <silent> <expr> <C-x><C-]> (&buftype == 'terminal') ? 'i' : '<C-x>]'
 
 " this causes sign column to disappear on popups that are terminal windows ...
 "au TerminalOpen * setlocal signcolumn=no
@@ -6195,7 +6565,11 @@ function! MyGSStart(timer)
     if filereadable(expand(g:gitinfo_script))
       let l:command = '/bin/sh -c ' . '"' . g:gitinfo_script . ' ' . expand('%:p:h') . '"'
       "echomsg "starting job " . l:command
-      let b:MyGSJob = job_start(l:command, { 'close_cb':'MyGSCloseHandler' })
+      if has("nvim")
+        " TODO: add nvim jobstart() ...
+      else
+        let b:MyGSJob = job_start(l:command, { 'close_cb':'MyGSCloseHandler' })
+      endif
     endif
   endif
   call lightline#update()

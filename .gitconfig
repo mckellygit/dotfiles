@@ -31,14 +31,15 @@
 [pager]
 	diff = less -R
 [alias]
-	undo = "!f() { git reset --hard $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
-	dt = difftool
-	gvdiff = difftool
+    undo = "!f() { git reset --hard $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
+    dt = difftool
+    gvdiff = difftool
     difff = dless
     olddiff = diff
     oldiff = diff
-	dif = dless
-	dles = dless
+    dif = dless
+    dles = dless
+    vless = dvim
 #	git diff does not use alternate screen, no matter what PAGER, GIT_PAGER, etc. are
 #	dless is a git-dless cmd
 #	dvim is a git-dvim cmd
@@ -53,7 +54,7 @@
     br-name = "!git rev-parse --abbrev-ref HEAD"
     for = fetch origin
     fup = fetch upstream
-    fall = fetch --all
+    f-all = fetch --all
     ff-ups-mrg = "!f() { git merge --signoff --ff-only "upstream/$(git br-name)"; }; f"
     ff-org-mrg = "!f() { git merge --signoff --ff-only "origin/$(git br-name)"; }; f"
     del-loc-br = "!f() { git branch -D "$@"; }; f"

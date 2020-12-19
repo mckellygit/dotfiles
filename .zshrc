@@ -609,7 +609,9 @@ git() { if [[ $1 == "diff" ]]; then shift ; command git dless "$@" ; elif [[ $1 
 # ------------------
 
 # -x S -y R are not supported values
-alias fzf='fzf-tmux -p -x C -y 38 -w 80% -h 65%'
+if [[ -n "$TMUX_PANE" ]] ; then
+    alias fzf='fzf-tmux -p -x C -y 38 -w 80% -h 65%'
+fi
 
 # to use tmux window instead of popup, add -d arg
 # ls -l | fzf -d
@@ -759,7 +761,7 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # could make alt-c for dirs only (add -t d) - then it automatically chdir to there ...
 export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND -t d"
 # add --ansi because fd above uses --color=always ...
-export FZF_DEFAULT_OPTS='--ansi --preview "bat --style=numbers --color=always --line-range :250 {}" --bind="ctrl-alt-p:toggle-preview" --bind="ctrl-f:preview-half-page-down" --bind="ctrl-b:preview-half-page-up" --bind="ctrl-k:preview-up,ctrl-j:preview-down" --bind="ctrl-u:preview-page-up,ctrl-d:preview-page-down" --bind="alt-bs:preview-half-page-up,alt-space:preview-half-page-down" --bind="alt-k:up,alt-j:down" --bind="ctrl-alt-k:preview-half-page-up,ctrl-alt-j:preview-half-page-down" --bind="page-up:page-up" --bind="page-down:page-down" --bind="alt-u:page-up" --bind="alt-d:page-down" --preview-window=right:hidden --color fg:242,bg:236,hl:65,fg+:15,bg+:239,hl+:108 --color info:108,prompt:109,spinner:108,pointer:168,marker:168'
+export FZF_DEFAULT_OPTS='--ansi --preview "bat --style=numbers --color=always --line-range :250 {}" --bind="ctrl-alt-p:toggle-preview" --bind="ctrl-f:preview-half-page-down" --bind="ctrl-b:preview-half-page-up" --bind="ctrl-k:preview-up,ctrl-j:preview-down" --bind="ctrl-u:preview-page-up,ctrl-d:preview-page-down" --bind="alt-bs:preview-half-page-up,alt-space:preview-half-page-down" --bind="alt-k:up,alt-j:down" --bind="ctrl-alt-k:preview-half-page-up,ctrl-alt-j:preview-half-page-down" --bind="alt-9:preview-half-page-up,alt-0:preview-half-page-down" --bind="page-up:page-up" --bind="page-down:page-down" --bind="alt-u:page-up" --bind="alt-d:page-down" --preview-window=right:hidden --color fg:242,bg:236,hl:65,fg+:15,bg+:239,hl+:108 --color info:108,prompt:109,spinner:108,pointer:168,marker:168'
 
 # Options to fzf command
 export FZF_COMPLETION_OPTS='+c -x'
@@ -990,11 +992,17 @@ function ctrl-c-cmdline() {
 }
 zle -N ctrl-c-cmdline
 bindkey '^_/' ctrl-c-cmdline
+
 # terminals may have mapped C-S-<Space> to ^_<Space>
 bindkey '^_ ' autosuggest-accept
+
+# terminals may have mapped S-<Space> to ^^<Space>
+bindkey -s '^^ ' ' '
+
 # if we can get away with this ... just to keep cmdline quiet
-bindkey '^_' noop
-bindkey '^^' noop
+#bindkey '^_' noop
+#bindkey '^^' noop
+
 # these all seem benign in vim ...
 
 # C-\ - not a good key to use because in a terminal shell from vim

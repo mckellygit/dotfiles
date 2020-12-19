@@ -52,8 +52,12 @@ key_bindings:
   - { key: Return,    mods: Alt|Control,     chars: "\x1e\x0d"        }
   # special -------
 
-  - { key: V,         mods: Control|Shift,   action: Paste            }
-  - { key: C,         mods: Control|Shift,   action: Copy             }
+  # same esc-seq as S-Insert (really cannot be RecieveChar)
+  - { key: V,         mods: Control|Shift,   chars: "\x1b[2;2~"       }
+  # same esc-seq as C-Insert (really cannot be RecieveChar)
+  - { key: C,         mods: Control|Shift,   chars: "\x1b[2;5~"       }
+    #- { key: V,         mods: Control|Shift,   action: Paste            }
+    #- { key: C,         mods: Control|Shift,   action: Copy             }
 
   - { key: 11,        mods: Control|Shift,   action: ResetFontSize    }
   - { key: 12,        mods: Control|Shift,   action: DecreaseFontSize }

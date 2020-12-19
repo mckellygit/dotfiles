@@ -308,10 +308,17 @@ URxvt.keysym.Control-Meta-minus:        command:\000
 URxvt.keysym.Control-Meta-Return:       string:\036\015
 !! special ------
 
-URxvt.keysym.Shift-Control-V:   eval:paste_clipboard
-URxvt.keysym.Shift-Control-C:   eval:selection_to_clipboard
+!! same esc-seq as S-Insert (really cannot be builtin-string)
+URxvt.keysym.Shift-Control-V:   string:\033[2;2~
+!! same esc-seq as C-Insert (really cannot be builtin-string)
+URxvt.keysym.Shift-Control-C:   string:\033[2;5~
+
+!!URxvt.keysym.Shift-Control-V:   eval:paste_clipboard
+!!URxvt.keysym.Shift-Control-C:   eval:selection_to_clipboard
+
 !!URxvt.keysym.C-S-0x56:          eval:paste_clipboard
 !!URxvt.keysym.C-S-0x43:          eval:selection_to_clipboard
+
 URxvt.keysym.Control-Meta-c:    builtin-string:
 URxvt.keysym.Control-Meta-v:    builtin-string:
 
