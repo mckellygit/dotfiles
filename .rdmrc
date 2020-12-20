@@ -1,1 +1,2 @@
 --job-count 8
+--disable-compiler-manager
