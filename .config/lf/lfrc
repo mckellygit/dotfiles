@@ -7,6 +7,8 @@ map \\qq    quit
 map <c-c>   quit
 map <c-q>   quit
 
+map <esc>   push :
+
 map <enter> open
 
 # dedicated keys for file opener actions

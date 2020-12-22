@@ -1704,7 +1704,11 @@ endif
 function! s:MyUpdateTitle()
   set titleold=
   if &buftype=="terminal"
-    set title titlestring=@t:%.12t
+    if !has("nvim")
+        set title titlestring=@tv:%.11t
+    else
+        set title titlestring=@t:%.12t
+    endif
   else
     set title titlestring=@v:%.12t
   endif
@@ -2413,8 +2417,8 @@ call <SID>MapFastKeycode('<S-F26>',   "\e[6;3~", 126) " A-PageDown
 call <SID>MapFastKeycode('<F32>',  "\ee", 32)
 nnoremap <buffer> <F32> u
 vnoremap <buffer> <F32> u
-cnoremap <F32> <Esc>e
-inoremap <F32> <Esc>e
+cnoremap <F32> <C-v><Esc>e
+inoremap <F32> <C-v><Esc>e
 tnoremap <F32> <Esc>e
 if has("nvim")
     nnoremap <buffer> <M-e> u
@@ -2429,8 +2433,8 @@ endif
 call <SID>MapFastKeycode('<S-F28>',  "\ea", 128)
 nmap <S-F28> .
 vmap <S-F28> .
-cnoremap <S-F28> <Esc>a
-inoremap <S-F28> <Esc>a
+cnoremap <S-F28> <C-v><Esc>a
+inoremap <S-F28> <C-v><Esc>a
 tnoremap <S-F28> <Esc>a
 if has("nvim")
     nmap <M-a> .
@@ -2443,8 +2447,8 @@ endif
 " <C-A-p> for fzf preview ...
 call <SID>MapFastKeycode('<S-F27>',  "\e\<C-p>", 127)
 " but unmap it in terminal so fzf can use it as ctrl-alt-p ...
-cnoremap <S-F27> <Esc><C-p>
-inoremap <S-F27> <Esc><C-p>
+cnoremap <S-F27> <C-v><Esc><C-v>
+inoremap <S-F27> <C-v><Esc><C-v>
 tnoremap <S-F27> <Esc><C-p>
 if has("nvim")
     cnoremap <S-F27> <M-C-P>
@@ -2790,8 +2794,8 @@ endif
 call <SID>MapFastKeycode('<S-F36>',  "\e&", 136)
 nnoremap <S-F36> <Nop>
 vmap <expr> <S-F36> (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
-cnoremap <S-F36> <Esc>&
-inoremap <S-F36> <Esc>&
+cnoremap <S-F36> <C-v><Esc>&
+inoremap <S-F36> <C-v><Esc>&
 tnoremap <S-F36> <Esc>&
 if has("nvim")
     nnoremap <M-&> <Nop>
@@ -2811,8 +2815,8 @@ endif
 call <SID>MapFastKeycode('<S-F37>',  "\e(", 137)
 nnoremap <S-F37> <Nop>
 vmap <expr> <S-F37> (&buftype == 'terminal') ? '<Nop>' : 'tx'
-cnoremap <S-F37> <Esc>(
-inoremap <S-F37> <Esc>(
+cnoremap <S-F37> <C-v><Esc>(
+inoremap <S-F37> <C-v><Esc>(
 tnoremap <S-F37> <Esc>(
 if has("nvim")
     nnoremap <M-(> <Nop>
@@ -3552,8 +3556,8 @@ nnoremap <silent> Y y$
 call <SID>MapFastKeycode('<S-F31>',  "\e\<Return>", 131)
 "vmap <silent> <S-F31> mvty`v
 noremap <silent> <buffer> <S-F31> gk
-cnoremap <S-F31> <Esc><Return>
-inoremap <S-F31> <Esc><Return>
+cnoremap <S-F31> <C-v><Esc><Return>
+inoremap <S-F31> <C-v><Esc><Return>
 tnoremap <S-F31> <Esc><Return>
 if has("nvim")
     noremap <silent> <buffer> <M-Return> gk
@@ -3566,8 +3570,8 @@ endif
 call <SID>MapFastKeycode('<S-F30>',  "\eX", 130)
 noremap <silent> <expr> <S-F30> AtBot(0) ? '<C-y>' : '<C-y>k'
 " but unmap it in terminal so fzf can use it as alt-bs ...
-cnoremap <S-F30> <Esc><BS>
-inoremap <S-F30> <Esc><BS>
+cnoremap <S-F30> <C-v><Esc><BS>
+inoremap <S-F30> <C-v><Esc><BS>
 tnoremap <S-F30> <Esc><BS>
 if has("nvim")
     noremap <silent> <expr> <M-X> AtBot(0) ? '<C-y>' : '<C-y>k'
@@ -3580,8 +3584,8 @@ endif
 call <SID>MapFastKeycode('<S-F29>',  "\eY", 129)
 noremap <silent> <expr> <S-F29> ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>j'
 " but unmap it in terminal so fzf can use it as alt-space ...
-cnoremap <S-F29> <Esc><Space>
-inoremap <S-F29> <Esc><Space>
+cnoremap <S-F29> <C-v><Esc><Space>
+inoremap <S-F29> <C-v><Esc><Space>
 tnoremap <S-F29> <Esc><Space>
 if has("nvim")
     noremap <silent> <expr> <M-Y> ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>j'
@@ -4142,8 +4146,8 @@ inoremap <C-S-Right> <C-\><C-o>10gl
 call <SID>MapFastKeycode('<F30>',  "\ek", 30)
 noremap <A-k> 5gk
 noremap <F30> 5gk
-cnoremap <F30> <Esc>k
-inoremap <F30> <Esc>k
+cnoremap <F30> <C-v><Esc>k
+inoremap <F30> <C-v><Esc>k
 tnoremap <F30> <Esc>k
 if has("nvim")
     cnoremap <F30> <M-k>
@@ -4154,8 +4158,8 @@ endif
 call <SID>MapFastKeycode('<F31>',  "\ej", 31)
 noremap <A-j> 5gk
 noremap <F31> 5gj
-cnoremap <F31> <Esc>j
-inoremap <F31> <Esc>j
+cnoremap <F31> <C-v><Esc>j
+inoremap <F31> <C-v><Esc>j
 tnoremap <F31> <Esc>j
 if has("nvim")
     cnoremap <F31> <M-j>
@@ -4170,16 +4174,16 @@ call <SID>MapFastKeycode('<F28>',  "\e9", 28)
 "call <SID>MapFastKeycode('<F28>',  "\eK", 28)
 "noremap <silent> <expr> <A-K>  (line('.') == line('w$')) ? '5k' : '5<C-y>5k'
 noremap <silent> <expr> <F28>  (line('.') == line('w$')) ? '5k' : '5<C-y>5k'
-if has("nvim")
+if !has("nvim")
+    cnoremap <F28> <C-v><Esc><C-v>
+    inoremap <F28> <C-v><Esc><C-v>
+    tnoremap <F28> <Esc><C-k>
+    tnoremap <M-9> <Esc><C-k>
+else
     cnoremap <F28> <M-C-K>
     inoremap <F28> <M-C-K>
     tnoremap <F28> <M-C-K>
     tnoremap <M-9> <M-C-K>
-else
-    cnoremap <F28> <Esc><C-k>
-    inoremap <F28> <Esc><C-k>
-    tnoremap <F28> <Esc><C-k>
-    tnoremap <M-9> <Esc><C-k>
 endif
 
 " some terminals might map C-A-j to C-_-j ...
@@ -4189,16 +4193,16 @@ call <SID>MapFastKeycode('<F29>',  "\e0", 29)
 "call <SID>MapFastKeycode('<F29>',  "\eJ", 29)
 "noremap <silent> <expr> <A-J>  (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '5<C-e>5j'
 noremap <silent> <expr> <F29>  (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '5<C-e>5j'
-if has("nvim")
+if !has("nvim")
+    cnoremap <F29> <C-v><Esc><C-v> 
+    inoremap <F29> <C-v><Esc><C-v> 
+    tnoremap <F29> <Esc><C-j>
+    tnoremap <M-0> <Esc><C-j>
+else
     cnoremap <F29> <M-C-J>
     inoremap <F29> <M-C-J>
     tnoremap <F29> <M-C-J>
     tnoremap <M-0> <M-C-J>
-else
-    cnoremap <F29> <Esc><C-j>
-    inoremap <F29> <Esc><C-j>
-    tnoremap <F29> <Esc><C-j>
-    tnoremap <M-0> <Esc><C-j>
 endif
 
 " ---------
@@ -4753,6 +4757,21 @@ imap         <buffer> <C-^><Return> <Nop>
 " NOTE: C-Space in most terminals is C-@
 nnoremap <silent> <C-@> gj
 vnoremap <silent> <C-@> gj
+
+" BUG: vim terminal does not generate C-@ (C-Space)
+"      tmux can send A-, in its place when in a terminal
+call <SID>MapFastKeycode('<F27>',  "\e-", 27)
+noremap <F27> gj
+noremap <A--> gj
+cnoremap <F27> <C-v><Esc>-
+inoremap <F27> <C-v><Esc>-
+tnoremap <F27> <Esc>-
+if has("nvim")
+    cnoremap <F27> <M-->
+    inoremap <F27> <M-->
+    tnoremap <F27> <M-->
+endif
+
 " <Return> was nmapped above to gj also if not terminal ...
 nmap <silent> <buffer> <Return> gj
 vmap <silent> <buffer> <Return> gj

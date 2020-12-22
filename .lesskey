@@ -6,6 +6,8 @@
 \  noaction 10j
  noaction 10k
 \340 forw-line
+# vim terminal BUG - send M-- instead of C-@ (C-Space)
+\e-  forw-line
  back-line
 \e\n back-line
 \e back-line
@@ -32,3 +34,4 @@
 \e[1;7F noaction G
 qq   quit
 \\qq quit
+   noaction
