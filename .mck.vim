@@ -68,7 +68,7 @@ Plugin 'mattn/vim-findroot'
 "
 " rtags for code navigation (**modified++)
 "Plugin 'lyuts/vim-rtags'
-Plugin 'mckellyln/vim-rtags'
+Plugin 'mckellygit/vim-rtags'
 "
 " echodoc function completion
 "Plugin 'Shougo/echodoc.vim'
@@ -255,6 +255,9 @@ Plugin 't9md/vim-choosewin'
 Plugin 'voldikss/vim-floaterm'
 " :Floaterms fzf list of floaterms
 Plugin 'voldikss/fzf-floaterm'
+"
+" vifm plugin
+"Plugin 'vifm/vifm.vim'
 "
 "" All of your Plugins must be added before the following line
 call vundle#end()         " required
@@ -1037,6 +1040,7 @@ function QuitGV() abort
     if ans ==# 'y' || ans ==# 'Y' || ans ==# 'q' || ans ==# 'Q'
         quitall
     else
+        echo " "
         redraw!
     endif
 endfunction
@@ -1527,6 +1531,8 @@ function s:NoFloatermVless() abort
     echohl None
 endfunction
 
+let g:floaterm_width = 0.72
+let g:floaterm_height = 0.65
 let g:floaterm_autoclose = 2
 let g:floaterm_autoinsert = v:true
 " NOTE: there is also <Leader>zs and <Leader>zt for terminals mapped above ...
@@ -1541,11 +1547,23 @@ if !exists("g:vless")
 else
     nnoremap <Leader>zf :call <SID>NoFloatermVless()<CR>
 endif
+
+let g:floaterm_open_command = 'tabe'
+
+" install lf (go) -
+"   env CGO_ENABLED=0 GO111MODULE=on go get -u -ldflags="-s -w" github.com/gokcehan/lf
+nnoremap <silent> <Leader>fm :FloatermNew --height=0.75 --width=0.80 lf<CR>
 " floaterm ---------
 
-" annoying ...
-nmap - <Nop>
-nmap _ <Nop>
+" vifm -------------
+"let g:vifm_embed_term = v:true
+"let g:vifm_embed_split = v:true
+
+" ok in nvim terminal, but vim terminal does not allow <C-w>w to change to preview window for scrolling
+"nnoremap <silent> <Leader>fm :FloatermNew --height=0.75 --width=0.80 vifm<CR>
+
+nnoremap <silent> <Leader>fM :TabVifm<CR>
+" vifm -------------
 
 " ====================================================
 " ====================================================
@@ -2571,6 +2589,7 @@ function! ForceLoadNammedReg() abort
         silent call system("setsid -w myclip -", getreg('*'))
         echohl DiffText | echo "@* -> clipboard ; register copied" | echohl None
         sleep 551m
+        echo " "
         redraw!
     else
         echohl WarningMsg | echo "copyq/myclip not found, cannot set clipboard" | echohl None
@@ -2586,6 +2605,7 @@ function! s:CopyReg(arg)
     if a:arg == 1
         echohl DiffText | echo "@* -> @x ; register copied" | echohl None
         sleep 551m
+        echo " "
         redraw!
     endif
 endfunction
@@ -2604,6 +2624,7 @@ function! s:SwapReg(arg)
     if a:arg == 1
         echohl DiffText | echo "@* <-> @x ; registers swapped" | echohl None
         sleep 551m
+        echo " "
         redraw!
     endif
 endfunction
@@ -2648,6 +2669,7 @@ function! s:YankIt(cmd, arg) abort
         if a:arg == 1
             echo "copied to clipboard"
             sleep 651m
+            echo " "
             redraw!
         endif
         " NOTE: should we go back to live terminal mode ?
@@ -2675,6 +2697,7 @@ function! s:CutIt(cmd) abort
         exe "silent! normal! gv\""
         echo "readonly buffer ..."
         sleep 651m
+        echo " "
         redraw!
         return
     endif
@@ -2905,6 +2928,7 @@ endfunction
 "autocmd CmdlineLeave * call MyCmdLeave()
 function! MyCmdLeave()
     if !empty(getcmdline())
+        echo " "
         redraw!
     endif
 endfunction
@@ -4711,7 +4735,11 @@ inoremap          <S-BS> <BS>
 noremap <silent> <C-^><BS>  gk
 noremap <silent> <C-^><DEL> gk
 
-noremap <silent> <C-^>- -
+" annoying ...
+nmap - <Nop>
+nmap _ <Nop>
+
+noremap <silent> <C-^>- <Nop>
 inoremap         <C-^>- -
 cnoremap         <C-^>- -
 tnoremap         <C-^>- -
@@ -4723,7 +4751,8 @@ map <silent> <buffer> <C-^><Return> gk
 imap         <buffer> <C-^><Return> <Nop>
 
 " NOTE: C-Space in most terminals is C-@
-noremap <silent> <C-@> gj
+nnoremap <silent> <C-@> gj
+vnoremap <silent> <C-@> gj
 " <Return> was nmapped above to gj also if not terminal ...
 nmap <silent> <buffer> <Return> gj
 vmap <silent> <buffer> <Return> gj
@@ -5267,6 +5296,7 @@ function s:MySearch(meth) abort
   elseif (a:meth == 4)
     let promptstr = 'fzf-dir:/'
   else
+    echo " "
     redraw!
     return
   endif
@@ -5275,6 +5305,7 @@ function s:MySearch(meth) abort
   call inputrestore()
   if (len(string) == 0)
     " should we reset @/ ?
+    echo " "
     redraw!
     return
   endif
@@ -6017,6 +6048,7 @@ function Xdiff()
     else
       execute "silent! wq"
     endif
+    echo " "
     redraw!
     "let dbgmsg = "diffx: &diff = " . &diff
     "echomsg dbgmsg
@@ -6289,6 +6321,7 @@ function! UndoAll()
     echo 'No changes to undo'
     sleep 500m
   endif
+  echo " "
   redraw!
 endfunction
 nnoremap <Leader>uu           :call UndoAll()<CR>
@@ -6544,10 +6577,27 @@ function! MyGSCloseHandler(ch)
   endif
 endfunction
 
+function! MyGSCloseHandlerNvim(job_id, data, event)
+  if a:event == "stdout"
+    let b:mckgitstatus = join(a:data)
+    if exists('b:MyGSJob')
+      unlet b:MyGSJob
+    endif
+  endif
+endfunction
+
 function! MyGSStart(timer)
   let l:jstat = "complete"
   if exists('b:MyGSJob')
-    let l:jstat = job_status(b:MyGSJob)
+    "echomsg "MyGSStart: b:MyGSJob = " . b:MyGSJob
+    if has("nvim")
+      let l:running = jobwait([b:MyGSJob], 0)[0]
+      if l:running == -1
+        let l:jstat = "run"
+      endif
+    else
+      let l:jstat = job_status(b:MyGSJob)
+    endif
   endif
   "echomsg "l:jstat = " . l:jstat
   if l:jstat == "run"
@@ -6563,12 +6613,15 @@ function! MyGSStart(timer)
       return
     endif
     if filereadable(expand(g:gitinfo_script))
-      let l:command = '/bin/sh -c ' . '"' . g:gitinfo_script . ' ' . expand('%:p:h') . '"'
-      "echomsg "starting job " . l:command
       if has("nvim")
         " TODO: add nvim jobstart() ...
+        let l:command = g:gitinfo_script . ' ' . expand('%:p:h')
+        "echomsg "starting job " . l:command
+        let b:MyGSJob = jobstart(["/bin/bash", "-c", l:command], { 'on_stdout':function('MyGSCloseHandlerNvim'), 'stdout_buffered':v:true })
       else
-        let b:MyGSJob = job_start(l:command, { 'close_cb':'MyGSCloseHandler' })
+        let l:command = '/bin/bash -c ' . '"' . g:gitinfo_script . ' ' . expand('%:p:h') . '"'
+        "echomsg "starting job " . l:command
+        let b:MyGSJob = job_start(l:command, { 'out_mode':'nl' , 'stoponexit':'kill' , 'close_cb':'MyGSCloseHandler' })
       endif
     endif
   endif

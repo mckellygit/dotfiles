@@ -1,0 +1,26 @@
+
+set shell   zsh
+
+map q  
+map qq      quit
+map \\qq    quit
+map <c-c>   quit
+map <c-q>   quit
+
+map <enter> open
+
+# dedicated keys for file opener actions
+map o &mimeopen $f
+map O $mimeopen --ask $f
+
+# define a custom 'open' command
+# This command is called when current file is not a directory. You may want to
+# use either file extensions and/or mime types here. Below uses an editor for
+# text files and a file opener for the rest.
+cmd open ${{
+    case $(file --mime-type $f -b) in
+        text/*) echo -e "\e[?1049h" ; $EDITOR $fx ; echo -e "\e[?1049l" ;;
+        *) for f in $fx; do setsid $OPENER $f > /dev/null 2> /dev/null & done;;
+    esac
+}}
+
