@@ -32,6 +32,10 @@
 \e[1;7H noaction g
 \e[1;5F noaction G
 \e[1;7F noaction G
+\e[1;2B forw-line
+\e[1;2A back-line
+\e[1;3B forw-line
+\e[1;3A back-line
 qq   quit
 \\qq quit
    noaction

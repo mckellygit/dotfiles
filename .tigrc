@@ -62,29 +62,29 @@ bind generic   <PageUp>     move-page-up
 bind generic   <Ctrl-J>     scroll-line-down
 bind generic   <Ctrl-K>     scroll-line-up
 #
-bind generic   <Ctrl-[>j    move-down
-bind generic   <Ctrl-[>k    move-up
+bind generic   <Esc>j       move-down
+bind generic   <Esc>k       move-up
 bind generic   <Ctrl-_>j    scroll-line-down
 bind generic   <Ctrl-_>k    scroll-line-up
-bind generic   <Ctrl-[>0    scroll-line-down
-bind generic   <Ctrl-[>9    scroll-line-up
+bind generic   <Esc>0       scroll-line-down
+bind generic   <Esc>9       scroll-line-up
 #
-bind generic   <Ctrl-[><Enter> scroll-line-up
+bind generic   <Esc><Enter>    scroll-line-up
 bind generic   <Ctrl-^><Enter> scroll-line-up
 #
-bind generic   <Ctrl-[><Ctrl-[> view-close-no-quit
+bind generic   <Esc><Esc>        view-close-no-quit
 #
-bind generic   <Ctrl-[><Space>      scroll-line-down
-bind generic   <Ctrl-[><BackSpace>  scroll-line-up
+bind generic   <Esc><Space>      scroll-line-down
+bind generic   <Esc><BackSpace>  scroll-line-up
 #
-bind generic   <Ctrl-w>w            view-next
-bind generic   <Ctrl-w><Ctrl-w>     view-next
+bind generic   <Ctrl-w>w          view-next
+bind generic   <Ctrl-w><Ctrl-w>   view-next
 #
 bind main      <Space>              next
 bind generic   <Space>              scroll-page-down
 bind generic   <Ctrl-@>             move-down
 # vim terminal BUG - send M-- instead of C-@ (C-Space)
-bind generic   <Ctrl-[>-            move-down
+bind generic   <Esc>-               move-down
 bind main      <Backspace>          previous
 bind generic   <Backspace>          scroll-page-up
 bind generic   <Ctrl-^><Backspace>  move-up
@@ -92,21 +92,36 @@ bind generic   <Ctrl-^><Backspace>  move-up
 bind generic   <Tab>        next
 bind generic   <ShiftTab>   previous
 #
+bind generic   <Esc>[1;5B   scroll-line-down
+bind generic   <Esc>[1;5A   scroll-line-up
+bind generic   <Esc>[1;3B   scroll-line-down
+bind generic   <Esc>[1;3A   scroll-line-up
+#
+bind generic   <Esc>[1;5D   scroll-left
+bind generic   <Esc>[1;5C   scroll-right
+bind generic   <Esc>[1;3D   scroll-left
+bind generic   <Esc>[1;3C   scroll-right
+#
+bind generic   <Esc>[1;5H   move-first-line
+bind generic   <Esc>[1;5F   move-last-line
+bind generic   <Esc>[1;7H   move-first-line
+bind generic   <Esc>[1;7F   move-last-line
+#
 # extended ncurses codes and keynames
-#bind generic   <Esc>[1;5B   scroll-line-down
-#bind generic   <Esc>[1;5A   scroll-line-up
-bind generic   <Ctrl-Down>  scroll-line-down
-bind generic   <Ctrl-Up>    scroll-line-up
-bind generic   <C-Left>     scroll-left
-bind generic   <C-Right>    scroll-right
-bind generic   <Alt-Down>   scroll-line-down
-bind generic   <Alt-Up>     scroll-line-up
-bind generic   <A-Left>     scroll-left
-bind generic   <A-Right>    scroll-right
-bind generic   <C-Home>     move-first-line
-bind generic   <C-End>      move-last-line
-bind generic   <A-C-Home>   move-first-line
-bind generic   <A-C-End>    move-last-line
+#bind generic   <Ctrl-Down>  scroll-line-down
+#bind generic   <Ctrl-Up>    scroll-line-up
+#bind generic   <Alt-Down>   scroll-line-down
+#bind generic   <Alt-Up>     scroll-line-up
+#
+#bind generic   <C-Left>     scroll-left
+#bind generic   <C-Right>    scroll-right
+#bind generic   <A-Left>     scroll-left
+#bind generic   <A-Right>    scroll-right
+#
+#bind generic   <C-Home>     move-first-line
+#bind generic   <C-End>      move-last-line
+#bind generic   <A-C-Home>   move-first-line
+#bind generic   <A-C-End>    move-last-line
 #
 bind generic   <Insert>     none
 bind generic   <Delete>     none
