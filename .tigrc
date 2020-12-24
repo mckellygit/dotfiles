@@ -1,6 +1,7 @@
 #
 # tig rc file
 #
+set focus-child        = yes
 set vertical-split     = no
 set split-view-height  = 62%
 set horizontal-scroll  = 33%

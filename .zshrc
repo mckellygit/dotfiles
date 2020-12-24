@@ -999,6 +999,12 @@ bindkey '^_ ' autosuggest-accept
 # terminals may have mapped S-<Space> to ^^<Space>
 bindkey -s '^^ ' ' '
 
+bindkey -s '^^\n' '\n'
+bindkey -s '^^^J' '^J'
+
+bindkey -s '^^\r' '\r'
+bindkey -s '^^^M' '^M'
+
 # if we can get away with this ... just to keep cmdline quiet
 #bindkey '^_' noop
 #bindkey '^^' noop
