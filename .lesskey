@@ -23,8 +23,11 @@
 \ek  noaction 5k
 j  noaction 5^F
 k  noaction 5^B
-\e0  noaction 5^F
-\e9  noaction 5^B
+# use ^O instead of ^J (or ^M or \n or \r)
+\e  noaction 5^F
+\e  noaction 5^B
+\eJ  noaction
+\eK  noaction
 \n back-line
 \kh  noaction
 \ke  noaction

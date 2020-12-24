@@ -65,10 +65,13 @@ bind generic   <Ctrl-K>     scroll-line-up
 #
 bind generic   <Esc>j       move-down
 bind generic   <Esc>k       move-up
+bind generic   <Esc>J       none
+bind generic   <Esc>K       none
 bind generic   <Ctrl-_>j    scroll-line-down
 bind generic   <Ctrl-_>k    scroll-line-up
-bind generic   <Esc>0       scroll-line-down
-bind generic   <Esc>9       scroll-line-up
+# use ^O instead of ^J (or ^M or \n or \r)
+bind generic   <Esc><Ctrl-O>    scroll-line-down
+bind generic   <Esc><Ctrl-K>    scroll-line-up
 #
 bind generic   <Esc><Enter>    scroll-line-up
 bind generic   <Ctrl-^><Enter> scroll-line-up

@@ -1705,7 +1705,7 @@ function! s:MyUpdateTitle()
   set titleold=
   if &buftype=="terminal"
     if !has("nvim")
-        set title titlestring=@tv:%.11t
+        set title titlestring=@t:v%.11t
     else
         set title titlestring=@t:%.12t
     endif
@@ -2446,7 +2446,7 @@ endif
 
 " <C-A-p> for fzf preview ...
 call <SID>MapFastKeycode('<S-F27>',  "\e\<C-p>", 127)
-" but unmap it in terminal so fzf can use it as ctrl-alt-p ...
+" map it back to orig in terminal so fzf can use it as ctrl-alt-p ...
 cnoremap <S-F27> <C-v><Esc><C-v>
 inoremap <S-F27> <C-v><Esc><C-v>
 tnoremap <S-F27> <Esc><C-p>
@@ -4156,7 +4156,7 @@ if has("nvim")
 endif
 
 call <SID>MapFastKeycode('<F31>',  "\ej", 31)
-noremap <A-j> 5gk
+noremap <A-j> 5gj
 noremap <F31> 5gj
 cnoremap <F31> <C-v><Esc>j
 inoremap <F31> <C-v><Esc>j
@@ -4167,42 +4167,65 @@ if has("nvim")
     tnoremap <F31> <M-j>
 endif
 
-" some terminals might map C-A-k to C-_-k ...
-"call <SID>MapFastKeycode('<F28>',  "\<C-_>k", 28)
-call <SID>MapFastKeycode('<F28>',  "\e9", 28)
-"noremap <silent> <expr> <C-_>k (line('.') == line('w$')) ? '5k' : '5<C-y>5k'
-"call <SID>MapFastKeycode('<F28>',  "\eK", 28)
-"noremap <silent> <expr> <A-K>  (line('.') == line('w$')) ? '5k' : '5<C-y>5k'
+call <SID>MapFastKeycode('<F28>',  "\e\<C-k>", 28)
 noremap <silent> <expr> <F28>  (line('.') == line('w$')) ? '5k' : '5<C-y>5k'
 if !has("nvim")
     cnoremap <F28> <C-v><Esc><C-v>
     inoremap <F28> <C-v><Esc><C-v>
     tnoremap <F28> <Esc><C-k>
-    tnoremap <M-9> <Esc><C-k>
 else
+    noremap <silent> <expr> <M-C-K>  (line('.') == line('w$')) ? '5k' : '5<C-y>5k'
     cnoremap <F28> <M-C-K>
     inoremap <F28> <M-C-K>
     tnoremap <F28> <M-C-K>
-    tnoremap <M-9> <M-C-K>
 endif
 
-" some terminals might map C-A-j to C-_-j ...
-"call <SID>MapFastKeycode('<F29>',  "\<C-_>j", 29)
-call <SID>MapFastKeycode('<F29>',  "\e0", 29)
-"noremap <silent> <expr> <C-_>j (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '5<C-e>5j'
-"call <SID>MapFastKeycode('<F29>',  "\eJ", 29)
-"noremap <silent> <expr> <A-J>  (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '5<C-e>5j'
+" some terminals might map C-A-j to M-C-o ...
+" use ^O instead of ^J (or ^M or \n or \r)
+call <SID>MapFastKeycode('<F29>',  "\e\<C-o>", 29)
 noremap <silent> <expr> <F29>  (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '5<C-e>5j'
 if !has("nvim")
     cnoremap <F29> <C-v><Esc><C-v> 
     inoremap <F29> <C-v><Esc><C-v> 
-    tnoremap <F29> <Esc><C-j>
-    tnoremap <M-0> <Esc><C-j>
+    tnoremap <F29> <Esc><C-o>
 else
+    noremap <silent> <expr> <M-C-O>  (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '5<C-e>5j'
+    cnoremap <M-C-O> <M-C-J>
+    inoremap <M-C-O> <M-C-J>
+    tnoremap <M-C-O> <M-C-O>
+    noremap <silent> <expr> <M-C-J>  (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '5<C-e>5j'
     cnoremap <F29> <M-C-J>
     inoremap <F29> <M-C-J>
+    " TODO: send M-C-O or M-C-J here ?
     tnoremap <F29> <M-C-J>
-    tnoremap <M-0> <M-C-J>
+endif
+
+" ---------
+
+call <SID>MapFastKeycode('<F26>',  "\eK", 26)
+noremap <F26> <Nop>
+if !has("nvim")
+    cnoremap <F26> <C-v><Esc>K
+    inoremap <F26> <C-v><Esc>K
+    tnoremap <F26> <Esc>K
+else
+    noremap  <M-K> <Nop>
+    cnoremap <F26> <M-K>
+    inoremap <F26> <M-K>
+    tnoremap <F26> <M-K>
+endif
+
+call <SID>MapFastKeycode('<F23>',  "\eJ", 23)
+noremap <F23> <Nop>
+if !has("nvim")
+    cnoremap <F23> <C-v><Esc>J
+    inoremap <F23> <C-v><Esc>J
+    tnoremap <F23> <Esc>J
+else
+    noremap  <M-J> <Nop>
+    cnoremap <F23> <M-J>
+    inoremap <F23> <M-J>
+    tnoremap <F23> <M-J>
 endif
 
 " ---------

@@ -156,16 +156,21 @@ atlimit=0
 
 # read and display enough lines to fill most of the terminal (nlines many lines)
 while [ $n -lt "${nlines}" ] && IFS= read -r line; do
+  lchars=$(echo ${line} | wc -m)
   lines="${lines}${line}${newline}"
   line=''
   n=$((n + 1))
-  lchars=$(echo ${lines} | wc -m)
   nchars=$((nchars + lchars))
   if [[ $wrap -gt 0 && $nchars -ge $mchars ]]; then
       atlimit=1
       break
   fi
 done
+
+#echo "nlines = $nlines"
+#echo "nchars = $nchars"
+#echo "mchars = $mchars"
+#echo "atlimit = $atlimit"
 
 # For input with no trailing `\nEOF`
 # TODO: ComponentTest: `printf '1' | smartless`
