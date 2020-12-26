@@ -4762,6 +4762,9 @@ inoremap          <S-BS> <BS>
 noremap <silent> <C-^><BS>  gk
 noremap <silent> <C-^><DEL> gk
 
+" TODO: what are the leading spaces when inserting a \ with .vim files ... ?
+"inoremap <silent> <expr> \ (&filetype ==# 'vim') ? '<C-v>\' : '\'
+
 " annoying ...
 nmap - <Nop>
 nmap _ <Nop>
