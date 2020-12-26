@@ -77,7 +77,7 @@ Plugin 'mckellygit/vim-rtags'
 Plugin 'yssl/QFEnter'
 " only diff is if new tab from qf then orig tab focus
 " restores to before entering qf
-"Plugin 'mckellyln/QFEnter'
+"Plugin 'mckellygit/QFEnter'
 "
 " for managing and moving windows/tabs
 "Plugin 'yssl/TWcmd.vim'
@@ -106,11 +106,11 @@ Plugin 'mckellygit/vim-qf-preview'
 "
 " fswitch to switch between .cpp/.h{pp} (**modified++)
 "Plugin 'derekwyatt/vim-fswitch'
-Plugin 'mckellyln/vim-fswitch'
+Plugin 'mckellygit/vim-fswitch'
 "
 " FileBeagle for dir/file browsing (**modified++)
 "Plugin 'jeetsukumaran/vim-filebeagle'
-Plugin 'mckellyln/vim-filebeagle'
+Plugin 'mckellygit/vim-filebeagle'
 "
 "Plugin 'tpope/vim-vinegar'
 "Plugin 'scrooloose/nerdtree'
@@ -134,7 +134,7 @@ Plugin 'airblade/vim-gitgutter'
 "Plugin 'gregsexton/gitv'
 "Plugin 'sodapopcan/vim-twiggy'
 "Plugin 'junegunn/gv.vim'
-Plugin 'mckellyln/gv.vim'
+Plugin 'mckellygit/gv.vim'
 "
 " fzf for fuzzy listing/searching
 "Plugin 'junegunn/fzf' " (not needed because its in ~/.fzf already)
@@ -152,7 +152,7 @@ Plugin 'junegunn/fzf.vim'
 " Plugin 'othree/eregex.vim'
 " Quickfix multi-file search/replace (**modified++)
 "Plugin 'wincent/ferret'
-Plugin 'mckellyln/ferret'
+Plugin 'mckellygit/ferret'
 "
 " colorscheme
 Plugin 'ajmwagar/vim-deus'
@@ -187,7 +187,7 @@ Plugin 'itchyny/lightline.vim'
 " lastplace to start at prev cursor pos (**modified++)
 " see note below about doing this after uncompress
 "Plugin 'farmergreg/vim-lastplace'
-Plugin 'mckellyln/vim-lastplace'
+Plugin 'mckellygit/vim-lastplace'
 "
 " conque-gdb plugin
 "Plugin 'Conque-GDB'
@@ -246,7 +246,6 @@ Plugin 'vim-utils/vim-man'
 "
 " system copy clipboard (**modified++)
 "Plugin 'christoomey/vim-system-copy'
-"Plugin 'mckellyln/vim-system-copy'
 "
 " choosewin
 Plugin 't9md/vim-choosewin'
