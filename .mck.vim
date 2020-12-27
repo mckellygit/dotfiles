@@ -2347,8 +2347,14 @@ endfunction
 
 "call <SID>MapFastKeycode('<S-Up>',         "\e[1;2A", 19)
 "call <SID>MapFastKeycode('<S-Down>',       "\e[1;2B", 20)
+" <A-S-Del> - (vim) reverse case four letters at a time ...
+call <SID>MapFastKeycode('<F20>',           "\e[3;4~", 20) " A-S-Del
 "call <SID>MapFastKeycode('<S-Left>',       "\e[1;2D", 21)
+" <A-S-Insert> - (vim) reverse case four letters at a time ...
+call <SID>MapFastKeycode('<F21>',           "\e[2;4~", 21) " A-S-Insert
 "call <SID>MapFastKeycode('<S-Right>',      "\e[1;2C", 22)
+" <C-A-Insert> - (vim) reverse case four letters at a time ...
+call <SID>MapFastKeycode('<F22>',           "\e[2;7~", 22) " C-A-Insert
 
 "call <SID>MapFastKeycode('<C-S-Up>',       "\e[1;6A", 23)
 " NOTE: need to skip F24, F25 for tmux focus plugin
@@ -2374,14 +2380,12 @@ call <SID>MapFastKeycode('<F34>',     "\e[2;2~", 34) " S-Insert
 call <SID>MapFastKeycode('<F35>',     "\e[2;6~", 35) " C-S-Insert
 " NOTE: <A-Insert> used by tmux/gnome for copyq toggle
 "call <SID>MapFastKeycode('<A-Insert>',     "\e[2;3~", xx) " A-Insert
-"call <SID>MapFastKeycode('<A-S-Insert>',   "\e[2;4~", xx) " A-S-Insert
 
 call <SID>MapFastKeycode('<F36>',     "\e[3;5~", 36) " C-Del
 call <SID>MapFastKeycode('<F37>',     "\e[3;2~", 37) " S-Del
 " NOTE: start at 100 + 15 ...
 call <SID>MapFastKeycode('<S-F15>',   "\e[3;6~", 115) " C-S-Del
 call <SID>MapFastKeycode('<S-F16>',   "\e[3;3~", 116) " A-Del
-"call <SID>MapFastKeycode('<A-S-Del>',      "\e[3;4~", xxx) " A-S-Del
 
 " NOTE: <Home> (khome) can be: ^[[H or ^[[1~ or ^[[7~
 "call <SID>MapFastKeycode('<C-Home>',       "\e[1;5H", 117)
@@ -2522,12 +2526,24 @@ cmap <silent> <C-Insert> <Nop>
 tmap <silent> <F33>      <Nop>
 tmap <silent> <C-Insert> <Nop>
 
+" <C-A-Insert> - (vim) reverse case four letters at a time
+" but this is painful when using C-A-BS to switch tmux windows and we press it accitdentally
+map <silent>  <F22>         <Nop>
+map <silent>  <M-C-Insert>  <Nop>
+imap <silent> <F22>         <Esc>l
+imap <silent> <M-C-Insert>  <Esc>l
+
 " NOTE: <A-Insert> used by tmux for copyq toggle
 map  <silent> <A-Insert> <Nop>
 imap <silent> <A-Insert> <Nop>
 cmap <silent> <A-Insert> <Nop>
 tmap <silent> <A-Insert> <Nop>
-" <A-S-Insert> ?
+
+" <A-S-Insert> - (vim) reverse case four letters at a time ...
+map <silent>  <F21>         <Nop>
+map <silent>  <A-S-Insert>  <Nop>
+imap <silent> <F21>         <Esc>l
+imap <silent> <A-S-Insert>  <Esc>l
 
 " <S-PageUp> ?
 " <A-S-PageUp> ?
@@ -3711,7 +3727,11 @@ vnoremap <silent>        <A-Del> <Del>
 inoremap <silent> <expr> <S-F16> (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<Esc>llb"_dWi' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
 inoremap <silent> <expr> <A-Del> (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<Esc>llb"_dWi' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
 
-" <A-S-Del> ?
+" <A-S-Del> - (vim) reverse case four letters at a time ...
+map <silent>  <F20>      <Nop>
+map <silent>  <A-S-Del>  <Nop>
+imap <silent> <F20>      <Esc>l
+imap <silent> <A-S-Del>  <Esc>l
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related

@@ -116,12 +116,14 @@ key_bindings:
   - { key: Insert,    mods: Control|Shift,   chars: "\x1b[2;6~"       }
   - { key: Insert,    mods: Alt,             chars: "\x1b[2;3~"       }
   - { key: Insert,    mods: Alt|Shift,       chars: "\x1b[2;4~"       }
+  - { key: Insert,    mods: Alt|Control,     chars: "\x1b[2;7~"       }
 
   - { key: Delete,    mods: Control,         chars: "\x1b[3;5~"       }
   - { key: Delete,    mods: Shift,           chars: "\x1b[3;2~"       }
   - { key: Delete,    mods: Control|Shift,   chars: "\x1b[3;6~"       }
   - { key: Delete,    mods: Alt,             chars: "\x1b[3;3~"       }
   - { key: Delete,    mods: Alt|Shift,       chars: "\x1b[3;4~"       }
+    # key: Delete Alt|Control is usually eaten by winmgr ...
 
 mouse_bindings:
   - { mouse: Middle, action: None }

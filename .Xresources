@@ -385,12 +385,14 @@ URxvt.keysym.Shift-Insert:      string:\033[2;2~
 URxvt.keysym.C-S-Insert:        string:\033[2;6~
 URxvt.keysym.Meta-Insert:       string:\033[2;3~
 URxvt.keysym.Shift-Meta-Insert: string:\033[2;4~
+URxvt.keysym.Control-Meta-Insert: string:\033[2;7~
 
 URxvt.keysym.Control-Delete:    string:\033[3;5~
 URxvt.keysym.Shift-Delete:      string:\033[3;2~
 URxvt.keysym.C-S-Delete:        string:\033[3;6~
 URxvt.keysym.Meta-Delete:       string:\033[3;3~
 URxvt.keysym.Shift-Meta-Delete: string:\033[3;4~
+!! Control-Meta-Delete is usally eaten by winmgr ...
 
 !! no-op is command:\000
 
