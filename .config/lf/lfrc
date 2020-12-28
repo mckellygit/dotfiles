@@ -11,6 +11,10 @@ map <esc>   push :
 
 map <enter> open
 
+map i       pagefile
+
+set previewer ~/.config/lf/pv.sh
+
 # dedicated keys for file opener actions
 map o &mimeopen $f
 map O $mimeopen --ask $f
@@ -20,9 +24,19 @@ map O $mimeopen --ask $f
 # use either file extensions and/or mime types here. Below uses an editor for
 # text files and a file opener for the rest.
 cmd open ${{
+    echo -e "\e[?1049h"
+    clear
     case $(file --mime-type $f -b) in
-        text/*) echo -e "\e[?1049h" ; $EDITOR $fx ; echo -e "\e[?1049l" ;;
+        text/*) $EDITOR $fx ;;
         *) for f in $fx; do setsid $OPENER $f > /dev/null 2> /dev/null & done;;
     esac
+    echo -e "\e[?1049l"
+}}
+
+cmd pagefile ${{
+    echo -e "\e[?1049h"
+    clear
+    BAT_STYLE=numbers less $f
+    echo -e "\e[?1049l"
 }}
 

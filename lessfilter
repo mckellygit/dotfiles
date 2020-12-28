@@ -1,4 +1,10 @@
 #!/bin/bash
 
-bat --paging never --color always --style plain "$1"
+# bat --paging never --color always --style plain "$1"
+
+if [[ -z "$BAT_STYLE" ]] ; then
+    bat --paging=never --decorations=always --color=always --style=plain "$@"
+else
+    bat --paging=never --decorations=always --color=always "$@"
+fi
 
