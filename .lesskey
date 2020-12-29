@@ -31,10 +31,19 @@
 \n back-line
 \kh  noaction
 \ke  noaction
-\e[1;5H noaction g
-\e[1;7H noaction g
+gg   noaction <
+\e[1;5H noaction <
+\e[1;7H noaction <
 \e[1;5F noaction G
 \e[1;7F noaction G
+\e[1;4H noaction
+\e[1;4F noaction
+\e[1;2H noaction
+\e[1;2F noaction
+\e[1;3H noaction
+\e[1;3F noaction
+\e[5;4~ noaction
+\e[6;4~ noaction
 \e[1;2B forw-line
 \e[1;2A back-line
 \e[1;3B forw-line
