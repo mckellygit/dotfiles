@@ -672,8 +672,24 @@ function! s:find_git_root()
     endif
     return gdir
 endfunction
+
+" to get our own custom preview.sh script:
+" this:
+"     fzf#vim#with_preview({'options': ['--bind=alt-d:kill-word']})
+" becomes:
+"     {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']},
+" and then we can:
+"     1). add a limit of 250 lines for the general fzf cmd
+"     2), remove file/mime check
+
+command! -bang -nargs=? -complete=dir Files
+    \ call fzf#vim#files(<q-args>,
+    \ {'options': ['--preview', '~/bin/fzf_preview250.sh {}', '--bind=alt-d:kill-word']},
+    \ <bang>0)
+
 command! FZFProjectFiles execute 'Files' s:find_git_root()
 noremap <silent> <Leader>f. <C-\><C-n>:Files<CR>
+
 " you can always run
 " :Files       - to get list from current dir
 " "Files <dir> - to get list from <dir>
@@ -708,13 +724,13 @@ noremap <silent> <Leader>f. <C-\><C-n>:Files<CR>
 command! -bang -nargs=* Ag
   \ call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(<q-args>),
   \ 1,
-  \ fzf#vim#with_preview({'options': ['--bind=alt-d:page-down']}),
+  \ {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']},
   \ <bang>0)
 "
 command! -bang -nargs=* Agit
   \ call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(<q-args>).' '.s:find_git_root(),
   \ 1,
-  \ fzf#vim#with_preview({'options': ['--bind=alt-d:page-down']}, 'up:50%:hidden', 'ctrl-alt-p'),
+  \ {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']},
   \ <bang>0)
 "
 " fzf env vars:
@@ -5400,10 +5416,10 @@ function s:MySearch(meth) abort
     "execute 'AsyncRun! -strip -cwd ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) ' 2>/dev/null'
     execute 'AsyncRun! -strip ag --vimgrep -U --hidden -- ' shellescape(string, 1) ' 2>/dev/null'
   elseif (a:meth == 3)
-    call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root(), 1, fzf#vim#with_preview({'options': ['--bind=alt-d:page-down']}, 'up:50%:hidden', 'ctrl-alt-p'), 0)
+    call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root(), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']}, 0)
   elseif (a:meth == 4)
-    call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1), 1, fzf#vim#with_preview({'options': ['--bind=alt-d:page-down']}), 0)
   endif
+  call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']}, 0)
   let @/=string
   set hlsearch
 endfunction
@@ -5441,9 +5457,9 @@ function s:MyVisSearch(meth) abort
     "execute 'AsyncRun! -strip -cwd ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) ' 2>/dev/null'
     execute 'AsyncRun! -strip ag --vimgrep -U --hidden -- ' shellescape(string, 1) ' 2>/dev/null'
   elseif (a:meth == 3)
-    call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root(), 1, fzf#vim#with_preview({'options': ['--bind=alt-d:page-down']}, 'up:50%:hidden', 'ctrl-alt-p'), 0)
+    call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root(), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']}, 0)
   elseif (a:meth == 4)
-    call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1), 1, fzf#vim#with_preview({'options': ['--bind=alt-d:page-down']}), 0)
+    call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']}, 0)
   endif
   let @/=string
   set hlsearch

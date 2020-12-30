@@ -13,7 +13,11 @@ map <enter> open
 
 map i       pagefile
 
+set hidden  on
+
 set previewer ~/.config/lf/pv.sh
+
+set tabstop 4
 
 # dedicated keys for file opener actions
 map o &mimeopen $f

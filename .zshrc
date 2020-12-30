@@ -761,7 +761,11 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # could make alt-c for dirs only (add -t d) - then it automatically chdir to there ...
 export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND -t d"
 # add --ansi because fd above uses --color=always ...
-export FZF_DEFAULT_OPTS='--ansi --preview "bat --style=numbers --color=always --line-range :250 {}" --bind="ctrl-alt-p:toggle-preview" --bind="ctrl-f:preview-half-page-down" --bind="ctrl-b:preview-half-page-up" --bind="ctrl-k:preview-up,ctrl-j:preview-down" --bind="ctrl-u:preview-page-up,ctrl-d:preview-page-down" --bind="alt-bs:preview-half-page-up,alt-space:preview-half-page-down" --bind="alt-k:up,alt-j:down" --bind="ctrl-alt-k:preview-half-page-up,ctrl-alt-j:preview-half-page-down" --bind="ctrl-alt-o:preview-half-page-down" --bind="page-up:page-up" --bind="page-down:page-down" --bind="alt-u:page-up" --bind="alt-d:page-down" --preview-window=right:hidden --color fg:242,bg:236,hl:65,fg+:15,bg+:239,hl+:108 --color info:108,prompt:109,spinner:108,pointer:168,marker:168'
+
+# fzf from cmdline uses FZF_DEFAULT_OPTS and has a 250 line preview limit
+# fzf from vim plugin does not have the 250 line max
+
+export FZF_DEFAULT_OPTS='--ansi --preview "bat --style=numbers --color=always --line-range :250 {}" --bind="ctrl-alt-p:toggle-preview" --bind="ctrl-f:preview-half-page-down" --bind="ctrl-b:preview-half-page-up" --bind="ctrl-k:preview-up,ctrl-j:preview-down" --bind="ctrl-d:delete-char" --bind="alt-bs:preview-half-page-up,alt-space:preview-half-page-down" --bind="alt-k:up,alt-j:down" --bind="ctrl-alt-k:preview-half-page-up,ctrl-alt-j:preview-half-page-down" --bind="ctrl-alt-o:preview-half-page-down" --bind="page-up:page-up" --bind="page-down:page-down" --bind="alt-d:kill-word,alt-u:unix-line-discard" --bind="alt-b:page-up" --bind="alt-f:page-down" --preview-window=right:hidden --color fg:242,bg:236,hl:65,fg+:15,bg+:239,hl+:108 --color info:108,prompt:109,spinner:108,pointer:168,marker:168'
 
 # Options to fzf command
 export FZF_COMPLETION_OPTS='+c -x'
@@ -813,7 +817,7 @@ my-fzfcmd() {
 my-fzf-history-widget() {
   local selected num
   setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2> /dev/null
-  selected=( $(fc -rl 1 | perl -ne 'print if !$seen{(/^\s*[0-9]+\**\s+(.*)/, $1)}++' | $(my-fzfcmd) +m +s -n 2.. --preview="" --tiebreak=index --bind=ctrl-r:toggle-sort --bind="ctrl-f:preview-half-page-down" --bind="ctrl-b:preview-half-page-up" --bind="page-up:page-up" --bind="page-down:page-down" --bind="alt-u:page-up" --bind="alt-d:page-down") )
+  selected=( $(fc -rl 1 | perl -ne 'print if !$seen{(/^\s*[0-9]+\**\s+(.*)/, $1)}++' | $(my-fzfcmd) +m +s -n 2.. --preview="" --tiebreak=index --bind=ctrl-r:toggle-sort --bind="ctrl-f:preview-half-page-down" --bind="ctrl-b:preview-half-page-up" --bind="page-up:page-up" --bind="page-down:page-down" --bind="alt-b:page-up" --bind="alt-f:page-down") )
   local ret=$?
   if [ -n "$selected" ]; then
     num=$selected[1]
