@@ -627,6 +627,12 @@ alias kc='kubectl'
 
 # ------------------
 
+# lazygit
+
+alias lg='lazygit'
+
+# ------------------
+
 # dont disappear on a non-exiting command ...
 # also note use of command
 # bash does this automatically
