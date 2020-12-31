@@ -182,6 +182,9 @@ Plugin 'itchyny/lightline.vim'
 "Plugin 'vim-airline/vim-airline'
 "Plugin 'vim-airline/vim-airline-themes'
 "
+" calendar
+Plugin 'itchyny/calendar.vim'
+"
 " start at prev cursor position, except for git etc.
 " (make sure to disable code below that also does this)
 " lastplace to start at prev cursor pos (**modified++)
@@ -604,6 +607,10 @@ au BufAdd * let &tabline = &tabline
 " also saw this-
 "set tabline=%!lightline#tabline()
 " lightline ----------
+
+" calendar -----------
+map tt <Plug>(calendar_today)
+" calendar -----------
 
 " rooter ----------
 " echo cwd: status
@@ -5418,8 +5425,8 @@ function s:MySearch(meth) abort
   elseif (a:meth == 3)
     call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root(), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']}, 0)
   elseif (a:meth == 4)
+    call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']}, 0)
   endif
-  call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']}, 0)
   let @/=string
   set hlsearch
 endfunction
