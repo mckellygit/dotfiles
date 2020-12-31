@@ -48,7 +48,9 @@ bind generic   \`           move-half-page-up
 #
 bind generic   Q            none
 bind generic   q            none
-bind generic   qq           view-close-no-quit
+bind main      qq           none
+bind main      qqq          view-close
+bind generic   qq           view-close
 bind generic   \qq          view-close
 #
 bind generic   <Ctrl-D>     scroll-page-down
@@ -139,24 +141,24 @@ bind generic   <ScrollBack> previous
 bind main      <ShiftLeft>  scroll-left
 bind main      <ShiftRight> scroll-right
 #
-bind generic   |            none
-bind generic   -            none
-bind main      C            none
-bind reflog    C            none
-bind reflog    !            none
-bind refs      C            none
-bind refs      !            none
-bind status    M            none
-bind status    C            none
-bind status    !            none
-bind status    u            none
-bind stage     1            none
+#bind generic   |            none
+#bind generic   -            none
+#bind main      C            none
+#bind reflog    C            none
+#bind reflog    !            none
+#bind refs      C            none
+#bind refs      !            none
+#bind status    M            none
+#bind status    C            none
+#bind status    !            none
+#bind status    u            none
+#bind stage     1            none
 bind stage     \            none
-bind stage     !            none
-bind stage     u            none
-bind stash     A            none
-bind stash     P            none
-bind stash     !            none
+#bind stage     !            none
+#bind stage     u            none
+#bind stash     A            none
+#bind stash     P            none
+#bind stash     !            none
 #
 # colors: color0-255 or white, black, green, magenta, blue, cyan, yellow, red, default
 # attributes: normal, blink, bold, dim, reverse, standout, underline

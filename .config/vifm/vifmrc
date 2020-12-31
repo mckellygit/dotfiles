@@ -497,6 +497,7 @@ nnoremap <c-u> <c-w>x
 "
 " let $VIFM_SERVER_NAME = v:servername
 
+nnoremap qq :q<CR>
 nnoremap \qq :q<CR>
 qmap \qq <C-w>w
 
