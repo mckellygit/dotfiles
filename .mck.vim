@@ -227,6 +227,8 @@ Plugin 'mhinz/vim-startify'
 Plugin 'PeterRincker/vim-searchlight'
 " also look into: qxxxb/vim-searchhi
 " also look into: wincent/loupe
+" TODO: also look into:
+"Plugin 'inkarkat/vim-SearchHighlighting'
 "
 " fade inactive buffers
 " NOTE: recently works ok but many flashing redraws on pum up/down ...
