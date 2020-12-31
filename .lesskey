@@ -32,6 +32,8 @@
 \kh  noaction
 \ke  noaction
 gg   noaction <
+\eg  noaction <
+\eG  noaction G
 \e[1;5H noaction <
 \e[1;7H noaction <
 \e[1;5F noaction G

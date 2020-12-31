@@ -2303,12 +2303,6 @@ vmap <C-q> q
 " dont do this, it messes up viw ...
 "vnoremap i <Nop>
 
-" to get all of top/bottom lines ...
-noremap 1G 1G0
-noremap gg 1G0
-noremap G G0
-vnoremap G G$
-
 " ------------------------------
 
 " MapFastKeycode: helper for fast keycode mappings
@@ -2482,6 +2476,44 @@ if has("nvim")
     cnoremap <S-F27> <M-C-P>
     inoremap <S-F27> <M-C-P>
     tnoremap <S-F27> <M-C-P>
+endif
+
+" ------------------------------
+
+" to get all of top/bottom lines ...
+nnoremap 1G 1G0
+nnoremap gg 1G0
+nnoremap G  G0
+vnoremap 1G 1G0
+vnoremap gg 1G0
+vnoremap G  G$
+
+call <SID>MapFastKeycode('<F18>',  "\eg", 18)
+nnoremap <F18> 1G0
+vnoremap <F18> 1G0
+cnoremap <F18> <C-v><Esc>g
+inoremap <F18> <C-v><Esc>g
+tnoremap <F18> <Esc>g
+if has("nvim")
+    nnoremap <M-g> 1G0
+    vnoremap <M-g> 1G0
+    cnoremap <F18> <M-g>
+    inoremap <F18> <M-g>
+    tnoremap <F18> <M-g>
+endif
+
+call <SID>MapFastKeycode('<F19>',  "\eG", 19)
+nnoremap <F19> G0
+vnoremap <F19> G$
+cnoremap <F19> <C-v><Esc>G
+inoremap <F19> <C-v><Esc>G
+tnoremap <F19> <Esc>G
+if has("nvim")
+    nnoremap <M-G> G0
+    vnoremap <M-G> G$
+    cnoremap <F19> <M-G>
+    inoremap <F19> <M-G>
+    tnoremap <F19> <M-G>
 endif
 
 " ------------------------------

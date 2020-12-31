@@ -9,11 +9,24 @@ set history-size       = 0
 set mouse              = yes
 set mouse-scroll       = 10
 set mouse-wheel-cursor = no
+set ignore-case        = true
+#set line-graphics      = utf-8
+set refresh-mode       = auto
 #
 bind generic   +            @sh -c "echo -n %(commit) | myclip"
 bind generic   <Down>       move-down
 bind generic   <Up>         move-up
 bind generic   u            previous
+#
+bind generic   g            none
+bind generic   gp           view-grep
+bind generic   gg           move-first-line
+bind generic   G            move-last-line
+bind main      G            move-last-line
+bind generic   <Esc>g       move-first-line
+bind generic   <Esc>G       move-last-line
+# override page content view
+bind generic   p            none
 #
 # Leader mappings ...
 # use 2-key mapping as single \f,F and c,C cause input delays in vim ...
@@ -168,4 +181,8 @@ color title-focus   white      black      bold
 color cursor        default    color241
 color author        color35    default
 color status        color178   default
+#
+bind refs pp ?git push
+bind refs pb ?git push -u %(remote) %(branch):'%(prompt Which branch? )'
+bind refs pF ?git push --force
 #
