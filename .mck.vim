@@ -1320,6 +1320,7 @@ function! <SID>LaunchMagit()
     endif
 endfunction
 nnoremap <silent> <Leader>ma :call <SID>LaunchMagit()<CR>
+let g:magit_default_fold_level = 0
 " magit ---------------
 
 " twiggy --------------

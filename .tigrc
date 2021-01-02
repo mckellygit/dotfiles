@@ -182,8 +182,20 @@ color cursor        default    color241
 color author        color35    default
 color status        color178   default
 #
+bind refs b none
+bind refs r none
+bind refs C none
+bind refs cc @git checkout %(ref)
+#
 bind refs pp ?git push
 bind refs pb ?git push -u %(remote) %(branch):'%(prompt Which branch? )'
 bind refs pf ?git push origin +%(branch)
 bind refs pF ?git push --force
+#
+bind refs gf ?git fetch %(remote) %(ref)
+bind refs pr ?git push '%(prompt Push to which remote? )' %(ref):%(ref)
+bind refs pd ?git push %(remote) :%(ref)
+bind refs pD ?git push '%(prompt Delete from which remote? )' :%(ref)
+bind refs rd ?git branch --remotes -D %(remote)/%(ref)
+
 #
