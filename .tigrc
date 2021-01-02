@@ -182,7 +182,7 @@ color cursor        default    color241
 color author        color35    default
 color status        color178   default
 #
-bind refs pq ?git push origin +%(branch)
+#bind refs pq ?git push origin +%(branch)
 bind refs pp ?git push
 bind refs pb ?git push -u %(remote) %(branch):'%(prompt Which branch? )'
 bind refs pF ?git push --force
