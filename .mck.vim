@@ -120,6 +120,10 @@ Plugin 'mckellygit/vim-filebeagle'
 Plugin 'tpope/vim-fugitive'
 " for :Gbrowse to open GitHub urls
 "Plugin 'tpope/vim-rhubarb'
+" magit ...
+Plugin 'jreybert/vimagit.git'
+" twiggy ...
+Plugin 'sodapopcan/vim-twiggy'
 "
 " dispatch make/etc utils
 Plugin 'tpope/vim-dispatch'
@@ -132,7 +136,6 @@ Plugin 'airblade/vim-gitgutter'
 "
 " gitk like repo viewer
 "Plugin 'gregsexton/gitv'
-"Plugin 'sodapopcan/vim-twiggy'
 "Plugin 'junegunn/gv.vim'
 Plugin 'mckellygit/gv.vim'
 "
@@ -1007,13 +1010,13 @@ aug END
 nmap <silent> <C-l> :call gitgutter#process_buffer(bufnr(''), 0)<bar>:redraw!<CR>
 " gitgutter -----------
 
-" gitv -----------
+" gitv ----------------
 let g:Gitv_OpenHorizontal = 1
 let g:Gitv_WrapLines = 0
 let g:Gitv_WipeAllOnClose = 0
-" gitv -----------
+" gitv ----------------
 
-" gv -----------
+" gv ------------------
 autocmd FileType GV nmap <buffer> <Leader><Tab> O
 autocmd FileType GV nmap <buffer> <C-t> O
 autocmd FileType GV nmap <buffer> <Return> O
@@ -1300,7 +1303,43 @@ endfunction
 
 command! -nargs=0 LC  call s:MyLC()
 command! -nargs=0 LCF call s:MyLCF()
-" gv -----------
+" gv ------------------
+
+" magit ---------------
+function! <SID>LaunchMagit()
+    let git_dir = FugitiveGitDir()
+    if empty(git_dir)
+        let errmsg = 'Not a git repository'
+        call s:warn(errmsg)
+        sleep 1251m
+        redraw!
+        echo " "
+        return
+    else
+        silent execute "Magit"
+    endif
+endfunction
+nnoremap <silent> <Leader>ma :call <SID>LaunchMagit()<CR>
+" magit ---------------
+
+" twiggy --------------
+function! <SID>LaunchTwiggy()
+    let git_dir = FugitiveGitDir()
+    if empty(git_dir)
+        let errmsg = 'Not a git repository'
+        call s:warn(errmsg)
+        sleep 1251m
+        redraw!
+        echo " "
+        return
+    else
+        let t:twiggy_git_cmd = fugitive#repo().git_command()
+        let t:twiggy_git_dir = git_dir
+        silent execute "Twiggy"
+    endif
+endfunction
+nnoremap <silent> <Leader>br :call <SID>LaunchTwiggy()<CR>
+" twiggy --------------
 
 " QFEnter -------------
 " add C-t, C-v, C-x to open consistently with fzf ...
