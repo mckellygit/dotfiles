@@ -1315,7 +1315,7 @@ function! <SID>LaunchMagit()
         redraw!
         echo " "
         return
-    else
+    elseif &filetype != "magit"
         silent execute "Magit"
     endif
 endfunction
