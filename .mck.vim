@@ -120,7 +120,7 @@ Plugin 'mckellygit/vim-filebeagle'
 Plugin 'tpope/vim-fugitive'
 " for :Gbrowse to open GitHub urls
 "Plugin 'tpope/vim-rhubarb'
-" magit ...
+" vimagit ...
 Plugin 'jreybert/vimagit.git'
 " twiggy ...
 Plugin 'sodapopcan/vim-twiggy'
@@ -1305,7 +1305,7 @@ command! -nargs=0 LC  call s:MyLC()
 command! -nargs=0 LCF call s:MyLCF()
 " gv ------------------
 
-" magit ---------------
+" vimagit -------------
 function! <SID>LaunchMagit()
     let git_dir = FugitiveGitDir()
     if empty(git_dir)
@@ -1317,11 +1317,13 @@ function! <SID>LaunchMagit()
         return
     elseif &filetype != "magit"
         silent execute "Magit"
+    else
+        silent execute "q"
     endif
 endfunction
 nnoremap <silent> <Leader>ma :call <SID>LaunchMagit()<CR>
 let g:magit_default_fold_level = 0
-" magit ---------------
+" vimagit -------------
 
 " twiggy --------------
 function! <SID>LaunchTwiggy()
