@@ -3314,16 +3314,16 @@ inoremap <C-LeftDrag> <LeftDrag>
 
 " see mousetime for double-click delay
 
-" DoubleClick for word (lbvhe)
+" DoubleClick for word (lbvhe/lbve) (is h needed ?)
 nmap <2-LeftMouse> mvviwtygv
 vmap <2-LeftMouse> <Esc>mvviwtygv
 imap <silent> <2-LeftMouse> <C-\><C-o>:let @i="2"<CR><C-\><C-o>:call <SID>GetWord(1)<CR>
 
-" TripleClick for next larger entity, not whole line (lBvhE)
+" TripleClick for next larger entity, not whole line (lBvhE/lBvE) (is h needed ?)
 "nnoremap <silent> <3-LeftMouse> mvviWygv
 "vnoremap <silent> <3-LeftMouse> mviWygv
 
-" NOTE: Use GetPath instead of lBvhE ...
+" NOTE: Use GetPath instead of lBvhE/lBvE (is h needed ?)
 "nnoremap <3-LeftMouse> <LeftMouse>:call GetPath(1,1)<CR>
 "vnoremap <3-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath(1,1)<CR>
 nmap <3-LeftMouse> mvviWtygv
@@ -3336,7 +3336,7 @@ vmap <4-LeftMouse> <Esc>mvVtygv
 inoremap <4-LeftMouse> <Nop>
 
 " change C-LeftMouse searching tags file for symbol under cursor
-" and select words under cursor instead (lBvhE)
+" and select words under cursor instead (lBvhE/lBvE) (is h needed ?)
 " (was viW), use GetPath() instead ...
 "nnoremap <silent> <C-LeftMouse> <Nop>
 "vnoremap <silent> <C-LeftMouse> <Nop>
@@ -3367,7 +3367,7 @@ endfunction
 "vnoremap <LeftRelease> <LeftRelease><C-\><C-n>:call <SID>YankIfOnlyOneLine()<CR>
 "inoremap <LeftMouse> <C-\><C-o>:let @k="1"<CR><LeftMouse>
 
-" TripleClick for next larger entity, not whole line (lBvhE)
+" TripleClick for next larger entity, not whole line (lBvhE/lBvE) (is h needed ?)
 "nmap <C-3-LeftMouse> mvviWtygv
 "vmap <C-3-LeftMouse> <Esc>mvviWtygv
 "inoremap <silent> <expr> <C-3-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(1)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(1,1)<CR>'
@@ -3527,13 +3527,13 @@ imap <silent> <A-LeftMouse> <C-\><C-o>:let @i="1"<CR><LeftMouse>
 " => Word commands NOTE: selection is USUALLY copied to clipboard
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" highlight word under cursor (lbvhe)
+" highlight word under cursor (lbvhe/lbve) (is h needed ?)
 " NOTE: also copy to clipboard (since its not a mouse click event) ?
 "nmap <silent> <Leader>ws mv:call <SID>CopyReg(0)<CR>viwtygv
 nmap <silent> <Leader>ws mvviw
 vmap <silent> <Leader>ws <C-\><C-n>mvviw
 
-" highlight WORD under cursor (lBvhE) (does not use iskeyword)
+" highlight WORD under cursor (lBvhE/lBvE) (does not use iskeyword) (is h needed ?)
 " NOTE: also copy to clipboard (since its not a mouse click event) ?
 nmap <silent> <Leader>wS mvviW
 vmap <silent> <Leader>wS <C-\><C-n>mvviW
