@@ -1067,8 +1067,8 @@ function QuitGV() abort
     if ans ==# 'y' || ans ==# 'Y' || ans ==# 'q' || ans ==# 'Q'
         quitall
     else
-        echo " "
         redraw!
+        echo " "
     endif
 endfunction
 
@@ -2707,8 +2707,8 @@ function! ForceLoadNammedReg() abort
         silent call system("setsid -w myclip -", getreg('*'))
         echohl DiffText | echo "@* -> clipboard ; register copied" | echohl None
         sleep 551m
-        echo " "
         redraw!
+        echo " "
     else
         echohl WarningMsg | echo "copyq/myclip not found, cannot set clipboard" | echohl None
     endif
@@ -2723,8 +2723,8 @@ function! s:CopyReg(arg)
     if a:arg == 1
         echohl DiffText | echo "@* -> @x ; register copied" | echohl None
         sleep 551m
-        echo " "
         redraw!
+        echo " "
     endif
 endfunction
 
@@ -2742,8 +2742,8 @@ function! s:SwapReg(arg)
     if a:arg == 1
         echohl DiffText | echo "@* <-> @x ; registers swapped" | echohl None
         sleep 551m
-        echo " "
         redraw!
+        echo " "
     endif
 endfunction
 
@@ -2787,8 +2787,8 @@ function! s:YankIt(cmd, arg) abort
         if a:arg == 1
             echo "copied to clipboard"
             sleep 651m
-            echo " "
             redraw!
+            echo " "
         endif
         " NOTE: should we go back to live terminal mode ?
         exe "silent! normal! i"
@@ -2815,8 +2815,8 @@ function! s:CutIt(cmd) abort
         exe "silent! normal! gv\""
         echo "readonly buffer ..."
         sleep 651m
-        echo " "
         redraw!
+        echo " "
         return
     endif
     "let @z = getregtype("*")
@@ -3046,8 +3046,8 @@ endfunction
 "autocmd CmdlineLeave * call MyCmdLeave()
 function! MyCmdLeave()
     if !empty(getcmdline())
-        echo " "
         redraw!
+        echo " "
     endif
 endfunction
 
@@ -5286,7 +5286,7 @@ if $USER != 'root'
 else
   let g:rtagsAutoLaunchRdm=0
 endif
-nnoremap <C-]> <C-\><C-n>:<C-u>call rtags#JumpTo(g:SAME_WINDOW)<CR>
+nnoremap <silent> <C-]> <C-\><C-n>:<C-u>call rtags#JumpTo(g:SAME_WINDOW)<CR>
 autocmd BufReadPost quickfix nnoremap <silent> <buffer> <C-]> <Return>
 " C-o to go back
 " C-t to go back (not implemented)
@@ -5459,8 +5459,8 @@ function s:MySearch(meth) abort
   elseif (a:meth == 4)
     let promptstr = 'fzf-dir:/'
   else
-    echo " "
     redraw!
+    echo " "
     return
   endif
   call inputsave()
@@ -5468,8 +5468,8 @@ function s:MySearch(meth) abort
   call inputrestore()
   if (len(string) == 0)
     " should we reset @/ ?
-    echo " "
     redraw!
+    echo " "
     return
   endif
   if g:asyncrun_status == 'running'
@@ -6167,12 +6167,10 @@ cnoreabbrev <silent> <expr> quitall (getcmdtype() == ':' && getcmdline() =~ '\s*
 
 function! MyQuit(arg) abort
     " just to clear the cmdline of this function ...
+    redraw!
     echo " "
     if &buftype != 'terminal' && &buftype != 'popup'
         exe "conf " . a:arg
-        redraw!
-    else
-        redraw!
     endif
 endfunction
 
@@ -6211,8 +6209,8 @@ function Xdiff()
     else
       execute "silent! wq"
     endif
-    echo " "
     redraw!
+    echo " "
     "let dbgmsg = "diffx: &diff = " . &diff
     "echomsg dbgmsg
   endif
@@ -6310,6 +6308,7 @@ nnoremap <silent> <Leader>lW :silent windo setlocal nowrap! nowrap?<CR>
 
 function! MyCQuit()
     " just to clear the cmdline of this function ...
+    redraw!
     echo " "
     update
     cquit 1
@@ -6356,6 +6355,7 @@ function s:NextOrQuit() abort
         return
     endif
     " just to clear the cmdline of this function ...
+    redraw!
     echo " "
     update
     try
@@ -6387,6 +6387,7 @@ function s:ConfNextOrQuit() abort
         endif
     else
         " just to clear the cmdline of this function ...
+        redraw!
         echo " "
     endif
     try
@@ -6482,10 +6483,10 @@ function! UndoAll()
     endif
   else
     echo 'No changes to undo'
-    sleep 500m
+    sleep 900m
   endif
-  echo " "
   redraw!
+  echo " "
 endfunction
 nnoremap <Leader>uu           :call UndoAll()<CR>
 vnoremap <Leader>uu <C-\><C-n>:call UndoAll()<CR>
