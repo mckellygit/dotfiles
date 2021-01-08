@@ -75,7 +75,9 @@
 [diff]
 	algorithm = histogram
 #	compactionHeuristic = true
-	tool = vimdiff
+	tool = vimgitdiff
+[difftool "vimgitdiff"]
+    cmd = vimdiff "$REMOTE" "$LOCAL"
 [difftool]
 	prompt = false
 	trustExitCode = true
