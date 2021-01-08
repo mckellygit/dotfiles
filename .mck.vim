@@ -1224,7 +1224,7 @@ function! s:MyGV(args) abort
     if !exists('g:loaded_fugitive')
         let errmsg = 'fugitive not found'
         call s:warn(errmsg)
-        sleep 651m
+        sleep 951m
         cquit
         return
     endif
@@ -1232,7 +1232,7 @@ function! s:MyGV(args) abort
     if empty(git_dir)
         let errmsg = 'not in git repo'
         call s:warn(errmsg)
-        sleep 651m
+        sleep 951m
         cquit
         return
     endif
@@ -1306,12 +1306,19 @@ command! -nargs=0 LCF call s:MyLCF()
 " gv ------------------
 
 " vimagit -------------
+let g:magit_auto_close=1
+let g:magit_auto_foldopen=1
+let g:magit_default_fold_level=0
+
+autocmd User VimagitEnterCommit startinsert
+autocmd FileType magit noremap <silent> <buffer> q <Nop>
+
 function! <SID>LaunchMagit()
     let git_dir = FugitiveGitDir()
     if empty(git_dir)
         let errmsg = 'Not a git repository'
         call s:warn(errmsg)
-        sleep 1251m
+        sleep 951m
         redraw!
         echo " "
         return
@@ -1322,7 +1329,20 @@ function! <SID>LaunchMagit()
     endif
 endfunction
 nnoremap <silent> <Leader>ma :call <SID>LaunchMagit()<CR>
-let g:magit_default_fold_level = 0
+
+function! s:Magit1(args)
+    let git_dir = FugitiveGitDir()
+    if empty(git_dir)
+        let errmsg = 'Not a git repository'
+        call s:warn(errmsg)
+        sleep 951m
+        cquit
+    else
+        autocmd FileType magit noremap <silent> <buffer> <Leader>qq :call MyQuit("conf qa")<CR>
+        silent execute "Magit"
+    endif
+endfunction
+command! -nargs=* Magit2 call s:Magit1(<q-args>)
 " vimagit -------------
 
 " twiggy --------------
@@ -1331,7 +1351,7 @@ function! <SID>LaunchTwiggy()
     if empty(git_dir)
         let errmsg = 'Not a git repository'
         call s:warn(errmsg)
-        sleep 1251m
+        sleep 951m
         redraw!
         echo " "
         return
@@ -6216,6 +6236,11 @@ function Xdiff()
   return
 endfunction
 
+function s:SwapDiffWins(arg)
+    execute "normal \<C-w>x"
+endfunction
+command! -nargs=* SwapDiffs call s:SwapDiffWins(<q-args>)
+
 if &diff
   "if using cmdalias/vim-alias plugin:
   "aug diff_alias
@@ -6290,7 +6315,7 @@ else
   aug not_diff_alias
   "!&diff
     au!
-    au VimEnter * :Alias q call\ MyQuit("q")
+    au VimEnter * :Alias q  call\ MyQuit("q")
     au VimEnter * :Alias q! call\ MyQuit("q!")
     au VimEnter * :Alias PU PluginUpdate
   aug END
@@ -6320,6 +6345,22 @@ endfunction
 " then dont get '2 files to edit' msg at exit ...
 " but shell alias for arguments ($1 $2) doesnt like
 " when $2 is a dir ...
+
+" add custom diffexpr so we do not get default diff -b cmd, as we want all space diffs highlighted
+" set diffopt+=iwhite etc. to skip whitespace diffs ...
+set diffexpr=DiffEx()
+function! DiffEx()
+    let opt = ""
+    if &diffopt =~ "icase"
+      let opt = opt . "-i "
+    endif
+    if &diffopt =~ "iwhite"
+      let opt = opt . "-w " " swapped vim's -b with -w
+    endif
+    "silent execute "!diff -a --binary " . opt . v:fname_in . " " . v:fname_new .  " > " . v:fname_out
+    let cmd = "diff -a --binary " . opt . v:fname_in . " " . v:fname_new .  " > " . v:fname_out
+    silent call system(cmd)
+endfunction
 
 function! Diffstart()
     if !&diff
