@@ -1339,6 +1339,7 @@ function! s:Magit1(args)
         cquit
     else
         autocmd FileType magit noremap <silent> <buffer> <Leader>qq :call MyQuit("conf qa")<CR>
+        autocmd FileType magit noremap <silent> <buffer> <Leader>ma <Nop>
         silent execute "Magit"
     endif
 endfunction
