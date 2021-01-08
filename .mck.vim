@@ -1603,13 +1603,12 @@ let g:floaterm_autoclose = 2
 let g:floaterm_autoinsert = v:true
 " NOTE: there is also <Leader>zs and <Leader>zt for terminals mapped above ...
 if !exists("g:vless")
-    if exists('$TMUX_PANE_SKIP')
-        nnoremap <silent> <Leader>zf :call system("tmux popup -d '#{pane_current_path}' -xC -yC -w70% -h60% -KER \"tmux attach -t popup \|\| tmux new -s popup\"")<CR>
-    else
-        nnoremap <silent> <Leader>zf :FloatermToggle<CR>
-        "tnoremap <silent> <expr> <C-x><C-d> (win_gettype(win_getid()) ==# 'popup' \|\| win_gettype(win_getid()) ==# 'floating') ? '<C-\><C-n><C-w>:FloatermHide<CR>' : '<C-x>'
-        tnoremap <silent> <expr> <C-x><C-d> (&filetype ==# 'floaterm') ? '<C-\><C-n><C-w>:FloatermHide<CR>' : ''
+    if exists('$TMUX_PANE')
+        nnoremap <silent> <Leader>zF :call system("tmux popup -d '#{pane_current_path}' -xC -yC -w70% -h63% -KER \"tmux attach -t popup \|\| tmux new -s popup\"")<CR>
     endif
+    nnoremap <silent> <Leader>zf :FloatermToggle<CR>
+    "tnoremap <silent> <expr> <C-x><C-d> (win_gettype(win_getid()) ==# 'popup' \|\| win_gettype(win_getid()) ==# 'floating') ? '<C-\><C-n><C-w>:FloatermHide<CR>' : '<C-x>'
+    tnoremap <silent> <expr> <C-x><C-d> (&filetype ==# 'floaterm') ? '<C-\><C-n><C-w>:FloatermHide<CR>' : ''
 else
     nnoremap <Leader>zf :call <SID>NoFloatermVless()<CR>
 endif
