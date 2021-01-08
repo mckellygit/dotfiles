@@ -1338,10 +1338,9 @@ function! s:Magit1(args)
         sleep 951m
         cquit
     else
-        let g:magit_auto_close=0
         autocmd FileType magit noremap <silent> <buffer> <Leader>qq :call MyQuit("conf qa")<CR>
         autocmd FileType magit noremap <silent> <buffer> <Leader>ma <Nop>
-        silent execute "Magit"
+        silent execute "MagitOnly"
     endif
 endfunction
 command! -nargs=* Magit2 call s:Magit1(<q-args>)
