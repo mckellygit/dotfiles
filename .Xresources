@@ -209,6 +209,9 @@
 !!*.cursorColor:           #a49b88
 *.cursorColor:           #d78700
 
+*.cursorOffTime: 300
+*.cursorOnTime:  700
+
 Xcursor.size: 32
 
 !! ==========================================
@@ -429,9 +432,12 @@ URxvt.perl-ext-common: default,matcher
 !!URxvt.keysym.M-u: perl:url-select:select_next
 URxvt.urlButton: 1
 URxvt.urlLauncher: xdg-open
-URxvt.underlineURLs: true
+!!URxvt.underlineURLs: true
+URxvt.underlineURLs: false
 !! if want urls colored differently, bold etc.
 !!URxvt.matcher.rend.0: Uline Bold fg5
+URxvt.matcher.rend.0: Italic
+!!URxvt.url-select.underline: true
 
 URxvt.copyCommand:  xsel -i -c --rmlastnl --sc 0
 URxvt.pasteCommand: xsel -o -c --rmlastnl --sc 0

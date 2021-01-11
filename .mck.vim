@@ -1230,7 +1230,7 @@ function! s:MyGV(args) abort
     endif
     let git_dir = FugitiveGitDir()
     if empty(git_dir)
-        let errmsg = 'not in git repo'
+        let errmsg = 'Not in a git repository'
         call s:warn(errmsg)
         sleep 951m
         cquit
@@ -1262,8 +1262,11 @@ command! -nargs=* GV2 call s:MyGV(<q-args>)
 function! s:MyGVF(args) abort
     let git_dir = s:find_git_root()
     if empty(git_dir)
-        let errmsg = 'not in git repo'
+        let errmsg = 'Not in a git repository'
         call s:warn(errmsg)
+        sleep 951m
+        redraw!
+        echo " "
         return
     endif
     exec 'lcd ' . git_dir
@@ -1282,8 +1285,11 @@ command! -nargs=* GFP call s:MyGVF("-p")
 function! s:MyLC() abort
     let git_dir = s:find_git_root()
     if empty(git_dir)
-        let errmsg = 'not in git repo'
+        let errmsg = 'Not in a git repository'
         call s:warn(errmsg)
+        sleep 951m
+        redraw!
+        echo " "
         return
     endif
     exec 'lcd ' . git_dir
@@ -1293,8 +1299,11 @@ endfunction
 function! s:MyLCF() abort
     let git_dir = s:find_git_root()
     if empty(git_dir)
-        let errmsg = 'not in git repo'
+        let errmsg = 'Not in a git repository'
         call s:warn(errmsg)
+        sleep 951m
+        redraw!
+        echo " "
         return
     endif
     exec 'lcd ' . git_dir
@@ -1316,7 +1325,7 @@ autocmd FileType magit noremap <silent> <buffer> q <Nop>
 function! <SID>LaunchMagit()
     let git_dir = FugitiveGitDir()
     if empty(git_dir)
-        let errmsg = 'Not a git repository'
+        let errmsg = 'Not in a git repository'
         call s:warn(errmsg)
         sleep 951m
         redraw!
@@ -1333,7 +1342,7 @@ nnoremap <silent> <Leader>ma :call <SID>LaunchMagit()<CR>
 function! s:Magit1(args)
     let git_dir = FugitiveGitDir()
     if empty(git_dir)
-        let errmsg = 'Not a git repository'
+        let errmsg = 'Not in a git repository'
         call s:warn(errmsg)
         sleep 951m
         cquit
@@ -1349,7 +1358,7 @@ command! -nargs=* Magit2 call s:Magit1(<q-args>)
 function! <SID>LaunchTwiggy()
     let git_dir = FugitiveGitDir()
     if empty(git_dir)
-        let errmsg = 'Not a git repository'
+        let errmsg = 'Not in a git repository'
         call s:warn(errmsg)
         sleep 951m
         redraw!
@@ -2274,7 +2283,7 @@ function s:InitializeClipboard()
             let copyqpid = system('pgrep --exact copyq')
             if empty(copyqpid)
                 silent call system('setsid copyq &')
-                sleep 551m
+                sleep 651m
             endif
         endif
         if !exists('$VIM_SKIP_PRESERVE_CLIPBOARD')
@@ -2725,7 +2734,7 @@ function! ForceLoadNammedReg() abort
         "silent call system("setsid -w xsel -i -b --rmlastnl --sc 0", getreg('+'))
         silent call system("setsid -w myclip -", getreg('*'))
         echohl DiffText | echo "@* -> clipboard ; register copied" | echohl None
-        sleep 551m
+        sleep 651m
         redraw!
         echo " "
     else
@@ -2741,7 +2750,7 @@ function! s:CopyReg(arg)
     call setreg('x', getreg('*'), getregtype('*'))
     if a:arg == 1
         echohl DiffText | echo "@* -> @x ; register copied" | echohl None
-        sleep 551m
+        sleep 651m
         redraw!
         echo " "
     endif
@@ -2760,7 +2769,7 @@ function! s:SwapReg(arg)
     call setreg('y', [])
     if a:arg == 1
         echohl DiffText | echo "@* <-> @x ; registers swapped" | echohl None
-        sleep 551m
+        sleep 651m
         redraw!
         echo " "
     endif
@@ -3464,7 +3473,7 @@ function! s:Delay(arg) abort
         let clipcmd = c2
         echohl String | echon 'Copied to clipboard using: ' . clipcmd | echohl None
     endif
-    sleep 551m
+    sleep 651m
     echo ""
 endfunction
 
@@ -3523,15 +3532,15 @@ imap <silent> <A-4-LeftMouse> <Nop>
 " NOTE: need to set z reg to 'c' also ... (this y is not YankIt)
 "nnoremap <silent> <expr> <A-LeftRelease> (&filetype == 'GV') ? '' : '<LeftRelease>Vy:let @z="c"<CR>gv'
 " or call YankIt() ...
-"nnoremap <silent> <expr> <A-LeftRelease> (&filetype == 'GV') ? '' : '<LeftRelease>V<C-\><C-n>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y")<bar>:redraw!<CR>
+"nnoremap <silent> <expr> <A-LeftRelease> (&filetype == 'GV') ? '' : '<LeftRelease>V<C-\><C-n>:echo "copied to clipboard"<bar>:sleep 651m<bar>:call YankIt("*y")<bar>:redraw!<CR>
 " NOTE: M- Drag end now copies selection to clipboard and returns to normal mode
-"vnoremap <silent> <A-LeftRelease> <C-\><C-n>mv<LeftRelease><C-\><C-n>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR>`v
-"vnoremap <silent> <expr> <A-LeftRelease> (@i=="1") ? '<C-\><C-n>mv<LeftRelease><C-\><C-n>:let @i="0"<bar>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR>`v<Esc>i' : '<C-\><C-n>mv<LeftRelease><C-\><C-n>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR>`v'
+"vnoremap <silent> <A-LeftRelease> <C-\><C-n>mv<LeftRelease><C-\><C-n>:echo "copied to clipboard"<bar>:sleep 651m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR>`v
+"vnoremap <silent> <expr> <A-LeftRelease> (@i=="1") ? '<C-\><C-n>mv<LeftRelease><C-\><C-n>:let @i="0"<bar>:echo "copied to clipboard"<bar>:sleep 651m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR>`v<Esc>i' : '<C-\><C-n>mv<LeftRelease><C-\><C-n>:echo "copied to clipboard"<bar>:sleep 651m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR>`v'
 
 " YankIt() now leaves cursor at end position ...
-"vnoremap <expr> <A-LeftRelease> (@i=="1") ? '<LeftRelease><C-\><C-n>:let @i="0"<bar>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR><Esc>i' : '<LeftRelease><C-\><C-n>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR>'
-"vnoremap <expr> <A-LeftRelease> (@i=="1") ? '<LeftRelease><C-\><C-n>:let @i="0"<bar>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<CR><Esc>i' : '<LeftRelease><C-\><C-n>:echo "copied to clipboard"<bar>:sleep 551m<bar>:call YankIt("*y", 2)<CR>'
-"vmap <expr> <A-LeftRelease> (@i=="1") ? '<LeftRelease><C-\><C-n>:<C-u>sleep 551m<bar>:let @i="0"<bar>:call YankIt("*y", 2)<CR><Esc>i' : '<LeftRelease><C-\><C-n>:<C-u>sleep 551m<bar>:call YankIt("*y", 2)<CR>'
+"vnoremap <expr> <A-LeftRelease> (@i=="1") ? '<LeftRelease><C-\><C-n>:let @i="0"<bar>:echo "copied to clipboard"<bar>:sleep 651m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR><Esc>i' : '<LeftRelease><C-\><C-n>:echo "copied to clipboard"<bar>:sleep 651m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR>'
+"vnoremap <expr> <A-LeftRelease> (@i=="1") ? '<LeftRelease><C-\><C-n>:let @i="0"<bar>:echo "copied to clipboard"<bar>:sleep 651m<bar>:call YankIt("*y", 2)<CR><Esc>i' : '<LeftRelease><C-\><C-n>:echo "copied to clipboard"<bar>:sleep 651m<bar>:call YankIt("*y", 2)<CR>'
+"vmap <expr> <A-LeftRelease> (@i=="1") ? '<LeftRelease><C-\><C-n>:<C-u>sleep 651m<bar>:let @i="0"<bar>:call YankIt("*y", 2)<CR><Esc>i' : '<LeftRelease><C-\><C-n>:<C-u>sleep 651m<bar>:call YankIt("*y", 2)<CR>'
 
 "vmap <A-LeftRelease> "*ygv
 vmap <silent> <A-LeftRelease> tygv:<C-u>call <SID>Delay(0)<CR><Esc>
@@ -5635,7 +5644,7 @@ function s:GetWord(arg) abort
   if a:arg > 1
     redraw
     "echo "copied to clipboard"
-    sleep 551m
+    sleep 651m
     execute 'normal ty`v'
     "redraw!
     if &buftype == "terminal"
@@ -5686,7 +5695,7 @@ function s:GetPath(arg,ws) abort
   if a:arg > 1
     redraw
     "echo "copied to clipboard"
-    sleep 551m
+    sleep 651m
     execute 'normal ty`v'
     redraw
     if &buftype == "terminal"
@@ -5730,7 +5739,7 @@ function s:GetWord2(arg) abort
   if a:arg > 1
     redraw
     "echo "copied to clipboard"
-    sleep 551m
+    sleep 651m
     execute 'normal ty`v'
     redraw
     if &buftype == "terminal"
@@ -5770,7 +5779,7 @@ function s:GetLine(arg) abort
   if a:arg > 1
     redraw
     "echo "copied to clipboard"
-    sleep 551m
+    sleep 651m
     execute 'normal ty`v'
     redraw
     if &buftype == "terminal"
