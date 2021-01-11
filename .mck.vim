@@ -6195,11 +6195,12 @@ cnoreabbrev <silent> <expr> quitall (getcmdtype() == ':' && getcmdline() =~ '\s*
 
 function! MyQuit(arg) abort
     " just to clear the cmdline of this function ...
+    echo "\r"
     redraw!
-    echo " "
     if &buftype != 'terminal' && &buftype != 'popup'
         exe "conf " . a:arg
     endif
+    echo " "
 endfunction
 
 " vimdiff (also as a git difftool)
