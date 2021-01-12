@@ -655,7 +655,8 @@ let g:fzf_preview_window = ['right:60%:hidden', 'ctrl-alt-p']
 
 " Switch to the directory of the current file unless it breaks something.
 function! s:autochdir()
-    let can_autochdir = (!exists("v:vim_did_enter") || v:vim_did_enter) " Don't mess with vim on startup.
+    let can_autochdir = !exists("vim_starting") " Don't mess with vim on startup.
+    let can_autochdir = can_autochdir && (!exists("v:vim_did_enter") || v:vim_did_enter) " Don't mess with vim on startup.
     let can_autochdir = can_autochdir && !(&filetype ==# 'qf') " Not for some fts.
     let can_autochdir = can_autochdir && filereadable(expand("%")) " Only change to real files.
     if can_autochdir
@@ -1347,8 +1348,11 @@ function! s:Magit1(args)
         sleep 951m
         cquit
     else
+        au VimEnter * :Alias! q  call\ MyQuit("qa")
+        au VimEnter * :Alias! q! call\ MyQuit("qa!")
+        autocmd FileType magit nmap <silent> <buffer> <Leader>qq :<C-u>call <SID>QuitIfOnlyNoNameLeft()<CR>
         autocmd FileType magit noremap <silent> <buffer> <Leader>ma <Nop>
-        silent execute "MagitOnly"
+        silent execute "Magit"
     endif
 endfunction
 command! -nargs=* Magit2 call s:Magit1(<q-args>)
