@@ -6054,7 +6054,10 @@ noremap <Leader><C-e> <C-e>
 cnoremap <C-a> <Home>
 cnoremap <C-e> <End>
 
-function! s:SkipTerminalsQuitCmd(cmd) abort
+function! SkipTerminalsQuitCmd(cmd) abort
+    " just to clear the cmdline of this function ...
+    echo "\r"
+    redraw!
     let l:bmod = 0
     let l:doquit = 1
     for b in getbufinfo()
@@ -6083,7 +6086,10 @@ function! s:SkipTerminalsQuitCmd(cmd) abort
     endif
 endfunction
 
-function! s:SkipTerminalsConfQA() abort
+function! SkipTerminalsConfQA() abort
+    " just to clear the cmdline of this function ...
+    echo "\r"
+    redraw!
     let l:bmod = 0
     let l:doquit = 1
     for b in getbufinfo()
@@ -6113,6 +6119,9 @@ function! s:SkipTerminalsConfQA() abort
 endfunction
 
 function! s:QuitIfOnlyNoNameLeft() abort
+    " just to clear the cmdline of this function ...
+    echo "\r"
+    redraw!
     let l:doquit = 1
     for b in getbufinfo()
         if b.listed
@@ -6131,7 +6140,7 @@ function! s:QuitIfOnlyNoNameLeft() abort
         execute "qa!"
         execute 'normal! \<CR>'
     else
-        execute ":q!"
+        execute "q!"
         "execute "tabclose!"
     endif
 endfunction
@@ -6139,20 +6148,20 @@ endfunction
 " close all windows and write then quit
 " no imap for this
 " <C-x> used in visual mode already
-"vnoremap <silent> <C-x>w     <Esc>:call <SID>SkipTerminalsQuitCmd(":wqa")<CR>
-"nnoremap <silent> <C-x>w          :call <SID>SkipTerminalsQuitCmd(":wqa")<CR>
+"vnoremap <silent> <C-x>w     <Esc>:call SkipTerminalsQuitCmd("wqa")<CR>
+"nnoremap <silent> <C-x>w          :call SkipTerminalsQuitCmd("wqa")<CR>
 
 " no imap for this
 " <C-x> used in visual mode already
-"vnoremap <silent> <C-x><C-w> <Esc>:call <SID>SkipTerminalsQuitCmd(":wqa")<CR>
+"vnoremap <silent> <C-x><C-w> <Esc>:call SkipTerminalsQuitCmd("wqa")<CR>
 " skip for now
-"nnoremap <silent> <C-x><C-w>      :call <SID>SkipTerminalsQuitCmd(":wqa")<CR>
+"nnoremap <silent> <C-x><C-w>      :call SkipTerminalsQuitCmd("wqa")<CR>
 
 " close all windows and confirm then quit
 " no imap for this
 " <C-x> used in visual mode already
-"vnoremap <silent> <C-x>c     <Esc>:call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
-"nnoremap <silent> <C-x>c          :call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
+"vnoremap <silent> <C-x>c     <Esc>:call SkipTerminalsQuitCmd("conf qa")<CR>
+"nnoremap <silent> <C-x>c          :call SkipTerminalsQuitCmd("conf qa")<CR>
 
 " another way to exit insert mode ...
 inoremap <C-c> <Esc>
@@ -6162,20 +6171,23 @@ inoremap <C-c> <Esc>
 " (<C-c> previously remapped in visual mode above)
 " no imap for this
 " <C-x> used in visual mode already
-""vnoremap <silent> <C-x><C-c> <Esc>:call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
+""vnoremap <silent> <C-x><C-c> <Esc>:call SkipTerminalsQuitCmd("conf qa")<CR>
 " skip for now
-"nnoremap <silent> <C-x><C-c>            :call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
+"nnoremap <silent> <C-x><C-c>            :call SkipTerminalsQuitCmd("conf qa")<CR>
 
 " no imap for this
-vnoremap <silent> <Leader>xc  <C-\><C-n>:<C-u>call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
-nnoremap <silent> <Leader>xc            :call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
+vnoremap <silent> <Leader>xc  <C-\><C-n>:<C-u>call SkipTerminalsQuitCmd("conf qa")<CR>
+nnoremap <silent> <Leader>xc            :<C-u>call SkipTerminalsQuitCmd("conf qa")<CR>
 
 " no imap for this
 " skip for now
-"vnoremap <silent> <Leader>ax  <C-\><C-n>:<C-u>call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
-"nnoremap <silent> <Leader>ax            :call <SID>SkipTerminalsQuitCmd(":conf qa")<CR>
+"vnoremap <silent> <Leader>ax  <C-\><C-n>:<C-u>call SkipTerminalsQuitCmd("conf qa")<CR>
+"nnoremap <silent> <Leader>ax            :<C-u>call SkipTerminalsQuitCmd("conf qa")<CR>
 
-function! s:EndTerminalsConfQA() abort
+function! EndTerminalsConfQA() abort
+    " just to clear the cmdline of this function ...
+    echo "\r"
+    redraw!
     for b in range(1, bufnr('$'))
         if bufexists(b) && buflisted(b)
             if getbufvar(b, '&buftype') ==# 'terminal'
@@ -6187,15 +6199,15 @@ function! s:EndTerminalsConfQA() abort
 endfunction
 
 " :exit to quit all windows
-cnoreabbrev <silent> <expr> exi (getcmdtype() == ':' && getcmdline() =~ '\s*exi\s*')  ? 'call <SID>EndTerminalsConfQA()' : 'exi'
-cnoreabbrev <silent> <expr> exit (getcmdtype() == ':' && getcmdline() =~ '\s*exit\s*') ? 'call <SID>EndTerminalsConfQA()' : 'exit'
+cnoreabbrev <silent> <expr> exi (getcmdtype() == ':' && getcmdline() =~ '\s*exi\s*')  ? 'call EndTerminalsConfQA()' : 'exi'
+cnoreabbrev <silent> <expr> exit (getcmdtype() == ':' && getcmdline() =~ '\s*exit\s*') ? 'call EndTerminalsConfQA()' : 'exit'
 
-cnoreabbrev <silent> <expr> qa (getcmdtype() == ':' && getcmdline() =~ '\s*qa\s*')  ? 'call <SID>SkipTerminalsConfQA()' : 'qa'
-cnoreabbrev <silent> <expr> qal (getcmdtype() == ':' && getcmdline() =~ '\s*qal\s*')  ? 'call <SID>SkipTerminalsConfQA()' : 'qal '
-cnoreabbrev <silent> <expr> qall (getcmdtype() == ':' && getcmdline() =~ '\s*qall\s*')  ? 'call <SID>SkipTerminalsConfQA()' : 'qall'
-cnoreabbrev <silent> <expr> quita (getcmdtype() == ':' && getcmdline() =~ '\s*quita\s*')  ? 'call <SID>SkipTerminalsConfQA()' : 'quita'
-cnoreabbrev <silent> <expr> quital (getcmdtype() == ':' && getcmdline() =~ '\s*quital\s*')  ? 'call <SID>SkipTerminalsConfQA()' : 'quital'
-cnoreabbrev <silent> <expr> quitall (getcmdtype() == ':' && getcmdline() =~ '\s*quitall\s*')  ? 'call <SID>SkipTerminalsConfQA()' : 'quitall'
+"cnoreabbrev <silent> <expr> qa (getcmdtype() == ':' && getcmdline() =~ '\s*qa\s*')  ? 'call SkipTerminalsConfQA()' : 'qa'
+cnoreabbrev <silent> <expr> qal (getcmdtype() == ':' && getcmdline() =~ '\s*qal\s*')  ? 'call SkipTerminalsConfQA()' : 'qal '
+cnoreabbrev <silent> <expr> qall (getcmdtype() == ':' && getcmdline() =~ '\s*qall\s*')  ? 'call SkipTerminalsConfQA()' : 'qall'
+cnoreabbrev <silent> <expr> quita (getcmdtype() == ':' && getcmdline() =~ '\s*quita\s*')  ? 'call SkipTerminalsConfQA()' : 'quita'
+cnoreabbrev <silent> <expr> quital (getcmdtype() == ':' && getcmdline() =~ '\s*quital\s*')  ? 'call SkipTerminalsConfQA()' : 'quital'
+cnoreabbrev <silent> <expr> quitall (getcmdtype() == ':' && getcmdline() =~ '\s*quitall\s*')  ? 'call SkipTerminalsConfQA()' : 'quitall'
 
 function! MyQuit(arg) abort
     " just to clear the cmdline of this function ...
@@ -6331,6 +6343,8 @@ else
     au!
     au VimEnter * :Alias q  call\ MyQuit("q")
     au VimEnter * :Alias q! call\ MyQuit("q!")
+    au VimEnter * :Alias qa  call\ SkipTerminalsQuitCmd("qa")
+    au VimEnter * :Alias qa! call\ SkipTerminalsQuitCmd("qa!")
     au VimEnter * :Alias PU PluginUpdate
   aug END
 endif
