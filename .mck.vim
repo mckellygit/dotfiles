@@ -3418,7 +3418,7 @@ nmap <silent> <C-2-LeftMouse> mvviwty:call <SID>Delay(1)<CR><Esc>
 nmap <silent> <C-3-LeftMouse> mvviWty:call <SID>Delay(1)<CR><Esc>
 nmap <silent> <C-4-LeftMouse> mvVty:call <SID>Delay(1)<CR><Esc>
 
-" NOTE: tmux maps C-Triple to M-c to be able to know its a triple-click ...
+" NOTE: tmux maps C-Triple to M-C to be able to know its a triple-click ...
 call <SID>MapFastKeycode('<S-F32>',  "\eC", 132)
 nmap <silent> <S-F32> mvviWty:call <SID>Delay(1)<CR><Esc>
 vmap <silent> <S-F32> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
@@ -3481,7 +3481,7 @@ function! s:Delay(arg) abort
         echohl String | echon 'Copied to clipboard using: ' . clipcmd | echohl None
     endif
     sleep 651m
-    echo ""
+    echo " "
 endfunction
 
 " M- same as C- (was viW)
@@ -3494,7 +3494,7 @@ nmap <silent> <A-2-LeftMouse> mvviwty:call <SID>Delay(1)<CR><Esc>
 nmap <silent> <A-3-LeftMouse> mvviWty:call <SID>Delay(1)<CR><Esc>
 nmap <silent> <A-4-LeftMouse> mvVty:call <SID>Delay(1)<CR><Esc>
 
-" NOTE: tmux maps A-Triple to M-b to be able to know its a triple-click ...
+" NOTE: tmux maps A-Triple to M-B to be able to know its a triple-click ...
 call <SID>MapFastKeycode('<S-F33>',  "\eB", 133)
 nmap <silent> <S-F33> mvviWty:call <SID>Delay(1)<CR><Esc>
 vmap <silent> <S-F33> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
@@ -5380,7 +5380,7 @@ nmap <Leader>pe $<Plug>UnconditionalPasteCharAfter`]
 nmap <Leader>pE $A<Space><Esc><Plug>UnconditionalPasteCharAfter`]
 " at beg of first word (^ not 0)
 nmap <Leader>pa ^<Plug>UnconditionalPasteCharBefore`]
-" NOTE: use <Esc>hlb instead of <Esc>b because M-b is mapped to A-3click in tmux ...
+" NOTE: use <Esc>hlb instead of <Esc>B because M-B is mapped to A-3click in tmux ...
 "nmap <Leader>pA ^<Plug>UnconditionalPasteCharBefore`]li<Space><Esc>hlb
 nmap <Leader>pA ^<Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w
 
@@ -5591,8 +5591,8 @@ function s:MyVisSearch(meth) abort
 endfunction
 
 " use :let @/="" to clear out search pattern and stop any running search
-nnoremap <silent> <Leader>sx :let @/=""<bar>:echo ""<bar>:AsyncStop!<CR>
-vnoremap <silent> <Leader>sx <C-\><C-n>:let @/=""<bar>:echo ""<bar>:AsyncStop!<CR>
+nnoremap <silent> <Leader>sx :let @/=""<bar>:echo " "<bar>:AsyncStop!<CR>
+vnoremap <silent> <Leader>sx <C-\><C-n>:let @/=""<bar>:echo " "<bar>:AsyncStop!<CR>
 " stop running search
 nnoremap <silent> <Leader>sq :AsyncStop!<CR>
 vnoremap <silent> <Leader>sq <C-\><C-n>:AsyncStop!<CR>
