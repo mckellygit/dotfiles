@@ -1352,7 +1352,10 @@ function! s:Magit1(args)
         au VimEnter * :Alias! q! call\ MyQuit("qa!")
         autocmd FileType magit nmap <silent> <buffer> <Leader>qq :<C-u>call <SID>QuitIfOnlyNoNameLeft()<CR>
         autocmd FileType magit noremap <silent> <buffer> <Leader>ma <Nop>
-        silent execute "Magit"
+        let wh = winheight(0) - 4
+        let mcmd = wh.'new | MagitOnly'
+        silent execute mcmd
+        execute "normal \<C-w>r"
     endif
 endfunction
 command! -nargs=* Magit2 call s:Magit1(<q-args>)
