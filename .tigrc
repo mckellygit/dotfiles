@@ -102,7 +102,7 @@ bind generic   <Ctrl-w><Ctrl-w>   view-next
 bind main      <Space>              next
 bind generic   <Space>              scroll-page-down
 bind generic   <Ctrl-@>             move-down
-# vim terminal BUG - send M-- instead of C-@ (C-Space)
+# vim terminal BUG - send M-- instead of C-@ (C-Space) - may be fixed now with tnoremap
 bind generic   <Esc>-               move-down
 bind main      <Backspace>          previous
 bind generic   <Backspace>          scroll-page-up

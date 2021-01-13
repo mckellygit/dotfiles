@@ -6,7 +6,7 @@
 \  noaction 10j
  noaction 10k
 \340 forw-line
-# vim terminal BUG - send M-- instead of C-@ (C-Space)
+# vim terminal BUG - send M-- instead of C-@ (C-Space) - may be fixed now with tnoremap
 \e-  forw-line
  back-line
 \e\n back-line

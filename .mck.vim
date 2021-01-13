@@ -4937,7 +4937,8 @@ imap         <buffer> <C-^><Return> <Nop>
 nnoremap <silent> <C-@> gj
 vnoremap <silent> <C-@> gj
 
-" BUG: vim terminal does not generate C-@ (C-Space)
+" ------------------
+" BUG: vim terminal does not generate C-@ (C-Space) - may be fixed now with tnoremap (see below)
 "      tmux can send A-, in its place when in a terminal
 call <SID>MapFastKeycode('<F27>',  "\e-", 27)
 noremap <F27> gj
@@ -4950,6 +4951,12 @@ if has("nvim")
     inoremap <F27> <M-->
     tnoremap <F27> <M-->
 endif
+
+" NOTE: this seems to produce the correct key code ...
+if !has("nvim")
+    tnoremap <C-@> <C-Space>
+endif
+" ------------------
 
 " <Return> was nmapped above to gj also if not terminal ...
 nmap <silent> <buffer> <Return> gj
