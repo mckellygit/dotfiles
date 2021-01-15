@@ -3352,7 +3352,7 @@ inoremap <C-LeftDrag> <LeftDrag>
 " DoubleClick for word (lbvhe/lbve) (is h needed ?)
 nmap <2-LeftMouse> mvviwtygv
 vmap <2-LeftMouse> <Esc>mvviwtygv
-imap <silent> <2-LeftMouse> <C-\><C-o>:let @i="2"<CR><C-\><C-o>:call <SID>GetWord(1)<CR>
+imap <silent> <2-LeftMouse> <C-\><C-o>:let @i="2"<bar>:call <SID>GetWord(1)<CR>
 
 " TripleClick for next larger entity, not whole line (lBvhE/lBvE) (is h needed ?)
 "nnoremap <silent> <3-LeftMouse> mvviWygv
@@ -3384,7 +3384,7 @@ vmap <C-LeftMouse> <LeftMouse>
 " --------------------------------
 "nmap <C-2-LeftMouse> mvviwtygv
 "vmap <C-2-LeftMouse> <Esc>mvviwtygv
-"inoremap <silent> <C-2-LeftMouse> <C-\><C-o>:let @i="2"<CR><C-\><C-o>:call <SID>GetWord(1)<CR>
+"inoremap <silent> <C-2-LeftMouse> <C-\><C-o>:let @i="2"<bar>:call <SID>GetWord(1)<CR>
 
 " if visual selection is only one line then auto yank it ...
 function s:YankIfOnlyOneLine()
@@ -3414,28 +3414,44 @@ endfunction
 " --------------------------------
 
 " TODO: use Alt mapping where we leave vis-mode upon release ...
-nmap <silent> <C-2-LeftMouse> mvviwty:call <SID>Delay(1)<CR><Esc>
-nmap <silent> <C-3-LeftMouse> mvviWty:call <SID>Delay(1)<CR><Esc>
-nmap <silent> <C-4-LeftMouse> mvVty:call <SID>Delay(1)<CR><Esc>
+nmap <silent> <C-2-LeftMouse>      mvviwty:call <SID>Delay(1)<CR><Esc>
+vmap <silent> <C-2-LeftMouse> <Esc>mvviwty:call <SID>Delay(1)<CR><Esc>
+imap <silent> <C-2-LeftMouse> <LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>
+if exists('$TMUX_PANE')
+    nmap <silent> <C-3-LeftMouse> <Nop>
+    vmap <silent> <C-3-LeftMouse> <Nop>
+    imap <silent> <C-3-LeftMouse> <Nop>
+
+    nmap <silent> <C-4-LeftMouse> <Nop>
+    vmap <silent> <C-4-LeftMouse> <Nop>
+else
+    nmap <silent> <C-3-LeftMouse>      mvviWty:call <SID>Delay(1)<CR><Esc>
+    vmap <silent> <C-3-LeftMouse> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
+
+    nmap <silent> <C-4-LeftMouse>      mvVty:call <SID>Delay(1)<CR><Esc>
+    vmap <silent> <C-4-LeftMouse> <Esc>mvVty:call <SID>Delay(1)<CR><Esc>
+endif
+
+imap <silent> <C-4-LeftMouse> <Nop>
 
 " NOTE: tmux maps C-Triple to M-C to be able to know its a triple-click ...
 call <SID>MapFastKeycode('<S-F32>',  "\eC", 132)
-nmap <silent> <S-F32> mvviWty:call <SID>Delay(1)<CR><Esc>
-vmap <silent> <S-F32> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
-imap <silent> <expr> <S-F32> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>'
+"nmap <silent> <S-F32> mvviWty:call <SID>Delay(1)<CR><Esc>
+"vmap <silent> <S-F32> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
+"nmap <silent> <expr> <S-F32> (@j=="0") ? '<LeftMouse>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse>:call <SID>GetPath(2,1)<CR>'
+"vmap <silent> <expr> <S-F32> (@j=="0") ? '<LeftMouse><C-\><C-n>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-n>:call <SID>GetPath(2,1)<CR>'
+nmap <silent> <S-F32> <LeftMouse>:call <SID>GetPath(2,1)<CR>
+vmap <silent> <S-F32> <LeftMouse><C-\><C-n>:call <SID>GetPath(2,1)<CR>
+imap <silent> <S-F32> <LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>
 if has("nvim")
-    nmap <silent> <M-C> mvviWty:call <SID>Delay(1)<CR><Esc>
-    vmap <silent> <M-C> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
-    imap <silent> <expr> <M-C> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>'
+    "nmap <silent> <M-C> mvviWty:call <SID>Delay(1)<CR><Esc>
+    "vmap <silent> <M-C> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
+    "nmap <silent> <expr> <M-C> (@j=="0") ? '<LeftMouse>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse>:call <SID>GetPath(2,1)<CR>'
+    "vmap <silent> <expr> <M-C> (@j=="0") ? '<LeftMouse><C-\><C-n>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-n>:call <SID>GetPath(2,1)<CR>'
+    nmap <silent> <M-C> <LeftMouse>:call <SID>GetPath(2,1)<CR>
+    vmap <silent> <M-C> <LeftMouse><C-\><C-n>:call <SID>GetPath(2,1)<CR>
+    imap <silent> <M-C> <LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>
 endif
-
-vmap <silent> <C-2-LeftMouse> <Esc>mvviwty:call <SID>Delay(1)<CR><Esc>
-vmap <silent> <C-3-LeftMouse> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
-vmap <silent> <C-4-LeftMouse> <Esc>mvVty:call <SID>Delay(1)<CR><Esc>
-
-imap <silent> <C-2-LeftMouse> <LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>
-imap <silent> <C-3-LeftMouse> <LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>
-imap <silent> <C-4-LeftMouse> <Nop>
 
 vmap <silent> <C-LeftRelease> tygv:<C-u>call <SID>Delay(0)<CR><Esc>
 imap <silent> <C-LeftMouse> <C-\><C-o>:let @i="1"<CR><LeftMouse>
@@ -3480,9 +3496,11 @@ function! s:Delay(arg) abort
         let clipcmd = c2
         echohl String | echon 'Copied to clipboard using: ' . clipcmd | echohl None
     endif
-    sleep 651m
+    sleep 551m
     echo " "
 endfunction
+
+" ------------------------------
 
 " M- same as C- (was viW)
 " NOTE: copy/yank and returns to normal mode
@@ -3490,24 +3508,49 @@ endfunction
 
 " NOTE: single click after double ...
 
-nmap <silent> <A-2-LeftMouse> mvviwty:call <SID>Delay(1)<CR><Esc>
-nmap <silent> <A-3-LeftMouse> mvviWty:call <SID>Delay(1)<CR><Esc>
-nmap <silent> <A-4-LeftMouse> mvVty:call <SID>Delay(1)<CR><Esc>
+nmap <silent> <A-2-LeftMouse>      mvviwty:call <SID>Delay(1)<CR><Esc>
+vmap <silent> <A-2-LeftMouse> <Esc>mvviwty:call <SID>Delay(1)<CR><Esc>
+imap <silent> <A-2-LeftMouse> <LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>
+if exists('$TMUX_PANE')
+    nmap <silent> <A-3-LeftMouse> <Nop>
+    vmap <silent> <A-3-LeftMouse> <Nop>
+    imap <silent> <A-3-LeftMouse> <Nop>
+
+    nmap <silent> <A-4-LeftMouse> <Nop>
+    vmap <silent> <A-4-LeftMouse> <Nop>
+else
+    nmap <silent> <A-3-LeftMouse>      mvviWty:call <SID>Delay(1)<CR><Esc>
+    vmap <silent> <A-3-LeftMouse> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
+
+    nmap <silent> <A-4-LeftMouse>      mvVty:call <SID>Delay(1)<CR><Esc>
+    vmap <silent> <A-4-LeftMouse> <Esc>mvVty:call <SID>Delay(1)<CR><Esc>
+endif
+
+imap <silent> <A-4-LeftMouse> <Nop>
 
 " NOTE: tmux maps A-Triple to M-B to be able to know its a triple-click ...
 call <SID>MapFastKeycode('<S-F33>',  "\eB", 133)
-nmap <silent> <S-F33> mvviWty:call <SID>Delay(1)<CR><Esc>
-vmap <silent> <S-F33> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
-imap <silent> <expr> <S-F33> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>'
+"nmap <silent> <S-F33> mvviWty:call <SID>Delay(1)<CR><Esc>
+"vmap <silent> <S-F33> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
+"nmap <silent> <expr> <S-F33> (@j=="0") ? '<LeftMouse>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse>:call <SID>GetPath(2,1)<CR>'
+"vmap <silent> <expr> <S-F33> (@j=="0") ? '<LeftMouse><A-\><C-n>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-n>:call <SID>GetPath(2,1)<CR>'
+nmap <silent> <S-F33> <LeftMouse>:call <SID>GetPath(2,1)<CR>
+vmap <silent> <S-F33> <LeftMouse><A-\><C-n>:call <SID>GetPath(2,1)<CR>
+imap <silent> <S-F33> <LeftMouse><A-\><C-o>:call <SID>GetPath(2,1)<CR>
 if has("nvim")
-    nmap <silent> <M-B> mvviWty:call <SID>Delay(1)<CR><Esc>
-    vmap <silent> <M-B> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
-    imap <silent> <expr> <M-B> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>'
+    "nmap <silent> <M-B> mvviWty:call <SID>Delay(1)<CR><Esc>
+    "vmap <silent> <M-B> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
+    "nmap <silent> <expr> <M-B> (@j=="0") ? '<LeftMouse>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse>:call <SID>GetPath(2,1)<CR>'
+    "vmap <silent> <expr> <M-B> (@j=="0") ? '<LeftMouse><A-\><C-n>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-n>:call <SID>GetPath(2,1)<CR>'
+    nmap <silent> <M-B> <LeftMouse>:call <SID>GetPath(2,1)<CR>
+    vmap <silent> <M-B> <LeftMouse><A-\><C-n>:call <SID>GetPath(2,1)<CR>
+    imap <silent> <M-B> <LeftMouse><A-\><C-o>:call <SID>GetPath(2,1)<CR>
 endif
 
-vmap <silent> <A-2-LeftMouse> <Esc>mvviwty:call <SID>Delay(1)<CR><Esc>
-vmap <silent> <A-3-LeftMouse> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
-vmap <silent> <A-4-LeftMouse> <Esc>mvVty:call <SID>Delay(1)<CR><Esc>
+vmap <silent> <A-LeftRelease> tygv:<C-u>call <SID>Delay(0)<CR><Esc>
+imap <silent> <A-LeftMouse> <C-\><C-o>:let @i="1"<CR><LeftMouse>
+
+" ------------------------------
 
 "vnoremap <silent> <A-2-LeftMouse> mv<Esc>viwygv<C-\><C-n>:sleep 651m<CR>`v<Esc>
 "vnoremap <silent> <A-3-LeftMouse> mv<Esc>viWygv<C-\><C-n>:sleep 651m<CR>`v<Esc>
@@ -3528,10 +3571,6 @@ vmap <silent> <A-4-LeftMouse> <Esc>mvVty:call <SID>Delay(1)<CR><Esc>
 "vnoremap <expr> <A-4-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-n>:let @j="1"<bar>:call GetWord(2)<CR>' : '<LeftMouse><C-\><C-n>:call GetPath(2,1)<CR>'
 
 "imap <silent> <expr> <A-2-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>'
-imap <silent> <A-2-LeftMouse> <LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>
-imap <silent> <A-3-LeftMouse> <LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>
-imap <silent> <A-4-LeftMouse> <Nop>
-
 "imap <silent> <expr> <A-3-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>'
 "inoremap <silent> <expr> <A-4-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>'
 
@@ -3543,6 +3582,8 @@ imap <silent> <A-4-LeftMouse> <Nop>
 " NOTE: M- Drag end now copies selection to clipboard and returns to normal mode
 "vnoremap <silent> <A-LeftRelease> <C-\><C-n>mv<LeftRelease><C-\><C-n>:echo "copied to clipboard"<bar>:sleep 651m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR>`v
 "vnoremap <silent> <expr> <A-LeftRelease> (@i=="1") ? '<C-\><C-n>mv<LeftRelease><C-\><C-n>:let @i="0"<bar>:echo "copied to clipboard"<bar>:sleep 651m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR>`v<Esc>i' : '<C-\><C-n>mv<LeftRelease><C-\><C-n>:echo "copied to clipboard"<bar>:sleep 651m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR>`v'
+
+" ------------------------------
 
 " YankIt() now leaves cursor at end position ...
 "vnoremap <expr> <A-LeftRelease> (@i=="1") ? '<LeftRelease><C-\><C-n>:let @i="0"<bar>:echo "copied to clipboard"<bar>:sleep 651m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR><Esc>i' : '<LeftRelease><C-\><C-n>:echo "copied to clipboard"<bar>:sleep 651m<bar>:call YankIt("*y", 2)<bar>:redraw!<CR>'
@@ -5658,7 +5699,7 @@ function s:GetWord(arg) abort
   if a:arg > 1
     redraw
     "echo "copied to clipboard"
-    sleep 651m
+    sleep 351m
     execute 'normal ty`v'
     "redraw!
     if &buftype == "terminal"
@@ -5709,7 +5750,7 @@ function s:GetPath(arg,ws) abort
   if a:arg > 1
     redraw
     "echo "copied to clipboard"
-    sleep 651m
+    sleep 351m
     execute 'normal ty`v'
     redraw
     if &buftype == "terminal"
@@ -5753,7 +5794,7 @@ function s:GetWord2(arg) abort
   if a:arg > 1
     redraw
     "echo "copied to clipboard"
-    sleep 651m
+    sleep 351m
     execute 'normal ty`v'
     redraw
     if &buftype == "terminal"
