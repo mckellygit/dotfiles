@@ -389,7 +389,7 @@ let g:lightline = {
 function! MyLightlineMode()
   " dont wrapscan if in visual mode ...
   let m = mode()
-  if m ==# 'v' || m ==# 'V' || m ==# ''
+  if m ==# 'v' || m ==# 'V' || m ==# '\<C-v>'
     set nowrapscan
     "let &sj=0
     "let &so=10
@@ -399,6 +399,10 @@ function! MyLightlineMode()
       "let &sj=-50
       "let &so=0
     endif
+  endif
+  if (mode(1) ==# 'n')
+    let w:vc = 'u'
+    let w:vp = 'u'
   endif
   if &filetype ==# 'qf'
     return ''
@@ -1674,12 +1678,16 @@ nnoremap <silent> <Leader>fM :TabVifm<CR>
 " save previous reg + to reg x for exchange/paste/etc
 vnoremap <silent> zy    y
 vnoremap <silent> ty    :<C-u>call setreg('x', getreg('*'), getregtype('*'))<CR>gvy
+vnoremap <silent> Ty    :<C-u>call setreg('x', getreg('*'), getregtype('*'))<CR>
 vnoremap <silent> zY    Y
 vnoremap <silent> tY    :<C-u>call setreg('x', getreg('*'), getregtype('*'))<CR>gvY
+vnoremap <silent> TY    :<C-u>call setreg('x', getreg('*'), getregtype('*'))<CR>
 vnoremap <silent> zx    x
 vnoremap <silent> tx    :<C-u>call setreg('x', getreg('*'), getregtype('*'))<CR>gvx
+vnoremap <silent> Tx    :<C-u>call setreg('x', getreg('*'), getregtype('*'))<CR>
 vnoremap <silent> zX    X
 vnoremap <silent> tX    :<C-u>call setreg('x', getreg('*'), getregtype('*'))<CR>gvX
+vnoremap <silent> TX    :<C-u>call setreg('x', getreg('*'), getregtype('*'))<CR>
 vmap     <silent> x     tx
 vmap     <silent> d     tx
 vmap     <silent> X     tX
@@ -3066,7 +3074,14 @@ function! s:MyVisV2()
 endfunction
 
 " q to exit visual-mode and clear previous w:v* states
-xnoremap <silent> q <C-\><C-n>:<C-u>call <SID>MyVisQ()<CR>
+" if we just map q to <Esc> then q works well to go back to original mode,
+" (ie a visual select from insert ...) but then if we want to get out of
+" insert we need 2 key stokes - q + <Esc> ...
+"xnoremap q <Esc>
+xnoremap <silent> q     <C-\><C-n>:<C-u>call <SID>MyVisQ()<CR>
+xnoremap <silent> Q     <C-\><C-n>:<C-u>call <SID>MyVisQ()<CR>
+xnoremap <silent> <C-q> <C-\><C-n>:<C-u>call <SID>MyVisQ()<CR>
+
 function! s:MyVisQ()
     let w:vc = 'u'
     let w:vp = 'u'
@@ -3347,11 +3362,14 @@ nnoremap <C-LeftDrag> v<LeftDrag>
 vnoremap <C-LeftDrag> <LeftDrag>
 inoremap <C-LeftDrag> <LeftDrag>
 
+au InsertEnter * let @i="2"
+au InsertLeave * if (!(mode() =~ 'n')) | let @i="0" | endif
+
 " see mousetime for double-click delay
 
 " DoubleClick for word (lbvhe/lbve) (is h needed ?)
-nmap <2-LeftMouse> mvviwtygv
-vmap <2-LeftMouse> <Esc>mvviwtygv
+nmap <2-LeftMouse> mvviwTygvzygv
+vmap <expr> <2-LeftMouse> (@i=="2") ? '<Esc>i<C-\><C-o>mvviwTy<C-\><C-o>gvzy<C-\><C-o>gv' : '<C-\><C-n>mvviwTy<C-\><C-n>gvzy<C-\><C-n>gv'
 imap <silent> <2-LeftMouse> <C-\><C-o>:let @i="2"<bar>:call <SID>GetWord(1)<CR>
 
 " TripleClick for next larger entity, not whole line (lBvhE/lBvE) (is h needed ?)
@@ -3361,14 +3379,14 @@ imap <silent> <2-LeftMouse> <C-\><C-o>:let @i="2"<bar>:call <SID>GetWord(1)<CR>
 " NOTE: Use GetPath instead of lBvhE/lBvE (is h needed ?)
 "nnoremap <3-LeftMouse> <LeftMouse>:call GetPath(1,1)<CR>
 "vnoremap <3-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath(1,1)<CR>
-nmap <3-LeftMouse> mvviWtygv
-vmap <3-LeftMouse> <Esc>mvviWtygv
-imap <silent> <expr> <3-LeftMouse> (@j=="0") ? '<LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(1)<CR>' : '<LeftMouse><C-\><C-o>:call <SID>GetPath(1,1)<CR>'
+nmap <3-LeftMouse> mvviWTygvzygv
+vmap <expr> <3-LeftMouse> (@i=="2") ? '<Esc>i<C-\><C-o>mvviWTy<C-\><C-o>gvzy<C-\><C-o>gv' : '<C-\><C-n>mvviWTy<C-\><C-n>gvzy<C-\><C-n>gv'
+imap <silent> <3-LeftMouse> <C-\><C-o>:let @i="2"<bar>:call <SID>GetWord2(1)<CR>
 
 " QuadrupleClick for whole line
-nmap <4-LeftMouse> mvVtygv
-vmap <4-LeftMouse> <Esc>mvVtygv
-inoremap <4-LeftMouse> <Nop>
+nmap <4-LeftMouse> mvVTygvzygv
+vmap <expr> <4-LeftMouse> (@i=="2") ? '<Esc>i<C-\><C-o>mvVTy<C-\><C-o>gvzy<C-\><C-o>gv' : '<C-\><C-n>mvVTy<C-\><C-n>gvzy<C-\><C-n>gv'
+imap <silent> <4-LeftMouse> <C-\><C-o>:let @i="2"<bar>:call <SID>GetLine(1)<CR>
 
 " change C-LeftMouse searching tags file for symbol under cursor
 " and select words under cursor instead (lBvhE/lBvE) (is h needed ?)
@@ -3417,6 +3435,7 @@ endfunction
 nmap <silent> <C-2-LeftMouse>      mvviwty:call <SID>Delay(1)<CR><Esc>
 vmap <silent> <C-2-LeftMouse> <Esc>mvviwty:call <SID>Delay(1)<CR><Esc>
 imap <silent> <C-2-LeftMouse> <LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>
+
 if exists('$TMUX_PANE')
     nmap <silent> <C-3-LeftMouse> <Nop>
     vmap <silent> <C-3-LeftMouse> <Nop>
@@ -3425,8 +3444,9 @@ if exists('$TMUX_PANE')
     nmap <silent> <C-4-LeftMouse> <Nop>
     vmap <silent> <C-4-LeftMouse> <Nop>
 else
-    nmap <silent> <C-3-LeftMouse>      mvviWty:call <SID>Delay(1)<CR><Esc>
-    vmap <silent> <C-3-LeftMouse> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
+    nmap <silent> <C-3-LeftMouse> <LeftMouse>:call <SID>GetPath(2,1)<CR>
+    vmap <silent> <C-3-LeftMouse> <LeftMouse><C-\><C-n>:call <SID>GetPath(2,1)<CR>
+    imap <silent> <C-3-LeftMouse> <LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>
 
     nmap <silent> <C-4-LeftMouse>      mvVty:call <SID>Delay(1)<CR><Esc>
     vmap <silent> <C-4-LeftMouse> <Esc>mvVty:call <SID>Delay(1)<CR><Esc>
@@ -3454,7 +3474,7 @@ if has("nvim")
 endif
 
 vmap <silent> <C-LeftRelease> tygv:<C-u>call <SID>Delay(0)<CR><Esc>
-imap <silent> <C-LeftMouse> <C-\><C-o>:let @i="1"<CR><LeftMouse>
+imap <silent> <C-LeftMouse> <C-\><C-o>:let @i="2"<CR><LeftMouse>
 
 " ------------------------------
 " TODO: inside A-2-LeftMouse functions, check for 3rd click ...
@@ -3511,6 +3531,7 @@ endfunction
 nmap <silent> <A-2-LeftMouse>      mvviwty:call <SID>Delay(1)<CR><Esc>
 vmap <silent> <A-2-LeftMouse> <Esc>mvviwty:call <SID>Delay(1)<CR><Esc>
 imap <silent> <A-2-LeftMouse> <LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>
+
 if exists('$TMUX_PANE')
     nmap <silent> <A-3-LeftMouse> <Nop>
     vmap <silent> <A-3-LeftMouse> <Nop>
@@ -3519,8 +3540,9 @@ if exists('$TMUX_PANE')
     nmap <silent> <A-4-LeftMouse> <Nop>
     vmap <silent> <A-4-LeftMouse> <Nop>
 else
-    nmap <silent> <A-3-LeftMouse>      mvviWty:call <SID>Delay(1)<CR><Esc>
-    vmap <silent> <A-3-LeftMouse> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
+    nmap <silent> <A-3-LeftMouse> <LeftMouse>:call <SID>GetPath(2,1)<CR>
+    vmap <silent> <A-3-LeftMouse> <LeftMouse><C-\><C-n>:call <SID>GetPath(2,1)<CR>
+    imap <silent> <A-3-LeftMouse> <LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>
 
     nmap <silent> <A-4-LeftMouse>      mvVty:call <SID>Delay(1)<CR><Esc>
     vmap <silent> <A-4-LeftMouse> <Esc>mvVty:call <SID>Delay(1)<CR><Esc>
@@ -3533,22 +3555,22 @@ call <SID>MapFastKeycode('<S-F33>',  "\eB", 133)
 "nmap <silent> <S-F33> mvviWty:call <SID>Delay(1)<CR><Esc>
 "vmap <silent> <S-F33> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
 "nmap <silent> <expr> <S-F33> (@j=="0") ? '<LeftMouse>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse>:call <SID>GetPath(2,1)<CR>'
-"vmap <silent> <expr> <S-F33> (@j=="0") ? '<LeftMouse><A-\><C-n>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-n>:call <SID>GetPath(2,1)<CR>'
+"vmap <silent> <expr> <S-F33> (@j=="0") ? '<LeftMouse><C-\><C-n>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-n>:call <SID>GetPath(2,1)<CR>'
 nmap <silent> <S-F33> <LeftMouse>:call <SID>GetPath(2,1)<CR>
-vmap <silent> <S-F33> <LeftMouse><A-\><C-n>:call <SID>GetPath(2,1)<CR>
-imap <silent> <S-F33> <LeftMouse><A-\><C-o>:call <SID>GetPath(2,1)<CR>
+vmap <silent> <S-F33> <LeftMouse><C-\><C-n>:call <SID>GetPath(2,1)<CR>
+imap <silent> <S-F33> <LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>
 if has("nvim")
     "nmap <silent> <M-B> mvviWty:call <SID>Delay(1)<CR><Esc>
     "vmap <silent> <M-B> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
     "nmap <silent> <expr> <M-B> (@j=="0") ? '<LeftMouse>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse>:call <SID>GetPath(2,1)<CR>'
-    "vmap <silent> <expr> <M-B> (@j=="0") ? '<LeftMouse><A-\><C-n>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-n>:call <SID>GetPath(2,1)<CR>'
+    "vmap <silent> <expr> <M-B> (@j=="0") ? '<LeftMouse><C-\><C-n>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-n>:call <SID>GetPath(2,1)<CR>'
     nmap <silent> <M-B> <LeftMouse>:call <SID>GetPath(2,1)<CR>
-    vmap <silent> <M-B> <LeftMouse><A-\><C-n>:call <SID>GetPath(2,1)<CR>
-    imap <silent> <M-B> <LeftMouse><A-\><C-o>:call <SID>GetPath(2,1)<CR>
+    vmap <silent> <M-B> <LeftMouse><C-\><C-n>:call <SID>GetPath(2,1)<CR>
+    imap <silent> <M-B> <LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>
 endif
 
 vmap <silent> <A-LeftRelease> tygv:<C-u>call <SID>Delay(0)<CR><Esc>
-imap <silent> <A-LeftMouse> <C-\><C-o>:let @i="1"<CR><LeftMouse>
+imap <silent> <A-LeftMouse> <C-\><C-o>:let @i="2"<CR><LeftMouse>
 
 " ------------------------------
 
@@ -6080,9 +6102,12 @@ endfunction
 
 " -----------------------------
 
-" : in visual mode (can still use <C-w>:)
-vnoremap : <C-\><C-n>:<C-u>call <SID>MyVisQ()<CR>:
+" <Leader>: in visual mode for raw cmdline without range (can still use : or <C-w>:)
+"vnoremap : <C-\><C-n>:<C-u>call <SID>MyVisQ()<CR>:
 "vnoremap : <C-w>:
+vnoremap <Leader>: <C-\><C-n>:<C-u>call <SID>MyVisQ()<CR>:
+
+" -----------------------------
 
 noremap <C-a> ^
 " ctrl-e was scroll down one line so we lose that
