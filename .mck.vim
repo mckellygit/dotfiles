@@ -3369,8 +3369,14 @@ au InsertLeave * if (!(mode() =~ 'n')) | let @i="0" | endif
 
 " DoubleClick for word (lbvhe/lbve) (is h needed ?)
 nmap <2-LeftMouse> mvviwTygvzygv
-vmap <expr> <2-LeftMouse> (@i=="2") ? '<Esc>i<C-\><C-o>mvviwTy<C-\><C-o>gvzy<C-\><C-o>gv' : '<C-\><C-n>mvviwTy<C-\><C-n>gvzy<C-\><C-n>gv'
-imap <silent> <2-LeftMouse> <C-\><C-o>:let @i="2"<bar>:call <SID>GetWord(1)<CR>
+if !has("nvim")
+    vmap <expr> <2-LeftMouse> (@i=="2") ? '<Esc>i<C-\><C-o>viwTy<C-\><C-o>gvzy<C-\><C-o>gv' : '<C-\><C-n>viwTy<C-\><C-n>gvzy<C-\><C-n>gv'
+    imap <2-LeftMouse> <C-\><C-o>viwTy<C-\><C-o>gvzy<C-\><C-o>gv
+else
+    vmap <expr> <2-LeftMouse> (@i=="2") ? '<Esc>viwTygvzyi<C-\><C-o>gv' : '<C-\><C-n>viwTy<C-\><C-n>gvzy<C-\><C-n>gv'
+    imap <2-LeftMouse> <Esc>viwTygvzyi<C-\><C-o>gv
+endif
+"imap <silent> <2-LeftMouse> <C-\><C-o>:let @i="2"<bar>:call <SID>GetWord(1)<CR>
 
 " TripleClick for next larger entity, not whole line (lBvhE/lBvE) (is h needed ?)
 "nnoremap <silent> <3-LeftMouse> mvviWygv
@@ -3380,13 +3386,25 @@ imap <silent> <2-LeftMouse> <C-\><C-o>:let @i="2"<bar>:call <SID>GetWord(1)<CR>
 "nnoremap <3-LeftMouse> <LeftMouse>:call GetPath(1,1)<CR>
 "vnoremap <3-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath(1,1)<CR>
 nmap <3-LeftMouse> mvviWTygvzygv
-vmap <expr> <3-LeftMouse> (@i=="2") ? '<Esc>i<C-\><C-o>mvviWTy<C-\><C-o>gvzy<C-\><C-o>gv' : '<C-\><C-n>mvviWTy<C-\><C-n>gvzy<C-\><C-n>gv'
-imap <silent> <3-LeftMouse> <C-\><C-o>:let @i="2"<bar>:call <SID>GetWord2(1)<CR>
+if !has("nvim")
+    vmap <expr> <3-LeftMouse> (@i=="2") ? '<Esc>i<C-\><C-o>viWTy<C-\><C-o>gvzy<C-\><C-o>gv' : '<C-\><C-n>viWTy<C-\><C-n>gvzy<C-\><C-n>gv'
+    imap <3-LeftMouse> <C-\><C-o>viWTy<C-\><C-o>gvzy<C-\><C-o>gv
+else
+    vmap <expr> <3-LeftMouse> (@i=="2") ? '<Esc>viWTygvzyi<C-\><C-o>gv' : '<C-\><C-n>viWTy<C-\><C-n>gvzy<C-\><C-n>gv'
+    imap <3-LeftMouse> <Esc>viWTygvzyi<C-\><C-o>gv
+endif
+"imap <silent> <3-LeftMouse> <C-\><C-o>:let @i="2"<bar>:call <SID>GetWord2(1)<CR>
 
 " QuadrupleClick for whole line
 nmap <4-LeftMouse> mvVTygvzygv
-vmap <expr> <4-LeftMouse> (@i=="2") ? '<Esc>i<C-\><C-o>mvVTy<C-\><C-o>gvzy<C-\><C-o>gv' : '<C-\><C-n>mvVTy<C-\><C-n>gvzy<C-\><C-n>gv'
-imap <silent> <4-LeftMouse> <C-\><C-o>:let @i="2"<bar>:call <SID>GetLine(1)<CR>
+if !has("nvim")
+    vmap <expr> <4-LeftMouse> (@i=="2") ? '<Esc>i<C-\><C-o>VTy<C-\><C-o>gvzy<C-\><C-o>gv' : '<C-\><C-n>VTy<C-\><C-n>gvzy<C-\><C-n>gv'
+    imap <4-LeftMouse> <C-\><C-o>VTy<C-\><C-o>gvzy<C-\><C-o>gv
+else
+    vmap <expr> <4-LeftMouse> (@i=="2") ? '<Esc>VTygvzyi<C-\><C-o>gv' : '<C-\><C-n>VTy<C-\><C-n>gvzy<C-\><C-n>gv'
+    imap <4-LeftMouse> <Esc>VTygvzyi<C-\><C-o>gv
+endif
+"imap <silent> <4-LeftMouse> <C-\><C-o>:let @i="2"<bar>:call <SID>GetLine(1)<CR>
 
 " change C-LeftMouse searching tags file for symbol under cursor
 " and select words under cursor instead (lBvhE/lBvE) (is h needed ?)
@@ -3613,13 +3631,10 @@ imap <silent> <A-LeftMouse> <C-\><C-o>:let @i="2"<CR><LeftMouse>
 "vmap <expr> <A-LeftRelease> (@i=="1") ? '<LeftRelease><C-\><C-n>:<C-u>sleep 651m<bar>:let @i="0"<bar>:call YankIt("*y", 2)<CR><Esc>i' : '<LeftRelease><C-\><C-n>:<C-u>sleep 651m<bar>:call YankIt("*y", 2)<CR>'
 
 "vmap <A-LeftRelease> "*ygv
-vmap <silent> <A-LeftRelease> tygv:<C-u>call <SID>Delay(0)<CR><Esc>
 
 "vnoremap <A-2-LeftRelease>  <Nop>
 "vnoremap <A-3-LeftRelease>  <Nop>
 "vnoremap <A-4-LeftRelease>  <Nop>
-
-imap <silent> <A-LeftMouse> <C-\><C-o>:let @i="1"<CR><LeftMouse>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Word commands NOTE: selection is USUALLY copied to clipboard
@@ -5709,6 +5724,9 @@ function s:GetWord(arg) abort
   " 0 selects in visual mode - (0)ygv is like (1)
   " 1 selects in visual mode and yanks
   " 2 selects, yanks and returns to previous mode
+  if @i=="2"
+    startinsert
+  endif
   if @j!="0"
     let g:click_start = reltime()
     let g:orig_pos = getcurpos()
@@ -5740,7 +5758,6 @@ function s:GetPath(arg,ws) abort
   " if ws then dont remove : from iskeyword to get https:// etc. urls ...
   " basically all mouse clicks paths thru here set ws ...
   if @i=="2"
-    let @i="0"
     startinsert
   endif
   if @j!="0"
@@ -5788,7 +5805,6 @@ function s:GetWord2(arg) abort
   " 1 selects in visual mode and yanks
   " 2 selects, yanks and returns to previous mode
   if @i=="2"
-    let @i="0"
     startinsert
   endif
   if @j!="0"
@@ -5832,7 +5848,6 @@ function s:GetLine(arg) abort
   " 1 selects in visual mode and yanks
   " 2 selects, yanks and returns to previous mode
   if @i=="2"
-    let @i="0"
     startinsert
   endif
   if @j!="0"
