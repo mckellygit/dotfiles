@@ -363,6 +363,10 @@ filextype */
 "
 " fileviewer *[^/] pygmentize -O style=monokai -f console256 -g
 
+" NOTE: need to undefine env var COLORTERM to get 256 colors for bat to display properly ...
+fileviewer *[^/] env -uCOLORTERM bat --decorations=always --color=always --pager=never --wrap=never --tabs=4 --style=plain %c:p
+"fileviewer *.[ch],*.[ch]pp,*.[ch]xx env -uCOLORTERM bat ...
+
 " Displaying pictures in terminal
 "
 " fileviewer *.jpg,*.png shellpic %c
@@ -383,7 +387,9 @@ filextype */
 
 " What should be saved automatically between vifm sessions.  Drop "savedirs"
 " value if you don't want vifm to remember last visited directories for you.
-set vifminfo=dhistory,savedirs,chistory,state,tui,shistory,
+"set vifminfo=dhistory,savedirs,chistory,state,tui,shistory,
+
+set vifminfo=dhistory,chistory,state,tui,shistory,
     \phistory,fhistory,dirstack,registers,bookmarks,bmarks
 
 " ------------------------------------------------------------------------------
@@ -497,7 +503,17 @@ nnoremap <c-u> <c-w>x
 "
 " let $VIFM_SERVER_NAME = v:servername
 
+" ------------------------------------------------------------------------------
+" ------------------------------------------------------------------------------
+
 nnoremap qq :q<CR>
 nnoremap \qq :q<CR>
 qmap \qq <C-w>w
+
+" for switching to/from preview window (NOTE: <S-Tab> also works)
+nmap <C-w>w <C-w>.w
+nmap <C-w><C-w> <C-w>.w
+
+qnoremap <BS> <C-b>
+qnoremap  <C-b>
 

@@ -266,6 +266,11 @@ Plugin 'voldikss/fzf-floaterm'
 " vifm plugin
 "Plugin 'vifm/vifm.vim'
 "
+" lf plugin
+" neovim dependency -
+"Plugin 'rbgrouleff/bclose.vim'
+"Plugin 'ptzz/lf.vim'
+"
 "" All of your Plugins must be added before the following line
 call vundle#end()         " required
 filetype plugin indent on " required
@@ -913,8 +918,9 @@ noremap <silent> <Leader>hb <C-\><C-n>:hide<CR>
 let g:filebeagle_suppress_keymaps = 1
 "nmap <silent> <Leader>fB <Plug>FileBeagleOpenCurrentWorkingDir
 "nmap <silent> <Leader>fb <Plug>FileBeagleOpenCurrentBufferDir
-nmap <silent> <Leader>fb :FBCurrentFiles<CR>:redraw!<CR>
-nmap <silent> <Leader>fB :FBProjectFiles<CR>:redraw!<CR>
+" add the :enew just so we can run this from the vim startify window without errors ...
+nmap <silent> <Leader>fb :enew<bar>FBCurrentFiles<CR>:redraw!<CR>
+nmap <silent> <Leader>fB :enew<bar>FBProjectFiles<CR>:redraw!<CR>
 command! FBCurrentFiles execute ':FileBeagle' getcwd()
 command! FBProjectFiles execute ':FileBeagle' s:find_git_root()
 let g:filebeagle_statusline = ""
@@ -1653,20 +1659,25 @@ else
     nnoremap <Leader>zf :call <SID>NoFloatermVless()<CR>
 endif
 
+" how to open file selected in floaterm - can be 'edit', 'split', 'vsplit', 'tabe'
 let g:floaterm_open_command = 'tabe'
 
 " install lf (go) -
 "   env CGO_ENABLED=0 GO111MODULE=on go get -u -ldflags="-s -w" github.com/gokcehan/lf
-nnoremap <silent> <Leader>fm :FloatermNew --height=0.75 --width=0.80 lf<CR>
+"   NOTE: use 'i' to enter preview window (inspect) to scroll, then exit less/bat (qq etc.) to go back ...
+nnoremap <silent> <Leader>lf :FloatermNew --height=0.75 --width=0.80 lf<CR>
 " floaterm ---------
 
 " vifm -------------
+" NOTE: these need vifm (https://github.com/vifm/vifm.git) already installed ...
+
+" ok in nvim terminal, but vim terminal needs <C-w>.w to change to preview window for scrolling
+" NOTE: use <S-Tab> instead of <C-w>w to switch to/from preview window for scrolling
+nnoremap <silent> <Leader>fm :FloatermNew --height=0.75 --width=0.80 vifm<CR>
+
 "let g:vifm_embed_term = v:true
 "let g:vifm_embed_split = v:true
-
-" ok in nvim terminal, but vim terminal does not allow <C-w>w to change to preview window for scrolling
-"nnoremap <silent> <Leader>fm :FloatermNew --height=0.75 --width=0.80 vifm<CR>
-
+" if vifm plugin is installed then full window vifm in a new tab ...
 nnoremap <silent> <Leader>fM :TabVifm<CR>
 " vifm -------------
 
@@ -5031,9 +5042,16 @@ if has("nvim")
 endif
 
 " NOTE: this seems to produce the correct key code ...
+" also need this to send <C-w>w to app inside vim terminal ...
+" but if its for vifm then <S-Tab> also works to switch to/from preview for scrolling
 if !has("nvim")
     tnoremap <C-@> <C-Space>
+    tnoremap <C-w>w <C-w>.w
+    tnoremap <C-w><C-w> <C-w>.w
+else
+    tnoremap <C-w><C-w> <C-w>w
 endif
+
 " ------------------
 
 " <Return> was nmapped above to gj also if not terminal ...
@@ -5448,18 +5466,23 @@ nmap <Leader>p1 <Plug>UnconditionalPasteCharAfter
 
 nmap <Leader>Pc <Plug>UnconditionalPasteCharBefore
 nmap <Leader>p- <Plug>UnconditionalPasteCharBefore
+" p0 adds a trailing space
 nmap <Leader>p0 <Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w
+" pp is p0 unless at end and then it is pE
+nmap <expr> <Leader>pp (col('.') < (col('$')-1)) ? '<Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w' : '$A<Space><Esc><Plug>UnconditionalPasteCharAfter`]'
 
 nmap <Leader>pj <Plug>UnconditionalPasteJustJoinedAfter
 nmap <Leader>Pj <Plug>UnconditionalPasteJustJoinedBefore
 "
 " at end of line
 nmap <Leader>pe $<Plug>UnconditionalPasteCharAfter`]
+" adds a leading space
 nmap <Leader>pE $A<Space><Esc><Plug>UnconditionalPasteCharAfter`]
 " at beg of first word (^ not 0)
 nmap <Leader>pa ^<Plug>UnconditionalPasteCharBefore`]
 " NOTE: use <Esc>hlb instead of <Esc>B because M-B is mapped to A-3click in tmux ...
 "nmap <Leader>pA ^<Plug>UnconditionalPasteCharBefore`]li<Space><Esc>hlb
+" adds a trailing space
 nmap <Leader>pA ^<Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w
 
 " change l to i to match current indentation ...

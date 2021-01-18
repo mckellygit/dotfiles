@@ -577,6 +577,8 @@ vigv() { vim -R -c "GV2 $1 $2 $3" -c ":nnoremap <silent> <buffer> q <Nop>" -c ":
 
 vical() { vim -c "Calendar $1 $2 $3" -c ":nnoremap <silent> <buffer> q <Nop>" -c ":cnoreabbrev <silent> <buffer> q Tabcloserightquit" -c ":cnoreabbrev <silent> <buffer> q! Tabcloserightquit" -c ":nnoremap <silent> <buffer> x <Nop>" -c ":cnoreabbrev <silent> <buffer> x Tabcloserightquit" }
 
+magit() { vim -c "Magit2 $1" }
+
 alias sync-hpcc='sync_hpcc'
 alias stop-hpcc='stop_hpcc'
 alias stat-hpcc='stat_hpcc'
