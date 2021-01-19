@@ -1854,6 +1854,11 @@ if has("nvim")
           \ if (expand('<afile>') !~ "fzf") && (expand('<afile>') !~ "ranger") && (expand('<afile>') !~ "coc") |
           \   call nvim_input('<CR>')  |
           \ endif
+
+    " a click in terminal automatically puts it in normal mode ...
+    " which allows for double-click etc to select words
+    " if we really wanted to override this behavior then -
+    "autocmd TermOpen term://* nnoremap <buffer> <LeftRelease> <LeftRelease>i
   augroup END
 endif
 
