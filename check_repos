@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cd ~/Downloads
-for d in FlameGraph perf-tools xsel CopyQ fd the_silver_searcher tmux vim rtags ccache cgdb tig alacritty zsh-autosuggestions byobu
+for d in FlameGraph perf-tools xsel CopyQ fd the_silver_searcher tmux vifm rtags ccache cgdb tig alacritty zsh-autosuggestions byobu
 do
     echo "checking $d ..."
     cd $d
@@ -141,8 +141,41 @@ cd ~/Downloads/vim_bundles
 # tmux:
 #   git clone https://github.com/tmux/tmux.git
 
+# ==================================
+
 # vim:
 #   git clone https://github.com/vim/vim.git
+
+# neovim:
+#   git clone https://github.com/neovim/neovim.git
+
+# ==================================
+
+# vifm:
+#   git clone https://github.com/vifm/vifm.git
+
+# lf:
+#   cd ~
+#   env CGO_ENABLED=0 GO111MODULE=on go get -u -ldflags="-s -w" github.com/gokcehan/lf
+
+# dog: (nslookup/dig alternative)
+#   git clone https://github.com/ogham/dog.git
+
+# lazygit:
+#   cd ~
+#   go get github.com/jesseduffield/lazygit
+
+# gitui:
+#   git clone git@github.com-mckelly:extrawurst/gitui.git
+
+# st: (simple terminal)
+#   git clone https://git.suckless.org/st
+
+# htop:
+#   git clone git@github.com-mckelly:htop-dev/htop.git
+
+# kakoune:
+#   git clone https://github.com/mawww/kakoune.git
 
 # nixnote:
 #   https://github.com/robert7/nixnote2.git
