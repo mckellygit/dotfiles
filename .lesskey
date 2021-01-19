@@ -50,6 +50,8 @@ gg   noaction <
 \e[1;2A back-line
 \e[1;3B forw-line
 \e[1;3A back-line
+\  forw-scroll
+ back-scroll
 qq   quit
 \\qq quit
    noaction

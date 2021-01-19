@@ -514,6 +514,116 @@ qmap \qq <C-w>w
 nmap <C-w>w <C-w>.w
 nmap <C-w><C-w> <C-w>.w
 
-qnoremap <BS> <C-b>
-qnoremap  <C-b>
+qnoremap <BS>          <C-b>
+qnoremap             <C-b>
+qnoremap <Space>       <C-f>
+
+" <S-BS>
+qnoremap <S-BS>        20k
+qnoremap <C-^><BS>     20k
+qnoremap <C-^>       20k
+qnoremap <C-^><C-h>    20k
+qnoremap <C-^>       20k
+" <S-Space>
+qnoremap <C-^><Space>  20j
+
+" <C-BS>
+qnoremap <C-^><BS>     k
+qnoremap <C-^>       k
+" <C-Space>
+qnoremap <C-@>         j
+" also could be M-- instead of C-@
+qnoremap <M-->         j
+qnoremap <Esc>-        j
+qnoremap -           j
+
+" <C-S-BS>
+qnoremap <C-_><BS>     10k
+qnoremap <C-_>       10k
+" <C-S-Space>
+qnoremap <C-_><Space>  10j
+
+" <A-BS>
+qnoremap <M-BS>        k
+qnoremap <Esc><BS>     k
+qnoremap <BS>        k
+qnoremap <Esc>       k
+qnoremap           k
+" <A-Space>
+qnoremap <M-Space>     j
+qnoremap <Esc><Space>  j
+qnoremap <Space>     j
+
+" <A-k>
+qnoremap <M-k>         5k
+qnoremap <Esc>k        5k
+qnoremap k           5k
+" <A-j>
+qnoremap <M-j>         5j
+qnoremap <Esc>j        5j
+qnoremap j           5j
+
+" <C-A-k>
+qnoremap <M-C-K>       5k
+qnoremap <Esc><C-k>    5k
+qnoremap <Esc>       5k
+qnoremap <C-k>       5k
+" <C-A-j>
+qnoremap <M-C-J>       5j
+qnoremap <Esc><C-j>    5j
+qnoremap <C-j>       5j
+" also could be C-o instead of C-j as that is problematic
+qnoremap <M-C-O>       5j
+qnoremap <Esc><C-o>    5j
+qnoremap <Esc>       5j
+qnoremap <C-o>       5j
+
+" <A-Return>
+qnoremap <M-CR>        k
+qnoremap <Esc><CR>     k
+qnoremap <CR>        k
+qnoremap <C-CR>        j
+
+" <C-A-Return>
+qnoremap <C-^><CR>     k
+
+" --------------
+
+" some mods to Default themes
+
+"highlight Win     cterm=none ctermfg=white ctermbg=236
+"highlight Border  cterm=none ctermfg=236 ctermbg=242
+"highlight TopLine cterm=none ctermfg=236 ctermbg=242
+"highlight JobLine cterm=bold,reverse ctermfg=236 ctermbg=242
+"highlight CmdLine cterm=none ctermfg=242 ctermbg=237
+
+" gruvbox theme ----------------------
+
+highlight clear
+
+highlight Border	cterm=none	ctermfg=235	ctermbg=default
+
+highlight TopLine	cterm=none	ctermfg=214	ctermbg=235
+highlight TopLineSel	cterm=bold	ctermfg=214	ctermbg=237
+
+"highlight Win		cterm=none	ctermfg=223	ctermbg=default
+highlight Win		cterm=none	ctermfg=223	ctermbg=235
+"highlight OtherWin  cterm=none	ctermfg=223	ctermbg=236
+highlight Directory	cterm=bold	ctermfg=109	ctermbg=default
+highlight CurrLine	cterm=bold,inverse	ctermfg=default	ctermbg=default
+highlight OtherLine	cterm=bold	ctermfg=default	ctermbg=235
+highlight Selected	cterm=none	ctermfg=223	ctermbg=237
+
+highlight JobLine	cterm=bold	ctermfg=116	ctermbg=238
+highlight StatusLine	cterm=bold	ctermfg=144	ctermbg=236
+highlight ErrorMsg	cterm=bold	ctermfg=167	ctermbg=default
+highlight WildMenu	cterm=bold	ctermfg=235	ctermbg=144
+highlight CmdLine	cterm=none	ctermfg=223	ctermbg=default
+
+highlight Executable	cterm=bold	ctermfg=142	ctermbg=default
+highlight Link		cterm=none	ctermfg=132	ctermbg=default
+highlight BrokenLink	cterm=bold	ctermfg=167	ctermbg=default
+highlight Device	cterm=none,standout	ctermfg=214	ctermbg=default
+highlight Fifo		cterm=none	ctermfg=172	ctermbg=default
+highlight Socket	cterm=bold	ctermfg=223	ctermbg=default
 

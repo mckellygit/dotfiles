@@ -91,6 +91,9 @@ bind generic   <Esc><Ctrl-K>    scroll-line-up
 bind generic   <Esc><Enter>    scroll-line-up
 bind generic   <Ctrl-^><Enter> scroll-line-up
 #
+bind generic   <Ctrl-^><Space> scroll-page-down
+bind generic   <Ctrl-^><C-H>   scroll-page-up
+
 bind generic   <Esc><Esc>        view-close-no-quit
 #
 bind generic   <Esc><Space>      scroll-line-down

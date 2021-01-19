@@ -11,6 +11,10 @@ map <esc>   push :
 
 map <enter> open
 
+map <c-w>w      pagefile
+map <c-w><c-w>  pagefile
+map <backtab>   pagefile
+
 map i       pagefile
 
 set hidden  on
