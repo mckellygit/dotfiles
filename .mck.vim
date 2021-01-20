@@ -2369,12 +2369,13 @@ set ttimeout ttimeoutlen=7
 "       <A-Up/Down/Right/Left> as app keys and not tmux ...
 " And <A-e> for undo
 
-nnoremap <buffer> <Tab> 4l
-vnoremap <buffer> <Tab> 4l
+" NOTE: cannot nmap <Tab> because it affects code nav <C-i> to go back to previous jump
+"nnoremap <buffer> <Tab> 4l
+"vnoremap <buffer> <Tab> 4l
 
 " <S-Tab> as an undo or as a 4h ?
-nnoremap <buffer> <S-Tab> 4h
-vnoremap <buffer> <S-Tab> 4h
+"nnoremap <buffer> <S-Tab> 4h
+"vnoremap <buffer> <S-Tab> 4h
 
 " a for insert after cursor is confusing, and accidentally typed often, use i instead
 nnoremap a <Nop>

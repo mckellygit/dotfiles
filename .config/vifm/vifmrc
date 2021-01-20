@@ -587,6 +587,32 @@ qnoremap <C-CR>        j
 " <C-A-Return>
 qnoremap <C-^><CR>     k
 
+nmap <C-j>             j
+nmap <C-k>             k
+
+qmap <C-j>             j
+qmap <C-k>             k
+
+" --------------
+
+" TODO: these do not work correctly ...
+
+qmap <c-down>          j
+qmap <Esc>[1;5B        j
+qmap [1;5B           j
+
+qmap <c-up>            k
+qmap <Esc>[1;5A        k
+qmap [1;5A           k
+
+qmap <c-home>          1G0
+qmap <Esc>[1;5H        1G0
+qmap [1;5H           1G0
+
+qmap <c-end>           G0
+qmap <Esc>[1;5F        G0
+qmap [1;5F           G0
+
 " --------------
 
 " some mods to Default themes
