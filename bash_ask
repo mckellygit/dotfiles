@@ -1,0 +1,49 @@
+#!/bin/bash
+
+ask() {
+    local prompt default reply
+
+    prompt='Y/n'
+    default='Y'
+
+    while true; do
+
+        # Ask the question (not using "read -p" as it uses stderr not stdout)
+        echo -n "$@ [$prompt] "
+
+        # Read the answer (use /dev/tty in case stdin is redirected from somewhere else)
+        read -r reply </dev/tty
+
+        # Default?
+        if [[ -z $reply ]]; then
+            reply=$default
+        fi
+
+        # Check if the reply is valid
+        case "$reply" in
+            Y*|y*) return 0 ;;
+            N*|n*) return 1 ;;
+        esac
+
+    done
+}
+
+if [[ $# -lt 1 ]] ; then
+    echo "Error: no cmd provided ..."
+    exit 22
+fi
+
+if [[ "$1" == "--da" ]] ; then
+    shift
+    $@ |& /bin/less -R
+    exit $?
+fi
+
+if ask "Run $@ ?" ; then
+    # could add -e less opt to quit if <CR> at end ...
+    $@ |& /bin/less -R
+    exit $?
+else
+    exit 1
+fi
+

@@ -190,15 +190,16 @@ bind refs r none
 bind refs C none
 bind refs cc @git checkout %(ref)
 #
-bind refs pp ?git push
-bind refs pb ?git push -u %(remote) %(branch):'%(prompt Which branch? )'
-bind refs pf ?git push origin +%(branch)
-bind refs pF ?git push --force
+#bind refs pp ?git push
+bind refs pp @tmux_popup_wrapper git push
+bind refs pb @tmux_popup_wrapper git push -u %(remote) %(branch):'%(prompt Which branch? )'
+bind refs pf @tmux_popup_wrapper git push origin +%(branch)
+bind refs pF @tmux_popup_wrapper git push --force
 #
-bind refs gf ?git fetch %(remote) %(ref)
-bind refs pr ?git push '%(prompt Push to which remote? )' %(ref):%(ref)
-bind refs pd ?git push %(remote) :%(ref)
-bind refs pD ?git push '%(prompt Delete from which remote? )' :%(ref)
-bind refs rd ?git branch --remotes -D %(remote)/%(ref)
+bind refs gf @tmux_popup_wrapper git fetch %(remote) %(ref)
+bind refs pr @tmux_popup_wrapper git push '%(prompt Push to which remote? )' %(ref):%(ref)
+bind refs pd @tmux_popup_wrapper git push %(remote) :%(ref)
+bind refs pD @tmux_popup_wrapper git push '%(prompt Delete from which remote? )' :%(ref)
+bind refs rd @tmux_popup_wrapper git branch --remotes -D %(remote)/%(ref)
 
 #
