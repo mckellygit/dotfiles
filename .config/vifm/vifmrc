@@ -518,16 +518,20 @@ nmap <C-w><C-w>        <C-w>.w
 
 qnoremap <BS>          <C-b>
 qnoremap             <C-b>
+
 qnoremap <Space>       <C-f>
 
+qnoremap \`            <C-u>
+qnoremap \1            <C-d>
+
 " <S-BS>
-qnoremap <S-BS>        20k
-qnoremap <C-^><BS>     20k
-qnoremap <C-^>       20k
-qnoremap <C-^><C-h>    20k
-qnoremap <C-^>       20k
+qnoremap <S-BS>        <C-u>
+qnoremap <C-^><BS>     <C-u>
+qnoremap <C-^>       <C-u>
+qnoremap <C-^><C-h>    <C-u>
+qnoremap <C-^>       <C-u>
 " <S-Space>
-qnoremap <C-^><Space>  20j
+qnoremap <C-^><Space>  <C-d>
 
 " <C-BS>
 qnoremap <C-^><BS>     k
