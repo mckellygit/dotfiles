@@ -179,10 +179,13 @@ bind stage     \            none
 #
 # colors: color0-255 or white, black, green, magenta, blue, cyan, yellow, red, default
 # attributes: normal, blink, bold, dim, reverse, standout, underline
+color default		white      color235   normal
+
 color date          yellow     default
 color title-blur    white      black
 color title-focus   white      black      bold
-color cursor        default    color241
+#color cursor        default    color241
+color cursor        color214   color241   normal
 color author        color35    default
 color status        color178   default
 #
