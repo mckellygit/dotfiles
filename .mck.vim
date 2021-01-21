@@ -1364,11 +1364,29 @@ function! s:Magit1(args)
         autocmd FileType magit noremap <silent> <buffer> <Leader>ma <Nop>
         let wh = winheight(0) - 4
         let mcmd = wh.'new | MagitOnly'
+        " set winfixheight so that opening qf (such as from an :AsyncRun git push) 
+        " does not resize current windows to be equal ...
+        set winfixheight
         silent execute mcmd
         execute "normal \<C-w>r"
     endif
 endfunction
 command! -nargs=* Magit2 call s:Magit1(<q-args>)
+
+function! s:MagitPush()
+    echo 'git push ? (y/n): '
+    let ans=nr2char(getchar())
+    if ans ==# 'y' || ans ==# 'Y' || ans == ""
+        AsyncRun git push
+        "FloatermNew --name=magit --autoclose=2 --height=0.75 --width=0.80
+        "FloatermNew --name=magit --autoclose=2 --height=0.75 --width=0.80 bash_ask --tty git push
+    else
+        sleep 351m
+        redraw!
+        echo " "
+    endif
+endfunction
+nnoremap <silent> <Leader>mP :call <SID>MagitPush()<CR>
 " vimagit -------------
 
 " twiggy --------------
