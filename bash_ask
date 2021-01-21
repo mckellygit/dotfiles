@@ -33,16 +33,54 @@ if [[ $# -lt 1 ]] ; then
     exit 22
 fi
 
+dontask=0
+usetty=0
+
 if [[ "$1" == "--da" ]] ; then
     shift
-    $@ |& /bin/less -R
-    exit $?
+    dontask=1
+elif [[ "$1" == "--tty" ]] ; then
+    shift
+    usetty=1
+fi
+
+if [[ $# -lt 1 ]] ; then
+    echo "Error: no cmd provided ..."
+    exit 22
+fi
+
+if [[ $dontask -eq 0 ]] ; then
+    if [[ "$1" == "--da" ]] ; then
+        shift
+        dontask=1
+    fi
+fi
+
+if [[ $usetty -eq 0 ]] ; then
+    if [[ "$1" == "--tty" ]] ; then
+        shift
+        usetty=1
+    fi
+fi
+
+if [[ $dontask -eq 1 ]] ; then
+    if [[ $usetty -eq 1 ]] ; then
+        exec "$@"
+    else
+        # could add -e less opt to quit if <CR> at end ...
+        $@ |& /bin/less -R
+        exit $?
+    fi
 fi
 
 if ask "Run $@ ?" ; then
-    # could add -e less opt to quit if <CR> at end ...
-    $@ |& /bin/less -R
-    exit $?
+    if [[ $usetty -eq 1 ]] ; then
+        exec "$@"
+    else
+        # could add -e less opt to quit if <CR> at end ...
+        $@ |& /bin/less -R
+        exit $?
+    fi
 else
     exit 1
 fi

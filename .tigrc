@@ -208,7 +208,7 @@ bind refs    !    @tmux_popup_wrapper git branch -D %(branch)
 #
 bind main    C    @tmux_popup_wrapper git cherry-pick %(commit)
 
-bind status  C    ?git commit
+bind status  C    @tmux_popup_wrapper --tty git commit
 bind status  M    status-merge            # Open git-mergetool(1)
 
 bind stash   A    @tmux_popup_wrapper git stash apply %(stash)
