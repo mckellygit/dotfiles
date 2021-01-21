@@ -191,15 +191,30 @@ bind refs C none
 bind refs cc @git checkout %(ref)
 #
 #bind refs pp ?git push
-bind refs pp @tmux_popup_wrapper git push
-bind refs pb @tmux_popup_wrapper git push -u %(remote) %(branch):'%(prompt Which branch? )'
-bind refs pf @tmux_popup_wrapper git push origin +%(branch)
-bind refs pF @tmux_popup_wrapper git push --force
+bind refs    pp   @tmux_popup_wrapper git push
+bind refs    pb   @tmux_popup_wrapper git push -u %(remote) %(branch):'%(prompt Which branch? )'
+bind refs    pf   @tmux_popup_wrapper git push origin +%(branch)
+bind refs    pF   @tmux_popup_wrapper git push --force
 #
-bind refs gf @tmux_popup_wrapper git fetch %(remote) %(ref)
-bind refs pr @tmux_popup_wrapper git push '%(prompt Push to which remote? )' %(ref):%(ref)
-bind refs pd @tmux_popup_wrapper git push %(remote) :%(ref)
-bind refs pD @tmux_popup_wrapper git push '%(prompt Delete from which remote? )' :%(ref)
-bind refs rd @tmux_popup_wrapper git branch --remotes -D %(remote)/%(ref)
+bind refs    gf   @tmux_popup_wrapper git fetch %(remote) %(ref)
+bind refs    pr   @tmux_popup_wrapper git push '%(prompt Push to which remote? )' %(ref):%(ref)
+bind refs    pd   @tmux_popup_wrapper git push %(remote) :%(ref)
+bind refs    pD   @tmux_popup_wrapper git push '%(prompt Delete from which remote? )' :%(ref)
+bind refs    rd   @tmux_popup_wrapper git branch --remotes -D %(remote)/%(ref)
+
+bind refs    C    @tmux_popup_wrapper git checkout %(branch)
+bind refs    !    @tmux_popup_wrapper git branch -D %(branch)
 
 #
+bind main    C    @tmux_popup_wrapper git cherry-pick %(commit)
+
+bind status  C    ?git commit
+bind status  M    status-merge            # Open git-mergetool(1)
+
+bind stash   A    @tmux_popup_wrapper git stash apply %(stash)
+bind stash   P    @tmux_popup_wrapper git stash pop %(stash)
+bind stash   !    @tmux_popup_wrapper git stash drop %(stash)
+
+bind reflog  C    @tmux_popup_wrapper git checkout %(branch)
+bind reflog  !    @tmux_popup_wrapper git reset --hard %(commit)
+

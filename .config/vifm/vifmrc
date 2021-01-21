@@ -596,22 +596,23 @@ qmap <C-k>             k
 " --------------
 
 " TODO: these do not work correctly ...
+"       it needs the keyok(false) for KEY_MAX:2000 fix ...
 
-qmap <c-down>          j
-qmap <Esc>[1;5B        j
-qmap [1;5B           j
+qnoremap <c-down>      j
+qnoremap <esc>[1;5B    j
+qnoremap [1;5B       j
 
-qmap <c-up>            k
-qmap <Esc>[1;5A        k
-qmap [1;5A           k
+qnoremap <c-up>        k
+qnoremap <esc>[1;5A    k
+qnoremap [1;5A       k
 
-qmap <c-home>          1G0
-qmap <Esc>[1;5H        1G0
-qmap [1;5H           1G0
+qnoremap <c-home>      1G0
+qnoremap <esc>[1;5H    1G0
+qnoremap [1;5H       1G0
 
-qmap <c-end>           G0
-qmap <Esc>[1;5F        G0
-qmap [1;5F           G0
+qnoremap <c-end>       G0
+qnoremap <esc>[1;5F    G0
+qnoremap [1;5F       G0
 
 " --------------
 
