@@ -1328,12 +1328,13 @@ command! -nargs=0 LCF call s:MyLCF()
 " vimagit -------------
 let g:magit_auto_close=1
 let g:magit_auto_foldopen=1
-let g:magit_default_fold_level=0
+let g:magit_default_fold_level=1
 
 " use R to refresh/update magit buffer ...
 
 autocmd User VimagitEnterCommit startinsert
 autocmd FileType magit noremap <silent> <buffer> q <Nop>
+autocmd FileType magit nnoremap <silent> <buffer> <C-l> :echo "magit update ..."<bar>call magit#update_buffer()<CR>:sleep 551m<bar>redraw!<bar>echo " "<CR>
 
 function! <SID>LaunchMagit()
     let git_dir = FugitiveGitDir()
