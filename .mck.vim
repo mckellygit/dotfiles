@@ -1374,7 +1374,7 @@ endfunction
 command! -nargs=* Magit2 call s:Magit1(<q-args>)
 
 function! s:MagitPush()
-    echo 'git push ? (y/n): '
+    echo 'git push ? (Y/n): '
     let ans=nr2char(getchar())
     if ans ==# 'y' || ans ==# 'Y' || ans == ""
         AsyncRun git push
@@ -6682,7 +6682,7 @@ hi! WarningMsg ctermfg=black
 "noremap <Leader>uu :earlier 999999<bar>:u<CR>
 function! UndoAll()
   if &mod !=# 0
-    echo 'Undo all changes? (y/n): '
+    echo 'Undo all changes? (y/N): '
     let ans=nr2char(getchar())
     if ans ==# 'y' || ans ==# 'Y'
       execute 'silent! earlier 999999'
