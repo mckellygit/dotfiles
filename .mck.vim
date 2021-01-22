@@ -1336,6 +1336,29 @@ autocmd User VimagitEnterCommit startinsert
 autocmd FileType magit noremap <silent> <buffer> q <Nop>
 autocmd FileType magit nnoremap <silent> <buffer> <C-l> :echo "magit update ..."<bar>call magit#update_buffer()<CR>:sleep 551m<bar>redraw!<bar>echo " "<CR>
 
+let g:magitonly = 0
+
+function! s:MagitReload()
+    echom "MagitReload: filetype = " . &filetype
+    sleep 1
+    if &filetype == "magit"
+        if g:magitonly != 0
+            let wh = winheight(0) - 4
+            let mcmd = wh.'new | MagitOnly'
+            " set winfixheight so that opening qf (such as from an :AsyncRun git push)
+            " does not resize current windows to be equal ...
+            setlocal winfixheight
+            silent execute mcmd
+            execute "normal \<C-w>r"
+        else
+            let mcmd = 'tabnew | call magit#show_magit("c")'
+            setlocal winfixheight
+            silent execute mcmd
+        endif
+    endif
+endfunction
+autocmd User VimagitLeaveCommit call <SID>MagitReload()
+
 function! <SID>LaunchMagit()
     let git_dir = FugitiveGitDir()
     if empty(git_dir)
@@ -1346,7 +1369,19 @@ function! <SID>LaunchMagit()
         echo " "
         return
     elseif &filetype != "magit"
-        silent execute "Magit"
+        if g:magitonly != 0
+            let wh = winheight(0) - 4
+            let mcmd = wh.'new | MagitOnly'
+            " set winfixheight so that opening qf (such as from an :AsyncRun git push)
+            " does not resize current windows to be equal ...
+            setlocal winfixheight
+            silent execute mcmd
+            execute "normal \<C-w>r"
+        else
+            let mcmd = 'tabnew | call magit#show_magit("c")'
+            setlocal winfixheight
+            silent execute mcmd
+        endif
     else
         silent execute "q"
     endif
@@ -1361,15 +1396,16 @@ function! s:Magit1(args)
         sleep 951m
         cquit
     else
+        let g:magitonly = 1
         au VimEnter * :Alias! q  call\ MyQuit("qa")
         au VimEnter * :Alias! q! call\ MyQuit("qa!")
         autocmd FileType magit nmap <silent> <buffer> <Leader>qq :conf qa<CR>
         autocmd FileType magit noremap <silent> <buffer> <Leader>ma <Nop>
         let wh = winheight(0) - 4
         let mcmd = wh.'new | MagitOnly'
-        " set winfixheight so that opening qf (such as from an :AsyncRun git push) 
+        " set winfixheight so that opening qf (such as from an :AsyncRun git push)
         " does not resize current windows to be equal ...
-        set winfixheight
+        setlocal winfixheight
         silent execute mcmd
         execute "normal \<C-w>r"
     endif
@@ -6114,7 +6150,7 @@ endfunction
 if has('autocmd')
     aug AutoCloseAllQF
         au!
-        autocmd WinEnter * nested silent! call s:QuitIfOnlyWindow()
+        autocmd WinEnter * nested silent! call <SID>QuitIfOnlyWindow()
     aug END
 endif
 
