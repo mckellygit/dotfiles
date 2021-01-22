@@ -1330,6 +1330,8 @@ let g:magit_auto_close=1
 let g:magit_auto_foldopen=1
 let g:magit_default_fold_level=0
 
+" use R to refresh/update magit buffer ...
+
 autocmd User VimagitEnterCommit startinsert
 autocmd FileType magit noremap <silent> <buffer> q <Nop>
 
