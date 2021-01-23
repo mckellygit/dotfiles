@@ -66,6 +66,8 @@ bind main      qq           none
 bind main      qqq          view-close
 bind generic   qq           view-close
 bind generic   \qq          view-close
+bind generic   QQ           quit
+bind generic   <C-q><C-q>   quit
 #
 bind generic   <Ctrl-D>     scroll-page-down
 bind generic   <Ctrl-U>     scroll-page-up
