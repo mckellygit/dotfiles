@@ -1419,6 +1419,9 @@ function! s:MagitPush()
         AsyncRun git push
         "FloatermNew --name=magit --autoclose=2 --height=0.75 --width=0.80
         "FloatermNew --name=magit --autoclose=2 --height=0.75 --width=0.80 bash_ask --tty git push
+        if g:magitonly == 0
+            silent call <SID>MagitReload()
+        endif
     else
         sleep 351m
         redraw!
