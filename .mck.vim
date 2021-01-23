@@ -121,7 +121,8 @@ Plugin 'tpope/vim-fugitive'
 " for :Gbrowse to open GitHub urls
 "Plugin 'tpope/vim-rhubarb'
 " vimagit ...
-Plugin 'jreybert/vimagit.git'
+"Plugin 'jreybert/vimagit.git'
+Plugin 'mckellygit/vimagit.git'
 " twiggy ...
 Plugin 'sodapopcan/vim-twiggy'
 "
@@ -1334,30 +1335,15 @@ let g:magit_default_fold_level=1
 
 autocmd User VimagitEnterCommit startinsert
 autocmd FileType magit noremap <silent> <buffer> q <Nop>
-autocmd FileType magit nnoremap <silent> <buffer> <C-l> :echo "magit update ..."<bar>call magit#update_buffer()<CR>:sleep 551m<bar>redraw!<bar>echo " "<CR>
+autocmd FileType magit nnoremap <silent> <buffer> <C-l> :echo "Magit update ..."<bar>call magit#update_buffer()<CR>:sleep 551m<bar>redraw!<bar>echo " "<CR>
+autocmd FileType magit nnoremap <silent> <buffer> <Leader>mR :echo "Magit update ..."<bar>call magit#update_buffer()<CR>:sleep 551m<bar>redraw!<bar>echo " "<CR>
 
-let g:magitonly = 0
-
-function! s:MagitReload()
-    echom "MagitReload: filetype = " . &filetype
-    sleep 1
+function! MagitUpdateBuffer()
+    echom "MagitUpdateBuffer"
     if &filetype == "magit"
-        if g:magitonly != 0
-            let wh = winheight(0) - 4
-            let mcmd = wh.'new | MagitOnly'
-            " set winfixheight so that opening qf (such as from an :AsyncRun git push)
-            " does not resize current windows to be equal ...
-            setlocal winfixheight
-            silent execute mcmd
-            execute "normal \<C-w>r"
-        else
-            let mcmd = 'tabnew | call magit#show_magit("c")'
-            setlocal winfixheight
-            silent execute mcmd
-        endif
+        call magit#update_buffer()
     endif
 endfunction
-autocmd User VimagitLeaveCommit call <SID>MagitReload()
 
 function! <SID>LaunchMagit()
     let git_dir = FugitiveGitDir()
@@ -1369,23 +1355,18 @@ function! <SID>LaunchMagit()
         echo " "
         return
     elseif &filetype != "magit"
-        if g:magitonly != 0
-            let wh = winheight(0) - 4
-            let mcmd = wh.'new | MagitOnly'
-            " set winfixheight so that opening qf (such as from an :AsyncRun git push)
-            " does not resize current windows to be equal ...
-            setlocal winfixheight
-            silent execute mcmd
-            execute "normal \<C-w>r"
-        else
-            let mcmd = 'tabnew | call magit#show_magit("c")'
-            setlocal winfixheight
-            silent execute mcmd
-        endif
+        let mcmd = 'Magit'
+        silent execute mcmd
+        execute "normal \<C-w>w"
+        vertical resize 20
+        setlocal winfixwidth
+        execute "normal \<C-w>w"
+        execute "normal \<C-w>r"
     else
         silent execute "q"
     endif
 endfunction
+command! MyMagit call s:LaunchMagit()
 nnoremap <silent> <Leader>ma :call <SID>LaunchMagit()<CR>
 
 function! s:Magit1(args)
@@ -1396,34 +1377,49 @@ function! s:Magit1(args)
         sleep 951m
         cquit
     else
-        let g:magitonly = 1
         au VimEnter * :Alias! q  call\ MyQuit("qa")
         au VimEnter * :Alias! q! call\ MyQuit("qa!")
         autocmd FileType magit nmap <silent> <buffer> <Leader>qq :conf qa<CR>
         autocmd FileType magit noremap <silent> <buffer> <Leader>ma <Nop>
-        let wh = winheight(0) - 4
-        let mcmd = wh.'new | MagitOnly'
-        " set winfixheight so that opening qf (such as from an :AsyncRun git push)
-        " does not resize current windows to be equal ...
-        setlocal winfixheight
+        let mcmd = 'Magit'
         silent execute mcmd
+        execute "normal \<C-w>w"
+        vertical resize 20
+        setlocal winfixwidth
+        execute "normal \<C-w>w"
         execute "normal \<C-w>r"
     endif
 endfunction
 command! -nargs=* Magit2 call s:Magit1(<q-args>)
 
+function! s:MagitReload()
+    "echom "MagitReload: filetype = " . &filetype
+    "sleep 1
+    if &filetype == "magit"
+        let mcmd = 'tabnew | MyMagit'
+        silent execute mcmd
+        quit
+    endif
+endfunction
+autocmd User VimagitLeaveCommit call <SID>MagitReload()
+
 function! s:MagitPush()
-    echo 'git push ? (Y/n): '
-    let ans=nr2char(getchar())
-    if ans ==# 'y' || ans ==# 'Y' || ans == ""
-        AsyncRun git push
-        "FloatermNew --name=magit --autoclose=2 --height=0.75 --width=0.80
-        "FloatermNew --name=magit --autoclose=2 --height=0.75 --width=0.80 bash_ask --tty git push
-        if g:magitonly == 0
-            silent call <SID>MagitReload()
+    if &filetype == "magit"
+        echo 'git push ? (Y/n): '
+        let ans=nr2char(getchar())
+        if ans ==# 'y' || ans ==# 'Y' || ans == ""
+            AsyncRun -raw -strip -post=call\ MagitUpdateBuffer() git push
+            "FloatermNew --name=magit --autoclose=2 --height=0.75 --width=0.80
+            "FloatermNew --name=magit --autoclose=2 --height=0.75 --width=0.80 bash_ask --tty git push
+        else
+            sleep 351m
+            redraw!
+            echo " "
         endif
     else
-        sleep 351m
+        let errmsg = 'Not inside Magit'
+        call s:warn(errmsg)
+        sleep 951m
         redraw!
         echo " "
     endif
