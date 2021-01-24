@@ -1330,8 +1330,19 @@ command! -nargs=0 LCF call s:MyLCF()
 let g:magit_auto_close=1
 let g:magit_auto_foldopen=1
 let g:magit_default_fold_level=1
+let g:magit_close_mapping='\mQ'
+let g:magit_ignore_mapping='\mI'
 
-" use R to refresh/update magit buffer ...
+" use R to refresh/update magit buffer (also <C-L> and <Leader>mR)
+" use F to stage/unstage a file
+" use L to stage/unstage a line
+" use S to stage/unstage a hunk
+" use E to edit the file
+" use M to mark a diff-line/hunk for staging (then use S to stage)
+" CC to commit
+" CA to commit --amend
+" CU to undo commit (before saving)
+" <Leader>mP to push
 
 autocmd User VimagitEnterCommit startinsert
 autocmd FileType magit noremap <silent> <buffer> q <Nop>
@@ -1396,6 +1407,10 @@ function! s:MagitReload()
     "echom "MagitReload: filetype = " . &filetype
     "sleep 1
     if &filetype == "magit"
+        " for CU to not create a new tab and magit ...
+        if b:magit_current_commit_mode ==# ''
+            return
+        endif
         let mcmd = 'tabnew | MyMagit'
         silent execute mcmd
         quit
