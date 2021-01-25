@@ -23,6 +23,8 @@ let Cscope_Keymap = 0
 "silent! nnoremap <unique> lhs rhs
 "if empty(maparg('lhs', 'old-rhs')) | nnoremap lhs new-rhs | endif
 
+let g:in_gv2 = 0
+
 "" vundle ------------------------------
 filetype off              " required
 "" set the runtime path to include Vundle and initialize
@@ -1268,7 +1270,13 @@ function! s:MyGV(args) abort
         execute 'GV'
     endif
 endfunction
-command! -nargs=* GV2 call s:MyGV(<q-args>)
+
+function! s:MyGV2(args) abort
+    let g:in_gv2 = 1
+    call <SID>MyGV(a:args)
+endfunction
+
+command! -nargs=* GV2 call s:MyGV2(<q-args>)
 
 " vigv shell function ...
 " could also add -c 'nnoremap qq :qa!<CR>' and perhaps same for <C-q> but this is done above ...
@@ -6352,6 +6360,10 @@ function! s:QuitIfOnlyNoNameLeft() abort
     " just to clear the cmdline of this function ...
     echo "\r"
     redraw!
+    if g:in_gv2 == 0
+        quit
+        return
+    endif
     let l:doquit = 1
     for b in getbufinfo()
         if b.listed
