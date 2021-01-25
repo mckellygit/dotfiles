@@ -1349,6 +1349,9 @@ autocmd FileType magit noremap <silent> <buffer> q <Nop>
 autocmd FileType magit nnoremap <silent> <buffer> <C-l> :echo "Magit update ..."<bar>call magit#update_buffer()<CR>:sleep 551m<bar>redraw!<bar>echo " "<CR>
 autocmd FileType magit nnoremap <silent> <buffer> <Leader>mR :echo "Magit update ..."<bar>call magit#update_buffer()<CR>:sleep 551m<bar>redraw!<bar>echo " "<CR>
 
+" dont exit with x
+autocmd FileType magit :Alias x w
+
 function! MagitUpdateBuffer()
     echom "MagitUpdateBuffer"
     if &filetype == "magit"
@@ -6532,10 +6535,16 @@ else
   aug not_diff_alias
   "!&diff
     au!
-    au VimEnter * :Alias q  call\ MyQuit("q")
-    au VimEnter * :Alias q! call\ MyQuit("q!")
-    au VimEnter * :Alias qa  call\ SkipTerminalsQuitCmd("qa")
-    au VimEnter * :Alias qa! call\ SkipTerminalsQuitCmd("qa!")
+    au VimEnter * :Alias q     call\ MyQuit("q")
+    au VimEnter * :Alias q!    call\ MyQuit("q!")
+    au VimEnter * :Alias qa    call\ SkipTerminalsQuitCmd("qa")
+    au VimEnter * :Alias qa!   call\ SkipTerminalsQuitCmd("qa!")
+    au VimEnter * :Alias qu    call\ MyQuit("q")
+    au VimEnter * :Alias qui   call\ MyQuit("q")
+    au VimEnter * :Alias quit  call\ MyQuit("q")
+    au VimEnter * :Alias qu!   call\ MyQuit("q!")
+    au VimEnter * :Alias qui!  call\ MyQuit("q!")
+    au VimEnter * :Alias quit! call\ MyQuit("q!")
     au VimEnter * :Alias PU PluginUpdate
   aug END
 endif

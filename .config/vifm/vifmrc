@@ -507,8 +507,9 @@ nnoremap <c-u> <c-w>x
 " ------------------------------------------------------------------------------
 " ------------------------------------------------------------------------------
 
-nnoremap qq            :q<CR>
-nnoremap \qq           :q<CR>
+nnoremap qq            :q<cr>
+nnoremap \qq           :q<cr>
+nnoremap \xc           :q<cr>
 
 qnoremap qq            <C-w>w
 qnoremap \qq           <C-w>w
@@ -521,6 +522,7 @@ qnoremap <C-o>         <C-w>w:edit<cr>
 "qnoremap <C-x><C-c>    <C-w>w:quit<cr>
 qnoremap QQ            <C-w>w:quit<cr>
 qnoremap <C-q><C-q>    <C-w>w:quit<cr>
+qnoremap \xc           <C-w>w:quit<cr>
 
 " for switching to/from preview window (NOTE: <S-Tab> also works)
 nmap <C-w>w            <C-w>.w
