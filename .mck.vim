@@ -1359,7 +1359,6 @@ function! MagitWriteBuffer() abort
     echo " "
     if &filetype == "magit"
         if &buftype == "nofile"
-            redraw!
             let errmsg = 'Nothing to commit'
             call s:warn(errmsg)
             sleep 951m
