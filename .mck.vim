@@ -948,17 +948,21 @@ autocmd BufEnter fugitive://**    nmap <buffer> <Return> O
 autocmd BufEnter *.fugitiveblame  nmap <buffer> <2-LeftMouse> O
 
 autocmd BufEnter fugitive://**    nmap <buffer> <2-LeftMouse> O
-autocmd BufEnter fugitive://**    nmap <silent> <buffer> <Leader>qq  :close<cr>:tabprevious<cr>:redraw!<cr>
-autocmd BufEnter fugitive://**    nmap <silent> <buffer> qq    :close<cr>:tabprevious<cr>:redraw!<cr>
-autocmd BufEnter fugitive://**    nmap <silent> <buffer> <C-q> :close<cr>:tabprevious<cr>:redraw!<cr>
-autocmd BufEnter fugitive://**    nmap <silent> <buffer> QQ    :close<cr>:tabprevious<cr>:redraw!<cr>
 
 autocmd FileType git              nmap <buffer> <Leader><Tab> O
 autocmd FileType git              nmap <buffer> <C-t> O
-autocmd FileType git              nmap <silent> <buffer> <Leader>qq  :close<cr>:tabprevious<cr>:redraw!<cr>
-autocmd FileType git              nmap <silent> <buffer> qq    :close<cr>:tabprevious<cr>:redraw!<cr>
-autocmd FileType git              nmap <silent> <buffer> <C-q> :close<cr>:tabprevious<cr>:redraw!<cr>
-autocmd FileType git              nmap <silent> <buffer> QQ    :close<cr>:tabprevious<cr>:redraw!<cr>
+
+aug gv_lqq
+    au!
+    autocmd BufEnter fugitive://**    nmap <silent> <buffer> <Leader>qq  :close<cr>:tabprevious<cr>:redraw!<cr>
+    autocmd BufEnter fugitive://**    nmap <silent> <buffer> qq    :close<cr>:tabprevious<cr>:redraw!<cr>
+    autocmd BufEnter fugitive://**    nmap <silent> <buffer> <C-q> :close<cr>:tabprevious<cr>:redraw!<cr>
+    autocmd BufEnter fugitive://**    nmap <silent> <buffer> QQ    :close<cr>:tabprevious<cr>:redraw!<cr>
+    autocmd FileType git              nmap <silent> <buffer> <Leader>qq  :close<cr>:tabprevious<cr>:redraw!<cr>
+    autocmd FileType git              nmap <silent> <buffer> qq    :close<cr>:tabprevious<cr>:redraw!<cr>
+    autocmd FileType git              nmap <silent> <buffer> <C-q> :close<cr>:tabprevious<cr>:redraw!<cr>
+    autocmd FileType git              nmap <silent> <buffer> QQ    :close<cr>:tabprevious<cr>:redraw!<cr>
+aug END
 
 " TODO: MCK should we be like less here ?
 autocmd FileType git              nmap <silent> <buffer> <BS>    :call <SID>CtrlB(1)<CR>
@@ -1079,7 +1083,8 @@ function QuitGV() abort
     endwhile
     let ans=nr2char(c)
     if ans ==# 'y' || ans ==# 'Y' || ans ==# 'q' || ans ==# 'Q'
-        quitall
+        "quitall
+        call <SID>QuitIfOnlyNoNameLeft()
     else
         redraw!
         echo " "
@@ -1130,7 +1135,8 @@ function! s:browse(url)
 endfunction
 
 function! s:tabnew()
-  execute (tabpagenr()-1).'tabnew'
+  "execute (tabpagenr()-1).'tabnew'
+  execute 'tabnew'
 endfunction
 
 function! s:type(visual)
@@ -1193,9 +1199,15 @@ function! s:open(visual, ...)
     call s:fill(target)
     setf diff
   endif
-  nnoremap <silent> <buffer> qq    :close<cr>
-  nnoremap <silent> <buffer> <C-q> :close<cr>
-  nnoremap <silent> <buffer> QQ    :close<cr>
+  if g:in_gv2 == 1
+    nnoremap <silent> <buffer> qq    :close<cr>
+    nnoremap <silent> <buffer> <C-q> :close<cr>
+    nnoremap <silent> <buffer> QQ    :close<cr>
+  else
+    nnoremap <silent> <buffer> qq    :close<cr>:tabprevious<cr>:redraw!<cr>
+    nnoremap <silent> <buffer> <C-q> :close<cr>:tabprevious<cr>:redraw!<cr>
+    nnoremap <silent> <buffer> QQ    :close<cr>:tabprevious<cr>:redraw!<cr>
+  endif
   let bang = a:0 ? '!' : ''
   if exists('#User#GV'.bang)
     execute 'doautocmd <nomodeline> User GV'.bang
@@ -1236,13 +1248,20 @@ autocmd FileType GV nnoremap <silent> <buffer> <C-x> :call <sid>open(0, 1, 9)<cr
 " to make vigv wrapper error more nicely in a non-git dir ..
 function! s:MyGV(args) abort
     let errmsg = ''
-    enew
-    setlocal buftype=nofile hidden bufhidden=wipe noswapfile
+    if g:in_gv2 == 1
+        enew
+        setlocal buftype=nofile hidden bufhidden=wipe noswapfile
+    endif
     if !exists('g:loaded_fugitive')
         let errmsg = 'fugitive not found'
         call s:warn(errmsg)
         sleep 951m
-        cquit
+        if g:in_gv2 == 1
+            cquit
+        else
+            redraw!
+            echo " "
+        endif
         return
     endif
     let git_dir = FugitiveGitDir()
@@ -1250,7 +1269,12 @@ function! s:MyGV(args) abort
         let errmsg = 'Not in a git repository'
         call s:warn(errmsg)
         sleep 951m
-        cquit
+        if g:in_gv2 == 1
+            cquit
+        else
+            redraw!
+            echo " "
+        endif
         return
     endif
     if !empty(a:args)
@@ -1269,10 +1293,25 @@ function! s:MyGV(args) abort
     else
         execute 'GV'
     endif
+    redraw!
+    echo " "
 endfunction
+
+nnoremap <silent> <Leader>gv :call <SID>MyGV('')<CR>
 
 function! s:MyGV2(args) abort
     let g:in_gv2 = 1
+    aug gv_lqq
+        au!
+        autocmd BufEnter fugitive://**    nmap <silent> <buffer> <Leader>qq  :close<cr>:redraw!<cr>
+        autocmd BufEnter fugitive://**    nmap <silent> <buffer> qq    :close<cr>:redraw!<cr>
+        autocmd BufEnter fugitive://**    nmap <silent> <buffer> <C-q> :close<cr>:redraw!<cr>
+        autocmd BufEnter fugitive://**    nmap <silent> <buffer> QQ    :close<cr>:redraw!<cr>
+        autocmd FileType git              nmap <silent> <buffer> <Leader>qq  :close<cr>:redraw!<cr>
+        autocmd FileType git              nmap <silent> <buffer> qq    :close<cr>:redraw!<cr>
+        autocmd FileType git              nmap <silent> <buffer> <C-q> :close<cr>:redraw!<cr>
+        autocmd FileType git              nmap <silent> <buffer> QQ    :close<cr>:redraw!<cr>
+    aug END
     call <SID>MyGV(a:args)
 endfunction
 
