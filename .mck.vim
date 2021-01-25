@@ -1348,9 +1348,30 @@ autocmd User VimagitEnterCommit startinsert
 autocmd FileType magit noremap <silent> <buffer> q <Nop>
 autocmd FileType magit nnoremap <silent> <buffer> <C-l> :echo "Magit update ..."<bar>call magit#update_buffer()<CR>:sleep 551m<bar>redraw!<bar>echo " "<CR>
 autocmd FileType magit nnoremap <silent> <buffer> <Leader>mR :echo "Magit update ..."<bar>call magit#update_buffer()<CR>:sleep 551m<bar>redraw!<bar>echo " "<CR>
+" for CU to not leave extra tab ...
+autocmd FileType magit nnoremap <silent> <buffer> CU :call magit#close_commit()<bar>quit<bar>/Staged<CR>0
 
-" dont exit with x
-autocmd FileType magit :Alias x w
+function! MagitWriteBuffer() abort
+    redraw!
+    echo " "
+    if &filetype == "magit"
+        if &buftype == "nofile"
+            let errmsg = 'Nothing to commit'
+            call s:warn(errmsg)
+            sleep 951m
+            redraw!
+            echo " "
+            return
+        endif
+        if &modified
+            write
+            quit
+        endif
+    endif
+endfunction
+
+autocmd FileType magit :Alias x call\ MagitWriteBuffer()
+autocmd FileType magit :Alias w call\ MagitWriteBuffer()
 
 function! MagitUpdateBuffer()
     echom "MagitUpdateBuffer"
@@ -1410,10 +1431,6 @@ function! s:MagitReload()
     "echom "MagitReload: filetype = " . &filetype
     "sleep 1
     if &filetype == "magit"
-        " for CU to not create a new tab and magit ...
-        if b:magit_current_commit_mode ==# ''
-            return
-        endif
         let mcmd = 'tabnew | MyMagit'
         silent execute mcmd
         quit
