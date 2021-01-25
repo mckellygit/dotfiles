@@ -1113,6 +1113,9 @@ endfunction
 command! -bang Tabcloseleft silent! call TabCloseLeft('<bang>')
 
 function! s:warn(message)
+  redraw!
+  echo " "
+  redraw!
   echohl WarningMsg | echom a:message | echohl None
 endfunction
 
