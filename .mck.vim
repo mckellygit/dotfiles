@@ -1356,6 +1356,7 @@ function! MagitWriteBuffer() abort
     echo " "
     if &filetype == "magit"
         if &buftype == "nofile"
+            redraw!
             let errmsg = 'Nothing to commit'
             call s:warn(errmsg)
             sleep 951m
@@ -1370,8 +1371,10 @@ function! MagitWriteBuffer() abort
     endif
 endfunction
 
-autocmd FileType magit :Alias x call\ MagitWriteBuffer()
-autocmd FileType magit :Alias w call\ MagitWriteBuffer()
+autocmd FileType magit :Alias x  call\ MagitWriteBuffer()
+autocmd FileType magit :Alias x! call\ MagitWriteBuffer()
+autocmd FileType magit :Alias w  call\ MagitWriteBuffer()
+autocmd FileType magit :Alias w! call\ MagitWriteBuffer()
 
 function! MagitUpdateBuffer()
     echom "MagitUpdateBuffer"
@@ -1412,8 +1415,22 @@ function! s:Magit1(args)
         sleep 951m
         cquit
     else
-        au VimEnter * :Alias! q  call\ MyQuit("qa")
-        au VimEnter * :Alias! q! call\ MyQuit("qa!")
+        au VimEnter * :Alias! q        call\ MyQuit("qa")
+        au VimEnter * :Alias! qu       call\ MyQuit("qa")
+        au VimEnter * :Alias! qui      call\ MyQuit("qa")
+        au VimEnter * :Alias! quit     call\ MyQuit("qa")
+        au VimEnter * :Alias! q!       call\ MyQuit("qa!")
+        au VimEnter * :Alias! qu!      call\ MyQuit("qa!")
+        au VimEnter * :Alias! qui!     call\ MyQuit("qa!")
+        au VimEnter * :Alias! quit!    call\ MyQuit("qa!")
+        au VimEnter * :Alias! qa       call\ MyQuit("qa")
+        au VimEnter * :Alias! qal      call\ MyQuit("qa")
+        au VimEnter * :Alias! qall     call\ MyQuit("qa")
+        au VimEnter * :Alias! qa!      call\ MyQuit("qa!")
+        au VimEnter * :Alias! qal!     call\ MyQuit("qa!")
+        au VimEnter * :Alias! qall!    call\ MyQuit("qa!")
+        au VimEnter * :Alias! quitall  call\ MyQuit("qa")
+        au VimEnter * :Alias! quitall! call\ MyQuit("qa!")
         autocmd FileType magit nmap <silent> <buffer> <Leader>qq :conf qa<CR>
         autocmd FileType magit noremap <silent> <buffer> <Leader>ma <Nop>
         let mcmd = 'Magit'
@@ -6562,7 +6579,7 @@ else
     au VimEnter * :Alias qu!   call\ MyQuit("q!")
     au VimEnter * :Alias qui!  call\ MyQuit("q!")
     au VimEnter * :Alias quit! call\ MyQuit("q!")
-    au VimEnter * :Alias PU PluginUpdate
+    au VimEnter * :Alias PU    PluginUpdate
   aug END
 endif
 
