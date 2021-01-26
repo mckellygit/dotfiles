@@ -13,21 +13,24 @@ set mouse-wheel-cursor = no
 set ignore-case        = true
 #set line-graphics      = utf-8
 set refresh-mode       = auto
-#
-bind generic   +            @sh -c "echo -n %(commit) | myclip"
+
+# =================================================
+
 bind generic   <Down>       move-down
 bind generic   <Up>         move-up
-bind generic   u            previous
 #
 bind generic   g            none
 bind generic   gp           view-grep
 bind generic   gg           move-first-line
 bind generic   G            move-last-line
 bind main      G            move-last-line
-bind generic   <Esc>g       move-first-line
-bind generic   <Esc>G       move-last-line
+#bind generic   <Esc>g       move-first-line
+#bind generic   <Esc>G       move-last-line
+
 # override page content view
 bind generic   p            none
+
+bind generic   u            none
 #
 # Leader mappings ...
 # use 2-key mapping as single \f,F and c,C cause input delays in vim ...
@@ -159,29 +162,82 @@ bind generic   <ScrollFwd>  next
 bind generic   <ScrollBack> previous
 bind main      <ShiftLeft>  scroll-left
 bind main      <ShiftRight> scroll-right
+
+bind generic   +            @sh -c "echo -n %(commit) | myclip"
+
+#bind generic   |            scroll-first-col
+bind generic   |            none
+
+#bind generic   -            move-page-up
+bind generic   -            none
+
+# =================================================
+
+bind refs    Pp   @tmux_popup_wrapper git push
+bind refs    Pb   @tmux_popup_wrapper git push -u %(remote) %(branch):'%(prompt Which branch? )'
+bind refs    Pf   @tmux_popup_wrapper git push origin +%(branch)
+bind refs    PF   @tmux_popup_wrapper git push --force
 #
-#bind generic   |            none
-#bind generic   -            none
-#bind main      C            none
-#bind reflog    C            none
-#bind reflog    !            none
-#bind refs      C            none
-#bind refs      !            none
-#bind status    M            none
-#bind status    C            none
-#bind status    !            none
-#bind status    u            none
-#bind stage     1            none
-bind stage     \            none
-#bind stage     !            none
-#bind stage     u            none
-#bind stash     A            none
-#bind stash     P            none
-#bind stash     !            none
-#
+bind refs    gf   @tmux_popup_wrapper git fetch %(remote) %(ref)
+bind refs    pr   @tmux_popup_wrapper git push '%(prompt Push to which remote? )' %(ref):%(ref)
+bind refs    pd   @tmux_popup_wrapper git push %(remote) :%(ref)
+bind refs    pD   @tmux_popup_wrapper git push '%(prompt Delete from which remote? )' :%(ref)
+bind refs    rd   @tmux_popup_wrapper git branch --remotes -D %(remote)/%(ref)
+
+bind refs    Cr   @tmux_popup_wrapper git checkout %(ref)
+
+#bind refs    C    ?git checkout %(branch)
+#bind refs    !    ?git branch -D %(branch)
+bind refs    C    none
+bind refs    !    none
+bind refs    Cb   @tmux_popup_wrapper git checkout %(branch)  # C
+bind refs    B!   @tmux_popup_wrapper git branch -D %(branch) # !
+
+#bind main    C    ?git cherry-pick %(commit)
+bind main    C    none
+bind main    Cp   @tmux_popup_wrapper git cherry-pick %(commit) # C
+
+#bind status  C    !git commit
+#bind status  M    status-merge        # Open git-mergetool(1)
+#bind status  u    status-update        # Stage/unstage changes in file
+#bind status  !    status-revert        # Revert changes in file
+bind status  C    none
+bind status  M    none
+bind status  !    none
+bind status  Cc   @tmux_popup_wrapper --tty git commit # C
+bind status  Sm   status-merge                         # M - Open git-mergetool(1)
+bind status  R!   status-revert        # Revert changes in file
+
+#bind stash   A    ?git stash apply %(stash)
+#bind stash   P    ?git stash pop %(stash)
+#bind stash   !    ?git stash drop %(stash)
+bind stash   A    none
+bind stash   P    none
+bind stash   !    none
+bind stash   Sa   @tmux_popup_wrapper git stash apply %(stash) # A
+bind stash   Sp   @tmux_popup_wrapper git stash pop %(stash)   # P
+bind stash   S!   @tmux_popup_wrapper git stash drop %(stash)  # !
+
+#bind stage   u    status-update        # Stage/unstage current diff (c)hunk
+#bind stage   1    stage-update-line    # Stage/unstage current line
+#bind stage   !    status-revert        # Revert current diff (c)hunk
+#bind stage   \    stage-split-chunk    # Split current diff (c)hunk
+bind stage   !    none
+bind stage   R!   status-revert        # Revert current diff (c)hunk
+bind stage   \     none
+
+#bind reflog  C    ?git checkout %(branch)
+#bind reflog  !    ?git reset --hard %(commit)
+bind reflog  C    none
+bind reflog  !    none
+bind reflog  Cb   @tmux_popup_wrapper git checkout %(branch)     # C
+bind reflog  R!   @tmux_popup_wrapper git reset --hard %(commit) # !
+
+# =================================================
+
 # colors: color0-255 or white, black, green, magenta, blue, cyan, yellow, red, default
 # attributes: normal, blink, bold, dim, reverse, standout, underline
-color default		white      color235   normal
+color default        white      color235   normal
 
 color date          yellow     default
 color title-blur    white      black
@@ -190,37 +246,4 @@ color title-focus   white      black      bold
 color cursor        color214   color241   normal
 color author        color35    default
 color status        color178   default
-#
-bind refs b none
-bind refs r none
-bind refs C none
-bind refs cc @git checkout %(ref)
-#
-#bind refs pp ?git push
-bind refs    pp   @tmux_popup_wrapper git push
-bind refs    pb   @tmux_popup_wrapper git push -u %(remote) %(branch):'%(prompt Which branch? )'
-bind refs    pf   @tmux_popup_wrapper git push origin +%(branch)
-bind refs    pF   @tmux_popup_wrapper git push --force
-#
-bind refs    gf   @tmux_popup_wrapper git fetch %(remote) %(ref)
-bind refs    pr   @tmux_popup_wrapper git push '%(prompt Push to which remote? )' %(ref):%(ref)
-bind refs    pd   @tmux_popup_wrapper git push %(remote) :%(ref)
-bind refs    pD   @tmux_popup_wrapper git push '%(prompt Delete from which remote? )' :%(ref)
-bind refs    rd   @tmux_popup_wrapper git branch --remotes -D %(remote)/%(ref)
-
-bind refs    C    @tmux_popup_wrapper git checkout %(branch)
-bind refs    !    @tmux_popup_wrapper git branch -D %(branch)
-
-#
-bind main    C    @tmux_popup_wrapper git cherry-pick %(commit)
-
-bind status  C    @tmux_popup_wrapper --tty git commit
-bind status  M    status-merge            # Open git-mergetool(1)
-
-bind stash   A    @tmux_popup_wrapper git stash apply %(stash)
-bind stash   P    @tmux_popup_wrapper git stash pop %(stash)
-bind stash   !    @tmux_popup_wrapper git stash drop %(stash)
-
-bind reflog  C    @tmux_popup_wrapper git checkout %(branch)
-bind reflog  !    @tmux_popup_wrapper git reset --hard %(commit)
 

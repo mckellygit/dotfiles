@@ -1807,7 +1807,9 @@ let g:floaterm_autoinsert = v:true
 " NOTE: there is also <Leader>zs and <Leader>zt for terminals mapped above ...
 if !exists("g:vless")
     if exists('$TMUX_PANE')
-        nnoremap <silent> <Leader>zF :call system("tmux popup -d '#{pane_current_path}' -xC -yC -w70% -h63% -KER \"tmux attach -t popup \|\| tmux new -s popup\"")<CR>
+        " printf \033]11;rgb:<R>/<G>/<B>\007 sets the terminal background colour (only when inside tmux)
+        let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w70% -h63% -KER \"tmux new -s popup \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; " . &shell . "\\\"\""
+        nnoremap <silent> <Leader>zF :call system(syscmd)<CR>
     endif
     nnoremap <silent> <Leader>zf :FloatermToggle<CR>
     "tnoremap <silent> <expr> <C-x><C-d> (win_gettype(win_getid()) ==# 'popup' \|\| win_gettype(win_getid()) ==# 'floating') ? '<C-\><C-n><C-w>:FloatermHide<CR>' : '<C-x>'
