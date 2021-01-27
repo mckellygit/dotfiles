@@ -16,6 +16,8 @@ set refresh-mode       = auto
 
 # =================================================
 
+bind generic   <C-L>        refresh # instead of redraw-screen
+
 bind generic   <Down>       move-down
 bind generic   <Up>         move-up
 #
