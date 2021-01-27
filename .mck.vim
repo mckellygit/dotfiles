@@ -1432,7 +1432,6 @@ autocmd FileType magit :Alias w  call\ MagitWriteBuffer()
 autocmd FileType magit :Alias w! call\ MagitWriteBuffer()
 
 function! MagitUpdateBuffer()
-    echom "MagitUpdateBuffer"
     if &filetype == "magit"
         call magit#update_buffer()
     endif
@@ -1510,12 +1509,21 @@ function! s:MagitReload()
 endfunction
 autocmd User VimagitLeaveCommit call <SID>MagitReload()
 
-function! s:MagitPush()
+function! s:MagitPush(args)
     if &filetype == "magit"
-        echo 'git push ? (Y/n): '
+        if empty(a:args)
+            let prompt = 'git push ? (Y/n): '
+        else
+            let prompt = 'git push ' . a:args . ' ? (Y/n): '
+        endif
+        echo prompt
         let ans=nr2char(getchar())
         if ans ==# 'y' || ans ==# 'Y' || ans == ""
-            AsyncRun -raw -strip -post=call\ MagitUpdateBuffer() git push
+            if empty(a:args)
+                execute 'AsyncRun -raw -strip -post=call\ MagitUpdateBuffer() git push'
+            else
+                execute 'AsyncRun -raw -strip -post=call\ MagitUpdateBuffer() git push ' a:args
+            endif
             "FloatermNew --name=magit --autoclose=2 --height=0.75 --width=0.80
             "FloatermNew --name=magit --autoclose=2 --height=0.75 --width=0.80 bash_ask --tty git push
         else
@@ -1531,7 +1539,10 @@ function! s:MagitPush()
         echo " "
     endif
 endfunction
-nnoremap <silent> <Leader>mP :call <SID>MagitPush()<CR>
+nnoremap <silent> <Leader>mP :call <SID>MagitPush('')<CR>
+
+command! -bang -nargs=* MPush call s:MagitPush(<q-args>)
+
 " vimagit -------------
 
 " twiggy --------------
