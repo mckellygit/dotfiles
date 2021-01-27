@@ -230,7 +230,7 @@ bind stash   S!   @tmux_popup_wrapper git stash drop %(stash)  # !
 #bind stage   \    stage-split-chunk    # Split current diff (c)hunk
 bind stage   !    none
 bind stage   R!   status-revert        # Revert current diff (c)hunk
-bind stage   \     none
+bind stage   \    none
 
 #bind reflog  C    ?git checkout %(branch)
 #bind reflog  !    ?git reset --hard %(commit)
