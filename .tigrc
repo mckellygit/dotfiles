@@ -206,6 +206,11 @@ bind status  !    none
 bind status  Cc   @tmux_popup_wrapper --tty git commit # C
 bind status  Sm   status-merge                         # M - Open git-mergetool(1)
 bind status  R!   status-revert        # Revert changes in file
+# also allow push from status-view ...
+bind status  Pp   @tmux_popup_wrapper git push
+bind status  Pb   @tmux_popup_wrapper git push -u %(remote) %(branch):'%(prompt Which branch? )'
+bind status  Pf   @tmux_popup_wrapper git push origin +%(branch)
+bind status  PF   @tmux_popup_wrapper git push --force
 
 #bind stash   A    ?git stash apply %(stash)
 #bind stash   P    ?git stash pop %(stash)
