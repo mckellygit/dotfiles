@@ -1074,6 +1074,12 @@ autocmd FileType GV nmap <buffer> <A-2-LeftMouse> <C-\><C-n>:<C-u>call feedkeys(
 autocmd FileType GV set foldlevelstart=1
 
 function QuitGV() abort
+    if g:in_gv2 == 0
+        redraw!
+        echo " "
+        quit
+        return
+    endif
     echohl Statement
     echo "Last remaining view, really quit ? (q|y/n): "
     echohl None

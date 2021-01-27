@@ -65,8 +65,6 @@ bind generic   \`           move-half-page-up
 #
 bind generic   Q            none
 bind generic   q            none
-bind main      qq           none
-bind main      qqq          view-close
 bind generic   qq           view-close
 bind generic   \qq          view-close
 bind generic   QQ           quit
