@@ -232,6 +232,10 @@ URxvt.geometry: 164x48+854+892
 URxvt*externalBorder: 1
 URxvt.internalBorder: 6
 URxvt.borderColor: #262626
+!! NOTE: rxvt uses the cvvis terminfo capability cvvis=\E[?12;25h
+!!       not sure if these blink X resources (and the Off/OnTime above) also matter ?
+!!       we can override terminfo cnorm to be same as cvvis to get a
+!!       blinking cursor, and since its cnorm it gets restored at program end
 URxvt.cursorBlink: true
 URxvt.cursorUnderline: false
 URxvt.saveline: 0

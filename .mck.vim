@@ -207,6 +207,7 @@ Plugin 'mckellygit/vim-lastplace'
 " run cmd in background and output to quickfix ...
 " :AsyncRun gcc % -c %< for example
 Plugin 'skywind3000/asyncrun.vim'
+"Plugin 'skywind3000/asynctasks.vim'
 "
 " cmd alias
 "Plugin 'cmdalias.vim'
@@ -265,6 +266,9 @@ Plugin 't9md/vim-choosewin'
 Plugin 'voldikss/vim-floaterm'
 " :Floaterms fzf list of floaterms
 Plugin 'voldikss/fzf-floaterm'
+" :Leaderf floaterm
+"Plugin 'voldikss/leaderf-floaterm'
+" and asynctasks support ...
 "
 " vifm plugin
 "Plugin 'vifm/vifm.vim'
@@ -3372,6 +3376,9 @@ endfunction
 " change cursor to beam in Insert mode ...
 let &t_SI = "\e[5 q"
 let &t_EI = "\e[2 q"
+
+" also note cnorm/cvvis terminfo for rxvt blinking cursor
+
 " ---------------
 
 " not needed anymore
