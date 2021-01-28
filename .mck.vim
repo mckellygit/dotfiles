@@ -2590,6 +2590,7 @@ vmap <C-q> q
 " MapFastKeycode: helper for fast keycode mappings
 " makes use of unused vim keycodes <[S-]F15> to <[S-]F37>
 " indx 15-37 for <F15-37>, indx 115-137 for <S-F15-37>
+" NOTE: also look into fixtermkeys.vim from http://www.leonerd.org.uk/hacks/vim/fixtermkeys.html
 function! s:MapFastKeycode(key, keycode, indx)
     let lindx = a:indx
     if lindx < 15
