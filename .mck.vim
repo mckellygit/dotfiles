@@ -1543,6 +1543,10 @@ nnoremap <silent> <Leader>mP :call <SID>MagitPush('')<CR>
 
 command! -bang -nargs=* MPush call s:MagitPush(<q-args>)
 
+command! -bang Mgv call s:MyGV('')
+
+" TODO: command! Mupdate to refresh/update buffer ...
+
 " vimagit -------------
 
 " twiggy --------------
