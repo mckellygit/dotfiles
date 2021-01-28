@@ -12,7 +12,8 @@ set mouse-scroll       = 10
 set mouse-wheel-cursor = no
 set ignore-case        = true
 #set line-graphics      = utf-8
-set refresh-mode       = after-command # or auto
+set refresh-mode       = auto # auto or after-command or periodic + refresh-interval
+set refresh-interval   = 5
 
 # =================================================
 
