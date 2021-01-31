@@ -443,12 +443,20 @@ URxvt.underlineURLs: false
 URxvt.matcher.rend.0: Italic
 !!URxvt.url-select.underline: true
 
-URxvt.copyCommand:  xsel -i -c --rmlastnl --sc 0
-URxvt.pasteCommand: xsel -o -c --rmlastnl --sc 0
+!!URxvt.copyCommand:  xsel -i -c --rmlastnl --sc 0
+!!URxvt.pasteCommand: xsel -o -c --rmlastnl --sc 0
+URxvt.copyCommand:  myclip -
+URxvt.pasteCommand: myclip --o --rmlastnl --sc 0
 
 URxvt.clipboard.autocopy: false
-URxvt.clipboard.copycmd:  xsel -i -c --rmlastnl --sc 0
-URxvt.clipboard.pastecmd: xsel -o -c --rmlastnl --sc 0
+!!URxvt.clipboard.copycmd:  xsel -i -c --rmlastnl --sc 0
+!!URxvt.clipboard.pastecmd: xsel -o -c --rmlastnl --sc 0
+URxvt.clipboard.copycmd:  myclip -
+URxvt.clipboard.pastecmd: myclip --o --rmlastnl --sc 0
 
 !! ==========================================
+
+!! seems to already be there
+!!URxvt*VT100.translations:    #override\
+!!    Control Meta<Btn3Motion>:  select-extend()
 

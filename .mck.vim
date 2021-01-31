@@ -880,8 +880,10 @@ noremap <silent> <Leader>lb <C-\><C-n>:<C-u>call <SID>Mylsfzf(1)<CR>
 " NOTE: seems like a better Buffers command than the fzf default ...
 command! Buffers call <SID>Mylsfzf(1)
 
-" hide buffer
-noremap <silent> <Leader>hb <C-\><C-n>:hide<CR>
+" buffer hide/del/wipe - good for after terminal program ends ...
+noremap <silent> <Leader>bh <C-\><C-n>:hide<CR>
+noremap <silent> <Leader>bd <C-\><C-n>:bdel<CR>
+noremap <silent> <Leader>bw <C-\><C-n>:bwipe<CR>
 
 " :BCommits git log options
 "let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
@@ -1833,7 +1835,7 @@ let g:floaterm_autoinsert = v:true
 if !exists("g:vless")
     if exists('$TMUX_PANE')
         " printf \033]11;rgb:<R>/<G>/<B>\007 sets the terminal background colour (only when inside tmux)
-        let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w70% -h63% -KER \"tmux new -s popup \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; " . &shell . "\\\"\""
+        let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w70% -h63% -KER \"tmux new -s popup \\\"printf '\\\\\\033]11;rgb:30/25/25\\\\\\007' ; tmux set -w status off ; " . &shell . "\\\"\""
         nnoremap <silent> <Leader>zF :call system(syscmd)<CR>
     endif
     nnoremap <silent> <Leader>zf :FloatermToggle<CR>
@@ -1886,6 +1888,7 @@ vnoremap <silent> TX    :<C-u>call setreg('x', getreg('*'), getregtype('*'))<CR>
 vmap     <silent> x     tx
 vmap     <silent> d     tx
 vmap     <silent> X     tX
+" delete entire selected line(s) - different than normal D (del to end-of-line)
 vmap     <silent> D     tX
 vmap     <silent> <Del> tx
 nnoremap <silent> ty    <Nop>
@@ -3401,55 +3404,133 @@ endfunction
 
 " ------------------------------
 
-" mouse paste
+" mouse paste etc.
+
+nnoremap <M-C-LeftMouse> <Nop>
+vnoremap <M-C-LeftMouse> <Nop>
+inoremap <M-C-LeftMouse> <Nop>
+tnoremap <M-C-LeftMouse> <LeftMouse>
+
+nnoremap <M-C-2-LeftMouse> <Nop>
+vnoremap <M-C-2-LeftMouse> <Nop>
+inoremap <M-C-2-LeftMouse> <Nop>
+tnoremap <M-C-2-LeftMouse> <2-LeftMouse>
+
+nnoremap <M-C-3-LeftMouse> <Nop>
+vnoremap <M-C-3-LeftMouse> <Nop>
+inoremap <M-C-3-LeftMouse> <Nop>
+tnoremap <M-C-3-LeftMouse> <3-LeftMouse>
+
+nnoremap <M-C-4-LeftMouse> <Nop>
+vnoremap <M-C-4-LeftMouse> <Nop>
+inoremap <M-C-4-LeftMouse> <Nop>
+tnoremap <M-C-4-LeftMouse> <Nop>
+
+nnoremap <M-C-MiddleMouse> <Nop>
+vnoremap <M-C-MiddleMouse> <Nop>
+inoremap <M-C-MiddleMouse> <Nop>
+tnoremap <M-C-MiddleMouse> <MiddleMouse>
+
+nnoremap <M-C-2-MiddleMouse> <Nop>
+vnoremap <M-C-2-MiddleMouse> <Nop>
+inoremap <M-C-2-MiddleMouse> <Nop>
+tnoremap <M-C-2-MiddleMouse> <2-MiddleMouse>
+
+nnoremap <M-C-3-MiddleMouse> <Nop>
+vnoremap <M-C-3-MiddleMouse> <Nop>
+inoremap <M-C-3-MiddleMouse> <Nop>
+tnoremap <M-C-3-MiddleMouse> <3-MiddleMouse>
+
+nnoremap <M-C-4-MiddleMouse> <Nop>
+vnoremap <M-C-4-MiddleMouse> <Nop>
+inoremap <M-C-4-MiddleMouse> <Nop>
+tnoremap <M-C-4-MiddleMouse> <Nop>
+
+nnoremap <M-C-RightMouse> <Nop>
+vnoremap <M-C-RightMouse> <Nop>
+inoremap <M-C-RightMouse> <Nop>
+tnoremap <M-C-RightMouse> <RightMouse>
+
+nnoremap <M-C-2-RightMouse> <Nop>
+vnoremap <M-C-2-RightMouse> <Nop>
+inoremap <M-C-2-RightMouse> <Nop>
+tnoremap <M-C-2-RightMouse> <2-RightMouse>
+
+nnoremap <M-C-3-RightMouse> <Nop>
+vnoremap <M-C-3-RightMouse> <Nop>
+inoremap <M-C-3-RightMouse> <Nop>
+tnoremap <M-C-3-RightMouse> <3-RightMouse>
+
+nnoremap <M-C-4-RightMouse> <Nop>
+vnoremap <M-C-4-RightMouse> <Nop>
+inoremap <M-C-4-RightMouse> <Nop>
+tnoremap <M-C-4-RightMouse> <Nop>
+
+" -----------------
 
 nnoremap <MiddleMouse> <Nop>
 vnoremap <MiddleMouse> <Nop>
 inoremap <MiddleMouse> <Nop>
+tnoremap <MiddleMouse> <Nop>
 
 nnoremap <2-MiddleMouse> <Nop>
 vnoremap <2-MiddleMouse> <Nop>
 inoremap <2-MiddleMouse> <Nop>
+tnoremap <2-MiddleMouse> <Nop>
 
 nnoremap <3-MiddleMouse> <Nop>
 vnoremap <3-MiddleMouse> <Nop>
 inoremap <3-MiddleMouse> <Nop>
+tnoremap <3-MiddleMouse> <Nop>
 
 nnoremap <4-MiddleMouse> <Nop>
 vnoremap <4-MiddleMouse> <Nop>
 inoremap <4-MiddleMouse> <Nop>
+tnoremap <4-MiddleMouse> <Nop>
+
+" -----------------
 
 nnoremap <C-MiddleMouse> <Nop>
 vnoremap <C-MiddleMouse> <Nop>
 inoremap <C-MiddleMouse> <Nop>
+tnoremap <C-MiddleMouse> <Nop>
 
 nnoremap <C-2-MiddleMouse> <Nop>
 vnoremap <C-2-MiddleMouse> <Nop>
 inoremap <C-2-MiddleMouse> <Nop>
+tnoremap <C-2-MiddleMouse> <Nop>
 
 nnoremap <C-3-MiddleMouse> <Nop>
 vnoremap <C-3-MiddleMouse> <Nop>
 inoremap <C-3-MiddleMouse> <Nop>
+tnoremap <C-3-MiddleMouse> <Nop>
 
 nnoremap <C-4-MiddleMouse> <Nop>
 vnoremap <C-4-MiddleMouse> <Nop>
 inoremap <C-4-MiddleMouse> <Nop>
+tnoremap <C-4-MiddleMouse> <Nop>
+
+" -----------------
 
 nnoremap <A-MiddleMouse> <Nop>
 vnoremap <A-MiddleMouse> <Nop>
 inoremap <A-MiddleMouse> <Nop>
+tnoremap <A-MiddleMouse> <Nop>
 
 nnoremap <A-2-MiddleMouse> <Nop>
 vnoremap <A-2-MiddleMouse> <Nop>
 inoremap <A-2-MiddleMouse> <Nop>
+tnoremap <A-2-MiddleMouse> <Nop>
 
 nnoremap <A-3-MiddleMouse> <Nop>
 vnoremap <A-3-MiddleMouse> <Nop>
 inoremap <A-3-MiddleMouse> <Nop>
+tnoremap <A-3-MiddleMouse> <Nop>
 
 nnoremap <A-4-MiddleMouse> <Nop>
 vnoremap <A-4-MiddleMouse> <Nop>
 inoremap <A-4-MiddleMouse> <Nop>
+tnoremap <A-4-MiddleMouse> <Nop>
 
 " could add `[ to go back to orig col ...
 
@@ -3514,36 +3595,60 @@ inoremap <4-RightMouse> <Nop>
 nnoremap <C-RightMouse> <Nop>
 vnoremap <C-RightMouse> <Nop>
 inoremap <C-RightMouse> <Nop>
+tnoremap <C-RightMouse> <Nop>
 
 nnoremap <C-2-RightMouse> <Nop>
 vnoremap <C-2-RightMouse> <Nop>
 inoremap <C-2-RightMouse> <Nop>
+tnoremap <C-2-RightMouse> <Nop>
 
 nnoremap <C-3-RightMouse> <Nop>
 vnoremap <C-3-RightMouse> <Nop>
 inoremap <C-3-RightMouse> <Nop>
+tnoremap <C-3-RightMouse> <Nop>
 
 nnoremap <C-4-RightMouse> <Nop>
 vnoremap <C-4-RightMouse> <Nop>
 inoremap <C-4-RightMouse> <Nop>
+tnoremap <C-4-RightMouse> <Nop>
 
 " ---------------
 
-nnoremap <A-RightMouse> p
-vnoremap <A-RightMouse> p
-inoremap <A-RightMouse> <C-o>p
+"nnoremap <A-RightMouse> p
+"vnoremap <A-RightMouse> p
+"inoremap <A-RightMouse> <C-o>p
 
-nnoremap <A-2-RightMouse> p
-vnoremap <A-2-RightMouse> p
-inoremap <A-2-RightMouse> <C-o>p
+"nnoremap <A-2-RightMouse> p
+"vnoremap <A-2-RightMouse> p
+"inoremap <A-2-RightMouse> <C-o>p
 
-nnoremap <A-3-RightMouse> p
-vnoremap <A-3-RightMouse> p
-inoremap <A-3-RightMouse> <C-o>p
+"nnoremap <A-3-RightMouse> p
+"vnoremap <A-3-RightMouse> p
+"inoremap <A-3-RightMouse> <C-o>p
 
-nnoremap <A-4-RightMouse> p
-vnoremap <A-4-RightMouse> p
-inoremap <A-4-RightMouse> <C-o>p
+"nnoremap <A-4-RightMouse> p
+"vnoremap <A-4-RightMouse> p
+"inoremap <A-4-RightMouse> <C-o>p
+
+nnoremap <A-RightMouse> <Nop>
+vnoremap <A-RightMouse> <Nop>
+inoremap <A-RightMouse> <Nop>
+tnoremap <A-RightMouse> <Nop>
+
+nnoremap <A-2-RightMouse> <Nop>
+vnoremap <A-2-RightMouse> <Nop>
+inoremap <A-2-RightMouse> <Nop>
+tnoremap <A-2-RightMouse> <Nop>
+
+nnoremap <A-3-RightMouse> <Nop>
+vnoremap <A-3-RightMouse> <Nop>
+inoremap <A-3-RightMouse> <Nop>
+tnoremap <A-3-RightMouse> <Nop>
+
+nnoremap <A-4-RightMouse> <Nop>
+vnoremap <A-4-RightMouse> <Nop>
+inoremap <A-4-RightMouse> <Nop>
+tnoremap <A-4-RightMouse> <Nop>
 
 " --------------------------
 
@@ -4051,7 +4156,9 @@ function s:MyTrimAllTrailingBlanks() abort
     call winrestview(l:save)
 endfunction
 
-command! TrimAllLines call <SID>MyTrimAllTrailingBlanks()
+command! TTWS                   call <SID>MyTrimAllTrailingBlanks()
+command! TrimAllLines           call <SID>MyTrimAllTrailingBlanks()
+command! TrimTrailingWhiteSpace call <SID>MyTrimAllTrailingBlanks()
 
 " -------------------
 
@@ -5297,16 +5404,6 @@ vnoremap  z<Up>    :m '<-2<CR>gv=gv
 " NOTE: these cannot be z* mappings or it adds delay when inserting z ...
 "inoremap  z<Down>  <Esc>:m .+1<CR>==gi
 "inoremap  z<Up>    <Esc>:m .-2<CR>==gi
-
-" -----------------------------
-
-function! TTWS() abort
-    let l:save = winsaveview()
-    keeppatterns %s/\s\+$//e
-    call winrestview(l:save)
-endfunction
-command! TTWS call TTWS()
-command! TrimTrailingWhiteSpace call TTWS()
 
 " -----------------------------
 
@@ -6734,9 +6831,10 @@ endfunction
 
 " :x to save (if modified) and go to next (w/o prompting) or exit
 function s:NextOrQuit() abort
+    " TODO: should we auto hide/bdel/bwipe and/or set modifiable on these terminal buffers ?
     if &buftype ==# 'terminal'
         echohl Statement
-        echo "Unable to :quit terminal"
+        echo "Unable to :quit terminal (hide|bdel|bwipe buffer)"
         echohl None
         return
     endif
@@ -6755,9 +6853,10 @@ endfunction
 
 function s:ConfNextOrQuit() abort
     " check if buf has changed and prompt to save now instead of after all files ?
+    " TODO: should we auto hide/bdel/bwipe and/or set modifiable on these terminal buffers ?
     if &buftype ==# 'terminal'
         echohl Statement
-        echo "Unable to :quit terminal"
+        echo "Unable to :quit terminal (hide|bdel|bwipe buffer)"
         echohl None
         return
     endif

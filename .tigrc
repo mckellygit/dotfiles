@@ -58,10 +58,10 @@ bind stage     <Ctrl-P>     :?^diff --git|^@@
 #
 bind generic   <Ctrl-_><Space>      move-down
 bind generic   <Ctrl-_><Backspace>  move-up
-bind diff      <Ctrl-_><Space>      scroll-page-down
-bind stage     <Ctrl-_><Space>      scroll-page-down
-bind diff      <Ctrl-_><Backspace>  scroll-page-up
-bind stage     <Ctrl-_><Backspace>  scroll-page-up
+bind diff      <Ctrl-_><Space>      scroll-half-page-down
+bind stage     <Ctrl-_><Space>      scroll-half-page-down
+bind diff      <Ctrl-_><Backspace>  scroll-half-page-up
+bind stage     <Ctrl-_><Backspace>  scroll-half-page-up
 #
 bind generic   \1           move-half-page-down
 bind generic   \`           move-half-page-up
@@ -99,8 +99,8 @@ bind generic   <Esc><Ctrl-K>    scroll-line-up
 bind generic   <Esc><Enter>    scroll-line-up
 bind generic   <Ctrl-^><Enter> scroll-line-up
 #
-bind generic   <Ctrl-^><Space> scroll-page-down
-bind generic   <Ctrl-^><C-H>   scroll-page-up
+bind generic   <Ctrl-^><Space> scroll-half-page-down
+bind generic   <Ctrl-^><C-H>   scroll-half-page-up
 
 bind generic   <Esc><Esc>        view-close-no-quit
 #
@@ -111,12 +111,12 @@ bind generic   <Ctrl-w>w          view-next
 bind generic   <Ctrl-w><Ctrl-w>   view-next
 #
 bind main      <Space>              next
-bind generic   <Space>              scroll-page-down
+bind generic   <Space>              scroll-half-page-down
 bind generic   <Ctrl-@>             move-down
 # vim terminal BUG - send M-- instead of C-@ (C-Space) - may be fixed now with tnoremap
 bind generic   <Esc>-               move-down
 bind main      <Backspace>          previous
-bind generic   <Backspace>          scroll-page-up
+bind generic   <Backspace>          scroll-half-page-up
 bind generic   <Ctrl-^><Backspace>  move-up
 #
 bind generic   <Tab>        next

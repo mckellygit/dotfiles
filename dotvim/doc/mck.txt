@@ -8,7 +8,9 @@
 <Leader>f/ fzf list of project dir files (:Files <git-root>) (<Leader>fz)
     <C-A-p> toggle qf file preview
 <Leader>ls fzf list of buffers - open in new tab
-<Leader>hb hide buffer
+<Leader>bh buffer hide
+<Leader>bd buffer delete
+<Leader>bw buffer wipe
 <Leader>fb FileBeagle current dir
 <Leader>fB FileBeagle project dir
 <Leader>of switch to other file (.hpp/.cpp/etc)
