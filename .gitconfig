@@ -6,6 +6,7 @@
     preloadindex = true
 [apply]
 	whitespace = error
+# [credential "https://url_without_scheme"]
 [credential]
 	helper = cache --timeout=9600
 [checkout]
@@ -27,7 +28,8 @@
 #	frag = yellow
 	frag = 185 bold
 	commit = blue
-	hunk = magenta
+    hunk = magenta
+    context = 249
 [pager]
 	diff = less -R
 [alias]

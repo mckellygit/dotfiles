@@ -253,4 +253,34 @@ color title-focus   white      black      bold
 color cursor        color214   color241   normal
 color author        color35    default
 color status        color178   default
+color diff-stat     color185   default
+color main-commit   color249   default
+
+set git-colors = \
+	branch.current=main-head \
+	branch.local=main-ref \
+	branch.plain=main-ref \
+	branch.remote=main-remote \
+	\
+	diff.meta=diff-header \
+	diff.meta=diff-index \
+	diff.meta=diff-oldmode \
+	diff.meta=diff-newmode \
+	diff.frag=diff-chunk \
+	diff.old=diff-del \
+	diff.new=diff-add \
+	diff.context=main-commit \
+	\
+	diff-highlight.oldHighlight=diff-del-highlight \
+	diff-highlight.newHighlight=diff-add-highlight \
+	\
+	grep.filename=grep.file \
+	grep.linenumber=grep.line-number \
+	grep.separator=grep.delimiter \
+	\
+	status.branch=status.header \
+	status.added=stat-staged \
+	status.updated=stat-staged \
+	status.changed=stat-unstaged \
+	status.untracked=stat-untracked
 
