@@ -278,6 +278,12 @@ Plugin 'voldikss/fzf-floaterm'
 "Plugin 'rbgrouleff/bclose.vim'
 "Plugin 'ptzz/lf.vim'
 "
+" nvim completeopt does not have popup ...
+" this works but it does not stop preview split
+"if has("nvim")
+"    Plugin 'ncm2/float-preview.nvim.git'
+"endif
+"
 "" All of your Plugins must be added before the following line
 call vundle#end()         " required
 filetype plugin indent on " required
@@ -1866,6 +1872,11 @@ nnoremap <silent> <Leader>fm :FloatermNew --height=0.75 --width=0.80 vifm<CR>
 " if vifm plugin is installed then full window vifm in a new tab ...
 nnoremap <silent> <Leader>fM :TabVifm<CR>
 " vifm -------------
+
+" float-preview ----
+let g:float_preview#docked = 0
+let g:float_preview#max_width = 80
+" float-preview ----
 
 " ====================================================
 " ====================================================
@@ -5582,8 +5593,11 @@ let g:clang_cpp_options = '-std=c++11 -DNDEBUG -Wno-inconsistent-missing-overrid
 "let g:clang_compilation_database = '~/lnrs/wip/buildln/compile_commands.json'
 "let g:clang_compilation_database = '~/lnrs/wip/buildln'
 if has("nvim")
-    let g:clang_c_completeopt = 'longest,menuone,preview'
-    let g:clang_cpp_completeopt = 'longest,menuone,preview'
+    " adding preview here without popup isnt great
+    " there is a nvim float-preview plugin but that doesnt stop the preview split
+    "let g:clang_c_completeopt = 'longest,menuone,preview'
+    let g:clang_c_completeopt = 'longest,menuone'
+    let g:clang_cpp_completeopt = 'longest,menuone'
 else
     let g:clang_c_completeopt = 'longest,menuone,preview,popup'
     let g:clang_cpp_completeopt = 'longest,menuone,preview,popup'
