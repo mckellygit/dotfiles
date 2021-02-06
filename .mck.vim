@@ -280,6 +280,7 @@ Plugin 'voldikss/fzf-floaterm'
 "
 " nvim completeopt does not have popup ...
 " this works but it does not stop preview split
+" for now, just skip preview with nvim, and have extra info in orig menu popup
 "if has("nvim")
 "    Plugin 'ncm2/float-preview.nvim.git'
 "endif
@@ -5584,6 +5585,8 @@ endif " has("autocmd")
 
 " vim-clang ----------
 " put preview window at bottom
+" if have preview,popup in completeopt then vim will use an addl popup instead of preview window
+" nvim doesnt support popup, but there is a float-preview to do similar
 set splitbelow
 set splitright
 "let g:clang_verbose_pmenu = 1
@@ -5593,11 +5596,17 @@ let g:clang_cpp_options = '-std=c++11 -DNDEBUG -Wno-inconsistent-missing-overrid
 "let g:clang_compilation_database = '~/lnrs/wip/buildln/compile_commands.json'
 "let g:clang_compilation_database = '~/lnrs/wip/buildln'
 if has("nvim")
-    " adding preview here without popup isnt great
+    " adding preview here without popup isnt great as we get preview window split
     " there is a nvim float-preview plugin but that doesnt stop the preview split
     "let g:clang_c_completeopt = 'longest,menuone,preview'
     let g:clang_c_completeopt = 'longest,menuone'
     let g:clang_cpp_completeopt = 'longest,menuone'
+    " is there a way to supress preview window ?
+    " these work but it flashes the preview window for a brief moment ...
+    "autocmd User FloatPreviewWinOpen pclose
+    " same with this ...
+    "autocmd WinEnter * if &previewwindow && pumvisible() | :pclose | endif
+    " for now, just skip preview with nvim, and have extra info in orig menu popup
 else
     let g:clang_c_completeopt = 'longest,menuone,preview,popup'
     let g:clang_cpp_completeopt = 'longest,menuone,preview,popup'

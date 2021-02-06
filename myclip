@@ -46,6 +46,9 @@ done
 # NOTE: copyq requires copySelection(); addUnique() to set selection and add to item list
 # can also clear with xsel -bc ; xsel -pc
 
+# NOTE: to append input to primary and selection -
+# copyq "copy(str(clipboard()) + str(input())); copySelection(str(selection()) + str(input())); text=(str(clipboard()) + str(input())) ; if (text.length>0) { addUnique(text) }"
+
 #echo "have_rmnl = $have_rmnl"
 #echo "have_dash = $have_dash"
 
