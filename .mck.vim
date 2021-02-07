@@ -1467,6 +1467,8 @@ function! <SID>LaunchMagit()
         setlocal winfixwidth
         execute "normal \<C-w>w"
         execute "normal \<C-w>r"
+        " to get the msg widths correct ...
+        call magit#update_buffer()
     else
         silent execute "q"
     endif
@@ -1507,6 +1509,8 @@ function! s:Magit1(args)
         setlocal winfixwidth
         execute "normal \<C-w>w"
         execute "normal \<C-w>r"
+        " to get the msg widths correct ...
+        call magit#update_buffer()
     endif
 endfunction
 command! -nargs=* Magit2 call s:Magit1(<q-args>)
@@ -1517,6 +1521,8 @@ function! s:MagitReload()
     if &filetype == "magit"
         let mcmd = 'tabnew | MyMagit'
         silent execute mcmd
+        " to get the msg widths correct ...
+        call magit#update_buffer()
         quit
     endif
 endfunction
@@ -5589,6 +5595,7 @@ endif " has("autocmd")
 " nvim doesnt support popup, but there is a float-preview to do similar
 set splitbelow
 set splitright
+set previewheight=5
 "let g:clang_verbose_pmenu = 1
 let g:clang_exec = 'clang++-9'
 let g:clang_cpp_options = '-std=c++11 -DNDEBUG -Wno-inconsistent-missing-override'
@@ -5606,6 +5613,10 @@ if has("nvim")
     "autocmd User FloatPreviewWinOpen pclose
     " same with this ...
     "autocmd WinEnter * if &previewwindow && pumvisible() | :pclose | endif
+    "aug fltpop
+    "    au!
+    "    autocmd WinEnter <buffer> if pumvisible() | :pclose | endif
+    "aug END
     " for now, just skip preview with nvim, and have extra info in orig menu popup
 else
     let g:clang_c_completeopt = 'longest,menuone,preview,popup'
