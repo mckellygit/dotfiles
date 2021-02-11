@@ -58,8 +58,7 @@ then
     tmux send-keys -X copy-pipe-and-cancel "tmux wait -S pipe"
     tmux wait pipe
     tmux set-buffer -n cmdx
-    tmux show-buffer -b cmdx | tr -d '\n' | tmux load-buffer -
-    tmux show-buffer | myclip
+    tmux show-buffer -b cmdx | tr -d '\n' | myclip -
     tmux delete-buffer -b cmdx
 
     # TODO: MCK - back to orig oy ...
@@ -88,8 +87,7 @@ do
         tmux send-keys -X copy-pipe-and-cancel "tmux wait -S pipe"
         tmux wait pipe
         tmux set-buffer -n cmdx
-        tmux show-buffer -b cmdx | tr -d '\n' | tmux load-buffer -
-        tmux show-buffer | myclip
+        tmux show-buffer -b cmdx | tr -d '\n' | myclip -
         tmux delete-buffer -b cmdx
 
         # TODO: MCK - back to orig ox, oy ...

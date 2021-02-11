@@ -281,9 +281,9 @@ Plugin 'voldikss/fzf-floaterm'
 " nvim completeopt does not have popup ...
 " this works but it does not stop preview split
 " for now, just skip preview with nvim, and have extra info in orig menu popup
-"if has("nvim")
-"    Plugin 'ncm2/float-preview.nvim.git'
-"endif
+if has("nvim")
+    Plugin 'ncm2/float-preview.nvim.git'
+endif
 "
 "" All of your Plugins must be added before the following line
 call vundle#end()         " required
@@ -724,7 +724,11 @@ command! -bang -nargs=? -complete=dir Files
     \ <bang>0)
 
 command! FZFProjectFiles execute 'Files' s:find_git_root()
+
 noremap <silent> <Leader>f. <C-\><C-n>:Files<CR>
+" NOTE: below is note about another way to do :Files -
+" but that wont support opening selection in the 3 ways, only the preset (tab) open ...
+"nnoremap <silent> <Leader>f. :FloatermNew --height=0.75 --width=0.80 fzf<CR>
 
 " you can always run
 " :Files       - to get list from current dir
@@ -1852,19 +1856,28 @@ if !exists("g:vless")
         nnoremap <silent> <Leader>zF :call system(syscmd)<CR>
     endif
     nnoremap <silent> <Leader>zf :FloatermToggle<CR>
+    " MCK: use something else besides <C-x> here ...
     "tnoremap <silent> <expr> <C-x><C-d> (win_gettype(win_getid()) ==# 'popup' \|\| win_gettype(win_getid()) ==# 'floating') ? '<C-\><C-n><C-w>:FloatermHide<CR>' : '<C-x>'
-    tnoremap <silent> <expr> <C-x><C-d> (&filetype ==# 'floaterm') ? '<C-\><C-n><C-w>:FloatermHide<CR>' : ''
+    "tnoremap <silent> <expr> <C-x><C-d> (&filetype ==# 'floaterm') ? '<C-\><C-n><C-w>:FloatermHide<CR>' : ''
+    tnoremap <silent> <expr> <F17>d (&filetype ==# 'floaterm') ? '<C-\><C-n><C-w>:FloatermHide<CR>' : ''
+    tnoremap <silent> <expr> <M-x>d (&filetype ==# 'floaterm') ? '<C-\><C-n><C-w>:FloatermHide<CR>' : ''
 else
     nnoremap <Leader>zf :call <SID>NoFloatermVless()<CR>
 endif
 
 " how to open file selected in floaterm - can be 'edit', 'split', 'vsplit', 'tabe'
+" TODO: would be awesome if this were configurable via separate mappings ...
+"       <C-v> - vsplit, <C-x> - split, <C-t> - tabe, etc.
 let g:floaterm_open_command = 'tabe'
 
 " install lf (go) -
 "   env CGO_ENABLED=0 GO111MODULE=on go get -u -ldflags="-s -w" github.com/gokcehan/lf
 "   NOTE: use 'i' to enter preview window (inspect) to scroll, then exit less/bat (qq etc.) to go back ...
 nnoremap <silent> <Leader>lf :FloatermNew --height=0.75 --width=0.80 lf<CR>
+
+" NOTE: <Leader>f. is mapped above to use :Files, this is another way ...
+" but this wont support opening selection in the 3 ways, only the preset (tab) open ...
+"nnoremap <silent> <Leader>f. :FloatermNew --height=0.75 --width=0.80 fzf<CR>
 " floaterm ---------
 
 " vifm -------------
@@ -2822,6 +2835,18 @@ if has("nvim")
     cnoremap <F19> <M-G>
     inoremap <F19> <M-G>
     tnoremap <F19> <M-G>
+endif
+
+" ------------------------------
+
+" use <M-x> instead of <C-x> for advanced terminal mappings ...
+" (we use <C-x> as a single key mapping in a few other places)
+call <SID>MapFastKeycode('<F17>',  "\ex", 17)
+cnoremap <F17> <C-v><Esc>x
+inoremap <F17> <C-v><Esc>x
+if has("nvim")
+    cnoremap <F17> <M-x>
+    inoremap <F17> <M-x>
 endif
 
 " ------------------------------
@@ -5593,9 +5618,20 @@ endif " has("autocmd")
 " put preview window at bottom
 " if have preview,popup in completeopt then vim will use an addl popup instead of preview window
 " nvim doesnt support popup, but there is a float-preview to do similar
+let g:clang_debug=0
 set splitbelow
 set splitright
 set previewheight=5
+" BUG: since vim 8.2.2426 completefunc cannot change windows and vim-clang does this
+"      disable for now until we can start diag window some other way ...
+"let g:clang_diagsopt = ''
+" diagnostic window ...
+let g:clang_diagsopt = 'botright:8'
+" TODO: make call to ClangSyntaxCheck be async ...
+noremap <silent> <Leader>do :let orig_do = g:clang_diagsopt<CR>:let g:clang_diagsopt = 'botright:8'<CR>:ClangSyntaxCheck<CR>:let g:clang_diagsopt = orig_do<CR>
+noremap <silent> <Leader>dc :ClangCloseWindow<CR>
+
+" extra info in popup menu ...
 "let g:clang_verbose_pmenu = 1
 let g:clang_exec = 'clang++-9'
 let g:clang_cpp_options = '-std=c++11 -DNDEBUG -Wno-inconsistent-missing-override'
@@ -5606,8 +5642,8 @@ if has("nvim")
     " adding preview here without popup isnt great as we get preview window split
     " there is a nvim float-preview plugin but that doesnt stop the preview split
     "let g:clang_c_completeopt = 'longest,menuone,preview'
-    let g:clang_c_completeopt = 'longest,menuone'
-    let g:clang_cpp_completeopt = 'longest,menuone'
+    let g:clang_c_completeopt = 'longest,menuone,preview'
+    let g:clang_cpp_completeopt = 'longest,menuone,preview'
     " is there a way to supress preview window ?
     " these work but it flashes the preview window for a brief moment ...
     "autocmd User FloatPreviewWinOpen pclose
@@ -5755,8 +5791,8 @@ autocmd BufReadPost quickfix nnoremap <silent> <buffer> <C-]> <Return>
 " C-t to go back (not implemented)
 " nmap <C-t> :call rtags#JumpBack()<bar>:echo<CR>
 " \cc to close quickfix, listview, preview
-nnoremap <silent> <Leader>cc           :ccl<bar>lcl<bar>pcl<bar>:echo<CR>
-vnoremap <silent> <Leader>cc <C-\><C-n>:ccl<bar>lcl<bar>pcl<bar>:echo<CR>
+nnoremap <silent> <Leader>cc           :ccl<bar>lcl<bar>pcl<bar>:ClangCloseWindow<CR>:echo<CR>
+vnoremap <silent> <Leader>cc <C-\><C-n>:ccl<bar>lcl<bar>pcl<bar>:ClangCloseWindow<CR>:echo<CR>
 "noremap <silent> <Leader>cc :windo lcl<bar>ccl<bar>pcl<bar>:echo<CR>
 " qq to also close location list, but we already have a q mapping ...
 "autocmd BufReadPost quickfix nnoremap <silent> <buffer> qq :ccl<bar>lcl<bar>pcl<bar>:echo<CR>
@@ -6950,12 +6986,17 @@ endif
 " NOTE: there is also <Leader>zf for new floating terminal (floaterm)
 "
 " terminal in new tab when already in a terminal
+" MCK: use something else besides <C-x> here ...
 if has("nvim")
-    tnoremap <silent> <C-x>t <C-\><C-n><C-w>:$tabnew <Esc>:terminal<CR><C-w>:se scl=no<CR>i
-    tnoremap <silent> <C-x>v <C-\><C-n><C-w>:$tabnew<CR>
+    tnoremap <silent> <F17>t <C-\><C-n><C-w>:$tabnew <Esc>:terminal<CR><C-w>:se scl=no<CR>i
+    tnoremap <silent> <F17>v <C-\><C-n><C-w>:$tabnew<CR>
+    tnoremap <silent> <M-x>t <C-\><C-n><C-w>:$tabnew <Esc>:terminal<CR><C-w>:se scl=no<CR>i
+    tnoremap <silent> <M-x>v <C-\><C-n><C-w>:$tabnew<CR>
 else
-    tnoremap <silent> <C-x>t <C-w>:$tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
-    tnoremap <silent> <C-x>v <C-w>:$tabnew<CR>
+    tnoremap <silent> <F17>t <C-w>:$tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
+    tnoremap <silent> <F17>v <C-w>:$tabnew<CR>
+    tnoremap <silent> <M-x>t <C-w>:$tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
+    tnoremap <silent> <M-x>v <C-w>:$tabnew<CR>
 endif
 " window in new tab when already in a terminal
 " <C-w><N> or <C-\><C-n> to get into normal mode
@@ -6969,10 +7010,17 @@ endif
 "tnoremap <silent> <C-Up>   <C-\><C-n>
 "tnoremap <silent> <PageUp> <C-\><C-n>
 " ctrl-x-] like tmux enter copy-mode-vi (ctrl-s-])
-tnoremap <silent> <C-x>]     <C-\><C-n>
-tnoremap <silent> <C-x><C-]> <C-\><C-n>
-nnoremap <silent> <expr> <C-x>]     (&buftype == 'terminal') ? 'i' : '<C-x>]'
-nnoremap <silent> <expr> <C-x><C-]> (&buftype == 'terminal') ? 'i' : '<C-x>]'
+" MCK: use something else besides <C-x> here ...
+"      perhaps <M-n> for normal mode ?
+tnoremap <silent> <F17>]     <C-\><C-n>
+tnoremap <silent> <F17><C-]> <C-\><C-n>
+tnoremap <silent> <M-x>]     <C-\><C-n>
+tnoremap <silent> <M-x><C-]> <C-\><C-n>
+" dont really want to map <C-x> + anything as <C-x> is used alone as a map in several other places
+nnoremap <silent> <expr> <F17>]     (&buftype == 'terminal') ? 'i' : '\<Esc>x]'
+nnoremap <silent> <expr> <F17><C-]> (&buftype == 'terminal') ? 'i' : '\<Esc>x\<C-]>]'
+nnoremap <silent> <expr> <M-x>]     (&buftype == 'terminal') ? 'i' : '\<M-x>]'
+nnoremap <silent> <expr> <M-x><C-]> (&buftype == 'terminal') ? 'i' : '\<M-x>\<C-]>]'
 
 " this causes sign column to disappear on popups that are terminal windows ...
 "au TerminalOpen * setlocal signcolumn=no

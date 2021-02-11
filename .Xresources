@@ -244,9 +244,17 @@ URxvt.scrollBar_right: false
 
 URxvt.visualBell: false
 URxvt.urgentOnBell: false
+!! more bell ?
+URxvt.insecure: false
+
 !! also turn gnome bell off ...
 !! gsettings set org.gnome.desktop.wm.preferences visual-bell false
 !! gsettings set org.gnome.desktop.wm.preferences audible-bell false
+
+!! ?
+URxvt*buffered: true
+URxvt.utmpInhibit: true
+!! ------
 
 !! disable scrollback buffer for alternate screen
 !! thus shift+up etc. does not scroll ...
@@ -416,8 +424,10 @@ URxvt.keysym.Shift-Meta-Delete: string:\033[3;4~
 !! NOTE: edit <perl-lib>/perl/selection-popup, option-popup and change:
 !!       button 3 + ControlMask -> button 3 + ShiftMask
 !!       button 2 + ControlMask -> button 2 + Mod1Mask
+
 !!URxvt.perl-lib: ~/urxvt-perl
 !!URxvt.perl-lib: /usr/lib/x86_64-linux-gnu/urxvt
+
 !!URxvt.perl-ext-common: default,matcher,font-size,selection-to-clipboard
 !! Open urls in browser with Control-Click
 !!URxvt.urlLauncher: /usr/bin/firefox
@@ -427,7 +437,8 @@ URxvt.matcher.button: S1
 !!URxvt.keysym.Control-0x2d: perl:font-size:decrease
 !! Copy Paste & Other Extensions
 !!URxvt.perl-ext-common: default,clipboard,url-select,keyboard-select
-URxvt.perl-ext-common: default,matcher
+!!URxvt.perl-ext-common: default,matcher,focus
+URxvt.perl-ext-common: default,matcher,-clipboard,-selection,-selection-popup,-option-popup
 !!URxvt.keysym.M-c: perl:clipboard:copy
 !!URxvt.keysym.M-v: perl:clipboard:paste
 !!URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
@@ -459,4 +470,22 @@ URxvt.clipboard.pastecmd: myclip --o --rmlastnl --sc 0
 !! seems to already be there
 !!URxvt*VT100.translations:    #override\
 !!    Control Meta<Btn3Motion>:  select-extend()
+
+!!*VT100.translations:    #override\
+!!    Shift ~Ctrl ~Alt<Btn1Down>:              extend-start()\n\
+!!    Shift ~Ctrl ~Alt Button1<PtrMoved>:      extend-adjust()\n\
+!!    Shift ~Ctrl ~Alt<Btn1Up>:                extend-end()\n\
+!!    Ctrl ~Shift ~Alt<Btn1Down>: grab-focus() set-insertion-point()\n\
+!!    Ctrl ~Shift ~Alt Button1<PtrMoved>:      \n\
+!!    Ctrl ~Shift ~Alt<Btn1Up>:                \n\
+!!    ~Shift ~Ctrl ~Alt Button1<PtrMoved>:     extend-adjust()\n\
+!!    ~Shift ~Ctrl ~Alt<Btn1Up>:               extend-end()\n\
+!!    ~Shift ~Ctrl ~Alt<Btn3Down>:             stuff()\n\
+
+!! these do NOT seem to work in urxvt-unicode ...
+*VT100.translations:    #override \
+    Shift ~Ctrl ~Alt<Btn1Down>:         \n\
+    Shift ~Ctrl ~Alt<Btn1Motion>:       \n\
+    Shift ~Ctrl ~Alt Button1<PtrMoved>: \n\
+    Shift ~Ctrl ~Alt<Btn1Up>:           \n
 
