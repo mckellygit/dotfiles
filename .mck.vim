@@ -1097,6 +1097,10 @@ function QuitGV() abort
         quit
         return
     endif
+
+    " --------------
+    "let ans='y'
+    " --------------
     echohl Statement
     echo "Last remaining view, really quit ? (q|y/n): "
     echohl None
@@ -1105,6 +1109,8 @@ function QuitGV() abort
         let c = getchar()
     endwhile
     let ans=nr2char(c)
+    " --------------
+
     if ans ==# 'y' || ans ==# 'Y' || ans ==# 'q' || ans ==# 'Q'
         "quitall
         call <SID>QuitIfOnlyNoNameLeft()
