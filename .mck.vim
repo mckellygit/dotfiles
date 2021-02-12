@@ -1541,7 +1541,7 @@ autocmd User VimagitLeaveCommit call <SID>MagitReload()
 function! s:MagitPush(p,args)
     if &filetype == "magit"
         let ans = 'y'
-        if p == 0
+        if a:p == 0
             if empty(a:args)
                 let prompt = 'git push ? (Y/n): '
             else
