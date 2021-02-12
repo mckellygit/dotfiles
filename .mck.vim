@@ -1454,6 +1454,14 @@ autocmd FileType magit :Alias x! call\ MagitWriteBuffer()
 autocmd FileType magit :Alias w  call\ MagitWriteBuffer()
 autocmd FileType magit :Alias w! call\ MagitWriteBuffer()
 
+function! MagitUpdateBufferTerm()
+    wincmd p
+    if &filetype == "magit"
+        call magit#update_buffer()
+    endif
+    wincmd p
+endfunction
+
 function! MagitUpdateBuffer()
     if &filetype == "magit"
         call magit#update_buffer()
@@ -1552,9 +1560,9 @@ function! s:MagitPush(p,args)
         endif
         if ans ==# 'y' || ans ==# 'Y' || ans == ""
             if empty(a:args)
-                execute 'AsyncRun -raw -strip -mode=term -pos=bottom -rows=10 -post=call\ MagitUpdateBuffer() git push'
+                execute 'AsyncRun -raw -strip -mode=term -pos=bottom -rows=10 -post=call\ MagitUpdateBufferTerm() git push'
             else
-                execute 'AsyncRun -raw -strip -mode=term -pos=bottom -rows=10 -post=call\ MagitUpdateBuffer() git push ' a:args
+                execute 'AsyncRun -raw -strip -mode=term -pos=bottom -rows=10 -post=call\ MagitUpdateBufferTerm() git push ' a:args
             endif
             "FloatermNew --name=magit --autoclose=2 --height=0.75 --width=0.80
             "FloatermNew --name=magit --autoclose=2 --height=0.75 --width=0.80 bash_ask --tty git push
@@ -5862,9 +5870,9 @@ nmap <Leader>pA ^<Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w
 nmap <Leader>pl <Plug>UnconditionalPasteLineAfter
 nmap <Leader>Pl <Plug>UnconditionalPasteLineBefore
 "
-" indented
-nmap <Leader>pi <Plug>UnconditionalPasteIndentedAfter
-nmap <Leader>Pi <Plug>UnconditionalPasteIndentedBefore
+" indented (used to be pi/Pi, but switched with px/Px below)
+nmap <Leader>px <Plug>UnconditionalPasteIndentedAfter
+nmap <Leader>Px <Plug>UnconditionalPasteIndentedBefore
 
 " use . for more (>) and , for less (<) indentation
 nmap <Leader>p. <Plug>UnconditionalPasteMoreIndentAfter
@@ -5880,23 +5888,8 @@ nmap <Leader>Pb <Plug>UnconditionalPasteBlockBefore
 "nmap <Leader>P> <Plug>UnconditionalPasteShiftedBefore
 "nmap <Leader>p> <Plug>UnconditionalPasteShiftedAfter
 
-" paste indented line, like <Leader>pi/Pi, but with more indent logic
-function s:MyUPIndentBefore() abort
-    execute 'keepjumps normal mx^'
-    let ccol = col('.')
-    execute 'keepjumps normal k0^'
-    let pcol = col('.')
-    execute 'keepjumps normal `x'
-    if pcol > ccol
-        "call feedkeys('\P.')
-        execute "keepjumps normal \<Plug>UnconditionalPasteMoreIndentBefore"
-    else
-        "call feedkeys('\Pi')
-        execute "keepjumps normal \<Plug>UnconditionalPasteIndentedBefore"
-    endif
-endfunction
-nmap <silent> <Leader>Px <C-\><C-n>:<C-u>call <SID>MyUPIndentBefore()<CR>
-
+" paste indented line, like <Leader>px/Px, but with more indent logic
+" (used to be px/Px but switched with pi/Pi above)
 function s:MyUPIndentAfter() abort
     execute 'keepjumps normal mx^'
     let ccol = col('.')
@@ -5911,7 +5904,23 @@ function s:MyUPIndentAfter() abort
         execute "keepjumps normal \<Plug>UnconditionalPasteIndentedAfter"
     endif
 endfunction
-nmap <silent> <Leader>px <C-\><C-n>:<C-u>call <SID>MyUPIndentAfter()<CR>
+nmap <silent> <Leader>pi <C-\><C-n>:<C-u>call <SID>MyUPIndentAfter()<CR>
+
+function s:MyUPIndentBefore() abort
+    execute 'keepjumps normal mx^'
+    let ccol = col('.')
+    execute 'keepjumps normal k0^'
+    let pcol = col('.')
+    execute 'keepjumps normal `x'
+    if pcol > ccol
+        "call feedkeys('\P.')
+        execute "keepjumps normal \<Plug>UnconditionalPasteMoreIndentBefore"
+    else
+        "call feedkeys('\Pi')
+        execute "keepjumps normal \<Plug>UnconditionalPasteIndentedBefore"
+    endif
+endfunction
+nmap <silent> <Leader>Pi <C-\><C-n>:<C-u>call <SID>MyUPIndentBefore()<CR>
 " unconditional-paste ---
 
 " ansiesc ----------
