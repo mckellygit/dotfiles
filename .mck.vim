@@ -1549,9 +1549,9 @@ function! s:MagitPush(args)
         let ans=nr2char(getchar())
         if ans ==# 'y' || ans ==# 'Y' || ans == ""
             if empty(a:args)
-                execute 'AsyncRun -raw -strip -post=call\ MagitUpdateBuffer() git push'
+                execute 'AsyncRun -raw -strip -mode=term -pos=bottom -rows=10 -post=call\ MagitUpdateBuffer() git push'
             else
-                execute 'AsyncRun -raw -strip -post=call\ MagitUpdateBuffer() git push ' a:args
+                execute 'AsyncRun -raw -strip -mode=term -pos=bottom -rows=10 -post=call\ MagitUpdateBuffer() git push ' a:args
             endif
             "FloatermNew --name=magit --autoclose=2 --height=0.75 --width=0.80
             "FloatermNew --name=magit --autoclose=2 --height=0.75 --width=0.80 bash_ask --tty git push
@@ -6908,7 +6908,30 @@ endfunction
 " :x to save (if modified) and go to next (w/o prompting) or exit
 function s:NextOrQuit() abort
     " TODO: should we auto hide/bdel/bwipe and/or set modifiable on these terminal buffers ?
-    if &buftype ==# 'terminal'
+    if &buftype ==# 'terminal' && mode() != 'n'
+        echohl Statement
+        echo "Unable to :quit terminal (hide|bdel|bwipe buffer)"
+        echohl None
+        return
+    endif
+    if &buftype ==# 'terminal' && mode() == 'n'
+        try
+            silent exe 'normal! i'
+            silent exe 'normal! \<Esc>'
+        catch /E21:/
+            " just to clear the cmdline of this function ...
+            redraw!
+            echo " "
+            update
+            try
+                next
+            catch /E163:/
+                exit
+            catch /E165:/
+                exit
+            endtry
+            return
+        endtry
         echohl Statement
         echo "Unable to :quit terminal (hide|bdel|bwipe buffer)"
         echohl None
@@ -6930,7 +6953,30 @@ endfunction
 function s:ConfNextOrQuit() abort
     " check if buf has changed and prompt to save now instead of after all files ?
     " TODO: should we auto hide/bdel/bwipe and/or set modifiable on these terminal buffers ?
-    if &buftype ==# 'terminal'
+    if &buftype ==# 'terminal' && mode() != 'n'
+        echohl Statement
+        echo "Unable to :quit terminal (hide|bdel|bwipe buffer)"
+        echohl None
+        return
+    endif
+    if &buftype ==# 'terminal' && mode() == 'n'
+        try
+            silent exe 'normal! i'
+            silent exe 'normal! \<Esc>'
+        catch /E21:/
+            " just to clear the cmdline of this function ...
+            redraw!
+            echo " "
+            update
+            try
+                next
+            catch /E163:/
+                exit
+            catch /E165:/
+                exit
+            endtry
+            return
+        endtry
         echohl Statement
         echo "Unable to :quit terminal (hide|bdel|bwipe buffer)"
         echohl None
