@@ -1538,15 +1538,18 @@ function! s:MagitReload()
 endfunction
 autocmd User VimagitLeaveCommit call <SID>MagitReload()
 
-function! s:MagitPush(args)
+function! s:MagitPush(p,args)
     if &filetype == "magit"
-        if empty(a:args)
-            let prompt = 'git push ? (Y/n): '
-        else
-            let prompt = 'git push ' . a:args . ' ? (Y/n): '
+        let ans = 'y'
+        if p == 0
+            if empty(a:args)
+                let prompt = 'git push ? (Y/n): '
+            else
+                let prompt = 'git push ' . a:args . ' ? (Y/n): '
+            endif
+            echo prompt
+            let ans=nr2char(getchar())
         endif
-        echo prompt
-        let ans=nr2char(getchar())
         if ans ==# 'y' || ans ==# 'Y' || ans == ""
             if empty(a:args)
                 execute 'AsyncRun -raw -strip -mode=term -pos=bottom -rows=10 -post=call\ MagitUpdateBuffer() git push'
@@ -1568,9 +1571,9 @@ function! s:MagitPush(args)
         echo " "
     endif
 endfunction
-nnoremap <silent> <Leader>mP :call <SID>MagitPush('')<CR>
+nnoremap <silent> <Leader>mP :call <SID>MagitPush(0,'')<CR>
 
-command! -bang -nargs=* MPush call s:MagitPush(<q-args>)
+command! -bang -nargs=* MPush call s:MagitPush(1,<q-args>)
 
 command! -bang Mgv call s:MyGV('')
 
