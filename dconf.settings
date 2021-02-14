@@ -1,5 +1,5 @@
 [com/ubuntu/update-notifier]
-release-check-time=uint32 1605794240
+release-check-time=uint32 1613057393
 
 [io/github/Pithos]
 last-station-id='3862749000310231591'
@@ -40,14 +40,14 @@ use-primary=true
 schema-version=uint32 3
 
 [org/gnome/settings-daemon/plugins/power]
-sleep-inactive-ac-timeout=5400
+sleep-inactive-ac-timeout=3600
 sleep-inactive-ac-type='suspend'
 sleep-inactive-battery-timeout=900
 
 [org/gnome/settings-daemon/plugins/color]
-night-light-schedule-automatic=true
-night-light-schedule-to=0.0
-night-light-schedule-from=6.0
+night-light-schedule-automatic=false
+night-light-schedule-to=0.5
+night-light-schedule-from=5.0
 night-light-enabled=true
 night-light-temperature=uint32 5250
 
@@ -66,7 +66,7 @@ numlock-state='on'
 app-picker-view=uint32 1
 command-history=['r']
 enabled-extensions=['sound-output-device-chooser@kgshank.net', 'clipboard-indicator@tudmotu.com']
-favorite-apps=['org.gnome.Nautilus.desktop', 'rhythmbox.desktop', 'io.github.Pithos.desktop', 'libreoffice-writer.desktop', 'org.gnome.Software.desktop', 'update-manager.desktop', 'yelp.desktop', 'teams-insiders.desktop', 'code.desktop', 'google-chrome.desktop', 'org.remmina.Remmina.desktop', 'vivaldi-stable.desktop', 'firefox.desktop', 'nixnote2.desktop', 'Alacritty.desktop', 'rxvt-unicode.desktop', 'simple-scan.desktop']
+favorite-apps=['org.gnome.Nautilus.desktop', 'rhythmbox.desktop', 'io.github.Pithos.desktop', 'libreoffice-writer.desktop', 'org.gnome.Software.desktop', 'update-manager.desktop', 'yelp.desktop', 'teams-insiders.desktop', 'code.desktop', 'google-chrome.desktop', 'org.remmina.Remmina.desktop', 'vivaldi-stable.desktop', 'nixnote2.desktop', 'Alacritty.desktop', 'rxvt-unicode.desktop', 'kitty.desktop', 'simple-scan.desktop']
 
 [org/gnome/shell/extensions/sound-output-device-chooser]
 icon-theme='colored'
@@ -75,7 +75,7 @@ icon-theme='colored'
 show-tabs-mode='auto'
 
 [org/gnome/gedit/plugins/filebrowser]
-virtual-root='file:///home/kellma02/hpcc-user-conf'
+virtual-root='file:///home/kellma02'
 tree-view=true
 root='file:///'
 
@@ -101,7 +101,7 @@ search-filter-time-type='last_modified'
 
 [org/gnome/nautilus/window-state]
 sidebar-width=244
-geometry='2321x1289+36+32'
+geometry='1672x966+36+32'
 maximized=false
 
 [org/gnome/nautilus/desktop]
@@ -170,13 +170,14 @@ type='google'
 migrated=true
 
 [org/gnome/desktop/interface]
-text-scaling-factor=1.22
+text-scaling-factor=1.25
 cursor-size=24
 font-name='Ubuntu 13'
 document-font-name='Sans 13'
 gtk-im-module='gtk-im-context-simple'
 cursor-theme='DMZ-White'
 monospace-font-name='Ubuntu Mono 13'
+cursor-blink=true
 clock-show-date=true
 
 [org/gnome/desktop/notifications]
@@ -264,7 +265,7 @@ picture-options='zoom'
 secondary-color='#000000000000'
 
 [org/gnome/desktop/peripherals/mouse]
-speed=-0.63309352517985618
+speed=-0.79856115107913672
 
 [org/gnome/desktop/calendar]
 show-weekdate=false
@@ -285,11 +286,16 @@ focus-mode='sloppy'
 audible-bell=false
 
 [org/gnome/desktop/wm/keybindings]
-switch-to-workspace-right=['<Super><Alt>Right']
-activate-window-menu=['<Shift><Alt>space']
-switch-to-workspace-left=['<Super><Alt>Left']
 raise-or-lower=['<Alt>w']
+switch-to-workspace-left=['<Super><Alt>Left']
+switch-applications=['<Super>Tab']
 switch-to-workspace-down=['<Super>Page_Down']
+switch-to-workspace-right=['<Super><Alt>Right']
+cycle-windows=['<Super>q']
+activate-window-menu=['<Shift><Alt>space']
+switch-applications-backward=['<Shift><Super>Tab']
+switch-group-backward=['<Shift><Super>Above_Tab']
+switch-group=['<Super>Above_Tab']
 switch-to-workspace-up=['<Super>Page_Up']
 
 [org/gnome/desktop/session]
@@ -308,12 +314,6 @@ secondary-color='#000000000000'
 [org/gnome/desktop/input-sources]
 sources=[('xkb', 'us')]
 xkb-options=['ctrl:nocaps']
-
-[org/gnome/simple-scan]
-save-directory='/home/kellma02/pCloudDrive/hal9009/Documents/misc/LakeviewManchester/rocket'
-photo-dpi=600
-text-dpi=600
-document-type='text'
 
 [org/gnome/cheese]
 photo-y-resolution=480
@@ -336,6 +336,9 @@ window-size=[1887, 1066]
 [org/gnome/eog/view]
 background-color='rgb(0,0,0)'
 use-background-color=true
+
+[org/gnome/eog/ui]
+statusbar=true
 
 [org/gnome/rhythmbox/plugins/audioscrobbler/Last.fm]
 scrobbling-enabled=true
@@ -402,16 +405,17 @@ subtitle-encoding='UTF-8'
 active-plugins=['skipto', 'screensaver', 'media_player_keys', 'vimeo', 'apple-trailers', 'screenshot', 'autoload-subtitles', 'movie-properties', 'save-file', 'variable-rate', 'recent']
 
 [org/gnome/mutter]
+overlay-key='Super_R'
 center-new-windows=true
 experimental-features=['scale-monitor-framebuffer']
 
 [org/gnome/software]
-check-timestamp=int64 1605454203
+check-timestamp=int64 1613309735
 
 [org/gtk/settings/file-chooser]
 sort-column='name'
-sidebar-width=244
-window-position=(663, 338)
+sidebar-width=247
+window-position=(2633, 356)
 show-size-column=true
 show-hidden=false
 window-size=(1231, 902)
@@ -421,7 +425,7 @@ sort-order='ascending'
 location-mode='path-bar'
 
 [org/gtk/settings/color-chooser]
-selected-color=(true, 0.84705882352941175, 0.37254901960784315, 0.0, 1.0)
+selected-color=(true, 0.74509803921568629, 0.80784313725490198, 0.8666666666666667, 1.0)
 custom-colors=[(0.84705882352941175, 0.37254901960784315, 0.0, 1.0), (0.74509803921568629, 0.80784313725490198, 0.8666666666666667, 1.0)]
 
 [org/yorba/shotwell/preferences/ui]
@@ -441,9 +445,12 @@ library-photos-sort-ascending=false
 display-photo-comments=false
 
 [org/yorba/shotwell/preferences/window]
+direct-maximize=false
+direct-height=768
+direct-width=1024
 library-height=768
-library-maximize=false
 library-width=1024
+library-maximize=false
 
 [apps/audio-recorder]
 show-systray-icon=true
@@ -476,14 +483,14 @@ saved-player-list=@as []
 
 [apps/update-manager]
 first-run=false
-launch-time=int64 1605058580
-window-height=400
+launch-time=int64 1612534732
+window-height=675
 show-details=true
-launch-count=17
+launch-count=26
 window-width=1135
 
 [ca/desrt/dconf-editor]
-saved-view='/org/gnome/settings-daemon/plugins/color/'
+saved-view='/org/gnome/desktop/wm/keybindings'
 window-height=1117
 window-width=1866
 window-is-maximized=false
