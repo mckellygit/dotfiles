@@ -1411,24 +1411,23 @@ let g:magit_auto_foldopen=1
 let g:magit_default_fold_level=1
 let g:magit_close_mapping='\mQ'
 let g:magit_ignore_mapping='\mI'
+let g:magit_close_commit_mapping='\mX'
 
 " use R to refresh/update magit buffer (also <C-L> and <Leader>mR)
-" use F to stage/unstage a file
+" use FF to stage/unstage a file, FA for all files
 " use L to stage/unstage a line
 " use S to stage/unstage a hunk
 " use E to edit the file
 " use M to mark a diff-line/hunk for staging (then use S to stage)
 " CC to commit
 " CA to commit --amend
-" CU to undo commit (before saving)
+" CX to undo commit (before saving)
 " <Leader>mP to push
 
 autocmd User VimagitEnterCommit startinsert
 autocmd FileType magit noremap <silent> <buffer> q <Nop>
 autocmd FileType magit nnoremap <silent> <buffer> <C-l> :echo "Magit update ..."<bar>call magit#update_buffer()<CR>:sleep 551m<bar>redraw!<bar>echo " "<CR>
 autocmd FileType magit nnoremap <silent> <buffer> <Leader>mR :echo "Magit update ..."<bar>call magit#update_buffer()<CR>:sleep 551m<bar>redraw!<bar>echo " "<CR>
-" for CU to not leave extra tab ...
-autocmd FileType magit nnoremap <silent> <buffer> CU :call magit#close_commit()<bar>quit<bar>/Staged<CR>0
 
 function! MagitWriteBuffer() abort
     redraw!
@@ -1487,6 +1486,14 @@ function! <SID>LaunchMagit()
         execute "normal \<C-w>r"
         " to get the msg widths correct ...
         call magit#update_buffer()
+
+        " clear undo
+        let cur_pos = line('.')
+        setlocal undolevels=-1
+        call cursor(1, 0)
+        exe "normal! a \<BS>\<Esc>"
+        call cursor(cur_pos, 0)
+
     else
         silent execute "q"
     endif
@@ -1529,6 +1536,14 @@ function! s:Magit1(args)
         execute "normal \<C-w>r"
         " to get the msg widths correct ...
         call magit#update_buffer()
+
+        " clear undo
+        let cur_pos = line('.')
+        setlocal undolevels=-1
+        call cursor(1, 0)
+        exe "normal! a \<BS>\<Esc>"
+        call cursor(cur_pos, 0)
+
     endif
 endfunction
 command! -nargs=* Magit2 call s:Magit1(<q-args>)
@@ -1541,6 +1556,14 @@ function! s:MagitReload()
         silent execute mcmd
         " to get the msg widths correct ...
         call magit#update_buffer()
+
+        " clear undo
+        let cur_pos = line('.')
+        setlocal undolevels=-1
+        call cursor(1, 0)
+        exe "normal! a \<BS>\<Esc>"
+        call cursor(cur_pos, 0)
+
         quit
     endif
 endfunction
@@ -1559,6 +1582,14 @@ function! s:MagitPush(p,args)
             let ans=nr2char(getchar())
         endif
         if ans ==# 'y' || ans ==# 'Y' || ans == ""
+
+            " clear undo
+            let cur_pos = line('.')
+            setlocal undolevels=-1
+            call cursor(1, 0)
+            exe "normal! a \<BS>\<Esc>"
+            call cursor(cur_pos, 0)
+
             if empty(a:args)
                 execute 'AsyncRun -raw -strip -mode=term -pos=bottom -rows=10 -post=call\ MagitUpdateBufferTerm() git push'
             else
@@ -1582,11 +1613,25 @@ endfunction
 nnoremap <silent> <Leader>mP :call <SID>MagitPush(0,'')<CR>
 
 command! -bang -nargs=* MPush call s:MagitPush(1,<q-args>)
-
 command! -bang Mgv call s:MyGV('')
+command! -bang MGV call s:MyGV('')
+command! -bang MUpdate  echo "Magit update ..."<bar>call magit#update_buffer()<bar>:sleep 551m<bar>redraw!<bar>echo " "
+command! -bang MRefresh echo "Magit update ..."<bar>call magit#update_buffer()<bar>:sleep 551m<bar>redraw!<bar>echo " "
 
-" TODO: command! Mupdate to refresh/update buffer ...
-
+" for CX to not leave extra tab ...
+function! s:MagitUnCommit()
+    if ( b:magit_current_commit_mode == '' )
+        return
+    endif
+    call magit#close_commit()
+    try
+        exec "normal! /Staged\<CR>"
+        quit
+        exec "normal! 0"
+    catch /E486:/
+    endtry
+endfunction
+autocmd FileType magit nnoremap <silent> <buffer> CX :call <SID>MagitUnCommit()<CR>
 " vimagit -------------
 
 " twiggy --------------
@@ -5893,9 +5938,12 @@ nmap <Leader>Pb <Plug>UnconditionalPasteBlockBefore
 function s:MyUPIndentAfter() abort
     execute 'keepjumps normal mx^'
     let ccol = col('.')
-    execute 'keepjumps normal j0^'
+    " keep going down until non-blank line ...
+    call search('^.\+', 'W')
+    execute 'keepjumps normal 0^'
     let ncol = col('.')
     execute 'keepjumps normal `x'
+    " TODO: can we paste at ncol ?
     if ncol > ccol
         "call feedkeys('\p.')
         execute "keepjumps normal \<Plug>UnconditionalPasteMoreIndentAfter"
@@ -5909,9 +5957,12 @@ nmap <silent> <Leader>pi <C-\><C-n>:<C-u>call <SID>MyUPIndentAfter()<CR>
 function s:MyUPIndentBefore() abort
     execute 'keepjumps normal mx^'
     let ccol = col('.')
-    execute 'keepjumps normal k0^'
+    " keep going up until non-blank line ...
+    call search('^.\+', 'bW')
+    execute 'keepjumps normal 0^'
     let pcol = col('.')
     execute 'keepjumps normal `x'
+    " TODO: can we paste at pcol ?
     if pcol > ccol
         "call feedkeys('\P.')
         execute "keepjumps normal \<Plug>UnconditionalPasteMoreIndentBefore"
