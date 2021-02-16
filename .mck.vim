@@ -61,7 +61,8 @@ Plugin 'inkarkat/vim-visualrepeat'
 "Plugin 'Valloric/YouCompleteMe'
 "
 " vim-clang auto-completion
-Plugin 'justmao945/vim-clang'
+"Plugin 'justmao945/vim-clang'
+Plugin 'mckellygit/vim-clang'
 "
 " rooter for :Files and FileBeagle (<Leader>fb)
 "Plugin 'airblade/vim-rooter'
@@ -281,9 +282,7 @@ Plugin 'voldikss/fzf-floaterm'
 " nvim completeopt does not have popup ...
 " this works but it does not stop preview split
 " for now, just skip preview with nvim, and have extra info in orig menu popup
-if has("nvim")
-    Plugin 'ncm2/float-preview.nvim.git'
-endif
+Plugin 'ncm2/float-preview.nvim.git'
 "
 "" All of your Plugins must be added before the following line
 call vundle#end()         " required
@@ -1647,6 +1646,7 @@ function! <SID>LaunchTwiggy()
     else
         let t:twiggy_git_cmd = fugitive#repo().git_command()
         let t:twiggy_git_dir = git_dir
+        let b:git_dir = git_dir
         silent execute "Twiggy"
     endif
 endfunction
