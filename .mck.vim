@@ -1428,6 +1428,8 @@ autocmd FileType magit noremap <silent> <buffer> q <Nop>
 autocmd FileType magit nnoremap <silent> <buffer> <C-l> :echo "Magit update ..."<bar>call magit#update_buffer()<CR>:sleep 551m<bar>redraw!<bar>echo " "<CR>
 autocmd FileType magit nnoremap <silent> <buffer> <Leader>mR :echo "Magit update ..."<bar>call magit#update_buffer()<CR>:sleep 551m<bar>redraw!<bar>echo " "<CR>
 
+let g:magit1 = 0
+
 function! MagitWriteBuffer() abort
     redraw!
     echo " "
@@ -1476,7 +1478,9 @@ function! <SID>LaunchMagit()
         echo " "
         return
     elseif &filetype != "magit"
-        autocmd FileType magit nmap <silent> <buffer> qq :conf q<CR>:redraw!<CR>:echo " "<CR>
+        if g:magit1 == 0
+            autocmd FileType magit nmap <silent> <buffer> qq :conf q<CR>:redraw!<CR>:echo " "<CR>
+        endif
         call magit#show_magit('v')
 
         "execute "normal \<C-w>w"
@@ -1504,6 +1508,7 @@ au VimEnter * :command! Magit call s:LaunchMagit()
 nnoremap <silent> <Leader>ma :call <SID>LaunchMagit()<CR>
 
 function! s:Magit1(args)
+    let g:magit1 = 1
     let git_dir = FugitiveGitDir()
     if empty(git_dir)
         let errmsg = 'Not in a git repository'
