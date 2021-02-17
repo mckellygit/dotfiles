@@ -1476,6 +1476,7 @@ function! <SID>LaunchMagit()
         echo " "
         return
     elseif &filetype != "magit"
+        autocmd FileType magit nmap <silent> <buffer> qq :conf q<CR>:redraw!<CR>:echo " "<CR>
         let mcmd = 'Magit'
         silent execute mcmd
 
