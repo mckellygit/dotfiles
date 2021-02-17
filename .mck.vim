@@ -1425,7 +1425,7 @@ let g:magit_close_commit_mapping='\mX'
 
 autocmd User VimagitEnterCommit startinsert
 autocmd FileType magit noremap <silent> <buffer> q <Nop>
-autocmd FileType magit noremap <silent> <buffer> qq :conf q<CR>
+autocmd FileType magit noremap <silent> <buffer> qq  :conf q<CR>
 autocmd FileType magit nnoremap <silent> <buffer> <C-l> :echo "Magit update ..."<bar>call magit#update_buffer()<CR>:sleep 551m<bar>redraw!<bar>echo " "<CR>
 autocmd FileType magit nnoremap <silent> <buffer> <Leader>mR :echo "Magit update ..."<bar>call magit#update_buffer()<CR>:sleep 551m<bar>redraw!<bar>echo " "<CR>
 
