@@ -1477,8 +1477,7 @@ function! <SID>LaunchMagit()
         return
     elseif &filetype != "magit"
         autocmd FileType magit nmap <silent> <buffer> qq :conf q<CR>:redraw!<CR>:echo " "<CR>
-        let mcmd = 'Magit'
-        silent execute mcmd
+        call magit#show_magit('v')
 
         "execute "normal \<C-w>w"
         "vertical resize 20
@@ -1500,6 +1499,8 @@ function! <SID>LaunchMagit()
     endif
 endfunction
 command! MyMagit call s:LaunchMagit()
+" do this so we are after the plugin and can overwrite it ...
+au VimEnter * :command! Magit call s:LaunchMagit()
 nnoremap <silent> <Leader>ma :call <SID>LaunchMagit()<CR>
 
 function! s:Magit1(args)
@@ -1529,8 +1530,7 @@ function! s:Magit1(args)
         autocmd FileType magit nmap <silent> <buffer> qq         :conf qa<CR>
         autocmd FileType magit nmap <silent> <buffer> <Leader>qq :conf qa<CR>
         autocmd FileType magit noremap <silent> <buffer> <Leader>ma <Nop>
-        let mcmd = 'Magit'
-        silent execute mcmd
+        call magit#show_magit('v')
         execute "normal \<C-w>w"
         vertical resize 20
         setlocal winfixwidth
