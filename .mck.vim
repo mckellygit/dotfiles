@@ -1425,6 +1425,7 @@ let g:magit_close_commit_mapping='\mX'
 
 autocmd User VimagitEnterCommit startinsert
 autocmd FileType magit noremap <silent> <buffer> q <Nop>
+autocmd FileType magit noremap <silent> <buffer> qq :conf q<CR>
 autocmd FileType magit nnoremap <silent> <buffer> <C-l> :echo "Magit update ..."<bar>call magit#update_buffer()<CR>:sleep 551m<bar>redraw!<bar>echo " "<CR>
 autocmd FileType magit nnoremap <silent> <buffer> <Leader>mR :echo "Magit update ..."<bar>call magit#update_buffer()<CR>:sleep 551m<bar>redraw!<bar>echo " "<CR>
 
@@ -1476,13 +1477,16 @@ function! <SID>LaunchMagit()
         echo " "
         return
     elseif &filetype != "magit"
+        autocmd FileType magit nmap <silent> <buffer> qq :conf q<CR>
         let mcmd = 'Magit'
         silent execute mcmd
-        execute "normal \<C-w>w"
-        vertical resize 20
-        setlocal winfixwidth
-        execute "normal \<C-w>w"
-        execute "normal \<C-w>r"
+
+        "execute "normal \<C-w>w"
+        "vertical resize 20
+        "setlocal winfixwidth
+        "execute "normal \<C-w>w"
+        "execute "normal \<C-w>r"
+
         " to get the msg widths correct ...
         call magit#update_buffer()
 
@@ -1492,7 +1496,6 @@ function! <SID>LaunchMagit()
         call cursor(1, 0)
         exe "normal! a \<BS>\<Esc>"
         call cursor(cur_pos, 0)
-
     else
         silent execute "q"
     endif
@@ -1524,6 +1527,7 @@ function! s:Magit1(args)
         au VimEnter * :Alias! qall!    call\ MyQuit("qa!")
         au VimEnter * :Alias! quitall  call\ MyQuit("qa")
         au VimEnter * :Alias! quitall! call\ MyQuit("qa!")
+        autocmd FileType magit nmap <silent> <buffer> qq         :conf qa<CR>
         autocmd FileType magit nmap <silent> <buffer> <Leader>qq :conf qa<CR>
         autocmd FileType magit noremap <silent> <buffer> <Leader>ma <Nop>
         let mcmd = 'Magit'
