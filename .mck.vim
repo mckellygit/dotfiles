@@ -282,6 +282,9 @@ Plugin 'voldikss/fzf-floaterm'
 " nvim completeopt does not have popup ...
 " this works but it does not stop preview split
 " for now, just skip preview with nvim, and have extra info in orig menu popup
+if !has('nvim')
+  let g:float_preview#loaded = 1
+endif
 Plugin 'ncm2/float-preview.nvim.git'
 "
 "" All of your Plugins must be added before the following line
