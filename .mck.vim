@@ -1484,16 +1484,19 @@ function! <SID>LaunchMagit()
         if g:magit1 == 0
             autocmd FileType magit nmap <silent> <buffer> qq :conf q<CR>:redraw!<CR>:echo " "<CR>
         endif
+
         call magit#show_magit('v')
 
-        execute "normal \<C-w>w"
-        vertical resize 20
-        setlocal winfixwidth
-        execute "normal \<C-w>w"
-        execute "normal \<C-w>r"
+        if g:magit1 == 1
+            execute "normal \<C-w>w"
+            vertical resize 20
+            setlocal winfixwidth
+            execute "normal \<C-w>w"
+            execute "normal \<C-w>r"
 
-        " to get the msg widths correct ...
-        call magit#update_buffer()
+            " to get the msg widths correct ...
+            call magit#update_buffer()
+        endif
 
         " clear undo
         let cur_pos = line('.')
@@ -1535,9 +1538,11 @@ function! s:Magit1(args)
         au VimEnter * :Alias! qall!    call\ MyQuit("qa!")
         au VimEnter * :Alias! quitall  call\ MyQuit("qa")
         au VimEnter * :Alias! quitall! call\ MyQuit("qa!")
+
         autocmd FileType magit nmap <silent> <buffer> qq         :conf qa<CR>
         autocmd FileType magit nmap <silent> <buffer> <Leader>qq :conf qa<CR>
         autocmd FileType magit noremap <silent> <buffer> <Leader>ma <Nop>
+
         call magit#show_magit('v')
 
         execute "normal \<C-w>w"
@@ -1567,8 +1572,7 @@ function! s:MagitReload()
         let mcmd = 'tabnew | MyMagit'
         silent execute mcmd
 
-        " to get the msg widths correct ...
-        "call magit#update_buffer()
+        " width already adjusted above in MyMagit ...
 
         " clear undo
         let cur_pos = line('.')
