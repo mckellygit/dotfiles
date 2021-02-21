@@ -1486,11 +1486,11 @@ function! <SID>LaunchMagit()
         endif
         call magit#show_magit('v')
 
-        "execute "normal \<C-w>w"
-        "vertical resize 20
-        "setlocal winfixwidth
-        "execute "normal \<C-w>w"
-        "execute "normal \<C-w>r"
+        execute "normal \<C-w>w"
+        vertical resize 20
+        setlocal winfixwidth
+        execute "normal \<C-w>w"
+        execute "normal \<C-w>r"
 
         " to get the msg widths correct ...
         call magit#update_buffer()
@@ -1539,11 +1539,13 @@ function! s:Magit1(args)
         autocmd FileType magit nmap <silent> <buffer> <Leader>qq :conf qa<CR>
         autocmd FileType magit noremap <silent> <buffer> <Leader>ma <Nop>
         call magit#show_magit('v')
+
         execute "normal \<C-w>w"
         vertical resize 20
         setlocal winfixwidth
         execute "normal \<C-w>w"
         execute "normal \<C-w>r"
+
         " to get the msg widths correct ...
         call magit#update_buffer()
 
