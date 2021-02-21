@@ -1564,8 +1564,9 @@ function! s:MagitReload()
     if &filetype == "magit"
         let mcmd = 'tabnew | MyMagit'
         silent execute mcmd
+
         " to get the msg widths correct ...
-        call magit#update_buffer()
+        "call magit#update_buffer()
 
         " clear undo
         let cur_pos = line('.')
