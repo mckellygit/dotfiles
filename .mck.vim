@@ -5886,6 +5886,15 @@ let g:localvimrc_persistent = 1
 "\r.	Jump to next location (>)
 " -------------------------------------
 "
+function s:CloseClangWin() abort
+    try
+        silent execute 'normal :ClangCloseWindow\<CR>'
+    catch /E492:/
+    endtry
+    redraw!
+    echo " "
+endfunction
+
 let g:rtagsUseLocationList=1
 " dont start rdm if from sudo
 if $USER != 'root'
@@ -5899,8 +5908,8 @@ autocmd BufReadPost quickfix nnoremap <silent> <buffer> <C-]> <Return>
 " C-t to go back (not implemented)
 " nmap <C-t> :call rtags#JumpBack()<bar>:echo<CR>
 " \cc to close quickfix, listview, preview
-nnoremap <silent> <Leader>cc           :ccl<bar>lcl<bar>pcl<bar>:ClangCloseWindow<CR>:echo<CR>
-vnoremap <silent> <Leader>cc <C-\><C-n>:ccl<bar>lcl<bar>pcl<bar>:ClangCloseWindow<CR>:echo<CR>
+nnoremap <silent> <Leader>cc           :ccl<bar>lcl<bar>pcl<bar>:call <SID>CloseClangWin()<CR>
+vnoremap <silent> <Leader>cc <C-\><C-n>:ccl<bar>lcl<bar>pcl<bar>:call <SID>CloseClangWin()<CR>
 "noremap <silent> <Leader>cc :windo lcl<bar>ccl<bar>pcl<bar>:echo<CR>
 " qq to also close location list, but we already have a q mapping ...
 "autocmd BufReadPost quickfix nnoremap <silent> <buffer> qq :ccl<bar>lcl<bar>pcl<bar>:echo<CR>
