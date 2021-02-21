@@ -1642,6 +1642,34 @@ function! s:MagitUnCommit()
     endtry
 endfunction
 autocmd FileType magit nnoremap <silent> <buffer> CX :call <SID>MagitUnCommit()<CR>
+
+function! s:MagitCmd(p,args)
+    if empty(a:args)
+        let errmsg = 'MagitCmd: <empty cmd>'
+        call s:warn(errmsg)
+        sleep 951m
+        redraw!
+        echo " "
+        return
+    endif
+    if &filetype == "magit"
+        " clear undo
+        let cur_pos = line('.')
+        setlocal undolevels=-1
+        call cursor(1, 0)
+        exe "normal! a \<BS>\<Esc>"
+        call cursor(cur_pos, 0)
+
+        execute 'AsyncRun -raw -strip -mode=term -pos=bottom -rows=10 -post=call\ MagitUpdateBufferTerm() ' a:args
+    else
+        let errmsg = 'Not inside Magit'
+        call s:warn(errmsg)
+        sleep 951m
+        redraw!
+        echo " "
+    endif
+endfunction
+command! -bang -nargs=* MCmd call s:MagitCmd(1,<q-args>)
 " vimagit -------------
 
 " twiggy --------------
@@ -6005,7 +6033,7 @@ let g:colorizer_rgb_disable = 1
 let g:colorizer_rgba_disable = 1
 let g:colorizer_vimhighl_dump_disable = 1
 "autocmd BufNewFile,BufRead * ColorHighlight!
-nnoremap <silent> <Leader>cC :ColorToggle!<CR>
+nnoremap <silent> <Leader>CC :ColorToggle!<CR>
 " colorizer --------
 
 " less as a pager --

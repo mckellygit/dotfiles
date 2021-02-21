@@ -175,6 +175,8 @@ bind generic   -            none
 
 # =================================================
 
+bind generic CC   @tmux_popup_wrapper --da --tty
+
 bind refs    Pp   @tmux_popup_wrapper git push
 bind refs    Pb   @tmux_popup_wrapper git push -u %(remote) %(branch):'%(prompt Which branch? )'
 bind refs    Pf   @tmux_popup_wrapper git push origin +%(branch)
@@ -214,6 +216,10 @@ bind status  Pp   @tmux_popup_wrapper git push
 bind status  Pb   @tmux_popup_wrapper git push -u %(remote) %(branch):'%(prompt Which branch? )'
 bind status  Pf   @tmux_popup_wrapper git push origin +%(branch)
 bind status  PF   @tmux_popup_wrapper git push --force
+
+bind status  Pl   @tmux_popup_wrapper git pull
+bind status  Mu   @tmux_popup_wrapper git merge --signoff --ff-only upstream/%(branch)
+bind status  Mo   @tmux_popup_wrapper git merge --signoff --ff-only origin/%(branch)
 
 #bind stash   A    ?git stash apply %(stash)
 #bind stash   P    ?git stash pop %(stash)

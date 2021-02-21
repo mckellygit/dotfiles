@@ -28,57 +28,60 @@ ask() {
     done
 }
 
-if [[ $# -lt 1 ]] ; then
-    echo "Error: no cmd provided ..."
-    exit 22
-fi
-
 dontask=0
 usetty=0
 
-if [[ "$1" == "--da" ]] ; then
-    shift
-    dontask=1
-elif [[ "$1" == "--tty" ]] ; then
-    shift
-    usetty=1
-fi
-
 if [[ $# -lt 1 ]] ; then
-    echo "Error: no cmd provided ..."
-    exit 22
-fi
-
-if [[ $dontask -eq 0 ]] ; then
+    cmd=$SHELL
+else
     if [[ "$1" == "--da" ]] ; then
         shift
         dontask=1
-    fi
-fi
-
-if [[ $usetty -eq 0 ]] ; then
-    if [[ "$1" == "--tty" ]] ; then
+    elif [[ "$1" == "--tty" ]] ; then
         shift
         usetty=1
+    fi
+
+    if [[ $# -lt 1 ]] ; then
+        cmd=$SHELL
+    else
+        if [[ $dontask -eq 0 ]] ; then
+            if [[ "$1" == "--da" ]] ; then
+                shift
+                dontask=1
+            fi
+        fi
+        if [[ $usetty -eq 0 ]] ; then
+            if [[ "$1" == "--tty" ]] ; then
+                shift
+                usetty=1
+            fi
+        fi
+    fi
+
+    if [[ $# -lt 1 ]] ; then
+        cmd=$SHELL
+    else
+        cmd="$@"
     fi
 fi
 
 if [[ $dontask -eq 1 ]] ; then
     if [[ $usetty -eq 1 ]] ; then
-        exec "$@"
+        exec "$cmd"
     else
         # could add -e less opt to quit if <CR> at end ...
-        $@ |& /bin/less -R
+        $cmd |& /bin/less -R
         exit $?
     fi
 fi
 
-if ask "Run $@ ?" ; then
+if ask "Run $cmd ?" ; then
     if [[ $usetty -eq 1 ]] ; then
-        exec "$@"
+        exec "$cmd"
     else
         # could add -e less opt to quit if <CR> at end ...
-        $@ |& /bin/less -R
+        $cmd |& /bin/less -R
         exit $?
     fi
 else
