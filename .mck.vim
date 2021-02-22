@@ -1104,7 +1104,7 @@ function QuitGV() abort
     "let ans='y'
     " --------------
     echohl Statement
-    echo "Last remaining view, really quit ? (q|y/n): "
+    echo "Last remaining view, really quit ? (q|Y/n): "
     echohl None
     let c = getchar()
     while type(c) != 0
@@ -1113,7 +1113,7 @@ function QuitGV() abort
     let ans=nr2char(c)
     " --------------
 
-    if ans ==# 'y' || ans ==# 'Y' || ans ==# 'q' || ans ==# 'Q'
+    if ans ==# 'y' || ans ==# 'Y' || ans ==# 'q' || ans ==# 'Q' || ans ==# "\<CR>"
         "quitall
         call <SID>QuitIfOnlyNoNameLeft()
     else
@@ -1598,7 +1598,7 @@ function! s:MagitPush(p,args)
             echo prompt
             let ans=nr2char(getchar())
         endif
-        if ans ==# 'y' || ans ==# 'Y' || ans == ""
+        if ans ==# 'y' || ans ==# 'Y' || ans == "\<CR>"
 
             " clear undo
             let cur_pos = line('.')
