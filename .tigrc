@@ -197,6 +197,10 @@ bind refs    !    none
 bind refs    Cb   @tmux_popup_wrapper git checkout %(branch)  # C
 bind refs    B!   @tmux_popup_wrapper git branch -D %(branch) # !
 
+bind refs    Pl   @tmux_popup_wrapper git pull
+bind refs    Mu   @tmux_popup_wrapper git merge --signoff --ff-only upstream/%(branch)
+bind refs    Mo   @tmux_popup_wrapper git merge --signoff --ff-only origin/%(branch)
+
 #bind main    C    ?git cherry-pick %(commit)
 bind main    C    none
 bind main    Cp   @tmux_popup_wrapper git cherry-pick %(commit) # C
@@ -216,10 +220,6 @@ bind status  Pp   @tmux_popup_wrapper git push
 bind status  Pb   @tmux_popup_wrapper git push -u %(remote) %(branch):'%(prompt Which branch? )'
 bind status  Pf   @tmux_popup_wrapper git push origin +%(branch)
 bind status  PF   @tmux_popup_wrapper git push --force
-
-bind status  Pl   @tmux_popup_wrapper git pull
-bind status  Mu   @tmux_popup_wrapper git merge --signoff --ff-only upstream/%(branch)
-bind status  Mo   @tmux_popup_wrapper git merge --signoff --ff-only origin/%(branch)
 
 #bind stash   A    ?git stash apply %(stash)
 #bind stash   P    ?git stash pop %(stash)
