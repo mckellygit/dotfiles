@@ -1139,7 +1139,7 @@ function! TabCloseRightQuit(bang)
     exe 'tabclose' . a:bang . ' ' . (cur + 1)
   endwhile
   execute "qa!"
-  execute 'normal! \<CR>'
+  execute "normal! \<CR>"
 endfunction
 command! -bang Tabcloserightquit silent! call TabCloseRightQuit('<bang>')
 
