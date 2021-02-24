@@ -1635,12 +1635,15 @@ endfunction
 nnoremap <silent> <Leader>mP :call <SID>MagitPush(0,'')<CR>
 
 command! -bang -nargs=* MPush call s:MagitPush(1,<q-args>)
-command! -bang -nargs=* Mgv call s:MyGV(<q-args>)
-command! -bang -nargs=* MGV call s:MyGV(<q-args>)
-" overwrite plugin GV command with s:MyGV(args) ...
-au VimEnter * :Alias! GV MyGVWrapper
 command! -bang MUpdate  echo "Magit update ..."<bar>call magit#update_buffer()<bar>:sleep 551m<bar>redraw!<bar>echo " "
 command! -bang MRefresh echo "Magit update ..."<bar>call magit#update_buffer()<bar>:sleep 551m<bar>redraw!<bar>echo " "
+
+" overwrite plugin GV command with s:MyGV(args) ...
+au VimEnter * :Alias! GV MyGVWrapper
+
+" now that custom GV cmd works no need for MGV/Mgv ...
+"command! -bang -nargs=* MGV call s:MyGV(<q-args>)
+"command! -bang -nargs=* Mgv call s:MyGV(<q-args>)
 
 " for CX to not leave extra tab ...
 function! s:MagitUnCommit()
