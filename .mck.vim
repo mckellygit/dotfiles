@@ -1653,9 +1653,9 @@ function! s:MagitUnCommit()
 endfunction
 autocmd FileType magit nnoremap <silent> <buffer> CX :call <SID>MagitUnCommit()<CR>
 
-function! s:MagitCmd(p,args)
+function! s:MagitGitCmd(p,args)
     if empty(a:args)
-        let errmsg = 'MagitCmd: <empty cmd>'
+        let errmsg = 'MagitGitCmd: <empty cmd>'
         call s:warn(errmsg)
         sleep 951m
         redraw!
@@ -1670,7 +1670,7 @@ function! s:MagitCmd(p,args)
         exe "normal! a \<BS>\<Esc>"
         call cursor(cur_pos, 0)
 
-        execute 'AsyncRun -raw -strip -mode=term -pos=bottom -rows=10 -post=call\ MagitUpdateBufferTerm() ' a:args
+        execute 'AsyncRun -raw -strip -mode=term -pos=bottom -rows=10 -post=call\ MagitUpdateBufferTerm() git ' a:args
     else
         let errmsg = 'Not inside Magit'
         call s:warn(errmsg)
@@ -1679,7 +1679,7 @@ function! s:MagitCmd(p,args)
         echo " "
     endif
 endfunction
-command! -bang -nargs=* MCmd call s:MagitCmd(1,<q-args>)
+command! -bang -nargs=* MGitCmd call s:MagitGitCmd(1,<q-args>)
 " vimagit -------------
 
 " twiggy --------------
