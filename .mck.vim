@@ -1320,16 +1320,18 @@ function! s:MyGV(args) abort
         call remove(l:alist, -1)
         if len(l:alist) >= 1
             let l:argstr = join(l:alist)
-            execute 'GV ' . l:argstr . ' -- ' . fpath
+            silent execute 'GV ' . l:argstr . ' -- ' . fpath
         else
-            execute 'GV -- ' . fpath
+            silent execute 'GV -- ' . fpath
         endif
     else
-        execute 'GV'
+        silent execute 'GV'
     endif
     redraw!
     echo " "
 endfunction
+
+command! -nargs=* MyGVWrapper call s:MyGV(<q-args>)
 
 nnoremap <silent> <Leader>gv :call <SID>MyGV('')<CR>
 
@@ -1633,8 +1635,10 @@ endfunction
 nnoremap <silent> <Leader>mP :call <SID>MagitPush(0,'')<CR>
 
 command! -bang -nargs=* MPush call s:MagitPush(1,<q-args>)
-command! -bang Mgv call s:MyGV('')
-command! -bang MGV call s:MyGV('')
+command! -bang -nargs=* Mgv call s:MyGV(<q-args>)
+command! -bang -nargs=* MGV call s:MyGV(<q-args>)
+" overwrite plugin GV command with s:MyGV(args) ...
+au VimEnter * :Alias! GV MyGVWrapper
 command! -bang MUpdate  echo "Magit update ..."<bar>call magit#update_buffer()<bar>:sleep 551m<bar>redraw!<bar>echo " "
 command! -bang MRefresh echo "Magit update ..."<bar>call magit#update_buffer()<bar>:sleep 551m<bar>redraw!<bar>echo " "
 
