@@ -1525,14 +1525,14 @@ function! s:Magit1(args)
         sleep 951m
         cquit
     else
-        au VimEnter * :Alias! q        call\ MyQuit("qa")
-        au VimEnter * :Alias! qu       call\ MyQuit("qa")
-        au VimEnter * :Alias! qui      call\ MyQuit("qa")
-        au VimEnter * :Alias! quit     call\ MyQuit("qa")
-        au VimEnter * :Alias! q!       call\ MyQuit("qa!")
-        au VimEnter * :Alias! qu!      call\ MyQuit("qa!")
-        au VimEnter * :Alias! qui!     call\ MyQuit("qa!")
-        au VimEnter * :Alias! quit!    call\ MyQuit("qa!")
+        au VimEnter * :Alias! q        if\ &filetype=='magit'|call\ MyQuit("qa")|else|quit|endif|redraw!|echo\ "\ "
+        au VimEnter * :Alias! qu       if\ &filetype=='magit'|call\ MyQuit("qa")|else|quit|endif|redraw!|echo\ "\ "
+        au VimEnter * :Alias! qui      if\ &filetype=='magit'|call\ MyQuit("qa")|else|quit|endif|redraw!|echo\ "\ "
+        au VimEnter * :Alias! quit     if\ &filetype=='magit'|call\ MyQuit("qa")|else|quit|endif|redraw!|echo\ "\ "
+        au VimEnter * :Alias! q!       if\ &filetype=='magit'|call\ MyQuit("qa")|else|quit!|endif|redraw!|echo\ "\ "
+        au VimEnter * :Alias! qu!      if\ &filetype=='magit'|call\ MyQuit("qa")|else|quit!|endif|redraw!|echo\ "\ "
+        au VimEnter * :Alias! qui!     if\ &filetype=='magit'|call\ MyQuit("qa")|else|quit!|endif|redraw!|echo\ "\ "
+        au VimEnter * :Alias! quit!    if\ &filetype=='magit'|call\ MyQuit("qa")|else|quit!|endif|redraw!|echo\ "\ "
         au VimEnter * :Alias! qa       call\ MyQuit("qa")
         au VimEnter * :Alias! qal      call\ MyQuit("qa")
         au VimEnter * :Alias! qall     call\ MyQuit("qa")
@@ -1679,7 +1679,7 @@ function! s:MagitGitCmd(p,args)
         echo " "
     endif
 endfunction
-command! -bang -nargs=* MGitCmd call s:MagitGitCmd(1,<q-args>)
+command! -bang -nargs=* MGit call s:MagitGitCmd(1,<q-args>)
 " vimagit -------------
 
 " twiggy --------------
