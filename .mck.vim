@@ -287,6 +287,9 @@ if !has('nvim')
 endif
 Plugin 'ncm2/float-preview.nvim.git'
 "
+" CMake utils
+"Plugin 'vhdirk/vim-cmake'
+"
 "" All of your Plugins must be added before the following line
 call vundle#end()         " required
 filetype plugin indent on " required
