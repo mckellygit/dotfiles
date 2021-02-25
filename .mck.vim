@@ -4935,17 +4935,17 @@ endif
 " ---------
 
 nnoremap <silent> <expr> gH winline() - 1 - &scrolloff > 0
-      \ ? ':normal! ' . (winline() - 1 - &scrolloff) . 'gkg^<CR>'
+      \ ? ':normal! ' . (winline() - 1 - &scrolloff) . "gkg^\<CR>"
       \ : 'g^'
 
 nnoremap <silent> <expr> gM winline() < (winheight(0)+1)/2
-      \ ? ':normal! ' . ((winheight(0)+1)/2 - winline()) . 'gjg^<CR>'
+      \ ? ':normal! ' . ((winheight(0)+1)/2 - winline()) . "gjg^\<CR>"
       \ : winline() == (winheight(0)+1)/2
       \         ? 'g^'
-      \         : ':normal! ' . (winline() - (winheight(0)+1)/2) . 'gkg^<CR>'
+      \         : ':normal! ' . (winline() - (winheight(0)+1)/2) . "gkg^\<CR>"
 
 nnoremap <silent> <expr> gL winheight(0) - winline() - &scrolloff > 0
-      \ ? ':normal! ' . (winheight(0) - winline() - &scrolloff) . 'gjg^<CR>'
+      \ ? ':normal! ' . (winheight(0) - winline() - &scrolloff) . "gjg^\<CR>"
       \ : 'g^'
 
 " ---------
@@ -6689,7 +6689,7 @@ function! SkipTerminalsQuitCmd(cmd) abort
     if l:doquit == 1
         "quit!
         execute "qa!"
-        execute 'normal! \<CR>'
+        execute "normal! \<CR>"
     else
         execute a:cmd
     endif
@@ -6721,7 +6721,7 @@ function! SkipTerminalsConfQA() abort
     if l:doquit == 1
         "quit!
         execute "qa!"
-        execute 'normal! \<CR>'
+        execute "normal! \<CR>"
     else
         execute "conf qa"
     endif
@@ -6751,7 +6751,7 @@ function! s:QuitIfOnlyNoNameLeft() abort
     endfor
     if l:doquit == 1
         execute "qa!"
-        execute 'normal! \<CR>'
+        execute "normal! \<CR>"
     else
         execute "q!"
         "execute "tabclose!"
