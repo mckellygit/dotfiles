@@ -1457,7 +1457,8 @@ function! MagitWriteBuffer() abort
     endif
 endfunction
 
-autocmd FileType magit :Alias x  call\ MagitWriteBuffer()
+"autocmd FileType magit :Alias x  call\ MagitWriteBuffer()
+au VimEnter * :Alias x if\ &filetype=='magit'|call\ MagitWriteBuffer()|else|call\ MyNextOrQuit()|endif
 autocmd FileType magit :Alias x! call\ MagitWriteBuffer()
 autocmd FileType magit :Alias w  call\ MagitWriteBuffer()
 autocmd FileType magit :Alias w! call\ MagitWriteBuffer()
@@ -1639,7 +1640,7 @@ command! -bang MUpdate  echo "Magit update ..."<bar>call magit#update_buffer()<b
 command! -bang MRefresh echo "Magit update ..."<bar>call magit#update_buffer()<bar>:sleep 551m<bar>redraw!<bar>echo " "
 
 " overwrite plugin GV command with s:MyGV(args) ...
-au VimEnter * :Alias! GV MyGVWrapper
+au VimEnter * :Alias GV MyGVWrapper
 
 " now that custom GV cmd works no need for MGV/Mgv ...
 "command! -bang -nargs=* MGV call s:MyGV(<q-args>)
@@ -6812,15 +6813,22 @@ function! EndTerminalsConfQA() abort
 endfunction
 
 " :exit to quit all windows
-cnoreabbrev <silent> <expr> exi (getcmdtype() == ':' && getcmdline() =~ '\s*exi\s*')  ? 'call EndTerminalsConfQA()' : 'exi'
-cnoreabbrev <silent> <expr> exit (getcmdtype() == ':' && getcmdline() =~ '\s*exit\s*') ? 'call EndTerminalsConfQA()' : 'exit'
+"cnoreabbrev <silent> <expr> exi (getcmdtype() == ':' && getcmdline() =~ '\s*exi\s*')  ? 'call EndTerminalsConfQA()' : 'exi'
+"cnoreabbrev <silent> <expr> exit (getcmdtype() == ':' && getcmdline() =~ '\s*exit\s*') ? 'call EndTerminalsConfQA()' : 'exit'
+au VimEnter * :Alias exi   call\ EndTerminalsConfQA()
+au VimEnter * :Alias exit  call\ EndTerminalsConfQA()
 
 "cnoreabbrev <silent> <expr> qa (getcmdtype() == ':' && getcmdline() =~ '\s*qa\s*')  ? 'call SkipTerminalsConfQA()' : 'qa'
-cnoreabbrev <silent> <expr> qal (getcmdtype() == ':' && getcmdline() =~ '\s*qal\s*')  ? 'call SkipTerminalsConfQA()' : 'qal '
-cnoreabbrev <silent> <expr> qall (getcmdtype() == ':' && getcmdline() =~ '\s*qall\s*')  ? 'call SkipTerminalsConfQA()' : 'qall'
-cnoreabbrev <silent> <expr> quita (getcmdtype() == ':' && getcmdline() =~ '\s*quita\s*')  ? 'call SkipTerminalsConfQA()' : 'quita'
-cnoreabbrev <silent> <expr> quital (getcmdtype() == ':' && getcmdline() =~ '\s*quital\s*')  ? 'call SkipTerminalsConfQA()' : 'quital'
-cnoreabbrev <silent> <expr> quitall (getcmdtype() == ':' && getcmdline() =~ '\s*quitall\s*')  ? 'call SkipTerminalsConfQA()' : 'quitall'
+"cnoreabbrev <silent> <expr> qal (getcmdtype() == ':' && getcmdline() =~ '\s*qal\s*')  ? 'call SkipTerminalsConfQA()' : 'qal '
+"cnoreabbrev <silent> <expr> qall (getcmdtype() == ':' && getcmdline() =~ '\s*qall\s*')  ? 'call SkipTerminalsConfQA()' : 'qall'
+"cnoreabbrev <silent> <expr> quita (getcmdtype() == ':' && getcmdline() =~ '\s*quita\s*')  ? 'call SkipTerminalsConfQA()' : 'quita'
+"cnoreabbrev <silent> <expr> quital (getcmdtype() == ':' && getcmdline() =~ '\s*quital\s*')  ? 'call SkipTerminalsConfQA()' : 'quital'
+"cnoreabbrev <silent> <expr> quitall (getcmdtype() == ':' && getcmdline() =~ '\s*quitall\s*')  ? 'call SkipTerminalsConfQA()' : 'quitall'
+au VimEnter * :Alias qal     call\ SkipTerminalsConfQA()
+au VimEnter * :Alias qall    call\ SkipTerminalsConfQA()
+au VimEnter * :Alias quita   call\ SkipTerminalsConfQA()
+au VimEnter * :Alias quital  call\ SkipTerminalsConfQA()
+au VimEnter * :Alias quitall call\ SkipTerminalsConfQA()
 
 function! MyQuit(arg) abort
     " just to clear the cmdline of this function ...
@@ -6881,34 +6889,45 @@ endfunction
 command! -nargs=* SwapDiffs call s:SwapDiffWins(<q-args>)
 
 if &diff
-  "if using cmdalias/vim-alias plugin:
-  "aug diff_alias
-  "  au!
-  "  au VimEnter * :Alias q!   qa!
-  "  au VimEnter * :Alias q    qa
-  "  au VimEnter * :Alias n    qa
-  "  au VimEnter * :Alias next qa
-  "  au VimEnter * :Alias exit cquit
-  "aug END
-  " ---
-  cnoreabbrev <silent> <expr> q! (getcmdtype() == ':' && getcmdline() =~ '\s*q!\s*') ? 'qa!' : 'q!'
-  cnoreabbrev <silent> <expr> q  (getcmdtype() == ':' && getcmdline() =~ '\s*q\s*')  ? 'qa' : 'q'
-  cnoreabbrev <silent> <expr> n  (getcmdtype() == ':' && getcmdline() =~ '\s*n\s*')  ? 'qa' : 'n'
-  cnoreabbrev <silent> <expr> next (getcmdtype() == ':' && getcmdline() =~ '\s*next\s*') ? 'qa' : 'next'
-  cuna exi
-  cnoreabbrev <silent> <expr> exi (getcmdtype() == ':' && getcmdline() =~ '\s*exi\s*') ? 'cquit' : 'exi'
-  cuna exit
-  cnoreabbrev <silent> <expr> exit (getcmdtype() == ':' && getcmdline() =~ '\s*exit\s*') ? 'cquit' : 'exit'
-  nmap  <silent> <Leader>qq           :conf q<CR>
-  vmap  <silent> <Leader>qq <C-\><C-n>:conf q<CR>
+  " TODO: do we want conf qa here ? ...
+  "nmap  <silent> <Leader>qq           :conf q<CR>
+  "vmap  <silent> <Leader>qq <C-\><C-n>:conf q<CR>
+  nmap  <silent> <Leader>qq           :call MyQuit("conf q")<CR>
+  vmap  <silent> <Leader>qq <C-\><C-n>:<C-u>call MyQuit("conf q")<CR>
+
+  "cnoreabbrev <silent> <expr> q! (getcmdtype() == ':' && getcmdline() =~ '\s*q!\s*') ? 'qa!' : 'q!'
+  "cnoreabbrev <silent> <expr> q  (getcmdtype() == ':' && getcmdline() =~ '\s*q\s*')  ? 'qa' : 'q'
+  "cnoreabbrev <silent> <expr> n  (getcmdtype() == ':' && getcmdline() =~ '\s*n\s*')  ? 'qa' : 'n'
+  "cnoreabbrev <silent> <expr> next (getcmdtype() == ':' && getcmdline() =~ '\s*next\s*') ? 'qa' : 'next'
+
+  "try
+  "  cuna exi
+  "catch /E24:/
+  "endtry
+  "cnoreabbrev <silent> <expr> exi (getcmdtype() == ':' && getcmdline() =~ '\s*exi\s*') ? 'cquit' : 'exi'
+  "try
+  "  cuna exit
+  "catch /E24:/
+  "endtry
+  "cnoreabbrev <silent> <expr> exit (getcmdtype() == ':' && getcmdline() =~ '\s*exit\s*') ? 'cquit' : 'exit'
+
+  " if no mods, then :x is like :q ...
+  "cnoreabbrev <silent> <expr> x (getcmdtype() == ':' && getcmdline() =~ '\s*x\s*') ? 'call Xdiff()' : 'x'
+
   aug diff_alias
       au!
-      au VimEnter * :Alias qa  call\ MyCQuit()
-      au VimEnter * :Alias qa! call\ MyCQuit()
+      au VimEnter * :Alias! q!   qa!
+      au VimEnter * :Alias! q    qa
+      au VimEnter * :Alias! n    qa
+      au VimEnter * :Alias! next qa
+      au VimEnter * :Alias! exi  cquit
+      au VimEnter * :Alias! exit cquit
+      au VimEnter * :Alias! qa  call\ MyCQuit()
+      au VimEnter * :Alias! qa! call\ MyCQuit()
+      au VimEnter * :Alias! x call\ Xdiff()
   aug END
+
   " -----------
-  " if no mods, then :x is like :q ...
-  cnoreabbrev <silent> <expr> x (getcmdtype() == ':' && getcmdline() =~ '\s*x\s*') ? 'call Xdiff()' : 'x'
 
   nnoremap  <silent> <Leader>df           :qa<CR>
   vnoremap  <silent> <Leader>df <C-\><C-n>:qa<CR>
@@ -6966,6 +6985,12 @@ else
     au VimEnter * :Alias quit! call\ MyQuit("q!")
     au VimEnter * :Alias PU    PluginUpdate
   aug END
+
+  "cnoreabbrev <silent> <expr> x (getcmdtype() == ':' && getcmdline() =~ '\s*x\s*')  ? 'call <SID>NextOrQuit()' : 'x'
+  " Alias x handled above in Magit section ...
+
+  noremap <silent> <Leader>nf :call <SID>ConfNextOrQuit()<CR>
+
 endif
 
 " patience diff algo ...
@@ -7034,7 +7059,7 @@ endfunction
 " -----------
 
 " :x to save (if modified) and go to next (w/o prompting) or exit
-function s:NextOrQuit() abort
+function MyNextOrQuit() abort
     " TODO: should we auto hide/bdel/bwipe and/or set modifiable on these terminal buffers ?
     if &buftype ==# 'terminal' && mode() != 'n'
         echohl Statement
@@ -7044,8 +7069,8 @@ function s:NextOrQuit() abort
     endif
     if &buftype ==# 'terminal' && mode() == 'n'
         try
-            silent exe 'normal! i'
-            silent exe 'normal! \<Esc>'
+            silent exe "normal! i"
+            silent exe "normal! \<Esc>"
         catch /E21:/
             " just to clear the cmdline of this function ...
             redraw!
@@ -7089,8 +7114,8 @@ function s:ConfNextOrQuit() abort
     endif
     if &buftype ==# 'terminal' && mode() == 'n'
         try
-            silent exe 'normal! i'
-            silent exe 'normal! \<Esc>'
+            silent exe "normal! i"
+            silent exe "normal! \<Esc>"
         catch /E21:/
             " just to clear the cmdline of this function ...
             redraw!
@@ -7135,11 +7160,6 @@ function s:ConfNextOrQuit() abort
         conf q
     endtry
 endfunction
-
-if !&diff
-    cnoreabbrev <silent> <expr> x (getcmdtype() == ':' && getcmdline() =~ '\s*x\s*')  ? 'call <SID>NextOrQuit()' : 'x'
-    noremap <silent> <Leader>nf :call <SID>ConfNextOrQuit()<CR>
-endif
 
 " could also look into autowrite for :n to write (if modified) ...
 
@@ -7431,8 +7451,10 @@ nnoremap <silent> <Leader>gt <C-w>gf
 vnoremap <silent> <Leader>gt <Esc><C-w>gf
 
 " convenience, so there is [v,h]split, [v,h]new
-cnoreabbrev <silent> <expr> hsplit (getcmdtype() == ':' && getcmdline() =~ '\s*hsplit\s*')  ? 'split' : 'hsplit'
-cnoreabbrev <silent> <expr> hnew   (getcmdtype() == ':' && getcmdline() =~ '\s*hnew\s*')    ? 'new'   : 'hnew'
+"cnoreabbrev <silent> <expr> hsplit (getcmdtype() == ':' && getcmdline() =~ '\s*hsplit\s*')  ? 'split' : 'hsplit'
+"cnoreabbrev <silent> <expr> hnew   (getcmdtype() == ':' && getcmdline() =~ '\s*hnew\s*')    ? 'new'   : 'hnew'
+au VimEnter * :Alias hsplit split
+au VimEnter * :Alias hnew   new
 " TODO: look into vim-alias ...
 
 " most <Leader>s? mappings are for search, but these h,v,t,<Tab> +shift are for splits ...
@@ -7616,7 +7638,7 @@ function! s:GitStatusXX()
   redraw!
   wincmd P
 endfunction
-cnoreabbrev <silent> <expr> GstatusXX (getcmdtype() == ':' && getcmdline() =~ '\s*GstatusXX\s*')  ? 'call <SID>GitStatusXX()' : 'GstatusXX'
+"cnoreabbrev <silent> <expr> GstatusXX (getcmdtype() == ':' && getcmdline() =~ '\s*GstatusXX\s*')  ? 'call <SID>GitStatusXX()' : 'GstatusXX'
 
 " -----------------------------
 
