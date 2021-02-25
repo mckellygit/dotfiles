@@ -5898,7 +5898,7 @@ let g:localvimrc_persistent = 1
 "
 function s:CloseClangWin() abort
     try
-        silent execute 'normal :ClangCloseWindow\<CR>'
+        silent execute "normal :ClangCloseWindow\<CR>"
     catch /E492:/
     endtry
     redraw!
