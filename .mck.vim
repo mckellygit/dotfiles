@@ -896,6 +896,8 @@ noremap <silent> <Leader>lb <C-\><C-n>:<C-u>call <SID>Mylsfzf(1)<CR>
 " NOTE: seems like a better Buffers command than the fzf default ...
 command! Buffers call <SID>Mylsfzf(1)
 
+" NOTE: fzf adds a Windows command that is essentially the same as Buffers
+
 " buffer hide/del/wipe - good for after terminal program ends ...
 noremap <silent> <Leader>bh <C-\><C-n>:hide<CR>
 noremap <silent> <Leader>bd <C-\><C-n>:bdel<CR>
