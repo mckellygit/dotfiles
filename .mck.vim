@@ -1595,8 +1595,12 @@ function! s:MagitReload()
 endfunction
 autocmd User VimagitLeaveCommit call <SID>MagitReload()
 
-function! s:MagitPush(p,args)
+function! s:MagitPushPull(p,q,args)
     if &filetype == "magit"
+        let gcmd = 'push'
+        if a:q != 0
+            let gcmd = 'pull'
+        endif
         let ans = 'y'
         if a:p == 0
             if empty(a:args)
@@ -1617,9 +1621,9 @@ function! s:MagitPush(p,args)
             call cursor(cur_pos, 0)
 
             if empty(a:args)
-                execute 'AsyncRun -raw -strip -mode=term -pos=bottom -rows=10 -post=call\ MagitUpdateBufferTerm() git push'
+                execute 'AsyncRun -raw -strip -mode=term -pos=bottom -rows=10 -post=call\ MagitUpdateBufferTerm() git ' gcmd
             else
-                execute 'AsyncRun -raw -strip -mode=term -pos=bottom -rows=10 -post=call\ MagitUpdateBufferTerm() git push ' a:args
+                execute 'AsyncRun -raw -strip -mode=term -pos=bottom -rows=10 -post=call\ MagitUpdateBufferTerm() git ' gcmd a:args
             endif
             "FloatermNew --name=magit --autoclose=2 --height=0.75 --width=0.80
             "FloatermNew --name=magit --autoclose=2 --height=0.75 --width=0.80 bash_ask --tty git push
@@ -1636,9 +1640,11 @@ function! s:MagitPush(p,args)
         echo " "
     endif
 endfunction
-nnoremap <silent> <Leader>mP :call <SID>MagitPush(0,'')<CR>
+nnoremap <silent> <Leader>mP :call <SID>MagitPushPull(0,0,'')<CR>
 
-command! -bang -nargs=* MPush call s:MagitPush(1,<q-args>)
+command! -bang -nargs=* MPush call s:MagitPushPull(1,0,<q-args>)
+command! -bang -nargs=* MPull call s:MagitPushPull(1,1,<q-args>)
+
 command! -bang MUpdate  echo "Magit update ..."<bar>call magit#update_buffer()<bar>:sleep 551m<bar>redraw!<bar>echo " "
 command! -bang MRefresh echo "Magit update ..."<bar>call magit#update_buffer()<bar>:sleep 551m<bar>redraw!<bar>echo " "
 
