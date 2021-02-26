@@ -1136,6 +1136,7 @@ autocmd FileType GV nmap <silent> <buffer> qq    :call QuitGV()<CR>
 autocmd FileType GV nmap <silent> <buffer> <Leader>wq <C-\><C-n>:<C-u>call <SID>QuitIfOnlyNoNameLeft()<CR>
 autocmd FileType GV nmap <silent> <buffer> <Leader>qq <C-\><C-n>:<C-u>call <SID>QuitIfOnlyNoNameLeft()<CR>
 
+" also perhaps consider getcmdpos() <= 3 ...
 "autocmd FileType GV cnoreabbrev <silent> <expr> q! (getcmdtype() == ':' && getcmdline() =~ '\s*q!\s*') ? 'qa!' : 'q!'
 
 function! TabCloseRightQuit(bang)
