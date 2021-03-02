@@ -1109,7 +1109,7 @@ function QuitGV() abort
     "let ans='y'
     " --------------
     echohl Statement
-    echo "Last remaining view, really quit ? (q|Y/n): "
+    echo "Last remaining view, really quit ? (Q|Y/n): "
     echohl None
     let c = getchar()
     while type(c) != 0
@@ -5701,7 +5701,7 @@ if has("autocmd")
  "    endif
  "    let dname = expand("%:p:h")
  "    if !isdirectory(dname)
- "        echo '"' . dname . '" dir does not exist, create? (y/n): '
+ "        echo '"' . dname . '" dir does not exist, create? (y/N): '
  "        let c = getchar()
  "        while type(c) != 0
  "            let c = getchar()
@@ -6862,34 +6862,33 @@ endfunction
 " and some better colors
 
 function Xdiff()
-  let anymod = 0
-  let bufcount = bufnr("$")
   let currbufnr = 1
+  let bufcount = bufnr("$")
   while currbufnr <= bufcount
     if bufexists(currbufnr)
       let bufmod = getbufvar(currbufnr, "&mod")
       "let dbgmsg = "diffx: bufnr = " . currbufnr . " &bufmod = " . bufmod
       "echomsg dbgmsg
-      let anymod += bufmod
+      if bufmod
+        echo "Buffer " . fnamemodify(bufname(currbufnr), ':p') . " modified, save now? (y/N): "
+        let c = getchar()
+        while type(c) != 0
+            let c = getchar()
+        endwhile
+        let ans=nr2char(c)
+        if ans ==# 'y' || ans ==# 'Y'
+            silent execute "normal :b " . currbufnr . " \<CR>"
+            silent execute "normal :wq\<CR>"
+        else
+            silent execute "normal :bd!" . currbufnr . " \<CR>"
+        endif
+      endif
     endif
     let currbufnr += 1
   endwhile
-  if anymod == 0
-    execute "silent! qa"
-  else
-    "let dbgmsg = "diffx: &mod = " . &mod
-    "echomsg dbgmsg
-    if &mod == 0
-      execute "silent! conf q"
-    else
-      execute "silent! wq"
-    endif
-    redraw!
-    echo " "
-    "let dbgmsg = "diffx: &diff = " . &diff
-    "echomsg dbgmsg
-  endif
-  return
+  call MyQuit("conf qa")
+  redraw!
+  echo " "
 endfunction
 
 function s:SwapDiffWins(arg)
@@ -6899,10 +6898,8 @@ command! -nargs=* SwapDiffs call s:SwapDiffWins(<q-args>)
 
 if &diff
   " TODO: do we want conf qa here ? ...
-  "nmap  <silent> <Leader>qq           :conf q<CR>
-  "vmap  <silent> <Leader>qq <C-\><C-n>:conf q<CR>
-  "nmap  <silent> <Leader>qq           :call MyQuit("conf q")<CR>
-  "vmap  <silent> <Leader>qq <C-\><C-n>:<C-u>call MyQuit("conf q")<CR>
+  "nmap  <silent> <Leader>qq           :conf qa<CR>
+  "vmap  <silent> <Leader>qq <C-\><C-n>:conf qa<CR>
   nmap  <silent> <Leader>qq           :call Xdiff()<CR>
   vmap  <silent> <Leader>qq <C-\><C-n>:<C-u>call Xdiff()<CR>
 
@@ -6927,15 +6924,15 @@ if &diff
 
   aug diff_alias
       au!
-      au VimEnter * :Alias! q!   qa!
-      au VimEnter * :Alias! q    qa
-      au VimEnter * :Alias! n    qa
-      au VimEnter * :Alias! next qa
-      au VimEnter * :Alias! exi  cquit
-      au VimEnter * :Alias! exit cquit
-      au VimEnter * :Alias! qa  call\ MyCQuit()
-      au VimEnter * :Alias! qa! call\ MyCQuit()
-      au VimEnter * :Alias! x call\ Xdiff()
+      au VimEnter * :Alias! q    call\ Xdiff()
+      au VimEnter * :Alias! qa   call\ Xdiff()
+      au VimEnter * :Alias! n    call\ Xdiff()
+      au VimEnter * :Alias! next call\ Xdiff()
+      au VimEnter * :Alias! x    call\ Xdiff()
+      au VimEnter * :Alias! q!   call\ MyCQuit()
+      au VimEnter * :Alias! qa!  call\ MyCQuit()
+      au VimEnter * :Alias! exi  call\ MyCQuit()
+      au VimEnter * :Alias! exit call\ MyCQuit()
   aug END
 
   " -----------
@@ -7147,7 +7144,7 @@ function s:ConfNextOrQuit() abort
         return
     endif
     if &modified
-        echo "Buffer " . bufname("") . " modified, save now? (y/n): "
+        echo "Buffer " . bufname("") . " modified, save now? (y/N): "
         let c = getchar()
         while type(c) != 0
             let c = getchar()
