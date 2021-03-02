@@ -6901,8 +6901,10 @@ if &diff
   " TODO: do we want conf qa here ? ...
   "nmap  <silent> <Leader>qq           :conf q<CR>
   "vmap  <silent> <Leader>qq <C-\><C-n>:conf q<CR>
-  nmap  <silent> <Leader>qq           :call MyQuit("conf q")<CR>
-  vmap  <silent> <Leader>qq <C-\><C-n>:<C-u>call MyQuit("conf q")<CR>
+  "nmap  <silent> <Leader>qq           :call MyQuit("conf q")<CR>
+  "vmap  <silent> <Leader>qq <C-\><C-n>:<C-u>call MyQuit("conf q")<CR>
+  nmap  <silent> <Leader>qq           :call Xdiff()<CR>
+  vmap  <silent> <Leader>qq <C-\><C-n>:<C-u>call Xdiff()<CR>
 
   "cnoreabbrev <silent> <expr> q! (getcmdtype() == ':' && getcmdline() =~ '\s*q!\s*') ? 'qa!' : 'q!'
   "cnoreabbrev <silent> <expr> q  (getcmdtype() == ':' && getcmdline() =~ '\s*q\s*')  ? 'qa' : 'q'
