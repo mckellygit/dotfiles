@@ -6861,34 +6861,29 @@ endfunction
 "  exit
 " and some better colors
 
-function Xdiff()
-  let currbufnr = 1
-  let bufcount = bufnr("$")
-  while currbufnr <= bufcount
-    if bufexists(currbufnr)
-      let bufmod = getbufvar(currbufnr, "&mod")
-      "let dbgmsg = "diffx: bufnr = " . currbufnr . " &bufmod = " . bufmod
-      "echomsg dbgmsg
-      if bufmod
-        echo "Buffer " . fnamemodify(bufname(currbufnr), ':p') . " modified, save now? (y/N): "
-        let c = getchar()
-        while type(c) != 0
-            let c = getchar()
-        endwhile
-        let ans=nr2char(c)
-        if ans ==# 'y' || ans ==# 'Y'
-            silent execute "normal :b " . currbufnr . " \<CR>"
-            silent execute "normal :wq\<CR>"
-        else
-            silent execute "normal :bd!" . currbufnr . " \<CR>"
-        endif
+function s:Xdiff1()
+    let bufnr = winbufnr(winnr())
+    let bufmod = getbufvar(bufnr, "&mod")
+    if bufmod
+      redraw!
+      echo "Buffer " . fnamemodify(bufname(bufnr), ':p') . " modified, save now? (y/N): "
+      let c = getchar()
+      while type(c) != 0
+          let c = getchar()
+      endwhile
+      let ans=nr2char(c)
+      if ans ==# 'y' || ans ==# 'Y'
+          silent execute "normal :b " . bufnr . " \<CR>"
+          silent execute "normal :wq\<CR>"
+      else
+          silent execute "normal :bd!" . bufnr . " \<CR>"
       endif
     endif
-    let currbufnr += 1
-  endwhile
-  call MyQuit("conf qa")
-  redraw!
-  echo " "
+endfunction
+
+function Xdiff()
+    windo call <SID>Xdiff1()
+    call MyQuit("conf qa")
 endfunction
 
 function s:SwapDiffWins(arg)
