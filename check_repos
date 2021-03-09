@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cd ~/Downloads
-for d in FlameGraph perf-tools xsel CopyQ fd the_silver_searcher tmux vifm rtags ccache cgdb tig alacritty zsh-autosuggestions byobu
+for d in FlameGraph perf-tools CopyQ fd the_silver_searcher tmux vifm rtags ccache cgdb tig alacritty zsh-autosuggestions byobu
 do
     echo "checking $d ..."
     cd $d
@@ -111,6 +111,9 @@ cd ~/Downloads/vim_bundles
 #   mkdir -p ~/.bash_completion
 #   cp extra/completions/alacritty.bash ~/.bash_completion/alacritty
 #   echo "source ~/.bash_completion/alacritty" >> ~/.bashrc
+
+# xsel:
+#   git clone https://github.com/kfish/xsel.git
 
 # rxvt:
 #   sudo apt-get install rxvt-unicode
