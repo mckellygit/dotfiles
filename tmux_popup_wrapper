@@ -6,8 +6,8 @@ if [[ $# -lt 1 ]] ; then
 fi
 
 if [[ -n "$TMUX_PANE" ]] ; then
-    #tmux popup -d '#{pane_current_path}' -KER "bash_ask $*"
-    tmux popup -d '#{pane_current_path}' -KER "tmux new -s popup \"printf \\\"\033]11;rgb:30/30/30\007\\\" ; tmux set -w status off ; bash_ask $*\""
+    #tmux popup -d '#{pane_current_path}' -E "bash_ask $*"
+    tmux popup -d '#{pane_current_path}' -E "tmux new -s popup \"printf \\\"\033]11;rgb:30/30/30\007\\\" ; tmux set -w status off ; bash_ask $*\""
 else
     echo "Error: TMUX not running ..."
     exit 22
