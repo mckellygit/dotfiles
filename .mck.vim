@@ -280,8 +280,8 @@ Plugin 'voldikss/fzf-floaterm'
 "Plugin 'ptzz/lf.vim'
 "
 " nvim completeopt does not have popup ...
-" this works but it does not stop preview split
-" for now, just skip preview with nvim, and have extra info in orig menu popup
+" this plugin provides the same behavior, but it does not stop preview split
+" but we may be able to add an autocmd to pclose preview ...
 if !has('nvim')
   let g:float_preview#loaded = 1
 endif
@@ -3111,9 +3111,11 @@ function! AutoRestoreWinView()
 endfunction
 
 " When switching buffers, preserve window view.
-if v:version >= 700
-    autocmd BufLeave * call AutoSaveWinView()
-    autocmd BufEnter * call AutoRestoreWinView()
+if v:version >= 700 && !&diff
+    aug winrest
+        au!
+        autocmd BufEnter * call AutoRestoreWinView()
+    aug END
 endif
 
 " ----------- yank / cut / paste -----------
@@ -3843,8 +3845,11 @@ nnoremap <C-LeftDrag> v<LeftDrag>
 vnoremap <C-LeftDrag> <LeftDrag>
 inoremap <C-LeftDrag> <LeftDrag>
 
-au InsertEnter * let @i="2"
-au InsertLeave * if (!(mode() =~ 'n')) | let @i="0" | endif
+aug setival
+    au!
+    au InsertEnter * let @i="2"
+    au InsertLeave * if (!(mode() =~ 'n')) | let @i="0" | endif
+aug END
 
 " see mousetime for double-click delay
 
@@ -4469,12 +4474,15 @@ set scrolloff=0
 
 " ---------
 
-" TODO: not sure what is best
-" half window height (was winheight('%')/2, but -50 is 50%)
-au BufEnter,WinEnter,WinNew,VimResized * call <SID>MySetScrollJump(-50)
-" disable when in insert mode ...
-au InsertEnter * call <SID>MySetScrollJump(1)
-au InsertLeave * let &scrolljump=-50
+aug scrjump
+    au!
+    " TODO: not sure what is best
+    " half window height (was winheight('%')/2, but -50 is 50%)
+    au BufEnter,BufWinEnter,WinEnter,WinNew,VimResized * call <SID>MySetScrollJump(-50)
+    " disable when in insert mode ...
+    "au InsertEnter * call <SID>MySetScrollJump(1)
+    "au InsertLeave * let &scrolljump=-50
+aug END
 
 function! s:MySetScrollJump(sjval)
     if mode() =~# 'i'
@@ -4741,11 +4749,11 @@ endfunction
 
 " Cursor moves by screen lines
 "nmap            k      gk
-noremap         <Up>   gk
+nmap            <Up>   gk
 inoremap <expr> <Up>   pumvisible() ? '<Up>'   : '<C-\><C-o>gk'
 
 "nmap            j      gj
-noremap         <Down> gj
+nmap            <Down> gj
 inoremap <expr> <Down> pumvisible() ? '<Down>' : '<C-\><C-o>gj'
 
 noremap         <Home> g<Home>
@@ -5769,20 +5777,20 @@ let g:clang_cpp_options = '-std=c++11 -DNDEBUG -Wno-inconsistent-missing-overrid
 if has("nvim")
     " adding preview here without popup isnt great as we get preview window split
     " there is a nvim float-preview plugin but that doesnt stop the preview split
-    "let g:clang_c_completeopt = 'longest,menuone,preview'
     let g:clang_c_completeopt = 'longest,menuone,preview'
     let g:clang_cpp_completeopt = 'longest,menuone,preview'
     " is there a way to supress preview window ?
-    " these work but it flashes the preview window for a brief moment ...
+    " this works, but it flashes the preview window for a brief moment ...
     "autocmd User FloatPreviewWinOpen pclose
     " same with this ...
-    "autocmd WinEnter * if &previewwindow && pumvisible() | :pclose | endif
-    "aug fltpop
-    "    au!
-    "    autocmd WinEnter <buffer> if pumvisible() | :pclose | endif
-    "aug END
-    " for now, just skip preview with nvim, and have extra info in orig menu popup
+    "autocmd WinEnter * if &previewwindow && pumvisible() | pclose | endif
+    " this seems ok so far ...
+    aug fltpop
+        au!
+        autocmd WinEnter <buffer> if pumvisible() | pclose | endif
+    aug END
 else
+    " vim has popup option ...
     let g:clang_c_completeopt = 'longest,menuone,preview,popup'
     let g:clang_cpp_completeopt = 'longest,menuone,preview,popup'
 endif
@@ -6449,7 +6457,10 @@ endfunction
 " https://gist.github.com/juanpabloaj/5845848
 
 " automatically quit Vim if quickfix window is the last ...
-au BufEnter * call <SID>MyWindow()
+aug mywin
+    au!
+    au BufEnter * call <SID>MyWindow()
+aug END
 function! s:MyWindow()
   " if the window is quickfix go on
   if &buftype=="quickfix"
@@ -6468,7 +6479,10 @@ function! s:MyWindow()
   endif
 endfunction
 
-au BufWinEnter * call <SID>MyWindow2()
+aug mywin2
+    au!
+    au BufWinEnter * call <SID>MyWindow2()
+aug END
 function! s:MyWindow2()
   if &buftype=="quickfix"
     " qf highlight on
@@ -6917,6 +6931,43 @@ if &diff
   " if no mods, then :x is like :q ...
   "cnoreabbrev <silent> <expr> x (getcmdtype() == ':' && getcmdline() =~ '\s*x\s*') ? 'call Xdiff()' : 'x'
 
+  " -------------
+
+  " TODO: vim insert mode <arrow> / esc-seq keys may be caught as typed chars ...
+  " (nvim is ok here)
+
+  if !has("nvim")
+
+      au WinEnter * imap <buffer> <Up>    <Up>
+      au WinEnter * imap <buffer> <Down>  <Down>
+      au WinEnter * imap <buffer> <Home>  <Home>
+      au WinEnter * imap <buffer> <End>   <End>
+
+      " but what to do about these ?
+
+      au WinEnter * imap <buffer> <C-Up>       <C-o><C-k>
+      au WinEnter * imap <buffer> <C-Down>     <C-o><C-j>
+      au WinEnter * imap <buffer> <PageUp>     <C-o><C-u>
+      au WinEnter * imap <buffer> <PageDown>   <C-o><C-d>
+      au WinEnter * imap <buffer> <C-PageUp>   <C-o><C-b>
+      au WinEnter * imap <buffer> <C-PageDown> <C-o><C-f>
+
+  endif
+
+  " -------------
+
+  au WinEnter * nnoremap <silent> <buffer> uu u
+  au WinEnter * nnoremap <silent> <buffer> U  u
+  au WinEnter * nmap     <silent> <buffer> u <Nop>
+
+  au WinEnter * vnoremap <silent> <buffer> uu u
+  au WinEnter * vnoremap <silent> <buffer> U  u
+  au WinEnter * vmap     <silent> <buffer> u <Nop>
+
+  aug winrest
+      au!
+  aug END
+
   aug diff_alias
       au!
       au VimEnter * :Alias! q    call\ Xdiff()
@@ -6928,6 +6979,7 @@ if &diff
       au VimEnter * :Alias! qa!  call\ MyCQuit()
       au VimEnter * :Alias! exi  call\ MyCQuit()
       au VimEnter * :Alias! exit call\ MyCQuit()
+      au InsertLeave * diffupdate
   aug END
 
   " -----------
@@ -7023,7 +7075,6 @@ endfunction
 
 " add custom diffexpr so we do not get default diff -b cmd, as we want all space diffs highlighted
 " set diffopt+=iwhite etc. to skip whitespace diffs ...
-set diffexpr=DiffEx()
 function! DiffEx()
     let opt = ""
     if &diffopt =~ "icase"
@@ -7032,10 +7083,10 @@ function! DiffEx()
     if &diffopt =~ "iwhite"
       let opt = opt . "-w " " swapped vim's -b with -w
     endif
-    "silent execute "!diff -a --binary " . opt . v:fname_in . " " . v:fname_new .  " > " . v:fname_out
-    let cmd = "diff -a --binary " . opt . v:fname_in . " " . v:fname_new .  " > " . v:fname_out
-    silent call system(cmd)
+    silent execute "!diff -a --binary " . opt . v:fname_in . " " . v:fname_new .  " > " . v:fname_out
 endfunction
+
+set diffexpr=DiffEx()
 
 function! Diffstart()
     if !&diff
@@ -7545,7 +7596,9 @@ function! MyGSStart(timer)
       "echomsg "MyGSStart: match to fugitive://"
       call timer_stop(a:timer)
       let b:mckgitstatus = "git:<fugitive>"
-      call lightline#update()
+      if !pumvisible()
+        call lightline#update()
+      endif
       return
     endif
     if filereadable(expand(g:gitinfo_script))
@@ -7561,7 +7614,9 @@ function! MyGSStart(timer)
       endif
     endif
   endif
-  call lightline#update()
+  if !pumvisible()
+    call lightline#update()
+  endif
 endfunction
 
 function! MyGitStatus()
