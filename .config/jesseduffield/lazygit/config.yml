@@ -2,7 +2,7 @@ reporting: "off"
 startuppopupversion: 1
 keybinding:
     universal:
-        quit: '<c-c>'
-        quit-alt1: '<c-q>'
+        quit: '<f12>'
+        return: '<c-q>'
         scrollUpMain-alt1: '<c-b>' # main panel scrool up
         scrollDownMain-alt1: '<c-f>' # main panel scrool down
