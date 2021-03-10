@@ -1472,6 +1472,10 @@ function! MagitUpdateBufferTerm()
         call magit#update_buffer()
     endif
     wincmd p
+    " put completed terminal into normal mode for possible scrolling ...
+    if has("nvim")
+        call nvim_input('<C-\><C-n>')
+    endif
 endfunction
 
 function! MagitUpdateBuffer()
@@ -1548,8 +1552,8 @@ function! s:Magit1(args)
         au VimEnter * :Alias! quitall  call\ MyQuit("qa")
         au VimEnter * :Alias! quitall! call\ MyQuit("qa!")
 
-        autocmd FileType magit nmap <silent> <buffer> qq         :conf qa<CR>
-        autocmd FileType magit nmap <silent> <buffer> <Leader>qq :conf qa<CR>
+        autocmd FileType magit nmap <silent> <buffer> qq         :call MyQuit("conf qa")<CR>
+        autocmd FileType magit nmap <silent> <buffer> <Leader>qq :call MyQuit("conf qa")<CR>
         autocmd FileType magit noremap <silent> <buffer> <Leader>ma <Nop>
 
         call magit#show_magit('v')
@@ -1621,12 +1625,12 @@ function! s:MagitPushPull(p,q,args)
             call cursor(cur_pos, 0)
 
             if empty(a:args)
-                execute 'AsyncRun -raw -strip -mode=term -pos=bottom -rows=10 -post=call\ MagitUpdateBufferTerm() git ' gcmd
+                execute 'AsyncRun -raw -strip -mode=term -pos=bottom -rows=10 -name=aterm -post=call\ MagitUpdateBufferTerm() git ' gcmd
             else
-                execute 'AsyncRun -raw -strip -mode=term -pos=bottom -rows=10 -post=call\ MagitUpdateBufferTerm() git ' gcmd a:args
+                execute 'AsyncRun -raw -strip -mode=term -pos=bottom -rows=10 -name=aterm -post=call\ MagitUpdateBufferTerm() git ' gcmd a:args
             endif
-            "FloatermNew --name=magit --autoclose=2 --height=0.75 --width=0.80
-            "FloatermNew --name=magit --autoclose=2 --height=0.75 --width=0.80 bash_ask --tty git push
+            "FloatermNew --name=fterm --autoclose=2 --height=0.75 --width=0.80
+            "FloatermNew --name=fterm --autoclose=2 --height=0.75 --width=0.80 bash_ask --tty git push
         else
             sleep 351m
             redraw!
@@ -1687,7 +1691,7 @@ function! s:MagitGitCmd(p,args)
         exe "normal! a \<BS>\<Esc>"
         call cursor(cur_pos, 0)
 
-        execute 'AsyncRun -raw -strip -mode=term -pos=bottom -rows=10 -post=call\ MagitUpdateBufferTerm() git ' a:args
+        execute 'AsyncRun -raw -strip -mode=term -pos=bottom -rows=10 -name=aterm -post=call\ MagitUpdateBufferTerm() git ' a:args
     else
         let errmsg = 'Not inside Magit'
         call s:warn(errmsg)
@@ -2191,15 +2195,23 @@ if has("nvim")
   augroup terminal_settings
     autocmd!
 
+    " this is set below for :terminal ... with the 'i' added at the end
+    "autocmd TermOpen term://* startinsert
+
     "autocmd BufWinEnter,WinEnter term://* startinsert
     "autocmd BufLeave term://* stopinsert
 
     " Ignore various filetypes as those will close terminal automatically
     " Ignore fzf, ranger, coc
-    autocmd TermClose term://*
-          \ if (expand('<afile>') !~ "fzf") && (expand('<afile>') !~ "ranger") && (expand('<afile>') !~ "coc") |
-          \   call nvim_input('<CR>')  |
-          \ endif
+    "autocmd TermClose term://*
+    "    \ if (expand('<afile>') !~ "fzf") &&
+    "    \    (expand('<afile>') !~ "ranger") &&
+    "    \    (expand('<afile>') !~ "coc") |
+    "    \     call nvim_input('<CR>') |
+    "    \ endif
+
+    " close terminal shell automatically if it exited ...
+    autocmd TermClose term://* if (expand('<afile>') =~ ":/usr/bin/zsh") | call nvim_input('<CR>') | endif
 
     " a click in terminal automatically puts it in normal mode ...
     " which allows for double-click etc to select words
@@ -4500,10 +4512,10 @@ endfunction
 "nnoremap <silent> L lzl
 "vnoremap <silent> H zhh
 "vnoremap <silent> L lzl
-nnoremap <silent> z<Left>  10zh10h
-nnoremap <silent> z<Right> 10zl10l
-vnoremap <silent> z<Left>  10zh10h
-vnoremap <silent> z<Right> 10zl10l
+nnoremap <silent> Z<S-Left>  10zh10h
+nnoremap <silent> Z<S-Right> 10zl10l
+vnoremap <silent> Z<S-Left>  10zh10h
+vnoremap <silent> Z<S-Right> 10zl10l
 
 " ---------
 
@@ -6896,6 +6908,9 @@ function s:Xdiff1()
 endfunction
 
 function Xdiff()
+    " just to clear the cmdline of this function ...
+    echo "\r"
+    redraw!
     windo call <SID>Xdiff1()
     call MyQuit("conf qa")
 endfunction
@@ -7059,8 +7074,8 @@ nnoremap <silent> <Leader>lW :silent windo setlocal nowrap! nowrap?<CR>
 
 function! MyCQuit()
     " just to clear the cmdline of this function ...
+    echo "\r"
     redraw!
-    echo " "
     update
     cquit 1
 endfunction
@@ -7123,21 +7138,12 @@ function MyNextOrQuit() abort
     endif
     if &buftype ==# 'terminal' && mode() == 'n'
         try
-            silent exe "normal! i"
-            silent exe "normal! \<Esc>"
-        catch /E21:/
-            " just to clear the cmdline of this function ...
-            redraw!
-            echo " "
-            update
-            try
-                next
-            catch /E163:/
-                exit
-            catch /E165:/
-                exit
-            endtry
+            quit
             return
+        catch /.*/
+            " just to clear the cmdline of this function ...
+            echo "\r"
+            redraw!
         endtry
         echohl Statement
         echo "Unable to :quit terminal (hide|bdel|bwipe buffer)"
@@ -7145,8 +7151,8 @@ function MyNextOrQuit() abort
         return
     endif
     " just to clear the cmdline of this function ...
+    echo "\r"
     redraw!
-    echo " "
     update
     try
         next
@@ -7168,21 +7174,12 @@ function s:ConfNextOrQuit() abort
     endif
     if &buftype ==# 'terminal' && mode() == 'n'
         try
-            silent exe "normal! i"
-            silent exe "normal! \<Esc>"
-        catch /E21:/
-            " just to clear the cmdline of this function ...
-            redraw!
-            echo " "
-            update
-            try
-                next
-            catch /E163:/
-                exit
-            catch /E165:/
-                exit
-            endtry
+            quit
             return
+        catch /.*/
+            " just to clear the cmdline of this function ...
+            echo "\r"
+            redraw!
         endtry
         echohl Statement
         echo "Unable to :quit terminal (hide|bdel|bwipe buffer)"
@@ -7201,8 +7198,8 @@ function s:ConfNextOrQuit() abort
         endif
     else
         " just to clear the cmdline of this function ...
+        echo "\r"
         redraw!
-        echo " "
     endif
     try
         next
