@@ -285,10 +285,13 @@ Plugin 'voldikss/fzf-floaterm'
 if !has('nvim')
   let g:float_preview#loaded = 1
 endif
-Plugin 'ncm2/float-preview.nvim.git'
+Plugin 'ncm2/float-preview.nvim'
 "
 " CMake utils
 "Plugin 'vhdirk/vim-cmake'
+"
+" diffchar
+Plugin 'rickhowe/diffchar.vim'
 "
 "" All of your Plugins must be added before the following line
 call vundle#end()         " required
@@ -2029,6 +2032,18 @@ nnoremap <silent> <Leader>fM :TabVifm<CR>
 let g:float_preview#docked = 0
 let g:float_preview#max_width = 80
 " float-preview ----
+
+" diffchar ---------
+let g:DiffUnit = 'Word2' "Char, Word1, Word2
+function s:UnmapSomeDiffCharKeys()
+    try
+        nunmap <Leader>p
+        nunmap <Leader>g
+    catch /E31:/
+    endtry
+endfunction
+autocmd BufEnter * call <SID>UnmapSomeDiffCharKeys()
+" diffchar ---------
 
 " ====================================================
 " ====================================================
@@ -7075,9 +7090,9 @@ else
 endif
 
 " patience diff algo ...
-if has("patch-8.1.0360")
-  set diffopt+=internal,algorithm:patience
-endif
+"if has("patch-8.1.0360")
+  set diffopt=context:6,filler,closeoff
+"endif
 
 " set wrap for vimdiff ...
 "au VimEnter * if &diff | execute 'windo setlocal wrap' | endif
@@ -7087,7 +7102,6 @@ function! MyCQuit()
     " just to clear the cmdline of this function ...
     echo "\r"
     redraw!
-    update
     cquit 1
 endfunction
 
@@ -7112,7 +7126,7 @@ function! DiffEx()
     silent execute "!diff -a --binary " . opt . v:fname_in . " " . v:fname_new .  " > " . v:fname_out
 endfunction
 
-set diffexpr=DiffEx()
+"set diffexpr=DiffEx()
 
 function! Diffstart()
     if !&diff
