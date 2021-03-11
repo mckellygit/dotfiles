@@ -7002,7 +7002,9 @@ if &diff
       au VimEnter * :Alias! exi  call\ MyCQuit()
       au VimEnter * :Alias! exit call\ MyCQuit()
       " BUG: disable/re-enable scrollbind to help position cursor on append (A)
-      au InsertEnter * set noscb
+      if has("nvim")
+          au InsertEnter * set noscb | call nvim_input(' <BS>')
+      endif
       au InsertLeave * set scb | diffupdate
   aug END
 
