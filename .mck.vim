@@ -4517,6 +4517,12 @@ nnoremap <silent> Z<S-Right> 10zl10l
 vnoremap <silent> Z<S-Left>  10zh10h
 vnoremap <silent> Z<S-Right> 10zl10l
 
+nnoremap <silent> <M-h>      10zh10h
+nnoremap <silent> <M-l>      10zl10l
+vnoremap <silent> <M-h>      10zh10h
+vnoremap <silent> <M-l>      10zl10l
+" TODO: need vim mappings for these ...
+
 " ---------
 
 " could skip ()&,[]{}'"+-/:;
@@ -6953,19 +6959,20 @@ if &diff
 
   if !has("nvim")
 
+      "let g:diff_translations = 0
+
       au WinEnter * imap <buffer> <Up>    <Up>
       au WinEnter * imap <buffer> <Down>  <Down>
       au WinEnter * imap <buffer> <Home>  <Home>
       au WinEnter * imap <buffer> <End>   <End>
 
-      " but what to do about these ?
-
-      au WinEnter * imap <buffer> <C-Up>       <C-o><C-k>
-      au WinEnter * imap <buffer> <C-Down>     <C-o><C-j>
-      au WinEnter * imap <buffer> <PageUp>     <C-o><C-u>
-      au WinEnter * imap <buffer> <PageDown>   <C-o><C-d>
-      au WinEnter * imap <buffer> <C-PageUp>   <C-o><C-b>
-      au WinEnter * imap <buffer> <C-PageDown> <C-o><C-f>
+      " what to do about these ?
+      "au WinEnter * imap <buffer> <C-Up>       <C-\><C-o><C-k>
+      "au WinEnter * imap <buffer> <C-Down>     <C-\><C-o><C-j>
+      "au WinEnter * imap <buffer> <PageUp>     <C-\><C-o><C-u>
+      "au WinEnter * imap <buffer> <PageDown>   <C-\><C-o><C-d>
+      "au WinEnter * imap <buffer> <C-PageUp>   <C-\><C-o><C-b>
+      "au WinEnter * imap <buffer> <C-PageDown> <C-\><C-o><C-f>
 
   endif
 
@@ -6994,7 +7001,9 @@ if &diff
       au VimEnter * :Alias! qa!  call\ MyCQuit()
       au VimEnter * :Alias! exi  call\ MyCQuit()
       au VimEnter * :Alias! exit call\ MyCQuit()
-      au InsertLeave * diffupdate
+      " BUG: disable/re-enable scrollbind to help position cursor on append (A)
+      au InsertEnter * set noscb
+      au InsertLeave * set scb | diffupdate
   aug END
 
   " -----------
