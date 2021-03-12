@@ -75,7 +75,7 @@
 #   git show - to describe last commit ...
 #   ls-changes = !git diff HEAD~1 --name-only
 #   cout = "!f() { git checkout "$(git branch -a --sort=-committerdate | fzf-tmux -p -w 80% -h 60% | sed 's/^\\*//' | tr -d '[:space:]')"; }; f"
-    cout = "!f() { git checkout "$(git branch -a --sort=-committerdate | fzf-tmux -r | sed 's/^\\*//' | tr -d '[:space:]')"; }; f"
+    cout = "!f() { git checkout "$(git branch -a --sort=-committerdate | fzf-tmux -r | awk '{print $NF}')"; }; f"
 [diff]
 	algorithm = histogram
 #	compactionHeuristic = true

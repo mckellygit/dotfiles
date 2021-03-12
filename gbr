@@ -1,0 +1,4 @@
+#!/bin/bash
+
+git branch -a --sort=-committerdate | fzf-tmux -r | awk '{print $NF}'
+
