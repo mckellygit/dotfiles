@@ -7035,8 +7035,8 @@ if &diff
 
   " -----------
 
-  nnoremap  <silent> <Leader>df           :qa<CR>
-  vnoremap  <silent> <Leader>df <C-\><C-n>:qa<CR>
+  nnoremap  <silent> <Leader>nf           :qa<CR>
+  vnoremap  <silent> <Leader>nf <C-\><C-n>:qa<CR>
   nnoremap  <silent> <Leader>xc           :cquit<CR>
   vnoremap  <silent> <Leader>xc <C-\><C-n>:cquit<CR>
   nnoremap           <C-l>                :diffupdate<CR><C-l>
