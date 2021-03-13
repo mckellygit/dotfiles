@@ -291,7 +291,7 @@ Plugin 'ncm2/float-preview.nvim'
 "Plugin 'vhdirk/vim-cmake'
 "
 " diffchar
-Plugin 'rickhowe/diffchar.vim'
+"Plugin 'rickhowe/diffchar.vim'
 "
 "" All of your Plugins must be added before the following line
 call vundle#end()         " required
@@ -2056,7 +2056,7 @@ function s:UnmapSomeDiffCharKeys()
     catch /E31:/
     endtry
 endfunction
-autocmd BufEnter * call <SID>UnmapSomeDiffCharKeys()
+"autocmd BufEnter * call <SID>UnmapSomeDiffCharKeys()
 " diffchar ---------
 
 " ====================================================
@@ -3152,12 +3152,11 @@ function! AutoRestoreWinView()
 endfunction
 
 " When switching buffers, preserve window view.
-if v:version >= 700 && !&diff
-    aug winrest
-        au!
-        autocmd BufEnter * call AutoRestoreWinView()
-    aug END
-endif
+aug winrest
+    au!
+    autocmd BufLeave * call AutoSaveWinView()
+    autocmd BufEnter * call AutoRestoreWinView()
+aug END
 
 " ----------- yank / cut / paste -----------
 
@@ -3590,7 +3589,7 @@ endfunction
 
 " active cursor ...
 
-" change cursor to beam in Insert mode ...
+" change cursor shape to beam in Insert mode ...
 let &t_SI = "\e[5 q"
 let &t_EI = "\e[2 q"
 
@@ -4550,6 +4549,10 @@ nnoremap <silent> <M-h>      10zh10h
 nnoremap <silent> <M-l>      10zl10l
 vnoremap <silent> <M-h>      10zh10h
 vnoremap <silent> <M-l>      10zl10l
+nnoremap <silent> <M-,>      10zh10h
+nnoremap <silent> <M-.>      10zl10l
+vnoremap <silent> <M-,>      10zh10h
+vnoremap <silent> <M-.>      10zl10l
 " TODO: need vim mappings for these ...
 
 " ---------
@@ -7015,10 +7018,6 @@ if &diff
   au WinEnter * vnoremap <silent> <buffer> U  u
   au WinEnter * vmap     <silent> <buffer> u <Nop>
 
-  aug winrest
-      au!
-  aug END
-
   aug diff_alias
       au!
       au VimEnter * :Alias! q    call\ Xdiff()
@@ -7030,11 +7029,8 @@ if &diff
       au VimEnter * :Alias! qa!  call\ MyCQuit()
       au VimEnter * :Alias! exi  call\ MyCQuit()
       au VimEnter * :Alias! exit call\ MyCQuit()
-      " BUG: disable/re-enable scrollbind to help position cursor on append (A)
-      if has("nvim")
-          au InsertEnter * set noscb | call nvim_input(' <BS>')
-      endif
-      au InsertLeave * set scb | diffupdate
+      au InsertEnter * diffoff
+      au InsertLeave * diffthis
   aug END
 
   " -----------
@@ -7047,23 +7043,31 @@ if &diff
   vnoremap           <C-l>      <C-\><C-n>:diffupdate<CR><C-l>
   noremap  <silent> <Leader>dn ]c
   noremap  <silent> <Leader>dp [c
-  "hi DiffAdd    ctermfg=233 ctermbg=LightGreen guifg=#003300 guibg=#DDFFDD gui=none cterm=none
-  "hi DiffChange ctermbg=white  guibg=#ececec gui=none   cterm=none
-  "hi DiffText   ctermfg=233  ctermbg=yellow  guifg=#000033 guibg=#DDDDFF gui=none cterm=none
+
+  "syntax off
+
   " to ignore whitespace diffs
   "set diffopt+=iwhite
+
   "colorscheme desert
   "colorscheme evening
-  "highlight! link DiffText MatchParen
-  highlight DiffAdd    cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
-  highlight DiffDelete cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
-  highlight DiffChange cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
-  highlight DiffText   cterm=bold ctermfg=10 ctermbg=88 gui=none guifg=bg guibg=Red
+
+  highlight! link DiffText MatchParen
+
+  "hi DiffAdd    ctermfg=233 ctermbg=LightGreen guifg=#003300 guibg=#DDFFDD gui=none cterm=none
+  "hi DiffChange             ctermbg=white                    guibg=#ececec gui=none cterm=none
+  "hi DiffText   ctermfg=233 ctermbg=yellow     guifg=#000033 guibg=#DDDDFF gui=none cterm=none
+
+  highlight DiffAdd    cterm=bold ctermfg=10 ctermbg=238 gui=none guifg=bg guibg=Red
+  highlight DiffDelete cterm=bold ctermfg=10 ctermbg=238 gui=none guifg=bg guibg=Red
+  highlight DiffChange cterm=bold ctermfg=10 ctermbg=238 gui=none guifg=bg guibg=Red
+  highlight DiffText   cterm=bold ctermfg=10 ctermbg=90  gui=none guifg=bg guibg=Red
 
   " vimdiff default has wrap off (as screen width is cut in half)
   " set sidescroll=1 to help navigate smoothly when wrap is off
   set sidescroll=1
-  " use zhh/H and lzl/L to scroll horizontal without moving cursor
+  " use zhh and lzl to scroll horizontal without moving cursor
+  " use Z<S-Right>/Z<S-Left> or <M-Right>/<M-Left> to scroll horizontally
   " or force wrap on in all windows ...
   "au VimEnter * if &diff | execute 'windo set wrap' | endif
   " but this can mess up alignment of long lines
@@ -7105,12 +7109,14 @@ endif
 
 " patience diff algo ...
 "if has("patch-8.1.0360")
+  "set diffopt=context:6,internal,algorithm:patience,filler,closeoff
   set diffopt=context:6,filler,closeoff
 "endif
 
 " set wrap for vimdiff ...
 "au VimEnter * if &diff | execute 'windo setlocal wrap' | endif
 nnoremap <silent> <Leader>lW :silent windo setlocal nowrap! nowrap?<CR>
+"there is also diffopt+=followwrap
 
 function! MyCQuit()
     " just to clear the cmdline of this function ...
