@@ -23,6 +23,12 @@ let Cscope_Keymap = 0
 "silent! nnoremap <unique> lhs rhs
 "if empty(maparg('lhs', 'old-rhs')) | nnoremap lhs new-rhs | endif
 
+if has("nvim")
+    " to not load nvim man plugin which overwrites Man command
+    " from vim-man plugin (Vman vim-man command is untouched ...)
+    let g:loaded_man = 1
+endif
+
 let g:in_gv2 = 0
 
 "" vundle ------------------------------
@@ -6736,6 +6742,9 @@ noremap <Leader><C-e> <C-e>
 " cmdline movement
 cnoremap <C-a> <Home>
 cnoremap <C-e> <End>
+" insert as well, wish <C-a> was ^ but that would leave insert mode briefly, causing those autocmds ...
+inoremap <C-a> <Home>
+inoremap <C-e> <End>
 
 function! SkipTerminalsQuitCmd(cmd) abort
     " just to clear the cmdline of this function ...
