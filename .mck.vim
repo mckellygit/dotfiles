@@ -7058,6 +7058,13 @@ if &diff
       diffupdate
   endfunction
 
+  function! s:TempNoFiller()
+      set diffopt-=filler
+      if g:prevdiffopt =~ 'filler'
+        set diffopt+=filler
+      endif
+  endfunction
+
   aug diff_alias
       au!
       au VimEnter * :Alias! q    call\ Xdiff()
@@ -7073,6 +7080,7 @@ if &diff
       "au InsertLeave * diffthis
       au InsertEnter * call <SID>SaveAndDisableFiller()
       au InsertLeave * call <SID>RestoreFillerAndUpdate()
+      au TextChanged * call <SID>TempNoFiller()
   aug END
 
   " -----------
@@ -7153,7 +7161,7 @@ endif
 "if has("patch-8.1.0360")
   "set diffopt=context:6,internal,algorithm:patience,indent-heuristic,closeoff
   set diffopt=context:6,closeoff
-  "set diffopt+=filler
+  set diffopt+=filler
   noremap <silent> <Leader>df :call <SID>ToggleDiffopt()<CR>
 "endif
 
