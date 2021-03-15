@@ -68,7 +68,8 @@ fi
 
 if [[ $dontask -eq 1 ]] ; then
     if [[ $usetty -eq 1 ]] ; then
-        exec "$cmd"
+        $cmd
+        exit $?
     else
         # could add -e less opt to quit if <CR> at end ...
         $cmd |& /bin/less -R
@@ -78,7 +79,8 @@ fi
 
 if ask "Run $cmd ?" ; then
     if [[ $usetty -eq 1 ]] ; then
-        exec "$cmd"
+        $cmd
+        exit $?
     else
         # could add -e less opt to quit if <CR> at end ...
         $cmd |& /bin/less -R
