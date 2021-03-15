@@ -81,7 +81,7 @@
 #	compactionHeuristic = true
 	tool = vimgitdiff
 [difftool "vimgitdiff"]
-    cmd = vimdiff "$REMOTE" "$LOCAL"
+    cmd = nvimdiff "$REMOTE" "$LOCAL"
 [difftool]
 	prompt = false
 	trustExitCode = true

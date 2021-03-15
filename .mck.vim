@@ -253,7 +253,7 @@ Plugin 'TaDaa/vimade'
 "
 " focus
 if !exists('$VIM_TERMINAL')
-    Plugin 'tmux-plugins/vim-tmux-focus-events'
+    Plugin 'mckellygit/vim-tmux-focus-events'
 endif
 "
 " ansi esc sequences
@@ -1930,6 +1930,9 @@ let g:echodoc#enable_at_startup = 1
 "let g:lightline.component_type   = {'buffers': 'tabsel'}
 " lightline-bufferline ---
 
+" tmux-focus -------
+" tmux-focus -------
+
 " vimade -----------
 let g:vimade = {}
 let g:vimade.fadelevel = 0.6
@@ -2063,6 +2066,8 @@ function s:UnmapSomeDiffCharKeys()
     endtry
 endfunction
 "autocmd BufEnter * call <SID>UnmapSomeDiffCharKeys()
+"nmap <Leader>g <Nop>
+"nmap <Leader>p <Nop>
 " diffchar ---------
 
 " ====================================================
@@ -7027,6 +7032,32 @@ if &diff
   au WinEnter * vnoremap <silent> <buffer> U  u
   au WinEnter * vmap     <silent> <buffer> u <Nop>
 
+  function! s:ToggleDiffopt()
+      if &diffopt =~ 'filler'
+          set diffopt-=filler
+      else
+          set diffopt+=filler
+      endif
+      redraw!
+  endfunction
+
+  let g:prevdiffopt = &diffopt
+
+  function! s:SaveAndDisableFiller()
+      let g:prevdiffopt = &diffopt
+      let g:prevView = winsaveview()
+      set diffopt-=filler
+      call winrestview(g:prevView)
+  endfunction
+
+  function! s:RestoreFillerAndUpdate()
+      if g:prevdiffopt =~ 'filler'
+        set diffopt+=filler
+      endif
+      let g:prevdiffopt = &diffopt
+      diffupdate
+  endfunction
+
   aug diff_alias
       au!
       au VimEnter * :Alias! q    call\ Xdiff()
@@ -7040,7 +7071,8 @@ if &diff
       au VimEnter * :Alias! exit call\ MyCQuit()
       "au InsertEnter * diffoff
       "au InsertLeave * diffthis
-      au InsertLeave * diffupdate
+      au InsertEnter * call <SID>SaveAndDisableFiller()
+      au InsertLeave * call <SID>RestoreFillerAndUpdate()
   aug END
 
   " -----------
@@ -7119,9 +7151,10 @@ endif
 
 " patience diff algo ...
 "if has("patch-8.1.0360")
-  set diffopt=context:6,internal,algorithm:patience,indent-heuristic,closeoff
-  "set diffopt=context:6,closeoff
+  "set diffopt=context:6,internal,algorithm:patience,indent-heuristic,closeoff
+  set diffopt=context:6,closeoff
   "set diffopt+=filler
+  noremap <silent> <Leader>df :call <SID>ToggleDiffopt()<CR>
 "endif
 
 " set wrap for vimdiff ...
@@ -7157,7 +7190,7 @@ function! DiffEx()
     silent execute "!diff -a --binary " . opt . v:fname_in . " " . v:fname_new .  " > " . v:fname_out
 endfunction
 
-"set diffexpr=DiffEx()
+set diffexpr=DiffEx()
 
 function! Diffstart()
     if !&diff
