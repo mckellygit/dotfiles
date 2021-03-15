@@ -7038,8 +7038,9 @@ if &diff
       au VimEnter * :Alias! qa!  call\ MyCQuit()
       au VimEnter * :Alias! exi  call\ MyCQuit()
       au VimEnter * :Alias! exit call\ MyCQuit()
-      au InsertEnter * diffoff
-      au InsertLeave * diffthis
+      "au InsertEnter * diffoff
+      "au InsertLeave * diffthis
+      au InsertLeave * diffupdate
   aug END
 
   " -----------
@@ -7118,8 +7119,9 @@ endif
 
 " patience diff algo ...
 "if has("patch-8.1.0360")
-  "set diffopt=context:6,internal,algorithm:patience,filler,closeoff
-  set diffopt=context:6,filler,closeoff
+  set diffopt=context:6,internal,algorithm:patience,indent-heuristic,closeoff
+  "set diffopt=context:6,closeoff
+  "set diffopt+=filler
 "endif
 
 " set wrap for vimdiff ...
