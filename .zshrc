@@ -528,9 +528,9 @@ alias rm='rm -i'
 #  alias dmesg='dmesg -T'
 #fi
 alias dmesg='dmesg -kuxT'
-alias vdiff='nvimdiff'
-alias vdifff='nvimdiff'
-alias vdif='nvimdiff'
+alias vdiff='vimdiff'
+alias vdifff='vimdiff'
+alias vdif='vimdiff'
 
 # skip -X arg to less to get alternate screen so tmux mouse can scroll ...
 # and dont use -F without -X ...
@@ -571,13 +571,13 @@ alias dif='diff'
 
 # gv.vim uses noremap so need to override q, x here, look into using :Alias ?
 # could also nnoremap qq qa!<CR> here
-#alias vigv="nvim -R -c \"GV2 \$1\" -c \":nnoremap <silent> <buffer> q <Nop>\" -c \":cnoreabbrev <silent> <buffer> q Tabcloserightquit\" -c \":cnoreabbrev <silent> <buffer> q! Tabcloserightquit\" -c \":nnoremap <silent> <buffer> x <Nop>\" -c \":cnoreabbrev <silent> <buffer> x Tabcloserightquit\" -c \":se bt=nowrite|:tabn|:hide|:redraw!\""
+#alias vigv="vim -R -c \"GV2 \$1\" -c \":nnoremap <silent> <buffer> q <Nop>\" -c \":cnoreabbrev <silent> <buffer> q Tabcloserightquit\" -c \":cnoreabbrev <silent> <buffer> q! Tabcloserightquit\" -c \":nnoremap <silent> <buffer> x <Nop>\" -c \":cnoreabbrev <silent> <buffer> x Tabcloserightquit\" -c \":se bt=nowrite|:tabn|:hide|:redraw!\""
 # use a function to support arguments ...
-vigv() { nvim -R -c "GV2 $1 $2 $3" -c ":nnoremap <silent> <buffer> q <Nop>" -c ":cnoreabbrev <silent> <buffer> q Tabcloserightquit" -c ":cnoreabbrev <silent> <buffer> q! Tabcloserightquit" -c ":nnoremap <silent> <buffer> x <Nop>" -c ":cnoreabbrev <silent> <buffer> x Tabcloserightquit" -c ":se bt=nowrite|:tabn|:hide|:redraw!" }
+vigv() { vim -R -c "GV2 $1 $2 $3" -c ":nnoremap <silent> <buffer> q <Nop>" -c ":cnoreabbrev <silent> <buffer> q Tabcloserightquit" -c ":cnoreabbrev <silent> <buffer> q! Tabcloserightquit" -c ":nnoremap <silent> <buffer> x <Nop>" -c ":cnoreabbrev <silent> <buffer> x Tabcloserightquit" -c ":se bt=nowrite|:tabn|:hide|:redraw!" }
 
-vical() { nvim -c "Calendar $1 $2 $3" -c ":nnoremap <silent> <buffer> q <Nop>" -c ":cnoreabbrev <silent> <buffer> q Tabcloserightquit" -c ":cnoreabbrev <silent> <buffer> q! Tabcloserightquit" -c ":nnoremap <silent> <buffer> x <Nop>" -c ":cnoreabbrev <silent> <buffer> x Tabcloserightquit" }
+vical() { vim -c "Calendar $1 $2 $3" -c ":nnoremap <silent> <buffer> q <Nop>" -c ":cnoreabbrev <silent> <buffer> q Tabcloserightquit" -c ":cnoreabbrev <silent> <buffer> q! Tabcloserightquit" -c ":nnoremap <silent> <buffer> x <Nop>" -c ":cnoreabbrev <silent> <buffer> x Tabcloserightquit" }
 
-magit() { nvim -c "Magit2 $1" }
+magit() { vim -c "Magit2 $1" }
 
 alias sync-hpcc='sync_hpcc'
 alias stop-hpcc='stop_hpcc'
@@ -751,8 +751,8 @@ alias roxie_regression='./ecl-test run --target roxie -e=embedded,3rdparty'
 alias hpcc_regression='./ecl-test run --timeout -1 -e=embedded,3rdparty'
 
 # also look at ~/.selected_editor file
-export VISUAL=nvim
-export EDITOR=nvim
+export VISUAL=vim
+export EDITOR=vim
 
 # fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

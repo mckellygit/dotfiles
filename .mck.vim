@@ -6939,31 +6939,36 @@ endfunction
 "  exit
 " and some better colors
 
-function s:Xdiff1()
+function s:Xdiff1(arg)
     let bufnr = winbufnr(winnr())
     let bufmod = getbufvar(bufnr, "&mod")
     if bufmod
-      redraw!
-      echo "Buffer " . fnamemodify(bufname(bufnr), ':p') . " modified, save now? (y/N): "
-      let c = getchar()
-      while type(c) != 0
-          let c = getchar()
-      endwhile
-      let ans=nr2char(c)
-      if ans ==# 'y' || ans ==# 'Y'
-          silent execute "normal :b " . bufnr . " \<CR>"
-          silent execute "normal :wq\<CR>"
-      else
-          silent execute "normal :bd!" . bufnr . " \<CR>"
-      endif
+        if a:arg == 1
+            silent execute "normal :b " . bufnr . " \<CR>"
+            silent execute "normal :wq\<CR>"
+            return
+        endif
+        redraw!
+        echo "Buffer " . fnamemodify(bufname(bufnr), ':p') . " modified, save now? (y/N): "
+        let c = getchar()
+        while type(c) != 0
+            let c = getchar()
+        endwhile
+        let ans=nr2char(c)
+        if ans ==# 'y' || ans ==# 'Y'
+            silent execute "normal :b " . bufnr . " \<CR>"
+            silent execute "normal :wq\<CR>"
+        else
+            silent execute "normal :bd!" . bufnr . " \<CR>"
+        endif
     endif
 endfunction
 
-function Xdiff()
+function Xdiff(arg)
     " just to clear the cmdline of this function ...
     echo "\r"
     redraw!
-    windo call <SID>Xdiff1()
+    windo call <SID>Xdiff1(a:arg)
     call MyQuit("conf qa")
 endfunction
 
@@ -6976,8 +6981,8 @@ if &diff
   " TODO: do we want conf qa here ? ...
   "nmap  <silent> <Leader>qq           :conf qa<CR>
   "vmap  <silent> <Leader>qq <C-\><C-n>:conf qa<CR>
-  nmap  <silent> <Leader>qq           :call Xdiff()<CR>
-  vmap  <silent> <Leader>qq <C-\><C-n>:<C-u>call Xdiff()<CR>
+  nmap  <silent> <Leader>qq           :call Xdiff(0)<CR>
+  vmap  <silent> <Leader>qq <C-\><C-n>:<C-u>call Xdiff(0)<CR>
 
   "cnoreabbrev <silent> <expr> q! (getcmdtype() == ':' && getcmdline() =~ '\s*q!\s*') ? 'qa!' : 'q!'
   "cnoreabbrev <silent> <expr> q  (getcmdtype() == ':' && getcmdline() =~ '\s*q\s*')  ? 'qa' : 'q'
@@ -7067,11 +7072,11 @@ if &diff
 
   aug diff_alias
       au!
-      au VimEnter * :Alias! q    call\ Xdiff()
-      au VimEnter * :Alias! qa   call\ Xdiff()
-      au VimEnter * :Alias! n    call\ Xdiff()
-      au VimEnter * :Alias! next call\ Xdiff()
-      au VimEnter * :Alias! x    call\ Xdiff()
+      au VimEnter * :Alias! q    call\ Xdiff(0)
+      au VimEnter * :Alias! qa   call\ Xdiff(0)
+      au VimEnter * :Alias! n    call\ Xdiff(0)
+      au VimEnter * :Alias! next call\ Xdiff(0)
+      au VimEnter * :Alias! x    call\ Xdiff(1)
       au VimEnter * :Alias! q!   call\ MyCQuit()
       au VimEnter * :Alias! qa!  call\ MyCQuit()
       au VimEnter * :Alias! exi  call\ MyCQuit()
@@ -7218,7 +7223,7 @@ function! Diffstart()
     execute "normal j"
     let l1=line('.')
     if (l1 == 1)
-        call Xdiff()
+        call Xdiff(0)
     endif
 endfunction
 
