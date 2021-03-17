@@ -1445,6 +1445,7 @@ let g:magit_default_fold_level=1
 let g:magit_close_mapping='\mQ'
 let g:magit_ignore_mapping='\mI'
 let g:magit_close_commit_mapping='\mX'
+let g:magit_commit_args=''
 
 " use R to refresh/update magit buffer (also <C-L> and <Leader>mR)
 " use FF to stage/unstage a file, FA for all files
@@ -1461,6 +1462,7 @@ autocmd User VimagitEnterCommit startinsert
 autocmd FileType magit noremap <silent> <buffer> q <Nop>
 autocmd FileType magit nnoremap <silent> <buffer> <C-l> :echo "Magit update ..."<bar>call magit#update_buffer()<CR>:sleep 551m<bar>redraw!<bar>echo " "<CR>
 autocmd FileType magit nnoremap <silent> <buffer> <Leader>mR :echo "Magit update ..."<bar>call magit#update_buffer()<CR>:sleep 551m<bar>redraw!<bar>echo " "<CR>
+autocmd FileType magit nnoremap <silent> <buffer> CS :let g:magit_commit_args='--signoff'<CR>:call magit#commit_command('CC')<CR>
 
 let g:magit1 = 0
 
@@ -1604,6 +1606,7 @@ command! -nargs=* Magit2 call s:Magit1(<q-args>)
 function! s:MagitReload()
     "echom "MagitReload: filetype = " . &filetype
     "sleep 1
+    let g:magit_commit_args=''
     if &filetype == "magit"
         let mcmd = 'tabnew | MyMagit'
         silent execute mcmd
@@ -1648,9 +1651,9 @@ function! s:MagitPushPull(p,q,args)
             call cursor(cur_pos, 0)
 
             if empty(a:args)
-                execute 'AsyncRun -raw -strip -mode=term -pos=bottom -rows=10 -name=aterm -post=call\ MagitUpdateBufferTerm() git ' gcmd
+                execute 'AsyncRun -raw -strip -mode=term -reuse -pos=bottom -rows=10 -name=aterm -post=call\ MagitUpdateBufferTerm() git ' gcmd
             else
-                execute 'AsyncRun -raw -strip -mode=term -pos=bottom -rows=10 -name=aterm -post=call\ MagitUpdateBufferTerm() git ' gcmd a:args
+                execute 'AsyncRun -raw -strip -mode=term -reuse -pos=bottom -rows=10 -name=aterm -post=call\ MagitUpdateBufferTerm() git ' gcmd a:args
             endif
             "FloatermNew --name=fterm --autoclose=2 --height=0.75 --width=0.80
             "FloatermNew --name=fterm --autoclose=2 --height=0.75 --width=0.80 bash_ask --tty git push
@@ -1714,7 +1717,7 @@ function! s:MagitGitCmd(p,args)
         exe "normal! a \<BS>\<Esc>"
         call cursor(cur_pos, 0)
 
-        execute 'AsyncRun -raw -strip -mode=term -pos=bottom -rows=10 -name=aterm -post=call\ MagitUpdateBufferTerm() git ' a:args
+        execute 'AsyncRun -raw -strip -mode=term -reuse -pos=bottom -rows=10 -name=aterm -post=call\ MagitUpdateBufferTerm() git ' a:args
     else
         let errmsg = 'Not inside Magit'
         call s:warn(errmsg)
