@@ -1463,6 +1463,7 @@ autocmd FileType magit noremap <silent> <buffer> q <Nop>
 autocmd FileType magit nnoremap <silent> <buffer> <C-l> :echo "Magit update ..."<bar>call magit#update_buffer()<CR>:sleep 551m<bar>redraw!<bar>echo " "<CR>
 autocmd FileType magit nnoremap <silent> <buffer> <Leader>mR :echo "Magit update ..."<bar>call magit#update_buffer()<CR>:sleep 551m<bar>redraw!<bar>echo " "<CR>
 autocmd FileType magit nnoremap <silent> <buffer> CS :let g:magit_commit_args='--signoff'<CR>:call magit#commit_command('CC')<CR>
+autocmd FileType magit nnoremap <silent> <buffer> CB :let g:magit_commit_args='--signoff'<CR>:call magit#commit_command('CA')<CR>
 
 let g:magit1 = 0
 
@@ -1540,7 +1541,7 @@ function! <SID>LaunchMagit()
         let cur_pos = line('.')
         setlocal undolevels=-1
         call cursor(1, 0)
-        exe "normal! a \<BS>\<Esc>"
+        silent exe "normal! a \<BS>\<Esc>"
         call cursor(cur_pos, 0)
     else
         silent execute "q"
@@ -1596,7 +1597,7 @@ function! s:Magit1(args)
         let cur_pos = line('.')
         setlocal undolevels=-1
         call cursor(1, 0)
-        exe "normal! a \<BS>\<Esc>"
+        silent exe "normal! a \<BS>\<Esc>"
         call cursor(cur_pos, 0)
 
     endif
@@ -1604,6 +1605,9 @@ endfunction
 command! -nargs=* Magit2 call s:Magit1(<q-args>)
 
 function! s:MagitReload()
+    if empty(b:magit_current_commit_mode)
+        return
+    endif
     "echom "MagitReload: filetype = " . &filetype
     "sleep 1
     let g:magit_commit_args=''
@@ -1617,7 +1621,7 @@ function! s:MagitReload()
         let cur_pos = line('.')
         setlocal undolevels=-1
         call cursor(1, 0)
-        exe "normal! a \<BS>\<Esc>"
+        silent exe "normal! a \<BS>\<Esc>"
         call cursor(cur_pos, 0)
 
         quit
@@ -1647,7 +1651,7 @@ function! s:MagitPushPull(p,q,args)
             let cur_pos = line('.')
             setlocal undolevels=-1
             call cursor(1, 0)
-            exe "normal! a \<BS>\<Esc>"
+            silent exe "normal! a \<BS>\<Esc>"
             call cursor(cur_pos, 0)
 
             if empty(a:args)
@@ -1692,13 +1696,14 @@ function! s:MagitUnCommit()
     endif
     call magit#close_commit()
     try
-        exec "normal! /Staged\<CR>"
-        quit
-        exec "normal! 0"
+        silent exec "silent normal! /Staged\<CR>"
+        silent exec "silent normal! 0"
     catch /E486:/
     endtry
 endfunction
 autocmd FileType magit nnoremap <silent> <buffer> CX :call <SID>MagitUnCommit()<CR>
+" original mapping is now <Leader>mX ...
+autocmd FileType magit nnoremap <silent> <buffer> CU <Nop>
 
 function! s:MagitGitCmd(p,args)
     if empty(a:args)
@@ -1714,7 +1719,7 @@ function! s:MagitGitCmd(p,args)
         let cur_pos = line('.')
         setlocal undolevels=-1
         call cursor(1, 0)
-        exe "normal! a \<BS>\<Esc>"
+        silent exe "normal! a \<BS>\<Esc>"
         call cursor(cur_pos, 0)
 
         execute 'AsyncRun -raw -strip -mode=term -reuse -pos=bottom -rows=10 -name=aterm -post=call\ MagitUpdateBufferTerm() git ' a:args
