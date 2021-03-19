@@ -1467,7 +1467,7 @@ autocmd FileType magit nnoremap <silent> <buffer> CB :let g:magit_commit_args='-
 
 let g:magit1 = 0
 
-function! MagitWriteBuffer() abort
+function! MagitWriteBuffer(arg) abort
     redraw!
     echo " "
     if &filetype == "magit"
@@ -1481,16 +1481,20 @@ function! MagitWriteBuffer() abort
         endif
         if &modified
             write
-            quit
+            if a:arg > 0
+                quit
+            else
+                call <SID>LaunchMagit()
+            endif
         endif
     endif
 endfunction
 
 "autocmd FileType magit :Alias x  call\ MagitWriteBuffer()
-au VimEnter * :Alias x if\ &filetype=='magit'|call\ MagitWriteBuffer()|else|call\ MyNextOrQuit()|endif
-autocmd FileType magit :Alias x! call\ MagitWriteBuffer()
-autocmd FileType magit :Alias w  call\ MagitWriteBuffer()
-autocmd FileType magit :Alias w! call\ MagitWriteBuffer()
+au VimEnter * :Alias x if\ &filetype=='magit'|call\ MagitWriteBuffer(1)|else|call\ MyNextOrQuit()|endif
+autocmd FileType magit :Alias x! call\ MagitWriteBuffer(1)
+autocmd FileType magit :Alias w  call\ MagitWriteBuffer(0)
+autocmd FileType magit :Alias w! call\ MagitWriteBuffer(0)
 
 function! MagitUpdateBufferTerm()
     wincmd p
@@ -6957,7 +6961,7 @@ function s:Xdiff1(arg)
     let bufnr = winbufnr(winnr())
     let bufmod = getbufvar(bufnr, "&mod")
     if bufmod
-        if a:arg == 1
+        if a:arg > 0
             silent execute "normal :b " . bufnr . " \<CR>"
             silent execute "normal :wq\<CR>"
             return
@@ -6983,7 +6987,9 @@ function Xdiff(arg)
     echo "\r"
     redraw!
     windo call <SID>Xdiff1(a:arg)
-    call MyQuit("conf qa")
+    if a:arg != 1
+        call MyQuit("conf qa")
+    endif
 endfunction
 
 function s:SwapDiffWins(arg)
@@ -7119,7 +7125,8 @@ if &diff
       au VimEnter * :Alias! qa   call\ Xdiff(0)
       au VimEnter * :Alias! n    call\ Xdiff(0)
       au VimEnter * :Alias! next call\ Xdiff(0)
-      au VimEnter * :Alias! x    call\ Xdiff(1)
+      au VimEnter * :Alias! w    call\ Xdiff(1)
+      au VimEnter * :Alias! x    call\ Xdiff(2)
       au VimEnter * :Alias! q!   call\ MyCQuit()
       au VimEnter * :Alias! qa!  call\ MyCQuit()
       au VimEnter * :Alias! exi  call\ MyCQuit()
