@@ -7063,33 +7063,54 @@ if &diff
   let g:prevdiffopt = &diffopt
 
   function! s:SaveAndDisableFiller()
+      if mode(1) ==# 'niI'
+          return
+      endif
       let g:prevdiffopt = &diffopt
-      let g:prevView = winsaveview()
+      "let g:prevView = winsaveview()
       let bline = winline()
       set diffopt-=filler
       let aline = winline()
       let mvdelta = bline - aline
-      call winrestview(g:prevView)
+      "call winrestview(g:prevView)
       "echom "mvdelta = " . mvdelta
-      "exec "normal! " . mvdelta . "\<C-y>"
-      au InsertEnter * ++once call <SID>SaveAndDisableFiller()
+      " feedkeys() might be a way to not have to exit/enter insertmode with <C-\><C-o> ...
+      "call feedkeys("\<C-e>\<C-e>\<C-e>", "n")
+      if mvdelta < 0
+          exec "normal " . -mvdelta . "\<C-j>"
+      elseif mvdelta > 0
+          exec "normal " . mvdelta . "\<C-k>"
+      endif
   endfunction
 
   function! s:RestoreFillerAndUpdate()
+      if mode(1) ==# 'niI'
+          return
+      endif
+      let bline = winline()
       if g:prevdiffopt =~ 'filler'
         set diffopt+=filler
       endif
       let g:prevdiffopt = &diffopt
+      let aline = winline()
+      let mvdelta = bline - aline
+      "echom "mvdelta = " . mvdelta
       diffupdate
-      au InsertLeave * ++once call <SID>RestoreFillerAndUpdate()
+      if mvdelta < 0
+          exec "normal " . -mvdelta . "\<C-j>k"
+      elseif mvdelta > 0
+          exec "normal " . mvdelta . "\<C-k>j"
+      endif
   endfunction
 
   function! s:TempNoFiller()
+      if mode(1) ==# 'niI'
+          return
+      endif
       set diffopt-=filler
       if g:prevdiffopt =~ 'filler'
         set diffopt+=filler
       endif
-      au TextChanged * ++once call <SID>TempNoFiller()
   endfunction
 
   aug diff_alias
@@ -7105,9 +7126,9 @@ if &diff
       au VimEnter * :Alias! exit call\ MyCQuit()
       "au InsertEnter * diffoff
       "au InsertLeave * diffthis
-      au InsertEnter * ++once call <SID>SaveAndDisableFiller()
-      au InsertLeave * ++once call <SID>RestoreFillerAndUpdate()
-      au TextChanged * ++once call <SID>TempNoFiller()
+      au InsertEnter * call <SID>SaveAndDisableFiller()
+      au InsertLeave * call <SID>RestoreFillerAndUpdate()
+      au TextChanged * call <SID>TempNoFiller()
   aug END
 
   " -----------
