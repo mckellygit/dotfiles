@@ -1469,7 +1469,7 @@ let g:magit1 = 0
 
 function! MagitWriteBuffer(arg) abort
     redraw!
-    echo " "
+    echo "\r"
     if &filetype == "magit"
         if &buftype == "nofile"
             let errmsg = 'Nothing to commit'
@@ -1490,8 +1490,18 @@ function! MagitWriteBuffer(arg) abort
     endif
 endfunction
 
+function Myxit()
+    redraw!
+    echo "\r"
+    if &filetype == 'magit'
+        call MagitWriteBuffer(1)
+    else
+        call MyNextOrQuit()
+    endif
+endfunction
+
 "autocmd FileType magit :Alias x  call\ MagitWriteBuffer()
-au VimEnter * :Alias x if\ &filetype=='magit'|call\ MagitWriteBuffer(1)|else|call\ MyNextOrQuit()|endif
+au VimEnter * :Alias x call\ Myxit()
 autocmd FileType magit :Alias x! call\ MagitWriteBuffer(1)
 autocmd FileType magit :Alias w  call\ MagitWriteBuffer(0)
 autocmd FileType magit :Alias w! call\ MagitWriteBuffer(0)
@@ -7179,17 +7189,19 @@ if &diff
   " and Bram said a fix is not planned ...
 
   " TODO: seems weird these dont work in diff ...
-  try
-    "unmap <C-d>
-    "unmap <C-u>
-    unmap <C-f>
-    unmap <C-b>
-  catch /E31:/
-  endtry
+  "try
+  "  "unmap <C-d>
+  "  "unmap <C-u>
+  "  unmap <C-f>
+  "  unmap <C-b>
+  "catch /E31:/
+  "endtry
   " dont use <C-\><C-o> because those leave and enter insert mode again, triggering the slow functions and messing up mapped with input
-  inoremap <buffer> <C-f> <Down><Down><Down><Down><Down><Down><Down><Down><Down><Down><Down><Down><Down><Down><Down><Down><Down><Down><Down><Down>
-  inoremap <buffer> <C-b> <Up><Up><Up><Up><Up><Up><Up><Up><Up><Up><Up><Up><Up><Up><Up><Up><Up><Up><Up><Up>
+  "inoremap <buffer> <C-f> <Down><Down><Down><Down><Down><Down><Down><Down><Down><Down><Down><Down><Down><Down><Down><Down><Down><Down><Down><Down>
+  "inoremap <buffer> <C-b> <Up><Up><Up><Up><Up><Up><Up><Up><Up><Up><Up><Up><Up><Up><Up><Up><Up><Up><Up><Up>
+
 else
+
   aug not_diff_alias
   "!&diff
     au!
