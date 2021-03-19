@@ -7069,7 +7069,7 @@ if &diff
   let g:prevdiffopt = &diffopt
 
   function! s:SaveAndDisableFiller()
-      if mode(1) ==# 'niI'
+      if mode() =~ 'n'
           return
       endif
       let g:prevdiffopt = &diffopt
@@ -7090,7 +7090,7 @@ if &diff
   endfunction
 
   function! s:RestoreFillerAndUpdate()
-      if mode(1) ==# 'niI'
+      if mode() =~ 'n'
           return
       endif
       let bline = winline()
@@ -7110,7 +7110,7 @@ if &diff
   endfunction
 
   function! s:TempNoFiller()
-      if mode(1) ==# 'niI'
+      if mode() =~ 'n'
           return
       endif
       set diffopt-=filler
