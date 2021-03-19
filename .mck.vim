@@ -7068,14 +7068,11 @@ if &diff
       let bline = winline()
       set diffopt-=filler
       let aline = winline()
-      "call winrestview(g:prevView)
-      "echom "bline, aline = " . bline . ", " . aline
-      "let mvdelta = bline - aline
-      "let g:prevView.lnum += mvdelta
+      let mvdelta = bline - aline
       call winrestview(g:prevView)
       "echom "mvdelta = " . mvdelta
-      "exec "normal! " . mvdelta . "\<C-u>"
-      "exec "normal! " . mvdelta . "j"
+      "exec "normal! " . mvdelta . "\<C-y>\<CR>"
+      au InsertEnter * ++once call <SID>SaveAndDisableFiller()
   endfunction
 
   function! s:RestoreFillerAndUpdate()
@@ -7084,6 +7081,7 @@ if &diff
       endif
       let g:prevdiffopt = &diffopt
       diffupdate
+      au InsertLeave * ++once call <SID>RestoreFillerAndUpdate()
   endfunction
 
   function! s:TempNoFiller()
@@ -7091,6 +7089,7 @@ if &diff
       if g:prevdiffopt =~ 'filler'
         set diffopt+=filler
       endif
+      au TextChanged * ++once call <SID>TempNoFiller()
   endfunction
 
   aug diff_alias
@@ -7106,9 +7105,9 @@ if &diff
       au VimEnter * :Alias! exit call\ MyCQuit()
       "au InsertEnter * diffoff
       "au InsertLeave * diffthis
-      au InsertEnter * call <SID>SaveAndDisableFiller()
-      au InsertLeave * call <SID>RestoreFillerAndUpdate()
-      au TextChanged * call <SID>TempNoFiller()
+      au InsertEnter * ++once call <SID>SaveAndDisableFiller()
+      au InsertLeave * ++once call <SID>RestoreFillerAndUpdate()
+      au TextChanged * ++once call <SID>TempNoFiller()
   aug END
 
   " -----------
@@ -7159,8 +7158,9 @@ if &diff
     unmap <C-b>
   catch /E31:/
   endtry
-  inoremap <C-f> <C-\><C-o><C-f>
-  inoremap <C-b> <C-\><C-o><C-b>
+  " dont use <C-\><C-o> because those leave and enter insert mode again, triggering the slow functions and messing up mapped with input
+  inoremap <buffer> <C-f> <Down><Down><Down><Down><Down><Down><Down><Down><Down><Down><Down><Down><Down><Down><Down><Down><Down><Down><Down><Down>
+  inoremap <buffer> <C-b> <Up><Up><Up><Up><Up><Up><Up><Up><Up><Up><Up><Up><Up><Up><Up><Up><Up><Up><Up><Up>
 else
   aug not_diff_alias
   "!&diff
