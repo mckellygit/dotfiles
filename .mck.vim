@@ -7071,7 +7071,7 @@ if &diff
       let mvdelta = bline - aline
       call winrestview(g:prevView)
       "echom "mvdelta = " . mvdelta
-      "exec "normal! " . mvdelta . "\<C-y>\<CR>"
+      "exec "normal! " . mvdelta . "\<C-y>"
       au InsertEnter * ++once call <SID>SaveAndDisableFiller()
   endfunction
 
