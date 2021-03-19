@@ -3151,6 +3151,9 @@ tmap <silent> <A-End> <Nop>
 
 " Save current view settings on a per-window, per-buffer basis.
 function! AutoSaveWinView()
+    if &diff
+        return
+    endif
     if !exists("w:SavedBufView")
         let w:SavedBufView = {}
     endif
@@ -3159,11 +3162,14 @@ endfunction
 
 " Restore current view settings.
 function! AutoRestoreWinView()
+    if &diff
+        return
+    endif
     let buf = bufnr("%")
     if exists("w:SavedBufView") && has_key(w:SavedBufView, buf)
         let v = winsaveview()
         let atStartOfFile = v.lnum == 1 && v.col == 0
-        if atStartOfFile && !&diff
+        if atStartOfFile
             call winrestview(w:SavedBufView[buf])
         endif
         unlet w:SavedBufView[buf]
@@ -7059,8 +7065,17 @@ if &diff
   function! s:SaveAndDisableFiller()
       let g:prevdiffopt = &diffopt
       let g:prevView = winsaveview()
+      let bline = winline()
       set diffopt-=filler
+      let aline = winline()
+      "call winrestview(g:prevView)
+      "echom "bline, aline = " . bline . ", " . aline
+      "let mvdelta = bline - aline
+      "let g:prevView.lnum += mvdelta
       call winrestview(g:prevView)
+      "echom "mvdelta = " . mvdelta
+      "exec "normal! " . mvdelta . "\<C-u>"
+      "exec "normal! " . mvdelta . "j"
   endfunction
 
   function! s:RestoreFillerAndUpdate()
