@@ -821,7 +821,7 @@ _fzf_compgen_dir() {
 
 my-fzfcmd() {
   [ -n "$TMUX_PANE" ] &&
-    echo "fzf-tmux -p -x C -y 38 -w 80% -h 65% " || echo "fzf --height 50% "
+    echo "fzf-tmux -p -x C -y C -w 80% -h 65% " || echo "fzf --height 50% "
 }
 
 my-fzf-history-widget() {

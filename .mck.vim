@@ -1505,6 +1505,9 @@ au VimEnter * :Alias x call\ Myxit()
 autocmd FileType magit :Alias x! call\ MagitWriteBuffer(1)
 autocmd FileType magit :Alias w  call\ MagitWriteBuffer(0)
 autocmd FileType magit :Alias w! call\ MagitWriteBuffer(0)
+autocmd FileType magit :Alias wq call\ MagitWriteBuffer(1)
+
+nnoremap <silent> <Leader>mw :call MagitWriteBuffer(0)<CR>
 
 function! MagitUpdateBufferTerm()
     wincmd p
@@ -6029,8 +6032,53 @@ autocmd BufReadPost quickfix nnoremap <silent> <buffer> <C-]> <Return>
 " C-t to go back (not implemented)
 " nmap <C-t> :call rtags#JumpBack()<bar>:echo<CR>
 " \cc to close quickfix, listview, preview
-nnoremap <silent> <Leader>cc           :ccl<bar>lcl<bar>pcl<bar>:call <SID>CloseClangWin()<CR>
-vnoremap <silent> <Leader>cc <C-\><C-n>:ccl<bar>lcl<bar>pcl<bar>:call <SID>CloseClangWin()<CR>
+
+function s:IsTerminalFinished()
+    " just to clear the cmdline of this function ...
+    echo "\r"
+    redraw!
+    redir => lsout
+    silent ls
+    redir END
+    if empty(lsout)
+        return
+    endif
+    let blist = split(lsout, '\n')
+    for lline in blist
+        let bdict = split(lline, ' ')
+        if bdict[1] ==# 'aF' || bdict[1] ==# '%aF'
+            let bnum = str2nr(bdict[0])
+            if getbufvar(bnum, '&buftype') ==# 'terminal'
+                "echo "finished terminal buffer to end: " . bnum
+                try
+                    silent exec "normal :bdel! " . bnum . "\<CR>"
+                catch /.*/
+                    " just to clear the cmdline of this function ...
+                    echo "\r"
+                    redraw!
+                endtry
+            endif
+        endif
+    endfor
+endfunction
+
+function s:CloseUtilWins()
+    " just to clear the cmdline of this function ...
+    echo "\r"
+    redraw!
+    ccl
+    lcl
+    pcl
+    call s:CloseClangWin()
+    call s:IsTerminalFinished()
+endfunction
+
+nnoremap <silent> <Leader>cc           :call <SID>CloseUtilWins()<CR>
+vnoremap <silent> <Leader>cc <C-\><C-n>:<C-u>call <SID>CloseUtilWins()<CR>
+
+"nnoremap <silent> <Leader>cc           :ccl<bar>lcl<bar>pcl<bar>:call <SID>CloseClangWin()<CR>
+"vnoremap <silent> <Leader>cc <C-\><C-n>:ccl<bar>lcl<bar>pcl<bar>:call <SID>CloseClangWin()<CR>
+
 "noremap <silent> <Leader>cc :windo lcl<bar>ccl<bar>pcl<bar>:echo<CR>
 " qq to also close location list, but we already have a q mapping ...
 "autocmd BufReadPost quickfix nnoremap <silent> <buffer> qq :ccl<bar>lcl<bar>pcl<bar>:echo<CR>
@@ -7116,10 +7164,10 @@ if &diff
         set diffopt+=filler
       endif
       let g:prevdiffopt = &diffopt
-      let aline = winline()
-      let mvdelta = bline - aline
       "echom "mvdelta = " . mvdelta
       diffupdate
+      let aline = winline()
+      let mvdelta = bline - aline
       if mvdelta < 0
           exec "normal " . -mvdelta . "\<C-j>k"
       elseif mvdelta > 0
@@ -7133,9 +7181,17 @@ if &diff
       if mode(1) ==# 'niI'
           return
       endif
+      let bline = winline()
       set diffopt-=filler
       if g:prevdiffopt =~ 'filler'
         set diffopt+=filler
+      endif
+      let aline = winline()
+      let mvdelta = bline - aline
+      if mvdelta < 0
+          exec "normal " . -mvdelta . "\<C-j>k"
+      elseif mvdelta > 0
+          exec "normal " . mvdelta . "\<C-k>j"
       endif
   endfunction
 
