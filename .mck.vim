@@ -7188,11 +7188,12 @@ if &diff
       endif
       let aline = winline()
       let mvdelta = bline - aline
-      if mvdelta < 0
-          exec "normal " . -mvdelta . "\<C-j>k"
-      elseif mvdelta > 0
-          exec "normal " . mvdelta . "\<C-k>j"
-      endif
+      "echom "mvdelta = " . mvdelta
+      "if mvdelta < 0
+      "    exec "normal " . -mvdelta . "\<C-j>k"
+      "elseif mvdelta > 0
+      "    exec "normal " . mvdelta . "\<C-k>j"
+      "endif
   endfunction
 
   aug diff_alias
