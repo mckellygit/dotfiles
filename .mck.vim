@@ -5621,6 +5621,10 @@ else
     tnoremap <C-w><C-w> <C-w>w
 endif
 
+" to match normal mode ...
+inoremap <C-w>w      <C-\><C-o><C-w>w
+inoremap <C-w><C-w>  <C-\><C-o><C-w>w
+
 " ------------------
 
 " <Return> was nmapped above to gj also if not terminal ...
@@ -7079,7 +7083,9 @@ if &diff
   let g:prevdiffopt = &diffopt
 
   function! s:SaveAndDisableFiller()
-      if mode() =~ 'n'
+      " this helps prevent recursive calls to here when a normal cmd or <C-\><C-o> mapping is used,
+      " causing another InserLeave/InsertEnter autocmd event
+      if mode(1) ==# 'niI'
           return
       endif
       let g:prevdiffopt = &diffopt
@@ -7100,7 +7106,9 @@ if &diff
   endfunction
 
   function! s:RestoreFillerAndUpdate()
-      if mode() =~ 'n'
+      " this helps prevent recursive calls to here when a normal cmd or <C-\><C-o> mapping is used,
+      " causing another InserLeave/InsertEnter autocmd event
+      if mode(1) ==# 'niI'
           return
       endif
       let bline = winline()
@@ -7120,7 +7128,9 @@ if &diff
   endfunction
 
   function! s:TempNoFiller()
-      if mode() =~ 'n'
+      " this helps prevent recursive calls to here when a normal cmd or <C-\><C-o> mapping is used,
+      " causing another InserLeave/InsertEnter autocmd event
+      if mode(1) ==# 'niI'
           return
       endif
       set diffopt-=filler
@@ -7145,6 +7155,7 @@ if &diff
       "au InsertLeave * diffthis
       au InsertEnter * call <SID>SaveAndDisableFiller()
       au InsertLeave * call <SID>RestoreFillerAndUpdate()
+      " work-around tp help keep cursor at correct line ...
       au TextChanged * call <SID>TempNoFiller()
   aug END
 
