@@ -1771,6 +1771,10 @@ endfunction
 nnoremap <silent> <Leader>br :call <SID>LaunchTwiggy()<CR>
 " twiggy --------------
 
+" dispatch ------------
+let g:dispatch_no_maps = 1
+" dispatch ------------
+
 " QFEnter -------------
 " add C-t, C-v, C-x to open consistently with fzf ...
 let g:qfenter_keymap = {}
