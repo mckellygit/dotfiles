@@ -1035,15 +1035,15 @@ autocmd BufReadCmd  index{,.lock}
     \ endif
 
 function MyGitHelper(ff)
-    echo "\r"
     redraw!
+    echo "\r"
     if a:ff =~ "blame"
         execute "normal :Git blame\<CR>"
     elseif a:ff =~ "status"
-        execute "normal :Git status\<CR>"
+        execute "normal :Git \<CR>"
     endif
-    echo "\r"
     redraw!
+    echo "\r"
 endfunction
 
 aug fugitive_alias
