@@ -7123,16 +7123,17 @@ if &diff
   au WinEnter * vnoremap <silent> <buffer> U  u
   au WinEnter * vmap     <silent> <buffer> u <Nop>
 
+  let g:prevdiffopt = &diffopt
+
   function! s:ToggleDiffopt()
       if &diffopt =~ 'filler'
           set diffopt-=filler
       else
           set diffopt+=filler
       endif
+      let g:prevdiffopt = &diffopt
       redraw!
   endfunction
-
-  let g:prevdiffopt = &diffopt
 
   function! s:SaveAndDisableFiller()
       " this helps prevent recursive calls to here when a normal cmd or <C-\><C-o> mapping is used,
