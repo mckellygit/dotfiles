@@ -7185,11 +7185,13 @@ if &diff
       if mode(1) ==# 'niI'
           return
       endif
+      let g:prevView = winsaveview()
       let bline = winline()
       set diffopt-=filler
       if g:prevdiffopt =~ 'filler'
         set diffopt+=filler
       endif
+      call winrestview(g:prevView)
       let aline = winline()
       let mvdelta = bline - aline
       "echom "mvdelta = " . mvdelta
