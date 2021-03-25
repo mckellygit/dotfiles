@@ -4,3 +4,7 @@ sleep 5
 xrdb -load ~/.Xresources
 xmodmap ~/.Xmodmap
 
+# to try and eliminate msg: Invalid MIT-MAGIC-COOKIE-1 key ...
+# when using sudo vim (gvim) ...
+xhost +local: > /dev/null 2>&1
+
