@@ -7303,7 +7303,7 @@ endif
 " patience diff algo ...
 "if has("patch-8.1.0360")
   "set diffopt=context:6,internal,algorithm:patience,indent-heuristic,closeoff
-  set diffopt=context:6,closeoff
+  set diffopt=context:6,closeoff,foldcolumn:0
   set diffopt+=filler
   noremap <silent> <Leader>df :call <SID>ToggleDiffopt()<CR>
 "endif
