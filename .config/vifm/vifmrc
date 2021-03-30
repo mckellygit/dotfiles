@@ -511,6 +511,9 @@ nnoremap qq            :q<cr>
 nnoremap \qq           :q<cr>
 nnoremap \xc           :q<cr>
 
+nnoremap QQ            :q<cr>
+nnoremap <C-q><C-q>    :q<cr>
+
 qnoremap qq            <C-w>w
 qnoremap \qq           <C-w>w
 
