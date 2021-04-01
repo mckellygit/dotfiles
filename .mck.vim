@@ -205,6 +205,10 @@ Plugin 'itchyny/calendar.vim'
 "Plugin 'farmergreg/vim-lastplace'
 Plugin 'mckellygit/vim-lastplace'
 "
+" any-jump (with rg/ag)
+"Plugin 'pechorin/any-jump.vim'
+Plugin 'mckellygit/any-jump.vim'
+"
 " conque-gdb plugin
 "Plugin 'Conque-GDB'
 "
@@ -422,7 +426,7 @@ let g:lightline = {
 function! MyLightlineMode()
   " dont wrapscan if in visual mode ...
   let m = mode()
-  if m ==# 'v' || m ==# 'V' || m ==# '\<C-v>'
+  if m ==# "v" || m ==# "V" || m == "\<C-v>"
     set nowrapscan
     "let &sj=0
     "let &so=10
@@ -845,7 +849,8 @@ endfunction
 
 let g:blist = []
 function! MylsFilter(id, key)
-    if a:key == 'q' || a:key == 'x' || a:key == '\<Esc>' || a:key == '\<C-c>'
+    " is <C-c> available in filter ? or use a callback to capture that close
+    if a:key == "q" || a:key == "x" || a:key == "\<Esc>" || a:key == "\<C-c>"
         call popup_close(a:id, 0)
         " return > 0 to not pass on to callback ...
         return 1
@@ -1908,6 +1913,25 @@ autocmd BufNewFile,BufRead *.{ecl} set filetype=ecl
 let c_no_curly_error = 1
 " vim-cpp-modern -----------
 
+" any-jump -----------
+let g:any_jump_disable_default_keybindings = 1
+" rg seems to have some more correct line numbers etc.
+" from https://github.com/BurntSushi/ripgrep
+let g:any_jump_search_prefered_engine = 'rg'
+let g:any_jump_results_ui_style = 'filename_first'
+let g:any_jump_max_search_results = 8
+let g:any_jump_list_numbers = 0
+let g:any_jump_references_enabled = 1
+" Normal mode: Jump to definition under cursore
+nnoremap <leader>as :AnyJump<CR>
+" Visual mode: jump to selected text in visual mode
+xnoremap <leader>as <C-\><C-n>:<C-u>AnyJumpVisual<CR>
+" Normal mode: open previous opened file (after jump) - could just use <C-o> ...
+nnoremap <leader>ab :AnyJumpBack<CR>
+" Normal mode: open last closed search window again
+nnoremap <leader>al :AnyJumpLastResults<CR>
+" any-jump -----------
+
 " asyncrun -----------
 " open quickfix (10 lines) when cmd ends
 " skip as we now copen at end ...
@@ -2129,16 +2153,16 @@ nnoremap <silent> tx    <Nop>
 nnoremap <silent> tX    <Nop>
 
 " copy (yank) selection, stay at end unless rectangular region ...
-"vmap <silent> <expr> <C-c> (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
-"vmap <silent> <expr> y     (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
+"vmap <silent> <expr> <C-c> (mode() =~ "\<C-v>") ? 'ty' : 'mvty`v'
+"vmap <silent> <expr> y     (mode() =~ "\<C-v>") ? 'ty' : 'mvty`v'
 
 " TODO: if in normal mode in a terminal - do we exit normal mode on a yank ?
 
-vmap <silent> <expr> <C-c> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
-vmap <silent> <expr> y     (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
-vmap <silent> <expr> Y     (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ '\<C-v>') ? 'omvVtY`v' : 'mvtY`v'
-vmap <silent> <expr> <Leader>yy (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
-vmap <silent> <expr> <Leader>yY (mode() =~ '\<C-v>') ? 'omvVtY`v' : 'mvtY`v'
+vmap <silent> <expr> <C-c> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty' : 'mvty`v'
+vmap <silent> <expr> y     (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty' : 'mvty`v'
+vmap <silent> <expr> Y     (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'omvVtY`v' : 'mvtY`v'
+vmap <silent> <expr> <Leader>yy (mode() =~ "\<C-v>") ? 'ty' : 'mvty`v'
+vmap <silent> <expr> <Leader>yY (mode() =~ "\<C-v>") ? 'omvVtY`v' : 'mvtY`v'
 
 if has("nvim")
     let g:clipboard = {
@@ -2353,7 +2377,8 @@ endfunction
 
 let g:reglist = []
 function! MyregFilter(id, key)
-    if a:key == 'q' || a:key == 'x' || a:key == '\<Esc>' || a:key == '\<C-c>'
+    " is <C-c> available in filter ? or use a callback to capture that close
+    if a:key == "q" || a:key == "x" || a:key == "\<Esc>" || a:key == "\<C-c>"
         call popup_close(a:id, 0)
         " return > 0 to not pass on to callback ...
         return 1
@@ -2951,16 +2976,16 @@ call <SID>MapFastKeycode('<S-F16>',   "\e[3;3~", 116) " A-Del
 " <A-S-End>
 
 call <SID>MapFastKeycode('<S-F21>',   "\e[5;5~", 121) " C-PageUp
-" <S-PageUp>
+call <SID>MapFastKeycode('<S-F17>',   "\e[5;2~", 117) " S-PageUp
 call <SID>MapFastKeycode('<S-F22>',   "\e[5;6~", 122) " C-S-PageUp
 call <SID>MapFastKeycode('<S-F23>',   "\e[5;3~", 123) " A-PageUp
-" <A-S-PageUp>
+call <SID>MapFastKeycode('<S-F19>',   "\e[5;4~", 119) " A-S-PageUp
 
 call <SID>MapFastKeycode('<S-F24>',   "\e[6;5~", 124) " C-PageDown
-" <S-PageDown>
+call <SID>MapFastKeycode('<S-F18>',   "\e[6;2~", 118) " S-PageDown
 call <SID>MapFastKeycode('<S-F25>',   "\e[6;6~", 125) " C-S-PageDown
 call <SID>MapFastKeycode('<S-F26>',   "\e[6;3~", 126) " A-PageDown
-" <A-S-PageDown>
+call <SID>MapFastKeycode('<S-F20>',   "\e[6;4~", 120) " A-S-PageDown
 
 " NOTE: addl mappings start at <S-F27> 127 ...
 "       so we have what is not used above ...
@@ -3139,16 +3164,41 @@ cmap <silent> <A-Insert> <Nop>
 tmap <silent> <A-Insert> <Nop>
 
 " <A-S-Insert> - (vim) reverse case four letters at a time ...
-map <silent>  <F21>         <Nop>
-map <silent>  <A-S-Insert>  <Nop>
+map  <silent> <F21>         <Nop>
+map  <silent> <A-S-Insert>  <Nop>
 imap <silent> <F21>         <Esc>l
 imap <silent> <A-S-Insert>  <Esc>l
 
+" ---------------------------
+
 " <S-PageUp> ?
 " <A-S-PageUp> ?
-
 " <S-PageDown> ?
 " <A-S-PageDown> ?
+
+" NOTE: X might use these to scroll alt screen ...
+
+ noremap <silent> <expr> <S-F17>        (line('.') == line('w$')) ? '5k' : '5<C-y>5k'
+ noremap <silent> <expr> <S-PageUp>     (line('.') == line('w$')) ? '5k' : '5<C-y>5k'
+ noremap <silent> <expr> <S-F19>        (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
+ noremap <silent> <expr> <A-S-PageUp>   (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
+
+ noremap <silent> <expr> <S-F18>        (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '5<C-e>5j'
+ noremap <silent> <expr> <S-PageDown>   (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '5<C-e>5j'
+ noremap <silent> <expr> <S-F20>        (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
+ noremap <silent> <expr> <A-S-PageDown> (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
+
+inoremap <silent> <expr> <S-F17>        pumvisible() ? '<Up>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <S-PageUp>     pumvisible() ? '<Up>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <S-F19>        pumvisible() ? '<Up>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <A-S-PageUp>   pumvisible() ? '<Up>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
+
+inoremap <silent> <expr> <S-F18>        pumvisible() ? '<Down>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <S-PageDown>   pumvisible() ? '<Down>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <S-F20>        pumvisible() ? '<Down>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <A-S-PageDown> pumvisible() ? '<Down>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
+
+" ---------------------------
 
 " <S-Home> ?
 " <C-S-Home> ?
@@ -3414,13 +3464,13 @@ endif
 " some terminal configs (urxvt) map C-S-c => M-&
 call <SID>MapFastKeycode('<S-F36>',  "\e&", 136)
 nnoremap <S-F36> <Nop>
-vmap <expr> <S-F36> (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
+vmap <expr> <S-F36> (mode() =~ "\<C-v>") ? 'ty' : 'mvty`v'
 cnoremap <S-F36> <C-v><Esc>&
 inoremap <S-F36> <C-v><Esc>&
 tnoremap <S-F36> <Esc>&
 if has("nvim")
     nnoremap <M-&> <Nop>
-    vmap <expr> <M-&> (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
+    vmap <expr> <M-&> (mode() =~ "\<C-v>") ? 'ty' : 'mvty`v'
     cnoremap <S-F36> <M-&>
     inoremap <S-F36> <M-&>
     tnoremap <S-F36> <M-&>
@@ -3614,8 +3664,8 @@ vnoremap <silent> <buffer> <expr> <F35> (&buftype == 'terminal') ? '<Nop>' : '"_
 "  <F33> is copy
 "  <F34> is paste (mapped below)
 "  <F37>    is cut (mapped below)
-vmap <silent> <expr> <F33>      (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
-vmap <silent> <expr> <C-Insert> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ '\<C-v>') ? 'ty' : 'mvty`v'
+vmap <silent> <expr> <F33>      (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty' : 'mvty`v'
+vmap <silent> <expr> <C-Insert> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty' : 'mvty`v'
 vmap <silent> <F37>   tx
 vmap <silent> <S-Del> tx
 
@@ -3638,6 +3688,8 @@ endfunction
 " change cursor shape to beam in Insert mode ...
 let &t_SI = "\e[5 q"
 let &t_EI = "\e[2 q"
+" underline
+"let &t_EI = "\e[4 q"
 
 " also note cnorm/cvvis terminfo for rxvt blinking cursor
 
@@ -3797,7 +3849,8 @@ tnoremap <A-4-MiddleMouse> <Nop>
 
 let g:list3b = ['Copy', 'Paste', 'Quit']
 function! My3BFilter(id, key)
-    if a:key == 'q' || a:key == 'x' || a:key == '\<Esc>' || a:key == '\<C-c>'
+    " is <C-c> available in filter ? or use a callback to capture that close
+    if a:key == "q" || a:key == "x" || a:key == "\<Esc>" || a:key == "\<C-c>"
         call popup_close(a:id, 0)
         " return > 0 to not pass on to callback ...
         return 1
@@ -5525,12 +5578,6 @@ noremap  <S-Up>    <Up>
 noremap  <S-Down>  <Down>
 inoremap <S-Up>    <Up>
 inoremap <S-Down>  <Down>
-
-" X might use these to scroll alt screen ...
-noremap  <S-PageUp>   <Nop>
-noremap  <S-PageDown> <Nop>
-inoremap <S-PageUp>   <Nop>
-inoremap <S-PageDown> <Nop>
 
 " ---------
 
@@ -7467,11 +7514,11 @@ endif
 " terminal in new tab NOTE: added <C-w>:se scl=no<CR> at end to turn off signcolumn in terminal only ...
 noremap <silent> zt <Nop>
 if has("nvim")
-    nnoremap <silent> <Leader>zt           :$tabnew <Esc>:terminal<CR><C-w>:se scl=no<CR>i
-    vnoremap <silent> <Leader>zt <C-\><C-n>:$tabnew <Esc>:terminal<CR><C-w>:se scl=no<CR>i
+    nnoremap <silent> <Leader>zt           :$tabnew<bar>terminal<CR><C-w>:se scl=no<CR>i
+    vnoremap <silent> <Leader>zt <C-\><C-n>:$tabnew<bar>terminal<CR><C-w>:se scl=no<CR>i
 else
-    nnoremap <silent> <Leader>zt           :$tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
-    vnoremap <silent> <Leader>zt <C-\><C-n>:$tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
+    nnoremap <silent> <Leader>zt           :$tabnew<bar>terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
+    vnoremap <silent> <Leader>zt <C-\><C-n>:$tabnew<bar>terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
 endif
 "
 " NOTE: there is also <Leader>zf for new floating terminal (floaterm)
@@ -7479,14 +7526,14 @@ endif
 " terminal in new tab when already in a terminal
 " MCK: use something else besides <C-x> here ...
 if has("nvim")
-    tnoremap <silent> <F17>t <C-\><C-n><C-w>:$tabnew <Esc>:terminal<CR><C-w>:se scl=no<CR>i
+    tnoremap <silent> <F17>t <C-\><C-n><C-w>:$tabnew<bar>:terminal<CR><C-w>:se scl=no<CR>i
     tnoremap <silent> <F17>v <C-\><C-n><C-w>:$tabnew<CR>
-    tnoremap <silent> <M-x>t <C-\><C-n><C-w>:$tabnew <Esc>:terminal<CR><C-w>:se scl=no<CR>i
+    tnoremap <silent> <M-x>t <C-\><C-n><C-w>:$tabnew<bar>:terminal<CR><C-w>:se scl=no<CR>i
     tnoremap <silent> <M-x>v <C-\><C-n><C-w>:$tabnew<CR>
 else
-    tnoremap <silent> <F17>t <C-w>:$tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
+    tnoremap <silent> <F17>t <C-w>:$tabnew<bar>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
     tnoremap <silent> <F17>v <C-w>:$tabnew<CR>
-    tnoremap <silent> <M-x>t <C-w>:$tabnew <Esc>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
+    tnoremap <silent> <M-x>t <C-w>:$tabnew<bar>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
     tnoremap <silent> <M-x>v <C-w>:$tabnew<CR>
 endif
 " window in new tab when already in a terminal
@@ -7508,10 +7555,10 @@ tnoremap <silent> <F17><C-]> <C-\><C-n>
 tnoremap <silent> <M-x>]     <C-\><C-n>
 tnoremap <silent> <M-x><C-]> <C-\><C-n>
 " dont really want to map <C-x> + anything as <C-x> is used alone as a map in several other places
-nnoremap <silent> <expr> <F17>]     (&buftype == 'terminal') ? 'i' : '\<Esc>x]'
-nnoremap <silent> <expr> <F17><C-]> (&buftype == 'terminal') ? 'i' : '\<Esc>x\<C-]>]'
-nnoremap <silent> <expr> <M-x>]     (&buftype == 'terminal') ? 'i' : '\<M-x>]'
-nnoremap <silent> <expr> <M-x><C-]> (&buftype == 'terminal') ? 'i' : '\<M-x>\<C-]>]'
+nnoremap <silent> <expr> <F17>]     (&buftype == 'terminal') ? 'i' : '<Esc>x]'
+nnoremap <silent> <expr> <F17><C-]> (&buftype == 'terminal') ? 'i' : '<Esc>x<C-]>]'
+nnoremap <silent> <expr> <M-x>]     (&buftype == 'terminal') ? 'i' : '<M-x>]'
+nnoremap <silent> <expr> <M-x><C-]> (&buftype == 'terminal') ? 'i' : '<M-x><C-]>]'
 
 " this causes sign column to disappear on popups that are terminal windows ...
 "au TerminalOpen * setlocal signcolumn=no
