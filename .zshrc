@@ -579,6 +579,15 @@ vical() { vim -c "Calendar $1 $2 $3" -c ":nnoremap <silent> <buffer> q <Nop>" -c
 
 magit() { vim -c "Magit2 $1" }
 
+#function delete-branches() {
+#  local branches_to_delete
+#  branches_to_delete=$(git branch | fzf --multi)
+#
+#  if [ -n "$branches_to_delete" ]; then
+#    git branch --delete --force $branches_to_delete
+#  fi
+#}
+
 alias sync-hpcc='sync_hpcc'
 alias stop-hpcc='stop_hpcc'
 alias stat-hpcc='stat_hpcc'
@@ -628,6 +637,9 @@ fi
 # kubernetes, helm etc.
 
 alias kc='kubectl'
+
+# kubectl completion zsh > ~/.kc_zsh
+# source ~/.kc_zsh
 
 # ------------------
 
@@ -819,6 +831,14 @@ _fzf_compgen_dir() {
 
 # -----------------------
 
+# an example (like with fzf history below) where a zsh binding is used
+# instead of a tmux binding - to get into copy-mode from shell and not when inside an app ...
+# tmuxup(){ tmux copy-mode -u }
+# zle -N tmuxup
+# bindkey '^[v' tmuxup
+
+# -----------------------
+
 my-fzfcmd() {
   [ -n "$TMUX_PANE" ] &&
     echo "fzf-tmux -p -x C -y C -w 80% -h 65% " || echo "fzf --height 50% "
@@ -863,7 +883,7 @@ bindkey "\e_" my-fzf-files-widget
 #export MANPAGER="less"
 #alias manls="man -k . | fzf --prompt='Man> ' | awk '{print \$1}' | xargs -r man -P 'less'"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
-alias manls="man -k . | fzf --prompt='Man> ' | awk '{print \$1}' | xargs -r man -P 'sh -c \"col -bx | bat -l man -p\"'"
+alias manls="man -k . | fzf --bind=\"ctrl-f:half-page-down\" --bind=\"ctrl-b:half-page-up\" --bind=\"ctrl-k:up,ctrl-j:down\" --bind=\"ctrl-d:delete-char\" --bind=\"alt-bs:half-page-up,alt-space:half-page-down\" --bind=\"alt-k:up,alt-j:down\" --bind=\"ctrl-alt-k:half-page-up,ctrl-alt-j:half-page-down\" --bind=\"ctrl-alt-o:half-page-down\" --bind=\"page-up:page-up\" --bind=\"page-down:page-down\" --bind=\"alt-d:kill-word,alt-u:unix-line-discard\" --bind=\"alt-b:page-up\" --bind=\"alt-f:page-down\" --prompt='Man> ' | awk '{print \$1}' | xargs -r man -P 'sh -c \"col -bx | bat -l man -p\"'"
 
 # This can be slow, try it in byobu/tmux status bar ...
 # git repo info/status in prompt
