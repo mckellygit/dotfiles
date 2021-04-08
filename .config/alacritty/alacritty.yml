@@ -123,14 +123,15 @@ key_bindings:
   - { key: Delete,    mods: Control|Shift,   chars: "\x1b[3;6~"       }
   - { key: Delete,    mods: Alt,             chars: "\x1b[3;3~"       }
   - { key: Delete,    mods: Alt|Shift,       chars: "\x1b[3;4~"       }
+  - { key: Delete,    mods: Alt|Control,     chars: "\x1b[3;7~"       }
     # key: Delete Alt|Control is usually eaten by winmgr ...
 
 mouse_bindings:
   - { mouse: Middle, action: None }
 
 mouse:
-  double_click: { threshold: 300 }
-  triple_click: { threshold: 300 }
+  double_click: { threshold: 250 }
+  triple_click: { threshold: 500 }
   hide_when_typing: true
 
   url:

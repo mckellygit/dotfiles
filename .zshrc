@@ -80,8 +80,25 @@ fi
 #  export TERM=screen-256color
 #fi
 
-autoload -Uz compinit
-compinit
+#fpath+=${ZDOTDIR:-~}/.zsh_functions
+fpath=( ~/.zsh_functions "${fpath[@]}" )
+
+autoload -Uz compinit && compinit
+
+zmodload -i zsh/complist
+
+zstyle ':completion:*' menu select
+zstyle ':completion:*' show-completer true
+zstyle ':completion:*' verbose false
+eval "$(dircolors)"
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+
+# yes this points to bash - but its correct ...
+zstyle ':completion:*:*:git:*' script /usr/share/bash-completion/completions/git
+
+# costs, but refreshes cmd cache automatically
+# zstyle ":completion:*:commands" rehash 1
+# or could just run hash -rf ...
 
 if [ "$TERM" = "xterm-kitty" ] ; then
 # Completion for kitty - needs to be after compinit ...
@@ -105,18 +122,6 @@ fi
 
 # tcp foo
 zmodload zsh/net/tcp
-
-zmodload -i zsh/complist
-
-zstyle ':completion:*' menu select
-zstyle ':completion:*' show-completer true
-zstyle ':completion:*' verbose false
-eval "$(dircolors)"
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-
-# costs, but refreshes cmd cache automatically
-# zstyle ":completion:*:commands" rehash 1
-# or could just run hash -rf ...
 
 # Enable bracketed paste: printf "\e[?2004h"
 # Wait for paste to start: you’ll see \e[200~ on STDIN.
@@ -401,6 +406,19 @@ bindkey "\e[1;2B" down-line-or-beginning-search
 # Shift-Up
 bindkey "\e[1;2A" up-line-or-beginning-search
 
+# Shift-Left
+bindkey "\e[1;2D" backward-char
+# Shift-Right
+bindkey "\e[1;2C" forward-char
+
+# Alt-Left
+bindkey "\e[1;3D" backward-char
+# Alt-Right
+bindkey "\e[1;3C" forward-char
+
+# Alt-Shift-Left - used by tmux for pane sizing
+# Alt-Shift-Right - used by tmux for pane sizing
+
 # --------------------
 
 # Shift-DEL - backward kill word
@@ -435,6 +453,10 @@ bindkey -M viins "\e[3;5~" my-kill-word
 bindkey -M vicmd "\e[3;5~" my-kill-word
 # same for ^x
 #bindkey "^x" my-kill-word
+
+# Ctrl-Alt-DEL (if OS doesn't usurp it)
+bindkey -M viins "\e[3;7~" my-kill-word
+bindkey -M vicmd "\e[3;7~" my-kill-word
 
 # -------
 
@@ -528,9 +550,14 @@ alias rm='rm -i'
 #  alias dmesg='dmesg -T'
 #fi
 alias dmesg='dmesg -kuxT'
+
 alias vdiff='vimdiff'
 alias vdifff='vimdiff'
 alias vdif='vimdiff'
+
+alias nvdiff='nvimdiff'
+alias nvdifff='nvimdiff'
+alias nvdif='nvimdiff'
 
 # skip -X arg to less to get alternate screen so tmux mouse can scroll ...
 # and dont use -F without -X ...
@@ -573,11 +600,14 @@ alias dif='diff'
 # could also nnoremap qq qa!<CR> here
 #alias vigv="vim -R -c \"GV2 \$1\" -c \":nnoremap <silent> <buffer> q <Nop>\" -c \":cnoreabbrev <silent> <buffer> q Tabcloserightquit\" -c \":cnoreabbrev <silent> <buffer> q! Tabcloserightquit\" -c \":nnoremap <silent> <buffer> x <Nop>\" -c \":cnoreabbrev <silent> <buffer> x Tabcloserightquit\" -c \":se bt=nowrite|:tabn|:hide|:redraw!\""
 # use a function to support arguments ...
-vigv() { vim -R -c "GV2 $1 $2 $3" -c ":nnoremap <silent> <buffer> q <Nop>" -c ":cnoreabbrev <silent> <buffer> q Tabcloserightquit" -c ":cnoreabbrev <silent> <buffer> q! Tabcloserightquit" -c ":nnoremap <silent> <buffer> x <Nop>" -c ":cnoreabbrev <silent> <buffer> x Tabcloserightquit" -c ":se bt=nowrite|:tabn|:hide|:redraw!" }
+vigv()  { vim -R -c "GV2 $1 $2 $3" -c ":nnoremap <silent> <buffer> q <Nop>" -c ":cnoreabbrev <silent> <buffer> q Tabcloserightquit" -c ":cnoreabbrev <silent> <buffer> q! Tabcloserightquit" -c ":nnoremap <silent> <buffer> x <Nop>" -c ":cnoreabbrev <silent> <buffer> x Tabcloserightquit" -c ":se bt=nowrite|:tabn|:hide|:redraw!" }
+nvigv() { nvi -R -c "GV2 $1 $2 $3" -c ":nnoremap <silent> <buffer> q <Nop>" -c ":cnoreabbrev <silent> <buffer> q Tabcloserightquit" -c ":cnoreabbrev <silent> <buffer> q! Tabcloserightquit" -c ":nnoremap <silent> <buffer> x <Nop>" -c ":cnoreabbrev <silent> <buffer> x Tabcloserightquit" -c ":se bt=nowrite|:tabn|:hide|:redraw!" }
 
-vical() { vim -c "Calendar $1 $2 $3" -c ":nnoremap <silent> <buffer> q <Nop>" -c ":cnoreabbrev <silent> <buffer> q Tabcloserightquit" -c ":cnoreabbrev <silent> <buffer> q! Tabcloserightquit" -c ":nnoremap <silent> <buffer> x <Nop>" -c ":cnoreabbrev <silent> <buffer> x Tabcloserightquit" }
+vical()  { vim -c "Calendar $1 $2 $3" -c ":nnoremap <silent> <buffer> q <Nop>" -c ":cnoreabbrev <silent> <buffer> q Tabcloserightquit" -c ":cnoreabbrev <silent> <buffer> q! Tabcloserightquit" -c ":nnoremap <silent> <buffer> x <Nop>" -c ":cnoreabbrev <silent> <buffer> x Tabcloserightquit" }
+nvical() { nvi -c "Calendar $1 $2 $3" -c ":nnoremap <silent> <buffer> q <Nop>" -c ":cnoreabbrev <silent> <buffer> q Tabcloserightquit" -c ":cnoreabbrev <silent> <buffer> q! Tabcloserightquit" -c ":nnoremap <silent> <buffer> x <Nop>" -c ":cnoreabbrev <silent> <buffer> x Tabcloserightquit" }
 
-magit() { vim -c "Magit2 $1" }
+magit()  { vim -c "Magit2 $1" }
+nmagit() { nvi -c "Magit2 $1" }
 
 #function delete-branches() {
 #  local branches_to_delete
@@ -1016,6 +1046,14 @@ bindkey '^_\'  forward-word
 bindkey "\e[1;6F" forward-word
 # and C-S-Home to beg line
 bindkey "\e[1;6H" backward-word
+# also C-A-End ...
+bindkey "\e[1;7F" forward-word
+# and C-A-Home to beg line
+bindkey "\e[1;7H" backward-word
+# also A-End ...
+bindkey "\e[1;3F" forward-word
+# and A-Home to beg line
+bindkey "\e[1;3H" backward-word
 # terminals may have mapped C-S-/ to ^_/
 # send break because end-of-history or kill-line dont reset history completely
 function ctrl-c-cmdline() {
@@ -1096,7 +1134,3 @@ bindkey -s "\e," ","
 #bindkey "\e\n" autosuggest-execute
 
 # --------------------
-
-#fpath+=${ZDOTDIR:-~}/.zsh_functions
-fpath=( ~/.zsh_functions "${fpath[@]}" )
-

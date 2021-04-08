@@ -407,6 +407,7 @@ URxvt.keysym.Shift-Delete:      string:\033[3;2~
 URxvt.keysym.C-S-Delete:        string:\033[3;6~
 URxvt.keysym.Meta-Delete:       string:\033[3;3~
 URxvt.keysym.Shift-Meta-Delete: string:\033[3;4~
+URxvt.keysym.Control-Meta-Delete: string:\033[3;7~
 !! Control-Meta-Delete is usally eaten by winmgr ...
 
 !! no-op is command:\000
@@ -488,4 +489,14 @@ URxvt.clipboard.pastecmd: myclip --o --rmlastnl --sc 0
     Shift ~Ctrl ~Alt<Btn1Motion>:       \n\
     Shift ~Ctrl ~Alt Button1<PtrMoved>: \n\
     Shift ~Ctrl ~Alt<Btn1Up>:           \n
+
+!! ==========================================
+
+!! Zutty options
+
+Zutty.altScroll:       false
+Zutty.fontsize:        15
+Zutty.saveLines:       0
+!!Zutty.altSendsEscape:  false
+Zutty.modifyOtherKeys: 2
 
