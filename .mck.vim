@@ -724,6 +724,7 @@ augroup END
 
 " add \fz mapping also
 noremap <silent> <Leader>fz <C-\><C-n>:FZFProjectFiles<CR>
+noremap <silent> <Leader>fg <C-\><C-n>:FZFProjectFiles<CR>
 noremap <silent> <Leader>f/ <C-\><C-n>:FZFProjectFiles<CR>
 function! s:find_git_root()
     let gdir = ''
@@ -1934,9 +1935,15 @@ let g:any_jump_max_search_results = 8
 let g:any_jump_list_numbers = 0
 let g:any_jump_references_enabled = 1
 " Normal mode: Jump to definition under cursore
-nnoremap <leader>as :AnyJump<CR>
+nnoremap <leader>a/ :AnyJump<CR>
+nnoremap <leader>ag :AnyJump<CR>
+nnoremap <leader>ad :AnyJumpDirLocal<CR>
+nnoremap <leader>a. :AnyJumpDirRecur<CR>
 " Visual mode: jump to selected text in visual mode
-xnoremap <leader>as <C-\><C-n>:<C-u>AnyJumpVisual<CR>
+xnoremap <leader>a/ <C-\><C-n>:<C-u>AnyJumpVisual<CR>
+xnoremap <leader>ag <C-\><C-n>:<C-u>AnyJumpVisual<CR>
+xnoremap <leader>ad <C-\><C-n>:<C-u>AnyJumpVisualDirLocal<CR>
+xnoremap <leader>a. <C-\><C-n>:<C-u>AnyJumpVisualDirRecur<CR>
 " Normal mode: open previous opened file (after jump) - could just use <C-o> ...
 nnoremap <leader>ab :AnyJumpBack<CR>
 " Normal mode: open last closed search window again
@@ -1948,12 +1955,16 @@ nnoremap <leader>al :AnyJumpLastResults<CR>
 " skip as we now copen at end ...
 "let g:asyncrun_open = 10
 " so we can see echoes at end ...
+let g:asyncrun_code = 1
 let g:asyncrun_silent = 0
-autocmd User AsyncRunPre echohl DiffAdd | echo 'AsyncRun started ...' | echohl None
+autocmd User AsyncRunPre echohl DiffAdd | echo 'AsyncRun started ...' | echohl None | let g:asyncrun_code = 2
 autocmd User AsyncRunStop if g:asyncrun_code != 0 | echohl DiffText | echo 'AsyncRun complete: [FAIL]' | echohl None |
             \ else | echohl DiffAdd | echo 'AsyncRun complete: [OK]' | echohl None | copen | set nowrap | set cursorline | clearjumps | call lightline#update() | endif
+autocmd User AsyncRunInterrupt echohl DiffText | echo 'AsyncRun interrupt: [TERM]' | echohl None | let g:asyncrun_code = 2
 " NOTE: add '| wincmd p' to go back to orig window
 " NOTE: add '| set ma' after copen to make qf modifiable
+" there is also <leader>sq and <Leader>sx to cancel AsyncRun search in flight ...
+" TODO: is there a way to map <C-c> to send interrupt and call AsyncStop ?
 " asyncrun -----------
 
 " startify -----------
@@ -2913,10 +2924,6 @@ noremap <C-t> <Nop>
 " (<Leader>t? is usually for tab-based cmds)
 noremap <Leader><C-t> <C-t>
 
-" <C-q> seems to start selection sometimes ...
-nmap <C-q> <Nop>
-vmap <C-q> q
-
 " dont do this, it messes up viw ...
 "vnoremap i <Nop>
 
@@ -3658,6 +3665,9 @@ function! s:MyVisV2()
         exe "silent! normal! gvV"
     endif
 endfunction
+
+" <C-q> seems to start visual mode ...
+nmap <C-q> <Nop>
 
 " q to exit visual-mode and clear previous w:v* states
 " if we just map q to <Esc> then q works well to go back to original mode,
@@ -6598,10 +6608,10 @@ function s:MyVisSearch(meth) abort
   set hlsearch
 endfunction
 
-" use :let @/="" to clear out search pattern and stop any running search
+" use :let @/="" to clear out search pattern and stop any running search - wish we could use <C-c>
 nnoremap <silent> <Leader>sx :let @/=""<bar>:echo " "<bar>:AsyncStop!<CR>
 vnoremap <silent> <Leader>sx <C-\><C-n>:let @/=""<bar>:echo " "<bar>:AsyncStop!<CR>
-" stop running search
+" stop running search - wish we could use <C-c>
 nnoremap <silent> <Leader>sq :AsyncStop!<CR>
 vnoremap <silent> <Leader>sq <C-\><C-n>:AsyncStop!<CR>
 " search normally
