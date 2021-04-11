@@ -722,7 +722,7 @@ augroup END
 
 " ------------
 
-" add \fz mapping also
+" add \fz mapping also ?
 noremap <silent> <Leader>fz <C-\><C-n>:FZFProjectFiles<CR>
 noremap <silent> <Leader>fg <C-\><C-n>:FZFProjectFiles<CR>
 noremap <silent> <Leader>f/ <C-\><C-n>:FZFProjectFiles<CR>
@@ -1934,16 +1934,19 @@ let g:any_jump_results_ui_style = 'filename_first'
 let g:any_jump_max_search_results = 8
 let g:any_jump_list_numbers = 0
 let g:any_jump_references_enabled = 1
-" Normal mode: Jump to definition under cursore
+" Normal mode: Jump to definition under cursor
+" d, g, f, ., /
 nnoremap <leader>a/ :AnyJump<CR>
 nnoremap <leader>ag :AnyJump<CR>
 nnoremap <leader>ad :AnyJumpDirLocal<CR>
 nnoremap <leader>a. :AnyJumpDirRecur<CR>
+" TODO: <Leader>af for files
 " Visual mode: jump to selected text in visual mode
 xnoremap <leader>a/ <C-\><C-n>:<C-u>AnyJumpVisual<CR>
 xnoremap <leader>ag <C-\><C-n>:<C-u>AnyJumpVisual<CR>
 xnoremap <leader>ad <C-\><C-n>:<C-u>AnyJumpVisualDirLocal<CR>
 xnoremap <leader>a. <C-\><C-n>:<C-u>AnyJumpVisualDirRecur<CR>
+" TODO: <Leader>af for files
 " Normal mode: open previous opened file (after jump) - could just use <C-o> ...
 nnoremap <leader>ab :AnyJumpBack<CR>
 " Normal mode: open last closed search window again
@@ -1955,12 +1958,12 @@ nnoremap <leader>al :AnyJumpLastResults<CR>
 " skip as we now copen at end ...
 "let g:asyncrun_open = 10
 " so we can see echoes at end ...
-let g:asyncrun_code = 1
+let g:asyncrun_code = 0
 let g:asyncrun_silent = 0
 autocmd User AsyncRunPre echohl DiffAdd | echo 'AsyncRun started ...' | echohl None | let g:asyncrun_code = 2
-autocmd User AsyncRunStop if g:asyncrun_code != 0 | echohl DiffText | echo 'AsyncRun complete: [FAIL]' | echohl None |
-            \ else | echohl DiffAdd | echo 'AsyncRun complete: [OK]' | echohl None | copen | set nowrap | set cursorline | clearjumps | call lightline#update() | endif
-autocmd User AsyncRunInterrupt echohl DiffText | echo 'AsyncRun interrupt: [TERM]' | echohl None | let g:asyncrun_code = 2
+autocmd User AsyncRunStop if g:asyncrun_code != 0 | echohl DiffText | echo 'AsyncRun complete: [ ?? ]' | echohl None |
+            \ else | echohl DiffAdd | echo 'AsyncRun complete: [ OK ]' | echohl None | copen | set nowrap | set cursorline | clearjumps | call lightline#update() | endif
+autocmd User AsyncRunInterrupt echohl DiffText | echo 'AsyncRun complete: [TERM]' | echohl None | let g:asyncrun_code = 2
 " NOTE: add '| wincmd p' to go back to orig window
 " NOTE: add '| set ma' after copen to make qf modifiable
 " there is also <leader>sq and <Leader>sx to cancel AsyncRun search in flight ...
@@ -6548,7 +6551,7 @@ function s:MySearch(meth) abort
     let files = map(files, "shellescape(fnamemodify(v:val, ':p'))")
     "execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) join(files) ' 2>/dev/null'
     if empty(files)
-      redraw | echohl DiffText | echo "No buffers to search" | echohl None
+      redraw | echohl DiffText | echo "No files to search" | echohl None
     else
       execute 'AsyncRun! -strip ag --vimgrep -- ' shellescape(string, 1) join(files) ' 2>/dev/null'
     endif
@@ -6589,7 +6592,7 @@ function s:MyVisSearch(meth) abort
     let files = map(files, "shellescape(fnamemodify(v:val, ':p'))")
     "execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) join(files) ' 2>/dev/null'
     if empty(files)
-      redraw | echohl DiffText | echo "No buffers to search" | echohl None
+      redraw | echohl DiffText | echo "No files to search" | echohl None
     else
       execute 'AsyncRun! -strip ag --vimgrep -- ' shellescape(string, 1) join(files) ' 2>/dev/null'
     endif
@@ -6621,9 +6624,9 @@ vnoremap <Leader>sn "sy<Esc>:let @/=""<bar>:set hlsearch<CR>/<C-r>"
 nnoremap <Leader>sN :let @/=""<bar>:set hlsearch<CR>?
 vnoremap <Leader>sN "sy<Esc>:let @/=""<bar>:set hlsearch<CR>?<C-r>"
 
-" search buffer with results in qf list
-nnoremap <silent> <Leader>sb :call <SID>MySearch(0)<CR>
-vnoremap <silent> <Leader>sb "sy<Esc>:call <SID>MyVisSearch(0)<CR>
+" search all currently open files with results in qf list - NOTE: make sure to save buffers to disk before searching!
+nnoremap <silent> <Leader>sf :call <SID>MySearch(0)<CR>
+vnoremap <silent> <Leader>sf "sy<Esc>:call <SID>MyVisSearch(0)<CR>
 " search dir with results in qf list
 nnoremap <silent> <Leader>sd :call <SID>MySearch(2)<CR>
 vnoremap <silent> <Leader>sd "sy<Esc>:call <SID>MyVisSearch(2)<CR>
