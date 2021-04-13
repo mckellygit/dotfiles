@@ -314,6 +314,9 @@ endif
 "Plugin 'bfredl/nvim-miniyank'
 Plugin 'mckellygit/nvim-miniyank'
 "
+" vim-better-whitespace
+"Plugin 'ntpeters/vim-better-whitespace'
+"
 "" All of your Plugins must be added before the following line
 call vundle#end()         " required
 filetype plugin indent on " required
@@ -1089,7 +1092,7 @@ aug gg_init
 aug END
 
 " NOTE: ^L redraws but also updates git changes ...
-nmap <silent> <C-l> :call gitgutter#process_buffer(bufnr(''), 0)<bar>:redraw!<CR>
+nnoremap <silent> <expr> <C-l> pumvisible() ? '<C-l>' : ':call gitgutter#process_buffer(bufnr(""), 0)<bar>:redraw!<CR>'
 " gitgutter -----------
 
 " gitv ----------------
@@ -1477,7 +1480,7 @@ let g:magit_commit_args=''
 
 autocmd User VimagitEnterCommit startinsert
 autocmd FileType magit noremap <silent> <buffer> q <Nop>
-autocmd FileType magit nnoremap <silent> <buffer> <C-l> :echo "Magit update ..."<bar>call magit#update_buffer()<CR>:sleep 551m<bar>redraw!<bar>echo " "<CR>
+autocmd FileType magit nnoremap <silent> <buffer> <expr> <C-l> pumvisible() ? '<C-l>' : ':echo "Magit update ..."<bar>call magit#update_buffer()<CR>:sleep 551m<bar>redraw!<bar>echo " "<CR>'
 autocmd FileType magit nnoremap <silent> <buffer> <Leader>mR :echo "Magit update ..."<bar>call magit#update_buffer()<CR>:sleep 551m<bar>redraw!<bar>echo " "<CR>
 autocmd FileType magit nnoremap <silent> <buffer> CS :let g:magit_commit_args='--signoff'<CR>:call magit#commit_command('CC')<CR>
 autocmd FileType magit nnoremap <silent> <buffer> CB :let g:magit_commit_args='--signoff'<CR>:call magit#commit_command('CA')<CR>
@@ -1962,7 +1965,7 @@ let g:asyncrun_code = 0
 let g:asyncrun_silent = 0
 autocmd User AsyncRunPre echohl DiffAdd | echo 'AsyncRun started ...' | echohl None | let g:asyncrun_code = 2
 autocmd User AsyncRunStop if g:asyncrun_code != 0 | echohl DiffText | echo 'AsyncRun complete: [ ?? ]' | echohl None |
-            \ else | echohl DiffAdd | echo 'AsyncRun complete: [ OK ]' | echohl None | copen | set nowrap | set cursorline | clearjumps | call lightline#update() | endif
+            \ else | echohl DiffAdd | echo 'AsyncRun complete: [ OK ]' | echohl None | copen | set nowrap | set cursorline | clearjumps | if !pumvisible() | call lightline#update() | endif | endif
 autocmd User AsyncRunInterrupt echohl DiffText | echo 'AsyncRun complete: [TERM]' | echohl None | let g:asyncrun_code = 2
 " NOTE: add '| wincmd p' to go back to orig window
 " NOTE: add '| set ma' after copen to make qf modifiable
@@ -2179,6 +2182,14 @@ if has("nvim")
 endif
 " nvim-miniyank ----
 
+" vim-better-whitespace -
+let g:show_spaces_that_precede_tabs=1
+let g:better_whitespace_enabled=0
+let g:strip_whitespace_on_save=0
+let g:current_line_whitespace_disabled_soft=1
+let g:better_whitespace_operator='___s'
+" vim-better-whitespace -
+
 " ====================================================
 " ====================================================
 " ====================================================
@@ -2214,11 +2225,20 @@ nnoremap <silent> tX    <Nop>
 
 " TODO: if in normal mode in a terminal - do we exit normal mode on a yank ?
 
-vmap <silent> <expr> <C-c> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty' : 'mvty`v'
-vmap <silent> <expr> y     (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty' : 'mvty`v'
-vmap <silent> <expr> Y     (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'omvVtY`v' : 'mvtY`v'
-vmap <silent> <expr> <Leader>yy (mode() =~ "\<C-v>") ? 'ty' : 'mvty`v'
-vmap <silent> <expr> <Leader>yY (mode() =~ "\<C-v>") ? 'omvVtY`v' : 'mvtY`v'
+" NOTE: to save and restore cursor without adjusting lines use: mvHmw [func/cmd] 'wzt`v
+function! s:YankAndRestoreWinPos(cmd)
+    " this was mvty`v or mvtY`v ...
+    let l:w1 = winsaveview()
+    silent execute 'silent normal gv' . a:cmd
+    call winrestview(l:w1)
+endfunction
+
+"vmap <silent> <expr> <C-c> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty' : 'mvty`v'
+vmap <silent> <expr> <C-c> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty")<CR>'
+vmap <silent> <expr> y     (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty")<CR>'
+vmap <silent> <expr> Y     (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'omvVtY`v' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("tY")<CR>'
+vmap <silent> <expr> <Leader>yy (mode() =~ "\<C-v>") ? 'ty' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty")<CR>'
+vmap <silent> <expr> <Leader>yY (mode() =~ "\<C-v>") ? 'omvVtY`v' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("tY")<CR>'
 
 if has("nvim")
     let g:clipboard = {
@@ -5672,6 +5692,9 @@ autocmd VimEnter,VimResized * call <SID>MapScrollKeys()
 " if in Insert mode with no input/movement for 10 sec then revert to Normal mode ...
 set updatetime=10000
 function! s:IdleToNormalMode()
+    if pumvisible()
+        return
+    endif
     let mymode = mode()
     if mymode ==# 'i' || mymode ==# 'R'
         call feedkeys("\<Esc>", "m")
@@ -5681,6 +5704,9 @@ endfunction
 autocmd CursorHoldI * call <SID>IdleToNormalMode()
 
 function! s:ClearCmdWindow()
+    if pumvisible()
+        return
+    endif
     "exe 'normal :'
     "redraw!
     echo "\r\r"
@@ -6101,6 +6127,9 @@ endif " has("autocmd")
 "================================================================
 "================================================================
 
+set completeopt=longest,menuone,preview,noselect
+inoremap <silent> <expr> <Tab> pumvisible() ? '<C-n>' : '<Tab>'
+
 " NOTE: vim needs -python/3 support for YouCompleteMe and rtags
 " +python/dyn +python3/dyn
 " ./configure --enable-pythoninterp=yes --enable-python3interp=yes
@@ -6511,6 +6540,7 @@ endfunction
 "================================================================
 
 function s:MySearch(meth) abort
+  " TODO: - make it so there are 2 modes, prompt or expand("<cword>") ...
   if (a:meth == 0)
     let promptstr = 'sqf-buf:/'
   elseif (a:meth == 1)
@@ -6612,8 +6642,8 @@ function s:MyVisSearch(meth) abort
 endfunction
 
 " use :let @/="" to clear out search pattern and stop any running search - wish we could use <C-c>
-nnoremap <silent> <Leader>sx :let @/=""<bar>:echo " "<bar>:AsyncStop!<CR>
-vnoremap <silent> <Leader>sx <C-\><C-n>:let @/=""<bar>:echo " "<bar>:AsyncStop!<CR>
+nnoremap <silent> <Leader>sx :let @/=""<bar>:redraw!<CR>:echo " "<CR>:AsyncStop!<CR>
+vnoremap <silent> <Leader>sx <C-\><C-n>:let @/=""<bar>:redraw!<CR>:echo " "<CR>:AsyncStop!<CR>
 " stop running search - wish we could use <C-c>
 nnoremap <silent> <Leader>sq :AsyncStop!<CR>
 vnoremap <silent> <Leader>sq <C-\><C-n>:AsyncStop!<CR>
