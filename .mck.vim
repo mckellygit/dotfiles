@@ -96,6 +96,7 @@ Plugin 'sk1418/QFGrep'
 "Plugin 'itchyny/vim-qfedit'
 "
 " qf preview popup
+" NOTE: not compatible with nvim
 Plugin 'mckellygit/vim-qf-preview'
 "Plugin 'bfrg/vim-qf-preview'
 "Plugin 'ronakg/quickr-preview.vim'
@@ -806,6 +807,8 @@ command! -bang -nargs=* Agit
   \ {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']},
   \ <bang>0)
 "
+" TODO: see Rg command that reloads search string dynamically - can we do this with Ag ?
+"
 " fzf env vars:
 "export FZF_PREVIEW_LINES=20
 "export FZF_DEFAULT_COMMAND='ag -U --hidden --nocolor -g ""'
@@ -1464,26 +1467,32 @@ let g:magit_auto_foldopen=1
 let g:magit_default_fold_level=1
 let g:magit_close_mapping='\mQ'
 let g:magit_ignore_mapping='\mI'
-let g:magit_close_commit_mapping='\mX'
+let g:magit_close_commit_mapping='\mU'
 let g:magit_commit_args=''
 
 " use R to refresh/update magit buffer (also <C-L> and <Leader>mR)
-" use FF to stage/unstage a file, FA for all files
+" use FF to stage/unstage a file
+" use FA to stage all files
 " use L to stage/unstage a line
 " use S to stage/unstage a hunk
 " use E to edit the file
 " use M to mark a diff-line/hunk for staging (then use S to stage)
-" CC to commit
-" CA to commit --amend
-" CX to undo commit (before saving)
+" use CC to commit
+" use CS to commit --signoff
+" use CA to commit --amend
+" use CB to commit --amend --signoff
+" use CU to undo commit (before saving)
 " <Leader>mP to push
+" :MPush [git options]
+" :MPull [git options]
 
 autocmd User VimagitEnterCommit startinsert
 autocmd FileType magit noremap <silent> <buffer> q <Nop>
 autocmd FileType magit nnoremap <silent> <buffer> <expr> <C-l> pumvisible() ? '<C-l>' : ':echo "Magit update ..."<bar>call magit#update_buffer()<CR>:sleep 551m<bar>redraw!<bar>echo " "<CR>'
 autocmd FileType magit nnoremap <silent> <buffer> <Leader>mR :echo "Magit update ..."<bar>call magit#update_buffer()<CR>:sleep 551m<bar>redraw!<bar>echo " "<CR>
-autocmd FileType magit nnoremap <silent> <buffer> CS :let g:magit_commit_args='--signoff'<CR>:call magit#commit_command('CC')<CR>
-autocmd FileType magit nnoremap <silent> <buffer> CB :let g:magit_commit_args='--signoff'<CR>:call magit#commit_command('CA')<CR>
+" these are in magit plugin now with help info -
+"autocmd FileType magit nnoremap <silent> <buffer> CS :let g:magit_commit_args='--signoff'<CR>:call magit#commit_command('CC')<CR>
+"autocmd FileType magit nnoremap <silent> <buffer> CB :let g:magit_commit_args='--signoff'<CR>:call magit#commit_command('CA')<CR>
 
 let g:magit1 = 0
 
@@ -1726,7 +1735,8 @@ au VimEnter * :Alias GV MyGVWrapper
 "command! -bang -nargs=* MGV call s:MyGV(<q-args>)
 "command! -bang -nargs=* Mgv call s:MyGV(<q-args>)
 
-" for CX to not leave extra tab ...
+" this is in magit plugin now with help info -
+" for CU to not leave extra tab ...
 function! s:MagitUnCommit()
     if ( b:magit_current_commit_mode == '' )
         return
@@ -1738,9 +1748,10 @@ function! s:MagitUnCommit()
     catch /E486:/
     endtry
 endfunction
-autocmd FileType magit nnoremap <silent> <buffer> CX :call <SID>MagitUnCommit()<CR>
-" original mapping is now <Leader>mX ...
-autocmd FileType magit nnoremap <silent> <buffer> CU <Nop>
+
+" these are in magit plugin now with help info -
+"autocmd FileType magit nnoremap <silent> <buffer> CU :call <SID>MagitUnCommit()<CR>
+" default map is <Leader>mU ...
 
 function! s:MagitGitCmd(p,args)
     if empty(a:args)
@@ -1822,7 +1833,7 @@ endfunction
 " vim-qf-preview ------
 augroup qfpreview
     autocmd!
-    " SPECIAL: <S-F27> is terminal mapped to <C-A-p> above ...
+    " SPECIAL: <S-F27> is terminal mapped to <A-C-P> above ...
     " SPECIAL: <S-F30> is terminal mapped to <A-BS> (via tmux for vim) ...
     " SPECIAL: <S-F29> is terminal mapped to <A-Space> (via tmux for vim) ...
     autocmd FileType qf nmap <buffer> <S-F27> <plug>(qf-preview-open)
@@ -1833,8 +1844,10 @@ augroup qfpreview
 augroup END
 " Do we use <C-k>/<C-j> for scroll-up/down or <C-Up>/<C-Down> ?
 " NOTE: mappings here have to be a single key - cannot be an esc-code ...
+" NOTE: vim-qf-preview is not compatible with nvim
 if has("nvim")
-    autocmd FileType qf nmap <buffer> <M-C-P> <plug>(qf-preview-open)
+    "autocmd FileType qf nmap <buffer> <M-C-P> <plug>(qf-preview-open)
+    autocmd FileType qf nmap <silent> <buffer> <M-C-P> :echohl WarningMsg<bar>echo "vim-qf-preview NOT compatible with nvim!"<bar>echohl None<CR>:sleep 1500m<CR>:echo " "<CR>
     let g:qfpreview = {
     \ 'top'           : "\<C-Home>",
     \ 'bottom'        : "\<C-End>",
@@ -1937,6 +1950,8 @@ let g:any_jump_results_ui_style = 'filename_first'
 let g:any_jump_max_search_results = 8
 let g:any_jump_list_numbers = 0
 let g:any_jump_references_enabled = 1
+" if -1 then center popup vertically, otherwise use offset
+let g:any_jump_window_top_offset = -1
 " Normal mode: Jump to definition under cursor
 " d, g, f, ., /
 nnoremap <leader>a/ :AnyJump<CR>
@@ -1950,10 +1965,16 @@ xnoremap <leader>ag <C-\><C-n>:<C-u>AnyJumpVisual<CR>
 xnoremap <leader>ad <C-\><C-n>:<C-u>AnyJumpVisualDirLocal<CR>
 xnoremap <leader>a. <C-\><C-n>:<C-u>AnyJumpVisualDirRecur<CR>
 " TODO: <Leader>af for files
+" TODO: prompt searches ...
+nnoremap <leader>a? :echo "TODO: prompt for any-jump search (a?)"<CR>
+nnoremap <leader>aG :echo "TODO: prompt for any-jump search (aG)"<CR>
+nnoremap <leader>aD :echo "TODO: prompt for any-jump search (aD)"<CR>
+nnoremap <leader>a: :echo "TODO: prompt for any-jump search (a:)"<CR>
 " Normal mode: open previous opened file (after jump) - could just use <C-o> ...
 nnoremap <leader>ab :AnyJumpBack<CR>
 " Normal mode: open last closed search window again
 nnoremap <leader>al :AnyJumpLastResults<CR>
+au FileType any-jump nnoremap <silent> <buffer> <M-C-P> :call g:AnyJumpHandlePreview()<CR>
 " any-jump -----------
 
 " asyncrun -----------
@@ -3020,8 +3041,8 @@ call <SID>MapFastKeycode('<F20>',           "\e[3;4~", 20) " A-S-Del
 " <A-S-Insert> - (vim) reverse case four letters at a time ...
 call <SID>MapFastKeycode('<F21>',           "\e[2;4~", 21) " A-S-Insert
 "call <SID>MapFastKeycode('<S-Right>',      "\e[1;2C", 22)
-" <C-A-Insert> - (vim) reverse case four letters at a time ...
-call <SID>MapFastKeycode('<F22>',           "\e[2;7~", 22) " C-A-Insert
+" <A-C-Insert> - (vim) reverse case four letters at a time ...
+call <SID>MapFastKeycode('<F22>',           "\e[2;7~", 22) " A-C-Insert
 
 "call <SID>MapFastKeycode('<C-S-Up>',       "\e[1;6A", 23)
 " NOTE: need to skip MapFastKeycode('<F24>') as its used by tmux focus plugin
@@ -3115,7 +3136,7 @@ if has("nvim")
     tnoremap <S-F28> <M-a>
 endif
 
-" <C-A-p> for fzf preview ...
+" <A-C-P> for fzf preview ...
 call <SID>MapFastKeycode('<S-F27>',  "\e\<C-p>", 127)
 " so <M-C-P> goes up to match <M-C-N> goes down
 noremap <S-F27> <C-p>
@@ -3248,8 +3269,8 @@ cmap <silent> <C-Insert> <Nop>
 tmap <silent> <F33>      <Nop>
 tmap <silent> <C-Insert> <Nop>
 
-" <C-A-Insert> - (vim) reverse case four letters at a time
-" but this is painful when using C-A-BS to switch tmux windows and we press it accitdentally
+" <A-C-Insert> - (vim) reverse case four letters at a time
+" but this is painful when using A-C-BS to switch tmux windows and we press it accitdentally
 map <silent>  <F22>         <Nop>
 map <silent>  <M-C-Insert>  <Nop>
 imap <silent> <F22>         <Esc>l
@@ -4705,7 +4726,7 @@ map <silent>  <A-S-Del>  <Nop>
 imap <silent> <F20>      <Esc>l
 imap <silent> <A-S-Del>  <Esc>l
 
-call <SID>MapFastKeycode('<F16>', "\e[3;7~", 16) " C-A-Del
+call <SID>MapFastKeycode('<F16>', "\e[3;7~", 16) " A-C-Del
 map <silent>  <F16>         <Nop>
 map <silent>  <M-C-Del>     <Nop>
 imap <silent> <F16>         <Nop>
@@ -4785,6 +4806,7 @@ nnoremap <silent> Z<S-Right> 10zl10l
 vnoremap <silent> Z<S-Left>  10zh10h
 vnoremap <silent> Z<S-Right> 10zl10l
 
+" NOTE: tmux sends CSI mappings for these ...
 nnoremap <silent> <M-h>      10zh10h
 nnoremap <silent> <M-l>      10zl10l
 vnoremap <silent> <M-h>      10zh10h
@@ -4793,7 +4815,11 @@ nnoremap <silent> <M-,>      10zh10h
 nnoremap <silent> <M-.>      10zl10l
 vnoremap <silent> <M-,>      10zh10h
 vnoremap <silent> <M-.>      10zl10l
-" TODO: need vim mappings for these ...
+
+inoremap <silent> <M-h>      <C-\><C-o>10zh<C-\><C-o>10h
+inoremap <silent> <M-l>      <C-\><C-o>10zl<C-\><C-o>10l
+inoremap <silent> <M-,>      <C-\><C-o>10zh<C-\><C-o>10h
+inoremap <silent> <M-.>      <C-\><C-o>10zl<C-\><C-o>10l
 
 " ---------
 
@@ -5198,7 +5224,7 @@ else
     tnoremap <F28> <M-C-K>
 endif
 
-" SPECIAL: some terminals might map C-A-j to M-C-o ...
+" SPECIAL: some terminals might map A-C-j to M-C-o ...
 " use ^O instead of ^J (or ^M or \n or \r)
 call <SID>MapFastKeycode('<F29>',  "\e\<C-o>", 29)
 noremap <silent> <expr> <F29>    (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '5<C-e>5j'
@@ -5248,15 +5274,18 @@ endif
 
 " ---------
 
-noremap <M-n> <Nop>
-noremap <M-p> <Nop>
-noremap <M-N> <Nop>
-noremap <M-P> <Nop>
-" TODO: these added to tmux to send true <M-key> ...
-" MapFastKeycode() for \\en <Nop>
-" MapFastKeycode() for \\eN <Nop>
-" MapFastKeycode() for \\ep <Nop>
-" MapFastKeycode() for \\eP <Nop>
+" NOTE: tmux sends CSI mappings for these ...
+ noremap <silent> <M-n> <Nop>
+ noremap <silent> <M-p> <Nop>
+ noremap <silent> <M-N> <Nop>
+ noremap <silent> <M-P> <Nop>
+
+" and get back orig for insert
+inoremap <silent> <M-n> <C-v><Esc>n
+inoremap <silent> <M-p> <C-v><Esc>p
+inoremap <silent> <M-N> <C-v><Esc>N
+inoremap <silent> <M-P> <C-v><Esc>P
+
 " -------------------------------
 
 nnoremap <silent> <expr> gH winline() - 1 - &scrolloff > 0
@@ -5878,7 +5907,7 @@ tnoremap         <C-^>- -
 
 map <silent> <buffer> <M-C-Return> gk
 imap         <buffer> <M-C-Return> <Nop>
-" SPECIAL: NOTE: terminals could map <C-A-Return> to <C-^><Return>
+" SPECIAL: NOTE: terminals could map <A-C-Return> to <C-^><Return>
 "nmap <silent> <buffer> <C-^><Return> <Nop>
 "vmap <silent> <buffer> <C-^><Return> mvty`v
 map <silent> <buffer> <C-^><Return> gk
@@ -6655,14 +6684,20 @@ nnoremap <Leader>sN :let @/=""<bar>:set hlsearch<CR>?
 vnoremap <Leader>sN "sy<Esc>:let @/=""<bar>:set hlsearch<CR>?<C-r>"
 
 " search all currently open files with results in qf list - NOTE: make sure to save buffers to disk before searching!
-nnoremap <silent> <Leader>sf :call <SID>MySearch(0)<CR>
+nnoremap <silent> <Leader>sf :let @s = expand('<cword>')<CR>:call <SID>MyVisSearch(0)<CR>
 vnoremap <silent> <Leader>sf "sy<Esc>:call <SID>MyVisSearch(0)<CR>
+nnoremap <silent> <Leader>sF :call <SID>MySearch(0)<CR>
+vnoremap <silent> <Leader>sF <Esc>:call <SID>MySearch(0)<CR>
 " search dir with results in qf list
-nnoremap <silent> <Leader>sd :call <SID>MySearch(2)<CR>
+nnoremap <silent> <Leader>sd :let @s = expand('<cword>')<CR>:call <SID>MyVisSearch(2)<CR>
 vnoremap <silent> <Leader>sd "sy<Esc>:call <SID>MyVisSearch(2)<CR>
+nnoremap <silent> <Leader>sD :call <SID>MySearch(2)<CR>
+vnoremap <silent> <Leader>sD <Esc>:call <SID>MySearch(2)<CR>
 " search globally (root/project/git dir) with results in qf list
-nnoremap <silent> <Leader>sg :call <SID>MySearch(1)<CR>
+nnoremap <silent> <Leader>sg :let @s = expand('<cword>')<CR>:call <SID>MyVisSearch(1)<CR>
 vnoremap <silent> <Leader>sg "sy<Esc>:call <SID>MyVisSearch(1)<CR>
+nnoremap <silent> <Leader>sG :call <SID>MySearch(1)<CR>
+vnoremap <silent> <Leader>sG <Esc>:call <SID>MySearch(1)<CR>
 
 "aug ack_alias
 "  au!
@@ -6678,12 +6713,38 @@ command! -nargs=+ -bang LAckfs execute ':lfdo<bang> ' . <q-args>
 
 " search dir (root/project/git dir) with results in fzf/Ag list
 " same as :Ag ...
-nnoremap <silent> <Leader>s. :call <SID>MySearch(4)<CR>
+nnoremap <silent> <Leader>s. :let @s = expand('<cword>')<CR>:call <SID>MyVisSearch(4)<CR>
 vnoremap <silent> <Leader>s. "sy<Esc>:call <SID>MyVisSearch(4)<CR>
+" <Leader>s> is used below ...
+nnoremap <silent> <Leader>s: :call <SID>MySearch(4)<CR>
+vnoremap <silent> <Leader>s: <Esc>:call <SID>MySearch(4)<CR>
 " search globally (root/project/git dir) with results in fzf/Ag list
 " same as :Agit ...
-nnoremap <silent> <Leader>s/ :call <SID>MySearch(3)<CR>
+nnoremap <silent> <Leader>s/ :let @s = expand('<cword>')<CR>:call <SID>MyVisSearch(3)<CR>
 vnoremap <silent> <Leader>s/ "sy<Esc>:call <SID>MyVisSearch(3)<CR>
+nnoremap <silent> <Leader>s? :call <SID>MySearch(3)<CR>
+vnoremap <silent> <Leader>s? <Esc>:call <SID>MySearch(3)<CR>
+
+function! RipgrepFzf(query, fullscreen)
+  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case --hidden -- %s || true'
+  let initial_command = printf(command_fmt, shellescape(a:query))
+  let reload_command = printf(command_fmt, '{q}')
+  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+endfunction
+
+function! RipgrepGitFzf(query, fullscreen)
+  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case --hidden -- %s ' . s:find_git_root() . ' || true'
+  let initial_command = printf(command_fmt, shellescape(a:query))
+  let reload_command = printf(command_fmt, '{q}')
+  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+endfunction
+
+command! -nargs=* -bang Rg call RipgrepFzf(<q-args>, <bang>0)
+command! -nargs=* -bang Rgit call RipgrepGitFzf(<q-args>, <bang>0)
+
+" TODO: can we do this with Ag also ?
 
 "================================================================
 
@@ -7807,7 +7868,6 @@ endif
 "tnoremap <silent> <PageUp> <C-\><C-n>
 " ctrl-x-] like tmux enter copy-mode-vi (ctrl-s-])
 " MCK: use something else besides <C-x> here ...
-"      perhaps <M-n> for normal mode ?
 tnoremap <silent> <F17>]     <C-\><C-n>
 tnoremap <silent> <F17><C-]> <C-\><C-n>
 tnoremap <silent> <M-x>]     <C-\><C-n>
