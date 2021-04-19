@@ -1106,7 +1106,8 @@ function enter-cmdline() {
   fi
 }
 zle -N enter-cmdline
-bindkey "\e<" enter-cmdline
+# used to be M-<, but change to M-{
+bindkey "\e{" enter-cmdline
 
 function copy-cmdline() {
     if [[ $CURSOR != 0 || -n $BUFFER ]]

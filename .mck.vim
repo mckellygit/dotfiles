@@ -2216,6 +2216,7 @@ let g:better_whitespace_operator='___s'
 " ====================================================
 
 " --- CLIPBOARD ---
+
 " save previous reg + to reg x for exchange/paste/etc
 vnoremap <silent> zy    y
 vnoremap <silent> ty    :<C-u>call setreg('x', getreg('*'), getregtype('*'))<CR>gvy
@@ -2900,9 +2901,6 @@ function s:InitializeClipboard()
 endfunction
 autocmd VimEnter * call <SID>InitializeClipboard()
 
-" --- CLIPBOARD ---
-
-" ------------------------------
 " NOTE: removing autoselect means visual selection is not automatically copied to unnamed clipboard (*)
 "       also removing autoselectml makes things fail weirdly
 "       this also affects getregtype("*") se we need to use visualmode() instead
@@ -2912,6 +2910,10 @@ set clipboard-=autoselectplus
 if !has("nvim")
     set clipboard^=autoselectml guioptions+=A
 endif
+
+" --- CLIPBOARD ---
+
+" ------------------------------
 
 " KEYMAP -------------
 
@@ -8009,6 +8011,13 @@ vnoremap <silent> <Leader><< <C-\><C-n>:tabprevious<CR>
 
 " ----------------------
 
+" --- FOLDs ---
+
+" to stop <Space> from opening fold ...
+noremap <Space> <Space>
+" use <Leader>Space to toggle (also <Leader>ff)
+"noremap <Leader><Space> za
+
 " toggle fold
 noremap <Leader>ff za
 " open fold
@@ -8050,6 +8059,8 @@ endfunction
 nnoremap <silent> <Leader>fp :<C-u>call RepeatCmd('call NextClosedFold("k")')<CR>
 " zj goes to next fold (open or closed), this goes to next closed fold
 nnoremap <silent> <Leader>fn :<C-u>call RepeatCmd('call NextClosedFold("j")')<CR>
+
+" FOLDS ---
 
 " ----------------------
 
