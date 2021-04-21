@@ -1382,7 +1382,8 @@ endfunction
 
 command! -nargs=* MyGVWrapper call s:MyGV(<q-args>)
 
-nnoremap <silent> <Leader>gv :call <SID>MyGV('')<CR>
+" <Leader>gv is used (below) for opening file under cursor in a vsplit
+nnoremap <silent> <Leader>GV :call <SID>MyGV('')<CR>
 
 function! s:MyGV2(args) abort
     let g:in_gv2 = 1
@@ -4808,7 +4809,7 @@ nnoremap <silent> Z<S-Right> 10zl10l
 vnoremap <silent> Z<S-Left>  10zh10h
 vnoremap <silent> Z<S-Right> 10zl10l
 
-" NOTE: tmux sends CSI mappings for these ...
+" NOTE: wish we could send CSI mappings for these ...
 nnoremap <silent> <M-h>      10zh10h
 nnoremap <silent> <M-l>      10zl10l
 vnoremap <silent> <M-h>      10zh10h
@@ -4822,6 +4823,23 @@ inoremap <silent> <M-h>      <C-\><C-o>10zh<C-\><C-o>10h
 inoremap <silent> <M-l>      <C-\><C-o>10zl<C-\><C-o>10l
 inoremap <silent> <M-,>      <C-\><C-o>10zh<C-\><C-o>10h
 inoremap <silent> <M-.>      <C-\><C-o>10zl<C-\><C-o>10l
+
+" NOTE: tmux may send <C-^> + char for these ...
+nnoremap <silent> <C-^>h     10zh10h
+nnoremap <silent> <C-^>l     10zl10l
+vnoremap <silent> <C-^>h     10zh10h
+vnoremap <silent> <C-^>l     10zl10l
+nnoremap <silent> <C-^>,     10zh10h
+nnoremap <silent> <C-^>.     10zl10l
+vnoremap <silent> <C-^>,     10zh10h
+vnoremap <silent> <C-^>.     10zl10l
+
+inoremap <silent> <C-^>h     <C-\><C-o>10zh<C-\><C-o>10h
+inoremap <silent> <C-^>l     <C-\><C-o>10zl<C-\><C-o>10l
+inoremap <silent> <C-^>,     <C-\><C-o>10zh<C-\><C-o>10h
+inoremap <silent> <C-^>.     <C-\><C-o>10zl<C-\><C-o>10l
+
+" NOTE: there is also M-H, M-L, M-<, M->
 
 " ---------
 
@@ -5276,17 +5294,28 @@ endif
 
 " ---------
 
-" NOTE: tmux sends CSI mappings for these ...
- noremap <silent> <M-n> <Nop>
- noremap <silent> <M-p> <Nop>
- noremap <silent> <M-N> <Nop>
- noremap <silent> <M-P> <Nop>
+" NOTE: wish we could send CSI mappings for these ...
+ noremap <silent> <M-n>  <Nop>
+ noremap <silent> <M-p>  <Nop>
+ noremap <silent> <M-N>  <Nop>
+ noremap <silent> <M-P>  <Nop>
 
 " and get back orig for insert
-inoremap <silent> <M-n> <C-v><Esc>n
-inoremap <silent> <M-p> <C-v><Esc>p
-inoremap <silent> <M-N> <C-v><Esc>N
-inoremap <silent> <M-P> <C-v><Esc>P
+inoremap <silent> <M-n>  <C-v><Esc>n
+inoremap <silent> <M-p>  <C-v><Esc>p
+inoremap <silent> <M-N>  <C-v><Esc>N
+inoremap <silent> <M-P>  <C-v><Esc>P
+
+" NOTE: tmux may send <C-^> + char for these ...
+ noremap <silent> <C-^>n <Nop>
+ noremap <silent> <C-^>p <Nop>
+ noremap <silent> <C-^>N <Nop>
+ noremap <silent> <C-^>P <Nop>
+
+inoremap <silent> <C-^>n <C-v><Esc>n
+inoremap <silent> <C-^>p <C-v><Esc>p
+inoremap <silent> <C-^>N <C-v><Esc>N
+inoremap <silent> <C-^>P <C-v><Esc>P
 
 " -------------------------------
 
@@ -5901,6 +5930,9 @@ noremap <silent> <C-^><Del> gk
 " annoying ...
 nmap - <Nop>
 nmap _ <Nop>
+
+noremap <C-^> <Nop>
+noremap <C-_> <Nop>
 
 noremap <silent> <C-^>- <Nop>
 inoremap         <C-^>- -
@@ -8239,12 +8271,48 @@ vnoremap <silent> <C-w><C-n>      <C-w>w
 
 " -----------------------------
 
+function! s:OpenFile(m) abort
+    let cmd = "normal! gf"
+    if a:m == 1 " tab
+        let cmd = "normal! \<C-w>gf"
+    elseif a:m == 2 " vsplit
+        let cmd = "normal! \<C-w>vgf"
+    elseif a:m == 3 " hsplit
+        let cmd = "normal! \<C-w>\<C-f>"
+    endif
+    let git_dir = s:find_git_root()
+    if empty(git_dir)
+        execute cmd
+        return
+    endif
+    let opath=&path
+    let &path=opath.','.git_dir.'/**'
+    "echo "path = " . &path
+    try
+        execute cmd
+        let &path = substitute(&path, ",\\=[^,]*$", "", "")
+    catch /.*/
+        let &path = substitute(&path, ",\\=[^,]*$", "", "")
+        redraw!
+        call s:warn("Error: unable to find file: \"" . expand('<cword>') . "\" in path")
+        sleep 2500m
+        redraw!
+        echo " "
+    endtry
+endfunction
+
 " try to open file under cursor
-nnoremap <silent> <Leader>gf gf
-vnoremap <silent> <Leader>gf <Esc>gf
-" try to open file under cursor in new tab
-nnoremap <silent> <Leader>gt <C-w>gf
-vnoremap <silent> <Leader>gt <Esc><C-w>gf
+nnoremap <silent> <Leader>gf      :call <SID>OpenFile(0)<CR>
+vnoremap <silent> <Leader>gf <Esc>:call <SID>OpenFile(0)<CR>
+" try to open file under cursor in a tab
+nnoremap <silent> <Leader>gt      :call <SID>OpenFile(1)<CR>
+vnoremap <silent> <Leader>gt <Esc>:call <SID>OpenFile(1)<CR>
+" try to open file under cursor in a vsplit
+nnoremap <silent> <Leader>gv      :call <SID>OpenFile(2)<CR>
+vnoremap <silent> <Leader>gv <Esc>:call <SID>OpenFile(2)<CR>
+" try to open file under cursor in a hsplit
+nnoremap <silent> <Leader>gh      :call <SID>OpenFile(3)<CR>
+vnoremap <silent> <Leader>gh <Esc>:call <SID>OpenFile(3)<CR>
 
 " convenience, so there is [v,h]split, [v,h]new
 "cnoreabbrev <silent> <expr> hsplit (getcmdtype() == ':' && getcmdline() =~ '\s*hsplit\s*')  ? 'split' : 'hsplit'
@@ -8271,10 +8339,12 @@ nnoremap <silent> <Leader>s<C-\>  :vnew<CR>
 nnoremap <silent> <C-w>\|         :vnew<CR>
 nnoremap <silent> <C-w><C-\>      :vnew<CR>
 
-nnoremap <silent> <Leader>s<C-^>- :new<CR>
 nnoremap <silent> <Leader>s_      :new<CR>
-nnoremap <silent> <C-w><C-^>-     :new<CR>
+nnoremap <silent> <Leader>s<C-^>- :new<CR>
 nnoremap <silent> <C-w>_          :new<CR>
+nnoremap <silent> <C-w><C-^>-     :new<CR>
+nnoremap <silent> <C-w><C-->      :new<CR>
+
 " and tab ...
 nnoremap <silent> <Leader>s<Tab> :$tabnew<CR>
 " (also matches <Leader>to)
