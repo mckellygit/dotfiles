@@ -1,5 +1,5 @@
 [com/ubuntu/update-notifier]
-release-check-time=uint32 1613057393
+release-check-time=uint32 1618573783
 
 [io/github/Pithos]
 last-station-id='3862749000310231591'
@@ -52,19 +52,26 @@ night-light-enabled=true
 night-light-temperature=uint32 5250
 
 [org/gnome/settings-daemon/plugins/media-keys]
-volume-mute='<Primary><Alt>slash'
-volume-down='<Primary><Alt>comma'
-volume-up='<Primary><Alt>period'
+custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']
+logout='<Primary><Shift><Alt>Delete'
+volume-down='<Super>comma'
+volume-up='<Super>period'
+volume-mute='<Super>slash'
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0]
+binding='<Alt>w'
+command='wchooser'
+name='Window Chooser'
 
 [org/gnome/settings-daemon/plugins/xsettings]
 hinting='slight'
 
 [org/gnome/settings-daemon/peripherals/keyboard]
-numlock-state='on'
+numlock-state='off'
 
 [org/gnome/shell]
 app-picker-view=uint32 1
-command-history=['r']
+command-history=['r', 'lg']
 enabled-extensions=['sound-output-device-chooser@kgshank.net', 'clipboard-indicator@tudmotu.com']
 favorite-apps=['org.gnome.Nautilus.desktop', 'rhythmbox.desktop', 'io.github.Pithos.desktop', 'libreoffice-writer.desktop', 'org.gnome.Software.desktop', 'update-manager.desktop', 'yelp.desktop', 'teams-insiders.desktop', 'code.desktop', 'google-chrome.desktop', 'org.remmina.Remmina.desktop', 'vivaldi-stable.desktop', 'nixnote2.desktop', 'Alacritty.desktop', 'rxvt-unicode.desktop', 'kitty.desktop', 'simple-scan.desktop']
 
@@ -101,7 +108,7 @@ search-filter-time-type='last_modified'
 
 [org/gnome/nautilus/window-state]
 sidebar-width=244
-geometry='1672x966+36+32'
+geometry='1672x786+36+32'
 maximized=false
 
 [org/gnome/nautilus/desktop]
@@ -116,7 +123,7 @@ info-last-device='wakeups'
 info-page-number=3
 
 [org/gnome/evince/default]
-window-ratio=(3.3501344086021501, 1.6145235361653272)
+window-ratio=(3.02755376344086, 2.1084481438959051)
 
 [org/gnome/file-roller/listing]
 sort-method='name'
@@ -181,7 +188,7 @@ cursor-blink=true
 clock-show-date=true
 
 [org/gnome/desktop/notifications]
-application-children=['diodon', 'org-gnome-software', 'google-chrome', 'kitty', 'apport-gtk', 'org-gnome-nautilus', 'nixnote2', 'teams-insiders', 'org-remmina-remmina', 'update-manager', 'ca-desrt-dconf-editor', 'clipit', 'org-gnome-dejadup', 'firefox', 'io-github-pithos', 'gnome-network-panel', 'rhythmbox', 'vivaldi-stable']
+application-children=['diodon', 'org-gnome-software', 'google-chrome', 'kitty', 'apport-gtk', 'org-gnome-nautilus', 'nixnote2', 'teams-insiders', 'org-remmina-remmina', 'update-manager', 'ca-desrt-dconf-editor', 'clipit', 'org-gnome-dejadup', 'firefox', 'io-github-pithos', 'gnome-network-panel', 'rhythmbox', 'vivaldi-stable', 'gvim']
 
 [org/gnome/desktop/notifications/application/io-github-pithos]
 application-id='io.github.Pithos.desktop'
@@ -237,6 +244,9 @@ application-id='apport-gtk.desktop'
 [org/gnome/desktop/notifications/application/org-remmina-remmina]
 application-id='org.remmina.Remmina.desktop'
 
+[org/gnome/desktop/notifications/application/gvim]
+application-id='gvim.desktop'
+
 [org/gnome/desktop/app-folders]
 folder-children=['Utilities', 'Sundry', 'YaST']
 
@@ -264,6 +274,9 @@ primary-color='#000000000000'
 picture-options='zoom'
 secondary-color='#000000000000'
 
+[org/gnome/desktop/peripherals/touchpad]
+speed=-0.78417266187050361
+
 [org/gnome/desktop/peripherals/mouse]
 speed=-0.79856115107913672
 
@@ -283,16 +296,17 @@ remove-old-trash-files=false
 
 [org/gnome/desktop/wm/preferences]
 focus-mode='sloppy'
+action-double-click-titlebar='toggle-maximize-horizontally'
 audible-bell=false
 
 [org/gnome/desktop/wm/keybindings]
-raise-or-lower=['<Alt>w']
+raise-or-lower=['<Shift><Alt>w']
 switch-to-workspace-left=['<Super><Alt>Left']
 switch-applications=['<Super>Tab']
 switch-to-workspace-down=['<Super>Page_Down']
 switch-to-workspace-right=['<Super><Alt>Right']
 cycle-windows=['<Super>q']
-activate-window-menu=['<Shift><Alt>space']
+activate-window-menu=['<Shift><Alt>m']
 switch-applications-backward=['<Shift><Super>Tab']
 switch-group-backward=['<Shift><Super>Above_Tab']
 switch-group=['<Super>Above_Tab']
@@ -324,7 +338,7 @@ photo-x-resolution=640
 video-x-resolution=640
 
 [org/gnome/control-center]
-last-panel='display'
+last-panel='keyboard'
 
 [org/gnome/todo]
 view='grid'
@@ -396,6 +410,10 @@ locations=['file:///home/kellma02/Music']
 ignore-phase2-ca-cert=false
 ignore-ca-cert=false
 
+[org/gnome/nm-applet/eap/e79b5425-4347-471f-9d44-af4ac6fac4e7]
+ignore-phase2-ca-cert=false
+ignore-ca-cert=false
+
 [org/gnome/nm-applet/eap/2ccca922-4956-4b08-8d62-a237b849436e]
 ignore-phase2-ca-cert=false
 ignore-ca-cert=false
@@ -410,12 +428,12 @@ center-new-windows=true
 experimental-features=['scale-monitor-framebuffer']
 
 [org/gnome/software]
-check-timestamp=int64 1613309735
+check-timestamp=int64 1618922574
 
 [org/gtk/settings/file-chooser]
 sort-column='name'
 sidebar-width=247
-window-position=(2633, 356)
+window-position=(36, 32)
 show-size-column=true
 show-hidden=false
 window-size=(1231, 902)
@@ -483,14 +501,14 @@ saved-player-list=@as []
 
 [apps/update-manager]
 first-run=false
-launch-time=int64 1612534732
+launch-time=int64 1618261667
 window-height=675
 show-details=true
-launch-count=26
+launch-count=34
 window-width=1135
 
 [ca/desrt/dconf-editor]
-saved-view='/org/gnome/desktop/wm/keybindings'
+saved-view='/org/gnome/desktop/wm/preferences/'
 window-height=1117
 window-width=1866
-window-is-maximized=false
+window-is-maximized=true

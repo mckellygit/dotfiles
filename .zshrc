@@ -647,7 +647,26 @@ alias ag='\ag -U --hidden '
 
 # cannot override builtin git diff with git cmds/aliases so do it this way ...
 # also add git log
-git() { if [[ $1 == "diff" ]]; then shift ; command git dless "$@" ; elif [[ $1 == "log" ]]; then shift ; command git llog "$@" ; else command git "$@"; fi }
+
+#zmodload zsh/system
+
+XXgit() {
+    local lockvar
+    touch ~/.gitcmd-lock
+    zsystem flock -f lockvar ~/.gitcmd-lock
+    if [[ $1 == "diff" ]]; then
+        shift
+        command git dless "$@"
+    elif [[ $1 == "log" ]]; then
+        shift
+        command git llog "$@"
+    else
+        command git "$@"
+    fi
+    zsystem flock -u $lockvar
+}
+
+alias git='~/bin/git'
 
 # ------------------
 
@@ -877,7 +896,7 @@ my-fzfcmd() {
 my-fzf-history-widget() {
   local selected num
   setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2> /dev/null
-  selected=( $(fc -rl 1 | perl -ne 'print if !$seen{(/^\s*[0-9]+\**\s+(.*)/, $1)}++' | $(my-fzfcmd) +m +s -n 2.. --preview="" --tiebreak=index --bind=ctrl-r:toggle-sort --bind="ctrl-f:preview-half-page-down" --bind="ctrl-b:preview-half-page-up" --bind="page-up:page-up" --bind="page-down:page-down" --bind="alt-b:page-up" --bind="alt-f:page-down") )
+  selected=( $(fc -rl 1 | perl -ne 'print if !$seen{(/^\s*[0-9]+\**\s+(.*)/, $1)}++' | $(my-fzfcmd) +m +s -n 2.. --preview="" --tiebreak=index --bind=ctrl-r:toggle-sort --bind="ctrl-f:half-page-down" --bind="ctrl-b:half-page-up" --bind="page-up:page-up" --bind="page-down:page-down" --bind="alt-b:page-up" --bind="alt-f:page-down") )
   local ret=$?
   if [ -n "$selected" ]; then
     num=$selected[1]

@@ -23,6 +23,8 @@ then
     exit
 fi
 
+trap "rm -f ~/.histfile-lock" EXIT SIGINT SIGTERM SIGQUIT
+
 if [[ -s $HISTFILE ]]
 then
     (

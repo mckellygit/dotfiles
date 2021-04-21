@@ -166,9 +166,16 @@ alias stop_rdm='rc -q'
 # skip -- as we might want to add -i for case-insensitive etc. ...
 alias ag='\ag -U --hidden '
 
+# ------------------
+
 # cannot override builtin git diff with git cmds/aliases so do it this way ...
 # also add git log
-git() { if [[ $1 == "diff" ]]; then shift ; command git dless "$@" ; elif [[ $1 == "log" ]]; then shift ; command git llog "$@" ; else command git "$@"; fi }
+
+XXgit() { if [[ $1 == "diff" ]]; then shift ; command git dless "$@" ; elif [[ $1 == "log" ]]; then shift ; command git llog "$@" ; else command git "$@"; fi }
+
+alias git="$HOME/bin/git"
+
+# ------------------
 
 alias radssh='python -m radssh.shell $@'
 #alias radssh='python ~/radssh/plugins/shell1.py $@'

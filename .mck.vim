@@ -5957,6 +5957,9 @@ inoremap <C-w><C-w>  <C-\><C-o><C-w>w
 nmap <silent> <buffer> <Return> gj
 vmap <silent> <buffer> <Return> gj
 
+nmap <silent> <buffer> <C-Return> gj
+vmap <silent> <buffer> <C-Return> gj
+
 " SPECIAL: NOTE: some terminals map <C-S-BS> to <C-_><BS>
 " SPECIAL: NOTE: some terminals map <C-S-Space> to <C-_><Space>
 "       if this is done then <C-_> -> zz above is lost
@@ -6352,7 +6355,7 @@ if $USER != 'root'
 else
   let g:rtagsAutoLaunchRdm=0
 endif
-nnoremap <silent> <C-]> <C-\><C-n>:<C-u>call rtags#JumpTo(g:SAME_WINDOW)<CR>
+nnoremap <silent> <buffer> <C-]> :call rtags#JumpTo(g:SAME_WINDOW)<CR>
 autocmd BufReadPost quickfix nnoremap <silent> <buffer> <C-]> <Return>
 " C-o to go back
 " C-t to go back (not implemented)
