@@ -20,5 +20,6 @@ fi
 # the +k was to go up one line and force a redraw at the top of the terminal ...
 # use -c~ instead ...
 # git --no-pager diff --color=always $1 $2 $3 $4 |& less -iR -K -x4 -c~
+export FROM_GIT_LESS=1
 git --no-pager diff --color=always $1 $2 $3 $4 |& smartless
 

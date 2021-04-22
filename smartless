@@ -121,6 +121,7 @@ if (( isfile == 1 )); then
   # if LESSOPEN is defined then try to use it ...
   if [[ -n "$LESSOPEN" ]]; then
     lpcmd=$(echo $LESSOPEN | sed 's/ %s//' | sed 's/|-/|/' | sed 's/||/|/' | awk -F\| '{print $2}')
+    export FROM_ISFILE=1
     ${lpcmd} ${file} | "${BASH_SOURCE[0]}" "${args[@]}"
     exit $?
   else
@@ -167,10 +168,16 @@ while [ $n -lt "${nlines}" ] && IFS= read -r line; do
   fi
 done
 
+if [[ -n "$FROM_GIT_LESS" ]]; then
+    export FROM_ISFILE=1
+fi
+
 #echo "nlines = $nlines"
 #echo "nchars = $nchars"
 #echo "mchars = $mchars"
 #echo "atlimit = $atlimit"
+#echo "ARGS = ${ARGS[@]}"
+#echo "FROM_ISFILE = ${FROM_ISFILE}"
 
 # For input with no trailing `\nEOF`
 # TODO: ComponentTest: `printf '1' | smartless`
@@ -191,7 +198,11 @@ if IFS= read -r line || [[ $atlimit -gt 0 ]]; then
   if [[ $wrap -eq 0 ]]; then
       printf '\033[?7l'
   fi
-  { printf '%s%s\n' "${lines}" "${line}"; exec cat; } | "${SMARTLESS_PAGER}" "${SMARTLESS_PAGER_ARGUMENTS}" "${ARGS[@]}"
+  if [[ -n "$FROM_ISFILE" ]]; then
+    { printf '%s%s\n' "${lines}" "${line}" ; exec cat; } | "${SMARTLESS_PAGER}" -L "${SMARTLESS_PAGER_ARGUMENTS}" "${ARGS[@]}"
+  else
+    { printf '%s%s\n' "${lines}" "${line}" | bat -pp ; exec bat -pp; } | "${SMARTLESS_PAGER}" "${SMARTLESS_PAGER_ARGUMENTS}" "${ARGS[@]}"
+  fi
   if [[ $wrap -eq 0 ]]; then
       printf '\033[?7h'
   fi
@@ -202,7 +213,11 @@ else
   if [[ $wrap -eq 0 ]]; then
       printf '\033[?7l'
   fi
-  printf '%s' "${lines}"
+  if [[ -n "$FROM_ISFILE" ]]; then
+    printf '%s' "${lines}"
+  else
+    printf '%s' "${lines}" | bat -pp
+  fi
   if [[ $wrap -eq 0 ]]; then
       printf '\033[?7h'
   fi
