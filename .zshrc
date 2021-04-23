@@ -265,6 +265,9 @@ zle -N zle-backward-delete-char-fix
 
 ## Change cursor shape according to the current Vi-mode.
 function zle-line-init zle-keymap-select {
+    if [ -n "$ZUTTY_VERSION" ] ; then
+        return
+    fi
     case "$(zle-vi-mode)" in
         $ZLE_VI_MODE_CMD)
             echo -ne '\e[3 q' ;; # cursor -> underline
@@ -280,7 +283,9 @@ function zle-line-init zle-keymap-select {
 }
 
 zle -N zle-line-init
-zle -N zle-keymap-select
+if [ -z "$ZUTTY_VERSION" ] ; then
+    zle -N zle-keymap-select
+fi
 
 bindkey '^?' zle-backward-delete-char-fix
 bindkey '^h' zle-backward-delete-char-fix
@@ -803,7 +808,7 @@ alias cmakemysqlplug='CC="ccache gcc" CXX="ccache g++" cmake -DCMAKE_BUILD_TYPE=
 alias Qt='~/qtcreator-3.5.1/bin/qtcreator &|'
 
 # add --shell.prompt=<cluster-name> to get prompt label ...
-alias radssh='python -m radssh.shell $@'
+alias radssh='python3 -m radssh.shell $@'
 #alias radssh='python ~/radssh/plugins/shell1.py $@'
 
 alias thor_regression='./ecl-test run --timeout -1 --target thor -e=embedded,3rdparty'
@@ -931,8 +936,8 @@ bindkey "\e_" my-fzf-files-widget
 
 #export MANPAGER="less"
 #alias manls="man -k . | fzf --prompt='Man> ' | awk '{print \$1}' | xargs -r man -P 'less'"
-export MANPAGER="sh -c 'col -bx | bat -l man -p'"
-alias manls="man -k . | fzf --bind=\"ctrl-f:half-page-down\" --bind=\"ctrl-b:half-page-up\" --bind=\"ctrl-k:up,ctrl-j:down\" --bind=\"ctrl-d:delete-char\" --bind=\"alt-bs:half-page-up,alt-space:half-page-down\" --bind=\"alt-k:up,alt-j:down\" --bind=\"ctrl-alt-k:half-page-up,ctrl-alt-j:half-page-down\" --bind=\"ctrl-alt-o:half-page-down\" --bind=\"page-up:page-up\" --bind=\"page-down:page-down\" --bind=\"alt-d:kill-word,alt-u:unix-line-discard\" --bind=\"alt-b:page-up\" --bind=\"alt-f:page-down\" --prompt='Man> ' | awk '{print \$1}' | xargs -r man -P 'sh -c \"col -bx | bat -l man -p\"'"
+export MANPAGER="sh -c 'col -bx | bat -l man -pp | less'"
+alias manls="man -k . | fzf --bind=\"ctrl-f:half-page-down\" --bind=\"ctrl-b:half-page-up\" --bind=\"ctrl-k:up,ctrl-j:down\" --bind=\"ctrl-d:delete-char\" --bind=\"alt-bs:half-page-up,alt-space:half-page-down\" --bind=\"alt-k:up,alt-j:down\" --bind=\"ctrl-alt-k:half-page-up,ctrl-alt-j:half-page-down\" --bind=\"ctrl-alt-o:half-page-down\" --bind=\"page-up:page-up\" --bind=\"page-down:page-down\" --bind=\"alt-d:kill-word,alt-u:unix-line-discard\" --bind=\"alt-b:page-up\" --bind=\"alt-f:page-down\" --prompt='Man> ' | awk '{print \$1}' | xargs -r man -P 'sh -c \"col -bx | bat -l man -pp | less\"'"
 
 # This can be slow, try it in byobu/tmux status bar ...
 # git repo info/status in prompt

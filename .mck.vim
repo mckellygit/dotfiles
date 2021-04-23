@@ -2966,10 +2966,59 @@ noremap ZZ <Nop>
 vnoremap J <Nop>
 
 " tag stack (<C-t>) remapped ...
-noremap <C-t> <Nop>
+ noremap <C-t> <Nop>
+
+nnoremap <silent> <C-t>t         :tabnext<CR>
+nnoremap <silent> <C-t><C-t>     :tabnext<CR>
+nnoremap <silent> <C-t><Left>    :tabprevious<CR>
+nnoremap <silent> <C-t><Right>   :tabnext<CR>
+nnoremap <silent> <C-t><C-Left>  :tabprevious<CR>
+nnoremap <silent> <C-t><C-Right> :tabnext<CR>
+
+vnoremap <silent> <C-t>t         <C-\><C-n>:<C-u>tabnext<CR>
+vnoremap <silent> <C-t><C-t>     <C-\><C-n>:<C-u>tabnext<CR>
+vnoremap <silent> <C-t><Left>    <C-\><C-n>:<C-u>tabprevious<CR>
+vnoremap <silent> <C-t><Right>   <C-\><C-n>:<C-u>tabnext<CR>
+vnoremap <silent> <C-t><C-Left>  <C-\><C-n>:<C-u>tabprevious<CR>
+vnoremap <silent> <C-t><C-Right> <C-\><C-n>:<C-u>tabnext<CR>
+
+nnoremap <silent> <C-t><Tab>     :tabnext<CR>
+nnoremap <silent> <C-t><S-Tab>   :tabprevious<CR>
+
+vnoremap <silent> <C-t><Tab>     <C-\><C-n>:<C-u>tabnext<CR>
+vnoremap <silent> <C-t><S-Tab>   <C-\><C-n>:<C-u>tabprevious<CR>
+
 " alternate <Leader> cmd for tag stack ...
 " (<Leader>t? is usually for tab-based cmds)
-noremap <Leader><C-t> <C-t>
+ noremap <silent> <Leader><C-t> <C-t>
+
+ noremap <silent> <C-t><C-^>     <Nop>
+
+nnoremap <silent> <C-t><BS>      :tabnext<CR>
+nnoremap <silent> <C-t><C-BS>    :tabnext<CR>
+nnoremap <silent> <C-t><C-^><BS> :tabnext<CR>
+
+vnoremap <silent> <C-t><BS>      <C-\><C-n>:<C-u>tabnext<CR>
+vnoremap <silent> <C-t><C-BS>    <C-\><C-n>:<C-u>tabnext<CR>
+vnoremap <silent> <C-t><C-^><BS> <C-\><C-n>:<C-u>tabnext<CR>
+
+nnoremap <silent> <C-t><Space>   :tabprevious<CR>
+nnoremap <silent> <C-t><C-Space> :tabprevious<CR>
+nnoremap <silent> <C-t><C-@>     :tabprevious<CR>
+
+vnoremap <silent> <C-t><Space>   <C-\><C-n>:<C-u>tabprevious<CR>
+vnoremap <silent> <C-t><C-Space> <C-\><C-n>:<C-u>tabprevious<CR>
+vnoremap <silent> <C-t><C-@>     <C-\><C-n>:<C-u>tabprevious<CR>
+
+nnoremap <silent> <M-Tab>        :tabnext<CR>
+nnoremap <silent> <M-S-Tab>      :tabprevious<CR>
+nnoremap <silent> <C-^><Tab>     :tabnext<CR>
+nnoremap <silent> <C-^><S-Tab>   :tabprevious<CR>
+
+vnoremap <silent> <M-Tab>        <C-\><C-n>:<C-u>tabnext<CR>
+vnoremap <silent> <M-S-Tab>      <C-\><C-n>:<C-u>tabprevious<CR>
+vnoremap <silent> <C-^><Tab>     <C-\><C-n>:<C-u>tabnext<CR>
+vnoremap <silent> <C-^><S-Tab>   <C-\><C-n>:<C-u>tabprevious<CR>
 
 " dont do this, it messes up viw ...
 "vnoremap i <Nop>
@@ -8197,10 +8246,10 @@ else
 endif
 
 " to stop some errors about alternate file (<C-^> ...)
-noremap <silent> <C-w><BS>      <Nop>
-noremap <silent> <C-w><C-BS>    <Nop>
+"-noremap <silent> <C-w><BS>      <Nop>
+"-noremap <silent> <C-w><C-BS>    <Nop>
 noremap <silent> <C-w><C-^>     <Nop>
-noremap <silent> <C-w><C-^><BS> <Nop>
+"-noremap <silent> <C-w><C-^><BS> <Nop>
 
 " QUES: move to next, previous tab, or window (below) ... ?
 " SPECIAL: NOTE: terminals could map <C-BS> to <C-^><BS>
@@ -8243,19 +8292,19 @@ nnoremap <silent> <C-w><C-Down>   <C-w>j
 
 " NOTE: move to next, previous window, or tab (above) ... ?
 " SPECIAL: NOTE: terminals could map <C-BS> to <C-^><BS>
-"--nnoremap <silent> <C-w><BS>      <C-w>W
-"--nnoremap <silent> <C-w><C-BS>    <C-w>W
-"--nnoremap <silent> <C-w><C-^><BS> <C-w>W
-"--vnoremap <silent> <C-w><BS>      <C-w>W
-"--vnoremap <silent> <C-w><C-BS>    <C-w>W
-"--vnoremap <silent> <C-w><C-^><BS> <C-w>W
+nnoremap <silent> <C-w><BS>      <C-w>W
+nnoremap <silent> <C-w><C-BS>    <C-w>W
+nnoremap <silent> <C-w><C-^><BS> <C-w>W
+vnoremap <silent> <C-w><BS>      <C-w>W
+vnoremap <silent> <C-w><C-BS>    <C-w>W
+vnoremap <silent> <C-w><C-^><BS> <C-w>W
 
-"--nnoremap <silent> <C-w><Space>   <C-w>w
-"--nnoremap <silent> <C-w><C-Space> <C-w>w
-"--nnoremap <silent> <C-w><C-@>     <C-w>w
-"--vnoremap <silent> <C-w><Space>   <C-w>w
-"--vnoremap <silent> <C-w><C-Space> <C-w>w
-"--vnoremap <silent> <C-w><C-@>     <C-w>w
+nnoremap <silent> <C-w><Space>   <C-w>w
+nnoremap <silent> <C-w><C-Space> <C-w>w
+nnoremap <silent> <C-w><C-@>     <C-w>w
+vnoremap <silent> <C-w><Space>   <C-w>w
+vnoremap <silent> <C-w><C-Space> <C-w>w
+vnoremap <silent> <C-w><C-@>     <C-w>w
 
 nnoremap <silent> <Leader>,,      <C-w>W
 nnoremap <silent> <C-w>p          <C-w>W

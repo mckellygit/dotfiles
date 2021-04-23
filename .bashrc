@@ -177,7 +177,7 @@ alias git="$HOME/bin/git"
 
 # ------------------
 
-alias radssh='python -m radssh.shell $@'
+alias radssh='python3 -m radssh.shell $@'
 #alias radssh='python ~/radssh/plugins/shell1.py $@'
 
 # export NCPUS=`cat /proc/cpuinfo | grep processor | wc -l`
