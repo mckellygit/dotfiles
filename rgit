@@ -1,0 +1,24 @@
+#!/bin/bash
+
+if [[ $# -lt 1 ]] ; then
+    echo "Error, missing arg(s) ..."
+    exit 1
+fi
+
+rg_args='--color=always --smart-case --hidden --iglob !".git" '
+
+gdir=$(git rev-parse --show-superproject-working-tree 2> /dev/null)
+if [[ -z "$gdir" ]] ; then
+    # not in a submodule, returns git root
+    gdir=$(git rev-parse --show-toplevel 2> /dev/null)
+fi
+
+if [[ -z "$gdir" ]] ; then
+    exec rg $rg_args $@
+fi
+
+lastarg=${@:$#} # last parameter 
+alloarg=${*%${!#}} # all parameters except the last
+
+#echo "git dir: $gdir"
+exec rg $rg_args $@ $gdir
