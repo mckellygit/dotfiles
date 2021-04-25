@@ -1953,6 +1953,31 @@ let g:any_jump_list_numbers = 0
 let g:any_jump_references_enabled = 1
 " if -1 then center popup vertically, otherwise use offset
 let g:any_jump_window_top_offset = -1
+
+function! s:AnyJumpPrompt(meth)
+  if (a:meth == 0)
+    let promptstr = 'any-gbl:/'
+  elseif (a:meth == 1)
+    let promptstr = 'any-ldir:/'
+  elseif (a:meth == 2)
+    let promptstr = 'any-rdir:/'
+  else
+    redraw!
+    echo " "
+    return
+  endif
+  call inputsave()
+  let string = input(promptstr)
+  call inputrestore()
+  if (len(string) == 0)
+    " should we reset @/ ?
+    redraw!
+    echo " "
+    return
+  endif
+  call AnyJumpMethod(a:meth, string)
+endfunction
+
 " Normal mode: Jump to definition under cursor
 " d, g, f, ., /
 nnoremap <leader>a/ :AnyJump<CR>
@@ -1967,10 +1992,10 @@ xnoremap <leader>ad <C-\><C-n>:<C-u>AnyJumpVisualDirLocal<CR>
 xnoremap <leader>a. <C-\><C-n>:<C-u>AnyJumpVisualDirRecur<CR>
 " TODO: <Leader>af for files
 " TODO: prompt searches ...
-nnoremap <leader>a? :echo "TODO: prompt for any-jump search (a?)"<CR>
-nnoremap <leader>aG :echo "TODO: prompt for any-jump search (aG)"<CR>
-nnoremap <leader>aD :echo "TODO: prompt for any-jump search (aD)"<CR>
-nnoremap <leader>a: :echo "TODO: prompt for any-jump search (a:)"<CR>
+nnoremap <leader>a? :call <SID>AnyJumpPrompt(0)<CR>
+nnoremap <leader>aG :call <SID>AnyJumpPrompt(0)<CR>
+nnoremap <leader>aD :call <SID>AnyJumpPrompt(1)<CR>
+nnoremap <leader>a: :call <SID>AnyJumpPrompt(2)<CR>
 " Normal mode: open previous opened file (after jump) - could just use <C-o> ...
 nnoremap <leader>ab :AnyJumpBack<CR>
 " Normal mode: open last closed search window again
@@ -6812,7 +6837,7 @@ nnoremap <silent> <Leader>s? :call <SID>MySearch(3)<CR>
 vnoremap <silent> <Leader>s? <Esc>:call <SID>MySearch(3)<CR>
 
 function! RipgrepFzf(query, fullscreen)
-  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case --hidden -- %s || true'
+  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case --hidden --iglob !".git" -- %s || true'
   let initial_command = printf(command_fmt, shellescape(a:query))
   let reload_command = printf(command_fmt, '{q}')
   let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
@@ -6820,7 +6845,7 @@ function! RipgrepFzf(query, fullscreen)
 endfunction
 
 function! RipgrepGitFzf(query, fullscreen)
-  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case --hidden -- %s ' . s:find_git_root() . ' || true'
+  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case --hidden --iglob !".git" -- %s ' . s:find_git_root() . ' || true'
   let initial_command = printf(command_fmt, shellescape(a:query))
   let reload_command = printf(command_fmt, '{q}')
   let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
