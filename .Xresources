@@ -269,7 +269,8 @@ URxvt.scrollWithBuffer: true
 ! scroll back to the bottom on keypress
 URxvt.scrollTtyKeypress: true
 
-*.foreground:  #ffd1b7
+*.foreground:  #c5c5c5
+!!*.foreground:  #ffd1b7
 !!*.background:  #2e2e26
 urxvt*depth: 32
 !!urxvt*background: rgba:0000/0000/0200/c800
@@ -300,6 +301,9 @@ URxvt.keysym.S-space:                   string:\036\040
 
 URxvt.keysym.C-S-BackSpace:             string:\037\177
 URxvt.keysym.C-S-space:                 string:\037\040
+!! make these the same as C-S-BackSpace/space for now ...
+URxvt.keysym.Shift-Meta-BackSpace:      string:\037\177
+URxvt.keysym.Shift-Meta-space:          string:\037\040
 
 URxvt.keysym.Shift-Control-X:           string:\033\170
 

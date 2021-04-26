@@ -28,6 +28,9 @@ key_bindings:
 
   - { key: Back,      mods: Control|Shift,   chars: "\x1f\x7f"        }
   - { key: Space,     mods: Control|Shift,   chars: "\x1f\x20"        }
+    # make these the same as C-S-Back/Space for now ...
+  - { key: Back,      mods: Alt|Shift,       chars: "\x1f\x7f"        }
+  - { key: Space,     mods: Alt|Shift,       chars: "\x1f\x20"        }
 
   - { key: X,         mods: Control|Shift,   chars: "\x1b\x78"        }
 
@@ -194,7 +197,9 @@ custom_cursor_colors: true
 colors:
   primary:
     background: '0x2e2e26'
-    foreground: '0xffd1b7'
+    # client side decoration title etc.
+    foreground: '0xc5c5c5'
+    #foreground: '0xffd1b7'
 
   normal:
     black:    '0x000000'
@@ -204,7 +209,8 @@ colors:
     blue:     '0x0066ff'
     magenta:  '0xba55d3'
     cyan:     '0x009999'
-    white:    '0xc7c7c7'
+    white:    '0xdddddd'
+    #white:    '0xc7c7c7'
 
   bright:
     black:    '0x808080'

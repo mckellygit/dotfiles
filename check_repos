@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cd ~/Downloads
-for d in FlameGraph perf-tools CopyQ fd the_silver_searcher tmux vifm rtags ccache cgdb tig alacritty zsh-autosuggestions byobu
+for d in CopyQ fd the_silver_searcher ripgrep tmux vifm rtags ccache cgdb tig alacritty zsh-autosuggestions byobu
 do
     echo "checking $d ..."
     cd $d
@@ -32,6 +32,12 @@ cd ~/Downloads/vim_bundles
 
 # ---------------------
 
+# FlameGraph
+#   git clone https://github.com/brendangregg/FlameGraph.git
+
+# perf-tools
+#   git clone https://github.com/brendangregg/perf-tools.git
+
 # ack:
 #   sudo apt-get install ack-grep
 #   -or-
@@ -44,6 +50,13 @@ cd ~/Downloads/vim_bundles
 #   sudo apt-get install silversearcher-ag
 #   -or-
 #   git clone https://github.com/ggreer/the_silver_searcher.git
+
+# rg:
+#   git clone https://github.com/BurntSushi/ripgrep
+#   rustup override set stable
+#   rustup update stable
+#   cargo build --release --features 'pcre2'
+#   sudo cp target/release/rg /usr/local/bin
 
 # CopyQ: (also copyq-commands)
 #   git clone https://github.com/hluk/CopyQ.git
