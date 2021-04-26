@@ -14,11 +14,13 @@ if [[ -z "$gdir" ]] ; then
 fi
 
 if [[ -z "$gdir" ]] ; then
-    exec ag $ag_args $@
+    command ag $ag_args $@
+    exit $?
 fi
 
 lastarg=${@:$#} # last parameter 
 alloarg=${*%${!#}} # all parameters except the last
 
 #echo "git dir: $gdir"
-exec ag $ag_args $@ $gdir
+command ag $ag_args $@ $gdir
+exit $?

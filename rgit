@@ -5,7 +5,7 @@ if [[ $# -lt 1 ]] ; then
     exit 1
 fi
 
-rg_args='--color=always --smart-case --hidden --iglob !".git" '
+rg_args="--color=always --smart-case --hidden --iglob !\\.git "
 
 gdir=$(git rev-parse --show-superproject-working-tree 2> /dev/null)
 if [[ -z "$gdir" ]] ; then
@@ -14,11 +14,15 @@ if [[ -z "$gdir" ]] ; then
 fi
 
 if [[ -z "$gdir" ]] ; then
-    exec rg $rg_args $@
+    command rg $rg_args $@
+    exit $?
 fi
 
 lastarg=${@:$#} # last parameter 
 alloarg=${*%${!#}} # all parameters except the last
 
+set -x
+
 #echo "git dir: $gdir"
-exec rg $rg_args $@ $gdir
+command rg $rg_args $@ $gdir
+exit $?
