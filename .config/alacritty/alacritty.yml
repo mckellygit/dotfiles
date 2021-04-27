@@ -130,7 +130,12 @@ key_bindings:
     # key: Delete Alt|Control is usually eaten by winmgr ...
 
 mouse_bindings:
-  - { mouse: Middle, action: None }
+    - { mouse: Middle, action: None }
+    - { mouse: Middle, mods: Alt, action: None }
+    - { mouse: Middle, mods: Shift, action: None }
+    - { mouse: Middle, mods: Control, action: None }
+    - { mouse: Middle, mods: Control|Shift, action: None }
+    - { mouse: Middle, mods: Alt|Shift, action: PasteSelection }
 
 mouse:
   double_click: { threshold: 250 }
