@@ -1677,6 +1677,9 @@ endfunction
 autocmd User VimagitLeaveCommit call <SID>MagitReload()
 
 function! s:MagitPushPull(p,q,args)
+    " if called from a terminal then try to close that first ...
+    " NOTE: could possibly check if terminal not ended then skip cmd ...
+    call s:IsTerminalFinished()
     if &filetype == "magit"
         let gcmd = 'push'
         if a:q != 0
@@ -3706,20 +3709,31 @@ vmap <expr> <C-x> (&buftype == 'terminal') ? '<Nop>' : 'tx'
 "xnoremap <silent> <expr> <C-v> mode()=="\<C-v>" ? "v" : "\<C-v>"
 
 " if these two are pressed together quickly it may scroll when not wanted ...
-noremap <silent> <C-v><C-Up>    <C-v>
-noremap <silent> <C-v><C-Down>  <C-v>
+" cannot really do this as then a single <C-v> suffers a delay ...
+"noremap <silent> <C-v><C-Up>    <C-v>
+"noremap <silent> <C-v><C-Down>  <C-v>
 
 let w:vc = 'u'
 let w:vp = 'u'
 nnoremap <silent> <C-v> :<C-u>call <SID>MyVisCvN()<CR>
 function! s:MyVisCvN()
+    " if ctrl char typed then skip first one to prevent down/up scroll
+    sleep 150m
+    let typahead = getchar(1)
     let w:vc = 'x'
     let w:vp = 'u'
     exe "silent! normal! \<C-v>"
+    if typahead == 128
+        while getchar(0)
+        endwhile
+    endif
 endfunction
 
 xnoremap <silent> <C-v> <C-\><C-n>:<C-u>call <SID>MyVisCv()<CR>
 function! s:MyVisCv()
+    " if ctrl char typed then skip first one to prevent down/up scroll
+    sleep 150m
+    let typahead = getchar(1)
     if w:vc ==# 'v'
         let w:vp = w:vc
         let w:vc = 'x'
@@ -3746,6 +3760,10 @@ function! s:MyVisCv()
     else
         let w:vc = 'x'
         exe "silent! normal! gv" . "\<C-v>"
+    endif
+    if typahead == 128
+        while getchar(0)
+        endwhile
     endif
 endfunction
 
