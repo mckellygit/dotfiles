@@ -504,3 +504,8 @@ Zutty.saveLines:       0
 !!Zutty.altSendsEscape:  false
 Zutty.modifyOtherKeys: 2
 
+!! ==========================================
+
+st.font:  Liberation Mono:pixelsize=22:antialias=true:autohint=true;
+st.alpha: 0.96
+
