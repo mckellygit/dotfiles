@@ -250,7 +250,8 @@ Plugin 'TaDaa/vimade'
 " alternative ...
 "Plugin 'blueyed/vim-diminactive'
 "
-" focus
+" tmux focus
+" plugin says its obsolete with neovim and vim 8.2.2345+ but its still useful
 if has("nvim")
     " not needed in nvim ...
     let g:loaded_tmux_focus_events = 1
@@ -3718,7 +3719,7 @@ let w:vp = 'u'
 nnoremap <silent> <C-v> :<C-u>call <SID>MyVisCvN()<CR>
 function! s:MyVisCvN()
     " if ctrl char typed then skip first one to prevent down/up scroll
-    sleep 150m
+    sleep 300m
     let typahead = getchar(1)
     let w:vc = 'x'
     let w:vp = 'u'
@@ -3732,7 +3733,7 @@ endfunction
 xnoremap <silent> <C-v> <C-\><C-n>:<C-u>call <SID>MyVisCv()<CR>
 function! s:MyVisCv()
     " if ctrl char typed then skip first one to prevent down/up scroll
-    sleep 150m
+    sleep 300m
     let typahead = getchar(1)
     if w:vc ==# 'v'
         let w:vp = w:vc
