@@ -354,7 +354,7 @@ endfunction
 " use ag (silver-searcher) instead of ack, if possible
 if executable('ag')
   " NOTE: ag can miss some matches without -U --hidden ...
-  let g:ackprg = 'ag --vimgrep -U --hidden -- '
+  let g:ackprg = '\ag --vimgrep -U --hidden -- '
 endif
 " example: (cdo/cfdo ldo/lfdo [!])
 " :Ack foo
@@ -711,6 +711,7 @@ let g:fzf_preview_window = ['right:60%:hidden', 'ctrl-alt-p']
 "autocmd VimEnter,BufEnter * silent! lcd %:p:h
 
 " Switch to the directory of the current file unless it breaks something.
+set noautochdir
 function! s:autochdir()
     let can_autochdir = !exists("vim_starting") " Don't mess with vim on startup.
     let can_autochdir = can_autochdir && (!exists("v:vim_did_enter") || v:vim_did_enter) " Don't mess with vim on startup.
@@ -722,7 +723,7 @@ function! s:autochdir()
 endfunction
 augroup myautochdir
     autocmd!
-    autocmd BufEnter * call s:autochdir()
+    autocmd BufWinEnter * call s:autochdir()
 augroup END
 
 " ------------
@@ -797,13 +798,13 @@ noremap <silent> <Leader>f. <C-\><C-n>:Files<CR>
 "command! -bang -nargs=+ -complete=dir Agits call s:ag_inM1(<bang>0, <f-args>)
 "
 command! -bang -nargs=* Ag
-  \ call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(<q-args>),
+  \ call fzf#vim#grep('\ag -U --hidden --nogroup --column --color -- '.shellescape(<q-args>),
   \ 1,
   \ {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']},
   \ <bang>0)
 "
 command! -bang -nargs=* Agit
-  \ call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(<q-args>).' '.s:find_git_root(),
+  \ call fzf#vim#grep('\ag -U --hidden --nogroup --column --color -- '.shellescape(<q-args>).' '.s:find_git_root(),
   \ 1,
   \ {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']},
   \ <bang>0)
@@ -2015,7 +2016,7 @@ au FileType any-jump nnoremap <silent> <buffer> <M-C-P> :call g:AnyJumpHandlePre
 let g:asyncrun_code = 0
 let g:asyncrun_silent = 0
 autocmd User AsyncRunPre echohl DiffAdd | echo 'AsyncRun started ...' | echohl None | let g:asyncrun_code = 2
-autocmd User AsyncRunStop if g:asyncrun_code != 0 | echohl DiffText | echo 'AsyncRun complete: [ ?? ]' | echohl None |
+autocmd User AsyncRunStop if g:asyncrun_code != 0 | echohl DiffText | echo 'AsyncRun complete: [ ' . g:asyncrun_code . ' ]' | echohl None |
             \ else | echohl DiffAdd | echo 'AsyncRun complete: [ OK ]' | echohl None | copen | set nowrap | set cursorline | clearjumps | if !pumvisible() | call lightline#update() | endif | endif
 autocmd User AsyncRunInterrupt echohl DiffText | echo 'AsyncRun complete: [TERM]' | echohl None | let g:asyncrun_code = 2
 " NOTE: add '| wincmd p' to go back to orig window
@@ -6742,18 +6743,18 @@ function s:MySearch(meth) abort
     if empty(files)
       redraw | echohl DiffText | echo "No files to search" | echohl None
     else
-      execute 'AsyncRun! -strip ag --vimgrep -- ' shellescape(string, 1) join(files) ' 2>/dev/null'
+      execute 'AsyncRun! -strip \ag --vimgrep -- ' shellescape(string, 1) join(files) ' 2>/dev/null'
     endif
   elseif (a:meth == 1)
     "execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
-    execute 'AsyncRun! -strip ag --vimgrep -U --hidden -- ' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
+    execute 'AsyncRun! -strip \ag --vimgrep -U --hidden -- ' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
   elseif (a:meth == 2)
     "execute 'AsyncRun! -strip -cwd ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) ' 2>/dev/null'
-    execute 'AsyncRun! -strip ag --vimgrep -U --hidden -- ' shellescape(string, 1) ' 2>/dev/null'
+    execute 'AsyncRun! -strip \ag --vimgrep -U --hidden -- ' shellescape(string, 1) ' 2>/dev/null'
   elseif (a:meth == 3)
-    call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root(), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']}, 0)
+    call fzf#vim#grep('\ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root(), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']}, 0)
   elseif (a:meth == 4)
-    call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']}, 0)
+    call fzf#vim#grep('\ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']}, 0)
   endif
   let @/=string
   set hlsearch
@@ -6783,18 +6784,18 @@ function s:MyVisSearch(meth) abort
     if empty(files)
       redraw | echohl DiffText | echo "No files to search" | echohl None
     else
-      execute 'AsyncRun! -strip ag --vimgrep -- ' shellescape(string, 1) join(files) ' 2>/dev/null'
+      execute 'AsyncRun! -strip \ag --vimgrep -- ' shellescape(string, 1) join(files) ' 2>/dev/null'
     endif
   elseif (a:meth == 1)
     "execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
-    execute 'AsyncRun! -strip ag --vimgrep -U --hidden -- ' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
+    execute 'AsyncRun! -strip \ag --vimgrep -U --hidden -- ' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
   elseif (a:meth == 2)
     "execute 'AsyncRun! -strip -cwd ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) ' 2>/dev/null'
-    execute 'AsyncRun! -strip ag --vimgrep -U --hidden -- ' shellescape(string, 1) ' 2>/dev/null'
+    execute 'AsyncRun! -strip \ag --vimgrep -U --hidden -- ' shellescape(string, 1) ' 2>/dev/null'
   elseif (a:meth == 3)
-    call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root(), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']}, 0)
+    call fzf#vim#grep('\ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root(), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']}, 0)
   elseif (a:meth == 4)
-    call fzf#vim#grep('ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']}, 0)
+    call fzf#vim#grep('\ag -U --hidden --nogroup --column --color -- '.shellescape(string, 1), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']}, 0)
   endif
   let @/=string
   set hlsearch
@@ -6856,7 +6857,7 @@ nnoremap <silent> <Leader>s? :call <SID>MySearch(3)<CR>
 vnoremap <silent> <Leader>s? <Esc>:call <SID>MySearch(3)<CR>
 
 function! RipgrepFzf(query, fullscreen)
-  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case --hidden --iglob !".git" -- %s || true'
+  let command_fmt = '\rg --column --line-number --no-heading --color=always --smart-case --hidden --iglob \!".git" -- %s || true'
   let initial_command = printf(command_fmt, shellescape(a:query))
   let reload_command = printf(command_fmt, '{q}')
   let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
@@ -6864,7 +6865,7 @@ function! RipgrepFzf(query, fullscreen)
 endfunction
 
 function! RipgrepGitFzf(query, fullscreen)
-  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case --hidden --iglob !".git" -- %s ' . s:find_git_root() . ' || true'
+  let command_fmt = '\rg --column --line-number --no-heading --color=always --smart-case --hidden --iglob \!".git" -- %s ' . s:find_git_root() . ' || true'
   let initial_command = printf(command_fmt, shellescape(a:query))
   let reload_command = printf(command_fmt, '{q}')
   let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}

@@ -509,3 +509,7 @@ Zutty.modifyOtherKeys: 2
 st.font:  Liberation Mono:pixelsize=22:antialias=true:autohint=true;
 st.alpha: 0.96
 
+st.foreground: #c5c5c5
+!! st.foreground: #ffd1b7
+st.background: #2e2e26
+
