@@ -6517,6 +6517,8 @@ function s:IsTerminalFinished()
             endif
         endif
     endfor
+    echo "\r"
+    redraw!
 endfunction
 
 function s:CloseUtilWins()
