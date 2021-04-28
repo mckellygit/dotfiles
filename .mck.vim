@@ -1485,6 +1485,7 @@ let g:magit_commit_args=''
 " use CA to commit --amend
 " use CB to commit --amend --signoff
 " use CU to undo commit (before saving)
+" <Leader>mp to pull
 " <Leader>mP to push
 " :MPush [git options]
 " :MPull [git options]
@@ -1690,9 +1691,9 @@ function! s:MagitPushPull(p,q,args)
         let ans = 'y'
         if a:p == 0
             if empty(a:args)
-                let prompt = 'git push ? (Y/n): '
+                let prompt = 'git ' . gcmd . ' ? (Y/n): '
             else
-                let prompt = 'git push ' . a:args . ' ? (Y/n): '
+                let prompt = 'git ' . gcmd . ' ' . a:args . ' ? (Y/n): '
             endif
             echo prompt
             let ans=nr2char(getchar())
@@ -1726,6 +1727,7 @@ function! s:MagitPushPull(p,q,args)
         echo " "
     endif
 endfunction
+nnoremap <silent> <Leader>mp :call <SID>MagitPushPull(0,1,'')<CR>
 nnoremap <silent> <Leader>mP :call <SID>MagitPushPull(0,0,'')<CR>
 
 command! -bang -nargs=* MPush call s:MagitPushPull(1,0,<q-args>)
