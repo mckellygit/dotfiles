@@ -1159,10 +1159,12 @@ function QuitGV() abort
     echohl Statement
     echo "Last remaining view, really quit ? (Q|Y/n): "
     echohl None
+    call inputsave()
     let c = getchar()
     while type(c) != 0
         let c = getchar()
     endwhile
+    call inputrestore()
     let ans=nr2char(c)
     " --------------
 
@@ -1696,7 +1698,9 @@ function! s:MagitPushPull(p,q,args)
                 let prompt = 'git ' . gcmd . ' ' . a:args . ' ? (Y/n): '
             endif
             echo prompt
+            call inputsave()
             let ans=nr2char(getchar())
+            call inputrestore()
         endif
         if ans ==# 'y' || ans ==# 'Y' || ans == "\<CR>"
 
@@ -2648,6 +2652,7 @@ function s:Searchn() abort
       sleep 200m
       " eat typeahead ...
       while getchar(0)
+          sleep 1m
       endwhile
       redraw!
     endtry
@@ -2662,6 +2667,7 @@ function s:Searchn() abort
       sleep 200m
       " eat typeahead ...
       while getchar(0)
+          sleep 1m
       endwhile
       redraw!
     catch /E486:/
@@ -2673,6 +2679,7 @@ function s:Searchn() abort
       sleep 200m
       " eat typeahead ...
       while getchar(0)
+          sleep 1m
       endwhile
       redraw!
     endtry
@@ -2706,6 +2713,7 @@ function s:SearchN() abort
       sleep 200m
       " eat typeahead ...
       while getchar(0)
+          sleep 1m
       endwhile
       redraw!
     catch /E486:/
@@ -2717,6 +2725,7 @@ function s:SearchN() abort
       sleep 200m
       " eat typeahead ...
       while getchar(0)
+          sleep 1m
       endwhile
       redraw!
     endtry
@@ -2739,6 +2748,7 @@ function s:SearchN() abort
       sleep 200m
       " eat typeahead ...
       while getchar(0)
+          sleep 1m
       endwhile
       redraw!
     endtry
@@ -2844,6 +2854,7 @@ function s:CrossHairs() abort
     sleep 200m
     " eat typeahead ...
     while getchar(0)
+          sleep 1m
     endwhile
     set nocursorline
     set nocursorcolumn
@@ -3723,21 +3734,27 @@ nnoremap <silent> <C-v> :<C-u>call <SID>MyVisCvN()<CR>
 function! s:MyVisCvN()
     " if ctrl char typed then skip first one to prevent down/up scroll
     sleep 300m
+    call inputsave()
     let typahead = getchar(1)
+    call inputrestore()
+    while getchar(0)
+          sleep 1m
+    endwhile
     let w:vc = 'x'
     let w:vp = 'u'
     exe "silent! normal! \<C-v>"
-    if typahead == 128
-        while getchar(0)
-        endwhile
-    endif
 endfunction
 
 xnoremap <silent> <C-v> <C-\><C-n>:<C-u>call <SID>MyVisCv()<CR>
 function! s:MyVisCv()
     " if ctrl char typed then skip first one to prevent down/up scroll
     sleep 300m
+    call inputsave()
     let typahead = getchar(1)
+    call inputrestore()
+    while getchar(0)
+          sleep 1m
+    endwhile
     if w:vc ==# 'v'
         let w:vp = w:vc
         let w:vc = 'x'
@@ -3764,10 +3781,6 @@ function! s:MyVisCv()
     else
         let w:vc = 'x'
         exe "silent! normal! gv" . "\<C-v>"
-    endif
-    if typahead == 128
-        while getchar(0)
-        endwhile
     endif
 endfunction
 
@@ -6260,10 +6273,12 @@ if has("autocmd")
  "    let dname = expand("%:p:h")
  "    if !isdirectory(dname)
  "        echo '"' . dname . '" dir does not exist, create? (y/N): '
+ "        call inputsave()
  "        let c = getchar()
  "        while type(c) != 0
  "            let c = getchar()
  "        endwhile
+ "        call inputrestore()
  "        let ans=nr2char(c)
  "        if ans ==# 'y' || ans ==# 'Y'
  "            "TODO mkdir -p dname ...
@@ -7526,10 +7541,12 @@ function s:Xdiff1(arg)
         endif
         redraw!
         echo "Buffer " . fnamemodify(bufname(bufnr), ':p') . " modified, save now? (y/N): "
+        call inputsave()
         let c = getchar()
         while type(c) != 0
             let c = getchar()
         endwhile
+        call inputrestore()
         let ans=nr2char(c)
         if ans ==# 'y' || ans ==# 'Y'
             silent execute "normal! :b " . bufnr . " \<CR>"
@@ -7921,10 +7938,12 @@ function s:ConfNextOrQuit() abort
     endif
     if &modified
         echo "Buffer " . bufname("") . " modified, save now? (y/N): "
+        call inputsave()
         let c = getchar()
         while type(c) != 0
             let c = getchar()
         endwhile
+        call inputrestore()
         let ans=nr2char(c)
         if ans ==# 'y' || ans ==# 'Y'
             update
@@ -8035,7 +8054,9 @@ hi! WarningMsg ctermfg=black
 function! UndoAll()
   if &mod !=# 0
     echo 'Undo all changes? (y/N): '
+    call inputsave()
     let ans=nr2char(getchar())
+    call inputrestore()
     if ans ==# 'y' || ans ==# 'Y'
       execute 'silent! earlier 999999'
     endif
