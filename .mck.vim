@@ -2358,8 +2358,10 @@ if exists('$ST_VERSION')
     " NOTE: this DISABLES modifyOtherKeys
     let &t_TI=""
     let &t_TE=""
-    " enables blinking cursor
-    let &t_ve="\e[?12;25h"
+    if exists('$TMUX')
+        " enables blinking cursor (also needed for xterm)
+        let &t_ve="\e[?12;25h"
+    endif
 endif
 "if exists('$ZUTTY_VERSION')
   " NOTE: this ENABLES modifyOtherKeys=2
