@@ -265,16 +265,16 @@ zle -N zle-backward-delete-char-fix
 
 ## Change cursor shape according to the current Vi-mode.
 function zle-line-init zle-keymap-select {
-    if [ -n "$ZUTTY_VERSION" ] ; then
+    if [[ -n "$ZUTTY_VERSION" || -n "$ST_VERSION_SKIP" ]] ; then
         return
     fi
     case "$(zle-vi-mode)" in
         $ZLE_VI_MODE_CMD)
-            echo -ne '\e[3 q' ;; # cursor -> underline
+            echo -ne '\e[4 q' ;; # cursor -> underline
         $ZLE_VI_MODE_INS)
-            echo -ne '\e[2 q' ;; # cursor -> block
+            echo -ne '\e[1 q' ;; # cursor -> block
         $ZLE_VI_MODE_REP)
-            echo -ne '\e[2 q'    # cursor -> block
+            echo -ne '\e[1 q'    # cursor -> block
             MARK=$CURSOR
             ;;
         *)
@@ -283,7 +283,7 @@ function zle-line-init zle-keymap-select {
 }
 
 zle -N zle-line-init
-if [ -z "$ZUTTY_VERSION" ] ; then
+if [[ -z "$ZUTTY_VERSION" && -z "$ST_VERSION_SKIP" ]] ; then
     zle -N zle-keymap-select
 fi
 
@@ -297,8 +297,8 @@ bindkey '^^^h' zle-backward-delete-char-fix
 
 # --------------------
 
-# echo -ne '\e[2 q'                # Use block shape cursor on startup.
-# preexec() { echo -ne '\e[2 q' ;} # Use block shape cursor for each new prompt.
+# echo -ne '\e[1 q'                # Use block shape cursor on startup.
+# preexec() { echo -ne '\e[1 q' ;} # Use block shape cursor for each new prompt.
 
 #function zle-keymap-select {
 #  if [[ ${KEYMAP} == vicmd ]] || [[ $1 = 'block' ]]; then
@@ -309,17 +309,17 @@ bindkey '^^^h' zle-backward-delete-char-fix
 #    #      break
 #    #    fi
 #    #  done
-#       echo -ne '\e[3 q'
+#       echo -ne '\e[4 q'
 #    fi
 #  elif [[ ${KEYMAP} == main ]] || [[ ${KEYMAP} == viins ]] || [[ ${KEYMAP} = '' ]] || [[ $1 = 'beam' ]]; then
-#    echo -ne '\e[2 q'
+#    echo -ne '\e[1 q'
 #  fi
 #}
 #zle -N zle-keymap-select
 #
 #zle-line-init() {
 #    zle -K viins # initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
-#    echo -ne "\e[2 q"
+#    echo -ne "\e[1 q"
 #}
 #zle -N zle-line-init
 
@@ -545,6 +545,8 @@ export KEYTIMEOUT=5
 export ESCDELAY=100
 
 # --------------------
+
+alias st='command st -g 164x46+854+892'
 
 alias bye='echo "dont leave :-("'
 

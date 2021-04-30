@@ -2352,20 +2352,28 @@ if !has("nvim")
     set esckeys
 endif
 
+" -------------------------
+
+if exists('$ST_VERSION')
+    " NOTE: this DISABLES modifyOtherKeys
+    let &t_TI=""
+    let &t_TE=""
+    " enables blinking cursor
+    let &t_ve="\e[?12;25h"
+endif
 "if exists('$ZUTTY_VERSION')
   " NOTE: this ENABLES modifyOtherKeys=2
-  let &t_TI = "\<Esc>[>4;2m"
-  let &t_TE = "\<Esc>[>4;m"
+" let &t_TI = "\<Esc>[>4;2m"
+" let &t_TE = "\<Esc>[>4;m"
 "endif
-" NOTE: this DISABLES modifyOtherKeys=2
-"let &t_TI=""
-"let &t_TE=""
 " can prevent some strange chars in terminator ...
 "set t_TI=
 "set t_TE=
 " some terminals might want these also ...
 "set t_ti=
 "set t_te=
+
+" -------------------------
 
 "let g:solarized_termcolors=256
 "colorscheme solarized
@@ -3943,9 +3951,11 @@ endfunction
 
 " change cursor shape to beam in Insert mode ...
 let &t_SI = "\e[5 q"
-let &t_EI = "\e[2 q"
-" underline
-"let &t_EI = "\e[4 q"
+let &t_EI = "\e[1 q"
+" steady underline
+"let &t_SI = "\e[4 q"
+" blinking underline
+"let &t_SI = "\e[3 q"
 
 " also note cnorm/cvvis terminfo for rxvt blinking cursor
 
@@ -6498,7 +6508,7 @@ if $USER != 'root'
 else
   let g:rtagsAutoLaunchRdm=0
 endif
-nnoremap <silent> <buffer> <C-]> :call rtags#JumpTo(g:SAME_WINDOW)<CR>
+nnoremap <silent> <C-]> :call rtags#JumpTo(g:SAME_WINDOW)<CR>
 autocmd BufReadPost quickfix nnoremap <silent> <buffer> <C-]> <Return>
 " C-o to go back
 " C-t to go back (not implemented)
