@@ -2358,6 +2358,7 @@ if exists('$ST_VERSION')
     " NOTE: this DISABLES modifyOtherKeys
     let &t_TI=""
     let &t_TE=""
+    " tmux BUG ? seems we need this inside tmux ...
     if exists('$TMUX')
         " enables blinking cursor (also needed for xterm)
         let &t_ve="\e[?12;25h"

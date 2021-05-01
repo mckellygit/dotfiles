@@ -12,22 +12,18 @@ url="$(sed 's/.*│//g' | tr -d '\n' | # First remove linebreaks and mutt sideba
 
 if [[ -z "$url" ]] ; then
     if [[ -n "$TMUX" ]] ; then
-        tmux set-option -g display-time 1500
-        tmux display-message "url: not valid"
-        tmux set-option -g display-time 371
+        tmux display-message -N -d 1800 "url: not valid"
     else
         echo "url: not valid"
     fi
     exit 0
 fi
 
+setsid xdg-open "$url" >/dev/null 2>/dev/null &
+
 if [[ -n "$TMUX" ]] ; then
-    tmux set-option -g display-time 1500
-    tmux display-message "url: $url"
-    tmux set-option -g display-time 371
-    sleep 2
+    tmux display-message -N -d 1800 "url: $url"
 fi
 
-setsid xdg-open "$url" >/dev/null 2>&1 &
 exit 0
 
