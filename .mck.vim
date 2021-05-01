@@ -1691,6 +1691,7 @@ function! s:MagitPushPull(p,q,args)
             let gcmd = 'pull'
         endif
         let ans = 'y'
+        let c = 0
         if a:p == 0
             if empty(a:args)
                 let prompt = 'git ' . gcmd . ' ? (Y/n): '
@@ -1699,10 +1700,23 @@ function! s:MagitPushPull(p,q,args)
             endif
             echo prompt
             call inputsave()
-            let ans=nr2char(getchar())
-            call inputrestore()
+            try
+                let c = getchar(1)
+                while c == 0
+                    let c = getchar(1)
+                    sleep 1m
+                endwhile
+                let ans=nr2char(c)
+            catch /.*/
+                call inputrestore()
+                redraw!
+                echo " "
+                return
+            endtry
         endif
+        " enter a space first if optional arg starts with y or n ...
         if ans ==# 'y' || ans ==# 'Y' || ans == "\<CR>"
+            call inputrestore()
 
             " clear undo
             let cur_pos = line('.')
@@ -1713,15 +1727,52 @@ function! s:MagitPushPull(p,q,args)
 
             if empty(a:args)
                 execute 'AsyncRun -raw -strip -mode=term -reuse -pos=bottom -rows=10 -name=aterm -post=call\ MagitUpdateBufferTerm() git ' gcmd
+                redraw!
+                echo 'git ' . gcmd
             else
                 execute 'AsyncRun -raw -strip -mode=term -reuse -pos=bottom -rows=10 -name=aterm -post=call\ MagitUpdateBufferTerm() git ' gcmd a:args
+                redraw!
+                echo 'git ' . gcmd . ' ' . a:args
             endif
             "FloatermNew --name=fterm --autoclose=2 --height=0.75 --width=0.80
             "FloatermNew --name=fterm --autoclose=2 --height=0.75 --width=0.80 bash_ask --tty git push
+            return
         else
-            sleep 351m
-            redraw!
-            echo " "
+            " handle any ctrl char as a no ?
+            if c == 128 || ans ==# 'n' || ans ==# 'N' || ans == "\<Esc>" || ans == "\<C-q>" || ans == "\<C-x>"
+                call inputrestore()
+                redraw!
+                echo " "
+                return
+            endif
+            try
+                redraw!
+                echo "\r"
+                let string = input('')
+            catch /.*/
+                call inputrestore()
+                redraw!
+                echo " "
+                return
+            endtry
+            call inputrestore()
+            " clear undo
+            let cur_pos = line('.')
+            setlocal undolevels=-1
+            call cursor(1, 0)
+            silent exe "normal! a \<BS>\<Esc>"
+            call cursor(cur_pos, 0)
+
+            if empty(string)
+                execute 'AsyncRun -raw -strip -mode=term -reuse -pos=bottom -rows=10 -name=aterm -post=call\ MagitUpdateBufferTerm() git ' gcmd
+                redraw!
+                echo 'git ' . gcmd
+            else
+                execute 'AsyncRun -raw -strip -mode=term -reuse -pos=bottom -rows=10 -name=aterm -post=call\ MagitUpdateBufferTerm() git ' gcmd string
+                redraw!
+                echo 'git ' . gcmd . ' ' . string
+            endif
+            return
         endif
     else
         let errmsg = 'Not inside Magit'
