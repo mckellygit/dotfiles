@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=0.8.4
+Type=Application
+Name=st
+GenericName=ST Terminal emulator
+Comment=st terminal
+Exec=st -g 164x48+854+856
+Icon=terminal
+Categories=System;TerminalEmulator;

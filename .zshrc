@@ -546,7 +546,7 @@ export ESCDELAY=100
 
 # --------------------
 
-alias st='command st -g 164x46+854+892'
+alias st='command st -g 164x48+854+856'
 
 alias bye='echo "dont leave :-("'
 
