@@ -202,7 +202,7 @@ custom_cursor_colors: true
 colors:
   primary:
     background: '0x2e2e26'
-    # client side decoration title etc.
+    # also includes client side decoration titlebar
     foreground: '0xc5c5c5'
     #foreground: '0xffd1b7'
 
