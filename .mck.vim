@@ -2407,6 +2407,7 @@ endif
 
 if (&term =~ "^screen" || &term =~ "^tmux")
   " seems we need this for blinking cursor ...
+  " vim uses vi, vs, VS, ve and may not get these from cnorm, civis, cvvis correctly
   "let &t_ve="\e[?12;25h"
   let &t_VS="\e[34h"
   let &t_ve="\e[?25h"
