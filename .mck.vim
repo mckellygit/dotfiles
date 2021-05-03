@@ -2405,24 +2405,31 @@ endif
 
 " -------------------------
 
-if exists('$ST_VERSION')
-    " NOTE: this DISABLES modifyOtherKeys
-    let &t_TI=""
-    let &t_TE=""
-    " tmux BUG ? seems we need this inside tmux ...
-    if exists('$TMUX')
-        " enables blinking cursor (also needed for xterm)
-        let &t_ve="\e[?12;25h"
-    endif
+if (&term =~ "^screen" || &term =~ "^tmux")
+  " seems we need this for blinking cursor ...
+  "let &t_ve="\e[?12;25h"
+  let &t_VS="\e[34h"
+  let &t_ve="\e[?25h"
+  "let vs=system("infocmp -1 | grep cnorm | sed 's/,//g' | awk -F\\ '{print $2}'")
+  "let ve=system("infocmp -1 | grep cnorm | sed 's/,//g' | awk -F\\ '{print $3}'")
 endif
+
+"if exists('$ST_VERSION')
+  " NOTE: this DISABLES modifyOtherKeys
+"  let &t_TI=""
+"  let &t_TE=""
+"endif
+
 "if exists('$ZUTTY_VERSION')
   " NOTE: this ENABLES modifyOtherKeys=2
-" let &t_TI = "\<Esc>[>4;2m"
-" let &t_TE = "\<Esc>[>4;m"
+"  let &t_TI = "\<Esc>[>4;2m"
+"  let &t_TE = "\<Esc>[>4;m"
 "endif
+
 " can prevent some strange chars in terminator ...
 "set t_TI=
 "set t_TE=
+
 " some terminals might want these also ...
 "set t_ti=
 "set t_te=
