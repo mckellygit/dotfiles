@@ -1334,6 +1334,9 @@ autocmd FileType GV nnoremap <silent> <buffer> <C-x> :call <sid>open(0, 1, 9)<cr
 
 " to make vigv wrapper error more nicely in a non-git dir ..
 function! s:MyGV(args) abort
+    if &buftype == 'terminal'
+        call s:IsTerminalFinished()
+    endif
     let errmsg = ''
     if g:in_gv2 == 1
         enew
@@ -2405,7 +2408,15 @@ endif
 
 " -------------------------
 
-if (&term =~ "^screen" || &term =~ "^tmux")
+" cursor shape blink ...
+" also note cnorm/cvvis terminfo for rxvt blinking cursor
+
+if has("nvim")
+    " does not work in st/xterm inside tmux, do we need Ss/Se ?
+    set guicursor=n-v-c:block,o-i-r-ci-cr:ver25,a:blinkon500-blinkoff300
+endif
+
+if !has("nvim") && (&term =~ "^screen" || &term =~ "^tmux")
   " seems we need this for blinking cursor ...
   " vim uses vi, vs, VS, ve and may not get these from cnorm, civis, cvvis correctly
   "let &t_ve="\e[?12;25h"
@@ -2431,9 +2442,19 @@ endif
 "set t_TI=
 "set t_TE=
 
-" some terminals might want these also ...
+" do not reset terminal at exit ...
 "set t_ti=
 "set t_te=
+
+if !has("nvim")
+    " change cursor shape to beam in Insert mode ...
+    let &t_SI = "\e[5 q"
+    let &t_EI = "\e[1 q"
+    " steady underline
+    "let &t_SI = "\e[4 q"
+    " blinking underline
+    "let &t_SI = "\e[3 q"
+endif
 
 " -------------------------
 
@@ -4008,20 +4029,6 @@ function! WrapForTmux_NOTUSED(as)
   let tmux_end = "\<Esc>\\"
   return tmux_start . substitute(a:as, "\<Esc>", "\<Esc>\<Esc>", 'g') . tmux_end
 endfunction
-
-" active cursor ...
-
-" change cursor shape to beam in Insert mode ...
-let &t_SI = "\e[5 q"
-let &t_EI = "\e[1 q"
-" steady underline
-"let &t_SI = "\e[4 q"
-" blinking underline
-"let &t_SI = "\e[3 q"
-
-" also note cnorm/cvvis terminfo for rxvt blinking cursor
-
-" ---------------
 
 " not needed anymore
 "if !exists('$VIM_TERMINAL')
