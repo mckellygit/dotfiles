@@ -1,7 +1,11 @@
 # Lines configured by zsh-newuser-install
 
 ZSH_HIST=~/.zsh_hist.$$
-flock ~/.histfile-lock cp -p ~/.histfile $ZSH_HIST
+if [[ -z "$SUDO_USER" && -z "$SUDO_UID" ]] ; then
+    flock ~/.histfile-lock cp -p ~/.histfile $ZSH_HIST
+else
+    cp -p ~/.histfile $ZSH_HIST
+fi
 HISTFILE=$ZSH_HIST
 HISTSIZE=1000
 SAVEHIST=1000
@@ -83,7 +87,9 @@ fi
 #fpath+=${ZDOTDIR:-~}/.zsh_functions
 fpath=( ~/.zsh_functions "${fpath[@]}" )
 
-autoload -Uz compinit && compinit
+if [[ -z "$SUDO_USER" && -z "$SUDO_UID" ]] ; then
+    autoload -Uz compinit && compinit
+fi
 
 zmodload -i zsh/complist
 

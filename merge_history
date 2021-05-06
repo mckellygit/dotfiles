@@ -14,16 +14,25 @@ fi
 # skip if from sudo ...
 if [[ -n "$SUDO_USER" && -n "$SUDO_UID" ]]
 then
-    exit
+    exit 0
 fi
 
 myid=$(id -u)
 if [[ $myid -eq 0 ]]
 then
-    exit
+    exit 0
 fi
 
-trap "rm -f ~/.histfile-lock" EXIT SIGINT SIGTERM SIGQUIT
+if [[ -s $HISTFILE ]]
+then
+    owner=$(stat -c '%u' $HISTFILE)
+    if [[ "$owner" != "$myid" ]]
+    then
+        exit 0
+    fi
+fi
+
+trap "rm -f ~/.histfile-lock ; exit 0" EXIT SIGINT SIGTERM SIGQUIT
 
 if [[ -s $HISTFILE ]]
 then
