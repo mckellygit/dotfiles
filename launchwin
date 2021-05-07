@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# This script programmatically moves around the windows on my screens.
+# The JavaScript can be prototyped in Looking Glass (ALT+F2 lg). The documentation of MetaWindow can be found here:
+# https://developer.gnome.org/meta/stable/MetaWindow.html
+
+#set -e
+
+M=0
+
+X=852
+Y=900
+W=2142
+H=1230
+
+if [[ -n "$ST_VERSION" ]] ; then
+    X=854
+    Y=856
+    W=2142
+    H=1300
+fi
+
+JS="""
+const GLib = imports.gi.GLib;
+global.get_window_actors().forEach(function (w) {
+    var mw = w.meta_window;
+    if (mw.has_focus()) {
+        if (mw.get_maximized()) {
+            mw.unmaximize(3); // 3 is META_MAXIMIZE_BOTH, so unmaximizing the window in both directions
+        }
+
+        mw.move_resize_frame(0, $X, $Y, $W, $H);
+
+        if ($M) {
+            // Maximization needs to be delayed a little, so that the window has time to move
+            GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, function() { mw.maximize($M); });
+        }
+    }
+});
+"""
+
+gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval "$JS" >/dev/null
+
+exec $SHELL $@
+
