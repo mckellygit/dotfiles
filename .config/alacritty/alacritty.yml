@@ -222,7 +222,7 @@ colors:
     red:      '0xdf0000'
     green:    '0x00d700'
     yellow:   '0xffd700'
-    blue:     '0x5f87d7'
+    blue:     '0x5f87ff'
     magenta:  '0x875faf'
     cyan:     '0x00ffff'
     white:    '0xffffff'
