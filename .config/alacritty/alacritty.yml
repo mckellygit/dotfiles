@@ -208,6 +208,9 @@ colors:
     #foreground: '0xc5c5c5'
     #foreground: '0xffd1b7'
 
+    dim_foreground: '#828482'
+    bright_foreground: '#eaeaea'
+
   normal:
     black:    '0x000000'
     red:      '0xb22222'
