@@ -18,7 +18,15 @@ if [[ -n "$ST_VERSION" ]] ; then
     Y=856
     W=2142
     H=1300
+elif [[ -n "$ALACRITTY_LOG" ]] ; then
+    # add this for Alacritty, need window to display and grab focus ...
+    sleep 0.6
+    Y=850
+    H=1286
 fi
+
+# just to be safe for all ...
+sleep 0.3
 
 JS="""
 const GLib = imports.gi.GLib;
