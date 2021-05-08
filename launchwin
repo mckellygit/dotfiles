@@ -22,7 +22,7 @@ elif [[ -n "$ALACRITTY_LOG" ]] ; then
     # add this for Alacritty, need window to display and grab focus ...
     sleep 0.6
     Y=874
-    H=1260
+    H=1256
 fi
 
 # just to be safe for all ...

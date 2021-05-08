@@ -177,11 +177,9 @@ font:
 window:
   dimensions:
     columns: 164
-    # without csd titlebar use one less line
-    lines: 47
+    lines: 48
 
   position:
-    # without csd titlebar use slightyly adjusted x,y
     x: 854
     y: 874
 
