@@ -203,7 +203,9 @@ colors:
   primary:
     background: '0x2e2e26'
     # also includes client side decoration titlebar
-    foreground: '0xc5c5c5'
+    # a little more grey ...
+    foreground: '0x8a8a8a'
+    #foreground: '0xc5c5c5'
     #foreground: '0xffd1b7'
 
   normal:
