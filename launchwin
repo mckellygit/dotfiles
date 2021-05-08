@@ -8,21 +8,21 @@
 
 M=0
 
-X=852
+X=854
 Y=900
-W=2142
+W=2140
 H=1230
 
 if [[ -n "$ST_VERSION" ]] ; then
     X=854
     Y=856
-    W=2142
+    W=2140
     H=1300
 elif [[ -n "$ALACRITTY_LOG" ]] ; then
     # add this for Alacritty, need window to display and grab focus ...
     sleep 0.6
-    Y=850
-    H=1286
+    Y=874
+    H=1260
 fi
 
 # just to be safe for all ...

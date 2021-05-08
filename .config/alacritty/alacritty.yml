@@ -177,11 +177,13 @@ font:
 window:
   dimensions:
     columns: 164
-    lines: 48
+    # without csd titlebar use one less line
+    lines: 47
 
   position:
-    x: 820
-    y: 850
+    # without csd titlebar use slightyly adjusted x,y
+    x: 854
+    y: 874
 
   padding:
     x: 4
@@ -189,7 +191,9 @@ window:
 
   dynamic_padding: false
 
-  decorations: full
+  # use alt+shift+m for window menu to move, resize etc.
+  # (foreground color csd titlebar can be distracting)
+  decorations: none
 
   # Allow terminal applications to change Alacritty's window title.
   dynamic_title: true
@@ -203,9 +207,9 @@ colors:
   primary:
     background: '0x2e2e26'
     # also includes client side decoration titlebar
-    # a little more grey ...
-    foreground: '0x8a8a8a'
-    #foreground: '0xc5c5c5'
+    # (a little more grey for csd titlebar)
+    #foreground: '0x8a8a8a'
+    foreground: '0xc5c5c5'
     #foreground: '0xffd1b7'
 
     dim_foreground: '#828482'
