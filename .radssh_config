@@ -24,7 +24,7 @@ shell.console=formatters.ip_colorizer
 # jump method:
 # radssh jump:jumphost/10.173.104.{1..100}
 
-max_threads=220
+max_threads=40
 ### Automatically save log files into date/time-stamped local directory
 # logdir=session_%Y%m%d_%H%M%S
 logdir=~/radssh/sessions/session_%Y%m%d_%H%M%S
@@ -71,8 +71,8 @@ quota.bytes=262144
 # authfile=~/.radssh_auth
 
 ### Network Tweaks
-# socket.timeout=30
-# keepalive=180
+socket.timeout=10
+keepalive=150
 
 ### Extensions to the shell via plugins
 ### System plugin collections always loaded from ${EXEC}/plugins
