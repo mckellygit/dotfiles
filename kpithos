@@ -1,0 +1,14 @@
+#!/bin/bash
+
+pid=$(pgrep python -a | grep pithos | awk '{print $1}')
+
+if [[ -n "$pid" ]] ; then
+    kill -0 $pid
+    rc=$?
+    if [[ $rc -eq 0 ]] ; then
+        echo "killing pithon pid: $pid ..."
+        kill -9 $pid
+    fi
+fi
+
+
