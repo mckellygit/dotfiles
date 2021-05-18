@@ -55,6 +55,16 @@ bind diff      <Ctrl-N>     :/^diff --git|^@@
 bind diff      <Ctrl-P>     :?^diff --git|^@@
 bind stage     <Ctrl-N>     :/^diff --git|^@@
 bind stage     <Ctrl-P>     :?^diff --git|^@@
+# alt-n/p for next/prev file
+bind diff      <Esc>n       :/^diff --git
+bind diff      <Esc>p       :?^diff --git
+bind stage     <Esc>n       :/^diff --git
+bind stage     <Esc>p       :?^diff --git
+# alt-N/P for next/prev file or hunk
+bind diff      <Esc>N       :/^diff --git|^@@
+bind diff      <Esc>P       :?^diff --git|^@@
+bind stage     <Esc>N       :/^diff --git|^@@
+bind stage     <Esc>P       :?^diff --git|^@@
 #
 bind generic   <Ctrl-_><Space>      move-down
 bind generic   <Ctrl-_><Backspace>  move-up
