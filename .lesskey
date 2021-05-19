@@ -26,8 +26,8 @@
 # use ^O instead of ^J (or ^M or \n or \r)
 \e  noaction 5^F
 \e  noaction 5^B
-\eJ  noaction
-\eK  noaction
+\eJ  noaction 5^F
+\eK  noaction 5^B
 \n back-line
 \kh  noaction
 \ke  noaction

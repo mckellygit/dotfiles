@@ -5455,10 +5455,10 @@ endif
 " ---------
 
 call <SID>MapFastKeycode('<F26>',  "\eK", 26)
-noremap <F26> 5gk
-noremap <M-K> 5gk
-inoremap <F26> <C-\><C-o>5gk
-inoremap <M-K> <C-\><C-o>5gk
+noremap <silent> <expr> <F26>    (line('.') == line('w$')) ? '5k' : '5<C-y>5k'
+noremap <silent> <expr> <M-K>    (line('.') == line('w$')) ? '5k' : '5<C-y>5k'
+inoremap <silent> <expr> <F26>   (line('.') == line('w$')) ? '<C-\><C-o>5k' : '<C-\><C-o>5<C-y><C-\><C-o>5k'
+inoremap <silent> <expr> <M-K>   (line('.') == line('w$')) ? '<C-\><C-o>5k' : '<C-\><C-o>5<C-y><C-\><C-o>5k'
 if !has("nvim")
     cnoremap <F26> <C-v><Esc>K
     tnoremap <F26> <Esc>K
@@ -5468,10 +5468,10 @@ else
 endif
 
 call <SID>MapFastKeycode('<F23>',  "\eJ", 23)
-noremap <F23> 5gj
-noremap <M-J> 5gj
-inoremap <F23> <C-\><C-o>5gj
-inoremap <M-J> <C-\><C-o>5gj
+noremap <silent> <expr> <F23>    (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '5<C-e>5j'
+noremap <silent> <expr> <M-J>    (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '5<C-e>5j'
+inoremap <silent> <expr> <F23>   (line('.') == line('w0')) ? '<C-\><C-o>5j' : ((line('$') - line('w$')) < 5) ? '<C-\><C-o>mf<C-\><C-o>G<C-\><C-o>`f<C-\><C-o>5j' : '<C-\><C-o>5<C-e><C-\><C-o>5j'
+inoremap <silent> <expr> <M-J>   (line('.') == line('w0')) ? '<C-\><C-o>5j' : ((line('$') - line('w$')) < 5) ? '<C-\><C-o>mf<C-\><C-o>G<C-\><C-o>`f<C-\><C-o>5j' : '<C-\><C-o>5<C-e><C-\><C-o>5j'
 if !has("nvim")
     cnoremap <F23> <C-v><Esc>J
     tnoremap <F23> <Esc>J

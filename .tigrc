@@ -96,15 +96,17 @@ bind generic   <PageUp>     move-page-up
 bind generic   <Ctrl-J>     scroll-line-down
 bind generic   <Ctrl-K>     scroll-line-up
 #
-bind generic   <Esc>j       move-down
-bind generic   <Esc>k       move-up
-bind generic   <Esc>J       none
-bind generic   <Esc>K       none
-bind generic   <Ctrl-_>j    scroll-line-down
-bind generic   <Ctrl-_>k    scroll-line-up
+bind generic   <Esc>j       move-half-page-down
+bind generic   <Esc>k       move-half-page-up
+bind generic   <Esc>J       scroll-half-page-down
+bind generic   <Esc>K       scroll-half-page-up
+# C-A-j -> <Ctrl-_>j, C-M-k -> <Ctrl-_>k
+bind generic   <Ctrl-_>j    scroll-half-page-down
+bind generic   <Ctrl-_>k    scroll-half-page-up
+# C-A-j -> M-C-o, C-M-k -> M-C-k
 # use ^O instead of ^J (or ^M or \n or \r)
-bind generic   <Esc><Ctrl-O>    scroll-line-down
-bind generic   <Esc><Ctrl-K>    scroll-line-up
+bind generic   <Esc><Ctrl-O>    scroll-half-page-down
+bind generic   <Esc><Ctrl-K>    scroll-half-page-up
 #
 bind generic   <Esc><Enter>    scroll-line-up
 bind generic   <Ctrl-^><Enter> scroll-line-up
