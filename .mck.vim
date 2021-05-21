@@ -2991,11 +2991,17 @@ function! s:PreserveClipboard() abort
         "silent call system("setsid -w copyq >/dev/null 2>/dev/null copySelection -", getreg('*'))
         "silent call system("setsid -w copyq >/dev/null 2>/dev/null copy -", getreg('*'))
         " trim(getreg('*'), '\n', 2)
+
         " if contents have not changed then dont save as this will add a duplicate to the copyq list
         "if @* != @"
         "    silent call system("setsid -w myclip", getreg('*'))
         "endif
-        silent call system("setsid -w myclip -", getreg('*'))
+
+        " --------------------------------------
+        " NOTE: dont seem to need this anymore ?
+        "silent call system("setsid -w myclip -", getreg('*'))
+        " --------------------------------------
+
         " clear regs ?
         "call setreg('+', [])
         "call setreg('*', [])
@@ -3005,7 +3011,21 @@ function! s:PreserveClipboard() abort
 endfunction
 autocmd VimLeave * silent call <SID>PreserveClipboard()
 
-" initially set + and * regs, even if clipboard empty ...
+" save reg type for next vim session
+function! s:SaveRegType() abort
+    if has("nvim")
+        return
+    endif
+    let regtype = getregtype('*')
+    let fname = fnamemodify("~/.vimsrt", ":p")
+    " TODO: obtain lock/mutex to prevent collisions ...
+    call writefile([regtype], fname, "b")
+endfunction
+if !has("nvim")
+    autocmd VimLeavePre * call <SID>SaveRegType()
+endif
+
+" initially set + and * regs (and regtype), even if clipboard empty ...
 " otherwise they can get loaded from elsewhere
 function s:InitializeClipboard()
     if executable("copyq") && executable("myclip") && !exists('$SSH_CLIENT')
@@ -3026,8 +3046,23 @@ function s:InitializeClipboard()
                 call setreg('*', [])
             else
                 "echom "initializing + and * registers"
-                call setreg('+', clipdata)
-                call setreg('*', clipdata)
+                if !has("nvim")
+                    " try to also restore regtype ...
+                    let regtype = []
+                    let fname = fnamemodify("~/.vimsrt", ":p")
+                    " TODO: obtain lock/mutex to prevent collisions ...
+                    let regtype = readfile(fname, "b")
+                    if len(regtype) == 1
+                        call setreg('+', clipdata, regtype[0])
+                        call setreg('*', clipdata, regtype[0])
+                    else
+                        call setreg('+', clipdata)
+                        call setreg('*', clipdata)
+                    endif
+                else
+                    call setreg('+', clipdata)
+                    call setreg('*', clipdata)
+                endif
             endif
             call setreg('x', [])
             call setreg('y', [])
