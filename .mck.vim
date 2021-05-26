@@ -2997,10 +2997,13 @@ function! s:PreserveClipboard() abort
         "    silent call system("setsid -w myclip", getreg('*'))
         "endif
 
-        " --------------------------------------
-        " NOTE: dont seem to need this anymore ?
-        "silent call system("setsid -w myclip -", getreg('*'))
-        " --------------------------------------
+        " -------------------------------------
+        " NOTE: dont seem to need this if block - but why ?
+        let regtype = getregtype('*')
+        if ! (regtype =~ "")
+            silent call system("setsid -w myclip -", getreg('*'))
+        endif
+        " -------------------------------------
 
         " clear regs ?
         "call setreg('+', [])
