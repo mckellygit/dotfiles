@@ -2469,6 +2469,10 @@ set bufhidden=hide
 
 set lazyredraw
 
+set redrawtime=10000
+" :syntax sync minlines=1000
+" TODO: add a mapping to syntax sync ?
+
 set confirm
 
 set noshowmode
