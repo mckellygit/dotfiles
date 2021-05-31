@@ -319,6 +319,13 @@ Plugin 'mckellygit/nvim-miniyank'
 " vim-better-whitespace
 "Plugin 'ntpeters/vim-better-whitespace'
 "
+" fix nvim CursorHold issues ...
+" (adds a timer after each CursorMoved event)
+"if !has("nvim")
+"  let g:loaded_fix_cursorhold_nvim = 1
+"endif
+"Plugin 'antoinemadec/FixCursorHold.nvim'
+"
 "" All of your Plugins must be added before the following line
 call vundle#end()         " required
 filetype plugin indent on " required
@@ -2302,6 +2309,10 @@ let g:current_line_whitespace_disabled_soft=1
 let g:better_whitespace_operator='___s'
 " vim-better-whitespace -
 
+" fixCursorHold ----
+let g:cursorhold_updatetime = 10000
+" fixCursorHold ----
+
 " ====================================================
 " ====================================================
 " ====================================================
@@ -2750,6 +2761,7 @@ function s:Searchn() abort
           sleep 1m
       endwhile
       redraw!
+      echo "\r"
     endtry
   catch /E385:/
 "   echohl WarningMsg
@@ -2777,6 +2789,7 @@ function s:Searchn() abort
           sleep 1m
       endwhile
       redraw!
+      echo "\r"
     endtry
   endtry
   nnoremap <buffer> <silent> n :call <SID>Searchn()<CR>
@@ -2823,6 +2836,7 @@ function s:SearchN() abort
           sleep 1m
       endwhile
       redraw!
+      echo "\r"
     endtry
   catch /E385:/
 "   echohl WarningMsg
@@ -2846,6 +2860,7 @@ function s:SearchN() abort
           sleep 1m
       endwhile
       redraw!
+      echo "\r"
     endtry
   endtry
   nnoremap <buffer> <silent> N :call <SID>SearchN()<CR>
@@ -5998,12 +6013,35 @@ function! s:ClearCmdWindow()
         return
     endif
     "exe 'normal :'
-    "redraw!
-    echo "\r\r"
-    echo ''
+    if has("nvim")
+        redraw!
+    endif
+    echo "\r"
 endfunction
 " nice but can clear asyncrun status in cmdline ...
 autocmd CursorHold * call <SID>ClearCmdWindow()
+
+" ---------
+
+let g:my_cursorhold_updatetime = 10000
+
+function My_Nvim_CursorHold_Cb(timer_id) abort
+  set eventignore-=CursorHold
+  doautocmd <nomodeline> CursorHold
+  set eventignore+=CursorHold
+endfunction
+
+let g:my_cursorhold_nvim_timer = -1
+function My_Nvim_CursorHold_Fix() abort
+    if !has("nvim")
+        return
+    endif
+    if mode() != 'n'
+        return
+    endif
+    call timer_stop(g:my_cursorhold_nvim_timer)
+    let g:my_cursorhold_nvim_timer = timer_start(g:my_cursorhold_updatetime, 'My_Nvim_CursorHold_Cb')
+endfunction
 
 " ---------
 
