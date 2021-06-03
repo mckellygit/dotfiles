@@ -10,5 +10,8 @@ then
     echo "fatal: not a git repository (or any of the parent directories): .git"
     exit 1
 fi
-cd $gdir || exit
+
+# why did we think we needed to cd to top-level git dir ?
+#cd $gdir || exit
+
 git --no-pager gvdiff $1 $2 $3 $4
