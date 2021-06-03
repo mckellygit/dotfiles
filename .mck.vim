@@ -6004,9 +6004,13 @@ function! s:IdleToNormalMode()
     if mymode ==# 'i' || mymode ==# 'R'
         call feedkeys("\<Esc>", "m")
         echo "Exiting Insert mode after idle timeout ..."
+        if has("nvim")
+            call My_StartIdleTimer()
+        endif
     endif
 endfunction
 autocmd CursorHoldI * call <SID>IdleToNormalMode()
+autocmd User MyCursorHoldI call <SID>IdleToNormalMode()
 
 function! s:ClearCmdWindow()
     if pumvisible()
@@ -6020,6 +6024,7 @@ function! s:ClearCmdWindow()
 endfunction
 " nice but can clear asyncrun status in cmdline ...
 autocmd CursorHold * call <SID>ClearCmdWindow()
+autocmd User MyCursorHold call <SID>ClearCmdWindow()
 
 " ---------
 
@@ -6042,6 +6047,33 @@ function My_Nvim_CursorHold_Fix() abort
     call timer_stop(g:my_cursorhold_nvim_timer)
     let g:my_cursorhold_nvim_timer = timer_start(g:my_cursorhold_updatetime, 'My_Nvim_CursorHold_Cb')
 endfunction
+
+" ---------
+
+" work-around for nvim CursorHold[I] issue ...
+
+let g:my_insertidle_nvim_timer = -1
+function My_StartIdleTimer_Cb(timer_id) abort
+    let mymode = mode()
+    if mymode ==# 'i' || mymode ==# 'R'
+        doautocmd User MyCursorHoldI
+    else
+        doautocmd User MyCursorHold
+    endif
+endfunction
+
+function My_StartIdleTimer() abort
+    call timer_stop(g:my_insertidle_nvim_timer)
+    let g:my_insertidle_nvim_timer = timer_start(g:my_cursorhold_updatetime, 'My_StartIdleTimer_Cb')
+endfunction
+
+if has("nvim")
+    autocmd CmdlineLeave * call My_StartIdleTimer()
+    autocmd InsertEnter *  call My_StartIdleTimer()
+    " TODO: ouch ...
+    autocmd CursorMovedI * call My_StartIdleTimer()
+    autocmd CursorMoved  * call My_StartIdleTimer()
+endif
 
 " ---------
 
