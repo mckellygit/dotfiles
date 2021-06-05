@@ -58,10 +58,10 @@ bind stage     <Ctrl-P>     :?^diff --git|^@@
 # match vim gitgutter C-S-n/p for next/prev hunk
 # some terminals may map <C-S-n> to <C-_>N ...
 # some terminals may map <C-S-p> to <C-_>P ...
-bind diff      <Ctrl-_>N    :/^@@
-bind diff      <Ctrl-_>P    :?^@@
-bind stage     <Ctrl-_>N    :/^@@
-bind stage     <Ctrl-_>P    :?^@@
+bind diff      <Ctrl-_>N    :/^diff --git|^@@
+bind diff      <Ctrl-_>P    :?^diff --git|^@@
+bind stage     <Ctrl-_>N    :/^diff --git|^@@
+bind stage     <Ctrl-_>P    :?^diff --git|^@@
 #
 bind generic   <Ctrl-_><Space>      move-down
 bind generic   <Ctrl-_><Backspace>  move-up

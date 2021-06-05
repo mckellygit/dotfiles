@@ -1042,14 +1042,18 @@ autocmd FileType git              vmap <silent> <buffer> d       <C-f>
 " NOTE: fugitive git <C-n>, <C-p> mappings already do these
 " git diff navigation like tig ...
 " NOTE: single <Leader>f,F and c,C causes input delays ...
-autocmd FileType git              nmap <silent> <buffer> <Leader>;f /^diff --git<CR>
-autocmd FileType git              nmap <silent> <buffer> <Leader>;F ?^diff --git<CR>
-autocmd FileType git              nmap <silent> <buffer> <Leader>;c /^@@<CR>
-autocmd FileType git              nmap <silent> <buffer> <Leader>;C ?^@@<CR>
-autocmd FileType git              vmap <silent> <buffer> <Leader>;f /^diff --git<CR>
-autocmd FileType git              vmap <silent> <buffer> <Leader>;F ?^diff --git<CR>
-autocmd FileType git              vmap <silent> <buffer> <Leader>;c /^@@<CR>
-autocmd FileType git              vmap <silent> <buffer> <Leader>;C ?^@@<CR>
+"autocmd FileType git              nmap <silent> <buffer> <Leader>;f /^diff --git<CR>
+"autocmd FileType git              nmap <silent> <buffer> <Leader>;F ?^diff --git<CR>
+"autocmd FileType git              nmap <silent> <buffer> <Leader>;c /^@@<CR>
+"autocmd FileType git              nmap <silent> <buffer> <Leader>;C ?^@@<CR>
+"autocmd FileType git              vmap <silent> <buffer> <Leader>;f /^diff --git<CR>
+"autocmd FileType git              vmap <silent> <buffer> <Leader>;F ?^diff --git<CR>
+"autocmd FileType git              vmap <silent> <buffer> <Leader>;c /^@@<CR>
+"autocmd FileType git              vmap <silent> <buffer> <Leader>;C ?^@@<CR>
+
+" fugitive/GV to be like gitgutter/tig ...
+autocmd FileType git              map <buffer> <C-_>N <C-n>
+autocmd FileType git              map <buffer> <C-_>P <C-p>
 
 " ----------------
 
