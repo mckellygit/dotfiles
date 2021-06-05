@@ -1158,6 +1158,13 @@ bindkey "\e=" copy-cmdline
 
 bindkey -s "\e," ","
 
+# some terminals may map <C-S-g> to <C-_>G ...
+bindkey "^_G" noop
+# some terminals may map <C-S-n> to <C-_>N ...
+bindkey "^_N" noop
+# some terminals may map <C-S-p> to <C-_>P ...
+bindkey "^_P" noop
+
 # Ctrl-Enter to execute suggestion
 #bindkey '^\n' autosuggest-execute
 # make it a no-op for safety

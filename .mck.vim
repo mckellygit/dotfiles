@@ -1094,9 +1094,22 @@ let g:gitgutter_sign_column_always = 1
 if exists('&signcolumn')  " Vim 7.4.2201
   set signcolumn=yes
 endif
+
 map <Leader>gn <Plug>(GitGutterNextHunk)
 map <Leader>gp <Plug>(GitGutterPrevHunk)
-map <silent> <Leader>gg <C-\><C-n>:<C-u>call gitgutter#process_buffer(bufnr(''), 0)<CR>
+" some terminals may map <C-S-n> to <C-_>N ...
+map <C-_>N     <Plug>(GitGutterNextHunk)
+" some terminals may map <C-S-p> to <C-_>P ...
+map <C-_>P     <Plug>(GitGutterPrevHunk)
+" NOTE: kitty previously used ctrl+shift+p + ... for url selection
+" and this was changed to ctrl+shift+/ so we can use C-S-p here ...
+" TODO: or use M-n/p or M-n/N or C-A-n/p ?
+" NOTE: tmux maps <M-n> to <C-^>n and same for N,p,P
+" or have tmux change <C-S-n> to <C-_>N ?
+nmap <silent> <Leader>gg :call gitgutter#process_buffer(bufnr(''), 0)<CR>
+" some terminals may map <C-S-g> to <C-_>G ...
+nmap <silent> <C-_>G     :call gitgutter#process_buffer(bufnr(''), 0)<CR>
+
 aug gg_init
   au!
   " NOTE: force auto process git changes ...
@@ -1104,7 +1117,8 @@ aug gg_init
 aug END
 
 " NOTE: ^L redraws but also updates git changes ...
-nnoremap <silent> <expr> <C-l> pumvisible() ? '<C-l>' : ':call gitgutter#process_buffer(bufnr(""), 0)<bar>:redraw!<CR>'
+" NOTE: nvim requires the :echo "\r" to clear cmdline ...
+nnoremap <silent> <expr> <C-l> pumvisible() ? '<C-l>' : ':call gitgutter#process_buffer(bufnr(""), 0)<bar>:echo "\r"<bar>:redraw!<CR>'
 " gitgutter -----------
 
 " gitv ----------------
@@ -5537,7 +5551,10 @@ else
     tnoremap <F23> <M-J>
 endif
 
-" ---------
+" -------------------------------
+
+" NOTE: <M-n/N/p/P> could be used in vim, less, tig
+" for scrollng/movement, similar to <M-j/J/k/K> ...
 
 " NOTE: wish we could send CSI mappings for these ...
  noremap <silent> <M-n>  <Nop>

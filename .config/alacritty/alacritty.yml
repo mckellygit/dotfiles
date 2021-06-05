@@ -53,6 +53,10 @@ key_bindings:
   - { key: Minus,     mods: Alt|Control,     action: None             }
 
   - { key: Return,    mods: Alt|Control,     chars: "\x1e\x0d"        }
+
+  - { key: G,         mods: Control|Shift,   chars: "\x1f\x47"        }
+  - { key: N,         mods: Control|Shift,   chars: "\x1f\x4e"        }
+  - { key: P,         mods: Control|Shift,   chars: "\x1f\x50"        }
   # special -------
 
   # same esc-seq as S-Insert (really cannot be RecieveChar)

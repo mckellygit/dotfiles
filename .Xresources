@@ -325,6 +325,10 @@ URxvt.keysym.C-minus:                   string:\036\055
 URxvt.keysym.Control-Meta-minus:        command:\000
 
 URxvt.keysym.Control-Meta-Return:       string:\036\015
+
+URxvt.keysym.Shift-Control-G:           string:\037\107
+URxvt.keysym.Shift-Control-N:           string:\037\116
+URxvt.keysym.Shift-Control-P:           string:\037\120
 !! special ------
 
 !! same esc-seq as S-Insert (really cannot be builtin-string)

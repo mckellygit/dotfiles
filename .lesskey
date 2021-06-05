@@ -64,3 +64,15 @@ qq   quit
 \\qq quit
    noaction
 \\xc quit
+#\en noaction ^n
+#\eN noaction 10^F
+#\ep noaction ^p
+#\eP noaction 10^B
+#N noaction ^n
+#P noaction ^p
+\en noaction
+\eN noaction
+\ep noaction
+\eP noaction
+N noaction
+P noaction
