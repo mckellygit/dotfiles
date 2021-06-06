@@ -1104,6 +1104,9 @@ bindkey '^_ ' autosuggest-accept
 # terminals may have mapped S-<Space> to ^^<Space>
 bindkey -s '^^ ' ' '
 
+# TODO: C-Space to Space ?
+# bindkey -s "^@" " "
+
 bindkey -s '^^\n' '\n'
 bindkey -s '^^^J' '^J'
 
