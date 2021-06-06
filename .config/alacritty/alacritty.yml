@@ -54,6 +54,9 @@ key_bindings:
 
   - { key: Return,    mods: Alt|Control,     chars: "\x1e\x0d"        }
 
+  - { key: J,         mods: Control|Shift,   chars: "\x1f\x4a"        }
+  - { key: K,         mods: Control|Shift,   chars: "\x1f\x4b"        }
+
   - { key: G,         mods: Control|Shift,   chars: "\x1f\x47"        }
   - { key: N,         mods: Control|Shift,   chars: "\x1f\x4e"        }
   - { key: P,         mods: Control|Shift,   chars: "\x1f\x50"        }

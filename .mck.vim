@@ -1052,8 +1052,10 @@ autocmd FileType git              vmap <silent> <buffer> d       <C-f>
 "autocmd FileType git              vmap <silent> <buffer> <Leader>;C ?^@@<CR>
 
 " fugitive/GV to be like gitgutter/tig ...
-autocmd FileType git              map <buffer> <C-_>N <C-n>
-autocmd FileType git              map <buffer> <C-_>P <C-p>
+" SPECIAL: some terminals may map <C-S-n> to <C-_>N ...
+autocmd FileType git              map <buffer> <C-_>N /^+\\|^-<CR>
+" SPECIAL: some terminals may map <C-S-p> to <C-_>P ...
+autocmd FileType git              map <buffer> <C-_>P ?^+\\|^-<CR>
 
 " ----------------
 
@@ -1102,9 +1104,9 @@ endif
 nmap <Leader>gn <Plug>(GitGutterNextHunk)
 nmap <Leader>gp <Plug>(GitGutterPrevHunk)
 
-" some terminals may map <C-S-n> to <C-_>N ...
+" SPECIAL: some terminals may map <C-S-n> to <C-_>N ...
 nmap <C-_>N     <Plug>(GitGutterNextHunk)
-" some terminals may map <C-S-p> to <C-_>P ...
+" SPECIAL: some terminals may map <C-S-p> to <C-_>P ...
 nmap <C-_>P     <Plug>(GitGutterPrevHunk)
 " NOTE: kitty previously used ctrl+shift+p + ... for url selection
 " and this was changed to ctrl+shift+/ so we can use C-S-p here ...
@@ -1114,7 +1116,7 @@ nmap <C-_>P     <Plug>(GitGutterPrevHunk)
 " or have tmux change <C-S-n> to <C-_>N ?
 
 nmap <silent> <Leader>gg :call gitgutter#process_buffer(bufnr(''), 0)<CR>
-" some terminals may map <C-S-g> to <C-_>G ...
+" SPECIAL: some terminals may map <C-S-g> to <C-_>G ...
 nmap <silent> <C-_>G     :call gitgutter#process_buffer(bufnr(''), 0)<CR>
 
 " to match fugitive and tig ...
@@ -5514,6 +5516,10 @@ else
     tnoremap <F28> <M-C-K>
 endif
 
+" SPECIAL: some terminals might map C-S-k to <C-_>K ...
+ noremap <C-_>K 5gk
+inoremap <C-_>K <C-\><C-o>5gk
+
 " SPECIAL: some terminals might map A-C-j to M-C-o ...
 " use ^O instead of ^J (or ^M or \n or \r)
 call <SID>MapFastKeycode('<F29>',  "\e\<C-o>", 29)
@@ -5533,6 +5539,10 @@ else
     tnoremap <F29> <M-C-J>
     tnoremap <M-C-O> <M-C-J>
 endif
+
+" SPECIAL: some terminals might map C-S-j to <C-_>J ...
+ noremap <C-_>J 5gj
+inoremap <C-_>J <C-\><C-o>5gj
 
 " ---------
 

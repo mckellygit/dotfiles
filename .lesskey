@@ -28,6 +28,10 @@
 \e  noaction 5^B
 \eJ  noaction 5^F
 \eK  noaction 5^B
+# SPECIAL: some terminals might map C-S-j to <C-_>J ...
+J  noaction 10^F
+# SPECIAL: some terminals might map C-S-k to <C-_>K ...
+K  noaction 10^B
 \n back-line
 \kh  noaction
 \ke  noaction
@@ -70,6 +74,8 @@ qq   quit
 #\eP noaction 10^B
 #N noaction ^n
 #P noaction ^p
+  noaction
+  noaction
 \en noaction
 \eN noaction
 \ep noaction

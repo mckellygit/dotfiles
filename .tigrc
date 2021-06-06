@@ -56,12 +56,12 @@ bind diff      <Ctrl-P>     :?^diff --git|^@@
 bind stage     <Ctrl-N>     :/^diff --git|^@@
 bind stage     <Ctrl-P>     :?^diff --git|^@@
 # match vim gitgutter C-S-n/p for next/prev hunk
-# some terminals may map <C-S-n> to <C-_>N ...
-# some terminals may map <C-S-p> to <C-_>P ...
-bind diff      <Ctrl-_>N    :/^diff --git|^@@
-bind diff      <Ctrl-_>P    :?^diff --git|^@@
-bind stage     <Ctrl-_>N    :/^diff --git|^@@
-bind stage     <Ctrl-_>P    :?^diff --git|^@@
+# SPECIAL: some terminals may map <C-S-n> to <C-_>N ...
+# SPECIAL: some terminals may map <C-S-p> to <C-_>P ...
+bind diff      <Ctrl-_>N    :/^\+|^-
+bind diff      <Ctrl-_>P    :?^\+|^-
+bind stage     <Ctrl-_>N    :/^\+|^-
+bind stage     <Ctrl-_>P    :?^\+|^-
 #
 bind generic   <Ctrl-_><Space>      move-down
 bind generic   <Ctrl-_><Backspace>  move-up
@@ -92,6 +92,11 @@ bind generic   <PageUp>     move-page-up
 #
 bind generic   <Ctrl-J>     scroll-line-down
 bind generic   <Ctrl-K>     scroll-line-up
+#
+# SPECIAL: some terminals might map C-S-j to <C-_>J ...
+bind generic   <Ctrl-_>J    scroll-half-page-down
+# SPECIAL: some terminals might map C-S-k to <C-_>K ...
+bind generic   <Ctrl-_>K    scroll-half-page-up
 #
 bind generic   <Esc>j       scroll-half-page-down
 bind generic   <Esc>k       scroll-half-page-up
