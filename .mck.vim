@@ -1099,20 +1099,27 @@ if exists('&signcolumn')  " Vim 7.4.2201
   set signcolumn=yes
 endif
 
-map <Leader>gn <Plug>(GitGutterNextHunk)
-map <Leader>gp <Plug>(GitGutterPrevHunk)
+nmap <Leader>gn <Plug>(GitGutterNextHunk)
+nmap <Leader>gp <Plug>(GitGutterPrevHunk)
+
 " some terminals may map <C-S-n> to <C-_>N ...
-map <C-_>N     <Plug>(GitGutterNextHunk)
+nmap <C-_>N     <Plug>(GitGutterNextHunk)
 " some terminals may map <C-S-p> to <C-_>P ...
-map <C-_>P     <Plug>(GitGutterPrevHunk)
+nmap <C-_>P     <Plug>(GitGutterPrevHunk)
 " NOTE: kitty previously used ctrl+shift+p + ... for url selection
 " and this was changed to ctrl+shift+/ so we can use C-S-p here ...
+
 " TODO: or use M-n/p or M-n/N or C-A-n/p ?
 " NOTE: tmux maps <M-n> to <C-^>n and same for N,p,P
 " or have tmux change <C-S-n> to <C-_>N ?
+
 nmap <silent> <Leader>gg :call gitgutter#process_buffer(bufnr(''), 0)<CR>
 " some terminals may map <C-S-g> to <C-_>G ...
 nmap <silent> <C-_>G     :call gitgutter#process_buffer(bufnr(''), 0)<CR>
+
+" to match fugitive and tig ...
+nmap <C-n>      <Plug>(GitGutterNextHunk)
+nmap <C-p>      <Plug>(GitGutterPrevHunk)
 
 aug gg_init
   au!
