@@ -5517,8 +5517,8 @@ else
 endif
 
 " SPECIAL: some terminals might map C-S-k to <C-_>K ...
- noremap <C-_>K 5gk
-inoremap <C-_>K <C-\><C-o>5gk
+ noremap <C-_>K 10gk
+inoremap <C-_>K <C-\><C-o>10gk
 
 " SPECIAL: some terminals might map A-C-j to M-C-o ...
 " use ^O instead of ^J (or ^M or \n or \r)
@@ -5541,8 +5541,8 @@ else
 endif
 
 " SPECIAL: some terminals might map C-S-j to <C-_>J ...
- noremap <C-_>J 5gj
-inoremap <C-_>J <C-\><C-o>5gj
+ noremap <C-_>J 10gj
+inoremap <C-_>J <C-\><C-o>10gj
 
 " ---------
 

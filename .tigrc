@@ -94,9 +94,9 @@ bind generic   <Ctrl-J>     scroll-line-down
 bind generic   <Ctrl-K>     scroll-line-up
 #
 # SPECIAL: some terminals might map C-S-j to <C-_>J ...
-bind generic   <Ctrl-_>J    scroll-half-page-down
+bind generic   <Ctrl-_>J    move-half-page-down
 # SPECIAL: some terminals might map C-S-k to <C-_>K ...
-bind generic   <Ctrl-_>K    scroll-half-page-up
+bind generic   <Ctrl-_>K    move-half-page-up
 #
 bind generic   <Esc>j       scroll-half-page-down
 bind generic   <Esc>k       scroll-half-page-up
