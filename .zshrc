@@ -599,6 +599,7 @@ export SMARTLESS_PAGER_ARGUMENTS='-iR -K -x4 -c~'
 #export PAGER='bat -p'
 #export PAGER='less'
 #export BAT_PAGER='smartless'
+
 #alias cat='ccat'
 #alias cat='mckless -EXR:'
 #alias cat='bat --plain --paging=never'

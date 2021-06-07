@@ -130,12 +130,29 @@ alias more='less -R'
 # there is also moar
 #alias more='moar'
 alias less-pyg='less-pyg'
-alias less='less -R'
+#alias less='less -K -iR -x4'
+#alias less='bat'
+alias less='smartless'
+
+# uses bat underneath to get bat syntax color but less driver with multiple files, etc.
+export LESSOPEN="|lessfilter %s"
+export LESS='-iR -K -x4 -c~'
+
+# number of lines to directly display before entering the pager
+export SMARTLESS_NUM_LINES=$((LINES-6))
+# the pager to be used
+export SMARTLESS_PAGER='less'
+# the default arguments to the pager
+export SMARTLESS_PAGER_ARGUMENTS='-iR -K -x4 -c~'
+
 #export PAGER='less -RX'
-export PAGER='bat -p'
+#export PAGER='bat -p'
+
 #alias cat='ccat'
 #alias cat='mckless -EXR:'
 #alias cat='bat --plain --paging=never'
+alias catc='bat --plain --tabs 4 --paging never'
+
 alias smesg='vless /var/log/syslog'
 
 alias tailrdm='tail -f /tmp/rdm-$LOGNAME.log'
