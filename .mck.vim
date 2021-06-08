@@ -144,6 +144,9 @@ Plugin 'airblade/vim-gitgutter'
 "Plugin 'junegunn/gv.vim'
 Plugin 'mckellygit/gv.vim'
 "
+" vim-flog - newer git viewer
+"Plugin 'rbong/vim-flog'
+"
 " fzf for fuzzy listing/searching
 "Plugin 'junegunn/fzf' " (not needed because its in ~/.fzf already)
 Plugin 'junegunn/fzf.vim'
