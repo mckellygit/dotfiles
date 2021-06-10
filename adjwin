@@ -49,5 +49,8 @@ global.get_window_actors().forEach(function (w) {
 
 gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval "$JS" >/dev/null
 
+# do we also do this ?
+xrdb -load ~/.Xresources
+
 exit 0
 
