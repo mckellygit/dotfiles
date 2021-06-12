@@ -142,7 +142,9 @@ mouse_bindings:
     - { mouse: Middle, mods: Shift, action: None }
     - { mouse: Middle, mods: Control, action: None }
     - { mouse: Middle, mods: Control|Shift, action: None }
-    - { mouse: Middle, mods: Alt|Shift, action: PasteSelection }
+      # NOTE: strange pasting bug sometimes (#5050)
+    - { mouse: Middle, mods: Alt|Shift, action: None }
+      #- { mouse: Middle, mods: Alt|Shift, action: PasteSelection }
 
 mouse:
   double_click: { threshold: 250 }
