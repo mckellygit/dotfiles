@@ -168,6 +168,10 @@ mouse:
 
 selection:
   semantic_escape_chars: ",│`|:\"' ()[]{}<>"
+
+  # When set to `true`, selected text will be copied to both the primary and
+  # the selection clipboard. Otherwise, it will only be copied to the selection
+  # clipboard.
   save_to_clipboard: false
 
 # INFO: to prevent inconsistent DPR, set it explcitly ...
