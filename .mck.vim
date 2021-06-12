@@ -2112,10 +2112,11 @@ au FileType any-jump nnoremap <silent> <buffer> <M-C-P> :call g:AnyJumpHandlePre
 " so we can see echoes at end ...
 let g:asyncrun_code = 0
 let g:asyncrun_silent = 0
-autocmd User AsyncRunPre echohl DiffAdd | echo 'AsyncRun started ...' | echohl None | let g:asyncrun_code = 2
+let g:asyncrun_string = ''
+autocmd User AsyncRunPre let g:asyncrun_code = 2 | echohl DiffAdd | echo "\rAsyncRun started ..." | echohl None
 autocmd User AsyncRunStop if g:asyncrun_code != 0 | echohl DiffText | echo 'AsyncRun complete: [ ' . g:asyncrun_code . ' ]' | echohl None |
-            \ else | echohl DiffAdd | echo 'AsyncRun complete: [ OK ]' | echohl None | copen | set nowrap | set cursorline | clearjumps | if !pumvisible() | call lightline#update() | endif | endif
-autocmd User AsyncRunInterrupt echohl DiffText | echo 'AsyncRun complete: [TERM]' | echohl None | let g:asyncrun_code = 2
+            \ else | echohl DiffAdd | echo 'AsyncRun complete: [ OK ]' | echohl None | copen | set nowrap | set cursorline | clearjumps | endif | if !pumvisible() | call lightline#update() | endif | let g:asyncrun_string = ''
+autocmd User AsyncRunInterrupt echohl DiffText | echo 'AsyncRun complete: [TERM]' | echohl None | let g:asyncrun_code = 2 | let g:asyncrun_string = ''
 " NOTE: add '| wincmd p' to go back to orig window
 " NOTE: add '| set ma' after copen to make qf modifiable
 " there is also <leader>sq and <Leader>sx to cancel AsyncRun search in flight ...
@@ -6983,6 +6984,7 @@ function s:MySearch(meth) abort
     echohl WarningMsg | echo "AsyncRun currently running" | echohl None
     return
   endif
+  let g:asyncrun_string = string
   if (a:meth == 0)
     " NOTE: list of files code below is from ack.vim for :LAckWindow ...
     let files = tabpagebuflist()
@@ -7024,6 +7026,7 @@ function s:MyVisSearch(meth) abort
     echohl WarningMsg | echo "AsyncRun currently running" | echohl None
     return
   endif
+  let g:asyncrun_string = string
   if (a:meth == 0)
     " NOTE: list of files code below is from ack.vim for :LAckWindow ...
     let files = tabpagebuflist()
@@ -7056,11 +7059,11 @@ function s:MyVisSearch(meth) abort
 endfunction
 
 " use :let @/="" to clear out search pattern and stop any running search - wish we could use <C-c>
-nnoremap <silent> <Leader>sx :let @/=""<bar>:redraw!<CR>:echo " "<CR>:AsyncStop!<CR>
-vnoremap <silent> <Leader>sx <C-\><C-n>:let @/=""<bar>:redraw!<CR>:echo " "<CR>:AsyncStop!<CR>
+nnoremap <silent> <Leader>sx :let @/=""<bar>:redraw!<CR>:echo " "<CR>:let g:asyncrun_code=2<CR>:AsyncStop!<CR>:sleep 500m<CR>:AsyncStop!<CR>
+vnoremap <silent> <Leader>sx <Esc>:let @/=""<bar>:redraw!<CR>:echo " "<CR>:let g:asyncrun_code=2<CR>:AsyncStop!<CR>:sleep 500m<CR>:AsyncStop!<CR>
 " stop running search - wish we could use <C-c>
-nnoremap <silent> <Leader>sq :AsyncStop!<CR>
-vnoremap <silent> <Leader>sq <C-\><C-n>:AsyncStop!<CR>
+nnoremap <silent> <Leader>sk :let g:asyncrun_code=2<CR>:AsyncStop!<CR>:sleep 500m<CR>:AsyncStop!<CR>
+vnoremap <silent> <Leader>sk <Esc>:let g:asyncrun_code=2<CR>:AsyncStop!<CR>:sleep 500m<CR>:AsyncStop!<CR>
 " search normally
 nnoremap <Leader>sn :let @/=""<bar>:set hlsearch<CR>/
 vnoremap <Leader>sn "sy<Esc>:let @/=""<bar>:set hlsearch<CR>/<C-r>"
