@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+TryExec=/home/kellma02/bin/unlock.sh
+Exec=/home/kellma02/bin/unlock.sh
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name[en_US]=unlock-monitor
+Name=unlock-monitor
+Comment[en_US]=run xmodmap.fx at unlock
+Comment=run xmodmap.fx at unlock

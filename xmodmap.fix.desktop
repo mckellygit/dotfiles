@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+TryExec=/home/kellma02/bin/xmodmap.fix
+Exec=/home/kellma02/bin/xmodmap.fix
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name[en_US]=ctrl-space-enter
+Name=ctrl-space-enter
+Comment[en_US]=Left side <CR> for browsers
+Comment=Left side <CR> for browsers
