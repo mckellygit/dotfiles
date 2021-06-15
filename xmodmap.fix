@@ -1,10 +1,23 @@
 #!/bin/bash
 
+logfile=/tmp/xmodmap.log
+
+log() {
+    echo $(date +%Y-%m-%d\ %X) -- $USER -- "$@" >> ${logfile}
+}
+
 sleep 5
+
+log running xrdb command
+
 xrdb -load ~/.Xresources
-xmodmap ~/.Xmodmap
+
+#xmodmap ~/.Xmodmap
+
+log running xhost command
 
 # to try and eliminate msg: Invalid MIT-MAGIC-COOKIE-1 key ...
 # when using sudo vim (gvim) ...
 xhost +local: > /dev/null 2>&1
 
+log xmodmap completed
