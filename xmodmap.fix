@@ -10,7 +10,7 @@ sleep 5
 
 log running xrdb command
 
-xrdb -load ~/.Xresources
+xrdb -load /home/kellma02/.Xresources
 
 #xmodmap ~/.Xmodmap
 
