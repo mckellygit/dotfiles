@@ -32,6 +32,34 @@ cd ~/Downloads/vim_bundles
 
 # ---------------------
 
+# rtags
+#   git https://github.com/Andersbakken/rtags.git
+#   git smu
+#   mkdir build; cd build
+#   CC=clang-9 CXX=clang++-9 cmake -DCMAKE_CXX_FLAGS=-isystem\ /usr/lib/llvm-9/include -DCMAKE_EXPORT_COMPILE_COMMANDS=1 ..
+#   make
+#   rc -q
+#   rm -f /tmp/rdm.log
+#   smi
+
+# ccache
+#   git clone https://github.com/ccache/ccache.git
+#   mkdir build; cd build
+#   cmake -DZSTD_FROM_INTERNET=ON ..
+#   smi
+
+# cgdb
+#   git clone git@github.com-mckelly:mckellygit/cgdb.git 
+#   orig:
+#   git clone https://github.com/cgdb/cgdb.git
+#   ./configure CXXFLAGS="-g -O2" --with-readline=/usr/local --with-ncurses=/usr/local
+
+# zsh-autosuggestions
+#   git clone https://github.com/zsh-users/zsh-autosuggestions
+
+# byobu
+#   git clone https://github.com/dustinkirkland/byobu.git
+
 # FlameGraph
 #   git clone https://github.com/brendangregg/FlameGraph.git
 
@@ -46,12 +74,12 @@ cd ~/Downloads/vim_bundles
 #   sud0 mv ack /usr/local/bin
 #   ln -s /usr/local/bin/ack /usr/local/bin/ack-grep
 
-# ag:
+# ag: (the_silver_searcher)
 #   sudo apt-get install silversearcher-ag
 #   -or-
 #   git clone https://github.com/ggreer/the_silver_searcher.git
 
-# rg:
+# rg: (ripgrep)
 #   git clone https://github.com/BurntSushi/ripgrep
 #   rustup override set stable
 #   rustup update stable
@@ -94,6 +122,8 @@ cd ~/Downloads/vim_bundles
 #   cargo test
 
 # tig:
+#   git clone git@github.com-mckelly:mckellygit/tig.git
+#   orig:
 #   git clone https://github.com/jonas/tig.git
 #   ./autogen.sh
 #   ./configure --prefix=/usr/local
@@ -125,9 +155,6 @@ cd ~/Downloads/vim_bundles
 #   cp extra/completions/alacritty.bash ~/.bash_completion/alacritty
 #   echo "source ~/.bash_completion/alacritty" >> ~/.bashrc
 
-# xsel:
-#   git clone https://github.com/kfish/xsel.git
-
 # rxvt:
 #   sudo apt-get install rxvt-unicode
 #   -or-
@@ -157,6 +184,9 @@ cd ~/Downloads/vim_bundles
 # tmux:
 #   git clone https://github.com/tmux/tmux.git
 
+# vifm:
+#   git clone https://github.com/vifm/vifm.git
+
 # ==================================
 
 # vim:
@@ -165,33 +195,32 @@ cd ~/Downloads/vim_bundles
 # neovim:
 #   git clone https://github.com/neovim/neovim.git
 
+# kitty:
+#   sudo -s
+#   curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin dest=/usr/local launch=n
+#   git clone https://github.com/kovidgoyal/kitty.git
+
 # ==================================
-
-# vifm:
-#   git clone https://github.com/vifm/vifm.git
-
-# lf:
-#   cd ~
-#   env CGO_ENABLED=0 GO111MODULE=on go get -u -ldflags="-s -w" github.com/gokcehan/lf
-
-# dog: (nslookup/dig alternative)
-#   git clone https://github.com/ogham/dog.git
 
 # lazygit:
 #   cd ~
 #   go get github.com/jesseduffield/lazygit
 
-# gitui:
-#   git clone git@github.com-mckelly:extrawurst/gitui.git
+# lf:
+#   cd ~
+#   env CGO_ENABLED=0 GO111MODULE=on go get -u -ldflags="-s -w" github.com/gokcehan/lf
 
 # st: (simple terminal)
+#   git clone git@github.com-mckelly:mckellygit/st.git
+#   upstream:
+#   git clone git@github.com-mckelly:LukeSmithxyz/st.git
+#   orig:
 #   git clone https://git.suckless.org/st
+
+# ==================================
 
 # htop:
 #   git clone git@github.com-mckelly:htop-dev/htop.git
-
-# kakoune:
-#   git clone https://github.com/mawww/kakoune.git
 
 # nixnote:
 #   https://github.com/robert7/nixnote2.git
@@ -210,13 +239,20 @@ cd ~/Downloads/vim_bundles
 #   sudo apt update
 #   sudo apt install vivaldi-stable
 
+# dog: (nslookup/dig alternative)
+#   git clone https://github.com/ogham/dog.git
+
+# gitui:
+#   git clone git@github.com-mckelly:extrawurst/gitui.git
+
+# kakoune:
+#   git clone https://github.com/mawww/kakoune.git
+
+# xsel:
+#   git clone https://github.com/kfish/xsel.git
+
 # standard notes
 #   TBD
-
-# kitty:
-#   sudo -s
-#   curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin dest=/usr/local
-#   https://github.com/kovidgoyal/kitty.git
 
 # ---------------------
 
