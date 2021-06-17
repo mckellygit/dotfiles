@@ -6,6 +6,6 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
 case "${1}" in
     resume|thaw)
-        /home/kellma02/bin/xmodmap.fix
+        sudo -u kellma02 env DISPLAY=:0 /home/kellma02/bin/xmodmap.fix
 ;;
 esac
