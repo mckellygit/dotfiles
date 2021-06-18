@@ -1,0 +1,13 @@
+[Unit]
+Description=run mck_resume on resume or thaw
+After=suspend.target
+
+[Service]
+User=root
+Type=oneshot
+ExecStart=/home/kellma02/bin/mck_resume resume
+TimeoutSec=0
+StandardOutput=syslog
+
+[Install]
+WantedBy=suspend.target

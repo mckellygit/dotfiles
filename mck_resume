@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# /etc/systemd/system/mck_resume.service
+
+# sudo systemctl enable mck_resume
+
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+
+case "${1}" in
+    resume)
+        sudo -u kellma02 env DISPLAY=:0 /home/kellma02/bin/xmodmap.fix
+;;
+esac
