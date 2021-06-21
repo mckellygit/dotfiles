@@ -4554,7 +4554,7 @@ imap <silent> <C-LeftMouse> <C-\><C-o>:let @i="2"<CR><LeftMouse>
 function! s:Delay(arg) abort
     if a:arg == 1
         silent exe "normal! gv"
-        redraw
+        "redraw
     endif
     if (exists("g:use_system_copy") && g:use_system_copy > 0) || (!exists("g:use_system_copy"))
         let clipcmd = ''
