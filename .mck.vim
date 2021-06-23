@@ -3897,7 +3897,10 @@ endif
 "vnoremap <silent> <C-x> "*d<LeftRelease>
 " NOTE: <C-x>] may be mapped above for terminal ...
 nnoremap <C-x> <Nop>
-vmap <expr> <C-x> (&buftype == 'terminal') ? '<Nop>' : 'tx'
+" NOTE: seems more logical/safe to have <C-x> quit than cut ?
+"vmap <expr> <C-x> (&buftype == 'terminal') ? '<Nop>' : 'tx'
+"vmap <expr> <C-x> (&buftype == 'terminal') ? '<Nop>' : '<Esc>'
+vmap <C-x> <Nop>
 
 " ---------------
 
@@ -4013,7 +4016,7 @@ nmap <C-q> <Nop>
 " insert we need 2 key stokes - q + <Esc> ...
 "xnoremap q <Esc>
 xnoremap <silent> q     <C-\><C-n>:<C-u>call <SID>MyVisQ()<CR>
-xnoremap <silent> Q     <C-\><C-n>:<C-u>call <SID>MyVisQ()<CR>
+"xnoremap <silent> Q     <C-\><C-n>:<C-u>call <SID>MyVisQ()<CR>
 xnoremap <silent> <C-q> <C-\><C-n>:<C-u>call <SID>MyVisQ()<CR>
 
 function! s:MyVisQ()
@@ -5038,9 +5041,9 @@ set tabstop=4
 " Don't use Ex mode, use Q for formatting
 " map Q gq
 " No, use Q (instead of q) for recording (@ for playback)
-" Qx to record to register x
+" <Leader>Qx to record to register x
 " enter keys/cmds ...
-" Q to end recording
+" <Leader>Q to end recording
 " 20@x to playback for 20 times ...
 noremap Q <Nop>
 noremap <silent> <Leader>Q q

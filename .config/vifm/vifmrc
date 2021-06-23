@@ -507,6 +507,10 @@ nnoremap <c-u> <c-w>x
 " ------------------------------------------------------------------------------
 " ------------------------------------------------------------------------------
 
+" to scroll preview without entering ...
+nnoremap F             <C-w>w<C-f><C-w>w
+nnoremap B             <C-w>w<C-b><C-w>w
+
 nnoremap qq            :q<cr>
 nnoremap \qq           :q<cr>
 nnoremap \xc           :q<cr>
