@@ -59,6 +59,11 @@ trap "if [[ -n \"$HISTFILE\" ]] ; then merge_zhist ; rm -f $HISTFILE; fi" SIGTER
 
 # --------------
 
+# if we wanted to have some aliases in scripts (non-interactive) ...
+export BASH_ENV=~/.bash_git_alias
+
+# --------------
+
 unsetopt beep
 
 # allow # on command line

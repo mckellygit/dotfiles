@@ -359,6 +359,14 @@ endfunction
 "   let msg = 'buf ' . i
 "   call <SID>LogIt(msg)
 
+" ----------------
+" to have system('git') and !git be ~/bin/git ...
+" seemingly not needed if bash/zsh non-interactive alias is configured (BASH_ENV / .zshenv)
+"let opath = $PATH
+"let hpath = $HOME
+"let npath = hpath . '/bin:' . opath
+"let $PATH = npath
+
 " ack ------------
 "let g:ackprg = 'ack -k --nogroup --nocolor --column --smart-case --follow'
 " use ag (silver-searcher) instead of ack, if possible

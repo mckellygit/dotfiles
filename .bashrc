@@ -3,7 +3,7 @@
 # for examples
 
 # if we wanted to have some aliases in scripts (non-interactive) ...
-#export BASH_ENV=~/.bash_git_alias
+export BASH_ENV=~/.bash_git_alias
 
 # If not running interactively, don't do anything
 case $- in
