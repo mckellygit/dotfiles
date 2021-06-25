@@ -1,5 +1,7 @@
 #!/bin/bash
 
+git() { $HOME/bin/git "$@"; }
+
 # functions {{{
 function help {
    local scriptname="$(basename $0)"

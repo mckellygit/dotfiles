@@ -1,5 +1,7 @@
 #!/bin/bash
 
+git() { $HOME/bin/git "$@"; }
+
 cd ~/Downloads
 for d in fd the_silver_searcher ripgrep tmux vifm rtags ccache cgdb tig alacritty zsh-autosuggestions
 do
@@ -251,8 +253,14 @@ cd ~/Downloads/vim_bundles
 # xsel:
 #   git clone https://github.com/kfish/xsel.git
 
-# standard notes
+# standard notes:
 #   TBD
+
+# CMake:
+#   https://github.com/Kitware/CMake.git
+
+# zsh:
+#   https://github.com/zsh-users/zsh.git
 
 # ---------------------
 

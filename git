@@ -1,16 +1,19 @@
 #!/bin/bash
 
+#echo "here"
+
 trap "rm -f ~/.gitcmd-lock" EXIT SIGINT SIGTERM SIGQUIT
 
-(
-    flock 300
-    if [[ $1 == "diff" ]]; then
-        shift
-        command git dless "$@"
-    elif [[ $1 == "log" ]]; then
-        shift
-        command git llog "$@"
-    else
-        command git "$@"
-    fi
-) 300>~/.gitcmd-lock
+exec {lock_fd}>~/.gitcmd-lock || exit 1
+flock "$lock_fd" || { echo "ERROR: flock() failed." >&2; exit 1; }
+
+if [[ $1 == "diff" ]]; then
+    shift
+    command git dless "$@"
+elif [[ $1 == "log" ]]; then
+    shift
+    command git llog "$@"
+else
+    command git "$@"
+fi
+
