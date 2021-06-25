@@ -192,10 +192,8 @@ alias rg='command rg --color=always --smart-case --hidden --iglob !".git" '
 # ------------------
 
 # cannot override builtin git diff with git cmds/aliases so do it this way ...
-# also add git log
-
-XXgit() { if [[ $1 == "diff" ]]; then shift ; command git dless "$@" ; elif [[ $1 == "log" ]]; then shift ; command git llog "$@" ; else command git "$@"; fi }
-
+# git is an alias in the BASH_ENV ~/.bash_git_alias file so it is always sourced (non-interactive shells/scripts)
+# do we need this ?  Since its already an alias ??
 git() { $HOME/bin/git "$@"; }
 
 # ------------------

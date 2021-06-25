@@ -59,7 +59,9 @@ trap "if [[ -n \"$HISTFILE\" ]] ; then merge_zhist ; rm -f $HISTFILE; fi" SIGTER
 
 # --------------
 
-# if we wanted to have some aliases in scripts (non-interactive) ...
+# git is an alias in the .zshenv file so it is always sourced (non-interactive shells/scripts)
+
+# if we wanted to have some aliases in bash scripts (non-interactive) ...
 export BASH_ENV=~/.bash_git_alias
 
 # --------------
@@ -670,22 +672,16 @@ alias rg='command rg --color=always --smart-case --hidden --iglob !".git" '
 
 #zmodload zsh/system
 
-XXgit() {
-    local lockvar
-    touch ~/.gitcmd-lock
-    zsystem flock -f lockvar ~/.gitcmd-lock
-    if [[ $1 == "diff" ]]; then
-        shift
-        command git dless "$@"
-    elif [[ $1 == "log" ]]; then
-        shift
-        command git llog "$@"
-    else
-        command git "$@"
-    fi
-    zsystem flock -u $lockvar
-}
+#{
+#    local lockvar
+#    touch ~/.gitcmd-lock
+#    zsystem flock -f lockvar ~/.gitcmd-lock
+#    ...
+#    zsystem flock -u $lockvar
+#}
 
+# git is an alias in the .zshenv file so it is always sourced (non-interactive shells/scripts)
+# do we need this ?  Since its already an alias ??
 alias git='~/bin/git'
 
 # ------------------
