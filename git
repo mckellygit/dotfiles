@@ -1,16 +1,18 @@
 #!/bin/bash
 
-trap "rm -f ~/.gitcmd-lock" EXIT SIGINT SIGTERM SIGQUIT
+unset BASH_ENV
+shopt -u expand_aliases
 
-(
-    flock 300
-    if [[ $1 == "diff" ]]; then
-        shift
-        command git dless "$@"
-    elif [[ $1 == "log" ]]; then
-        shift
-        command git llog "$@"
-    else
-        command git "$@"
-    fi
-) 300>~/.gitcmd-lock
+# exclusive lock on this script ...
+[ "${FLOCKER}" != "$0" ] && exec env FLOCKER="$0" flock -e "$0" "$0" "$@" || :
+
+if [[ $1 == "diff" ]]; then
+    shift
+    command git dless "$@"
+elif [[ $1 == "log" ]]; then
+    shift
+    command git llog "$@"
+else
+    command git "$@"
+fi
+

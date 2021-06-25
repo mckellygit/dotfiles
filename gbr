@@ -1,4 +1,6 @@
 #!/bin/bash
 
+git() { $HOME/bin/git "$@"; }
+
 git branch -a --sort=-committerdate | fzf-tmux -r | awk '{print $NF}'
 

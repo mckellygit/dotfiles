@@ -1,5 +1,7 @@
 #!/bin/bash
 
+git() { $HOME/bin/git "$@"; }
+
 dbg=0
 
 tfile1="/tmp/.git-status1$$.tmp"

@@ -2,6 +2,9 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
+# if we wanted to have some aliases in scripts (non-interactive) ...
+export BASH_ENV=~/.bash_git_alias
+
 # If not running interactively, don't do anything
 case $- in
     *i*) ;;
@@ -193,7 +196,7 @@ alias rg='command rg --color=always --smart-case --hidden --iglob !".git" '
 
 XXgit() { if [[ $1 == "diff" ]]; then shift ; command git dless "$@" ; elif [[ $1 == "log" ]]; then shift ; command git llog "$@" ; else command git "$@"; fi }
 
-alias git="$HOME/bin/git"
+git() { $HOME/bin/git "$@"; }
 
 # ------------------
 

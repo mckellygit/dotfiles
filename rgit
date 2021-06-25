@@ -1,5 +1,7 @@
 #!/bin/bash
 
+git() { $HOME/bin/git "$@"; }
+
 if [[ $# -lt 1 ]] ; then
     echo "Error, missing arg(s) ..."
     exit 1

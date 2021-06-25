@@ -1,0 +1,3 @@
+
+alias git='~/bin/git'
+

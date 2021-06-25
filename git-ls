@@ -1,5 +1,8 @@
 #!/bin/bash
 
+unset BASH_ENV
+shopt -u expand_aliases
+
 gdir=""
 gdir=$(git rev-parse --show-superproject-working-tree 2> /dev/null)
 if [[ -z "${gdir}" ]]; then

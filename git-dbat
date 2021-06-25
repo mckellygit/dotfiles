@@ -1,5 +1,8 @@
 #!/bin/bash
 
+unset BASH_ENV
+shopt -u expand_aliases
+
 # NOTE: there is also:
 # git diff --name-only --diff-filter=d | xargs bat --diff
 

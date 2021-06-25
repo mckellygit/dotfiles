@@ -1,4 +1,6 @@
 #!/bin/bash
 
+git() { $HOME/bin/git "$@"; }
+
 git --no-pager diff --color=always --no-index -- $1 $2 | tail -n +5
 

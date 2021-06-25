@@ -1,0 +1,5 @@
+
+shopt -s expand_aliases
+
+alias git='~/bin/git'
+

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+git() { $HOME/bin/git "$@"; }
+
 list=$(ls -1d .[a-z]*/.git */.git 2>/dev/null | awk -F / '{print $1}')
 
 while read -r dir
