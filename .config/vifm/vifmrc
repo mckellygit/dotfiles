@@ -507,9 +507,27 @@ nnoremap <c-u> <c-w>x
 " ------------------------------------------------------------------------------
 " ------------------------------------------------------------------------------
 
+" NOTE: <S-Up/Down> do not seem to be mappable ...
+
 " to scroll preview without entering ...
 nnoremap F             <C-w>w<C-f><C-w>w
 nnoremap B             <C-w>w<C-b><C-w>w
+
+nnoremap J             <C-w>w10j<C-w>w
+nnoremap K             <C-w>w10k<C-w>w
+
+nnoremap <C-j>         <C-w>w10j<C-w>w
+nnoremap <C-k>         <C-w>w10k<C-w>w
+
+" <C-Down/Up>
+nnoremap <Esc>[1;5B    <C-w>w10j<C-w>w
+nnoremap <Esc>[1;5A    <C-w>w10k<C-w>w
+
+" <A-Down/Up>
+nnoremap <Esc>[1;3B    <C-w>w10j<C-w>w
+nnoremap <Esc>[1;3A    <C-w>w10k<C-w>w
+
+" --------
 
 nnoremap qq            :q<cr>
 nnoremap \qq           :q<cr>
@@ -588,6 +606,13 @@ qnoremap <M-j>         5j
 qnoremap <Esc>j        5j
 qnoremap j           5j
 
+" <A-S-k/j> ... <A-K/J>
+qnoremap <Esc>K        10k
+qnoremap <Esc>J        10j
+
+qnoremap K             5k
+qnoremap J             5j
+
 " <C-A-k>
 qnoremap <M-C-K>       5k
 qnoremap <Esc><C-k>    5k
@@ -609,14 +634,15 @@ qnoremap <Esc><CR>     k
 qnoremap <CR>        k
 qnoremap <C-CR>        j
 
+" <C-S-j/k>
+qnoremap <C-_>J        10j
+qnoremap <C-_>K        10k
+
 " <C-A-Return>
 qnoremap <C-^><CR>     k
 
-nnoremap <C-j>         j
-nnoremap <C-k>         k
-
-qnoremap <C-j>         j
-qnoremap <C-k>         k
+qnoremap <C-j>         10j
+qnoremap <C-k>         10k
 
 qnoremap g             <nop>
 qnoremap gg            1G0
@@ -643,6 +669,10 @@ qnoremap <end>         <nop>
 qnoremap <c-end>       G0
 qnoremap <esc>[1;5F    G0
 qnoremap [1;5F       G0
+
+" <A-Down/Up>
+qnoremap <esc>[1;3B    10j
+qnoremap <esc>[1;3A    10k
 
 " --------------
 
