@@ -359,6 +359,16 @@ endfunction
 "   let msg = 'buf ' . i
 "   call <SID>LogIt(msg)
 
+" kitty.vim syntax highlighting
+function! s:checkitty()
+    let f = expand('%:t')
+    if f ==# 'kitty.conf'
+        set syntax=kitty
+        set ft=kitty
+    endif
+endfunction
+autocmd BufWinEnter *.conf call s:checkitty()
+
 " ----------------
 " to have system('git') and !git be ~/bin/git ...
 " seemingly not needed if bash/zsh non-interactive alias is configured (BASH_ENV / .zshenv)
