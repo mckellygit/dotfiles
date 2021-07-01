@@ -8,10 +8,12 @@
 "	      for Amiga:  s:.vimrc
 "  for MS-DOS and Win32:  $VIM\_vimrc
 "	    for OpenVMS:  sys$login:.vimrc
-
+"
 " Use Vim settings, rather then Vi settings (much better!).
 " This must be first, because it changes other options as a side effect.
 set nocompatible
+
+" ====================================================
 
 " skip loading this plugin for now ...
 let loaded_bufkill = 1
@@ -25,7 +27,9 @@ let Cscope_Keymap = 0
 
 let g:in_gv2 = 0
 
-"" vundle ------------------------------
+" ====================================================
+" --- vundle -----------------------------------------
+" ====================================================
 filetype off              " required
 "" set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -344,11 +348,16 @@ filetype plugin indent on " required
 ""
 "" see :h vundle for more details or wiki for FAQ
 "" Put your non-Plugin stuff after this line
-"" vundle ------------------------------
+"
+" ====================================================
+" --- vundle -----------------------------------------
+" ====================================================
 
 " use :Silentrun <cmd> to run <cmd> without prompting:
 " Press ENTER or type command to continue
 command! -nargs=1 Silentrun execute ':silent !' . <q-args> | execute ':redraw!'
+
+" ----------------
 
 function! s:LogIt(message)
   silent execute '!echo "'
@@ -359,27 +368,31 @@ endfunction
 "   let msg = 'buf ' . i
 "   call <SID>LogIt(msg)
 
-" kitty.vim syntax highlighting
-" unknown why rtp does not put .vim/after at end
-" or why we cannot setfiletype early so it is not overridden
-" or if we can override ft with a set ft=kitty after polyglot
-" or the entire .vim/filetype.vim / ftdetect / ftplugin / after logic
-function! s:checkitty()
-    let f = expand('%:t')
-    if f ==# 'kitty.conf'
-        set syntax=kitty
-        set ft=kitty
-    endif
-endfunction
-autocmd BufWinEnter *.conf call s:checkitty()
+" ----------------
+
+" work-around syntax highlighting, if putting <filetype>.vim
+" into .vim/syntax and .vimn/plugin dirs does not work ...
+"function! s:checkitty()
+"    let f = expand('%:t')
+"    if f ==# 'kitty.conf'
+"        set syntax=kitty
+"        set ft=kitty
+"    endif
+"endfunction
+"autocmd BufWinEnter *.conf call s:checkitty()
 
 " ----------------
+
 " to have system('git') and !git be ~/bin/git ...
-" seemingly not needed if bash/zsh non-interactive alias is configured (BASH_ENV / .zshenv)
+" not needed if bash/zsh non-interactive alias is configured (BASH_ENV / .zshenv)
 "let opath = $PATH
 "let hpath = $HOME
 "let npath = hpath . '/bin:' . opath
 "let $PATH = npath
+
+" ====================================================
+" --- plugin configurations --------------------------
+" ====================================================
 
 " ack ------------
 "let g:ackprg = 'ack -k --nogroup --nocolor --column --smart-case --follow'
@@ -2370,10 +2383,12 @@ let g:cursorhold_updatetime = 10000
 " fixCursorHold ----
 
 " ====================================================
-" ====================================================
+" --- plugin configurations --------------------------
 " ====================================================
 
-" --- CLIPBOARD ---
+" ====================================================
+" --- CLIPBOARD --------------------------------------
+" ====================================================
 
 " save previous reg + to reg x for exchange/paste/etc
 vnoremap <silent> zy    y
@@ -2435,7 +2450,9 @@ if has("nvim")
         \ }
 endif
 
-" --- CLIPBOARD ---
+" ====================================================
+" --- CLIPBOARD --------------------------------------
+" ====================================================
 
 " improves color highlighing with dark terminals
 set background=dark
@@ -3039,7 +3056,9 @@ set mouse=a
 
 " use shift + left click to get terminal selection (mouse=~a)
 
-" --- CLIPBOARD ---
+" ====================================================
+" --- CLIPBOARD --------------------------------------
+" ====================================================
 
 " selection '*' (XA_PRIMARY/unnamed) (ie mouse 'middle-click')
 " clipboard '+' (XA_CLIPBOARD/unnamedplus) (ie ctrl-shift-c/v, cut/paste)
@@ -3159,11 +3178,11 @@ if !has("nvim")
     set clipboard^=autoselectml guioptions+=A
 endif
 
-" --- CLIPBOARD ---
+" ====================================================
+" --- CLIPBOARD --------------------------------------
+" ====================================================
 
-" ------------------------------
-
-" KEYMAP -------------
+" --- KEYMAP -------------
 
 " NOTE: nvim handles <M-y> mapping ok, vim only sees <Esc>y ...
 " NOTE: it seems we want terminal to send <C-b> instead of <C-B>, at least with xterm
@@ -3171,7 +3190,7 @@ endif
 " NOTE: do we send <C-b> or <C-B> ?
 " NOTE: it seems <M-C-B> works so far for lower case (no shift) b ...
 
-" KEYMAP -------------
+" --- KEYMAP -------------
 
 " NOTE: use MapFastKeycode(<Fxx>, ...) to remove explicit leading <Esc> from mappings ...
 " then with no mappings starting with <Esc> we can increase ttimeoutlen for mapped and
