@@ -360,6 +360,10 @@ endfunction
 "   call <SID>LogIt(msg)
 
 " kitty.vim syntax highlighting
+" unknown why rtp does not put .vim/after at end
+" or why we cannot setfiletype early so it is not overridden
+" or if we can override ft with a set ft=kitty after polyglot
+" or the entire .vim/filetype.vim / ftdetect / ftplugin / after logic
 function! s:checkitty()
     let f = expand('%:t')
     if f ==# 'kitty.conf'
