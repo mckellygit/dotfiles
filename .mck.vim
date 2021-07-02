@@ -317,11 +317,16 @@ Plugin 'ncm2/float-preview.nvim'
 "Plugin 'rickhowe/diffchar.vim'
 "
 " nvim plugin for supporting block paste (C-v) with unnamed[plus]
-if !has("nvim")
+if !has("nvimSKIP_MINIYANK")
   let g:loaded_miniyank = 1
 endif
 "Plugin 'bfredl/nvim-miniyank'
-Plugin 'mckellygit/nvim-miniyank'
+" ----------
+" NOTE: not needed anymore since nvim v0.5.0+
+"Plugin 'mckellygit/nvim-miniyank'
+" ----------
+" there is also -
+"Plugin 'Rasukarusan/nvim-block-paste'
 "
 " vim-better-whitespace
 "Plugin 'ntpeters/vim-better-whitespace'
@@ -2357,7 +2362,7 @@ endfunction
 " diffchar ---------
 
 " nvim-miniyank ----
-if has("nvim")
+if has("nvimSKIP_MINIYANK")
     map p <Plug>(miniyank-autoput)
     map P <Plug>(miniyank-autoPut)
     let g:miniyank_maxitems = 100
@@ -4110,7 +4115,7 @@ endfunction
 "nnoremap <silent> <buffer> <expr> p (&buftype == 'terminal') ? '<Nop>' : ':call <SID>MyPasteNoJump('p')<CR>'
 "nnoremap <silent> <buffer> <expr> P (&buftype == 'terminal') ? '<Nop>' : ':call <SID>MyPasteNoJump('P`[')<CR>'
 
-if has("nvim") " miniyank
+if has("nvimSKIP_MINIYANK") " miniyank
     nmap <silent> <buffer> <expr> P (&buftype == 'terminal') ? '<Nop>' : '<Plug>(miniyank-autoPut)`['
 else
     nmap <silent> <buffer> <expr> P (&buftype == 'terminal') ? '<Nop>' : 'P`['
@@ -4119,7 +4124,7 @@ endif
 " Make p in Visual mode replace the selected text with the previous + register.
 " NOTE: see also <Leader>zx / <Leader>zp above ...
 "vnoremap <silent> <buffer> <expr> p (&buftype == 'terminal') ? '<Nop>' : ':<C-u>call <SID>SwapReg(0)<CR>gv"_x"xP'
-if has("nvim") " miniyank
+if has("nvimSKIP_MINIYANK") " miniyank
     vmap <silent> <buffer> <expr> p (&buftype == 'terminal') ? '<Nop>' : '"_x"*<Plug>(miniyank-autoPut)'
     vmap <silent> <buffer> <expr> P (&buftype == 'terminal') ? '<Nop>' : '"_x"*<Plug>(miniyank-autoPut)'
 else
@@ -4130,7 +4135,7 @@ endif
 " skip <F34> as a vis-mode 'replace' ...
 "vnoremap <silent> <buffer> <expr> <F34>   (&buftype == 'terminal') ? '<Nop>' : 's'
 
-if has("nvim") " miniyank
+if has("nvimSKIP_MINIYANK") " miniyank
     vmap <silent> <buffer> <expr> <F34>      (&buftype == 'terminal') ? '<Nop>' : '"_x"*<Plug>(miniyank-autoPut)'
     vmap <silent> <buffer> <expr> <S-Insert> (&buftype == 'terminal') ? '<Nop>' : '"_x"*<Plug>(miniyank-autoPut)'
     vmap <silent> <buffer> <expr> <F35>        (&buftype == 'terminal') ? '<Nop>' : '"_x"*<Plug>(miniyank-autoPut)'
@@ -4834,7 +4839,7 @@ nnoremap sC "fX"fp
 " exchange silent word (from beg) with clipboard
 " (need silent <CR> instead of <bar> here)
 nnoremap <silent> <Leader>wx "_ciw<C-r>*<Esc>
-if has("nvim") " miniyank
+if has("nvimSKIP_MINIYANK") " miniyank
     vmap <silent> <Leader>wx "_x"*<Plug>(miniyank-autoPut)
 else
     vmap <silent> <Leader>wx "_x"*P
@@ -4842,7 +4847,7 @@ endif
 
 " replace at cursor pos with clipboard (not from beg of word like \we above)
 nnoremap <silent> <Leader>wr "_cw<C-r>*<Esc>
-if has("nvim") " miniyank
+if has("nvimSKIP_MINIYANK") " miniyank
     vmap <silent> <Leader>wr "_x"*<Plug>(miniyank-autoPut)
 else
     vmap <silent> <Leader>wr "_x"*P

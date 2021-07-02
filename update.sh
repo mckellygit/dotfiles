@@ -11,15 +11,18 @@ list=$(ls -d */)
 
 while read -r item
 do
-  cd $item
-  rc=$?
-  if [[ $rc -eq 0 ]] ; then
-    echo "... $item ..."
-    git fetch upstream
-    gitinfo
-    if [[ $do_pull -eq 1 ]] ; then
-      git pull
+    if [[ "$item" != "unused/" ]] ; then
+        cd $item
+        rc=$?
+        if [[ $rc -eq 0 ]] ; then
+            echo "... $item ..."
+            #git remote -v
+            git fetch upstream
+            gitinfo
+            if [[ $do_pull -eq 1 ]] ; then
+                git pull
+            fi
+            cd ..
+        fi
     fi
-    cd ..
-  fi
 done <<< "$list"
