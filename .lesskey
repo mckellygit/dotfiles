@@ -19,8 +19,8 @@
 \e[1;5D  noaction 10\e(
 \\1  noaction 20^F
 \\`  noaction 20^B
-\ej  noaction 5j
-\ek  noaction 5k
+\ej  noaction j
+\ek  noaction k
 j  noaction 5^F
 k  noaction 5^B
 # use ^O instead of ^J (or ^M or \n or \r)

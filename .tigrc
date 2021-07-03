@@ -98,10 +98,10 @@ bind generic   <Ctrl-_>J    move-half-page-down
 # SPECIAL: some terminals might map C-S-k to <C-_>K ...
 bind generic   <Ctrl-_>K    move-half-page-up
 #
-bind generic   <Esc>j       scroll-half-page-down
-bind generic   <Esc>k       scroll-half-page-up
-bind generic   <Esc>J       next
-bind generic   <Esc>K       previous
+bind generic   <Esc>j       move-down
+bind generic   <Esc>k       move-up
+bind generic   <Esc>J       scroll-half-page-down
+bind generic   <Esc>K       scroll-half-page-up
 # C-A-j -> <Ctrl-_>j, C-M-k -> <Ctrl-_>k
 bind generic   <Ctrl-_>j    scroll-half-page-down
 bind generic   <Ctrl-_>k    scroll-half-page-up

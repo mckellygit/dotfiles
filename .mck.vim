@@ -3444,19 +3444,20 @@ if has("nvim")
 endif
 
 " This used to be <S-Tab> but <A-a> seems better.
+" Or how about <A-`> ?
 " And with this, use <A-Up/Down/Right/Left> as app keys and not tmux ...
-call <SID>MapFastKeycode('<S-F28>',  "\ea", 128)
+call <SID>MapFastKeycode('<S-F28>',  "\e`", 128)
 nmap <S-F28> .
 vmap <S-F28> .
 cnoremap <S-F28> <C-v><Esc>a
 inoremap <S-F28> <C-v><Esc>a
 tnoremap <S-F28> <Esc>a
 if has("nvim")
-    nmap <M-a> .
-    vmap <M-a> .
-    cnoremap <S-F28> <M-a>
-    inoremap <S-F28> <M-a>
-    tnoremap <S-F28> <M-a>
+    nmap <M-`> .
+    vmap <M-`> .
+    cnoremap <S-F28> <M-`>
+    inoremap <S-F28> <M-`>
+    tnoremap <S-F28> <M-`>
 endif
 
 " <A-C-P> for fzf preview ...
@@ -5094,6 +5095,8 @@ set tabstop=4
 noremap Q <Nop>
 noremap <silent> <Leader>Q q
 nmap <silent> q <Nop>
+" nvim
+nnoremap <silent> <M-q> <Nop>
 " NOTE: q will be re-mapped later on ...
 
 " for block select beyond shorter line lengths
@@ -5137,33 +5140,49 @@ nnoremap <silent> Z<S-Right> 10zl10l
 vnoremap <silent> Z<S-Left>  10zh10h
 vnoremap <silent> Z<S-Right> 10zl10l
 
+" use <M-l> as l so we can do
+" <M-l> for right and then <M-`> for repeat prev cmd
+" and same for <M-h>
 " NOTE: wish we could send CSI mappings for these ...
-nnoremap <silent> <M-h>      10zh10h
-nnoremap <silent> <M-l>      10zl10l
-vnoremap <silent> <M-h>      10zh10h
-vnoremap <silent> <M-l>      10zl10l
+nnoremap <silent> <M-h>      h
+nnoremap <silent> <M-l>      l
+vnoremap <silent> <M-h>      h
+vnoremap <silent> <M-l>      l
+"nnoremap <silent> <M-h>      10zh10h
+"nnoremap <silent> <M-l>      10zl10l
+"vnoremap <silent> <M-h>      10zh10h
+"vnoremap <silent> <M-l>      10zl10l
 nnoremap <silent> <M-,>      10zh10h
 nnoremap <silent> <M-.>      10zl10l
 vnoremap <silent> <M-,>      10zh10h
 vnoremap <silent> <M-.>      10zl10l
 
-inoremap <silent> <M-h>      <C-\><C-o>10zh<C-\><C-o>10h
-inoremap <silent> <M-l>      <C-\><C-o>10zl<C-\><C-o>10l
+" to be consistent, <M-h>/<M-l> to move like h/l
+inoremap <silent> <M-h>      <C-\><C-o>h
+inoremap <silent> <M-l>      <C-\><C-o>l
+"inoremap <silent> <M-h>      <C-\><C-o>10zh<C-\><C-o>10h
+"inoremap <silent> <M-l>      <C-\><C-o>10zl<C-\><C-o>10l
 inoremap <silent> <M-,>      <C-\><C-o>10zh<C-\><C-o>10h
 inoremap <silent> <M-.>      <C-\><C-o>10zl<C-\><C-o>10l
 
 " NOTE: tmux may send <C-^> + char for these ...
-nnoremap <silent> <C-^>h     10zh10h
-nnoremap <silent> <C-^>l     10zl10l
-vnoremap <silent> <C-^>h     10zh10h
-vnoremap <silent> <C-^>l     10zl10l
+nnoremap <silent> <C-^>h     h
+nnoremap <silent> <C-^>l     l
+vnoremap <silent> <C-^>h     h
+vnoremap <silent> <C-^>l     l
+"nnoremap <silent> <C-^>h     10zh10h
+"nnoremap <silent> <C-^>l     10zl10l
+"vnoremap <silent> <C-^>h     10zh10h
+"vnoremap <silent> <C-^>l     10zl10l
 nnoremap <silent> <C-^>,     10zh10h
 nnoremap <silent> <C-^>.     10zl10l
 vnoremap <silent> <C-^>,     10zh10h
 vnoremap <silent> <C-^>.     10zl10l
 
-inoremap <silent> <C-^>h     <C-\><C-o>10zh<C-\><C-o>10h
-inoremap <silent> <C-^>l     <C-\><C-o>10zl<C-\><C-o>10l
+inoremap <silent> <C-^>h     <C-\><C-o>h
+inoremap <silent> <C-^>l     <C-\><C-o>l
+"inoremap <silent> <C-^>h     <C-\><C-o>10zh<C-\><C-o>10h
+"inoremap <silent> <C-^>l     <C-\><C-o>10zl<C-\><C-o>10l
 inoremap <silent> <C-^>,     <C-\><C-o>10zh<C-\><C-o>10h
 inoremap <silent> <C-^>.     <C-\><C-o>10zl<C-\><C-o>10l
 
@@ -5533,11 +5552,17 @@ inoremap <C-S-Down>  <C-\><C-o>5gj
 inoremap <C-S-Left>  <C-\><C-o>10gh
 inoremap <C-S-Right> <C-\><C-o>10gl
 
+" use <M-k> as gk so we can do
+" <M-k> for up and then <M-`> for repeat prev cmd
 call <SID>MapFastKeycode('<F30>',  "\ek", 30)
-noremap <F30> 5gk
-noremap <M-k> 5gk
-inoremap <F30> <C-\><C-o>5gk
-inoremap <M-k> <C-\><C-o>5gk
+noremap <F30> gk
+noremap <M-k> gk
+inoremap <F30> <C-\><C-o>gk
+inoremap <M-k> <C-\><C-o>gk
+"noremap <F30> 5gk
+"noremap <M-k> 5gk
+"inoremap <F30> <C-\><C-o>5gk
+"inoremap <M-k> <C-\><C-o>5gk
 if has("nvim")
     cnoremap <F30> <M-k>
     tnoremap <F30> <M-k>
@@ -5546,11 +5571,17 @@ else
     tnoremap <F30> <Esc>k
 endif
 
+" use <M-j> as gj so we can do
+" <M-j> for down and then <M-`> for repeat prev cmd
 call <SID>MapFastKeycode('<F31>',  "\ej", 31)
-noremap <F31> 5gj
-noremap <M-j> 5gj
-inoremap <F31> <C-\><C-o>5gj
-inoremap <M-j> <C-\><C-o>5gj
+noremap <F31> gj
+noremap <M-j> gj
+inoremap <F31> <C-\><C-o>gj
+inoremap <M-j> <C-\><C-o>gj
+"noremap <F31> 5gj
+"noremap <M-j> 5gj
+"inoremap <F31> <C-\><C-o>5gj
+"inoremap <M-j> <C-\><C-o>5gj
 if has("nvim")
     cnoremap <F31> <M-j>
     tnoremap <F31> <M-j>
@@ -5634,8 +5665,10 @@ endif
 " for scrollng/movement, similar to <M-j/J/k/K> ...
 
 " NOTE: wish we could send CSI mappings for these ...
- noremap <silent> <M-n>  <Nop>
- noremap <silent> <M-p>  <Nop>
+" use <M-n> as n so we can do
+" <M-n> for next search and then <M-`> to repeat prev cmd
+ noremap <silent> <M-n>  n
+ noremap <silent> <M-p>  N
  noremap <silent> <M-N>  <Nop>
  noremap <silent> <M-P>  <Nop>
 
@@ -5646,8 +5679,8 @@ inoremap <silent> <M-N>  <C-v><Esc>N
 inoremap <silent> <M-P>  <C-v><Esc>P
 
 " NOTE: tmux may send <C-^> + char for these ...
- noremap <silent> <C-^>n <Nop>
- noremap <silent> <C-^>p <Nop>
+ noremap <silent> <C-^>n n
+ noremap <silent> <C-^>p N
  noremap <silent> <C-^>N <Nop>
  noremap <silent> <C-^>P <Nop>
 
@@ -8054,7 +8087,7 @@ if &diff
   " set sidescroll=1 to help navigate smoothly when wrap is off
   set sidescroll=1
   " use zhh and lzl to scroll horizontal without moving cursor
-  " use Z<S-Right>/Z<S-Left> or <M-Right>/<M-Left> to scroll horizontally
+  " use Z<S-Right>/Z<S-Left> or <M-.>/<M-,> to scroll horizontally
   " or force wrap on in all windows ...
   "au VimEnter * if &diff | execute 'windo set wrap' | endif
   " but this can mess up alignment of long lines

@@ -186,8 +186,13 @@ alias stop_rdm='rc -q'
 # also could use -u or -U instead of --all-text
 #alias ag='\ag -U --hidden -- '
 # skip -- as we might want to add -i for case-insensitive etc. ...
-alias ag='command ag -U --hidden '
-alias rg='command rg --color=always --smart-case --hidden --iglob !".git" '
+#alias ag='command ag -U --hidden '
+#alias rg='command rg --color=always --smart-case --hidden --iglob !".git" '
+
+# use these instead of aliasas above, only because git is a custom command now
+# and ag git wont find anything, you need ag 'git' ...
+ag() { command ag -U --hidden "$@"; }
+rg() { command rg --color=always --smart-case --hidden --iglob !".git" "$@"; }
 
 # ------------------
 
