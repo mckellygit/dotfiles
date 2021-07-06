@@ -2815,7 +2815,7 @@ function s:Searchn() abort
   set nows
   try
     "exe "normal n"
-    exe "normal /\<CR>"
+    exe "silent normal /\<CR>"
     "redraw!
   catch /E384:/
 "   echohl WarningMsg
@@ -2826,6 +2826,10 @@ function s:Searchn() abort
       "exe "normal n"
       exe "normal /\<CR>"
       sleep 200m
+      " eat typeahead ...
+      while getchar(0)
+          sleep 1m
+      endwhile
       redraw!
     catch /E486:/
       echo ' '
@@ -2886,7 +2890,7 @@ function s:SearchN() abort
   set nows
   try
     "exe "normal N"
-    exe "normal ?\<CR>"
+    exe "silent normal ?\<CR>"
     "redraw!
   catch /E384:/
 "   echohl WarningMsg
@@ -2925,6 +2929,10 @@ function s:SearchN() abort
       "exe "normal N"
       exe "normal ?\<CR>"
       sleep 200m
+      " eat typeahead ...
+      while getchar(0)
+          sleep 1m
+      endwhile
       redraw!
     catch /E486:/
       echo ' '

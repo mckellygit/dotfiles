@@ -507,25 +507,67 @@ nnoremap <c-u> <c-w>x
 " ------------------------------------------------------------------------------
 " ------------------------------------------------------------------------------
 
+nnoremap <Space>       j
+nnoremap <BS>          k
+
+" <C-BS>
+nnoremap <C-^><BS>     <C-w>w10k<C-w>w
+nnoremap <C-^>       <C-w>w10k<C-w>w
+" <C-Space>
+nnoremap <C-@>         <C-w>w10j<C-w>w
+" also could be M-- instead of C-@
+nnoremap <M-->         <C-w>w10j<C-w>w
+nnoremap <Esc>-        <C-w>w10j<C-w>w
+nnoremap -           <C-w>w10j<C-w>w
+
+" <C-S-BS>
+nnoremap <C-_><BS>     <C-w>w10k<C-w>w
+nnoremap <C-_>       <C-w>w10k<C-w>w
+" <C-S-Space>
+nnoremap <C-_><Space>  <C-w>w10j<C-w>w
+
+" <S-BS>
+nnoremap <S-BS>        5k
+nnoremap <C-^><C-h>    5k
+nnoremap <C-^>       5k
+" <S-Space>
+nnoremap <C-^><Space>  5j
+
+" --------
+
 " NOTE: <S-Up/Down> do not seem to be mappable ...
 
 " to scroll preview without entering ...
 nnoremap F             <C-w>w<C-f><C-w>w
 nnoremap B             <C-w>w<C-b><C-w>w
 
-nnoremap J             <C-w>w10j<C-w>w
-nnoremap K             <C-w>w10k<C-w>w
+nnoremap J             5j
+nnoremap K             5k
 
 nnoremap <C-j>         <C-w>w10j<C-w>w
 nnoremap <C-k>         <C-w>w10k<C-w>w
 
 " <C-Down/Up>
-nnoremap <Esc>[1;5B    <C-w>w10j<C-w>w
-nnoremap <Esc>[1;5A    <C-w>w10k<C-w>w
+nnoremap <Esc>[1;5B    <C-w>w5j<C-w>w
+nnoremap <Esc>[1;5A    <C-w>w5k<C-w>w
 
 " <A-Down/Up>
 nnoremap <Esc>[1;3B    <C-w>w10j<C-w>w
 nnoremap <Esc>[1;3A    <C-w>w10k<C-w>w
+
+nnoremap \`            <C-w>w<C-u>w
+nnoremap \1            <C-w>w<C-d>w
+
+" <A-BS>
+nnoremap <M-BS>        <C-w>w10k<C-w>w
+nnoremap <Esc><BS>     <C-w>w10k<C-w>w
+nnoremap <BS>        <C-w>w10k<C-w>w
+nnoremap <Esc>       <C-w>w10k<C-w>w
+nnoremap           <C-w>w10k<C-w>w
+" <A-Space>
+nnoremap <M-Space>     <C-w>w10j<C-w>w
+nnoremap <Esc><Space>  <C-w>w10j<C-w>w
+nnoremap <Space>     <C-w>w10j<C-w>w
 
 " --------
 
