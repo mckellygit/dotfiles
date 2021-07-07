@@ -2831,8 +2831,11 @@ function s:Searchn() abort
           sleep 1m
       endwhile
       redraw!
+      if has("nvim")
+          echo "\r"
+      endif
     catch /E486:/
-      echo ' '
+      echo " "
       redraw
       echohl WarningMsg
       echo "E486: Pattern not found: " . l:stext
@@ -2859,8 +2862,11 @@ function s:Searchn() abort
           sleep 1m
       endwhile
       redraw!
+      if has("nvim")
+          echo "\r"
+      endif
     catch /E486:/
-      echo ' '
+      echo " "
       redraw
       echohl WarningMsg
       echo "E486: Pattern not found: " . l:stext
@@ -2906,8 +2912,11 @@ function s:SearchN() abort
           sleep 1m
       endwhile
       redraw!
+      if has("nvim")
+          echo "\r"
+      endif
     catch /E486:/
-      echo ' '
+      echo " "
       redraw
       echohl WarningMsg
       echo "E486: Pattern not found: " . l:stext
@@ -2934,8 +2943,11 @@ function s:SearchN() abort
           sleep 1m
       endwhile
       redraw!
+      if has("nvim")
+          echo "\r"
+      endif
     catch /E486:/
-      echo ' '
+      echo " "
       redraw
       echohl WarningMsg
       echo "E486: Pattern not found: " . l:stext
