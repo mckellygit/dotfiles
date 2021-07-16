@@ -6845,8 +6845,8 @@ autocmd BufReadPost quickfix nnoremap <silent> <buffer> <C-]> <Return>
 
 function s:IsTerminalFinished()
     " just to clear the cmdline of this function ...
-    echo "\r"
     redraw!
+    echo "\r"
     redir => lsout
     silent ls
     redir END
@@ -6864,8 +6864,8 @@ function s:IsTerminalFinished()
                     silent exec "normal :bdel! " . bnum . "\<CR>"
                 catch /.*/
                     " just to clear the cmdline of this function ...
-                    echo "\r"
                     redraw!
+                    echo "\r"
                 endtry
             endif
         endif
@@ -6876,8 +6876,8 @@ endfunction
 
 function s:CloseUtilWins()
     " just to clear the cmdline of this function ...
-    echo "\r"
     redraw!
+    echo "\r"
     ccl
     lcl
     pcl
@@ -7680,8 +7680,8 @@ inoremap <C-e> <End>
 
 function! SkipTerminalsQuitCmd(cmd) abort
     " just to clear the cmdline of this function ...
-    echo "\r"
     redraw!
+    echo "\r"
     let l:bmod = 0
     let l:doquit = 1
     for b in getbufinfo()
@@ -7712,8 +7712,8 @@ endfunction
 
 function! SkipTerminalsConfQA() abort
     " just to clear the cmdline of this function ...
-    echo "\r"
     redraw!
+    echo "\r"
     let l:bmod = 0
     let l:doquit = 1
     for b in getbufinfo()
@@ -7744,8 +7744,8 @@ endfunction
 
 function! s:QuitIfOnlyNoNameLeft() abort
     " just to clear the cmdline of this function ...
-    echo "\r"
     redraw!
+    echo "\r"
     if g:in_gv2 == 0
         quit
         return
@@ -7814,8 +7814,8 @@ nnoremap <silent> <Leader>xc            :<C-u>call SkipTerminalsQuitCmd("conf qa
 
 function! EndTerminalsConfQA() abort
     " just to clear the cmdline of this function ...
-    echo "\r"
     redraw!
+    echo "\r"
     for b in range(1, bufnr('$'))
         if bufexists(b) && buflisted(b)
             if getbufvar(b, '&buftype') ==# 'terminal'
@@ -7846,8 +7846,9 @@ au VimEnter * :Alias quitall call\ SkipTerminalsConfQA()
 
 function! MyQuit(arg) abort
     " just to clear the cmdline of this function ...
-    echo "\r"
+    echo "                                    "
     redraw!
+    echo "\r"
     if &buftype != 'terminal' && &buftype != 'popup'
         exe "conf " . a:arg
     endif
@@ -7899,8 +7900,8 @@ endfunction
 
 function Xdiff(arg)
     " just to clear the cmdline of this function ...
-    echo "\r"
     redraw!
+    echo "\r"
     windo call <SID>Xdiff1(a:arg)
     if a:arg != 1
         call MyQuit("conf qa")
@@ -8165,8 +8166,8 @@ nnoremap <silent> <Leader>lW :silent windo setlocal nowrap! nowrap?<CR>
 
 function! MyCQuit()
     " just to clear the cmdline of this function ...
-    echo "\r"
     redraw!
+    echo "\r"
     cquit 1
 endfunction
 
@@ -8232,8 +8233,8 @@ function MyNextOrQuit() abort
             return
         catch /.*/
             " just to clear the cmdline of this function ...
-            echo "\r"
             redraw!
+            echo "\r"
         endtry
         echohl Statement
         echo "Unable to :quit terminal (hide|bdel|bwipe buffer)"
@@ -8241,8 +8242,8 @@ function MyNextOrQuit() abort
         return
     endif
     " just to clear the cmdline of this function ...
-    echo "\r"
     redraw!
+    echo "\r"
     update
     try
         next
@@ -8268,8 +8269,8 @@ function s:ConfNextOrQuit() abort
             return
         catch /.*/
             " just to clear the cmdline of this function ...
-            echo "\r"
             redraw!
+            echo "\r"
         endtry
         echohl Statement
         echo "Unable to :quit terminal (hide|bdel|bwipe buffer)"
@@ -8290,8 +8291,8 @@ function s:ConfNextOrQuit() abort
         endif
     else
         " just to clear the cmdline of this function ...
-        echo "\r"
         redraw!
+        echo "\r"
     endif
     try
         next
