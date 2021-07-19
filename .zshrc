@@ -1108,6 +1108,9 @@ bindkey '^_/' ctrl-c-cmdline
 # terminals may have mapped C-S-<Space> to ^_<Space>
 bindkey '^_ ' autosuggest-accept
 
+# M-U to clear current autosuggest text
+bindkey "\eU" autosuggest-clear
+
 # terminals may have mapped S-<Space> to ^^<Space>
 bindkey -s '^^ ' ' '
 
