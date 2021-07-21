@@ -14,6 +14,58 @@ Host github.com
     User git
     IdentityFile ~/.ssh/id_rsa
 
+Host 1.2.*.*
+    ServerAliveInterval 120
+    ServerAliveCountMax 5
+    ForwardX11 yes
+    ForwardX11Trusted yes
+    ForwardAgent yes
+    HashKnownHosts no
+    ConnectTimeout 10
+    CheckHostIP no
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+    LogLevel ERROR
+
+Host 1.3.*.*
+    ServerAliveInterval 120
+    ServerAliveCountMax 5
+    ForwardX11 yes
+    ForwardX11Trusted yes
+    ForwardAgent yes
+    HashKnownHosts no
+    ConnectTimeout 10
+    CheckHostIP no
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+    LogLevel ERROR
+
+Host 1.4.*.*
+    ServerAliveInterval 120
+    ServerAliveCountMax 5
+    ForwardX11 yes
+    ForwardX11Trusted yes
+    ForwardAgent yes
+    HashKnownHosts no
+    ConnectTimeout 10
+    CheckHostIP no
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+    LogLevel ERROR
+
+Host 1.5.*.*
+    ServerAliveInterval 120
+    ServerAliveCountMax 5
+    ForwardX11 yes
+    ForwardX11Trusted yes
+    ForwardAgent yes
+    HashKnownHosts no
+    ConnectTimeout 10
+    CheckHostIP no
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+    LogLevel ERROR
+
 Host *
     ServerAliveInterval 120
     ServerAliveCountMax 5
@@ -22,3 +74,4 @@ Host *
     ForwardAgent yes
     HashKnownHosts no
     ConnectTimeout 10
+
