@@ -2440,6 +2440,8 @@ vmap <silent> <expr> y     (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v
 vmap <silent> <expr> Y     (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'omvVtY`v' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("tY")<CR>'
 vmap <silent> <expr> <Leader>yy (mode() =~ "\<C-v>") ? 'ty' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty")<CR>'
 vmap <silent> <expr> <Leader>yY (mode() =~ "\<C-v>") ? 'omvVtY`v' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("tY")<CR>'
+" <C-y> like y ...
+vmap <silent> <expr> <C-y> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty")<CR>'
 
 if has("nvim")
     let g:clipboard = {
@@ -4276,6 +4278,76 @@ tnoremap <M-C-4-RightMouse> <Nop>
 
 " -----------------
 
+" TODO: S- clicks
+
+nnoremap <S-LeftMouse> <Nop>
+vnoremap <S-LeftMouse> <Nop>
+inoremap <S-LeftMouse> <Nop>
+tnoremap <S-LeftMouse> <LeftMouse>
+
+nnoremap <S-2-LeftMouse> <Nop>
+vnoremap <S-2-LeftMouse> <Nop>
+inoremap <S-2-LeftMouse> <Nop>
+tnoremap <S-2-LeftMouse> <LeftMouse>
+
+nnoremap <S-3-LeftMouse> <Nop>
+vnoremap <S-3-LeftMouse> <Nop>
+inoremap <S-3-LeftMouse> <Nop>
+tnoremap <S-3-LeftMouse> <LeftMouse>
+
+nnoremap <S-4-LeftMouse> <Nop>
+vnoremap <S-4-LeftMouse> <Nop>
+inoremap <S-4-LeftMouse> <Nop>
+tnoremap <S-4-LeftMouse> <LeftMouse>
+
+" -----------------
+
+" TODO: C-S- clicks
+
+nnoremap <C-S-LeftMouse> <Nop>
+vnoremap <C-S-LeftMouse> <Nop>
+inoremap <C-S-LeftMouse> <Nop>
+tnoremap <C-S-LeftMouse> <LeftMouse>
+
+nnoremap <C-S-2-LeftMouse> <Nop>
+vnoremap <C-S-2-LeftMouse> <Nop>
+inoremap <C-S-2-LeftMouse> <Nop>
+tnoremap <C-S-2-LeftMouse> <LeftMouse>
+
+nnoremap <C-S-3-LeftMouse> <Nop>
+vnoremap <C-S-3-LeftMouse> <Nop>
+inoremap <C-S-3-LeftMouse> <Nop>
+tnoremap <C-S-3-LeftMouse> <LeftMouse>
+
+nnoremap <C-S-4-LeftMouse> <Nop>
+vnoremap <C-S-4-LeftMouse> <Nop>
+inoremap <C-S-4-LeftMouse> <Nop>
+tnoremap <C-S-4-LeftMouse> <LeftMouse>
+
+" TODO: A-S- clicks
+
+nnoremap <M-S-LeftMouse> <Nop>
+vnoremap <M-S-LeftMouse> <Nop>
+inoremap <M-S-LeftMouse> <Nop>
+tnoremap <M-S-LeftMouse> <LeftMouse>
+
+nnoremap <M-S-2-LeftMouse> <Nop>
+vnoremap <M-S-2-LeftMouse> <Nop>
+inoremap <M-S-2-LeftMouse> <Nop>
+tnoremap <M-S-2-LeftMouse> <LeftMouse>
+
+nnoremap <M-S-3-LeftMouse> <Nop>
+vnoremap <M-S-3-LeftMouse> <Nop>
+inoremap <M-S-3-LeftMouse> <Nop>
+tnoremap <M-S-3-LeftMouse> <LeftMouse>
+
+nnoremap <M-S-4-LeftMouse> <Nop>
+vnoremap <M-S-4-LeftMouse> <Nop>
+inoremap <M-S-4-LeftMouse> <Nop>
+tnoremap <M-S-4-LeftMouse> <LeftMouse>
+
+" -----------------
+
 nnoremap <MiddleMouse> <Nop>
 vnoremap <MiddleMouse> <Nop>
 inoremap <MiddleMouse> <Nop>
@@ -5510,25 +5582,49 @@ inoremap <silent> <expr> <C-k>      pumvisible() ? '<C-k>'  : '<C-\><C-o>:call <
 " C- already used to adjust font size ...
 " A- to speed up scrolling ...
 
-nnoremap <silent> <expr> <ScrollWheelDown>   (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
+nnoremap <silent> <expr> <ScrollWheelDown>     (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
+nnoremap <silent> <expr> <S-ScrollWheelDown>   (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
 " C-Wheel is often font scaling but ...
-nnoremap <silent> <expr> <C-ScrollWheelDown> (line('.') == line('w0')) ? '24j' : ((line('$') - line('w$')) < 24) ? 'mfG`f24j' : '24<C-e>24j'
-nnoremap <silent> <expr> <A-ScrollWheelDown> (line('.') == line('w0')) ? '48j' : ((line('$') - line('w$')) < 48) ? 'mfG`f48j' : '48<C-e>48j'
+nnoremap <silent> <expr> <C-ScrollWheelDown>   (line('.') == line('w0')) ? '24j' : ((line('$') - line('w$')) < 24) ? 'mfG`f24j' : '24<C-e>24j'
+nnoremap <silent> <expr> <A-C-ScrollWheelDown> (line('.') == line('w0')) ? '24j' : ((line('$') - line('w$')) < 24) ? 'mfG`f24j' : '24<C-e>24j'
+nnoremap <silent> <expr> <A-ScrollWheelDown>   (line('.') == line('w0')) ? '48j' : ((line('$') - line('w$')) < 48) ? 'mfG`f48j' : '48<C-e>48j'
+
+nnoremap <silent> <expr> <C-S-ScrollWheelDown> (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
+nnoremap <silent> <expr> <A-S-ScrollWheelDown> (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
 
 " see below
 "vnoremap <silent>        <ScrollWheelDown> <C-\><C-n>:call <SID>Saving_scrollV("gv10<C-V><C-D>")<CR>
 
-inoremap <silent> <expr> <ScrollWheelDown>   pumvisible() ? '<ScrollWhellDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <ScrollWheelDown>     pumvisible() ? '<ScrollWhellDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <S-ScrollWheelDown>   pumvisible() ? '<ScrollWhellDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <C-ScrollWheelDown>   pumvisible() ? '<ScrollWhellDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("24<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <A-C-ScrollWheelDown> pumvisible() ? '<ScrollWhellDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("24<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <A-ScrollWheelDown>   pumvisible() ? '<ScrollWhellDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("48<C-V><C-D>")<CR>'
 
-nnoremap <silent> <expr> <ScrollWheelUp>     (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
+inoremap <silent> <expr> <C-S-ScrollWheelDown> pumvisible() ? '<ScrollWhellDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <A-S-ScrollWheelDown> pumvisible() ? '<ScrollWhellDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-D>")<CR>'
+
+nnoremap <silent> <expr> <ScrollWheelUp>       (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
+nnoremap <silent> <expr> <S-ScrollWheelUp>     (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
 " C-Wheel is often font scaling but ...
-nnoremap <silent> <expr> <C-ScrollWheelUp>   (line('.') == line('w$')) ? '24k' : '24<C-y>24k'
-nnoremap <silent> <expr> <A-ScrollWheelUp>   (line('.') == line('w$')) ? '48k' : '48<C-y>48k'
+nnoremap <silent> <expr> <C-ScrollWheelUp>     (line('.') == line('w$')) ? '24k' : '24<C-y>24k'
+nnoremap <silent> <expr> <A-C-ScrollWheelUp>   (line('.') == line('w$')) ? '24k' : '24<C-y>24k'
+nnoremap <silent> <expr> <A-ScrollWheelUp>     (line('.') == line('w$')) ? '48k' : '48<C-y>48k'
+
+nnoremap <silent> <expr> <C-S-ScrollWheelUp>   (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
+nnoremap <silent> <expr> <A-S-ScrollWheelUp>   (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
 
 " see below
 "vnoremap <silent>        <ScrollWheelUp>   <C-\><C-n>:call <SID>Saving_scrollV("gv10<C-V><C-U>")<CR>
 
-inoremap <silent> <expr> <ScrollWheelUp>     pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <ScrollWheelUp>       pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <S-ScrollWheelUp>     pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <C-ScrollWheelUp>     pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("24<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <A-C-ScrollWheelUp>   pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("24<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <A-ScrollWheelUp>     pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("48<C-V><C-U>")<CR>'
+
+inoremap <silent> <expr> <C-S-ScrollWheelUp>   pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <A-S-ScrollWheelUp>   pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-U>")<CR>'
 
 " ---------
 
@@ -5542,13 +5638,15 @@ inoremap <silent> <expr> <ScrollWheelUp>     pumvisible() ? '<ScrollWheelUp>' : 
 
 " NOTE: add selection to beg/end of next line ...
 " do we bother to look at reg to see if its V for this ?
-vnoremap <ScrollWheelUp>     5gkg0
-vnoremap <ScrollWheelDown>   5gjg$
+vnoremap <ScrollWheelUp>       5gkg0
+vnoremap <ScrollWheelDown>     5gjg$
 " C-Wheel is often font scaling but ...
-vnoremap <C-ScrollWheelUp>   24gkg0
-vnoremap <C-ScrollWheelDown> 24gjg$
-vnoremap <A-ScrollWheelUp>   48gkg0
-vnoremap <A-ScrollWheelDown> 48gjg$
+vnoremap <C-ScrollWheelUp>     10gkg0
+vnoremap <C-ScrollWheelDown>   10gjg$
+vnoremap <A-C-ScrollWheelUp>   10gkg0
+vnoremap <A-C-ScrollWheelDown> 10gjg$
+vnoremap <A-ScrollWheelUp>     20gkg0
+vnoremap <A-ScrollWheelDown>   20gjg$
 
 "inoremap <silent> <ScrollWheelUp>     <C-\><C-o>5k
 "inoremap <silent> <ScrollWheelDown>   <C-\><C-o>5j
@@ -6916,7 +7014,8 @@ let fsnonewfiles=1
 " should we use <C-y> for paste ?
 "nmap <C-y> <Plug>UnconditionalPasteCharBefore
 nnoremap <C-y> <Nop>
-vnoremap <C-y> <Nop>
+" NOTE: or make <C-y> like y ?
+"vnoremap <C-y> <Nop>
 
 " to get back orig if needed
 noremap <Leader><C-y> <C-y>

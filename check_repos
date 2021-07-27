@@ -174,6 +174,15 @@ cd ~/Downloads/vim_bundles
 # vifm:
 #   git clone https://github.com/vifm/vifm.git
 
+# byobu
+#   git clone https://github.com/dustinkirkland/byobu.git
+
+# CMake:
+#   https://github.com/Kitware/CMake.git
+
+# zsh:
+#   https://github.com/zsh-users/zsh.git
+
 # ==================================
 
 # vim:
@@ -193,10 +202,6 @@ cd ~/Downloads/vim_bundles
 #   cd ~
 #   go get github.com/jesseduffield/lazygit
 
-# lf:
-#   cd ~
-#   env CGO_ENABLED=0 GO111MODULE=on go get -u -ldflags="-s -w" github.com/gokcehan/lf
-
 # st: (simple terminal)
 #   git clone git@github.com-mckelly:mckellygit/st.git
 #   upstream:
@@ -212,17 +217,17 @@ cd ~/Downloads/vim_bundles
 
 # ==================================
 
-# byobu
-#   git clone https://github.com/dustinkirkland/byobu.git
-
 # FlameGraph
 #   git clone https://github.com/brendangregg/FlameGraph.git
-
 # perf-tools
 #   git clone https://github.com/brendangregg/perf-tools.git
+# bcc
+#   git clone https://github.com/iovisor/bcc.git
 
 # htop:
 #   git clone git@github.com-mckelly:htop-dev/htop.git
+
+# -------------
 
 # nixnote:
 #   https://github.com/robert7/nixnote2.git
@@ -241,6 +246,10 @@ cd ~/Downloads/vim_bundles
 #   sudo apt update
 #   sudo apt install vivaldi-stable
 
+# lf:
+#   cd ~
+#   env CGO_ENABLED=0 GO111MODULE=on go get -u -ldflags="-s -w" github.com/gokcehan/lf
+
 # dog: (nslookup/dig alternative)
 #   git clone https://github.com/ogham/dog.git
 
@@ -255,12 +264,6 @@ cd ~/Downloads/vim_bundles
 
 # standard notes:
 #   TBD
-
-# CMake:
-#   https://github.com/Kitware/CMake.git
-
-# zsh:
-#   https://github.com/zsh-users/zsh.git
 
 # ---------------------
 
