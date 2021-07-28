@@ -3500,21 +3500,21 @@ endif
 " ------------------------------
 
 " to get all of top/bottom lines ...
-nnoremap 1G 1G0
-nnoremap gg 1G0
-nnoremap G  G0
-vnoremap 1G 1G0
+"nnoremap 1G 1G0
+"nnoremap gg 1G0
+"nnoremap G  G0
+"vnoremap 1G 1G0
 vnoremap gg 1G0
 vnoremap G  G$
 
 call <SID>MapFastKeycode('<F18>',  "\eg", 18)
-nnoremap <F18> 1G0
+nnoremap <F18> gg
 vnoremap <F18> 1G0
 cnoremap <F18> <C-v><Esc>g
 inoremap <F18> <C-v><Esc>g
 tnoremap <F18> <Esc>g
 if has("nvim")
-    nnoremap <M-g> 1G0
+    nnoremap <M-g> gg
     vnoremap <M-g> 1G0
     cnoremap <F18> <M-g>
     inoremap <F18> <M-g>
@@ -3522,13 +3522,13 @@ if has("nvim")
 endif
 
 call <SID>MapFastKeycode('<F19>',  "\eG", 19)
-nnoremap <F19> G0
+nnoremap <F19> G
 vnoremap <F19> G$
 cnoremap <F19> <C-v><Esc>G
 inoremap <F19> <C-v><Esc>G
 tnoremap <F19> <Esc>G
 if has("nvim")
-    nnoremap <M-G> G0
+    nnoremap <M-G> G
     vnoremap <M-G> G$
     cnoremap <F19> <M-G>
     inoremap <F19> <M-G>
@@ -3600,10 +3600,12 @@ map <C-w>z     :call ZoomToTab()<CR>
 " to match vless and tmux
 " terminator <C-Home> mapped to <Esc>5 (M-5)
 "noremap <silent> <Esc>5 gg
-noremap <silent> <C-Home> gg
+nnoremap <silent> <C-Home> gg
+vnoremap <silent> <C-Home> 1G0
 " terminator <C-End> mapped to <Esc>6 (M-6)
 "noremap <silent> <Esc>6 G
-noremap <silent> <C-End> G
+nnoremap <silent> <C-End> G
+vnoremap <silent> <C-End> G$
 
 " NOTE: <F34> is mapped to paste below
 "   and <F33> is vmapped to copy selection below
