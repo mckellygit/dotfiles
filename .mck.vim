@@ -2154,7 +2154,7 @@ au FileType any-jump nnoremap <silent> <buffer> <M-C-P> :call g:AnyJumpHandlePre
 let g:asyncrun_code = 0
 let g:asyncrun_silent = 0
 let g:asyncrun_string = ''
-autocmd User AsyncRunPre let g:asyncrun_code = 2 | echohl DiffAdd | echo "\rAsyncRun started ..." | echohl None
+autocmd User AsyncRunPre let g:asyncrun_code = 2 | echo " " | redraw! | echohl DiffAdd | echo "\rAsyncRun started ..." | echohl None
 autocmd User AsyncRunStop if g:asyncrun_code != 0 | echohl DiffText | echo 'AsyncRun complete: [ ' . g:asyncrun_code . ' ]' | echohl None |
             \ else | echohl DiffAdd | echo 'AsyncRun complete: [ OK ]' | echohl None | copen | set nowrap | set cursorline | clearjumps | endif | if !pumvisible() | call lightline#update() | endif | let g:asyncrun_string = ''
 autocmd User AsyncRunInterrupt echohl DiffText | echo 'AsyncRun complete: [TERM]' | echohl None | let g:asyncrun_code = 2 | let g:asyncrun_string = ''
