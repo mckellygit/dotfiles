@@ -2160,8 +2160,12 @@ autocmd User AsyncRunStop if g:asyncrun_code != 0 | echohl DiffText | echo 'Asyn
 autocmd User AsyncRunInterrupt echohl DiffText | echo 'AsyncRun complete: [TERM]' | echohl None | let g:asyncrun_code = 2 | let g:asyncrun_string = ''
 " NOTE: add '| wincmd p' to go back to orig window
 " NOTE: add '| set ma' after copen to make qf modifiable
-" there is also <leader>sq and <Leader>sx to cancel AsyncRun search in flight ...
-" TODO: is there a way to map <C-c> to send interrupt and call AsyncStop ?
+" use <Leader>sx to cancel AsyncRun job in flight ...
+" in vim, <C-\> _may_ stop system() cmds (if stty quit is ^\) [but not nvim] - but may generate core file
+"noremap <C-\> <Esc>:AsyncStop!<CR><C-c>
+" TODO: is there a way to map <C-c> to both send <C-c> AND also run :AsyncStop ?
+"       or can we change AsyncRun to know if <C-c> was pressed ?
+"       or change any-jump searches to use AsyncRun ?
 " asyncrun -----------
 
 " startify -----------
