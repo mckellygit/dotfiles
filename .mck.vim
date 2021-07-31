@@ -2163,7 +2163,7 @@ autocmd User AsyncRunInterrupt echohl DiffText | echo 'AsyncRun complete: [TERM]
 " use <Leader>sx to cancel AsyncRun job in flight ...
 " in vim, <C-\> _may_ stop system() cmds (if stty quit is ^\) [but not nvim] - but may generate core file
 " <C-S-\> (or <C-|>) might be mapped to <C-_>\ in some terminals ...
-noremap <silent> <C-_>\ <C-c>:AsyncStop!<CR>
+noremap <silent> <C-_>\ <C-c>:AsyncStop!<CR>:sleep 500m<CR>:AsyncStop!<CR>
 " TODO: is there a way to map <C-c> to both send <C-c> AND also run :AsyncStop ?
 "       or can we change AsyncRun to know if <C-c> was pressed ?
 "       or change any-jump searches to use AsyncRun ?
