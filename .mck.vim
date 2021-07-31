@@ -2149,15 +2149,17 @@ au FileType any-jump nnoremap <silent> <buffer> <M-C-P> :call g:AnyJumpHandlePre
 " asyncrun -----------
 " open quickfix (10 lines) when cmd ends
 " skip as we now copen at end ...
-"let g:asyncrun_open = 10
+" but need to set it so it exists for -silent to work ...
+let g:asyncrun_open = 0
 " so we can see echoes at end ...
 let g:asyncrun_code = 0
 let g:asyncrun_silent = 0
 let g:asyncrun_string = ''
+let g:asyncrun_copen = 1
 autocmd User AsyncRunPre let g:asyncrun_code = 2 | echo " " | redraw! | echohl DiffAdd | echo "\rAsyncRun started ..." | echohl None
 autocmd User AsyncRunStop if g:asyncrun_code != 0 | echohl DiffText | echo 'AsyncRun complete: [ ' . g:asyncrun_code . ' ]' | echohl None |
-            \ else | echohl DiffAdd | echo 'AsyncRun complete: [ OK ]' | echohl None | copen | set nowrap | set cursorline | clearjumps | endif | if !pumvisible() | call lightline#update() | endif | let g:asyncrun_string = ''
-autocmd User AsyncRunInterrupt echohl DiffText | echo 'AsyncRun complete: [TERM]' | echohl None | let g:asyncrun_code = 2 | let g:asyncrun_string = ''
+            \ else | echohl DiffAdd | echo 'AsyncRun complete: [ OK ]' | echohl None | if g:asyncrun_copen != 0 | copen | set nowrap | set cursorline | clearjumps | endif | endif | if !pumvisible() | call lightline#update() | endif | let g:asyncrun_string = '' | let g:asyncrun_copen = 1
+autocmd User AsyncRunInterrupt echohl DiffText | echo 'AsyncRun complete: [TERM]' | echohl None | let g:asyncrun_code = 2 | let g:asyncrun_string = '' | let g:asyncrun_copen = 1
 " NOTE: add '| wincmd p' to go back to orig window
 " NOTE: add '| set ma' after copen to make qf modifiable
 " use <Leader>sx to cancel AsyncRun job in flight ...
@@ -2167,6 +2169,8 @@ noremap <silent> <C-_>\ <C-c>:AsyncStop!<CR>:sleep 500m<CR>:AsyncStop!<CR>
 " TODO: is there a way to map <C-c> to both send <C-c> AND also run :AsyncStop ?
 "       or can we change AsyncRun to know if <C-c> was pressed ?
 "       or change any-jump searches to use AsyncRun ?
+" To run a cmd without quickfix at end ...
+"let g:asyncrun_copen = 0 | AsyncRun -silent -post=call\ VimRoutine() bash -c "sleep 5"
 " asyncrun -----------
 
 " startify -----------
