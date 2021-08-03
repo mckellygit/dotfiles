@@ -2169,6 +2169,10 @@ noremap <silent> <C-_>\ <C-c>:AsyncStop!<CR>:sleep 500m<CR>:AsyncStop!<CR>
 " TODO: is there a way to map <C-c> to both send <C-c> AND also run :AsyncStop ?
 "       or can we change AsyncRun to know if <C-c> was pressed ?
 "       or change any-jump searches to use AsyncRun ?
+" ok with vim -
+if !has("nvim")
+    noremap <C-c> <Cmd>AsyncStop!<CR><Cmd>sleep 500m<CR><Cmd>AsyncStop!<CR><Cmd>call feedkeys("\<C-c>", "Lnt")<CR>
+endif
 " To run a cmd without quickfix at end ...
 "let g:asyncrun_copen = 0 | AsyncRun -silent -post=call\ VimRoutine() bash -c "sleep 5"
 " asyncrun -----------
