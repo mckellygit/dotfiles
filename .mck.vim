@@ -6932,6 +6932,7 @@ let g:localvimrc_persistent = 1
 "\rb	Jump to prev location
 "\r,	Jump to prev location (<)
 "\r.	Jump to next location (>)
+"\r:	Toggle use colon in keyword (<cword>)
 " -------------------------------------
 "
 function s:CloseClangWin() abort
