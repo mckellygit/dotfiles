@@ -204,7 +204,7 @@ window:
 
   # use alt+shift+m for window menu to move, resize etc.
   # (foreground color csd titlebar can be distracting)
-  decorations: none
+  decorations: full
 
   # Allow terminal applications to change Alacritty's window title.
   dynamic_title: true

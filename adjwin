@@ -21,8 +21,11 @@ if [[ -n "$ST_VERSION" ]] ; then
 elif [[ -n "$ALACRITTY_LOG" ]] ; then
     # add this for Alacritty, need window to display and grab focus ...
     sleep 0.6
-    Y=874
-    H=1256
+    Y=858
+    H=1286
+    # if decorations: none is set in Alacritty.yml config use these -
+    #Y=874
+    #H=1256
 fi
 
 # just to be safe for all ...
