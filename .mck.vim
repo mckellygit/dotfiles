@@ -2138,12 +2138,15 @@ xnoremap <leader>a. <C-\><C-n>:<C-u>AnyJumpVisualDirRecur<CR>
 nnoremap <leader>a? :call <SID>AnyJumpPrompt(0)<CR>
 nnoremap <leader>aG :call <SID>AnyJumpPrompt(0)<CR>
 nnoremap <leader>aD :call <SID>AnyJumpPrompt(1)<CR>
-nnoremap <leader>a: :call <SID>AnyJumpPrompt(2)<CR>
+" '>' is a shifted '.' (could also use R ?)
+nnoremap <leader>a> :call <SID>AnyJumpPrompt(2)<CR>
 " Normal mode: open previous opened file (after jump) - could just use <C-o> ...
 nnoremap <leader>ab :AnyJumpBack<CR>
 " Normal mode: open last closed search window again
 nnoremap <leader>al :AnyJumpLastResults<CR>
 au FileType any-jump nnoremap <silent> <buffer> <M-C-P> :call g:AnyJumpHandlePreview()<CR>
+nnoremap <Leader>a: :call rtags#ToggleColonKeyword()<CR>
+xnoremap <Leader>a: <C-\><C-n>:<C-u>call rtags#ToggleColonKeyword()<CR>
 " any-jump -----------
 
 " asyncrun -----------
@@ -4849,11 +4852,23 @@ imap <silent> <A-LeftMouse> <C-\><C-o>:let @i="2"<CR><LeftMouse>
 " => Word commands NOTE: selection is USUALLY copied to clipboard
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+function! s:MySelWord() abort
+    let l:oldiskeyword = &iskeyword
+    if (g:rtagsUseColonKeyword == 1)
+        setlocal iskeyword+=:
+    endif
+    let keyword = expand('<cword>')
+    execute 'normal mvviw'
+    let &iskeyword = l:oldiskeyword
+endfunction
+
 " highlight word under cursor (lbvhe/lbve) (is h needed ?)
 " NOTE: also copy to clipboard (since its not a mouse click event) ?
 "nmap <silent> <Leader>ws mv:call <SID>CopyReg(0)<CR>viwtygv
-nmap <silent> <Leader>ws mvviw
-vmap <silent> <Leader>ws <C-\><C-n>mvviw
+"nmap <silent> <Leader>ws mvviw
+"vmap <silent> <Leader>ws <C-\><C-n>mvviw
+nmap <silent> <Leader>ws :call <SID>MySelWord()<CR>
+vmap <silent> <Leader>ws <C-\><C-n>:<C-u>call <SID>MySelWord()<CR>
 
 " highlight WORD under cursor (lBvhE/lBvE) (does not use iskeyword) (is h needed ?)
 " NOTE: also copy to clipboard (since its not a mouse click event) ?
