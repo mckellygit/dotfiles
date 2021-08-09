@@ -2318,7 +2318,9 @@ let g:floaterm_autoinsert = v:true
 if !exists("g:vless")
     if exists('$TMUX_PANE')
         " printf \033]11;rgb:<R>/<G>/<B>\007 sets the terminal background colour (only when inside tmux)
-        let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w70% -h63% -E \"tmux new -s popup \\\"printf '\\\\\\033]11;rgb:30/25/25\\\\\\007' ; tmux set -w status off ; " . &shell . "\\\"\""
+        " many RGB values do not work, perhaps has to be one of 256 colours ?
+        " 32/28/28 is slightly different than Floaterm and normal vi backgrounds
+        let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w70% -h63% -E \"tmux new -s popup \\\"printf '\\\\\\033]11;rgb:38/28/28\\\\\\007' ; tmux set -w status off ; " . &shell . "\\\"\""
         nnoremap <silent> <Leader>zF :call system(syscmd)<CR>
     endif
     nnoremap <silent> <Leader>zf :FloatermToggle<CR>
@@ -2616,7 +2618,8 @@ else
 endif
 function! s:MyUpdateTitle()
   set titleold=
-  if &buftype=="terminal"
+  " TODO: skip for now as we handle all mappings in both normal and terminal
+  if &buftype==#"terminalSKIP"
     if !has("nvim")
         set title titlestring=@t:v%.11t
     else
@@ -4097,6 +4100,8 @@ endfunction
 
 " <C-q> seems to start visual mode ...
 nmap <C-q> <Nop>
+" TODO can we get <C-q> to leave normal mode of terminal ?
+"      or use <M-q> for that ?
 
 " q to exit visual-mode and clear previous w:v* states
 " if we just map q to <Esc> then q works well to go back to original mode,
@@ -8494,15 +8499,17 @@ endif
 "tnoremap <silent> <PageUp> <C-\><C-n>
 " ctrl-x-] like tmux enter copy-mode-vi (ctrl-s-])
 " MCK: use something else besides <C-x> here ...
-tnoremap <silent> <F17>]     <C-\><C-n>
-tnoremap <silent> <F17><C-]> <C-\><C-n>
-tnoremap <silent> <M-x>]     <C-\><C-n>
-tnoremap <silent> <M-x><C-]> <C-\><C-n>
+" TODO: perhaps map <Esc>] to some Func key ?  But maybe ok as its not the first char ...
+tnoremap <silent> <F17>]      <C-\><C-n>
+tnoremap <silent> <F17><Esc>] <C-\><C-n>
+tnoremap <silent> <M-x>]      <C-\><C-n>
+tnoremap <silent> <M-x><Esc>] <C-\><C-n>
 " dont really want to map <C-x> + anything as <C-x> is used alone as a map in several other places
-nnoremap <silent> <expr> <F17>]     (&buftype == 'terminal') ? 'i' : '<Esc>x]'
-nnoremap <silent> <expr> <F17><C-]> (&buftype == 'terminal') ? 'i' : '<Esc>x<C-]>]'
-nnoremap <silent> <expr> <M-x>]     (&buftype == 'terminal') ? 'i' : '<M-x>]'
-nnoremap <silent> <expr> <M-x><C-]> (&buftype == 'terminal') ? 'i' : '<M-x><C-]>]'
+nnoremap <silent> <expr> <F17>]      (&buftype == 'terminal') ? 'i' : '<Esc>x]'
+nnoremap <silent> <expr> <F17><Esc>] (&buftype == 'terminal') ? 'i' : '<Esc>x<C-]>]'
+nnoremap <silent> <expr> <M-x>]      (&buftype == 'terminal') ? 'i' : '<M-x>]'
+nnoremap <silent> <expr> <M-x><Esc>] (&buftype == 'terminal') ? 'i' : '<M-x><C-]>]'
+" TODO can we use <M-q> to leave normal mode of terminal ?
 
 " this causes sign column to disappear on popups that are terminal windows ...
 "au TerminalOpen * setlocal signcolumn=no
