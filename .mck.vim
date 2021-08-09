@@ -3896,8 +3896,13 @@ inoremap <silent> <F34>      <C-\><C-o>:set paste<CR><C-r>*<C-\><C-o>:set nopast
 inoremap <silent> <S-Insert> <C-\><C-o>:set paste<CR><C-r>*<C-\><C-o>:set nopaste<CR>
 cnoremap <F34>      <C-r>*
 cnoremap <S-Insert> <C-r>*
-tnoremap <F34>      <C-w>"*
-tnoremap <S-Insert> <C-w>"*
+if has("nvim")
+    tnoremap <F34>      <C-\><C-n>"*pi
+    tnoremap <S-Insert> <C-\><C-n>"*pi
+else
+    tnoremap <F34>      <C-w>"*
+    tnoremap <S-Insert> <C-w>"*
+endif
 
 " <M-!> paste after [menu?]
 call <SID>MapFastKeycode('<S-F34>',  "\e!", 134)
@@ -3911,7 +3916,7 @@ if has("nvim")
     vnoremap <expr> <M-!> (&buftype == 'terminal') ? '<Nop>' : '<Esc>p'
     inoremap <silent> <M-!> <C-\><C-o>:set paste<CR><C-r>*<C-\><C-o>:set nopaste<CR>
     cnoremap <M-!> <C-r>*
-    tnoremap <M-!> <C-w>"*
+    tnoremap <M-!> <C-\><C-n>"*pi
 endif
 
 " <F35> paste before
@@ -3923,8 +3928,13 @@ inoremap <silent> <F35>        <C-\><C-o>:set paste<CR><C-\><C-o>mp<C-r>*<C-\><C
 inoremap <silent> <C-S-Insert> <C-\><C-o>:set paste<CR><C-\><C-o>mp<C-r>*<C-\><C-o>:set nopaste<CR><C-\><C-o>`p
 cnoremap <F35>        <C-r>*
 cnoremap <C-S-Insert> <C-r>*
-tnoremap <F35>        <C-w>"*
-tnoremap <C-S-Insert> <C-w>"*
+if has("nvim")
+    tnoremap <F35>        <C-\><C-n>"*Pi
+    tnoremap <C-S-Insert> <C-\><C-n>"*Pi
+else
+    tnoremap <F35>        <C-w>"*
+    tnoremap <C-S-Insert> <C-w>"*
+endif
 
 " <M-*> paste before [menu?]
 call <SID>MapFastKeycode('<S-F35>',  "\e*", 135)
@@ -3938,7 +3948,7 @@ if has("nvim")
     vnoremap <expr> <M-*> (&buftype == 'terminal') ? '<Nop>' : '<Esc>P`]'
     inoremap <silent> <M-*> <C-\><C-o>:set paste<CR><C-r>*<C-\><C-o>:set nopaste<CR>
     cnoremap <M-*> <C-r>*
-    tnoremap <M-*> <C-w>"*
+    tnoremap <M-*> <C-\><C-n>"*Pi
 endif
 
 " C-S-c / M-& copy ...
@@ -5148,6 +5158,9 @@ vnoremap <silent>        <F37>   <Del>
 vnoremap <silent>        <S-Del> <Del>
 inoremap <silent> <expr> <F37>   (col('.') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<C-o>"_db' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
 inoremap <silent> <expr> <S-Del> (col('.') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<C-o>"_db' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
+" <S-Del> does not seem to work ...
+tnoremap <silent>        <F37>   <C-Del>
+tnoremap <silent>        <S-Del> <C-Del>
 
 " ctrl-del to delete from cursor to end of word, to match kill-word ...
 " also skip alt-d
@@ -5159,6 +5172,8 @@ vnoremap <silent>        <F36>   <Del>
 vnoremap <silent>        <C-Del> <Del>
 inoremap <silent> <expr> <F36>   (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<C-o>"_de' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
 inoremap <silent> <expr> <C-Del> (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<C-o>"_de' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
+tnoremap <silent>        <F36>   <C-Del>
+tnoremap <silent>        <C-Del> <C-Del>
 
 " ctrl-shift-del to delete whole word under cursor
 "nnoremap <silent> <expr> <S-F15> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? 'lb"_dW' : ':call <SID>CSDel()<CR>'
@@ -5169,6 +5184,9 @@ vnoremap <silent>        <S-F15>   <Del>
 vnoremap <silent>        <C-S-Del> <Del>
 inoremap <silent> <expr> <S-F15>   (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<Esc>llb"_dWi' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
 inoremap <silent> <expr> <C-S-Del> (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<Esc>llb"_dWi' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
+" <C-S-Del> does not seem to work ...
+tnoremap <silent>        <S-F15>   <C-Del>
+tnoremap <silent>        <C-S-Del> <C-Del>
 
 " NOTE: dont really need/use A-Del
 " alt-del to delete whole word under cursor
@@ -5179,18 +5197,24 @@ vnoremap <silent>        <S-F16> <Del>
 vnoremap <silent>        <A-Del> <Del>
 inoremap <silent> <expr> <S-F16> (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<Esc>llb"_dWi' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
 inoremap <silent> <expr> <A-Del> (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<Esc>llb"_dWi' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
+tnoremap <silent>        <S-F16> <A-Del>
+tnoremap <silent>        <A-Del> <A-Del>
 
 " <A-S-Del> - (vim) reverse case four letters at a time ...
 map <silent>  <F20>      <Nop>
 map <silent>  <A-S-Del>  <Nop>
 imap <silent> <F20>      <Esc>l
 imap <silent> <A-S-Del>  <Esc>l
+tnoremap <silent> <F20>     <A-Del>
+tnoremap <silent> <A-S-Del> <A-Del>
 
 call <SID>MapFastKeycode('<F16>', "\e[3;7~", 16) " A-C-Del
 map <silent>  <F16>         <Nop>
 map <silent>  <M-C-Del>     <Nop>
 imap <silent> <F16>         <Nop>
 imap <silent> <M-C-Del>     <Nop>
+tnoremap <silent> <F16>     <C-Del>
+tnoremap <silent> <M-C-Del> <C-Del>
 
 " SPECIAL: TODO: add cmap <A-Del> and all the others ...
 
