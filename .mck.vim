@@ -5709,10 +5709,10 @@ inoremap <C-S-Right> <C-\><C-o>10gl
 " use <M-k> as gk so we can do
 " <M-k> for up and then <M-`> for repeat prev cmd
 call <SID>MapFastKeycode('<F30>',  "\ek", 30)
-noremap <F30> gk
-noremap <M-k> gk
-inoremap <F30> <C-\><C-o>gk
-inoremap <M-k> <C-\><C-o>gk
+noremap <F30> 5gk
+noremap <M-k> 5gk
+inoremap <F30> <C-\><C-o>5gk
+inoremap <M-k> <C-\><C-o>5gk
 "noremap <F30> 5gk
 "noremap <M-k> 5gk
 "inoremap <F30> <C-\><C-o>5gk
@@ -5728,10 +5728,10 @@ endif
 " use <M-j> as gj so we can do
 " <M-j> for down and then <M-`> for repeat prev cmd
 call <SID>MapFastKeycode('<F31>',  "\ej", 31)
-noremap <F31> gj
-noremap <M-j> gj
-inoremap <F31> <C-\><C-o>gj
-inoremap <M-j> <C-\><C-o>gj
+noremap <F31> 5gj
+noremap <M-j> 5gj
+inoremap <F31> <C-\><C-o>5gj
+inoremap <M-j> <C-\><C-o>5gj
 "noremap <F31> 5gj
 "noremap <M-j> 5gj
 "inoremap <F31> <C-\><C-o>5gj
