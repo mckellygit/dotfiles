@@ -5247,8 +5247,6 @@ set tabstop=4
 noremap Q <Nop>
 noremap <silent> <Leader>Q q
 nmap <silent> q <Nop>
-" nvim
-nnoremap <silent> <M-q> <Nop>
 " NOTE: q will be re-mapped later on ...
 
 " for block select beyond shorter line lengths
@@ -8530,9 +8528,9 @@ tnoremap <silent> <M-x>]      <C-\><C-n>
 tnoremap <silent> <M-x><Esc>] <C-\><C-n>
 " dont really want to map <C-x> + anything as <C-x> is used alone as a map in several other places
 nnoremap <silent> <expr> <F17>]      (&buftype == 'terminal') ? 'i' : '<Esc>x]'
-nnoremap <silent> <expr> <F17><Esc>] (&buftype == 'terminal') ? 'i' : '<Esc>x<C-]>]'
+nnoremap <silent> <expr> <F17><Esc>] (&buftype == 'terminal') ? 'i' : '<Esc>x<Esc>]'
 nnoremap <silent> <expr> <M-x>]      (&buftype == 'terminal') ? 'i' : '<M-x>]'
-nnoremap <silent> <expr> <M-x><Esc>] (&buftype == 'terminal') ? 'i' : '<M-x><C-]>]'
+nnoremap <silent> <expr> <M-x><Esc>] (&buftype == 'terminal') ? 'i' : '<M-x><Esc>]'
 " TODO can we use <M-q> to leave normal mode of terminal ?
 
 " this causes sign column to disappear on popups that are terminal windows ...

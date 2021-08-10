@@ -3,10 +3,37 @@
 unset BASH_ENV
 shopt -u expand_aliases
 
-# exclusive lock on this script ...
-[ "${FLOCKER}" != "$0" ] && exec env FLOCKER="$0" flock -e "$0" "$0" "$@" || :
+trap ':' HUP
 
-if [[ $1 == "diff" ]]; then
+# exclusive lock on this script ...
+# [ "${FLOCKER}" != "$0" ] && exec env FLOCKER="$0" flock -e "$0" "$0" "$@" || :
+
+gdir=""
+gdir=$(command git rev-parse --show-superproject-working-tree 2> /dev/null)
+if [[ -z "${gdir}" ]]; then
+    gdir=$(command git rev-parse --show-toplevel 2> /dev/null)
+fi
+if [[ -z "${gdir}" ]] ; then
+    glfile="/tmp/.git-$$"
+else
+    glfile="/tmp/.git${gdir//\//-}"
+fi
+
+added_trap=0
+if [[ -n "${gdir}" ]] ; then
+    if [[ -d "${gdir}/.git" ]] ; then
+        trap "rm -f ${gdir}/.git/index.lock ${glfile}" EXIT QUIT TERM INT
+        added_trap=1
+    fi
+fi
+if [[ $added_trap -eq 0 ]] ; then
+    trap "rm -f ${glfile}" EXIT QUIT TERM INT
+fi
+
+exec {lock_fd}>${glfile} || exit 1
+flock -x "$lock_fd" || { echo "ERROR: flock() failed." >&2; exit 1; }
+
+if [[ "$1" == "diff" ]]; then
     shift
     command git dless "$@"
 else
