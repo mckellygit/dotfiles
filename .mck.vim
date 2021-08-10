@@ -9063,7 +9063,7 @@ function! MyGSStart(timer)
       else
         let l:command = '/bin/bash -c ' . '"' . g:gitinfo_script . ' ' . expand('%:p:h') . '"'
         "echomsg "starting job " . l:command
-        let b:MyGSJob = job_start(l:command, { 'out_mode':'nl' , 'stoponexit':'kill' , 'close_cb':'MyGSCloseHandler' })
+        let b:MyGSJob = job_start(l:command, { 'out_mode':'nl' , 'stoponexit':'' , 'close_cb':'MyGSCloseHandler' })
       endif
     endif
   endif
