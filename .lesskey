@@ -68,6 +68,7 @@ qq   quit
 \\qq quit
    noaction
 \\xc quit
+\\ quit
 #\en noaction ^n
 #\eN noaction 10^F
 #\ep noaction ^p

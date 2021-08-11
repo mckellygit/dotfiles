@@ -533,6 +533,10 @@ nnoremap <C-^>       5k
 " <S-Space>
 nnoremap <C-^><Space>  5j
 
+" <A-Down/Up>
+nnoremap <esc>[1;3B    <C-w>w10j<C-w>w
+nnoremap <esc>[1;3A    <C-w>w10k<C-w>w
+
 " --------
 
 " NOTE: <S-Up/Down> do not seem to be mappable ...
@@ -574,6 +578,9 @@ nnoremap <Space>     <C-w>w10j<C-w>w
 nnoremap qq            :q<cr>
 nnoremap \qq           :q<cr>
 nnoremap \xc           :q<cr>
+
+nnoremap <C-_>\        :q<cr>
+qnoremap <C-_>\        <C-w>w
 
 nnoremap QQ            :q<cr>
 nnoremap <C-q><C-q>    :q<cr>
