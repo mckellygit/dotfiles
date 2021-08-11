@@ -6,3 +6,5 @@ keybinding:
         return: '<c-q>'
         scrollUpMain-alt1: '<c-b>' # main panel scrool up
         scrollDownMain-alt1: '<c-f>' # main panel scrool down
+        scrollUpMain-alt2: '<c-k>'
+        scrollDownMain-alt2: '<c-j>'
