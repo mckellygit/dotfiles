@@ -3881,17 +3881,17 @@ endfunction
 " C-S-v / S-Insert / M-! / C-S-Insert / M-* - paste ...
 
 " cannot differentiate between C-S-v and C-v ...
-"nnoremap <expr> <C-S-v> (&buftype == 'terminal') ? '<Nop>' : 'p'
-"vnoremap <expr> <C-S-v> (&buftype == 'terminal') ? '<Nop>' : '<Esc>p'
+"nnoremap <expr> <C-S-v> (&buftype == 'terminal') ? '' : 'p'
+"vnoremap <expr> <C-S-v> (&buftype == 'terminal') ? '' : '<Esc>p'
 "inoremap <C-S-v> <C-r>+
 "cnoremap <C-S-v> <C-r>+
 "tnoremap <C-S-v> <C-w>"+
 
 " <F34> paste after
-nnoremap <expr> <F34>      (&buftype == 'terminal') ? '<Nop>' : 'p'
-nnoremap <expr> <S-Insert> (&buftype == 'terminal') ? '<Nop>' : 'p'
+nnoremap <expr> <F34>      (&buftype == 'terminal') ? '' : 'p'
+nnoremap <expr> <S-Insert> (&buftype == 'terminal') ? '' : 'p'
 " NOTE: <F34>/<S-Insert> vmapped below ...
-"vnoremap <expr> <F34> (&buftype == 'terminal') ? '<Nop>' : '<Esc>p'
+"vnoremap <expr> <F34> (&buftype == 'terminal') ? '' : '<Esc>p'
 inoremap <silent> <F34>      <C-\><C-o>:set paste<CR><C-r>*<C-\><C-o>:set nopaste<CR>
 inoremap <silent> <S-Insert> <C-\><C-o>:set paste<CR><C-r>*<C-\><C-o>:set nopaste<CR>
 cnoremap <F34>      <C-r>*
@@ -3906,24 +3906,24 @@ endif
 
 " <M-!> paste after [menu?]
 call <SID>MapFastKeycode('<S-F34>',  "\e!", 134)
-nnoremap <expr> <S-F34> (&buftype == 'terminal') ? '<Nop>' : 'p'
-vnoremap <expr> <S-F34> (&buftype == 'terminal') ? '<Nop>' : '<Esc>p'
+nnoremap <expr> <S-F34> (&buftype == 'terminal') ? '' : 'p'
+vnoremap <expr> <S-F34> (&buftype == 'terminal') ? '' : '<Esc>p'
 inoremap <silent> <S-F34> <C-\><C-o>:set paste<CR><C-r>*<C-\><C-o>:set nopaste<CR>
 cnoremap <S-F34> <C-r>*
 tnoremap <S-F34> <C-w>"*
 if has("nvim")
-    nnoremap <expr> <M-!> (&buftype == 'terminal') ? '<Nop>' : 'p'
-    vnoremap <expr> <M-!> (&buftype == 'terminal') ? '<Nop>' : '<Esc>p'
+    nnoremap <expr> <M-!> (&buftype == 'terminal') ? '' : 'p'
+    vnoremap <expr> <M-!> (&buftype == 'terminal') ? '' : '<Esc>p'
     inoremap <silent> <M-!> <C-\><C-o>:set paste<CR><C-r>*<C-\><C-o>:set nopaste<CR>
     cnoremap <M-!> <C-r>*
     tnoremap <M-!> <C-\><C-n>"*pi
 endif
 
 " <F35> paste before
-nnoremap <expr> <F35>        (&buftype == 'terminal') ? '<Nop>' : 'P`['
-nnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '<Nop>' : 'P`['
+nnoremap <expr> <F35>        (&buftype == 'terminal') ? '' : 'P`['
+nnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '' : 'P`['
 " NOTE: <F35>/<C-S-Insert> vmapped below ...
-"vnoremap <expr> <F35> (&buftype == 'terminal') ? '<Nop>' : '<Esc>P`['
+"vnoremap <expr> <F35> (&buftype == 'terminal') ? '' : '<Esc>P`['
 inoremap <silent> <F35>        <C-\><C-o>:set paste<CR><C-\><C-o>mp<C-r>*<C-\><C-o>:set nopaste<CR><C-\><C-o>`p
 inoremap <silent> <C-S-Insert> <C-\><C-o>:set paste<CR><C-\><C-o>mp<C-r>*<C-\><C-o>:set nopaste<CR><C-\><C-o>`p
 cnoremap <F35>        <C-r>*
@@ -3938,14 +3938,14 @@ endif
 
 " <M-*> paste before [menu?]
 call <SID>MapFastKeycode('<S-F35>',  "\e*", 135)
-nnoremap <expr> <S-F35> (&buftype == 'terminal') ? '<Nop>' : 'P`]'
-vnoremap <expr> <S-F35> (&buftype == 'terminal') ? '<Nop>' : '<Esc>P`]'
+nnoremap <expr> <S-F35> (&buftype == 'terminal') ? '' : 'P`]'
+vnoremap <expr> <S-F35> (&buftype == 'terminal') ? '' : '<Esc>P`]'
 inoremap <silent> <S-F35> <C-\><C-o>:set paste<CR><C-r>*<C-\><C-o>:set nopaste<CR>
 cnoremap <S-F35> <C-r>*
 tnoremap <S-F35> <C-w>"*
 if has("nvim")
-    nnoremap <expr> <M-*> (&buftype == 'terminal') ? '<Nop>' : 'P`]'
-    vnoremap <expr> <M-*> (&buftype == 'terminal') ? '<Nop>' : '<Esc>P`]'
+    nnoremap <expr> <M-*> (&buftype == 'terminal') ? '' : 'P`]'
+    vnoremap <expr> <M-*> (&buftype == 'terminal') ? '' : '<Esc>P`]'
     inoremap <silent> <M-*> <C-\><C-o>:set paste<CR><C-r>*<C-\><C-o>:set nopaste<CR>
     cnoremap <M-*> <C-r>*
     tnoremap <M-*> <C-\><C-n>"*Pi
@@ -3977,18 +3977,18 @@ endif
 
 " cannot differentiate between C-S-x and C-x ...
 "nnoremap <C-S-x> <Nop>
-"vnoremap <expr> <C-S-x> (&buftype == 'terminal') ? '<Nop>' : '"*d'
+"vnoremap <expr> <C-S-x> (&buftype == 'terminal') ? '' : '"*d'
 "inoremap <C-S-x> <Nop>
 
 call <SID>MapFastKeycode('<S-F37>',  "\e(", 137)
 nnoremap <S-F37> <Nop>
-vmap <expr> <S-F37> (&buftype == 'terminal') ? '<Nop>' : 'tx'
+vmap <expr> <S-F37> (&buftype == 'terminal') ? '' : 'tx'
 cnoremap <S-F37> <C-v><Esc>(
 inoremap <S-F37> <C-v><Esc>(
 tnoremap <S-F37> <Esc>(
 if has("nvim")
     nnoremap <M-(> <Nop>
-    vmap <expr> <M-(> (&buftype == 'terminal') ? '<Nop>' : 'tx'
+    vmap <expr> <M-(> (&buftype == 'terminal') ? '' : 'tx'
     cnoremap <S-F37> <M-(>
     inoremap <S-F37> <M-(>
     tnoremap <S-F37> <M-(>
@@ -3999,8 +3999,8 @@ endif
 " NOTE: <C-x>] may be mapped above for terminal ...
 nnoremap <C-x> <Nop>
 " NOTE: seems more logical/safe to have <C-x> quit than cut ?
-"vmap <expr> <C-x> (&buftype == 'terminal') ? '<Nop>' : 'tx'
-"vmap <expr> <C-x> (&buftype == 'terminal') ? '<Nop>' : '<Esc>'
+"vmap <expr> <C-x> (&buftype == 'terminal') ? '' : 'tx'
+"vmap <expr> <C-x> (&buftype == 'terminal') ? '' : '<Esc>'
 vmap <C-x> <Nop>
 
 " ---------------
@@ -4169,39 +4169,39 @@ function! s:MyPasteNoJump(cmd) abort
   execute "normal! " . a:cmd
   let &scrolljump=prevsj
 endfunction
-"nnoremap <silent> <buffer> <expr> p (&buftype == 'terminal') ? '<Nop>' : ':call <SID>MyPasteNoJump('p')<CR>'
-"nnoremap <silent> <buffer> <expr> P (&buftype == 'terminal') ? '<Nop>' : ':call <SID>MyPasteNoJump('P`[')<CR>'
+"nnoremap <silent> <buffer> <expr> p (&buftype == 'terminal') ? '' : ':call <SID>MyPasteNoJump('p')<CR>'
+"nnoremap <silent> <buffer> <expr> P (&buftype == 'terminal') ? '' : ':call <SID>MyPasteNoJump('P`[')<CR>'
 
 if has("nvimSKIP_MINIYANK") " miniyank
-    nmap <silent> <buffer> <expr> P (&buftype == 'terminal') ? '<Nop>' : '<Plug>(miniyank-autoPut)`['
+    nmap <silent> <buffer> <expr> P (&buftype == 'terminal') ? '' : '<Plug>(miniyank-autoPut)`['
 else
-    nmap <silent> <buffer> <expr> P (&buftype == 'terminal') ? '<Nop>' : 'P`['
+    nmap <silent> <buffer> <expr> P (&buftype == 'terminal') ? '' : 'P`['
 endif
 
 " Make p in Visual mode replace the selected text with the previous + register.
 " NOTE: see also <Leader>zx / <Leader>zp above ...
-"vnoremap <silent> <buffer> <expr> p (&buftype == 'terminal') ? '<Nop>' : ':<C-u>call <SID>SwapReg(0)<CR>gv"_x"xP'
+"vnoremap <silent> <buffer> <expr> p (&buftype == 'terminal') ? '' : ':<C-u>call <SID>SwapReg(0)<CR>gv"_x"xP'
 if has("nvimSKIP_MINIYANK") " miniyank
-    vmap <silent> <buffer> <expr> p (&buftype == 'terminal') ? '<Nop>' : '"_x"*<Plug>(miniyank-autoPut)'
-    vmap <silent> <buffer> <expr> P (&buftype == 'terminal') ? '<Nop>' : '"_x"*<Plug>(miniyank-autoPut)'
+    vmap <silent> <buffer> <expr> p (&buftype == 'terminal') ? '' : '"_x"*<Plug>(miniyank-autoPut)'
+    vmap <silent> <buffer> <expr> P (&buftype == 'terminal') ? '' : '"_x"*<Plug>(miniyank-autoPut)'
 else
-    vmap <silent> <buffer> <expr> p (&buftype == 'terminal') ? '<Nop>' : '"_x"*P'
-    vmap <silent> <buffer> <expr> P (&buftype == 'terminal') ? '<Nop>' : '"_x"*P'
+    vmap <silent> <buffer> <expr> p (&buftype == 'terminal') ? '' : '"_x"*P'
+    vmap <silent> <buffer> <expr> P (&buftype == 'terminal') ? '' : '"_x"*P'
 endif
 
 " skip <F34> as a vis-mode 'replace' ...
-"vnoremap <silent> <buffer> <expr> <F34>   (&buftype == 'terminal') ? '<Nop>' : 's'
+"vnoremap <silent> <buffer> <expr> <F34>   (&buftype == 'terminal') ? '' : 's'
 
 if has("nvimSKIP_MINIYANK") " miniyank
-    vmap <silent> <buffer> <expr> <F34>      (&buftype == 'terminal') ? '<Nop>' : '"_x"*<Plug>(miniyank-autoPut)'
-    vmap <silent> <buffer> <expr> <S-Insert> (&buftype == 'terminal') ? '<Nop>' : '"_x"*<Plug>(miniyank-autoPut)'
-    vmap <silent> <buffer> <expr> <F35>        (&buftype == 'terminal') ? '<Nop>' : '"_x"*<Plug>(miniyank-autoPut)'
-    vmap <silent> <buffer> <expr> <C-S-Insert> (&buftype == 'terminal') ? '<Nop>' : '"_x"*<Plug>(miniyank-autoPut)'
+    vmap <silent> <buffer> <expr> <F34>      (&buftype == 'terminal') ? '' : '"_x"*<Plug>(miniyank-autoPut)'
+    vmap <silent> <buffer> <expr> <S-Insert> (&buftype == 'terminal') ? '' : '"_x"*<Plug>(miniyank-autoPut)'
+    vmap <silent> <buffer> <expr> <F35>        (&buftype == 'terminal') ? '' : '"_x"*<Plug>(miniyank-autoPut)'
+    vmap <silent> <buffer> <expr> <C-S-Insert> (&buftype == 'terminal') ? '' : '"_x"*<Plug>(miniyank-autoPut)'
 else
-    vmap <silent> <buffer> <expr> <F34>      (&buftype == 'terminal') ? '<Nop>' : '"_x"*P'
-    vmap <silent> <buffer> <expr> <S-Insert> (&buftype == 'terminal') ? '<Nop>' : '"_x"*P'
-    vmap <silent> <buffer> <expr> <F35>        (&buftype == 'terminal') ? '<Nop>' : '"_x"*P'
-    vmap <silent> <buffer> <expr> <C-S-Insert> (&buftype == 'terminal') ? '<Nop>' : '"_x"*P'
+    vmap <silent> <buffer> <expr> <F34>      (&buftype == 'terminal') ? '' : '"_x"*P'
+    vmap <silent> <buffer> <expr> <S-Insert> (&buftype == 'terminal') ? '' : '"_x"*P'
+    vmap <silent> <buffer> <expr> <F35>        (&buftype == 'terminal') ? '' : '"_x"*P'
+    vmap <silent> <buffer> <expr> <C-S-Insert> (&buftype == 'terminal') ? '' : '"_x"*P'
 endif
 
 " NOTE: to match legacy editors/DOS/etc -
@@ -5248,6 +5248,8 @@ noremap Q <Nop>
 noremap <silent> <Leader>Q q
 nmap <silent> q <Nop>
 " NOTE: q will be re-mapped later on ...
+" nvim fix for repeated <M-q> to sometimes start recording ...
+noremap <silent> <M-q> <Nop>
 
 " for block select beyond shorter line lengths
 set virtualedit=block
@@ -8527,10 +8529,10 @@ tnoremap <silent> <F17><Esc>] <C-\><C-n>
 tnoremap <silent> <M-x>]      <C-\><C-n>
 tnoremap <silent> <M-x><Esc>] <C-\><C-n>
 " dont really want to map <C-x> + anything as <C-x> is used alone as a map in several other places
-nnoremap <silent> <expr> <F17>]      (&buftype == 'terminal') ? 'i' : '<Esc>x]'
-nnoremap <silent> <expr> <F17><Esc>] (&buftype == 'terminal') ? 'i' : '<Esc>x<Esc>]'
-nnoremap <silent> <expr> <M-x>]      (&buftype == 'terminal') ? 'i' : '<M-x>]'
-nnoremap <silent> <expr> <M-x><Esc>] (&buftype == 'terminal') ? 'i' : '<M-x><Esc>]'
+nnoremap <silent> <expr> <F17>]      (&buftype == 'terminal') ? 'i' : ''
+nnoremap <silent> <expr> <F17><Esc>] (&buftype == 'terminal') ? 'i' : ''
+nnoremap <silent> <expr> <M-x>]      (&buftype == 'terminal') ? 'i' : ''
+nnoremap <silent> <expr> <M-x><Esc>] (&buftype == 'terminal') ? 'i' : ''
 " TODO can we use <M-q> to leave normal mode of terminal ?
 
 " this causes sign column to disappear on popups that are terminal windows ...
