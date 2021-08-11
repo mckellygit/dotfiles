@@ -437,6 +437,14 @@ bindkey "\e[1;3C" forward-char
 # Alt-Shift-Left - used by tmux for pane sizing
 # Alt-Shift-Right - used by tmux for pane sizing
 
+# Alt-Down
+bindkey "\e[1;3B" down-line-or-beginning-search
+# Alt-Up
+bindkey "\e[1;3A" up-line-or-beginning-search
+
+# Alt-Shift-Up - used by tmux for pane sizing
+# Alt-Shift-Down - used by tmux for pane sizing
+
 # --------------------
 
 # Shift-DEL - backward kill word
