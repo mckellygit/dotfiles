@@ -2321,9 +2321,11 @@ if !exists("g:vless")
         " many RGB values do not work, perhaps has to be one of 256 colours ?
         " 32/28/28 is slightly different than Floaterm and normal vi backgrounds
         let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w70% -h63% -E \"tmux new -s popup \\\"printf '\\\\\\033]11;rgb:38/28/28\\\\\\007' ; tmux set -w status off ; " . &shell . "\\\"\""
-        nnoremap <silent> <Leader>zF :call system(syscmd)<CR>
+        nnoremap <silent> <Leader>zf :call system(syscmd)<CR>
+    else
+        nnoremap <silent> <Leader>zf :FloatermToggle<CR>
     endif
-    nnoremap <silent> <Leader>zf :FloatermToggle<CR>
+    nnoremap <silent> <Leader>zF :FloatermToggle<CR>
     " MCK: use something else besides <C-x> here ...
     "tnoremap <silent> <expr> <C-x><C-d> (win_gettype(win_getid()) ==# 'popup' \|\| win_gettype(win_getid()) ==# 'floating') ? '<C-\><C-n><C-w>:FloatermHide<CR>' : '<C-x>'
     "tnoremap <silent> <expr> <C-x><C-d> (&filetype ==# 'floaterm') ? '<C-\><C-n><C-w>:FloatermHide<CR>' : ''
@@ -2619,11 +2621,14 @@ endif
 function! s:MyUpdateTitle()
   set titleold=
   " TODO: skip for now as we handle all mappings in both normal and terminal
-  if &buftype==#"terminalSKIP"
+  if &buftype==#"terminal"
     if !has("nvim")
-        set title titlestring=@t:v%.11t
+        set title titlestring=@v:t:%.10t
     else
-        set title titlestring=@t:%.12t
+        " we could leave this @v:t: also and then use same logic
+        " to paste from tmux/OS instead of sending special chars here
+        "set title titlestring=@v:n:%.10t
+        set title titlestring=@v:t:%.10t
     endif
   else
     set title titlestring=@v:%.12t
