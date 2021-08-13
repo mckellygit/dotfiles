@@ -2320,7 +2320,7 @@ if !exists("g:vless")
         " printf \033]11;rgb:<R>/<G>/<B>\007 sets the terminal background colour (only when inside tmux)
         " many RGB values do not work, perhaps has to be one of 256 colours ?
         " 32/28/28 is slightly different than Floaterm and normal vi backgrounds
-        let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w70% -h63% -E \"tmux new -s popup \\\"printf '\\\\\\033]11;rgb:38/28/28\\\\\\007' ; tmux set -w status off ; " . &shell . "\\\"\""
+        let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w70% -h63% -E \"tmux new -s popup \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; tmux set -w status off ; " . &shell . "\\\"\""
         nnoremap <silent> <Leader>zf :call system(syscmd)<CR>
     else
         nnoremap <silent> <Leader>zf :FloatermToggle<CR>
