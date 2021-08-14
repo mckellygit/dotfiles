@@ -2,6 +2,7 @@ set +o history
 export TERM=xterm-256color; tset
 export sship=$(echo $SSH_CLIENT | awk '{print $1}')
 alias rm='rm -i'
+alias ll='ls -lAtr'
 alias lla='ls -lAtr'
 alias vi='vim -c ":hi Search cterm=NONE ctermfg=0 ctermbg=214" -c ":hi String ctermfg=70" -c ":se tabstop=4 shiftwidth=4 expandtab smarttab noai"'
 bind 'set enable-bracketed-paste on'
