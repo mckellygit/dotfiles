@@ -4338,6 +4338,46 @@ vnoremap <S-4-LeftMouse> <Nop>
 inoremap <S-4-LeftMouse> <Nop>
 tnoremap <S-4-LeftMouse> <LeftMouse>
 
+nnoremap <S-MiddleMouse> <Nop>
+vnoremap <S-MiddleMouse> <Nop>
+inoremap <S-MiddleMouse> <Nop>
+tnoremap <S-MiddleMouse> <Nop>
+
+nnoremap <S-2-MiddleMouse> <Nop>
+vnoremap <S-2-MiddleMouse> <Nop>
+inoremap <S-2-MiddleMouse> <Nop>
+tnoremap <S-2-MiddleMouse> <Nop>
+
+nnoremap <S-3-MiddleMouse> <Nop>
+vnoremap <S-3-MiddleMouse> <Nop>
+inoremap <S-3-MiddleMouse> <Nop>
+tnoremap <S-3-MiddleMouse> <Nop>
+
+nnoremap <S-4-MiddleMouse> <Nop>
+vnoremap <S-4-MiddleMouse> <Nop>
+inoremap <S-4-MiddleMouse> <Nop>
+tnoremap <S-4-MiddleMouse> <Nop>
+
+nnoremap <S-RightMouse> <Nop>
+vnoremap <S-RightMouse> <Nop>
+inoremap <S-RightMouse> <Nop>
+tnoremap <S-RightMouse> <Nop>
+
+nnoremap <S-2-RightMouse> <Nop>
+vnoremap <S-2-RightMouse> <Nop>
+inoremap <S-2-RightMouse> <Nop>
+tnoremap <S-2-RightMouse> <Nop>
+
+nnoremap <S-3-RightMouse> <Nop>
+vnoremap <S-3-RightMouse> <Nop>
+inoremap <S-3-RightMouse> <Nop>
+tnoremap <S-3-RightMouse> <Nop>
+
+nnoremap <S-4-RightMouse> <Nop>
+vnoremap <S-4-RightMouse> <Nop>
+inoremap <S-4-RightMouse> <Nop>
+tnoremap <S-4-RightMouse> <Nop>
+
 " -----------------
 
 " TODO: C-S- clicks
@@ -4362,6 +4402,46 @@ vnoremap <C-S-4-LeftMouse> <Nop>
 inoremap <C-S-4-LeftMouse> <Nop>
 tnoremap <C-S-4-LeftMouse> <LeftMouse>
 
+nnoremap <C-S-MiddleMouse> <Nop>
+vnoremap <C-S-MiddleMouse> <Nop>
+inoremap <C-S-MiddleMouse> <Nop>
+tnoremap <C-S-MiddleMouse> <Nop>
+
+nnoremap <C-S-2-MiddleMouse> <Nop>
+vnoremap <C-S-2-MiddleMouse> <Nop>
+inoremap <C-S-2-MiddleMouse> <Nop>
+tnoremap <C-S-2-MiddleMouse> <Nop>
+
+nnoremap <C-S-3-MiddleMouse> <Nop>
+vnoremap <C-S-3-MiddleMouse> <Nop>
+inoremap <C-S-3-MiddleMouse> <Nop>
+tnoremap <C-S-3-MiddleMouse> <Nop>
+
+nnoremap <C-S-4-MiddleMouse> <Nop>
+vnoremap <C-S-4-MiddleMouse> <Nop>
+inoremap <C-S-4-MiddleMouse> <Nop>
+tnoremap <C-S-4-MiddleMouse> <Nop>
+
+nnoremap <C-S-RightMouse> <Nop>
+vnoremap <C-S-RightMouse> <Nop>
+inoremap <C-S-RightMouse> <Nop>
+tnoremap <C-S-RightMouse> <Nop>
+
+nnoremap <C-S-2-RightMouse> <Nop>
+vnoremap <C-S-2-RightMouse> <Nop>
+inoremap <C-S-2-RightMouse> <Nop>
+tnoremap <C-S-2-RightMouse> <Nop>
+
+nnoremap <C-S-3-RightMouse> <Nop>
+vnoremap <C-S-3-RightMouse> <Nop>
+inoremap <C-S-3-RightMouse> <Nop>
+tnoremap <C-S-3-RightMouse> <Nop>
+
+nnoremap <C-S-4-RightMouse> <Nop>
+vnoremap <C-S-4-RightMouse> <Nop>
+inoremap <C-S-4-RightMouse> <Nop>
+tnoremap <C-S-4-RightMouse> <Nop>
+
 " TODO: A-S- clicks
 
 nnoremap <M-S-LeftMouse> <Nop>
@@ -4383,6 +4463,46 @@ nnoremap <M-S-4-LeftMouse> <Nop>
 vnoremap <M-S-4-LeftMouse> <Nop>
 inoremap <M-S-4-LeftMouse> <Nop>
 tnoremap <M-S-4-LeftMouse> <LeftMouse>
+
+nnoremap <M-S-MiddleMouse> <Nop>
+vnoremap <M-S-MiddleMouse> <Nop>
+inoremap <M-S-MiddleMouse> <Nop>
+tnoremap <M-S-MiddleMouse> <Nop>
+
+nnoremap <M-S-2-MiddleMouse> <Nop>
+vnoremap <M-S-2-MiddleMouse> <Nop>
+inoremap <M-S-2-MiddleMouse> <Nop>
+tnoremap <M-S-2-MiddleMouse> <Nop>
+
+nnoremap <M-S-3-MiddleMouse> <Nop>
+vnoremap <M-S-3-MiddleMouse> <Nop>
+inoremap <M-S-3-MiddleMouse> <Nop>
+tnoremap <M-S-3-MiddleMouse> <Nop>
+
+nnoremap <M-S-4-MiddleMouse> <Nop>
+vnoremap <M-S-4-MiddleMouse> <Nop>
+inoremap <M-S-4-MiddleMouse> <Nop>
+tnoremap <M-S-4-MiddleMouse> <Nop>
+
+nnoremap <M-S-RightMouse> <Nop>
+vnoremap <M-S-RightMouse> <Nop>
+inoremap <M-S-RightMouse> <Nop>
+tnoremap <M-S-RightMouse> <Nop>
+
+nnoremap <M-S-2-RightMouse> <Nop>
+vnoremap <M-S-2-RightMouse> <Nop>
+inoremap <M-S-2-RightMouse> <Nop>
+tnoremap <M-S-2-RightMouse> <Nop>
+
+nnoremap <M-S-3-RightMouse> <Nop>
+vnoremap <M-S-3-RightMouse> <Nop>
+inoremap <M-S-3-RightMouse> <Nop>
+tnoremap <M-S-3-RightMouse> <Nop>
+
+nnoremap <M-S-4-RightMouse> <Nop>
+vnoremap <M-S-4-RightMouse> <Nop>
+inoremap <M-S-4-RightMouse> <Nop>
+tnoremap <M-S-4-RightMouse> <Nop>
 
 " -----------------
 
