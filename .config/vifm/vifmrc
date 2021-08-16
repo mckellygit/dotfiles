@@ -735,7 +735,7 @@ qnoremap <esc>[1;3A    10k
 
 " gruvbox theme ----------------------
 
-highlight clear
+"highlight clear
 
 highlight Border	cterm=none	ctermfg=235	ctermbg=default
 
