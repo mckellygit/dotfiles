@@ -1214,9 +1214,9 @@ autocmd FileType GV setlocal cursorline
 " TODO: it seems when ft==git <ScrollWheel> acts different than the map defined in this file
 
 " M/A-DoubleClick to open (o) commit ...
-autocmd FileType GV nmap <buffer> <A-LeftRelease> <Nop>
-autocmd FileType GV nmap <buffer> <A-2-LeftRelease> <Nop>
-autocmd FileType GV nmap <buffer> <A-2-LeftMouse> <C-\><C-n>:<C-u>call feedkeys("O")<CR>
+autocmd FileType GV nmap <buffer> <A-C-LeftRelease> <Nop>
+autocmd FileType GV nmap <buffer> <A-C-2-LeftRelease> <Nop>
+autocmd FileType GV nmap <buffer> <A-C-2-LeftMouse> <C-\><C-n>:<C-u>call feedkeys("O")<CR>
 " M/A-q to quit like q, but M/A-q is used by Unity/Gnome
 
 " start with folds open
@@ -4254,25 +4254,25 @@ endfunction
 
 " mouse paste etc.
 
-nnoremap <M-C-LeftMouse> <Nop>
-vnoremap <M-C-LeftMouse> <Nop>
-inoremap <M-C-LeftMouse> <Nop>
-tnoremap <M-C-LeftMouse> <LeftMouse>
+"nnoremap <M-C-LeftMouse> <Nop>
+"vnoremap <M-C-LeftMouse> <Nop>
+"inoremap <M-C-LeftMouse> <Nop>
+"tnoremap <M-C-LeftMouse> <LeftMouse>
 
-nnoremap <M-C-2-LeftMouse> <Nop>
-vnoremap <M-C-2-LeftMouse> <Nop>
-inoremap <M-C-2-LeftMouse> <Nop>
-tnoremap <M-C-2-LeftMouse> <2-LeftMouse>
+"nnoremap <M-C-2-LeftMouse> <Nop>
+"vnoremap <M-C-2-LeftMouse> <Nop>
+"inoremap <M-C-2-LeftMouse> <Nop>
+"tnoremap <M-C-2-LeftMouse> <2-LeftMouse>
 
-nnoremap <M-C-3-LeftMouse> <Nop>
-vnoremap <M-C-3-LeftMouse> <Nop>
-inoremap <M-C-3-LeftMouse> <Nop>
-tnoremap <M-C-3-LeftMouse> <3-LeftMouse>
+"nnoremap <M-C-3-LeftMouse> <Nop>
+"vnoremap <M-C-3-LeftMouse> <Nop>
+"inoremap <M-C-3-LeftMouse> <Nop>
+"tnoremap <M-C-3-LeftMouse> <3-LeftMouse>
 
-nnoremap <M-C-4-LeftMouse> <Nop>
-vnoremap <M-C-4-LeftMouse> <Nop>
-inoremap <M-C-4-LeftMouse> <Nop>
-tnoremap <M-C-4-LeftMouse> <Nop>
+"nnoremap <M-C-4-LeftMouse> <Nop>
+"vnoremap <M-C-4-LeftMouse> <Nop>
+"inoremap <M-C-4-LeftMouse> <Nop>
+"tnoremap <M-C-4-LeftMouse> <Nop>
 
 nnoremap <M-C-MiddleMouse> <Nop>
 vnoremap <M-C-MiddleMouse> <Nop>
@@ -4702,14 +4702,36 @@ tnoremap <A-4-RightMouse> <Nop>
 " NOTE: Meta/Alt left mouse enters visual mode to drag/select ...
 "nnoremap <silent> <A-LeftMouse> <LeftMouse>
 "vnoremap <silent> <A-LeftMouse> <LeftMouse>
-nnoremap <A-LeftDrag> v<LeftDrag>
-vnoremap <A-LeftDrag> <LeftDrag>
-inoremap <A-LeftDrag> <LeftDrag>
+
+nnoremap <A-C-LeftDrag> <LeftDrag>
+vnoremap <A-C-LeftDrag> <LeftDrag>
+inoremap <A-C-LeftDrag> <LeftDrag>
+
+" NOTE: below we used nmap for the <C-LeftMouse> <LeftMouse>
+nnoremap <A-C-LeftMouse> <LeftMouse>
+vnoremap <A-C-LeftMouse> <LeftMouse>
+
+" ----------
+
+" change C-LeftMouse searching tags file for symbol under cursor
+" and select words under cursor instead (lBvhE/lBvE) (is h needed ?)
+" (was viW), use GetPath() instead ...
+"nnoremap <silent> <C-LeftMouse> <Nop>
+"vnoremap <silent> <C-LeftMouse> <Nop>
+"inoremap <silent> <C-LeftMouse> <Nop>
 
 " might as well make C- do the same as normal mode
-nnoremap <C-LeftDrag> v<LeftDrag>
+nnoremap <C-LeftDrag> <LeftDrag>
 vnoremap <C-LeftDrag> <LeftDrag>
 inoremap <C-LeftDrag> <LeftDrag>
+
+" NOTE: above we used nnoremap for the <A-C-LeftMouse> <LeftMouse>
+nmap <C-LeftMouse> <LeftMouse>
+vmap <C-LeftMouse> <LeftMouse>
+"imap <C-LeftMouse> <LeftMouse>
+
+" --------------------------
+" --------------------------
 
 aug setival
     au!
@@ -4757,16 +4779,6 @@ else
     imap <4-LeftMouse> <Esc>VTygvzyi<C-\><C-o>gv
 endif
 "imap <silent> <4-LeftMouse> <C-\><C-o>:let @i="2"<bar>:call <SID>GetLine(1)<CR>
-
-" change C-LeftMouse searching tags file for symbol under cursor
-" and select words under cursor instead (lBvhE/lBvE) (is h needed ?)
-" (was viW), use GetPath() instead ...
-"nnoremap <silent> <C-LeftMouse> <Nop>
-"vnoremap <silent> <C-LeftMouse> <Nop>
-"inoremap <silent> <C-LeftMouse> <Nop>
-nmap <C-LeftMouse> <LeftMouse>
-vmap <C-LeftMouse> <LeftMouse>
-"imap <C-LeftMouse> <LeftMouse>
 
 " TODO: previous Ctrl mappings ...
 " --------------------------------
@@ -4898,27 +4910,27 @@ endfunction
 
 " NOTE: single click after double ...
 
-nmap <silent> <A-2-LeftMouse>      mvviwty:call <SID>Delay(1)<CR><Esc>
-vmap <silent> <A-2-LeftMouse> <Esc>mvviwty:call <SID>Delay(1)<CR><Esc>
-imap <silent> <A-2-LeftMouse> <LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>
+nmap <silent> <A-C-2-LeftMouse>      mvviwty:call <SID>Delay(1)<CR><Esc>
+vmap <silent> <A-C-2-LeftMouse> <Esc>mvviwty:call <SID>Delay(1)<CR><Esc>
+imap <silent> <A-C-2-LeftMouse> <LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>
 
 if exists('$TMUX_PANE')
-    nmap <silent> <A-3-LeftMouse> <Nop>
-    vmap <silent> <A-3-LeftMouse> <Nop>
-    imap <silent> <A-3-LeftMouse> <Nop>
+    nmap <silent> <A-C-3-LeftMouse> <Nop>
+    vmap <silent> <A-C-3-LeftMouse> <Nop>
+    imap <silent> <A-C-3-LeftMouse> <Nop>
 
-    nmap <silent> <A-4-LeftMouse> <Nop>
-    vmap <silent> <A-4-LeftMouse> <Nop>
+    nmap <silent> <A-C-4-LeftMouse> <Nop>
+    vmap <silent> <A-C-4-LeftMouse> <Nop>
 else
-    nmap <silent> <A-3-LeftMouse> <LeftMouse>:call <SID>GetPath(2,1)<CR>
-    vmap <silent> <A-3-LeftMouse> <LeftMouse><C-\><C-n>:call <SID>GetPath(2,1)<CR>
-    imap <silent> <A-3-LeftMouse> <LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>
+    nmap <silent> <A-C-3-LeftMouse> <LeftMouse>:call <SID>GetPath(2,1)<CR>
+    vmap <silent> <A-C-3-LeftMouse> <LeftMouse><C-\><C-n>:call <SID>GetPath(2,1)<CR>
+    imap <silent> <A-C-3-LeftMouse> <LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>
 
-    nmap <silent> <A-4-LeftMouse>      mvVty:call <SID>Delay(1)<CR><Esc>
-    vmap <silent> <A-4-LeftMouse> <Esc>mvVty:call <SID>Delay(1)<CR><Esc>
+    nmap <silent> <A-C-4-LeftMouse>      mvVty:call <SID>Delay(1)<CR><Esc>
+    vmap <silent> <A-C-4-LeftMouse> <Esc>mvVty:call <SID>Delay(1)<CR><Esc>
 endif
 
-imap <silent> <A-4-LeftMouse> <Nop>
+imap <silent> <A-C-4-LeftMouse> <Nop>
 
 " NOTE: tmux maps A-Triple to M-B to be able to know its a triple-click ...
 call <SID>MapFastKeycode('<S-F33>',  "\eB", 133)
@@ -4939,8 +4951,8 @@ if has("nvim")
     imap <silent> <M-B> <LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>
 endif
 
-vmap <silent> <A-LeftRelease> tygv:<C-u>call <SID>Delay(0)<CR><Esc>
-imap <silent> <A-LeftMouse> <C-\><C-o>:let @i="2"<CR><LeftMouse>
+vmap <silent> <A-C-LeftRelease> tygv:<C-u>call <SID>Delay(0)<CR><Esc>
+imap <silent> <A-C-LeftMouse>   <C-\><C-o>:let @i="2"<CR><LeftMouse>
 
 " ------------------------------
 
