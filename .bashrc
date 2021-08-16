@@ -224,6 +224,33 @@ alias fzf='fzf-tmux'
 
 alias kc='kubectl'
 
+# --------------------
+
+# gcc/clang -fsanitize=leak ...
+
+export ASAN_OPTIONS="detect_leaks=0"
+export LSAN_OPTIONS="detect_leaks=0 exitcode=0 max_leaks=100"
+
+# also can add to ASAN_OPTIONS=fast_unwind_on_malloc=0 if trace is missing
+
+# also can add to LSAN_OPTIONS: suppressions=/tmp/leak_suppresion.txt
+# where leak_supression.txt file is:
+# leak:FooBar
+
+# to remove FooBar symbol from checking
+
+# and may need to manually dump leak summary ...
+
+#   #include <sanitizer/lsan_interface.h>
+#
+#   void handler(int sig)
+#   {
+#       __lsan_do_leak_check();
+#       if (sig == SIGUSR1)
+#           return;
+#       exit(1);
+#   }
+
 # ------------------
 
 sship()
