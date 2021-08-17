@@ -142,6 +142,8 @@ Plugin 'tpope/vim-dispatch'
 "
 " gitgutter
 Plugin 'airblade/vim-gitgutter'
+" there is also -
+"Plugin 'mhinz/vim-signify'
 "
 " gitk like repo viewer
 "Plugin 'gregsexton/gitv'
@@ -1137,6 +1139,52 @@ aug END
 " fugitive -----------
 
 " gitgutter -----------
+function! s:GitGutterNextHunkCycle()
+  let bufnr = bufnr('')
+  if !gitgutter#utility#is_active(bufnr) | return | endif
+  let hunks = gitgutter#hunk#hunks(bufnr)
+  if empty(hunks)
+      call s:warn('No git hunks in file')
+      sleep 451m
+      " eat typeahead ...
+      while getchar(0)
+          sleep 1m
+      endwhile
+      redraw!
+      echo " "
+      return
+  endif
+  let line = line('.')
+  GitGutterNextHunk
+  if line('.') == line
+    silent execute 'normal! 1G'
+    GitGutterNextHunk
+  endif
+endfunction
+
+function! s:GitGutterPrevHunkCycle()
+  let bufnr = bufnr('')
+  if !gitgutter#utility#is_active(bufnr) | return | endif
+  let hunks = gitgutter#hunk#hunks(bufnr)
+  if empty(hunks)
+      call s:warn('No git hunks in file')
+      sleep 451m
+      " eat typeahead ...
+      while getchar(0)
+          sleep 1m
+      endwhile
+      redraw!
+      echo " "
+      return
+  endif
+  let line = line('.')
+  GitGutterPrevHunk
+  if line('.') == line
+    silent execute 'normal! G'
+    GitGutterPrevHunk
+  endif
+endfunction
+
 let g:gitgutter_enabled = 1
 let g:gitgutter_sign_column_always = 1
 " always have sign column
@@ -1144,27 +1192,33 @@ if exists('&signcolumn')  " Vim 7.4.2201
   set signcolumn=yes
 endif
 
-nmap <Leader>gn <Plug>(GitGutterNextHunk)
-nmap <Leader>gp <Plug>(GitGutterPrevHunk)
+"nmap <Leader>gn <Plug>(GitGutterNextHunk)
+"nmap <Leader>gp <Plug>(GitGutterPrevHunk)
+nmap <silent> <Leader>gn :call <SID>GitGutterNextHunkCycle()<CR>
+nmap <silent> <Leader>gp :call <SID>GitGutterPrevHunkCycle()<CR>
 
 " SPECIAL: some terminals may map <C-S-n> to <C-_>N ...
-nmap <C-_>N     <Plug>(GitGutterNextHunk)
+"nmap <C-_>N     <Plug>(GitGutterNextHunk)
 " SPECIAL: some terminals may map <C-S-p> to <C-_>P ...
-nmap <C-_>P     <Plug>(GitGutterPrevHunk)
+"nmap <C-_>P     <Plug>(GitGutterPrevHunk)
 " NOTE: kitty previously used ctrl+shift+p + ... for url selection
 " and this was changed to ctrl+shift+/ so we can use C-S-p here ...
+nmap <silent> <C-_>N  :call <SID>GitGutterNextHunkCycle()<CR>
+nmap <silent> <C-_>P  :call <SID>GitGutterPrevHunkCycle()<CR>
 
 " TODO: or use M-n/p or M-n/N or C-A-n/p ?
 " NOTE: tmux maps <M-n> to <C-^>n and same for N,p,P
 " or have tmux change <C-S-n> to <C-_>N ?
 
+" to match fugitive and tig ...
+"nmap <C-n>      <Plug>(GitGutterNextHunk)
+"nmap <C-p>      <Plug>(GitGutterPrevHunk)
+nmap <silent> <C-n> :call <SID>GitGutterNextHunkCycle()<CR>
+nmap <silent> <C-p> :call <SID>GitGutterPrevHunkCycle()<CR>
+
 nmap <silent> <Leader>gg :call gitgutter#process_buffer(bufnr(''), 0)<CR>
 " SPECIAL: some terminals may map <C-S-g> to <C-_>G ...
 nmap <silent> <C-_>G     :call gitgutter#process_buffer(bufnr(''), 0)<CR>
-
-" to match fugitive and tig ...
-nmap <C-n>      <Plug>(GitGutterNextHunk)
-nmap <C-p>      <Plug>(GitGutterPrevHunk)
 
 aug gg_init
   au!
@@ -2320,7 +2374,7 @@ if !exists("g:vless")
         " printf \033]11;rgb:<R>/<G>/<B>\007 sets the terminal background colour (only when inside tmux)
         " many RGB values do not work, perhaps has to be one of 256 colours ?
         " 32/28/28 is slightly different than Floaterm and normal vi backgrounds
-        let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w70% -h63% -E \"tmux new -s popup \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; tmux set -w status off ; " . &shell . "\\\"\""
+        let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w70% -h63% -E \"tmux new \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; tmux set -w status off ; " . &shell . "\\\"\""
         nnoremap <silent> <Leader>zf :call system(syscmd)<CR>
     else
         nnoremap <silent> <Leader>zf :FloatermToggle<CR>
@@ -2614,7 +2668,7 @@ endif
 " do something different (such as remove last empty NUL/NL for the terminal)
 au WinEnter * call <SID>MyUpdateTitle()
 if !has("nvim")
-    au TerminalOpen * call <SID>MyUpdateTitle()
+    au TerminalOpen,TerminalWinOpen * call <SID>MyUpdateTitle()
 else
     au TermEnter,TermOpen * call <SID>MyUpdateTitle()
 endif
@@ -3338,6 +3392,18 @@ vnoremap <silent> <M-S-Tab>      <C-\><C-n>:<C-u>tabprevious<CR>
 vnoremap <silent> <C-^><Tab>     <C-\><C-n>:<C-u>tabnext<CR>
 vnoremap <silent> <C-^><S-Tab>   <C-\><C-n>:<C-u>tabprevious<CR>
 
+if !has("nvim")
+    tnoremap <silent> <M-Tab>        <C-w>:tabnext<CR>
+    tnoremap <silent> <M-S-Tab>      <C-w>:tabprevious<CR>
+    tnoremap <silent> <C-^><Tab>     <C-w>:tabnext<CR>
+    tnoremap <silent> <C-^><S-Tab>   <C-w>:tabprevious<CR>
+else
+    tnoremap <silent> <M-Tab>        <C-\><C-n>:<C-u>tabnext<CR>
+    tnoremap <silent> <M-S-Tab>      <C-\><C-n>:<C-u>tabprevious<CR>
+    tnoremap <silent> <C-^><Tab>     <C-\><C-n>:<C-u>tabnext<CR>
+    tnoremap <silent> <C-^><S-Tab>   <C-\><C-n>:<C-u>tabprevious<CR>
+endif
+
 " dont do this, it messes up viw ...
 "vnoremap i <Nop>
 
@@ -3380,7 +3446,7 @@ function! s:MapFastKeycode(key, keycode, indx)
         let vkeycode = '<S-F'.lindx.'>'
     endif
     " skip over existing mappings ...
-    if !hasmapto('vkeycode', 'nvoict') && (maparg('vkeycode', 'nvoict') ==# '' || maparg('vkeycode', 'nvoict') ==# '<Nop>')
+    if !hasmapto('vkeycode', 'nvoict') && (maparg('vkeycode', 'nvoict') ==# '' || maparg('vkeycode', 'nvoict') == '<Nop>')
         exec 'set  '.vkeycode.'='.a:keycode
         exec 'map  '.vkeycode.' '.a:key
         exec 'imap '.vkeycode.' '.a:key
@@ -4046,6 +4112,12 @@ function! s:MyVisCv()
     while getchar(0)
           sleep 1m
     endwhile
+    if !exists('w:vc')
+        let w:vc = 'u'
+    endif
+    if !exists('w:vp')
+        let w:vp = 'u'
+    endif
     if w:vc ==# 'v'
         let w:vp = w:vc
         let w:vc = 'x'
@@ -4084,6 +4156,12 @@ endfunction
 
 xnoremap <silent> v <C-\><C-n>:<C-u>call <SID>MyVisV1()<CR>
 function! s:MyVisV1()
+    if !exists('w:vc')
+        let w:vc = 'u'
+    endif
+    if !exists('w:vp')
+        let w:vp = 'u'
+    endif
     if w:vc ==# 'v'
         " no-op
         exe "silent! normal! gv"
@@ -4103,6 +4181,12 @@ endfunction
 
 xnoremap <silent> V <C-\><C-n>:<C-u>call <SID>MyVisV2()<CR>
 function! s:MyVisV2()
+    if !exists('w:vc')
+        let w:vc = 'u'
+    endif
+    if !exists('w:vp')
+        let w:vp = 'u'
+    endif
     if w:vc ==# 'V'
         " no-op
         exe "silent! normal! gv"
@@ -4277,17 +4361,17 @@ endfunction
 nnoremap <M-C-MiddleMouse> <Nop>
 vnoremap <M-C-MiddleMouse> <Nop>
 inoremap <M-C-MiddleMouse> <Nop>
-tnoremap <M-C-MiddleMouse> <MiddleMouse>
+tnoremap <M-C-MiddleMouse> <Nop>
 
 nnoremap <M-C-2-MiddleMouse> <Nop>
 vnoremap <M-C-2-MiddleMouse> <Nop>
 inoremap <M-C-2-MiddleMouse> <Nop>
-tnoremap <M-C-2-MiddleMouse> <2-MiddleMouse>
+tnoremap <M-C-2-MiddleMouse> <Nop>
 
 nnoremap <M-C-3-MiddleMouse> <Nop>
 vnoremap <M-C-3-MiddleMouse> <Nop>
 inoremap <M-C-3-MiddleMouse> <Nop>
-tnoremap <M-C-3-MiddleMouse> <3-MiddleMouse>
+tnoremap <M-C-3-MiddleMouse> <Nop>
 
 nnoremap <M-C-4-MiddleMouse> <Nop>
 vnoremap <M-C-4-MiddleMouse> <Nop>
@@ -4297,17 +4381,36 @@ tnoremap <M-C-4-MiddleMouse> <Nop>
 nnoremap <M-C-RightMouse> <Nop>
 vnoremap <M-C-RightMouse> <Nop>
 inoremap <M-C-RightMouse> <Nop>
-tnoremap <M-C-RightMouse> <RightMouse>
+tnoremap <M-C-RightMouse> <Nop>
+
+" -------------------
+
+" so mouse paste in nvim terminal does not go into normal mode ...
+if has("nvim")
+    tnoremap <RightRelease> <Nop>
+    tnoremap <C-RightMouse> <Nop>
+    tnoremap <M-RightRelease> <Nop>
+    tnoremap <silent> <C-RightRelease>   <Space><BS>
+    tnoremap <silent> <M-C-RightRelease> <Space><BS>
+    tnoremap <C-2-RightRelease> <Nop>
+    tnoremap <C-3-RightRelease> <Nop>
+    tnoremap <C-4-RightRelease> <Nop>
+    tnoremap <M-C-2-RightRelease> <Nop>
+    tnoremap <M-C-3-RightRelease> <Nop>
+    tnoremap <M-C-4-RightRelease> <Nop>
+endif
+
+" -------------------
 
 nnoremap <M-C-2-RightMouse> <Nop>
 vnoremap <M-C-2-RightMouse> <Nop>
 inoremap <M-C-2-RightMouse> <Nop>
-tnoremap <M-C-2-RightMouse> <2-RightMouse>
+tnoremap <M-C-2-RightMouse> <Nop>
 
 nnoremap <M-C-3-RightMouse> <Nop>
 vnoremap <M-C-3-RightMouse> <Nop>
 inoremap <M-C-3-RightMouse> <Nop>
-tnoremap <M-C-3-RightMouse> <3-RightMouse>
+tnoremap <M-C-3-RightMouse> <Nop>
 
 nnoremap <M-C-4-RightMouse> <Nop>
 vnoremap <M-C-4-RightMouse> <Nop>
@@ -4710,6 +4813,7 @@ inoremap <A-C-LeftDrag> <LeftDrag>
 " NOTE: below we used nmap for the <C-LeftMouse> <LeftMouse>
 nnoremap <A-C-LeftMouse> <LeftMouse>
 vnoremap <A-C-LeftMouse> <LeftMouse>
+"inoremap <A-C-LeftMouse> <LeftMouse>
 
 " ----------
 
@@ -4726,9 +4830,9 @@ vnoremap <C-LeftDrag> <LeftDrag>
 inoremap <C-LeftDrag> <LeftDrag>
 
 " NOTE: above we used nnoremap for the <A-C-LeftMouse> <LeftMouse>
-nmap <C-LeftMouse> <LeftMouse>
-vmap <C-LeftMouse> <LeftMouse>
-"imap <C-LeftMouse> <LeftMouse>
+nnoremap <C-LeftMouse> <LeftMouse>
+vnoremap <C-LeftMouse> <LeftMouse>
+"inoremap <C-LeftMouse> <LeftMouse>
 
 " --------------------------
 " --------------------------
@@ -4845,6 +4949,7 @@ call <SID>MapFastKeycode('<S-F32>',  "\eC", 132)
 nmap <silent> <S-F32> <LeftMouse>:call <SID>GetPath(2,1)<CR>
 vmap <silent> <S-F32> <LeftMouse><C-\><C-n>:call <SID>GetPath(2,1)<CR>
 imap <silent> <S-F32> <LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>
+tnoremap <S-F32> <Nop>
 if has("nvim")
     "nmap <silent> <M-C> mvviWty:call <SID>Delay(1)<CR><Esc>
     "vmap <silent> <M-C> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
@@ -4898,6 +5003,8 @@ function! s:Delay(arg) abort
         let clipcmd = c2
         echohl String | echon 'Copied to clipboard using: ' . clipcmd | echohl None
     endif
+    let w:vp=w:vc
+    let w:vc='u'
     sleep 551m
     echo " "
 endfunction
@@ -4941,12 +5048,16 @@ call <SID>MapFastKeycode('<S-F33>',  "\eB", 133)
 nmap <silent> <S-F33> <LeftMouse>:call <SID>GetPath(2,1)<CR>
 vmap <silent> <S-F33> <LeftMouse><C-\><C-n>:call <SID>GetPath(2,1)<CR>
 imap <silent> <S-F33> <LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>
+tnoremap <S-F33> <Nop>
 if has("nvim")
     "nmap <silent> <M-B> mvviWty:call <SID>Delay(1)<CR><Esc>
     "vmap <silent> <M-B> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
     "nmap <silent> <expr> <M-B> (@j=="0") ? '<LeftMouse>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse>:call <SID>GetPath(2,1)<CR>'
     "vmap <silent> <expr> <M-B> (@j=="0") ? '<LeftMouse><C-\><C-n>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-n>:call <SID>GetPath(2,1)<CR>'
     nmap <silent> <M-B> <LeftMouse>:call <SID>GetPath(2,1)<CR>
+    " if wanted to paste selection on cmdline ... (but still doesn't handle trailing space)
+    "nmap <silent> <expr> <M-B> (&buftype == 'terminal') ? '<LeftMouse>:call <SID>GetPath(2,1)<CR><S-Insert>' : '<LeftMouse>:call <SID>GetPath(2,1)<CR>'
+    " C-M-LeftDrag doesn't paste in nvim terminal either ...
     vmap <silent> <M-B> <LeftMouse><C-\><C-n>:call <SID>GetPath(2,1)<CR>
     imap <silent> <M-B> <LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>
 endif
@@ -5748,9 +5859,9 @@ endfunction
 noremap <silent> <expr> <C-Down>   ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>j'
 noremap <silent> <expr> <C-j>      ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>j'
 
-noremap <silent> <expr> <C-S-Space> AtTop(0) ? ((line("$") - line("w$")) >= 10 ? '10<C-e>' : (line("$") - line("w$")) >= 9 ? '9<C-e>' : (line("$") - line("w$")) >= 8 ? '8<C-e>' : (line("$") - line("w$")) >= 7 ? '7<C-e>' : (line("$") - line("w$")) >= 6 ? '6<C-e>' : (line("$") - line("w$")) >= 5 ? '5<C-e>' : (line("$") - line("w$")) >= 4 ? '4<C-e>' : (line("$") - line("w$")) >= 3 ? '3<C-e>' : (line("$") - line("w$")) >= 2 ? '2<C-e>' :(line("$") - line("w$")) >= 1 ? '1<C-e>' : '\<Nop>') : ((line("$") - line("w$")) >= 10 ? '10<C-e>10j' : (line("$") - line("w$")) >= 9 ? '9<C-e>9j' : (line("$") - line("w$")) >= 8 ? '8<C-e>8j' : (line("$") - line("w$")) >= 7 ? '7<C-e>7j' : (line("$") - line("w$")) >= 6 ? '6<C-e>6j' : (line("$") - line("w$")) >= 5 ? '5<C-e>5j' : (line("$") - line("w$")) >= 4 ? '4<C-e>4j' : (line("$") - line("w$")) >= 3 ? '3<C-e>3j' : (line("$") - line("w$")) >= 2 ? '2<C-e>2j' :(line("$") - line("w$")) >= 1 ? '1<C-e>1j' : '\<Nop>')
+noremap <silent> <expr> <C-S-Space> AtTop(0) ? ((line("$") - line("w$")) >= 10 ? '10<C-e>' : (line("$") - line("w$")) >= 9 ? '9<C-e>' : (line("$") - line("w$")) >= 8 ? '8<C-e>' : (line("$") - line("w$")) >= 7 ? '7<C-e>' : (line("$") - line("w$")) >= 6 ? '6<C-e>' : (line("$") - line("w$")) >= 5 ? '5<C-e>' : (line("$") - line("w$")) >= 4 ? '4<C-e>' : (line("$") - line("w$")) >= 3 ? '3<C-e>' : (line("$") - line("w$")) >= 2 ? '2<C-e>' :(line("$") - line("w$")) >= 1 ? '1<C-e>' : '') : ((line("$") - line("w$")) >= 10 ? '10<C-e>10j' : (line("$") - line("w$")) >= 9 ? '9<C-e>9j' : (line("$") - line("w$")) >= 8 ? '8<C-e>8j' : (line("$") - line("w$")) >= 7 ? '7<C-e>7j' : (line("$") - line("w$")) >= 6 ? '6<C-e>6j' : (line("$") - line("w$")) >= 5 ? '5<C-e>5j' : (line("$") - line("w$")) >= 4 ? '4<C-e>4j' : (line("$") - line("w$")) >= 3 ? '3<C-e>3j' : (line("$") - line("w$")) >= 2 ? '2<C-e>2j' :(line("$") - line("w$")) >= 1 ? '1<C-e>1j' : '')
 " SPECIAL: NOTE: some terminals map <C-S-Space> to <C-_><Space>
-noremap <silent> <expr> <C-_><Space> AtTop(0) ? ((line("$") - line("w$")) >= 10 ? '10<C-e>' : (line("$") - line("w$")) >= 9 ? '9<C-e>' : (line("$") - line("w$")) >= 8 ? '8<C-e>' : (line("$") - line("w$")) >= 7 ? '7<C-e>' : (line("$") - line("w$")) >= 6 ? '6<C-e>' : (line("$") - line("w$")) >= 5 ? '5<C-e>' : (line("$") - line("w$")) >= 4 ? '4<C-e>' : (line("$") - line("w$")) >= 3 ? '3<C-e>' : (line("$") - line("w$")) >= 2 ? '2<C-e>' :(line("$") - line("w$")) >= 1 ? '1<C-e>' : '\<Nop>') : ((line("$") - line("w$")) >= 10 ? '10<C-e>10j' : (line("$") - line("w$")) >= 9 ? '9<C-e>9j' : (line("$") - line("w$")) >= 8 ? '8<C-e>8j' : (line("$") - line("w$")) >= 7 ? '7<C-e>7j' : (line("$") - line("w$")) >= 6 ? '6<C-e>6j' : (line("$") - line("w$")) >= 5 ? '5<C-e>5j' : (line("$") - line("w$")) >= 4 ? '4<C-e>4j' : (line("$") - line("w$")) >= 3 ? '3<C-e>3j' : (line("$") - line("w$")) >= 2 ? '2<C-e>2j' :(line("$") - line("w$")) >= 1 ? '1<C-e>1j' : '\<Nop>')
+noremap <silent> <expr> <C-_><Space> AtTop(0) ? ((line("$") - line("w$")) >= 10 ? '10<C-e>' : (line("$") - line("w$")) >= 9 ? '9<C-e>' : (line("$") - line("w$")) >= 8 ? '8<C-e>' : (line("$") - line("w$")) >= 7 ? '7<C-e>' : (line("$") - line("w$")) >= 6 ? '6<C-e>' : (line("$") - line("w$")) >= 5 ? '5<C-e>' : (line("$") - line("w$")) >= 4 ? '4<C-e>' : (line("$") - line("w$")) >= 3 ? '3<C-e>' : (line("$") - line("w$")) >= 2 ? '2<C-e>' :(line("$") - line("w$")) >= 1 ? '1<C-e>' : '') : ((line("$") - line("w$")) >= 10 ? '10<C-e>10j' : (line("$") - line("w$")) >= 9 ? '9<C-e>9j' : (line("$") - line("w$")) >= 8 ? '8<C-e>8j' : (line("$") - line("w$")) >= 7 ? '7<C-e>7j' : (line("$") - line("w$")) >= 6 ? '6<C-e>6j' : (line("$") - line("w$")) >= 5 ? '5<C-e>5j' : (line("$") - line("w$")) >= 4 ? '4<C-e>4j' : (line("$") - line("w$")) >= 3 ? '3<C-e>3j' : (line("$") - line("w$")) >= 2 ? '2<C-e>2j' :(line("$") - line("w$")) >= 1 ? '1<C-e>1j' : '')
 
 "vnoremap <silent> <expr> <C-Down> ((line('$') - line('w$')) < 1) ? 'j' : '<C-e>j'
 "vnoremap <silent> <expr> <C-j>    ((line('$') - line('w$')) < 1) ? 'j' : '<C-e>j'
@@ -5762,9 +5873,9 @@ inoremap <silent> <expr> <C-j>      pumvisible() ? '<C-j>'    : '<C-\><C-o>:call
 noremap <silent> <expr> <C-Up>     AtBot(0) ? '<C-y>' : '<C-y>k'
 noremap <silent> <expr> <C-k>      AtBot(0) ? '<C-y>' : '<C-y>k'
 
-noremap <silent> <expr> <C-S-BS> AtBot(0) ? ((line("w0") - 1 - line("0")) >= 10 ? '10<C-y>' : (line("w0") - 1 - line("0")) >= 9 ? '9<C-y>' : (line("w0") - 1 - line("0")) >= 8 ? '8<C-y>' : (line("w0") - 1 - line("0")) >= 7 ? '7<C-y>' : (line("w0") - 1 - line("0")) >= 6 ? '6<C-y>' : (line("w0") - 1 - line("0")) >= 5 ? '5<C-y>' : (line("w0") - 1 - line("0")) >= 4 ? '4<C-y>' : (line("w0") - 1 - line("0")) >= 3 ? '3<C-y>' : (line("w0") - 1 - line("0")) >= 2 ? '2<C-y>' : (line("w0") - 1 - line("0")) >= 1 ? '1<C-y>' : '\<Nop>') : ((line("w0") - 1 - line("0")) >= 10 ? '10<C-y>10k' : (line("w0") - 1 - line("0")) >= 9 ? '9<C-y>9k' : (line("w0") - 1 - line("0")) >= 8 ? '8<C-y>8k' : (line("w0") - 1 - line("0")) >= 7 ? '7<C-y>7k' : (line("w0") - 1 - line("0")) >= 6 ? '6<C-y>6k' : (line("w0") - 1 - line("0")) >= 5 ? '5<C-y>5k' : (line("w0") - 1 - line("0")) >= 4 ? '4<C-y>4k' : (line("w0") - 1 - line("0")) >= 3 ? '3<C-y>3k' : (line("w0") - 1 - line("0")) >= 2 ? '2<C-y>2k' : (line("w0") - 1 - line("0")) >= 1 ? '1<C-y>1k' : '\<Nop>')
+noremap <silent> <expr> <C-S-BS> AtBot(0) ? ((line("w0") - 1 - line("0")) >= 10 ? '10<C-y>' : (line("w0") - 1 - line("0")) >= 9 ? '9<C-y>' : (line("w0") - 1 - line("0")) >= 8 ? '8<C-y>' : (line("w0") - 1 - line("0")) >= 7 ? '7<C-y>' : (line("w0") - 1 - line("0")) >= 6 ? '6<C-y>' : (line("w0") - 1 - line("0")) >= 5 ? '5<C-y>' : (line("w0") - 1 - line("0")) >= 4 ? '4<C-y>' : (line("w0") - 1 - line("0")) >= 3 ? '3<C-y>' : (line("w0") - 1 - line("0")) >= 2 ? '2<C-y>' : (line("w0") - 1 - line("0")) >= 1 ? '1<C-y>' : '') : ((line("w0") - 1 - line("0")) >= 10 ? '10<C-y>10k' : (line("w0") - 1 - line("0")) >= 9 ? '9<C-y>9k' : (line("w0") - 1 - line("0")) >= 8 ? '8<C-y>8k' : (line("w0") - 1 - line("0")) >= 7 ? '7<C-y>7k' : (line("w0") - 1 - line("0")) >= 6 ? '6<C-y>6k' : (line("w0") - 1 - line("0")) >= 5 ? '5<C-y>5k' : (line("w0") - 1 - line("0")) >= 4 ? '4<C-y>4k' : (line("w0") - 1 - line("0")) >= 3 ? '3<C-y>3k' : (line("w0") - 1 - line("0")) >= 2 ? '2<C-y>2k' : (line("w0") - 1 - line("0")) >= 1 ? '1<C-y>1k' : '')
 " SPECIAL: NOTE: some terminals map <C-S-BS> to <C-_><BS>
-noremap <silent> <expr> <C-_><BS> AtBot(0) ? ((line("w0") - 1 - line("0")) >= 10 ? '10<C-y>' : (line("w0") - 1 - line("0")) >= 9 ? '9<C-y>' : (line("w0") - 1 - line("0")) >= 8 ? '8<C-y>' : (line("w0") - 1 - line("0")) >= 7 ? '7<C-y>' : (line("w0") - 1 - line("0")) >= 6 ? '6<C-y>' : (line("w0") - 1 - line("0")) >= 5 ? '5<C-y>' : (line("w0") - 1 - line("0")) >= 4 ? '4<C-y>' : (line("w0") - 1 - line("0")) >= 3 ? '3<C-y>' : (line("w0") - 1 - line("0")) >= 2 ? '2<C-y>' : (line("w0") - 1 - line("0")) >= 1 ? '1<C-y>' : '\<Nop>') : ((line("w0") - 1 - line("0")) >= 10 ? '10<C-y>10k' : (line("w0") - 1 - line("0")) >= 9 ? '9<C-y>9k' : (line("w0") - 1 - line("0")) >= 8 ? '8<C-y>8k' : (line("w0") - 1 - line("0")) >= 7 ? '7<C-y>7k' : (line("w0") - 1 - line("0")) >= 6 ? '6<C-y>6k' : (line("w0") - 1 - line("0")) >= 5 ? '5<C-y>5k' : (line("w0") - 1 - line("0")) >= 4 ? '4<C-y>4k' : (line("w0") - 1 - line("0")) >= 3 ? '3<C-y>3k' : (line("w0") - 1 - line("0")) >= 2 ? '2<C-y>2k' : (line("w0") - 1 - line("0")) >= 1 ? '1<C-y>1k' : '\<Nop>')
+noremap <silent> <expr> <C-_><BS> AtBot(0) ? ((line("w0") - 1 - line("0")) >= 10 ? '10<C-y>' : (line("w0") - 1 - line("0")) >= 9 ? '9<C-y>' : (line("w0") - 1 - line("0")) >= 8 ? '8<C-y>' : (line("w0") - 1 - line("0")) >= 7 ? '7<C-y>' : (line("w0") - 1 - line("0")) >= 6 ? '6<C-y>' : (line("w0") - 1 - line("0")) >= 5 ? '5<C-y>' : (line("w0") - 1 - line("0")) >= 4 ? '4<C-y>' : (line("w0") - 1 - line("0")) >= 3 ? '3<C-y>' : (line("w0") - 1 - line("0")) >= 2 ? '2<C-y>' : (line("w0") - 1 - line("0")) >= 1 ? '1<C-y>' : '') : ((line("w0") - 1 - line("0")) >= 10 ? '10<C-y>10k' : (line("w0") - 1 - line("0")) >= 9 ? '9<C-y>9k' : (line("w0") - 1 - line("0")) >= 8 ? '8<C-y>8k' : (line("w0") - 1 - line("0")) >= 7 ? '7<C-y>7k' : (line("w0") - 1 - line("0")) >= 6 ? '6<C-y>6k' : (line("w0") - 1 - line("0")) >= 5 ? '5<C-y>5k' : (line("w0") - 1 - line("0")) >= 4 ? '4<C-y>4k' : (line("w0") - 1 - line("0")) >= 3 ? '3<C-y>3k' : (line("w0") - 1 - line("0")) >= 2 ? '2<C-y>2k' : (line("w0") - 1 - line("0")) >= 1 ? '1<C-y>1k' : '')
 
 "vnoremap <silent>       <C-Up> <C-y>k
 "vnoremap <silent>       <C-k>  <C-y>k
@@ -7305,6 +7416,10 @@ function s:MyUPIndentBefore() abort
     endif
 endfunction
 nmap <silent> <Leader>Pi <C-\><C-n>:<C-u>call <SID>MyUPIndentBefore()<CR>
+
+" unconditional-paste may map <C-u> to something ...
+inoremap <silent> <C-u> <C-\><C-o><C-b>
+inoremap <silent> <C-d> <C-\><C-o><C-f>
 " unconditional-paste ---
 
 " ansiesc ----------
