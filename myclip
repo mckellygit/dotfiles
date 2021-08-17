@@ -1,5 +1,15 @@
 #!/bin/bash
 
+if [[ -n "$SUDO_USER" && -n "$SUDO_UID" ]] ; then
+    if [[ -z "$XDG_RUNTIME_DIR" ]] ; then
+        uid=$(id -u 2>/dev/null)
+        export XDG_RUNTIME_DIR="/run/user/$uid"
+        if [[ ! -d "$XDG_RUNTIME_DIR" ]] ; then
+            mkdir -m 0700 -p "$XDG_RUNTIME_DIR"
+        fi
+    fi
+fi
+
 have_sc=0
 have_rmnl=0
 have_dash=0
