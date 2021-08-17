@@ -145,6 +145,9 @@ mouse_bindings:
       # NOTE: strange pasting bug sometimes (#5050)
     - { mouse: Middle, mods: Alt|Shift, action: None }
       #- { mouse: Middle, mods: Alt|Shift, action: PasteSelection }
+      # NOTE: these below do not work to disable Alt|Shift Left or Right
+      #- { mouse: Left,   mods: Alt|Shift, action: None }
+      #- { mouse: Right,  mods: Alt|Shift, action: None }
 
 mouse:
   double_click: { threshold: 250 }
@@ -209,6 +212,8 @@ window:
   # Allow terminal applications to change Alacritty's window title.
   dynamic_title: true
 
+  opacity: 0.96
+
 scrolling: 
   history: 0
 
@@ -250,8 +255,6 @@ colors:
   cursor:
     cursor:   '0xd78700'
     text:     '0x111111'
-
-background_opacity: 0.96
 
 draw_bold_text_with_bright_colors: true
 
