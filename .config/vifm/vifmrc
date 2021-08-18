@@ -537,6 +537,10 @@ nnoremap <C-^><Space>  5j
 nnoremap <esc>[1;3B    <C-w>w10j<C-w>w
 nnoremap <esc>[1;3A    <C-w>w10k<C-w>w
 
+" <C-S-j/k>
+nnoremap <C-_>J        <C-w>w10j<C-w>w
+nnoremap <C-_>K        <C-w>w10k<C-w>w
+
 " --------
 
 " NOTE: <S-Up/Down> do not seem to be mappable ...
@@ -601,6 +605,9 @@ qnoremap \xc           <C-w>w:quit<cr>
 " for switching to/from preview window (NOTE: <S-Tab> also works)
 nmap <C-w>w            <C-w>.w
 nmap <C-w><C-w>        <C-w>.w
+
+nnoremap <Tab>         <Nop>
+qnoremap <Tab>         <Nop>
 
 qnoremap <BS>          <C-b>
 qnoremap             <C-b>
