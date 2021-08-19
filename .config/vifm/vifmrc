@@ -527,11 +527,11 @@ nnoremap <C-_>       <C-w>w10k<C-w>w
 nnoremap <C-_><Space>  <C-w>w10j<C-w>w
 
 " <S-BS>
-nnoremap <S-BS>        5k
-nnoremap <C-^><C-h>    5k
-nnoremap <C-^>       5k
+nnoremap <S-BS>        <C-w>w5k<C-w>w
+nnoremap <C-^><C-h>    <C-w>w5k<C-w>w
+nnoremap <C-^>       <C-w>w5k<C-w>w
 " <S-Space>
-nnoremap <C-^><Space>  5j
+nnoremap <C-^><Space>  <C-w>w5j<C-w>w
 
 " <A-Down/Up>
 nnoremap <esc>[1;3B    <C-w>w10j<C-w>w
