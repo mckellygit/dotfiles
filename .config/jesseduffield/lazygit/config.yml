@@ -4,6 +4,8 @@ keybinding:
     universal:
         quit: '<f12>'
         return: '<c-q>'
+        redo: '<c-6>'
+        undo: '<c-8>'
         scrollUpMain-alt1: '<c-b>' # main panel scrool up
         scrollDownMain-alt1: '<c-f>' # main panel scrool down
         scrollUpMain-alt2: '<c-k>'
