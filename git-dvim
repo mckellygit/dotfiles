@@ -13,5 +13,5 @@ then
     echo "fatal: not a git repository (or any of the parent directories): .git"
     exit 1
 fi
-git --no-pager diff $1 $2 $3 $4 |& vless
+git --no-pager diff $@ |& vless
 
