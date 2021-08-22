@@ -132,7 +132,12 @@ Plugin 'tpope/vim-fugitive'
 "Plugin 'jreybert/vimagit.git'
 Plugin 'mckellygit/vimagit.git'
 " twiggy ...
-Plugin 'sodapopcan/vim-twiggy'
+"Plugin 'sodapopcan/vim-twiggy'
+Plugin 'mckellygit/vim-twiggy'
+" some other neovim magit-like alternatives -
+"Plugin 'Odie/gitabra'
+"Plugin 'plenary.nvim'
+"Plugin 'TimUntersberger/neogit'
 "
 " dispatch make/etc utils
 Plugin 'tpope/vim-dispatch'
@@ -1991,13 +1996,25 @@ function! <SID>LaunchTwiggy()
         echo " "
         return
     else
-        let t:twiggy_git_cmd = fugitive#repo().git_command()
-        let t:twiggy_git_dir = git_dir
         let b:git_dir = git_dir
+        let t:twiggy_git_dir = git_dir
+        "let t:twiggy_git_cmd = fugitive#repo().git_command()
+        let t:twiggy_git_cmd = "git --git-dir=" . b:git_dir . " "
         silent execute "Twiggy"
     endif
 endfunction
 nnoremap <silent> <Leader>br :call <SID>LaunchTwiggy()<CR>
+
+function! <SID>RefreshTwiggy()
+    let magitNr = bufwinnr('magit://')
+    if magitNr > 0
+        let twiggyNr = winnr()
+        execute magitNr 'wincmd w'
+        silent execute "MUpdate"
+        execute twiggyNr 'wincmd w'
+    endif
+endfunction
+autocmd User TwiggyCheckoutCommand call <SID>RefreshTwiggy()
 " twiggy --------------
 
 " dispatch ------------
@@ -2374,7 +2391,9 @@ if !exists("g:vless")
         " printf \033]11;rgb:<R>/<G>/<B>\007 sets the terminal background colour (only when inside tmux)
         " many RGB values do not work, perhaps has to be one of 256 colours ?
         " 32/28/28 is slightly different than Floaterm and normal vi backgrounds
-        let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w70% -h63% -E \"tmux new \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; tmux set -w status off ; " . &shell . "\\\"\""
+        "let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w70% -h63% -E \"tmux new \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; tmux set -w status off ; " . &shell . "\\\"\""
+        " leave status bar on
+        let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w70% -h63% -E \"tmux new \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; " . &shell . "\\\"\""
         nnoremap <silent> <Leader>zf :call system(syscmd)<CR>
     else
         nnoremap <silent> <Leader>zf :FloatermToggle<CR>
@@ -2682,7 +2701,7 @@ function! s:MyUpdateTitle()
         " we could leave this @v:t: also and then use same logic
         " to paste from tmux/OS instead of sending special chars here
         "set title titlestring=@v:n:%.10t
-        set title titlestring=@v:t:%.10t
+        set title titlestring=@v:t-%.10t
     endif
   else
     set title titlestring=@v:%.12t
@@ -4015,8 +4034,8 @@ inoremap <silent> <S-F35> <C-\><C-o>:set paste<CR><C-r>*<C-\><C-o>:set nopaste<C
 cnoremap <S-F35> <C-r>*
 tnoremap <S-F35> <C-w>"*
 if has("nvim")
-    nnoremap <expr> <M-*> (&buftype == 'terminal') ? '' : 'P`]'
-    vnoremap <expr> <M-*> (&buftype == 'terminal') ? '' : '<Esc>P`]'
+    nnoremap <expr> <M-*> (&buftype == 'terminal') ? 'yPi' : 'P`]'
+    vnoremap <expr> <M-*> (&buftype == 'terminal') ? 'yPi' : '<Esc>P`]'
     inoremap <silent> <M-*> <C-\><C-o>:set paste<CR><C-r>*<C-\><C-o>:set nopaste<CR>
     cnoremap <M-*> <C-r>*
     tnoremap <M-*> <C-\><C-n>"*Pi
