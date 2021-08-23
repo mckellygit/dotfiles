@@ -408,6 +408,50 @@ endfunction
 "let npath = hpath . '/bin:' . opath
 "let $PATH = npath
 
+function LaunchTtig() abort
+    let git_dir = FugitiveGitDir()
+    if empty(git_dir)
+        let errmsg = 'Not in a git repository'
+        call s:warn(errmsg)
+        sleep 951m
+        redraw!
+        echo " "
+        return
+    endif
+    if !executable('tig')
+        let errmsg = 'tig not found'
+        call s:warn(errmsg)
+        sleep 951m
+        redraw!
+        echo " "
+        return
+    endif
+    let tigcmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w90% -h73% -E \"tmux new -s popup_tig \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; tig\\\"\""
+    call system(tigcmd)
+endfunction
+
+function LaunchTlg() abort
+    let git_dir = FugitiveGitDir()
+    if empty(git_dir)
+        let errmsg = 'Not in a git repository'
+        call s:warn(errmsg)
+        sleep 951m
+        redraw!
+        echo " "
+        return
+    endif
+    if !executable('lazygit')
+        let errmsg = 'lazygit not found'
+        call s:warn(errmsg)
+        sleep 951m
+        redraw!
+        echo " "
+        return
+    endif
+    let tigcmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w90% -h73% -E \"tmux new -s popup_lg \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; lazygit\\\"\""
+    call system(lgcmd)
+endfunction
+
 function LaunchVtig() abort
     let git_dir = FugitiveGitDir()
     if empty(git_dir)
@@ -2451,24 +2495,19 @@ if !exists("g:vless")
         " leave status bar on
         let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w70% -h63% -E \"tmux new -s popup_vim \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; " . &shell . "\\\"\""
         nnoremap <silent> <Leader>zf :call system(syscmd)<CR>
+        command! Tterm call system(syscmd)
 
-        if executable('tig')
-            let tigcmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w90% -h73% -E \"tmux new -s popup_tig \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; tig\\\"\""
-            command! Ttig call system(tigcmd)
-        else
-            command! Ttig echohl WarningMsg | echo "tig not found" | echohl None | sleep 951m | redraw! | echo " "
-        endif
+        command! Ttig call LaunchTtig()
+        command! Tlg  call LaunchTlg()
 
-        if executable('lazygit')
-            let lgcmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w90% -h73% -E \"tmux new -s popup_lg \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; lazygit\\\"\""
-            command! Tlg call system(lgcmd)
-        else
-            command! Tlg echohl WarningMsg | echo "lazygit not found" | echohl None | sleep 951m | redraw! | echo " "
-        endif
     else
+
         nnoremap <silent> <Leader>zf :FloatermToggle<CR>
+
     endif
+
     nnoremap <silent> <Leader>zF :FloatermToggle<CR>
+    command! Fterm :FloatermToggle
 
     command! Vtig call LaunchVtig()
     command! Vlg  call LaunchVlg()
