@@ -25,6 +25,12 @@ let Cscope_Keymap = 0
 "silent! nnoremap <unique> lhs rhs
 "if empty(maparg('lhs', 'old-rhs')) | nnoremap lhs new-rhs | endif
 
+if has("nvim") || exists('$NVIM_LOG_FILE')
+    call setenv("VISUAL", "nvim")
+    call setenv("EDITOR", "nvim")
+    call setenv("TIG_EDITOR", "nvim")
+endif
+
 let g:in_gv2 = 0
 
 " ====================================================
@@ -401,6 +407,56 @@ endfunction
 "let hpath = $HOME
 "let npath = hpath . '/bin:' . opath
 "let $PATH = npath
+
+function LaunchVtig() abort
+    let git_dir = FugitiveGitDir()
+    if empty(git_dir)
+        let errmsg = 'Not in a git repository'
+        call s:warn(errmsg)
+        sleep 951m
+        redraw!
+        echo " "
+        return
+    endif
+    if !executable('tig')
+        let errmsg = 'tig not found'
+        call s:warn(errmsg)
+        sleep 951m
+        redraw!
+        echo " "
+        return
+    endif
+    if has("nvim")
+        execute '$tabnew | terminal tig'
+    else
+        execute '$tabnew | terminal ++curwin ++norestore ++close tig'
+    endif
+endfunction
+
+function LaunchVlg() abort
+    let git_dir = FugitiveGitDir()
+    if empty(git_dir)
+        let errmsg = 'Not in a git repository'
+        call s:warn(errmsg)
+        sleep 951m
+        redraw!
+        echo " "
+        return
+    endif
+    if !executable('lazygit')
+        let errmsg = 'lazygit not found'
+        call s:warn(errmsg)
+        sleep 951m
+        redraw!
+        echo " "
+        return
+    endif
+    if has("nvim")
+        execute '$tabnew | terminal lazygit'
+    else
+        execute '$tabnew | terminal ++curwin ++norestore ++close lazygit'
+    endif
+endfunction
 
 " ====================================================
 " --- plugin configurations --------------------------
@@ -2393,12 +2449,30 @@ if !exists("g:vless")
         " 32/28/28 is slightly different than Floaterm and normal vi backgrounds
         "let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w70% -h63% -E \"tmux new \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; tmux set -w status off ; " . &shell . "\\\"\""
         " leave status bar on
-        let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w70% -h63% -E \"tmux new \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; " . &shell . "\\\"\""
+        let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w70% -h63% -E \"tmux new -s popup_vim \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; " . &shell . "\\\"\""
         nnoremap <silent> <Leader>zf :call system(syscmd)<CR>
+
+        if executable('tig')
+            let tigcmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w90% -h73% -E \"tmux new -s popup_tig \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; tig\\\"\""
+            command! Ttig call system(tigcmd)
+        else
+            command! Ttig echohl WarningMsg | echo "tig not found" | echohl None | sleep 951m | redraw! | echo " "
+        endif
+
+        if executable('lazygit')
+            let lgcmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w90% -h73% -E \"tmux new -s popup_lg \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; lazygit\\\"\""
+            command! Tlg call system(lgcmd)
+        else
+            command! Tlg echohl WarningMsg | echo "lazygit not found" | echohl None | sleep 951m | redraw! | echo " "
+        endif
     else
         nnoremap <silent> <Leader>zf :FloatermToggle<CR>
     endif
     nnoremap <silent> <Leader>zF :FloatermToggle<CR>
+
+    command! Vtig call LaunchVtig()
+    command! Vlg  call LaunchVlg()
+
     " MCK: use something else besides <C-x> here ...
     "tnoremap <silent> <expr> <C-x><C-d> (win_gettype(win_getid()) ==# 'popup' \|\| win_gettype(win_getid()) ==# 'floating') ? '<C-\><C-n><C-w>:FloatermHide<CR>' : '<C-x>'
     "tnoremap <silent> <expr> <C-x><C-d> (&filetype ==# 'floaterm') ? '<C-\><C-n><C-w>:FloatermHide<CR>' : ''
@@ -2739,6 +2813,10 @@ if has("nvim")
 
     " close terminal shell automatically if it exited ...
     autocmd TermClose term://* if (expand('<afile>') =~ ":/usr/bin/zsh") | call nvim_input('<CR>') | endif
+    autocmd TermOpen  term://* if (expand('<afile>') =~ ":tig") | se scl=no | call nvim_input('i') | endif
+    autocmd TermClose term://* if (expand('<afile>') =~ ":tig") | call nvim_input('<CR>') | endif
+    autocmd TermOpen  term://* if (expand('<afile>') =~ ":lazygit") | se scl=no | call nvim_input('i') | endif
+    autocmd TermClose term://* if (expand('<afile>') =~ ":lazygit") | call nvim_input('<CR>') | endif
 
     " a click in terminal automatically puts it in normal mode ...
     " which allows for double-click etc to select words
@@ -9452,7 +9530,9 @@ aug END
 " when editing a file that is already edited with
 " another Vim instance, go to that Vim instance
 if !has("nvim")
-    packadd! editexisting
+    if !exists('$NVIM_LOG_FILE')
+        packadd! editexisting
+    endif
 endif
 
 " -----------------------------
