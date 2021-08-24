@@ -448,7 +448,7 @@ function LaunchTlg() abort
         echo " "
         return
     endif
-    let tigcmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w90% -h73% -E \"tmux new -s popup_lg \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; lazygit\\\"\""
+    let lgcmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w90% -h73% -E \"tmux new -s popup_lg \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; lazygit\\\"\""
     call system(lgcmd)
 endfunction
 
