@@ -1545,6 +1545,7 @@ endfunction
 
 function! s:fill(cmd)
   setlocal modifiable
+  %delete _
   silent execute 'read' escape('!'.a:cmd, '%')
   normal! gg"_dd
   setlocal nomodifiable
