@@ -1612,12 +1612,12 @@ function! s:MyGV(args) abort
         call remove(l:alist, -1)
         if len(l:alist) >= 1
             let l:argstr = join(l:alist)
-            silent execute 'GV ' . l:argstr . ' -- ' . fpath
+            execute 'GV ' . l:argstr . ' -- ' . fpath
         else
-            silent execute 'GV -- ' . fpath
+            execute 'GV -- ' . fpath
         endif
     else
-        silent execute 'GV'
+        execute 'GV'
     endif
     redraw!
     echo " "
