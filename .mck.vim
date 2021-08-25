@@ -1365,8 +1365,12 @@ autocmd FileType GV xmap <buffer> u <Up>
 autocmd FileType GV xmap <buffer> d <Down>
 
 " or use ! ?
-autocmd FileType GV nmap <buffer> QQ O
-autocmd FileType GV xmap <buffer> QQ O
+" do we want QQ to open, QQ to close, S-Space to move down pattern ?
+"autocmd FileType GV nmap <buffer> QQ O
+"autocmd FileType GV xmap <buffer> QQ O
+" some terminals may send <C-^><Space> for <S-Space> ...
+"autocmd FileType GV nmap <buffer> <C-^><Space> <Down>
+"autocmd FileType GV xmap <buffer> <C-^><Space> <Down>
 
 autocmd FileType GV setlocal cursorline
 
@@ -2100,8 +2104,9 @@ function! <SID>LaunchTwiggy()
         let b:git_dir = git_dir
         let t:twiggy_git_dir = git_dir
         "let t:twiggy_git_cmd = fugitive#repo().git_command()
-        let t:twiggy_git_cmd = "git --git-dir=" . b:git_dir . " "
-        silent execute "Twiggy"
+        "let t:twiggy_git_cmd = "git --git-dir=" . b:git_dir . " "
+        let t:twiggy_git_cmd = FugitiveShellCommand()
+        execute "Twiggy"
     endif
 endfunction
 nnoremap <silent> <Leader>br :call <SID>LaunchTwiggy()<CR>
