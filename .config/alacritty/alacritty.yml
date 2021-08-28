@@ -62,6 +62,10 @@ key_bindings:
   - { key: P,         mods: Control|Shift,   chars: "\x1f\x50"        }
   # special -------
 
+    # these were alacritty search forward/backward -
+  - { key: F,         mods: Control|Shift,   chars: "\x06"        }
+  - { key: B,         mods: Control|Shift,   chars: "\x02"        }
+
   # same esc-seq as S-Insert (really cannot be RecieveChar)
   - { key: V,         mods: Control|Shift,   chars: "\x1b[2;2~"       }
   # same esc-seq as C-Insert (really cannot be RecieveChar)

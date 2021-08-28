@@ -326,6 +326,9 @@ URxvt.keysym.Control-Meta-minus:        command:\000
 
 URxvt.keysym.Control-Meta-Return:       string:\036\015
 
+URxvt.keysym.Shift-Control-F:           string:\006
+URxvt.keysym.Shift-Control-B:           string:\002
+
 URxvt.keysym.Shift-Control-J:           string:\037\112
 URxvt.keysym.Shift-Control-K:           string:\037\113
 
