@@ -2350,8 +2350,11 @@ noremap <silent> <expr> <C-_>\ (&buftype ==# 'terminal') ? 'i' : '<C-c>:AsyncSto
 "       or can we change AsyncRun to know if <C-c> was pressed ?
 "       or change any-jump searches to use AsyncRun ?
 " ok with vim -
+" NOTE: tmux can map <C-c> to send <C-c> + sleep 500m + send <C-_>\ ...
 if !has("nvim")
-    noremap <C-c> <Cmd>AsyncStop!<CR><Cmd>sleep 500m<CR><Cmd>AsyncStop!<CR><Cmd>call feedkeys("\<C-c>", "Lnt")<CR>
+    if !exists('$TMUX_PANE')
+        noremap <C-c> <Cmd>AsyncStop!<CR><Cmd>sleep 500m<CR><Cmd>AsyncStop!<CR><Cmd>call feedkeys("\<C-c>", "Lnt")<CR>
+    endif
 endif
 " To run a cmd without quickfix at end ...
 "let g:asyncrun_copen = 0 | AsyncRun -silent -post=call\ VimRoutine() bash -c "sleep 5"
