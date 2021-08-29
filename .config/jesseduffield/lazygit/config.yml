@@ -1,6 +1,8 @@
 reporting: "off"
 startuppopupversion: 1
 keybinding:
+    files:
+        OpenStatusFilter: '<f10>'
     universal:
         quit: '<f12>'
         return: '<c-q>'
