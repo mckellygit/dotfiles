@@ -198,11 +198,12 @@ cd ~/Downloads/vim_bundles
 #   curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin dest=/usr/local launch=n
 #   git clone https://github.com/kovidgoyal/kitty.git
 
-# ==================================
-
 # lazygit:
-#   cd ~
-#   go get github.com/jesseduffield/lazygit
+#   git clone https://github.com/jesseduffield/lazygit.git
+#   cd lazygit
+#   go install
+
+# ==================================
 
 # st: (simple terminal)
 #   git clone git@github.com-mckelly:mckellygit/st.git
