@@ -97,6 +97,40 @@ xterm*|rxvt*)
     ;;
 esac
 
+# -----------------------
+
+export VISUAL=vim
+export EDITOR=vim
+export TIG_EDITOR=vim
+export VLESS=vless
+export VDIFF=vimdiff
+
+vdiff()
+{
+    if [[ -z "$VDIFF" ]] ; then
+        if [[ -z "$VISUAL" ]] ; then
+            vimdiff $@
+        elif [[ "$VISUAL" == "vim" ]] ; then
+            vimdiff $@
+        else
+            nvimdiff $@
+        fi
+    elif [[ "$VDIFF" == "vdiff" ]] ; then
+        vimdiff $@
+    else
+        nvimdiff $@
+    fi
+}
+
+alias vdifff='vdiff'
+alias vdif='vdiff'
+
+alias nvdiff='nvimdiff'
+alias nvdifff='nvimdiff'
+alias nvdif='nvimdiff'
+
+# -----------------------
+
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
@@ -126,7 +160,6 @@ alias rm='rm -i'
 #  alias dmesg='dmesg -T'
 #fi
 alias dmesg='dmesg -kuxT'
-alias vdiff='vimdiff'
 
 # skip -X arg to less to get alternate screen so tmux mouse can scroll ...
 alias more='less -R'
@@ -157,6 +190,7 @@ export SMARTLESS_PAGER_ARGUMENTS='-iR -K -x4 -c~'
 alias catc='bat --plain --tabs 4 --paging never'
 
 alias smesg='vless /var/log/syslog'
+alias nsmesg='nvless /var/log/syslog'
 
 alias tailrdm='tail -f /tmp/rdm-$LOGNAME.log'
 alias difff='diff'
