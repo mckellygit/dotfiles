@@ -603,14 +603,6 @@ alias rm='rm -i'
 #fi
 alias dmesg='dmesg -kuxT'
 
-alias vdiff='vimdiff'
-alias vdifff='vimdiff'
-alias vdif='vimdiff'
-
-alias nvdiff='nvimdiff'
-alias nvdifff='nvimdiff'
-alias nvdif='nvimdiff'
-
 # skip -X arg to less to get alternate screen so tmux mouse can scroll ...
 # and dont use -F without -X ...
 # use -S to not wrap long lines ...
@@ -645,6 +637,7 @@ export SMARTLESS_PAGER_ARGUMENTS='-iR -K -x4 -c~'
 alias catc='bat --plain --tabs 4 --paging never'
 
 alias smesg='vless /var/log/syslog'
+alias nsmesg='nvless /var/log/syslog'
 alias tailrdm='tail -f /tmp/rdm-$LOGNAME.log'
 alias difff='diff'
 alias dif='diff'
@@ -867,6 +860,33 @@ alias hpcc_regression='./ecl-test run --timeout -1 -e=embedded,3rdparty'
 # also look at ~/.selected_editor file
 export VISUAL=vim
 export EDITOR=vim
+export TIG_EDITOR=vim
+export VLESS=vless
+export VDIFF=vimdiff
+
+vdiff()
+{
+    if [[ -z "$VDIFF" ]] ; then
+        if [[ -z "$VISUAL" ]] ; then
+            vimdiff $@
+        elif [[ "$VISUAL" == "vim" ]] ; then
+            vimdiff $@
+        else
+            nvimdiff $@
+        fi
+    elif [[ "$VDIFF" == "vdiff" ]] ; then
+        vimdiff $@
+    else
+        nvimdiff $@
+    fi
+}
+
+alias vdifff='vdiff'
+alias vdif='vdiff'
+
+alias nvdiff='nvimdiff'
+alias nvdifff='nvimdiff'
+alias nvdif='nvimdiff'
 
 # fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

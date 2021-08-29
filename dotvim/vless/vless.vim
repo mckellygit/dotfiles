@@ -406,4 +406,8 @@ noremap <silent> <Leader>tq :call QuitVless()<CR>
 noremap <Leader>zs <Nop>
 noremap <Leader>zt <Nop>
 
+if has("nvim")
+    highlight! link ErrorMsg deusRedBold
+endif
+
 " vim: sw=2
