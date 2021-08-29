@@ -9,9 +9,12 @@
 M=0
 
 X=854
-Y=900
+Y=858
 W=2140
-H=1230
+H=1286
+# if we use kitty.conf setting: adjust_line_height 1 then we need to increase size ...
+#Y=900
+#H=1230
 
 if [[ -n "$ST_VERSION" ]] ; then
     X=854
