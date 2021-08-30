@@ -211,6 +211,12 @@ cd ~/Downloads/vim_bundles
 #   git clone git@github.com-mckelly:LukeSmithxyz/st.git
 #   orig:
 #   git clone https://git.suckless.org/st
+#
+# some other terminals:
+#   zutty
+#   git clone https://github.com/tomszilagyi/zutty.git
+#   wezterm
+#   git clone https://github.com/wez/wezterm.git
 
 # cgdb
 #   git clone git@github.com-mckelly:mckellygit/cgdb.git 
