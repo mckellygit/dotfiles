@@ -106,9 +106,10 @@ Plugin 'sk1418/QFGrep'
 "Plugin 'itchyny/vim-qfedit'
 "
 " qf preview popup
-" NOTE: not compatible with nvim
-Plugin 'mckellygit/vim-qf-preview'
+" NOTE: qf-preview is not compatible with nvim
+"Plugin 'mckellygit/vim-qf-preview'
 "Plugin 'bfrg/vim-qf-preview'
+Plugin 'mckellygit/quickr-preview.vim'
 "Plugin 'ronakg/quickr-preview.vim'
 "Plugin 'skywind3000/vim-quickui'
 "
@@ -2130,9 +2131,9 @@ let g:dispatch_no_maps = 1
 " QFEnter -------------
 " add C-t, C-v, C-x to open consistently with fzf ...
 let g:qfenter_keymap = {}
-let g:qfenter_keymap.topen = ['<Leader><Tab>',   '<C-t>']
-let g:qfenter_keymap.vopen = ['<Leader><CR>',    '<C-v>']
-let g:qfenter_keymap.hopen = ['<Leader><Space>', '<C-x>']
+let g:qfenter_keymap.topen = ['<Leader><Tab>', '<C-t>']
+let g:qfenter_keymap.vopen = ['<Leader>V',     '<C-v>']
+let g:qfenter_keymap.hopen = ['<Leader>H',     '<C-x>']
 let g:qf_loclist_window_bottom = 0
 " set to none if new tab and want cursor to return to orig win before qf ...
 let g:qfenter_prevtabwin_policy = 'none'
@@ -2152,92 +2153,105 @@ endfunction
 " QFEnter -------------
 
 " vim-qf-preview ------
-augroup qfpreview
-    autocmd!
-    " SPECIAL: <S-F27> is terminal mapped to <A-C-P> above ...
-    " SPECIAL: <S-F30> is terminal mapped to <A-BS> (via tmux for vim) ...
-    " SPECIAL: <S-F29> is terminal mapped to <A-Space> (via tmux for vim) ...
-    autocmd FileType qf nmap <buffer> <S-F27> <plug>(qf-preview-open)
-    " NOTE: can not use <C-\> as that is reserved in terminal shell ...
-    " C-/ (which is really <C-_>) - old fzf preview key
-    " <C-_> used with another key so cannot use this alone without delay ...
-    "autocmd FileType qf nmap <buffer> <C-_> <plug>(qf-preview-open)
-augroup END
-" Do we use <C-k>/<C-j> for scroll-up/down or <C-Up>/<C-Down> ?
-" NOTE: mappings here have to be a single key - cannot be an esc-code ...
-" NOTE: vim-qf-preview is not compatible with nvim
-if has("nvim")
-    "autocmd FileType qf nmap <buffer> <M-C-P> <plug>(qf-preview-open)
-    autocmd FileType qf nmap <silent> <buffer> <M-C-P> :echohl WarningMsg<bar>echo "vim-qf-preview NOT compatible with nvim!"<bar>echohl None<CR>:sleep 1500m<CR>:echo " "<CR>
-    let g:qfpreview = {
-    \ 'top'           : "\<C-Home>",
-    \ 'bottom'        : "\<C-End>",
-    \ 'scrollup'      : "\<C-k>",
-    \ 'scrollup2'     : "\<C-Up>",
-    \ 'scrollup3'     : "\<M-X>",
-    \ 'scrolldown'    : "\<C-j>",
-    \ 'scrolldown2'   : "\<C-Down>",
-    \ 'scrolldown3'   : "\<M-Y>",
-    \ 'halfpageup'    : "\<BS>",
-    \ 'halfpageup2'   : "\<C-b>",
-    \ 'halfpageup3'   : "\<F28>",
-    \ 'halfpagedown'  : "\<Space>",
-    \ 'halfpagedown2' : "\<C-f>",
-    \ 'halfpagedown3' : "\<F29>",
-    \ 'fullpageup'    : "\<C-u>",
-    \ 'fullpageup2'   : "\<C-PageUp>",
-    \ 'fullpagedown'  : "\<C-d>",
-    \ 'fullpagedown2' : "\<C-PageDown>",
-    \ 'next'          : "\<Down>",
-    \ 'next2'         : "\<M-j>",
-    \ 'previous'      : "\<Up>",
-    \ 'previous2'     : "\<M-k>",
-    \ 'reset'         : "\<C-r>",
-    \ 'close'         : "\<C-q>",
-    \ 'close2'        : "\<M-C-P>",
-    \ 'close3'        : "\<Esc>",
-    \ 'number'        : 1,
-    \ 'height'        : 15,
-    \ 'offset'        : 7,
-    \ 'sign'          : {'linehl': 'CursorLine'},
-    \ }
-else
-    let g:qfpreview = {
-    \ 'top'           : "\<C-Home>",
-    \ 'bottom'        : "\<C-End>",
-    \ 'scrollup'      : "\<C-k>",
-    \ 'scrollup2'     : "\<C-Up>",
-    \ 'scrollup3'     : "\<S-F30>",
-    \ 'scrolldown'    : "\<C-j>",
-    \ 'scrolldown2'   : "\<C-Down>",
-    \ 'scrolldown3'   : "\<S-F29>",
-    \ 'halfpageup'    : "\<BS>",
-    \ 'halfpageup2'   : "\<C-b>",
-    \ 'halfpageup3'   : "\<F28>",
-    \ 'halfpagedown'  : "\<Space>",
-    \ 'halfpagedown2' : "\<C-f>",
-    \ 'halfpagedown3' : "\<F29>",
-    \ 'fullpageup'    : "\<C-u>",
-    \ 'fullpageup2'   : "\<S-F21>",
-    \ 'fullpagedown'  : "\<C-d>",
-    \ 'fullpagedown2' : "\<S-F24>",
-    \ 'next'          : "\<Down>",
-    \ 'next2'         : "\<F31>",
-    \ 'previous'      : "\<Up>",
-    \ 'previous2'     : "\<F30>",
-    \ 'reset'         : "\<C-r>",
-    \ 'close'         : "\<C-q>",
-    \ 'close2'        : "\<S-F27>",
-    \ 'close3'        : "\<Esc>",
-    \ 'number'        : 1,
-    \ 'height'        : 15,
-    \ 'offset'        : 7,
-    \ 'sign'          : {'linehl': 'CursorLine'},
-    \ }
-endif
-" NOTE: popup mappings do not seem to work if they are
-"       from MapFastKeycode() unless they use <Fxx> or <S-Fxx> ...
+"augroup qfpreview
+"    autocmd!
+"    " SPECIAL: <S-F27> is terminal mapped to <A-C-P> above ...
+"    " SPECIAL: <S-F30> is terminal mapped to <A-BS> (via tmux for vim) ...
+"    " SPECIAL: <S-F29> is terminal mapped to <A-Space> (via tmux for vim) ...
+"    autocmd FileType qf nmap <buffer> <S-F27> <plug>(qf-preview-open)
+"    " NOTE: can not use <C-\> as that is reserved in terminal shell ...
+"    " C-/ (which is really <C-_>) - old fzf preview key
+"    " <C-_> used with another key so cannot use this alone without delay ...
+"    "autocmd FileType qf nmap <buffer> <C-_> <plug>(qf-preview-open)
+"augroup END
+"" Do we use <C-k>/<C-j> for scroll-up/down or <C-Up>/<C-Down> ?
+"" NOTE: mappings here have to be a single key - cannot be an esc-code ...
+"" NOTE: vim-qf-preview is not compatible with nvim
+"if has("nvim")
+"    "autocmd FileType qf nmap <buffer> <M-C-P> <plug>(qf-preview-open)
+"    autocmd FileType qf nmap <silent> <buffer> <M-C-P> :echohl WarningMsg<bar>echo "vim-qf-preview NOT compatible with nvim!"<bar>echohl None<CR>:sleep 1500m<CR>:echo " "<CR>
+"    let g:qfpreview = {
+"    \ 'top'           : "\<C-Home>",
+"    \ 'bottom'        : "\<C-End>",
+"    \ 'scrollup'      : "\<C-k>",
+"    \ 'scrollup2'     : "\<C-Up>",
+"    \ 'scrollup3'     : "\<M-X>",
+"    \ 'scrolldown'    : "\<C-j>",
+"    \ 'scrolldown2'   : "\<C-Down>",
+"    \ 'scrolldown3'   : "\<M-Y>",
+"    \ 'halfpageup'    : "\<BS>",
+"    \ 'halfpageup2'   : "\<C-b>",
+"    \ 'halfpageup3'   : "\<F28>",
+"    \ 'halfpagedown'  : "\<Space>",
+"    \ 'halfpagedown2' : "\<C-f>",
+"    \ 'halfpagedown3' : "\<F29>",
+"    \ 'fullpageup'    : "\<C-u>",
+"    \ 'fullpageup2'   : "\<C-PageUp>",
+"    \ 'fullpagedown'  : "\<C-d>",
+"    \ 'fullpagedown2' : "\<C-PageDown>",
+"    \ 'next'          : "\<Down>",
+"    \ 'next2'         : "\<M-j>",
+"    \ 'previous'      : "\<Up>",
+"    \ 'previous2'     : "\<M-k>",
+"    \ 'reset'         : "\<C-r>",
+"    \ 'close'         : "\<C-q>",
+"    \ 'close2'        : "\<M-C-P>",
+"    \ 'close3'        : "\<Esc>",
+"    \ 'number'        : 1,
+"    \ 'height'        : 15,
+"    \ 'offset'        : 7,
+"    \ 'sign'          : {'linehl': 'CursorLine'},
+"    \ }
+"else
+"    let g:qfpreview = {
+"    \ 'top'           : "\<C-Home>",
+"    \ 'bottom'        : "\<C-End>",
+"    \ 'scrollup'      : "\<C-k>",
+"    \ 'scrollup2'     : "\<C-Up>",
+"    \ 'scrollup3'     : "\<S-F30>",
+"    \ 'scrolldown'    : "\<C-j>",
+"    \ 'scrolldown2'   : "\<C-Down>",
+"    \ 'scrolldown3'   : "\<S-F29>",
+"    \ 'halfpageup'    : "\<BS>",
+"    \ 'halfpageup2'   : "\<C-b>",
+"    \ 'halfpageup3'   : "\<F28>",
+"    \ 'halfpagedown'  : "\<Space>",
+"    \ 'halfpagedown2' : "\<C-f>",
+"    \ 'halfpagedown3' : "\<F29>",
+"    \ 'fullpageup'    : "\<C-u>",
+"    \ 'fullpageup2'   : "\<S-F21>",
+"    \ 'fullpagedown'  : "\<C-d>",
+"    \ 'fullpagedown2' : "\<S-F24>",
+"    \ 'next'          : "\<Down>",
+"    \ 'next2'         : "\<F31>",
+"    \ 'previous'      : "\<Up>",
+"    \ 'previous2'     : "\<F30>",
+"    \ 'reset'         : "\<C-r>",
+"    \ 'close'         : "\<C-q>",
+"    \ 'close2'        : "\<S-F27>",
+"    \ 'close3'        : "\<Esc>",
+"    \ 'number'        : 1,
+"    \ 'height'        : 15,
+"    \ 'offset'        : 7,
+"    \ 'sign'          : {'linehl': 'CursorLine'},
+"    \ }
+"endif
+"" NOTE: popup mappings do not seem to work if they are
+""       from MapFastKeycode() unless they use <Fxx> or <S-Fxx> ...
 " vim-qf-preview ------
+
+" quickr-preview ------
+let g:quickr_preview_keymaps = 0
+au FileType qf nmap <Leader><Space> <plug>(quickr_preview)
+au FileType qf nmap <S-F27>         <plug>(quickr_preview)
+au FileType qf nmap <M-C-P>         <plug>(quickr_preview)
+let g:quickr_preview_position = 'above'
+let g:quickr_preview_size = '12'
+let g:quickr_preview_line_hl = "Search"
+let g:quickr_preview_options = 'number norelativenumber nofoldenable'
+let g:quickr_preview_on_cursor = 0
+let g:quickr_preview_exit_on_enter = 0
+" quickr-preview ------
 
 " lastplace -----------
 " mods to skip for vimdiff
@@ -3721,7 +3735,9 @@ endif
 " <A-C-P> for fzf preview ...
 call <SID>MapFastKeycode('<S-F27>',  "\e\<C-p>", 127)
 " so <M-C-P> goes up to match <M-C-N> goes down
-noremap <S-F27> <C-p>
+"nnoremap <S-F27> <C-_>P
+noremap <silent> <S-F27>  <Nop>
+noremap <silent> <M-C-P>  <Nop>
 " map it back to orig in terminal so fzf can use it as ctrl-alt-p ...
 cnoremap <S-F27> <C-v><Esc><C-v>
 inoremap <S-F27> <C-v><Esc><C-v>
@@ -3730,6 +3746,19 @@ if has("nvim")
     cnoremap <S-F27> <M-C-P>
     inoremap <S-F27> <M-C-P>
     tnoremap <S-F27> <M-C-P>
+endif
+
+" just to match <M-C-P> ...
+call <SID>MapFastKeycode('<F15>',  "\e\<C-n>", 15)
+noremap <silent> <F15>    <Nop>
+noremap <silent> <M-C-N>  <Nop>
+cnoremap <F15> <C-v><Esc><C-v>
+inoremap <F15> <C-v><Esc><C-v>
+tnoremap <F15> <Esc><C-n>
+if has("nvim")
+    cnoremap <F15> <M-C-N>
+    inoremap <F15> <M-C-N>
+    tnoremap <F15> <M-C-N>
 endif
 
 " ------------------------------
