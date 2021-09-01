@@ -1,8 +1,15 @@
+any-jump.vim
 ferret
 gv.vim
+quickr-preview.vim
+unused
 update.sh
+vimagit
+vim-choosewin
+vim-clang
 vim-filebeagle
 vim-fswitch
 vim-lastplace
 vim-rtags
-vim-qf-preview
+vim-tmux-focus-events
+vim-twiggy
