@@ -7459,9 +7459,11 @@ function s:CloseUtilWins()
     " just to clear the cmdline of this function ...
     redraw!
     echo "\r"
+    " if we pcl first then this will close all of preview, loc-list, quickfix
+    " if we ccl first then it closes preview and leaves loc-list, quickfix
+    pcl
     ccl
     lcl
-    pcl
     call s:CloseClangWin()
     call s:IsTerminalFinished()
 endfunction
