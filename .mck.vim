@@ -2242,7 +2242,8 @@ endfunction
 
 " quickr-preview ------
 let g:quickr_preview_keymaps = 0
-au FileType qf nmap <Leader><Space> <plug>(quickr_preview)
+"au FileType qf nmap <Leader><Space> <plug>(quickr_preview)
+au FileType qf nmap \|<C-^><Space>  <plug>(quickr_preview)
 au FileType qf nmap <S-F27>         <plug>(quickr_preview)
 au FileType qf nmap <M-C-P>         <plug>(quickr_preview)
 let g:quickr_preview_position = 'above'
