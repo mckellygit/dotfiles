@@ -23,8 +23,6 @@ fi
 lastarg=${@:$#} # last parameter 
 alloarg=${*%${!#}} # all parameters except the last
 
-set -x
-
 #echo "git dir: $gdir"
 command rg $rg_args $@ $gdir
 exit $?
