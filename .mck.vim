@@ -2913,7 +2913,19 @@ if has("nvim")
     " which allows for double-click etc to select words
     " if we really wanted to override this behavior then -
     "autocmd TermOpen term://* nnoremap <buffer> <LeftRelease> <LeftRelease>i
+    autocmd TermOpen term://* tnoremap <silent> <buffer> <LeftRelease> <Nop>
   augroup END
+
+  " dont enter normal mode with a wheel up ...
+  tnoremap <silent> <ScrollWheelUp>     <Nop>
+  tnoremap <silent> <2-ScrollWheelUp>   <Nop>
+  tnoremap <silent> <3-ScrollWheelUp>   <Nop>
+  tnoremap <silent> <4-ScrollWheelUp>   <Nop>
+
+  tnoremap <silent> <ScrollWheelDown>   <Nop>
+  tnoremap <silent> <2-ScrollWheelDown> <Nop>
+  tnoremap <silent> <3-ScrollWheelDown> <Nop>
+  tnoremap <silent> <4-ScrollWheelDown> <Nop>
 endif
 
 " visual/audio bell (terminator light bulb) off ...
