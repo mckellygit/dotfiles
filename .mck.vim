@@ -429,6 +429,7 @@ function LaunchTtig() abort
     endif
     let tigcmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w90% -h73% -E \"tmux new -s popup_tig \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; tig\\\"\""
     call system(tigcmd)
+    call magit#update_buffer()
 endfunction
 
 function LaunchTlg() abort
@@ -451,9 +452,10 @@ function LaunchTlg() abort
     endif
     let lgcmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w90% -h73% -E \"tmux new -s popup_lg \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; lazygit\\\"\""
     call system(lgcmd)
+    call magit#update_buffer()
 endfunction
 
-function LaunchVtig() abort
+function LaunchZtig() abort
     let git_dir = FugitiveGitDir()
     if empty(git_dir)
         let errmsg = 'Not in a git repository'
@@ -478,7 +480,7 @@ function LaunchVtig() abort
     endif
 endfunction
 
-function LaunchVlg() abort
+function LaunchZlg() abort
     let git_dir = FugitiveGitDir()
     if empty(git_dir)
         let errmsg = 'Not in a git repository'
@@ -1738,6 +1740,27 @@ let g:magit_discard_hunk_mapping='\mD'
 " :MPush [git options]
 " :MPull [git options]
 
+function! MagitTermUpdate()
+    if &buftype ==# 'terminal'
+        for b in range(1, bufnr('$'))
+            "let bt = getbufvar(b, '&filetype')
+            "echom "bufnr: " . b . " : " . bt
+            if getbufvar(b, '&filetype') ==# 'magit'
+                let wid = win_findbuf(b)
+                if !empty(wid)
+                    call win_gotoid(wid[0])
+                    call magit#update_buffer()
+                endif
+                return
+            endif
+        endfor
+    endif
+endfunction
+if has("nvim")
+    autocmd TabLeave term://*tig* call MagitTermUpdate()
+else
+    autocmd TabLeave *tig* call MagitTermUpdate()
+endif
 autocmd User VimagitEnterCommit startinsert
 autocmd FileType magit noremap <silent> <buffer> q <Nop>
 autocmd FileType magit nnoremap <silent> <buffer> <expr> <C-l> pumvisible() ? '<C-l>' : ':echo "Magit update ..."<bar>call magit#update_buffer()<CR>:sleep 551m<bar>redraw!<bar>echo " "<CR>'
@@ -2520,9 +2543,12 @@ if !exists("g:vless")
         let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w70% -h63% -E \"tmux new -s popup_vim \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; " . &shell . "\\\"\""
         nnoremap <silent> <Leader>zf :call system(syscmd)<CR>
         command! Tterm call system(syscmd)
+        command! TTerm Tterm
 
         command! Ttig call LaunchTtig()
+        command! TTig Ttig
         command! Tlg  call LaunchTlg()
+        command! TLg  Tlg
 
     else
 
@@ -2533,8 +2559,10 @@ if !exists("g:vless")
     nnoremap <silent> <Leader>zF :FloatermToggle<CR>
     command! Fterm :FloatermToggle
 
-    command! Vtig call LaunchVtig()
-    command! Vlg  call LaunchVlg()
+    command! Ztig call LaunchZtig()
+    command! ZTig Ztig
+    command! Zlg  call LaunchZlg()
+    command! ZLg  Zlg
 
     " MCK: use something else besides <C-x> here ...
     "tnoremap <silent> <expr> <C-x><C-d> (win_gettype(win_getid()) ==# 'popup' \|\| win_gettype(win_getid()) ==# 'floating') ? '<C-\><C-n><C-w>:FloatermHide<CR>' : '<C-x>'
@@ -8911,9 +8939,13 @@ noremap <silent> zt <Nop>
 if has("nvim")
     nnoremap <silent> <Leader>zt           :$tabnew<bar>terminal<CR><C-\><C-n>:se scl=no<CR>i
     vnoremap <silent> <Leader>zt <C-\><C-n>:$tabnew<bar>terminal<CR><C-\><C-n>:se scl=no<CR>i
+    command Zterm execute "normal! :$tabnew\<bar>terminal\<CR>\<C-\>\<C-n>:se scl=no\<CR>\<C-\>\<C-n>:\<BS>i"
+    command ZTerm Zterm
 else
     nnoremap <silent> <Leader>zt           :$tabnew<bar>terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
     vnoremap <silent> <Leader>zt <C-\><C-n>:$tabnew<bar>terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
+    command Zterm execute "normal :$tabnew\<bar>terminal ++close ++norestore ++kill=term ++curwin\<CR>\<C-w>:se scl=no\<CR>"
+    command ZTerm Zterm
 endif
 "
 " NOTE: there is also <Leader>zf for new floating terminal (floaterm)
