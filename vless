@@ -6,10 +6,10 @@ if [[ -z "$VLESS" ]] ; then
     elif [[ "$VISUAL" == "vim" ]] ; then
         vimless $@
     else
-        nvless $@
+        nvimless $@
     fi
 elif [[ "$VLESS" == "vless" ]] ; then
     vimless $@
 else
-    nvless $@
+    nvimless $@
 fi

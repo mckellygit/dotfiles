@@ -637,7 +637,8 @@ export SMARTLESS_PAGER_ARGUMENTS='-iR -K -x4 -c~'
 alias catc='bat --plain --tabs 4 --paging never'
 
 alias smesg='vless /var/log/syslog'
-alias nsmesg='nvless /var/log/syslog'
+alias vsmesg='vimless /var/log/syslog'
+alias nsmesg='nvimless /var/log/syslog'
 alias tailrdm='tail -f /tmp/rdm-$LOGNAME.log'
 alias difff='diff'
 alias dif='diff'
@@ -646,13 +647,16 @@ alias dif='diff'
 # could also nnoremap qq qa!<CR> here
 #alias vigv="vim -R -c \"GV2 \$1\" -c \":nnoremap <silent> <buffer> q <Nop>\" -c \":cnoreabbrev <silent> <buffer> q Tabcloserightquit\" -c \":cnoreabbrev <silent> <buffer> q! Tabcloserightquit\" -c \":nnoremap <silent> <buffer> x <Nop>\" -c \":cnoreabbrev <silent> <buffer> x Tabcloserightquit\" -c \":se bt=nowrite|:tabn|:hide|:redraw!\""
 # use a function to support arguments ...
-vigv()  { vim -R -c "GV2 $1 $2 $3" -c ":nnoremap <silent> <buffer> q <Nop>" -c ":cnoreabbrev <silent> <buffer> q Tabcloserightquit" -c ":cnoreabbrev <silent> <buffer> q! Tabcloserightquit" -c ":nnoremap <silent> <buffer> x <Nop>" -c ":cnoreabbrev <silent> <buffer> x Tabcloserightquit" -c ":se bt=nowrite|:tabn|:hide|:redraw!" }
+vigv()  { vi -R -c "GV2 $1 $2 $3" -c ":nnoremap <silent> <buffer> q <Nop>" -c ":cnoreabbrev <silent> <buffer> q Tabcloserightquit" -c ":cnoreabbrev <silent> <buffer> q! Tabcloserightquit" -c ":nnoremap <silent> <buffer> x <Nop>" -c ":cnoreabbrev <silent> <buffer> x Tabcloserightquit" -c ":se bt=nowrite|:tabn|:hide|:redraw!" }
+vvigv() { vim -R -c "GV2 $1 $2 $3" -c ":nnoremap <silent> <buffer> q <Nop>" -c ":cnoreabbrev <silent> <buffer> q Tabcloserightquit" -c ":cnoreabbrev <silent> <buffer> q! Tabcloserightquit" -c ":nnoremap <silent> <buffer> x <Nop>" -c ":cnoreabbrev <silent> <buffer> x Tabcloserightquit" -c ":se bt=nowrite|:tabn|:hide|:redraw!" }
 nvigv() { nvi -R -c "GV2 $1 $2 $3" -c ":nnoremap <silent> <buffer> q <Nop>" -c ":cnoreabbrev <silent> <buffer> q Tabcloserightquit" -c ":cnoreabbrev <silent> <buffer> q! Tabcloserightquit" -c ":nnoremap <silent> <buffer> x <Nop>" -c ":cnoreabbrev <silent> <buffer> x Tabcloserightquit" -c ":se bt=nowrite|:tabn|:hide|:redraw!" }
 
-vical()  { vim -c "Calendar $1 $2 $3" -c ":nnoremap <silent> <buffer> q <Nop>" -c ":cnoreabbrev <silent> <buffer> q Tabcloserightquit" -c ":cnoreabbrev <silent> <buffer> q! Tabcloserightquit" -c ":nnoremap <silent> <buffer> x <Nop>" -c ":cnoreabbrev <silent> <buffer> x Tabcloserightquit" }
+vical()  { vi -c "Calendar $1 $2 $3" -c ":nnoremap <silent> <buffer> q <Nop>" -c ":cnoreabbrev <silent> <buffer> q Tabcloserightquit" -c ":cnoreabbrev <silent> <buffer> q! Tabcloserightquit" -c ":nnoremap <silent> <buffer> x <Nop>" -c ":cnoreabbrev <silent> <buffer> x Tabcloserightquit" }
+vvical() { vim -c "Calendar $1 $2 $3" -c ":nnoremap <silent> <buffer> q <Nop>" -c ":cnoreabbrev <silent> <buffer> q Tabcloserightquit" -c ":cnoreabbrev <silent> <buffer> q! Tabcloserightquit" -c ":nnoremap <silent> <buffer> x <Nop>" -c ":cnoreabbrev <silent> <buffer> x Tabcloserightquit" }
 nvical() { nvi -c "Calendar $1 $2 $3" -c ":nnoremap <silent> <buffer> q <Nop>" -c ":cnoreabbrev <silent> <buffer> q Tabcloserightquit" -c ":cnoreabbrev <silent> <buffer> q! Tabcloserightquit" -c ":nnoremap <silent> <buffer> x <Nop>" -c ":cnoreabbrev <silent> <buffer> x Tabcloserightquit" }
 
-magit()  { vim -c "Magit2 $1" }
+magit()  { vi -c "Magit2 $1" }
+vmagit() { vim -c "Magit2 $1" }
 nmagit() { nvi -c "Magit2 $1" }
 
 #function delete-branches() {
@@ -858,11 +862,12 @@ alias roxie_regression='./ecl-test run --target roxie -e=embedded,3rdparty'
 alias hpcc_regression='./ecl-test run --timeout -1 -e=embedded,3rdparty'
 
 # also look at ~/.selected_editor file
-export VISUAL=vim
-export EDITOR=vim
-export TIG_EDITOR=vim
-export VLESS=vless
-export VDIFF=vimdiff
+export VISUAL=nvim
+export EDITOR=nvim
+export TIG_EDITOR=nvim
+
+export VLESS=nvimless
+export VDIFF=nvimdiff
 
 vdiff()
 {
@@ -883,6 +888,10 @@ vdiff()
 
 alias vdifff='vdiff'
 alias vdif='vdiff'
+
+alias vvdiff='vimdiff'
+alias vvdifff='vimdiff'
+alias vvdif='vimdiff'
 
 alias nvdiff='nvimdiff'
 alias nvdifff='nvimdiff'

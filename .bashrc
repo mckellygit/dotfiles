@@ -99,11 +99,12 @@ esac
 
 # -----------------------
 
-export VISUAL=vim
-export EDITOR=vim
-export TIG_EDITOR=vim
-export VLESS=vless
-export VDIFF=vimdiff
+export VISUAL=nvim
+export EDITOR=nvim
+export TIG_EDITOR=nvim
+
+export VLESS=nvimless
+export VDIFF=nvimdiff
 
 vdiff()
 {
@@ -124,6 +125,10 @@ vdiff()
 
 alias vdifff='vdiff'
 alias vdif='vdiff'
+
+alias vvdiff='vimdiff'
+alias vvdifff='vimdiff'
+alias vvdif='vimdiff'
 
 alias nvdiff='nvimdiff'
 alias nvdifff='nvimdiff'
@@ -190,12 +195,15 @@ export SMARTLESS_PAGER_ARGUMENTS='-iR -K -x4 -c~'
 alias catc='bat --plain --tabs 4 --paging never'
 
 alias smesg='vless /var/log/syslog'
-alias nsmesg='nvless /var/log/syslog'
+alias vsmesg='vimless /var/log/syslog'
+alias nsmesg='nvimless /var/log/syslog'
 
 alias tailrdm='tail -f /tmp/rdm-$LOGNAME.log'
 alias difff='diff'
 # gv.vim uses noremap so need to override q, x here
-alias vigv='vim -R -c GV -c ":nnoremap <buffer> q <Nop>" -c ":cnoreabbrev <buffer> q Tabcloserightquit" -c ":cnoreabbrev <buffer> q! Tabcloserightquit" -c ":nnoremap <buffer> x <Nop>" -c ":cnoreabbrev <buffer> x Tabcloserightquit" -c ":redraw!"'
+alias vigv='vi -R -c GV -c ":nnoremap <buffer> q <Nop>" -c ":cnoreabbrev <buffer> q Tabcloserightquit" -c ":cnoreabbrev <buffer> q! Tabcloserightquit" -c ":nnoremap <buffer> x <Nop>" -c ":cnoreabbrev <buffer> x Tabcloserightquit" -c ":redraw!"'
+alias vvigv='vim -R -c GV -c ":nnoremap <buffer> q <Nop>" -c ":cnoreabbrev <buffer> q Tabcloserightquit" -c ":cnoreabbrev <buffer> q! Tabcloserightquit" -c ":nnoremap <buffer> x <Nop>" -c ":cnoreabbrev <buffer> x Tabcloserightquit" -c ":redraw!"'
+alias nvigv='nvim -R -c GV -c ":nnoremap <buffer> q <Nop>" -c ":cnoreabbrev <buffer> q Tabcloserightquit" -c ":cnoreabbrev <buffer> q! Tabcloserightquit" -c ":nnoremap <buffer> x <Nop>" -c ":cnoreabbrev <buffer> x Tabcloserightquit" -c ":redraw!"'
 alias sync-hpcc='sync_hpcc'
 alias stop-hpcc='stop_hpcc'
 alias stat-hpcc='stat_hpcc'
