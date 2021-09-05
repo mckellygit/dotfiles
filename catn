@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [[ $# -lt 1 ]] ; then
+    echo "Error, need filename match string"
+    exit
+fi
+
+while read fname
+do
+    cat $fname
+done < <(ls -1 ${1}*)
+

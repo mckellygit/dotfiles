@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# radssh% *sftp bin/thorstack thorstack
+# radssh% ./thorstack <thor-name>
+# radssh% *tar thorslave_<thor-name>*stack
+# ... Collecting files into <session-dir> ...
+
+# --- on local host ---
+
+# % cd <session-dir>
+# % untar 
+# % rm -f *.tar
+# % tar cvf stack.tar thorslave_<thor-name>*stack
+# % rm -f thorslave_<thor-name>*stack
+
+if [[ $# -ge 1 ]] ; then
+    n=1
+    while read fname
+    do
+        tar xvf $fname
+        if [[ -s ${1} ]] ; then
+            mv ${1} ${1}.${n}
+        fi
+        n=$((n+1))
+    done < <(ls -1 tarfile_*)
+else
+    while read fname
+    do
+        tar xvf $fname
+    done < <(ls -1 tarfile_*)
+fi
+
