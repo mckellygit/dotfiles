@@ -2603,7 +2603,7 @@ nnoremap <silent> <Leader>fM :TabVifm<CR>
 
 " float-preview ----
 let g:float_preview#docked = 0
-let g:float_preview#max_width = 80
+let g:float_preview#max_width = 180
 " float-preview ----
 
 " diffchar ---------
@@ -3785,9 +3785,11 @@ inoremap <S-F27> <C-v><Esc><C-v>
 tnoremap <S-F27> <Esc><C-p>
 if has("nvim")
     cnoremap <S-F27> <M-C-P>
-    inoremap <S-F27> <M-C-P>
+    inoremap <S-F27> <C-P>
     tnoremap <S-F27> <M-C-P>
+    inoremap <M-C-P> <C-P>
 endif
+" NOTE: see other <M-P>, <C-_>P and <C-S-P> mappgings ...
 
 " just to match <M-C-P> ...
 call <SID>MapFastKeycode('<F15>',  "\e\<C-n>", 15)
@@ -3798,9 +3800,11 @@ inoremap <F15> <C-v><Esc><C-v>
 tnoremap <F15> <Esc><C-n>
 if has("nvim")
     cnoremap <F15> <M-C-N>
-    inoremap <F15> <M-C-N>
+    inoremap <F15> <C-N>
     tnoremap <F15> <M-C-N>
+    inoremap <M-C-N> <C-N>
 endif
+" NOTE: see other <M-N>, <C-_>N and <C-S-N> mappgings ...
 
 " ------------------------------
 
@@ -6314,10 +6318,10 @@ endif
  noremap <silent> <M-P>  <Nop>
 
 " and get back orig for insert
-inoremap <silent> <M-n>  <C-v><Esc>n
-inoremap <silent> <M-p>  <C-v><Esc>p
-inoremap <silent> <M-N>  <C-v><Esc>N
-inoremap <silent> <M-P>  <C-v><Esc>P
+inoremap <silent> <M-n>  <Nop>
+inoremap <silent> <M-p>  <Nop>
+inoremap <silent> <M-N>  <Nop>
+inoremap <silent> <M-P>  <Nop>
 
 " NOTE: tmux may send <C-^> + char for these ...
  noremap <silent> <C-^>n n
@@ -6325,10 +6329,13 @@ inoremap <silent> <M-P>  <C-v><Esc>P
  noremap <silent> <C-^>N <Nop>
  noremap <silent> <C-^>P <Nop>
 
-inoremap <silent> <C-^>n <C-v><Esc>n
-inoremap <silent> <C-^>p <C-v><Esc>p
-inoremap <silent> <C-^>N <C-v><Esc>N
-inoremap <silent> <C-^>P <C-v><Esc>P
+inoremap <silent> <C-^>n <C-n>
+inoremap <silent> <C-^>p <C-p>
+inoremap <silent> <C-^>N <C-n>
+inoremap <silent> <C-^>P <C-p>
+
+inoremap <silent> <C-_>N <C-n>
+inoremap <silent> <C-_>P <C-p>
 
 " -------------------------------
 
@@ -7265,6 +7272,7 @@ endif " has("autocmd")
 
 set completeopt=longest,menuone,preview,noselect
 inoremap <silent> <expr> <Tab> pumvisible() ? '<C-n>' : '<Tab>'
+inoremap <silent> <expr> <S-Tab> pumvisible() ? '<C-p>' : '<S-Tab>'
 
 " NOTE: vim needs -python/3 support for YouCompleteMe and rtags
 " +python/dyn +python3/dyn
