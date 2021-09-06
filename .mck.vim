@@ -1786,7 +1786,14 @@ function! MagitWriteBuffer(arg) abort
         if &modified
             write
             if a:arg > 0
-                quit
+                ":x command ...
+                if g:magit > 0
+                    " started magit from shell so exit completely ...
+                    cquit
+                else
+                    " close window ...
+                    quit
+                endif
             else
                 call <SID>LaunchMagit()
             endif
