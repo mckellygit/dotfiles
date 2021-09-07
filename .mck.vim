@@ -9155,7 +9155,7 @@ vnoremap <silent> <Leader><< <C-\><C-n>:tabprevious<CR>
 " to stop <Space> from opening fold ...
 noremap <Space> <Space>
 " use <Leader>Space to toggle (also <Leader>ff)
-"noremap <Leader><Space> za
+noremap <Leader><Space> za
 
 " toggle fold
 noremap <Leader>ff za
