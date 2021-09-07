@@ -1723,6 +1723,8 @@ let g:magit_close_commit_mapping='\mU'
 let g:magit_commit_args=''
 let g:magit_discard_hunk_mapping='\mD'
 let g:magit_folding_toggle_mapping=[ '<Leader><Space>' ]
+let g:magit_folding_open_mapping=[]
+let g:magit_folding_close_mapping=[]
 
 " use R to refresh/update magit buffer (also <C-L> and <Leader>mR)
 " use FF to stage/unstage a file
