@@ -552,6 +552,46 @@ nnoremap B             <C-w>w<C-b><C-w>w
 nnoremap J             5j
 nnoremap K             5k
 
+" these dont seem to work
+"nnoremap <S-Down>      5j
+"nnoremap <S-Up>        5k
+"nnoremap <esc>[1;2B    5j
+"nnoremap <esc>[1;2A    5k
+
+" <A-k>
+nnoremap <M-k>         <C-w>w5k<C-w>w
+nnoremap <Esc>k        <C-w>w5k<C-w>w
+nnoremap k           <C-w>w5k<C-w>w
+" <A-j>
+nnoremap <M-j>         <C-w>w5j<C-w>w
+nnoremap <Esc>j        <C-w>w5j<C-w>w
+nnoremap j           <C-w>w5j<C-w>w
+
+" <A-K>
+nnoremap <M-K>         <C-w>w5k<C-w>w
+nnoremap <Esc>K        <C-w>w5k<C-w>w
+nnoremap K           <C-w>w5k<C-w>w
+" <A-J>
+nnoremap <M-J>         <C-w>w5j<C-w>w
+nnoremap <Esc>J        <C-w>w5j<C-w>w
+nnoremap J           <C-w>w5j<C-w>w
+
+" <C-A-k>
+nnoremap <M-C-K>       <C-w>w5k<C-w>w
+nnoremap <Esc><C-k>    <C-w>w5k<C-w>w
+nnoremap <Esc>       <C-w>w5k<C-w>w
+nnoremap <C-k>       <C-w>w5k<C-w>w
+
+" <C-A-j>
+nnoremap <M-C-J>       <C-w>w5j<C-w>w
+nnoremap <Esc><C-j>    <C-w>w5j<C-w>w
+nnoremap <C-j>       <C-w>w5j<C-w>w
+" also could be C-o instead of C-j as that is problematic
+nnoremap <M-C-O>       <C-w>w5j<C-w>w
+nnoremap <Esc><C-o>    <C-w>w5j<C-w>w
+nnoremap <Esc>       <C-w>w5j<C-w>w
+nnoremap <C-o>       <C-w>w5j<C-w>w
+
 nnoremap <C-j>         <C-w>w10j<C-w>w
 nnoremap <C-k>         <C-w>w10k<C-w>w
 
@@ -578,6 +618,12 @@ nnoremap <Esc><Space>  <C-w>w10j<C-w>w
 nnoremap <Space>     <C-w>w10j<C-w>w
 
 " --------
+
+" these dont seem to work
+"qnoremap <S-Down>      5j
+"qnoremap <S-Up>        5k
+"qnoremap <esc>[1;2B    5j
+"qnoremap <esc>[1;2A    5k
 
 nnoremap qq            :q<cr>
 nnoremap \qq           :q<cr>
@@ -674,6 +720,7 @@ qnoremap <M-C-K>       5k
 qnoremap <Esc><C-k>    5k
 qnoremap <Esc>       5k
 qnoremap <C-k>       5k
+
 " <C-A-j>
 qnoremap <M-C-J>       5j
 qnoremap <Esc><C-j>    5j
