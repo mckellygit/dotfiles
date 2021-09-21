@@ -13,6 +13,14 @@
 " This must be first, because it changes other options as a side effect.
 set nocompatible
 
+" one of these is needed in vim on windows to avoid starting in replace mode
+if !has("nvim")
+    if exists('$WSL_DISTRO_NAME') || exists('$WSLENV')
+        set t_u7=
+        "set ambw=double
+    endif
+endif
+
 " ====================================================
 
 " skip loading this plugin for now ...
@@ -139,8 +147,7 @@ Plugin 'tpope/vim-fugitive'
 "Plugin 'jreybert/vimagit.git'
 Plugin 'mckellygit/vimagit.git'
 " twiggy ...
-"Plugin 'sodapopcan/vim-twiggy'
-Plugin 'mckellygit/vim-twiggy'
+Plugin 'sodapopcan/vim-twiggy'
 " some other neovim magit-like alternatives -
 "Plugin 'Odie/gitabra'
 "Plugin 'plenary.nvim'
