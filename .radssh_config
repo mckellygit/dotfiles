@@ -59,7 +59,7 @@ character_encoding=UTF-8
 ### waiting indefinately at a user prompt...
 # quota.time=0
 # quota.lines=0
-quota.bytes=262144
+# quota.bytes=262144
 
 ### Connection & Authentication Options
 ### Username defaults to $SSH_USER (or $USER) if not set here
