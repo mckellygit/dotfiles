@@ -143,6 +143,27 @@ zmodload zsh/net/tcp
 # To disable bracketed paste
 # unset zle_bracketed_paste
 
+# -----------
+
+# This speeds up pasting w/ autosuggest
+# https://github.com/zsh-users/zsh-autosuggestions/issues/238
+pasteinit() {
+  OLD_SELF_INSERT=${${(s.:.)widgets[self-insert]}[2,3]}
+  zle -N self-insert url-quote-magic # I wonder if you'd need `.url-quote-magic`?
+}
+
+pastefinish() {
+  zle -N self-insert $OLD_SELF_INSERT
+}
+zstyle :bracketed-paste-magic paste-init pasteinit
+zstyle :bracketed-paste-magic paste-finish pastefinish
+
+# https://github.com/zsh-users/zsh-autosuggestions/issues/351
+ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(bracketed-paste)
+ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(accept-line)
+
+# -----------
+
 # prompt styles (prompt -l to list) ...
 # autoload -U promptinit && promptinit
 
