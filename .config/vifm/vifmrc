@@ -541,6 +541,36 @@ nnoremap <esc>[1;3A    <C-w>w10k<C-w>w
 nnoremap <C-_>J        <C-w>w10j<C-w>w
 nnoremap <C-_>K        <C-w>w10k<C-w>w
 
+nnoremap <M-C-P>       <C-w>w
+nnoremap <Esc><C-p>    <C-w>w
+nnoremap <Esc>       <C-w>w
+nnoremap <C-p>       <C-w>w
+nnoremap           <C-w>w
+
+qnoremap <M-C-P>       <C-w>w
+qnoremap <Esc><C-p>    <C-w>w
+qnoremap <Esc>       <C-w>w
+qnoremap <C-p>       <C-w>w
+qnoremap           <C-w>w
+
+nnoremap <C-PageDown> <C-w>w10j<C-w>w
+nnoremap <C-PageUp>   <C-w>w10k<C-w>w
+
+nnoremap <M-PageDown> <C-w>w10j<C-w>w
+nnoremap <M-PageUp>   <C-w>w10k<C-w>w
+
+nnoremap <Esc>[6;5~   <C-w>w10j<C-w>w
+nnoremap <Esc>[5;5~   <C-w>w10k<C-w>w
+
+nnoremap <Esc>[6;3~   <C-w>w10j<C-w>w
+nnoremap <Esc>[5;3~   <C-w>w10k<C-w>w
+
+nnoremap <S-F24>      <C-w>w10j<C-w>w
+nnoremap <S-F21>      <C-w>w10k<C-w>w
+
+nnoremap <S-F26>      <C-w>w10j<C-w>w
+nnoremap <S-F23>      <C-w>w10k<C-w>w
+
 " --------
 
 " NOTE: <S-Up/Down> do not seem to be mappable ...
@@ -720,6 +750,7 @@ qnoremap <M-C-K>       5k
 qnoremap <Esc><C-k>    5k
 qnoremap <Esc>       5k
 qnoremap <C-k>       5k
+qnoremap           5k
 
 " <C-A-j>
 qnoremap <M-C-J>       5j
@@ -730,6 +761,7 @@ qnoremap <M-C-O>       5j
 qnoremap <Esc><C-o>    5j
 qnoremap <Esc>       5j
 qnoremap <C-o>       5j
+qnoremap           5j
 
 " <A-Return>
 qnoremap <M-CR>        k
