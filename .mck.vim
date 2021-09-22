@@ -5199,6 +5199,10 @@ imap <silent> <C-LeftMouse> <C-\><C-o>:let @i="2"<CR><LeftMouse>
 " ------------------------------
 
 function! s:Delay(arg) abort
+    if !exists('w:vc')
+        let w:vc = 'u'
+        let w:vp = 'u'
+    endif
     if a:arg == 1
         silent exe "normal! gv"
         "redraw
@@ -7140,7 +7144,8 @@ if has("autocmd")
 
  function s:ResetTabs()
      " and some other fts ...
-     "if &filetype ==# 'c'
+     " what about modelines ?
+     "if &filetype == 'c' || &filetype == 'cpp'
          setlocal tabstop=4 expandtab shiftwidth=4 noai
      "endif
  endfunction
@@ -7161,7 +7166,10 @@ if has("autocmd")
   au FileType c,cpp setlocal comments-=://
   " NOTE: dont know where or why but tabstops are reset for .c file types ...
   "       and some others ...
-  au BufWinEnter * call s:ResetTabs()
+  "au BufWinEnter * call s:ResetTabs()
+  " this is probably from modelines ...
+  "set modelines=0
+  "set nomodeline
  augroup END
 
  augroup gzip
