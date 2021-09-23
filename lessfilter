@@ -1,10 +1,16 @@
 #!/bin/bash
 
-# bat --paging never --color always --style plain "$1"
+if command -v batcat > /dev/null; then
+  BATNAME="batcat"
+elif command -v bat > /dev/null; then
+  BATNAME="bat"
+fi
+
+# $BATNAME --paging never --color always --style plain "$1"
 
 if [[ -z "$BAT_STYLE" ]] ; then
-    bat --paging=never --decorations=always --color=always --style=plain "$@"
+    $BATNAME --paging=never --decorations=always --color=always --style=plain "$@"
 else
-    bat --paging=never --decorations=always --color=always "$@"
+    $BATNAME --paging=never --decorations=always --color=always "$@"
 fi
 

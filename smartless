@@ -40,6 +40,12 @@ else
   SMARTLESS_HOLD_POLLUTE=1
 fi
 
+if command -v batcat > /dev/null; then
+  BATNAME="batcat"
+elif command -v bat > /dev/null; then
+  BATNAME="bat"
+fi
+
 # number of lines to directly display before entering the pager
 if [ -z "${SMARTLESS_NUM_LINES}" ] ; then
   # default to 5 lines less than the screen height, if it can be discovered
@@ -201,7 +207,7 @@ if IFS= read -r line || [[ $atlimit -gt 0 ]]; then
   if [[ -n "$FROM_ISFILE" ]]; then
     { printf '%s%s\n' "${lines}" "${line}" ; exec cat; } | "${SMARTLESS_PAGER}" -L "${SMARTLESS_PAGER_ARGUMENTS}" "${ARGS[@]}"
   else
-    { printf '%s%s\n' "${lines}" "${line}" | bat -pp ; exec bat -pp; } | "${SMARTLESS_PAGER}" "${SMARTLESS_PAGER_ARGUMENTS}" "${ARGS[@]}"
+    { printf '%s%s\n' "${lines}" "${line}" | $BATNAME -pp ; exec $BATNAME -pp; } | "${SMARTLESS_PAGER}" "${SMARTLESS_PAGER_ARGUMENTS}" "${ARGS[@]}"
   fi
   if [[ $wrap -eq 0 ]]; then
       printf '\033[?7h'
@@ -216,7 +222,7 @@ else
   if [[ -n "$FROM_ISFILE" ]]; then
     printf '%s' "${lines}"
   else
-    printf '%s' "${lines}" | bat -pp
+    printf '%s' "${lines}" | $BATNAME -pp
   fi
   if [[ $wrap -eq 0 ]]; then
       printf '\033[?7h'

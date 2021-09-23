@@ -3,8 +3,14 @@
 unset BASH_ENV
 shopt -u expand_aliases
 
+if command -v batcat > /dev/null; then
+  BATNAME="batcat"
+elif command -v bat > /dev/null; then
+  BATNAME="bat"
+fi
+
 # NOTE: there is also:
-# git diff --name-only --diff-filter=d | xargs bat --diff
+# git diff --name-only --diff-filter=d | xargs $BATNAME --diff
 
 gdir=""
 gdir=$(git rev-parse --show-superproject-working-tree 2> /dev/null)
@@ -16,5 +22,5 @@ then
     echo "fatal: not a git repository (or any of the parent directories): .git"
     exit 1
 fi
-git --no-pager diff $@ |& bat --style=plain
+git --no-pager diff $@ |& $BATNAME --style=plain
 

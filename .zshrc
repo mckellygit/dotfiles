@@ -612,6 +612,14 @@ export ESCDELAY=100
 
 # --------------------
 
+if command -v batcat > /dev/null; then
+  export BATNAME="batcat"
+elif command -v bat > /dev/null; then
+  export BATNAME="bat"
+fi
+
+# --------------------
+
 alias st='command st -g 164x48+854+856'
 
 alias bye='echo "dont leave :-("'
@@ -633,10 +641,10 @@ alias more='less'
 #alias less-pyg='less-pyg'
 alias lessc='less-pyg'
 #alias less='less -K -iR -x4'
-#alias less='bat'
+#alias less='$BATNAME'
 alias less='smartless'
 
-# uses bat underneath to get bat syntax color but less driver with multiple files, etc.
+# uses $BATNAME underneath to get $BATNAME syntax color but less driver with multiple files, etc.
 export LESSOPEN="|lessfilter %s"
 export LESS='-iR -K -x4 -c~'
 
@@ -648,14 +656,14 @@ export SMARTLESS_PAGER='less'
 export SMARTLESS_PAGER_ARGUMENTS='-iR -K -x4 -c~'
 
 #export PAGER='less -RX'
-#export PAGER='bat -p'
+#export PAGER='$BATNAME -p'
 #export PAGER='less'
 #export BAT_PAGER='smartless'
 
 #alias cat='ccat'
 #alias cat='mckless -EXR:'
-#alias cat='bat --plain --paging=never'
-alias catc='bat --plain --tabs 4 --paging never'
+#alias cat='$BATNAME --plain --paging=never'
+alias catc='$BATNAME --plain --tabs 4 --paging never'
 
 alias smesg='vless /var/log/syslog'
 alias vsmesg='vimless /var/log/syslog'
@@ -939,7 +947,7 @@ export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND -t d"
 # fzf from cmdline uses FZF_DEFAULT_OPTS and has a 250 line preview limit
 # fzf from vim plugin does not have the 250 line max
 
-export FZF_DEFAULT_OPTS='--ansi --preview "bat --style=numbers --color=always --line-range :250 {}" --bind="ctrl-alt-p:toggle-preview" --bind="alt-g:preview-top,alt-G:preview-bottom" --bind="ctrl-f:preview-half-page-down" --bind="ctrl-b:preview-half-page-up" --bind="ctrl-k:preview-up,ctrl-j:preview-down" --bind="ctrl-d:delete-char" --bind="alt-bs:preview-half-page-up,alt-space:preview-half-page-down" --bind="alt-k:up,alt-j:down" --bind="ctrl-alt-k:preview-half-page-up,ctrl-alt-j:preview-half-page-down" --bind="ctrl-alt-o:preview-half-page-down" --bind="page-up:page-up" --bind="page-down:page-down" --bind="alt-d:kill-word,alt-u:unix-line-discard" --bind="alt-b:page-up" --bind="alt-f:page-down" --preview-window=right:hidden --color fg:242,bg:236,hl:65,fg+:15,bg+:239,hl+:108 --color info:108,prompt:109,spinner:108,pointer:168,marker:168'
+export FZF_DEFAULT_OPTS='--ansi --preview "$BATNAME --style=numbers --color=always --line-range :250 {}" --bind="ctrl-alt-p:toggle-preview" --bind="alt-g:preview-top,alt-G:preview-bottom" --bind="ctrl-f:preview-half-page-down" --bind="ctrl-b:preview-half-page-up" --bind="ctrl-k:preview-up,ctrl-j:preview-down" --bind="ctrl-d:delete-char" --bind="alt-bs:preview-half-page-up,alt-space:preview-half-page-down" --bind="alt-k:up,alt-j:down" --bind="ctrl-alt-k:preview-half-page-up,ctrl-alt-j:preview-half-page-down" --bind="ctrl-alt-o:preview-half-page-down" --bind="page-up:page-up" --bind="page-down:page-down" --bind="alt-d:kill-word,alt-u:unix-line-discard" --bind="alt-b:page-up" --bind="alt-f:page-down" --preview-window=right:hidden --color fg:242,bg:236,hl:65,fg+:15,bg+:239,hl+:108 --color info:108,prompt:109,spinner:108,pointer:168,marker:168'
 
 # Options to fzf command
 export FZF_COMPLETION_OPTS='+c -x'
@@ -1034,8 +1042,8 @@ bindkey "\e_" my-fzf-files-widget
 
 #export MANPAGER="less"
 #alias manls="man -k . | fzf --prompt='Man> ' | awk '{print \$1}' | xargs -r man -P 'less'"
-export MANPAGER="sh -c 'col -bx | bat -l man -pp | less'"
-alias manls="man -k . | fzf --bind=\"ctrl-f:half-page-down\" --bind=\"ctrl-b:half-page-up\" --bind=\"ctrl-k:up,ctrl-j:down\" --bind=\"ctrl-d:delete-char\" --bind=\"alt-bs:half-page-up,alt-space:half-page-down\" --bind=\"alt-k:up,alt-j:down\" --bind=\"ctrl-alt-k:half-page-up,ctrl-alt-j:half-page-down\" --bind=\"ctrl-alt-o:half-page-down\" --bind=\"page-up:page-up\" --bind=\"page-down:page-down\" --bind=\"alt-d:kill-word,alt-u:unix-line-discard\" --bind=\"alt-b:page-up\" --bind=\"alt-f:page-down\" --prompt='Man> ' | awk '{print \$1}' | xargs -r man -P 'sh -c \"col -bx | bat -l man -pp | less\"'"
+export MANPAGER="sh -c 'col -bx | $BATNAME -l man -pp | less'"
+alias manls="man -k . | fzf --bind=\"ctrl-f:half-page-down\" --bind=\"ctrl-b:half-page-up\" --bind=\"ctrl-k:up,ctrl-j:down\" --bind=\"ctrl-d:delete-char\" --bind=\"alt-bs:half-page-up,alt-space:half-page-down\" --bind=\"alt-k:up,alt-j:down\" --bind=\"ctrl-alt-k:half-page-up,ctrl-alt-j:half-page-down\" --bind=\"ctrl-alt-o:half-page-down\" --bind=\"page-up:page-up\" --bind=\"page-down:page-down\" --bind=\"alt-d:kill-word,alt-u:unix-line-discard\" --bind=\"alt-b:page-up\" --bind=\"alt-f:page-down\" --prompt='Man> ' | awk '{print \$1}' | xargs -r man -P 'sh -c \"col -bx | $BATNAME -l man -pp | less\"'"
 
 # This can be slow, try it in byobu/tmux status bar ...
 # git repo info/status in prompt

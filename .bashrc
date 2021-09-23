@@ -136,6 +136,14 @@ alias nvdif='nvimdiff'
 
 # -----------------------
 
+if command -v batcat > /dev/null; then
+  export BATNAME="batcat"
+elif command -v bat > /dev/null; then
+  export BATNAME="bat"
+fi
+
+# -----------------------
+
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
@@ -172,10 +180,10 @@ alias more='less -R'
 #alias more='moar'
 alias less-pyg='less-pyg'
 #alias less='less -K -iR -x4'
-#alias less='bat'
+#alias less='$BATNAME'
 alias less='smartless'
 
-# uses bat underneath to get bat syntax color but less driver with multiple files, etc.
+# uses $BATNAME underneath to get $BATNAME syntax color but less driver with multiple files, etc.
 export LESSOPEN="|lessfilter %s"
 export LESS='-iR -K -x4 -c~'
 
@@ -187,12 +195,12 @@ export SMARTLESS_PAGER='less'
 export SMARTLESS_PAGER_ARGUMENTS='-iR -K -x4 -c~'
 
 #export PAGER='less -RX'
-#export PAGER='bat -p'
+#export PAGER='$BATNAME -p'
 
 #alias cat='ccat'
 #alias cat='mckless -EXR:'
-#alias cat='bat --plain --paging=never'
-alias catc='bat --plain --tabs 4 --paging never'
+#alias cat='$BATNAME --plain --paging=never'
+alias catc='$BATNAME --plain --tabs 4 --paging never'
 
 alias smesg='vless /var/log/syslog'
 alias vsmesg='vimless /var/log/syslog'
