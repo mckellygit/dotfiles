@@ -85,6 +85,9 @@ __ip_address() {
 	if [ -z "$ipaddr" ]; then
 		ipaddr=$(hostname -i)
 	fi
+	if [ -n "$WSL_DISTRO_NAME" ] || [ -n "$WSLENV" ]; then
+		ipaddr=$(ipconfig.exe 2>/dev/null | grep IPv4 | head -n 1 | awk '{print $NF}' | tr -d '\r\n')
+	fi
 	if [ -n "$ipaddr" ]; then
 		if [ "$1" = "t" ]; then
 			printf "%s" "$ipaddr"
