@@ -614,8 +614,16 @@ export ESCDELAY=100
 
 if command -v batcat > /dev/null; then
   export BATNAME="batcat"
-elif command -v bat > /dev/null; then
+  alias bat='batcat'
+else
   export BATNAME="bat"
+fi
+
+if command -v fdfind > /dev/null; then
+  export FDNAME="fdfind"
+  alias fd='fdfind'
+else
+  export FDNAME="fd"
 fi
 
 # --------------------
@@ -934,15 +942,15 @@ export FZF_DEFAULT_OPTS="--extended --cycle --reverse"
 
 # fzf shell history is in CTRL_R ...
 
-# fzf + ag or fd configuration
+# fzf + ag or $FDNAME configuration
 export FZF_PREVIEW_LINES=20
-# use fd instead of ag to get dirs listed ...
+# use $FDNAME instead of ag to get dirs listed ...
 #export FZF_DEFAULT_COMMAND='ag -U --hidden --nocolor -g ""'
-export FZF_DEFAULT_COMMAND='fd -u --hidden --follow --exclude .git --color=always'
+export FZF_DEFAULT_COMMAND='$FDNAME -u --hidden --follow --exclude .git --color=always'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # could make alt-c for dirs only (add -t d) - then it automatically chdir to there ...
 export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND -t d"
-# add --ansi because fd above uses --color=always ...
+# add --ansi because $FDNAME above uses --color=always ...
 
 # fzf from cmdline uses FZF_DEFAULT_OPTS and has a 250 line preview limit
 # fzf from vim plugin does not have the 250 line max
@@ -964,17 +972,17 @@ export FZF_COMPLETION_TRIGGER="\`\`"
 #  ag -u --hidden --nocolor -g "" "$1" | awk 'function dirname(fn) { if (fn == "") return ".";  if (fn !~ "[^/]") return "/"; sub("/*$", "", fn); if (fn !~ "/") return ".";# sub("/[^/]*$", "", fn); if (fn == "") fn = "/"; return fn } {$0 = dirname($0)} !a[$0]++'
 #}
 
-# Use fd (https://github.com/sharkdp/fd) instead of the default find
+# Use $FDNAME (https://github.com/sharkdp/fd) instead of the default find
 # command for listing path candidates.
 # - The first argument to the function ($1) is the base path to start traversal
 # - See the source code (completion.{bash,zsh}) for the details.
 _fzf_compgen_path() {
-  fd -u --hidden --follow --exclude ".git" . "$1"
+  $FDNAME -u --hidden --follow --exclude ".git" . "$1"
 }
 
-# Use fd to generate the list for directory completion
+# Use $FDNAME to generate the list for directory completion
 _fzf_compgen_dir() {
-  fd -t d -u --hidden --follow --exclude ".git" . "$1"
+  $FDNAME -t d -u --hidden --follow --exclude ".git" . "$1"
 }
 
 # (EXPERIMENTAL) Advanced customization of fzf options via _fzf_comprun function
@@ -1025,7 +1033,7 @@ bindkey "\e\"" my-fzf-history-widget
 
 my-fzf-files-widget() {
   local selected
-  selected=( $(fd --color always --hidden --follow --exclude ".git" . | $(my-fzfcmd)) )
+  selected=( $($FDNAME --color always --hidden --follow --exclude ".git" . | $(my-fzfcmd)) )
   local ret=$?
   if [ -n "$selected" ]; then
     zle -U "$selected"

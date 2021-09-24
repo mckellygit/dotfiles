@@ -138,8 +138,16 @@ alias nvdif='nvimdiff'
 
 if command -v batcat > /dev/null; then
   export BATNAME="batcat"
-elif command -v bat > /dev/null; then
+  alias bat='batcat'
+else
   export BATNAME="bat"
+fi
+
+if command -v fdfind > /dev/null; then
+  export FDNAME="fdfind"
+  alias fd='fdfind'
+else
+  export FDNAME="fd"
 fi
 
 # -----------------------

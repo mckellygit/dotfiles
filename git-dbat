@@ -5,7 +5,7 @@ shopt -u expand_aliases
 
 if command -v batcat > /dev/null; then
   BATNAME="batcat"
-elif command -v bat > /dev/null; then
+else
   BATNAME="bat"
 fi
 
