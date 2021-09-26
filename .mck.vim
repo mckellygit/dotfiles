@@ -14,10 +14,12 @@
 set nocompatible
 
 " one of these is needed in vim on windows to avoid starting in replace mode
+let has_wsl=0
 if !has("nvim")
     if exists('$WSL_DISTRO_NAME') || exists('$WSLENV')
         set t_u7=
         "set ambw=double
+        let has_wsl=1
     endif
 endif
 
@@ -2712,18 +2714,33 @@ vmap <silent> <expr> <Leader>yY (mode() =~ "\<C-v>") ? 'omvVtY`v' : '<C-\><C-n>:
 vmap <silent> <expr> <C-y> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty")<CR>'
 
 if has("nvim")
-    let g:clipboard = {
-        \   'name': 'myclip',
-        \   'copy': {
-        \      '+': 'myclip -',
-        \      '*': 'myclip -',
-        \    },
-        \   'paste': {
-        \      '+': 'myclip --o',
-        \      '*': 'myclip --o',
-        \   },
-        \   'cache_enabled': 1,
-        \ }
+    if has_wsl > 0
+        let g:clipboard = {
+            \   'name': 'win32yank',
+            \   'copy': {
+            \      '+': 'win32yank.exe -i --crlf',
+            \      '*': 'win32yank.exe -i --crlf',
+            \    },
+            \   'paste': {
+            \      '+': 'win32yank.exe -o --lf',
+            \      '*': 'win32yank.exe -o --lf',
+            \   },
+            \   'cache_enabled': 0,
+            \ }
+    else
+        let g:clipboard = {
+            \   'name': 'myclip',
+            \   'copy': {
+            \      '+': 'myclip -',
+            \      '*': 'myclip -',
+            \    },
+            \   'paste': {
+            \      '+': 'myclip --o',
+            \      '*': 'myclip --o',
+            \   },
+            \   'cache_enabled': 1,
+            \ }
+    endif
 endif
 
 " ====================================================
@@ -4045,8 +4062,7 @@ aug END
 
 " explicit force load @* to clipboard ...
 function! ForceLoadNammedReg() abort
-    if executable("copyq") && executable("myclip")
-        " if copyq and myclip exe ...
+    if executable("myclip")
         "silent call system("setsid -w xsel -i -b --rmlastnl --sc 0", getreg('+'))
         silent call system("setsid -w myclip -", getreg('*'))
         echohl DiffText | echo "@* -> clipboard ; register copied" | echohl None
@@ -4054,7 +4070,7 @@ function! ForceLoadNammedReg() abort
         redraw!
         echo " "
     else
-        echohl WarningMsg | echo "copyq/myclip not found, cannot set clipboard" | echohl None
+        echohl WarningMsg | echo "myclip not found, cannot set clipboard" | echohl None
     endif
 endfunction
 nnoremap <silent> <Leader>lr :call ForceLoadNammedReg()<CR>
@@ -4273,7 +4289,12 @@ if has("nvim")
     tnoremap <S-F36> <M-&>
 endif
 
-" C-S-x / M-( cut ...
+" C-S-x / M-( cut selection ...
+
+" ---------------
+" TODO: should <C-x> or <C-S-x> cut ?
+"       or use x, d or <Leader>D ...
+" ---------------
 
 " cannot differentiate between C-S-x and C-x ...
 "nnoremap <C-S-x> <Nop>
@@ -4294,7 +4315,6 @@ if has("nvim")
     tnoremap <S-F37> <M-(>
 endif
 
-" cut selection
 "vnoremap <silent> <C-x> "*d<LeftRelease>
 " NOTE: <C-x>] may be mapped above for terminal ...
 nnoremap <C-x> <Nop>
@@ -5507,6 +5527,25 @@ vnoremap <silent> <Leader>D "_x
 " yank from cursor to end of line (similar to D deleting from cursor to end of line)
 nnoremap <silent> Y y$
 
+" so that we dont execute x or d or ... after a pause/delay waiting for another char ...
+noremap <Leader>x <Nop>
+noremap <Leader>d <Nop>
+noremap <Leader>w <Nop>
+noremap <Leader>p <Nop>
+noremap <Leader>y <Nop>
+noremap <Leader>z <Nop>
+noremap <Leader>b <Nop>
+noremap <Leader>r <Nop>
+noremap <Leader>g <Nop>
+noremap <Leader>s <Nop>
+noremap <Leader>t <Nop>
+noremap <Leader>l <Nop>
+noremap <Leader>m <Nop>
+noremap <Leader>a <Nop>
+noremap <Leader>P <Nop>
+noremap <Leader>f <Nop>
+noremap <Leader>h <Nop>
+
 " NOTE: <A-Return> (S-F31) to copy/end vis-mode to match tmux
 call <SID>MapFastKeycode('<S-F31>',  "\e\<Return>", 131)
 "vmap <silent> <S-F31> mvty`v
@@ -6214,14 +6253,14 @@ inoremap <C-S-Right> <C-\><C-o>10gl
 " use <M-k> as gk so we can do
 " <M-k> for up and then <M-`> for repeat prev cmd
 call <SID>MapFastKeycode('<F30>',  "\ek", 30)
-noremap <F30> 5gk
-noremap <M-k> 5gk
-inoremap <F30> <C-\><C-o>5gk
-inoremap <M-k> <C-\><C-o>5gk
-"noremap <F30> 5gk
-"noremap <M-k> 5gk
-"inoremap <F30> <C-\><C-o>5gk
-"inoremap <M-k> <C-\><C-o>5gk
+noremap <F30> 1gk
+noremap <M-k> 1gk
+inoremap <F30> <C-\><C-o>1gk
+inoremap <M-k> <C-\><C-o>1gk
+"noremap <F30> 1gk
+"noremap <M-k> 1gk
+"inoremap <F30> <C-\><C-o>1gk
+"inoremap <M-k> <C-\><C-o>1gk
 if has("nvim")
     cnoremap <F30> <M-k>
     tnoremap <F30> <M-k>
@@ -6233,14 +6272,14 @@ endif
 " use <M-j> as gj so we can do
 " <M-j> for down and then <M-`> for repeat prev cmd
 call <SID>MapFastKeycode('<F31>',  "\ej", 31)
-noremap <F31> 5gj
-noremap <M-j> 5gj
-inoremap <F31> <C-\><C-o>5gj
-inoremap <M-j> <C-\><C-o>5gj
-"noremap <F31> 5gj
-"noremap <M-j> 5gj
-"inoremap <F31> <C-\><C-o>5gj
-"inoremap <M-j> <C-\><C-o>5gj
+noremap <F31> 1gj
+noremap <M-j> 1gj
+inoremap <F31> <C-\><C-o>1gj
+inoremap <M-j> <C-\><C-o>1gj
+"noremap <F31> 1gj
+"noremap <M-j> 1gj
+"inoremap <F31> <C-\><C-o>1gj
+"inoremap <M-j> <C-\><C-o>1gj
 if has("nvim")
     cnoremap <F31> <M-j>
     tnoremap <F31> <M-j>

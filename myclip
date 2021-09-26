@@ -10,6 +10,11 @@ if [[ -n "$SUDO_USER" && -n "$SUDO_UID" ]] ; then
     fi
 fi
 
+has_wsl=0
+if [[ -n "$WSL_DISTRO_NAME" || -n "$WSLENV" ]] ; then
+    has_wsl=1
+fi
+
 have_sc=0
 have_rmnl=0
 have_dash=0
@@ -66,20 +71,36 @@ if [[ $have_args -eq 0 || $have_dash -eq 1 ]] ; then
     # could have just -
     # exec xsel -i -b
     # since copyq would have then synced clipboard to selection ...
-    if [[ $have_rmnl -eq 1 && $have_dash -eq 1 ]] ; then
-        sed -z '$s/\n$//' | exec copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input()); text=input(); if (text.length>0) { addUnique(input()) }"
+    if [[ $has_wsl -gt 0 ]]; then
+        if [[ $have_rmnl -eq 1 && $have_dash -eq 1 ]] ; then
+            sed -z '$s/\n$//' | win32yank.exe -i --crlf
+        else
+            win32yank.exe -i --crlf
+        fi
     else
-        exec copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input()); text=input(); if (text.length>0) { addUnique(input()) }"
+        if [[ $have_rmnl -eq 1 && $have_dash -eq 1 ]] ; then
+            sed -z '$s/\n$//' | exec copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input()); text=input(); if (text.length>0) { addUnique(input()) }"
+        else
+            exec copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input()); text=input(); if (text.length>0) { addUnique(input()) }"
+        fi
     fi
     exit 0
 elif [[ $have_text -eq 1 ]] ; then
     # could have just -
     #echo "$escapedtext" | xsel -i -b
     # since copyq would have then synced clipboard to selection ...
-    if [[ $have_rmnl -eq 1 ]] ; then
-        echo -n "$escapedtext" | copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input()); text=input(); if (text.length>0) { addUnique(input()) }"
+    if [[ $has_wsl -gt 0 ]]; then
+        if [[ $have_rmnl -eq 1 ]] ; then
+            echo -n "$escapedtext" | win32yank.exe -i --crlf
+        else
+            echo "$escapedtext" | win32yank.exe -i --crlf
+        fi
     else
-        echo "$escapedtext" | copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input()); text=input(); if (text.length>0) { addUnique(input()) }"
+        if [[ $have_rmnl -eq 1 ]] ; then
+            echo -n "$escapedtext" | copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input()); text=input(); if (text.length>0) { addUnique(input()) }"
+        else
+            echo "$escapedtext" | copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input()); text=input(); if (text.length>0) { addUnique(input()) }"
+        fi
     fi
     exit 0
 fi
@@ -126,10 +147,18 @@ tmpclip=/dev/shm/myclip.$$
 
 trap "rm -f $tmpclip" EXIT
 
-if [[ $have_rmnl -eq 0 ]] ; then
-    copyq clipboard > $tmpclip 2>&1
+if [[ $has_wsl -gt 0 ]]; then
+    if [[ $have_rmnl -eq 0 ]] ; then
+        win32yank.exe -o --lf > $tmpclip 2>&1
+    else
+        win32yank.exe -o --lf | sed -z '$s/\n$//' > $tmpclip 2>&1
+    fi
 else
-    copyq clipboard | sed -z '$s/\n$//' > $tmpclip 2>&1
+    if [[ $have_rmnl -eq 0 ]] ; then
+        copyq clipboard > $tmpclip 2>&1
+    else
+        copyq clipboard | sed -z '$s/\n$//' > $tmpclip 2>&1
+    fi
 fi
 
 if [[ -s $tmpclip ]] ; then

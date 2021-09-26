@@ -46,17 +46,10 @@ return {
   bypass_mouse_reporting_modifiers = "SHIFT",
   disable_default_mouse_bindings = true,
   mouse_bindings = {
-    -- Bind 'Up' event of CTRL-Click to open hyperlinks
     {
       event={Up={streak=1, button="Left"}},
       mods="SHIFT",
       action="OpenLinkAtMouseCursor",
-    },
-    -- Disable the 'Down' event of CTRL-Click to avoid weird program behaviors
-    {
-      event={Down={streak=1, button="Left"}},
-      mods="CTRL",
-      action="Nop",
     },
   },
 
@@ -107,6 +100,10 @@ return {
 
     -- { key="c",         mods="CTRL|SHIFT",    action="Copy" },
     -- { key="v",         mods="CTRL|SHIFT",    action="Paste" },
+    -- { key="c",         mods="CTRL|SUPER",    action="Copy" },
+    -- { key="v",         mods="CTRL|SUPER",    action="Paste" },
+    { key="c",         mods="CTRL|ALT",      action="Copy" },
+    { key="v",         mods="CTRL|ALT",      action="Paste" },
     { key="c",         mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1b[2;5~"} },
     { key="v",         mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1b[2;2~"} },
 

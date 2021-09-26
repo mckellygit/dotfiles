@@ -305,8 +305,6 @@ URxvt.keysym.C-S-space:                 string:\037\040
 URxvt.keysym.Shift-Meta-BackSpace:      string:\037\177
 URxvt.keysym.Shift-Meta-space:          string:\037\040
 
-URxvt.keysym.Shift-Control-X:           string:\033\170
-
 URxvt.keysym.Control-Meta-BackSpace:    string:\033\100
 URxvt.keysym.Control-Meta-equal:        string:\033\043
 URxvt.keysym.Control-Meta-space:        string:\033\043
@@ -329,6 +327,8 @@ URxvt.keysym.Control-Meta-Return:       string:\036\015
 URxvt.keysym.Shift-Control-F:           string:\006
 URxvt.keysym.Shift-Control-B:           string:\002
 
+!!URxvt.keysym.Shift-Control-X:           string:\037\130
+
 URxvt.keysym.Shift-Control-J:           string:\037\112
 URxvt.keysym.Shift-Control-K:           string:\037\113
 
@@ -348,8 +348,10 @@ URxvt.keysym.Shift-Control-C:   string:\033[2;5~
 !!URxvt.keysym.C-S-0x56:          eval:paste_clipboard
 !!URxvt.keysym.C-S-0x43:          eval:selection_to_clipboard
 
-URxvt.keysym.Control-Meta-c:    builtin-string:
-URxvt.keysym.Control-Meta-v:    builtin-string:
+!!URxvt.keysym.Control-Meta-c:    builtin-string:
+!!URxvt.keysym.Control-Meta-v:    builtin-string:
+URxvt.keysym.Control-Meta-v:    eval:paste_clipboard
+URxvt.keysym.Control-Meta-c:    eval:selection_to_clipboard
 
 URxvt.keysym.C-S-plus:          font-size:increase
 URxvt.keysym.C-S-underscore:    font-size:decrease

@@ -251,7 +251,9 @@ zle -N noop
 bindkey  -M viins "\e[2;2~" noop
 bindkey  -M vicmd "\e[2;2~" noop
 
-# TODO: C-Insert ?
+# C-Insert no-op ...
+bindkey  -M viins "\e[2;5~" noop
+bindkey  -M vicmd "\e[2;5~" noop
 
 # --------------------
 
@@ -1284,6 +1286,9 @@ bindkey -s "^^\x7f" "\x7f"
 
 # SPECIAL: some terminals may map <C-S-h> (or <S-C-h>) to <C-^><C-h> ...
 bindkey -s "^^\x08" "\x08"
+
+# SPECIAL: some terminals may map <C-S-x> to <C-_>X ...
+bindkey "^_X" noop
 
 # SPECIAL: some terminals may map <C-S-j> to <C-_>J ...
 bindkey "^_J" noop
