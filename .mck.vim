@@ -2741,6 +2741,26 @@ if has("nvim")
             \   'cache_enabled': 1,
             \ }
     endif
+else
+    if has_wsl > 0
+        let g:yank_debounce_time_ms = 500
+        let g:yank_debounce_timer_id = -1
+
+        function! YankDebounced()
+            if v:event.operator ==# 'y'
+                let l:now = localtime()
+                call timer_stop(g:yank_debounce_timer_id)
+                let g:yank_debounce_timer_id = timer_start(g:yank_debounce_time_ms, 'Yank')
+            endif
+        endfunction
+
+        function! Yank(timer)
+            call system('win32yank.exe -i --crlf', @")
+            redraw!
+        endfunction
+
+        autocmd TextYankPost * call YankDebounced()
+    endif
 endif
 
 " ====================================================
@@ -8996,6 +9016,8 @@ function s:ConfNextOrQuit() abort
     catch /E165:/
         silent! FloatermKill!
         conf q
+    catch /.*/
+        silent! FloatermKill!
     endtry
 endfunction
 
