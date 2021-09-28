@@ -14,12 +14,12 @@
 set nocompatible
 
 " one of these is needed in vim on windows to avoid starting in replace mode
-let has_wsl=0
+let g:has_wsl=0
 if !has("nvim")
     if exists('$WSL_DISTRO_NAME') || exists('$WSLENV')
         set t_u7=
         "set ambw=double
-        let has_wsl=1
+        let g:has_wsl=1
     endif
 endif
 
@@ -2716,7 +2716,7 @@ vmap <silent> <expr> <Leader>yY (mode() =~ "\<C-v>") ? 'omvVtY`v' : '<C-\><C-n>:
 vmap <silent> <expr> <C-y> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty")<CR>'
 
 if has("nvim")
-    if has_wsl > 0
+    if g:has_wsl > 0
         let g:clipboard = {
             \   'name': 'win32yank',
             \   'copy': {
@@ -2744,7 +2744,7 @@ if has("nvim")
             \ }
     endif
 else
-    if has_wsl > 0
+    if g:has_wsl > 0
         let g:yank_debounce_time_ms = 500
         let g:yank_debounce_timer_id = -1
 
@@ -3448,7 +3448,7 @@ set clipboard-=unnamedplus
 
 " preserve clipboard(s) at exit ...
 function! s:PreserveClipboard() abort
-    if has_wsl == 0 && executable("myclip") && !exists('$SSH_CLIENT') && !exists('$VIM_SKIP_PRESERVE_CLIPBOARD')
+    if g:has_wsl == 0 && executable("myclip") && !exists('$SSH_CLIENT') && !exists('$VIM_SKIP_PRESERVE_CLIPBOARD')
         " if copyq and myclip exe and not ssh shell and special vim_skip_preserve_clipboard env not set ...
         "silent call system("setsid -w copyq >/dev/null 2>/dev/null copySelection -", getreg('*'))
         "silent call system("setsid -w copyq >/dev/null 2>/dev/null copy -", getreg('*'))
@@ -3493,7 +3493,7 @@ endif
 " initially set + and * regs (and regtype), even if clipboard empty ...
 " otherwise they can get loaded from elsewhere
 function s:InitializeClipboard()
-    if has_wsl == 0 && executable("copyq") && executable("myclip") && !exists('$SSH_CLIENT')
+    if g:has_wsl == 0 && executable("copyq") && executable("myclip") && !exists('$SSH_CLIENT')
         " if copyq and myclip exe and copyq not running and not ssh shell then start it ...
         if executable("pgrep") && executable("copyq")
             let copyqpid = system('pgrep --exact copyq')
