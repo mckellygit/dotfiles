@@ -67,10 +67,13 @@
             "keys": "ctrl+shift+space"
         }
     ],
+    "alwaysShowTabs": true,
     "copyFormatting": "none",
     "copyOnSelect": false,
     "defaultProfile": "{07b52e3e-de2c-5db4-bd2d-ba144ed6c273}",
     "disableAnimations": true,
+    "experimental.rendering.forceFullRepaint": false,
+    "experimental.rendering.software": false,
     "initialCols": 162,
     "initialPosition": "700,700",
     "initialRows": 40,
@@ -101,10 +104,11 @@
                 "name": "Command Prompt"
             },
             {
-                "colorScheme": "Solarized Dark",
+                "colorScheme": "Tmux",
                 "guid": "{07b52e3e-de2c-5db4-bd2d-ba144ed6c273}",
                 "hidden": false,
                 "name": "Ubuntu-20.04",
+                "startingDirectory" : "//wsl$/Ubuntu-20.04/home/kellma02",
                 "source": "Windows.Terminal.Wsl"
             },
             {
@@ -210,7 +214,7 @@
             "yellow": "#C18301"
         },
         {
-            "background": "#002B36",
+            "background": "#1F3F47",
             "black": "#002B36",
             "blue": "#268BD2",
             "brightBlack": "#073642",
@@ -302,6 +306,29 @@
             "yellow": "#C4A000"
         },
         {
+            "background": "#14292E",
+            "black": "#000000",
+            "blue": "#0066FF",
+            "brightBlack": "#808080",
+            "brightBlue": "#5F87FF",
+            "brightCyan": "#00FFFF",
+            "brightGreen": "#00D700",
+            "brightPurple": "#875FAF",
+            "brightRed": "#DF0000",
+            "brightWhite": "#FFFFFF",
+            "brightYellow": "#FFD700",
+            "cursorColor": "#D78700",
+            "cyan": "#009999",
+            "foreground": "#C5C5C5",
+            "green": "#008000",
+            "name": "Tmux",
+            "purple": "#BA55D3",
+            "red": "#B22222",
+            "selectionBackground": "#EEEEEE",
+            "white": "#DDDDDD",
+            "yellow": "#999900"
+        },
+        {
             "background": "#000000",
             "black": "#000000",
             "blue": "#000080",
@@ -326,5 +353,6 @@
         }
     ],
     "showTabsInTitlebar": true,
-    "showTerminalTitleInTitlebar": true
+    "showTerminalTitleInTitlebar": true,
+    "snapToGridOnResize": false
 }

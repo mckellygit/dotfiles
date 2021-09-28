@@ -43,6 +43,8 @@ endif
 
 let g:in_gv2 = 0
 
+let g:wslyanklast='y'
+
 " ====================================================
 " --- vundle -----------------------------------------
 " ====================================================
@@ -2746,20 +2748,33 @@ else
         let g:yank_debounce_time_ms = 500
         let g:yank_debounce_timer_id = -1
 
-        function! Yank(timer)
+        function! WSLYank(timer)
             call system('win32yank.exe -i --crlf', @")
             redraw!
         endfunction
 
-        function! YankDebounced()
+        function! WSLYankDebounced()
             if v:event.operator ==# 'y'
+                let g:wslyanklast='y'
                 let l:now = localtime()
                 call timer_stop(g:yank_debounce_timer_id)
-                let g:yank_debounce_timer_id = timer_start(g:yank_debounce_time_ms, 'Yank')
+                let g:yank_debounce_timer_id = timer_start(g:yank_debounce_time_ms, 'WSLYank')
+            else
+                let g:wslyanklast=''
             endif
         endfunction
 
-        autocmd TextYankPost * call YankDebounced()
+        autocmd TextYankPost * call WSLYankDebounced()
+
+        function! WSLPaste(mode) abort
+            if g:wslyanklast == 'y'
+                let @" = system('win32yank.exe -o --lf')
+            endif
+            return a:mode
+        endfunction
+
+        map <expr> p WSLPaste('p')
+        map <expr> P WSLPaste('P')
     endif
 endif
 
