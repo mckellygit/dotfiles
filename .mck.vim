@@ -3448,7 +3448,7 @@ set clipboard-=unnamedplus
 
 " preserve clipboard(s) at exit ...
 function! s:PreserveClipboard() abort
-    if executable("copyq") && executable("myclip") && !exists('$SSH_CLIENT') && !exists('$VIM_SKIP_PRESERVE_CLIPBOARD')
+    if has_wsl == 0 && executable("myclip") && !exists('$SSH_CLIENT') && !exists('$VIM_SKIP_PRESERVE_CLIPBOARD')
         " if copyq and myclip exe and not ssh shell and special vim_skip_preserve_clipboard env not set ...
         "silent call system("setsid -w copyq >/dev/null 2>/dev/null copySelection -", getreg('*'))
         "silent call system("setsid -w copyq >/dev/null 2>/dev/null copy -", getreg('*'))
@@ -3493,9 +3493,9 @@ endif
 " initially set + and * regs (and regtype), even if clipboard empty ...
 " otherwise they can get loaded from elsewhere
 function s:InitializeClipboard()
-    if executable("copyq") && executable("myclip") && !exists('$SSH_CLIENT')
+    if has_wsl == 0 && executable("copyq") && executable("myclip") && !exists('$SSH_CLIENT')
         " if copyq and myclip exe and copyq not running and not ssh shell then start it ...
-        if executable("pgrep")
+        if executable("pgrep") && executable("copyq")
             let copyqpid = system('pgrep --exact copyq')
             if empty(copyqpid)
                 silent call system('setsid copyq &')
