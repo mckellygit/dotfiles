@@ -19,20 +19,24 @@
             "keys": "ctrl+alt+c"
         },
         {
-            "command": 
-            {
-                "action": "sendInput",
-                "input": "\u001b@"
-            },
-            "keys": "ctrl+alt+backspace"
-        },
-        {
             "command": "paste",
             "keys": "ctrl+shift+v"
         },
         {
             "command": "paste",
             "keys": "ctrl+alt+v"
+        },
+
+        { "command": "unbound", "keys": "ctrl+insert" },
+        { "command": "unbound", "keys": "shift+insert" },
+
+        {
+            "command":
+            {
+                "action": "sendInput",
+                "input": "\u001b@"
+            },
+            "keys": "ctrl+alt+backspace"
         },
         {
             "command": 
@@ -354,5 +358,5 @@
     ],
     "showTabsInTitlebar": true,
     "showTerminalTitleInTitlebar": true,
-    "snapToGridOnResize": false
+    "snapToGridOnResize": true
 }
