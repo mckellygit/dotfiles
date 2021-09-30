@@ -23,6 +23,21 @@ if !has("nvim")
     endif
 endif
 
+let g:has_clipper=0
+if g:has_wsl > 0
+    if executable("win32yank.exe")
+        let g:has_clipper=1
+    else
+        echohl WarningMsg | echo "win32yank.exe not found, cannot get/set external clipboard" | echohl None
+    endif
+else
+    if executable("myclip")
+        let g:has_clipper=1
+    else
+        echohl WarningMsg | echo "myclip not found, cannot get/set external clipboard" | echohl None
+    endif
+endif
+
 " ====================================================
 
 " skip loading this plugin for now ...
@@ -2692,6 +2707,9 @@ nnoremap <silent> tY    <Nop>
 nnoremap <silent> tx    <Nop>
 nnoremap <silent> tX    <Nop>
 
+" sometimes press C instead of D on selection ...
+vmap <silent> C <Nop>
+
 " copy (yank) selection, stay at end unless rectangular region ...
 "vmap <silent> <expr> <C-c> (mode() =~ "\<C-v>") ? 'ty' : 'mvty`v'
 "vmap <silent> <expr> y     (mode() =~ "\<C-v>") ? 'ty' : 'mvty`v'
@@ -3448,7 +3466,7 @@ set clipboard-=unnamedplus
 
 " preserve clipboard(s) at exit ...
 function! s:PreserveClipboard() abort
-    if g:has_wsl == 0 && executable("myclip") && !exists('$SSH_CLIENT') && !exists('$VIM_SKIP_PRESERVE_CLIPBOARD')
+    if g:has_wsl == 0 && g:has_clipper > 0 && !exists('$SSH_CLIENT') && !exists('$VIM_SKIP_PRESERVE_CLIPBOARD')
         " if copyq and myclip exe and not ssh shell and special vim_skip_preserve_clipboard env not set ...
         "silent call system("setsid -w copyq >/dev/null 2>/dev/null copySelection -", getreg('*'))
         "silent call system("setsid -w copyq >/dev/null 2>/dev/null copy -", getreg('*'))
@@ -3463,7 +3481,7 @@ function! s:PreserveClipboard() abort
         " NOTE: dont seem to need this if block - but why ?
         let regtype = getregtype('*')
         if ! (regtype =~ "")
-            silent call system("setsid -w myclip -", getreg('*'))
+            silent call system("myclip -", getreg('*'))
         endif
         " -------------------------------------
 
@@ -3493,7 +3511,7 @@ endif
 " initially set + and * regs (and regtype), even if clipboard empty ...
 " otherwise they can get loaded from elsewhere
 function s:InitializeClipboard()
-    if g:has_wsl == 0 && executable("copyq") && executable("myclip") && !exists('$SSH_CLIENT')
+    if g:has_wsl == 0 && g:has_clipper > 0 && executable("copyq") && !exists('$SSH_CLIENT')
         " if copyq and myclip exe and copyq not running and not ssh shell then start it ...
         if executable("pgrep") && executable("copyq")
             let copyqpid = system('pgrep --exact copyq')
@@ -4097,15 +4115,26 @@ aug END
 
 " explicit force load @* to clipboard ...
 function! ForceLoadNammedReg() abort
-    if executable("myclip")
-        "silent call system("setsid -w xsel -i -b --rmlastnl --sc 0", getreg('+'))
-        silent call system("setsid -w myclip -", getreg('*'))
-        echohl DiffText | echo "@* -> clipboard ; register copied" | echohl None
-        sleep 651m
-        redraw!
-        echo " "
+    if g:has_wsl > 0
+        if g:has_clipper > 0
+            silent call system("win32yank.exe -i --crlf", getreg('*'))
+            echohl DiffText | echo "@* register copied to clipboard" | echohl None
+            sleep 851m
+            redraw!
+            echo " "
+        else
+            echohl WarningMsg | echo "win32yank.exe not found, cannot get from external clipboard" | echohl None
+        endif
     else
-        echohl WarningMsg | echo "myclip not found, cannot set clipboard" | echohl None
+        if g:has_clipper > 0
+            silent call system("myclip -", getreg('*'))
+            echohl DiffText | echo "@* register copied to clipboard" | echohl None
+            sleep 851m
+            redraw!
+            echo " "
+        else
+            echohl WarningMsg | echo "myclip not found, cannot get from external clipboard" | echohl None
+        endif
     endif
 endfunction
 nnoremap <silent> <Leader>lr :call ForceLoadNammedReg()<CR>
