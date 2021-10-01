@@ -2712,10 +2712,6 @@ nnoremap <silent> tY    <Nop>
 nnoremap <silent> tx    <Nop>
 nnoremap <silent> tX    <Nop>
 
-if g:has_wsl > 0
-    nmap <silent> yy yy:sleep 351m<CR>
-endif
-
 " sometimes press C instead of D on selection ...
 vmap <silent> C <Nop>
 
@@ -2772,7 +2768,7 @@ if has("nvim")
     endif
 else
     if g:has_wsl > 0
-        let g:yank_debounce_time_ms = 500
+        let g:yank_debounce_time_ms = 10
         let g:yank_debounce_timer_id = -1
 
         function! WSLYank(timer)
