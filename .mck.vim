@@ -60,6 +60,10 @@ let g:in_gv2 = 0
 
 let g:wslyanklast='y'
 
+if has("nvim")
+    let g:tclm = 0
+endif
+
 " ====================================================
 " --- vundle -----------------------------------------
 " ====================================================
@@ -1406,6 +1410,7 @@ autocmd FileType GV setlocal cursorline
 " TODO: it seems when ft==git <ScrollWheel> acts different than the map defined in this file
 
 " M/A-DoubleClick to open (o) commit ...
+autocmd FileType GV nmap <buffer> <A-C-LeftDrag> <Nop>
 autocmd FileType GV nmap <buffer> <A-C-LeftRelease> <Nop>
 autocmd FileType GV nmap <buffer> <A-C-2-LeftRelease> <Nop>
 autocmd FileType GV nmap <buffer> <A-C-2-LeftMouse> <C-\><C-n>:<C-u>call feedkeys("O")<CR>
@@ -2994,6 +2999,8 @@ if has("nvim")
     " if we really wanted to override this behavior then -
     "autocmd TermOpen term://* nnoremap <buffer> <LeftRelease> <LeftRelease>i
     autocmd TermOpen term://* tnoremap <silent> <buffer> <LeftRelease> <Nop>
+    autocmd TermOpen term://* tnoremap <silent> <buffer> <C-LeftMouse> <C-\><C-n>:let g:tclm=1<CR><LeftMouse>
+    autocmd TermOpen term://* tnoremap <silent> <buffer> <A-C-LeftMouse> <C-\><C-n>:let g:tclm=1<CR><LeftMouse>
   augroup END
 
   " dont enter normal mode with a wheel up ...
@@ -4511,7 +4518,8 @@ function! s:MyVisV2()
 endfunction
 
 " <C-q> seems to start visual mode ...
-nmap <C-q> <Nop>
+"nmap <C-q> <Nop>
+nmap <silent> <expr> <C-q> (&buftype == 'terminal') ? 'i' : ''
 " TODO can we get <C-q> to leave normal mode of terminal ?
 "      or use <M-q> for that ?
 
@@ -5273,7 +5281,11 @@ if has("nvim")
     imap <silent> <M-C> <LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>
 endif
 
-vmap <silent> <C-LeftRelease> tygv:<C-u>call <SID>Delay(0)<CR><Esc>
+if has("nvim")
+    vmap <silent> <expr> <C-LeftRelease> (g:tclm == 1) ? 'tygv:<C-u>call <SID>Delay(0)<CR>:let g:tclm=0<CR><Esc>i' : 'tygv:<C-u>call <SID>Delay(0)<CR><Esc>'
+else
+    vmap <silent> <C-LeftRelease> tygv:<C-u>call <SID>Delay(0)<CR><Esc>
+endif
 imap <silent> <C-LeftMouse> <C-\><C-o>:let @i="2"<CR><LeftMouse>
 
 " ------------------------------
@@ -5379,8 +5391,12 @@ if has("nvim")
     imap <silent> <M-B> <LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>
 endif
 
-vmap <silent> <A-C-LeftRelease> tygv:<C-u>call <SID>Delay(0)<CR><Esc>
-imap <silent> <A-C-LeftMouse>   <C-\><C-o>:let @i="2"<CR><LeftMouse>
+if has("nvim")
+    vmap <silent> <expr> <A-C-LeftRelease> (g:tclm == 1) ? 'tygv:<C-u>call <SID>Delay(0)<CR>:let g:tclm=0<CR><Esc>i' : 'tygv:<C-u>call <SID>Delay(0)<CR><Esc>'
+else
+    vmap <silent> <A-C-LeftRelease> tygv:<C-u>call <SID>Delay(0)<CR><Esc>
+endif
+imap <silent> <A-C-LeftMouse> <C-\><C-o>:let @i="2"<CR><LeftMouse>
 
 " ------------------------------
 
@@ -6198,6 +6214,15 @@ noremap <silent> <expr> <C-j>      ((line('$') - line('w$')) < 1) ? 'gj' : AtTop
 noremap <silent> <expr> <C-S-Space> AtTop(0) ? ((line("$") - line("w$")) >= 10 ? '10<C-e>' : (line("$") - line("w$")) >= 9 ? '9<C-e>' : (line("$") - line("w$")) >= 8 ? '8<C-e>' : (line("$") - line("w$")) >= 7 ? '7<C-e>' : (line("$") - line("w$")) >= 6 ? '6<C-e>' : (line("$") - line("w$")) >= 5 ? '5<C-e>' : (line("$") - line("w$")) >= 4 ? '4<C-e>' : (line("$") - line("w$")) >= 3 ? '3<C-e>' : (line("$") - line("w$")) >= 2 ? '2<C-e>' :(line("$") - line("w$")) >= 1 ? '1<C-e>' : '') : ((line("$") - line("w$")) >= 10 ? '10<C-e>10j' : (line("$") - line("w$")) >= 9 ? '9<C-e>9j' : (line("$") - line("w$")) >= 8 ? '8<C-e>8j' : (line("$") - line("w$")) >= 7 ? '7<C-e>7j' : (line("$") - line("w$")) >= 6 ? '6<C-e>6j' : (line("$") - line("w$")) >= 5 ? '5<C-e>5j' : (line("$") - line("w$")) >= 4 ? '4<C-e>4j' : (line("$") - line("w$")) >= 3 ? '3<C-e>3j' : (line("$") - line("w$")) >= 2 ? '2<C-e>2j' :(line("$") - line("w$")) >= 1 ? '1<C-e>1j' : '')
 " SPECIAL: NOTE: some terminals map <C-S-Space> to <C-_><Space>
 noremap <silent> <expr> <C-_><Space> AtTop(0) ? ((line("$") - line("w$")) >= 10 ? '10<C-e>' : (line("$") - line("w$")) >= 9 ? '9<C-e>' : (line("$") - line("w$")) >= 8 ? '8<C-e>' : (line("$") - line("w$")) >= 7 ? '7<C-e>' : (line("$") - line("w$")) >= 6 ? '6<C-e>' : (line("$") - line("w$")) >= 5 ? '5<C-e>' : (line("$") - line("w$")) >= 4 ? '4<C-e>' : (line("$") - line("w$")) >= 3 ? '3<C-e>' : (line("$") - line("w$")) >= 2 ? '2<C-e>' :(line("$") - line("w$")) >= 1 ? '1<C-e>' : '') : ((line("$") - line("w$")) >= 10 ? '10<C-e>10j' : (line("$") - line("w$")) >= 9 ? '9<C-e>9j' : (line("$") - line("w$")) >= 8 ? '8<C-e>8j' : (line("$") - line("w$")) >= 7 ? '7<C-e>7j' : (line("$") - line("w$")) >= 6 ? '6<C-e>6j' : (line("$") - line("w$")) >= 5 ? '5<C-e>5j' : (line("$") - line("w$")) >= 4 ? '4<C-e>4j' : (line("$") - line("w$")) >= 3 ? '3<C-e>3j' : (line("$") - line("w$")) >= 2 ? '2<C-e>2j' :(line("$") - line("w$")) >= 1 ? '1<C-e>1j' : '')
+
+inoremap <C-S-Space> <Space>
+cnoremap <C-S-Space> <Space>
+" handled in shell
+"tnoremap <C-S-Space> <Space>
+inoremap <C-_><Space> <Space>
+cnoremap <C-_><Space> <Space>
+" handled in shell
+"tnoremap <C-_><Space> <Space>
 
 "vnoremap <silent> <expr> <C-Down> ((line('$') - line('w$')) < 1) ? 'j' : '<C-e>j'
 "vnoremap <silent> <expr> <C-j>    ((line('$') - line('w$')) < 1) ? 'j' : '<C-e>j'
@@ -7588,6 +7613,8 @@ else
   let g:rtagsAutoLaunchRdm=0
 endif
 nnoremap <silent> <C-]> :call rtags#JumpTo(g:SAME_WINDOW)<CR>
+" we are using <C-w>] now to toggle termina/normal mode ...
+"nnoremap <silent> <expr> <C-]> (&buftype == 'terminal') ? 'i' : ':call rtags#JumpTo(g:SAME_WINDOW)<CR>'
 autocmd BufReadPost quickfix nnoremap <silent> <buffer> <C-]> <Return>
 " C-o to go back
 " C-t to go back (not implemented)
@@ -9132,11 +9159,17 @@ tnoremap <silent> <F17>]      <C-\><C-n>
 tnoremap <silent> <F17><Esc>] <C-\><C-n>
 tnoremap <silent> <M-x>]      <C-\><C-n>
 tnoremap <silent> <M-x><Esc>] <C-\><C-n>
+"tnoremap <silent> <M-]> <C-\><C-n>
+"tnoremap <silent> <C-]> <C-\><C-n>
+tnoremap <silent> <C-w>] <C-\><C-n>
+" mck <M-C-]> here ? or <C-]> (jump to symbol n/a here)
 " dont really want to map <C-x> + anything as <C-x> is used alone as a map in several other places
 nnoremap <silent> <expr> <F17>]      (&buftype == 'terminal') ? 'i' : ''
 nnoremap <silent> <expr> <F17><Esc>] (&buftype == 'terminal') ? 'i' : ''
 nnoremap <silent> <expr> <M-x>]      (&buftype == 'terminal') ? 'i' : ''
 nnoremap <silent> <expr> <M-x><Esc>] (&buftype == 'terminal') ? 'i' : ''
+nnoremap <silent> <expr> <C-w>]      (&buftype == 'terminal') ? 'i' : ''
+"nnoremap <silent> <expr> <M-]>       (&buftype == 'terminal') ? 'i' : ''
 " TODO can we use <M-q> to leave normal mode of terminal ?
 
 " this causes sign column to disappear on popups that are terminal windows ...
