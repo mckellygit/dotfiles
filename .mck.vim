@@ -2712,6 +2712,10 @@ nnoremap <silent> tY    <Nop>
 nnoremap <silent> tx    <Nop>
 nnoremap <silent> tX    <Nop>
 
+if g:has_wsl > 0
+    nmap <silent> yy yy:sleep 351m<CR>
+endif
+
 " sometimes press C instead of D on selection ...
 vmap <silent> C <Nop>
 
