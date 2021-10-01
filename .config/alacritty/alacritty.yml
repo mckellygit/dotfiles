@@ -228,7 +228,10 @@ custom_cursor_colors: true
 
 colors:
   primary:
-    background: '0x2e2e26'
+    # gray -
+    #background: '0x2e2e26'
+    # blue -
+    background: '0x14292e'
     # also includes client side decoration titlebar
     # (a little more grey for csd titlebar)
     #foreground: '0x8a8a8a'

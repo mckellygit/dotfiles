@@ -523,6 +523,8 @@ st.alpha: 0.96
 
 st.foreground: #c5c5c5
 !! st.foreground: #ffd1b7
+!! gray -
 !!st.background: #2e2e26
+!! blue -
 st.background: #14292e
 
