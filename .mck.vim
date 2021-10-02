@@ -4518,8 +4518,8 @@ function! s:MyVisV2()
 endfunction
 
 " <C-q> seems to start visual mode ...
-"nmap <C-q> <Nop>
-nmap <silent> <expr> <C-q> (&buftype == 'terminal') ? 'i' : ''
+nmap <C-q> <Nop>
+nmap <silent> <expr> <C-q><C-q> (&buftype == 'terminal') ? 'i' : ''
 " TODO can we get <C-q> to leave normal mode of terminal ?
 "      or use <M-q> for that ?
 
@@ -9159,16 +9159,24 @@ tnoremap <silent> <F17>]      <C-\><C-n>
 tnoremap <silent> <F17><Esc>] <C-\><C-n>
 tnoremap <silent> <M-x>]      <C-\><C-n>
 tnoremap <silent> <M-x><Esc>] <C-\><C-n>
+
 "tnoremap <silent> <M-]> <C-\><C-n>
 "tnoremap <silent> <C-]> <C-\><C-n>
-tnoremap <silent> <C-w>] <C-\><C-n>
+
+tnoremap <silent> <C-w>]     <C-\><C-n>
+tnoremap <silent> <C-w><C-]> <C-\><C-n>
+
 " mck <M-C-]> here ? or <C-]> (jump to symbol n/a here)
+
 " dont really want to map <C-x> + anything as <C-x> is used alone as a map in several other places
 nnoremap <silent> <expr> <F17>]      (&buftype == 'terminal') ? 'i' : ''
 nnoremap <silent> <expr> <F17><Esc>] (&buftype == 'terminal') ? 'i' : ''
 nnoremap <silent> <expr> <M-x>]      (&buftype == 'terminal') ? 'i' : ''
 nnoremap <silent> <expr> <M-x><Esc>] (&buftype == 'terminal') ? 'i' : ''
+
 nnoremap <silent> <expr> <C-w>]      (&buftype == 'terminal') ? 'i' : ''
+nnoremap <silent> <expr> <C-w><C-]>  (&buftype == 'terminal') ? 'i' : ''
+
 "nnoremap <silent> <expr> <M-]>       (&buftype == 'terminal') ? 'i' : ''
 " TODO can we use <M-q> to leave normal mode of terminal ?
 
