@@ -60,9 +60,7 @@ let g:in_gv2 = 0
 
 let g:wslyanklast='y'
 
-if has("nvim")
-    let g:tclm = 0
-endif
+let @t = 0
 
 " ====================================================
 " --- vundle -----------------------------------------
@@ -2999,8 +2997,8 @@ if has("nvim")
     " if we really wanted to override this behavior then -
     "autocmd TermOpen term://* nnoremap <buffer> <LeftRelease> <LeftRelease>i
     autocmd TermOpen term://* tnoremap <silent> <buffer> <LeftRelease> <Nop>
-    autocmd TermOpen term://* tnoremap <silent> <buffer> <C-LeftMouse> <C-\><C-n>:let g:tclm=1<CR><LeftMouse>
-    autocmd TermOpen term://* tnoremap <silent> <buffer> <A-C-LeftMouse> <C-\><C-n>:let g:tclm=1<CR><LeftMouse>
+    autocmd TermOpen term://* tnoremap <silent> <buffer> <C-LeftMouse> <C-\><C-n>:let @t=1<CR><LeftMouse>
+    autocmd TermOpen term://* tnoremap <silent> <buffer> <A-C-LeftMouse> <C-\><C-n>:let @t=1<CR><LeftMouse>
   augroup END
 
   " dont enter normal mode with a wheel up ...
@@ -5138,12 +5136,124 @@ vnoremap <A-C-LeftMouse> <LeftMouse>
 
 " ----------
 
+function s:VimTermMouse(arg)
+    if &buftype != 'terminal' || mode('') != 't'
+        return
+    endif
+    if a:arg == 0
+        let @t=0
+        call feedkeys("\<c-w>N", "m")
+        call feedkeys("\<LeftMouse>", "L")
+    elseif a:arg == 1
+        let @t=0
+        call feedkeys("\<c-w>N", "m")
+        call feedkeys("\<LeftDrag>", "x")
+    elseif a:arg == 2
+        let @t=1
+        call feedkeys("\<c-w>N", "m")
+        call feedkeys("\<LeftMouse>", "x")
+    elseif a:arg == 3
+        let @t=1
+        call feedkeys("\<c-w>N", "m")
+        call feedkeys("\<LeftDrag>", "x")
+    endif
+endfunction
+
+" mck - TODO - vim can we get into visual mode for C- and A-C- mouse drag ?
+if !has("nvim")
+    " BUG fix for vim on new terminal first time dragging ...
+    function s:VimTermInit()
+        silent call feedkeys("\<c-w>Nv\<Right>\<Left>\<Esc>i", "t")
+    endfunction
+    au TerminalOpen,TerminalWinOpen * call <SID>VimTermInit()
+
+    tnoremap <LeftMouse>        <Cmd>:let @t=0<CR><C-w>N<LeftMouse>
+    tnoremap <LeftDrag>         <Nop>
+    tnoremap <LeftRelease>      <Nop>
+
+    tnoremap <C-LeftMouse>      <Cmd>:let @t=1<CR><C-w>N<LeftMouse>
+    tnoremap <C-LeftDrag>       <Nop>
+    tnoremap <C-LeftRelease>    <Nop>
+
+    tnoremap <C-2-LeftMouse>    <Cmd>:let @t=1<CR><C-w>N<C-2-LeftMouse>
+    tnoremap <C-2-LeftDrag>     <Nop>
+    tnoremap <C-2-LeftRelease>  <Nop>
+
+    tnoremap <C-3-LeftMouse>    <Nop>
+    tnoremap <C-3-LeftDrag>     <Nop>
+    tnoremap <C-3-LeftRelease>  <Nop>
+
+    tnoremap <C-4-LeftMouse>    <Nop>
+    tnoremap <C-4-LeftDrag>     <Nop>
+    tnoremap <C-4-LeftRelease>  <Nop>
+
+    tnoremap <A-C-LeftMouse>    <Nop>
+    tnoremap <A-C-LeftDrag>     <Nop>
+    tnoremap <A-C-LeftRelease>  <Nop>
+
+    tnoremap <A-C-2-LeftMouse>    <Nop>
+    tnoremap <A-C-2-LeftDrag>     <Nop>
+    tnoremap <A-C-2-LeftRelease>  <Nop>
+
+    tnoremap <A-C-3-LeftMouse>    <Nop>
+    tnoremap <A-C-3-LeftDrag>     <Nop>
+    tnoremap <A-C-3-LeftRelease>  <Nop>
+
+    tnoremap <A-C-4-LeftMouse>    <Nop>
+    tnoremap <A-C-4-LeftDrag>     <Nop>
+    tnoremap <A-C-4-LeftRelease>  <Nop>
+
+    let s:term_pos = {} " { bufnr: [winheight, n visible lines] }
+
+    function! EnterTerminalNormalMode()
+        if &buftype != 'terminal' || mode('') != 't'
+            return 0
+        endif
+        call feedkeys("\<LeftMouse>\<c-w>N", "x")
+        let s:term_pos[bufnr()] = [winheight(winnr()), line('$') - line('w0')]
+        call feedkeys("\<ScrollWheelUp>")
+    endfunction
+
+    function! ExitTerminalNormalModeIfBottom()
+        if &buftype != 'terminal' || !(mode('') == 'n' || mode('') == 'v')
+            return 0
+        endif
+        let term_pos = s:term_pos[bufnr()]
+        let vis_lines = line('$') - line('w0')
+        let vis_empty = winheight(winnr()) - vis_lines
+        " if size has only expanded, match visible lines on entry
+        if term_pos[1] <= winheight(winnr())
+            let req_vis = min([winheight(winnr()), term_pos[1]])
+            if vis_lines <= req_vis | call feedkeys("i", "x") | endif
+        " if size has shrunk, match visible empty lines on entry
+        else
+            let req_vis_empty = term_pos[0] - term_pos[1]
+            let req_vis_empty = min([winheight(winnr()), req_vis_empty])
+            if vis_empty >= req_vis_empty | call feedkeys("i", "x") | endif
+        endif
+    endfunction
+
+    " scrolling up enters normal mode in terminal window, scrolling back to
+    " the cursor's location upon entry resumes terminal mode. only limitation
+    " is that terminal window must have focus before you can scroll to
+    " enter normal mode
+    "tnoremap <silent> <ScrollWheelUp> <c-w>:call EnterTerminalNormalMode()<CR>
+    "nnoremap <silent> <ScrollWheelDown> <ScrollWheelDown>:call ExitTerminalNormalModeIfBottom()
+endif
+
 " change C-LeftMouse searching tags file for symbol under cursor
 " and select words under cursor instead (lBvhE/lBvE) (is h needed ?)
 " (was viW), use GetPath() instead ...
 "nnoremap <silent> <C-LeftMouse> <Nop>
 "vnoremap <silent> <C-LeftMouse> <Nop>
 "inoremap <silent> <C-LeftMouse> <Nop>
+
+" -----------------------------
+" -----------------------------
+" return to visual mode on a click ?
+"vmap <LeftMouse> <LeftMouse>v
+" -----------------------------
+" -----------------------------
 
 " might as well make C- do the same as normal mode
 nnoremap <C-LeftDrag> <LeftDrag>
@@ -5281,11 +5391,7 @@ if has("nvim")
     imap <silent> <M-C> <LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>
 endif
 
-if has("nvim")
-    vmap <silent> <expr> <C-LeftRelease> (g:tclm == 1) ? 'tygv:<C-u>call <SID>Delay(0)<CR>:let g:tclm=0<CR><Esc>i' : 'tygv:<C-u>call <SID>Delay(0)<CR><Esc>'
-else
-    vmap <silent> <C-LeftRelease> tygv:<C-u>call <SID>Delay(0)<CR><Esc>
-endif
+vmap <silent> <expr> <C-LeftRelease> (@t == 1) ? 'tygv:<C-u>call <SID>Delay(0)<CR>:let @t=0<CR><Esc>i' : 'tygv:<C-u>call <SID>Delay(0)<CR><Esc>'
 imap <silent> <C-LeftMouse> <C-\><C-o>:let @i="2"<CR><LeftMouse>
 
 " ------------------------------
@@ -5335,6 +5441,7 @@ function! s:Delay(arg) abort
     let w:vp=w:vc
     let w:vc='u'
     sleep 551m
+    redraw!
     echo " "
 endfunction
 
@@ -5391,11 +5498,9 @@ if has("nvim")
     imap <silent> <M-B> <LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>
 endif
 
-if has("nvim")
-    vmap <silent> <expr> <A-C-LeftRelease> (g:tclm == 1) ? 'tygv:<C-u>call <SID>Delay(0)<CR>:let g:tclm=0<CR><Esc>i' : 'tygv:<C-u>call <SID>Delay(0)<CR><Esc>'
-else
-    vmap <silent> <A-C-LeftRelease> tygv:<C-u>call <SID>Delay(0)<CR><Esc>
-endif
+" mck - TODO can/should we paste selection here ?
+" it seems nvim_input() or feedkeys() works but w/o bracketed-paste ...
+vmap <silent> <expr> <A-C-LeftRelease> (@t == 1) ? 'tygv:<C-u>call <SID>Delay(0)<CR>:let @t=0<CR><Esc>i' : 'tygv:<C-u>call <SID>Delay(0)<CR><Esc>'
 imap <silent> <A-C-LeftMouse> <C-\><C-o>:let @i="2"<CR><LeftMouse>
 
 " ------------------------------
@@ -8636,8 +8741,10 @@ function! MyQuit(arg) abort
     echo "\r"
     if &buftype != 'terminal' && &buftype != 'popup'
         exe "conf " . a:arg
+        echo " "
+    else
+        exe "silent! normal! i"
     endif
-    echo " "
 endfunction
 
 " vimdiff (also as a git difftool)
@@ -9173,6 +9280,9 @@ nnoremap <silent> <expr> <F17>]      (&buftype == 'terminal') ? 'i' : ''
 nnoremap <silent> <expr> <F17><Esc>] (&buftype == 'terminal') ? 'i' : ''
 nnoremap <silent> <expr> <M-x>]      (&buftype == 'terminal') ? 'i' : ''
 nnoremap <silent> <expr> <M-x><Esc>] (&buftype == 'terminal') ? 'i' : ''
+
+vnoremap <silent> <expr> <C-w>]      (&buftype == 'terminal') ? '<Esc>i' : '<Esc>'
+vnoremap <silent> <expr> <C-w><C-]>  (&buftype == 'terminal') ? '<Esc>i' : '<Esc>'
 
 nnoremap <silent> <expr> <C-w>]      (&buftype == 'terminal') ? 'i' : ''
 nnoremap <silent> <expr> <C-w><C-]>  (&buftype == 'terminal') ? 'i' : ''
