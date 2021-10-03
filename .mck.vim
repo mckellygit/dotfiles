@@ -5159,6 +5159,11 @@ function s:VimTermMouse(arg)
     endif
 endfunction
 
+" leave normal mode of terminal (tmux menu ...)
+nnoremap <silent> <expr> <C-w>0 (&buftype == 'terminal') ? 'i' : '<Ignore>'
+vnoremap <silent> <expr> <C-w>0 (&buftype == 'terminal') ? '<Esc>i' : '<Ignore>'
+tnoremap <silent> <C-w>0 <Nop>
+
 " mck - TODO - vim can we get into visual mode for C- and A-C- mouse drag ?
 if !has("nvim")
     " BUG fix for vim on new terminal first time dragging ...
@@ -5167,15 +5172,27 @@ if !has("nvim")
     endfunction
     au TerminalOpen,TerminalWinOpen * call <SID>VimTermInit()
 
-    tnoremap <LeftMouse>        <Cmd>:let @t=0<CR><C-w>N<LeftMouse>
+    tnoremap <LeftMouse>        <Cmd>let @t=0<CR><C-w>N<LeftMouse>
     tnoremap <LeftDrag>         <Nop>
     tnoremap <LeftRelease>      <Nop>
 
-    tnoremap <C-LeftMouse>      <Cmd>:let @t=1<CR><C-w>N<LeftMouse>
+    tnoremap <2-LeftMouse>      <Nop>
+    tnoremap <2-LeftDrag>       <Nop>
+    tnoremap <2-LeftRelease>    <Nop>
+
+    tnoremap <3-LeftMouse>      <Nop>
+    tnoremap <3-LeftDrag>       <Nop>
+    tnoremap <3-LeftRelease>    <Nop>
+
+    tnoremap <4-LeftMouse>      <Nop>
+    tnoremap <4-LeftDrag>       <Nop>
+    tnoremap <4-LeftRelease>    <Nop>
+
+    tnoremap <C-LeftMouse>      <Cmd>let @t=1<CR><C-w>N<LeftMouse>
     tnoremap <C-LeftDrag>       <Nop>
     tnoremap <C-LeftRelease>    <Nop>
 
-    tnoremap <C-2-LeftMouse>    <Cmd>:let @t=1<CR><C-w>N<C-2-LeftMouse>
+    tnoremap <C-2-LeftMouse>    <Nop>
     tnoremap <C-2-LeftDrag>     <Nop>
     tnoremap <C-2-LeftRelease>  <Nop>
 
@@ -5390,6 +5407,9 @@ if has("nvim")
     vmap <silent> <M-C> <LeftMouse><C-\><C-n>:call <SID>GetPath(2,1)<CR>
     imap <silent> <M-C> <LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>
 endif
+
+" mck - TODO - this is recvd on C-2-LeftMouse also ...
+"nmap <silent> <expr> <C-LeftRelease> (@t == 1) ? '<Cmd>call <SID>Delay(0)<CR><Cmd>let @t=0<CR><Esc>i' : '<Ignre>'
 
 vmap <silent> <expr> <C-LeftRelease> (@t == 1) ? 'tygv:<C-u>call <SID>Delay(0)<CR>:let @t=0<CR><Esc>i' : 'tygv:<C-u>call <SID>Delay(0)<CR><Esc>'
 imap <silent> <C-LeftMouse> <C-\><C-o>:let @i="2"<CR><LeftMouse>
