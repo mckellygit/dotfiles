@@ -4154,7 +4154,7 @@ function! s:CopyReg(arg)
     call setreg('x', getreg('*'), getregtype('*'))
     if a:arg == 1
         echohl DiffText | echo "@* -> @x ; register copied" | echohl None
-        sleep 651m
+        sleep 851m
         redraw!
         echo " "
     endif
@@ -4173,7 +4173,7 @@ function! s:SwapReg(arg)
     call setreg('y', [])
     if a:arg == 1
         echohl DiffText | echo "@* <-> @x ; registers swapped" | echohl None
-        sleep 651m
+        sleep 851m
         redraw!
         echo " "
     endif
