@@ -2588,6 +2588,9 @@ if !exists("g:vless")
 
     endif
 
+    " ------------------------------------------------------------
+    " vim ISSUE: floaterm popup terminal in vim does not handle mouse events properly
+    " ------------------------------------------------------------
     nnoremap <silent> <Leader>zF :FloatermToggle<CR>
     command! Fterm :FloatermToggle
 
@@ -5278,7 +5281,14 @@ vnoremap <C-LeftDrag> <LeftDrag>
 inoremap <C-LeftDrag> <LeftDrag>
 
 " NOTE: above we used nnoremap for the <A-C-LeftMouse> <LeftMouse>
-nnoremap <C-LeftMouse> <LeftMouse>
+"if !has("nvim")
+"    " --------------------------------------------------------------------
+"    " strange vim ISSUE with first click in terminal
+"    nnoremap <expr> <C-LeftMouse> (@t=="1") ? '<Cmd>let @t="0"<CR><LeftMouse><Cmd>call <SID>Delay(0)<CR>' : '<LeftMouse>'
+"    " --------------------------------------------------------------------
+"else
+    nnoremap <C-LeftMouse> <LeftMouse>
+"endif
 vnoremap <C-LeftMouse> <LeftMouse>
 "inoremap <C-LeftMouse> <LeftMouse>
 
