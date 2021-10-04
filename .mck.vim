@@ -38,6 +38,9 @@ else
     endif
 endif
 
+" if want to preserve regtype between processes
+"let g:preserve_regtype = 1
+
 " ====================================================
 
 " skip loading this plugin for now ...
@@ -3504,15 +3507,12 @@ autocmd VimLeave * silent call <SID>PreserveClipboard()
 
 " save reg type for next vim session
 function! s:SaveRegType() abort
-    if has("nvim")
-        return
-    endif
     let regtype = getregtype('*')
     let fname = fnamemodify("~/.vimsrt", ":p")
     " TODO: obtain lock/mutex to prevent collisions ...
     call writefile([regtype], fname, "b")
 endfunction
-if !has("nvim")
+if exists('g:preserve_regtype') && g:preserve_regtype > 0
     autocmd VimLeavePre * call <SID>SaveRegType()
 endif
 
@@ -3537,7 +3537,7 @@ function s:InitializeClipboard()
                 call setreg('*', [])
             else
                 "echom "initializing + and * registers"
-                if !has("nvim")
+                if exists('g:preserve_regtype') && g:preserve_regtype > 0
                     " try to also restore regtype ...
                     let regtype = []
                     let fname = fnamemodify("~/.vimsrt", ":p")
