@@ -60,7 +60,7 @@ let g:in_gv2 = 0
 
 let g:wslyanklast='y'
 
-let @t = 0
+let @t="0"
 
 " ====================================================
 " --- vundle -----------------------------------------
@@ -2997,8 +2997,8 @@ if has("nvim")
     " if we really wanted to override this behavior then -
     "autocmd TermOpen term://* nnoremap <buffer> <LeftRelease> <LeftRelease>i
     autocmd TermOpen term://* tnoremap <silent> <buffer> <LeftRelease> <Nop>
-    autocmd TermOpen term://* tnoremap <silent> <buffer> <C-LeftMouse> <C-\><C-n>:let @t=1<CR><LeftMouse>
-    autocmd TermOpen term://* tnoremap <silent> <buffer> <A-C-LeftMouse> <C-\><C-n>:let @t=1<CR><LeftMouse>
+    autocmd TermOpen term://* tnoremap <silent> <buffer> <C-LeftMouse> <C-\><C-n>:let @t="1"<CR><LeftMouse>
+    autocmd TermOpen term://* tnoremap <silent> <buffer> <A-C-LeftMouse> <C-\><C-n>:let @t="1"<CR><LeftMouse>
   augroup END
 
   " dont enter normal mode with a wheel up ...
@@ -5168,11 +5168,11 @@ tnoremap <silent> <C-w>0 <Nop>
 if !has("nvim")
     " BUG fix for vim on new terminal first time dragging ...
     function s:VimTermInit()
-        silent call feedkeys("\<c-w>Nv\<Right>\<Left>\<Esc>i", "t")
+        silent call feedkeys("\<C-w>Nv\<Right>\<Left>\<Esc>i", "t")
     endfunction
-    au TerminalOpen,TerminalWinOpen * call <SID>VimTermInit()
+    au TerminalWinOpen * call <SID>VimTermInit()
 
-    tnoremap <LeftMouse>        <Cmd>let @t=0<CR><C-w>N<LeftMouse>
+    tnoremap <LeftMouse>        <Cmd>let @t="0"<CR><C-w>N<LeftMouse>
     tnoremap <LeftDrag>         <Nop>
     tnoremap <LeftRelease>      <Nop>
 
@@ -5188,7 +5188,7 @@ if !has("nvim")
     tnoremap <4-LeftDrag>       <Nop>
     tnoremap <4-LeftRelease>    <Nop>
 
-    tnoremap <C-LeftMouse>      <Cmd>let @t=1<CR><C-w>N<LeftMouse>
+    tnoremap <C-LeftMouse>      <Cmd>let @t="1"<CR><C-w>N<LeftMouse>
     tnoremap <C-LeftDrag>       <Nop>
     tnoremap <C-LeftRelease>    <Nop>
 
@@ -5409,9 +5409,9 @@ if has("nvim")
 endif
 
 " mck - TODO - this is recvd on C-2-LeftMouse also ...
-"nmap <silent> <expr> <C-LeftRelease> (@t == 1) ? '<Cmd>call <SID>Delay(0)<CR><Cmd>let @t=0<CR><Esc>i' : '<Ignre>'
+"nmap <silent> <expr> <C-LeftRelease> (@t=="1") ? '<Cmd>call <SID>Delay(0)<CR><Cmd>let @t="0"<CR><Esc>i' : '<Ignore>'
 
-vmap <silent> <expr> <C-LeftRelease> (@t == 1) ? 'tygv:<C-u>call <SID>Delay(0)<CR>:let @t=0<CR><Esc>i' : 'tygv:<C-u>call <SID>Delay(0)<CR><Esc>'
+vmap <silent> <expr> <C-LeftRelease> (@t=="1") ? 'tygv:<C-u>call <SID>Delay(0)<CR>:let @t="0"<CR><Esc>i' : 'tygv:<C-u>call <SID>Delay(0)<CR><Esc>'
 imap <silent> <C-LeftMouse> <C-\><C-o>:let @i="2"<CR><LeftMouse>
 
 " ------------------------------
@@ -5520,7 +5520,7 @@ endif
 
 " mck - TODO can/should we paste selection here ?
 " it seems nvim_input() or feedkeys() works but w/o bracketed-paste ...
-vmap <silent> <expr> <A-C-LeftRelease> (@t == 1) ? 'tygv:<C-u>call <SID>Delay(0)<CR>:let @t=0<CR><Esc>i' : 'tygv:<C-u>call <SID>Delay(0)<CR><Esc>'
+vmap <silent> <expr> <A-C-LeftRelease> (@t=="1") ? 'tygv:<C-u>call <SID>Delay(0)<CR>:let @t="0"<CR><Esc>i' : 'tygv:<C-u>call <SID>Delay(0)<CR><Esc>'
 imap <silent> <A-C-LeftMouse> <C-\><C-o>:let @i="2"<CR><LeftMouse>
 
 " ------------------------------
