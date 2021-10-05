@@ -5419,7 +5419,9 @@ if has("nvim")
 endif
 
 " mck - TODO - this is recvd on C-2-LeftMouse also ...
-"nmap <silent> <expr> <C-LeftRelease> (@t=="1") ? '<Cmd>call <SID>Delay(0)<CR><Cmd>let @t="0"<CR><Esc>i' : '<Ignore>'
+" some weirdness with vim on first time click from terminal
+" also if we do not release ctrl key it, clipboard may not get updated
+"nmap <silent> <expr> <C-LeftRelease> (@t=="1") ? '<Cmd>call <SID>Delay(0)<CR><Cmd>let @t="0"<CR>' : '<Ignore>'
 
 vmap <silent> <expr> <C-LeftRelease> (@t=="1") ? 'tygv:<C-u>call <SID>Delay(0)<CR>:let @t="0"<CR><Esc>i' : 'tygv:<C-u>call <SID>Delay(0)<CR><Esc>'
 imap <silent> <C-LeftMouse> <C-\><C-o>:let @i="2"<CR><LeftMouse>
