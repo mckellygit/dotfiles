@@ -99,9 +99,7 @@ if exists("loaded_gtags_cscope")
     finish
 endif
 if !has("cscope")
-    echohl WarningMsg |
-           \ echomsg 'Gtags-cscope: ' . 'This vim does not include cscope support.' |
-           \ echohl None
+    echohl WarningMsg | echomsg 'Gtags-cscope: ' . 'This vim does not include cscope support.' | echohl None
     finish
 endif
 "
