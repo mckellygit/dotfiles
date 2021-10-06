@@ -15,11 +15,11 @@ set nocompatible
 
 " one of these is needed in vim on windows to avoid starting in replace mode
 let g:has_wsl=0
-if !has("nvim")
-    if exists('$WSL_DISTRO_NAME') || exists('$WSLENV')
+if exists('$WSL_DISTRO_NAME') || exists('$WSLENV')
+    let g:has_wsl=1
+    if !has("nvim")
         set t_u7=
         "set ambw=double
-        let g:has_wsl=1
     endif
 endif
 
@@ -64,6 +64,7 @@ let g:in_gv2 = 0
 let g:wslyanklast='y'
 
 let @t="0"
+let @p="0"
 
 " ====================================================
 " --- vundle -----------------------------------------
@@ -286,7 +287,9 @@ Plugin 'Konfekt/vim-alias'
 "Plugin 'mengelbrecht/lightline-bufferline'
 "
 " start screen
-Plugin 'mhinz/vim-startify'
+if g:has_wsl == 0
+    Plugin 'mhinz/vim-startify'
+endif
 "
 " search + highlight
 Plugin 'PeterRincker/vim-searchlight'
@@ -298,19 +301,23 @@ Plugin 'PeterRincker/vim-searchlight'
 " fade inactive buffers
 " NOTE: recently works ok but many flashing redraws on pum up/down ...
 "       may need au! CompleteChanged code to help ...
-Plugin 'TaDaa/vimade'
+if g:has_wsl == 0
+    Plugin 'TaDaa/vimade'
+endif
 " alternative ...
 "Plugin 'blueyed/vim-diminactive'
 "
 " tmux focus
 " plugin says its obsolete with neovim and vim 8.2.2345+ but its still useful
-if has("nvim")
-    " not needed in nvim ...
-    let g:loaded_tmux_focus_events = 1
-elseif exists('$VIM_TERMINAL')
-    let g:loaded_tmux_focus_events = 1
+if g:has_wsl == 0
+    if has("nvim")
+        " not needed in nvim ...
+        let g:loaded_tmux_focus_events = 1
+    elseif exists('$VIM_TERMINAL')
+        let g:loaded_tmux_focus_events = 1
+    endif
+    Plugin 'mckellygit/vim-tmux-focus-events'
 endif
-Plugin 'mckellygit/vim-tmux-focus-events'
 "
 " ansi esc sequences
 "Plugin 'powerman/vim-plugin-AnsiEsc'
@@ -5171,6 +5178,7 @@ tnoremap <silent> <C-w>0 <Nop>
 if !has("nvim")
     " BUG fix for vim on new terminal first time dragging ...
     function s:VimTermInit()
+        let @p="1"
         silent call feedkeys("\<C-w>Nv\<Right>\<Left>\<Esc>i", "t")
     endfunction
     au TerminalWinOpen * call <SID>VimTermInit()
@@ -5298,7 +5306,8 @@ vnoremap <C-LeftMouse> <LeftMouse>
 aug setival
     au!
     au InsertEnter * let @i="2"
-    au InsertLeave * if (!(mode() =~ 'n')) | let @i="0" | endif
+    "au InsertLeave * if (!(mode() =~ 'n' || mode() =~ 'v')) | let @i="0" | endif
+    au InsertLeave * let @i="0"
 aug END
 
 " see mousetime for double-click delay
@@ -5376,8 +5385,8 @@ endfunction
 " --------------------------------
 
 " TODO: use Alt mapping where we leave vis-mode upon release ...
-nmap <silent> <C-2-LeftMouse>      mvviwty:call <SID>Delay(1)<CR><Esc>
-vmap <silent> <C-2-LeftMouse> <Esc>mvviwty:call <SID>Delay(1)<CR><Esc>
+nmap <silent> <C-2-LeftMouse>      mvviwty:call <SID>Delay(10)<CR><Esc>
+vmap <silent> <C-2-LeftMouse> <Esc>mvviwty:call <SID>Delay(11)<CR><Esc>
 imap <silent> <C-2-LeftMouse> <LeftMouse><C-\><C-o>:let @j="1"<bar>:call <SID>GetWord(2)<CR>
 
 if exists('$TMUX_PANE')
@@ -5421,7 +5430,9 @@ endif
 " mck - TODO - this is recvd on C-2-LeftMouse also ...
 " some weirdness with vim on first time click from terminal
 " also if we do not release ctrl key it, clipboard may not get updated
-"nmap <silent> <expr> <C-LeftRelease> (@t=="1") ? '<Cmd>call <SID>Delay(0)<CR><Cmd>let @t="0"<CR>' : '<Ignore>'
+if !has("nvim")
+    nmap <silent> <expr> <C-LeftRelease> (@t=="1" && @p=="1") ? '<Cmd>call <SID>Delay(100)<CR><Cmd>let @t="0"<CR>' : '<Ignore>'
+endif
 
 vmap <silent> <expr> <C-LeftRelease> (@t=="1") ? 'tygv:<C-u>call <SID>Delay(0)<CR>:let @t="0"<CR><Esc>i' : 'tygv:<C-u>call <SID>Delay(0)<CR><Esc>'
 imap <silent> <C-LeftMouse> <C-\><C-o>:let @i="2"<CR><LeftMouse>
@@ -5433,14 +5444,15 @@ imap <silent> <C-LeftMouse> <C-\><C-o>:let @i="2"<CR><LeftMouse>
 " ------------------------------
 
 function! s:Delay(arg) abort
+    let @p="0"
     if !exists('w:vc')
         let w:vc = 'u'
         let w:vp = 'u'
     endif
-    if a:arg == 1
-        silent exe "normal! gv"
-        "redraw
-    endif
+    "if a:arg != 0
+    "    silent exe "normal! gv"
+    "    "redraw
+    "endif
     if (exists("g:use_system_copy") && g:use_system_copy > 0) || (!exists("g:use_system_copy"))
         let clipcmd = ''
         let clipstr = &clipboard
