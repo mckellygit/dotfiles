@@ -187,8 +187,15 @@ cd ~/Downloads/vim_bundles
 
 # ==================================
 
+# lua:
+#   curl -R -O http://www.lua.org/ftp/lua-5.4.3.tar.gz
+#   tar zxf lua-5.4.3.tar.gz
+#   cd lua-5.4.3
+#   make all test
+
 # vim:
 #   git clone https://github.com/vim/vim.git
+#   ./configure --enable-python3interp=yes --enable-luainterp=yes --with-lua-prefix=/usr/local
 
 # neovim:
 #   git clone https://github.com/neovim/neovim.git
@@ -208,21 +215,30 @@ cd ~/Downloads/vim_bundles
 # st: (simple terminal)
 #   git clone git@github.com-mckelly:mckellygit/st.git
 #   upstream:
-#   git clone git@github.com-mckelly:LukeSmithxyz/st.git
+#       git clone git@github.com-mckelly:LukeSmithxyz/st.git
 #   orig:
-#   git clone https://git.suckless.org/st
+#       git clone https://git.suckless.org/st
 #
-# some other terminals:
-#   zutty
-#   git clone https://github.com/tomszilagyi/zutty.git
-#   wezterm
-#   git clone https://github.com/wez/wezterm.git
+# other terminals:
+#   wezterm:
+#       git clone https://github.com/wez/wezterm.git
+#   foot:
+#       git clone https://codeberg.org/dnkl/foot.git
+#   zutty:
+#       git clone https://github.com/tomszilagyi/zutty.git
 
 # cgdb
 #   git clone git@github.com-mckelly:mckellygit/cgdb.git 
 #   orig:
 #   git clone https://github.com/cgdb/cgdb.git
+#   ./autogen.sh
 #   ./configure CXXFLAGS="-g -O2" --with-readline=/usr/local --with-ncurses=/usr/local
+
+# radssh:
+#   git clone https://github.com/mckellyln/radssh.git
+#   upstream:
+#       git remote add upstream https://github.com/radssh/radssh.git
+#   sudo python3 setup.py install
 
 # ==================================
 
