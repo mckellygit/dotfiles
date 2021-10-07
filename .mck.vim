@@ -3479,8 +3479,11 @@ set mouse=a
 "       so exiting vim can change the clipboard without having actually
 "       selected anything - so initialize + and * at startup also ...
 
-set clipboard^=unnamed
-set clipboard-=unnamedplus
+" -----------------------------------------------------------------------------
+" NOTE: used to use unnamed, but strange vim ISSUE with ctrl key release being required to have clipboard be updated
+" -----------------------------------------------------------------------------
+set clipboard-=unnamed
+set clipboard^=unnamedplus
 
 " preserve clipboard(s) at exit ...
 function! s:PreserveClipboard() abort
@@ -3823,13 +3826,19 @@ call <SID>MapFastKeycode('<S-F16>',   "\e[3;3~", 116) " A-Del
 
 call <SID>MapFastKeycode('<S-F21>',   "\e[5;5~", 121) " C-PageUp
 call <SID>MapFastKeycode('<S-F17>',   "\e[5;2~", 117) " S-PageUp
-call <SID>MapFastKeycode('<S-F22>',   "\e[5;6~", 122) " C-S-PageUp
+
+" mck - save <S-F22> for tmux to use for C-triple-click
+"call <SID>MapFastKeycode('<S-F22>',   "\e[5;6~", 122) " C-S-PageUp
+
 call <SID>MapFastKeycode('<S-F23>',   "\e[5;3~", 123) " A-PageUp
 call <SID>MapFastKeycode('<S-F19>',   "\e[5;4~", 119) " A-S-PageUp
 
 call <SID>MapFastKeycode('<S-F24>',   "\e[6;5~", 124) " C-PageDown
 call <SID>MapFastKeycode('<S-F18>',   "\e[6;2~", 118) " S-PageDown
-call <SID>MapFastKeycode('<S-F25>',   "\e[6;6~", 125) " C-S-PageDown
+
+" mck - save <S-F25> for tmux to use for A-C-triple-click
+"call <SID>MapFastKeycode('<S-F25>',   "\e[6;6~", 125) " C-S-PageDown
+
 call <SID>MapFastKeycode('<S-F26>',   "\e[6;3~", 126) " A-PageDown
 call <SID>MapFastKeycode('<S-F20>',   "\e[6;4~", 120) " A-S-PageDown
 
@@ -5407,7 +5416,7 @@ endif
 
 imap <silent> <C-4-LeftMouse> <Nop>
 
-" NOTE: tmux maps C-Triple to M-C to be able to know its a triple-click ...
+" NOTE: tmux maps C-Double to M-C for vi to be able to know its a double-click ...
 call <SID>MapFastKeycode('<S-F32>',  "\eC", 132)
 "nmap <silent> <S-F32> mvviWty:call <SID>Delay(1)<CR><Esc>
 "vmap <silent> <S-F32> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
@@ -5427,12 +5436,34 @@ if has("nvim")
     imap <silent> <M-C> <LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>
 endif
 
-" mck - TODO - this is recvd on C-2-LeftMouse also ...
-" some weirdness with vim on first time click from terminal
-" also if we do not release ctrl key it, clipboard may not get updated
-if !has("nvim")
-    nmap <silent> <expr> <C-LeftRelease> (@t=="1" && @p=="1") ? '<Cmd>call <SID>Delay(100)<CR><Cmd>let @t="0"<CR>' : '<Ignore>'
+" NOTE: tmux maps C-Triple to M-F for vi to be able to know its a triple-click ...
+call <SID>MapFastKeycode('<S-F22>',  "\eF", 122)
+"nmap <silent> <S-F22> mvviWty:call <SID>Delay(1)<CR><Esc>
+"vmap <silent> <S-F22> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
+"nmap <silent> <expr> <S-F22> (@j=="0") ? '<LeftMouse>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse>:call <SID>GetPath(2,1)<CR>'
+"vmap <silent> <expr> <S-F22> (@j=="0") ? '<LeftMouse><C-\><C-n>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-n>:call <SID>GetPath(2,1)<CR>'
+nmap <silent> <S-F22> <LeftMouse>:call <SID>GetWord2(2)<CR>
+vmap <silent> <S-F22> <LeftMouse><C-\><C-n>:call <SID>GetWord2(2)<CR>
+imap <silent> <S-F22> <LeftMouse><C-\><C-o>:call <SID>GetWord2(2)<CR>
+tnoremap <S-F22> <Nop>
+if has("nvim")
+    "nmap <silent> <M-F> mvviWty:call <SID>Delay(1)<CR><Esc>
+    "vmap <silent> <M-F> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
+    "nmap <silent> <expr> <M-F> (@j=="0") ? '<LeftMouse>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse>:call <SID>GetPath(2,1)<CR>'
+    "vmap <silent> <expr> <M-F> (@j=="0") ? '<LeftMouse><C-\><C-n>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-n>:call <SID>GetPath(2,1)<CR>'
+    nmap <silent> <M-F> <LeftMouse>:call <SID>GetWord2(2)<CR>
+    vmap <silent> <M-F> <LeftMouse><C-\><C-n>:call <SID>GetWord2(2)<CR>
+    imap <silent> <M-F> <LeftMouse><C-\><C-o>:call <SID>GetWord2(2)<CR>
 endif
+
+" --------------------------------------------------------------------
+" mck - TODO - this is recvd on C-2-LeftMouse also ...
+" strange vim ISSUE on first time click from terminal
+" also if we do not release ctrl key it, clipboard may not get updated
+"if !has("nvim")
+"    nmap <silent> <expr> <C-LeftRelease> (@t=="1" && @p=="1") ? '<Cmd>call <SID>Delay(100)<CR><Cmd>let @t="0"<CR>' : '<Ignore>'
+"endif
+" --------------------------------------------------------------------
 
 vmap <silent> <expr> <C-LeftRelease> (@t=="1") ? 'tygv:<C-u>call <SID>Delay(0)<CR>:let @t="0"<CR><Esc>i' : 'tygv:<C-u>call <SID>Delay(0)<CR><Esc>'
 imap <silent> <C-LeftMouse> <C-\><C-o>:let @i="2"<CR><LeftMouse>
@@ -5453,6 +5484,7 @@ function! s:Delay(arg) abort
     "    silent exe "normal! gv"
     "    "redraw
     "endif
+    "DEBUG echom "Delay " . a:arg
     if (exists("g:use_system_copy") && g:use_system_copy > 0) || (!exists("g:use_system_copy"))
         let clipcmd = ''
         let clipstr = &clipboard
@@ -5519,7 +5551,7 @@ endif
 
 imap <silent> <A-C-4-LeftMouse> <Nop>
 
-" NOTE: tmux maps A-Triple to M-B to be able to know its a triple-click ...
+" NOTE: tmux maps A-C-Triple to M-B for vi to be able to know its a double-click ...
 call <SID>MapFastKeycode('<S-F33>',  "\eB", 133)
 "nmap <silent> <S-F33> mvviWty:call <SID>Delay(1)<CR><Esc>
 "vmap <silent> <S-F33> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
@@ -5540,6 +5572,29 @@ if has("nvim")
     " C-M-LeftDrag doesn't paste in nvim terminal either ...
     vmap <silent> <M-B> <LeftMouse><C-\><C-n>:call <SID>GetPath(2,1)<CR>
     imap <silent> <M-B> <LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>
+endif
+
+" NOTE: tmux maps A-C-Triple to M-H for vi to be able to know its a triple-click ...
+call <SID>MapFastKeycode('<S-F25>',  "\eH", 125)
+"nmap <silent> <S-F25> mvviWty:call <SID>Delay(1)<CR><Esc>
+"vmap <silent> <S-F25> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
+"nmap <silent> <expr> <S-F25> (@j=="0") ? '<LeftMouse>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse>:call <SID>GetPath(2,1)<CR>'
+"vmap <silent> <expr> <S-F25> (@j=="0") ? '<LeftMouse><C-\><C-n>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-n>:call <SID>GetPath(2,1)<CR>'
+nmap <silent> <S-F25> <LeftMouse>:call <SID>GetWord2(2)<CR>
+vmap <silent> <S-F25> <LeftMouse><C-\><C-n>:call <SID>GetWord2(2)<CR>
+imap <silent> <S-F25> <LeftMouse><C-\><C-o>:call <SID>GetWord2(2)<CR>
+tnoremap <S-F25> <Nop>
+if has("nvim")
+    "nmap <silent> <M-H> mvviWty:call <SID>Delay(1)<CR><Esc>
+    "vmap <silent> <M-H> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
+    "nmap <silent> <expr> <M-H> (@j=="0") ? '<LeftMouse>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse>:call <SID>GetPath(2,1)<CR>'
+    "vmap <silent> <expr> <M-H> (@j=="0") ? '<LeftMouse><C-\><C-n>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-n>:call <SID>GetPath(2,1)<CR>'
+    nmap <silent> <M-H> <LeftMouse>:call <SID>GetWord2(2)<CR>
+    " if wanted to paste selection on cmdline ... (but still doesn't handle trailing space)
+    "nmap <silent> <expr> <M-H> (&buftype == 'terminal') ? '<LeftMouse>:call <SID>GetPath(2,1)<CR><S-Insert>' : '<LeftMouse>:call <SID>GetPath(2,1)<CR>'
+    " C-M-LeftDrag doesn't paste in nvim terminal either ...
+    vmap <silent> <M-H> <LeftMouse><C-\><C-n>:call <SID>GetWord2(2)<CR>
+    imap <silent> <M-H> <LeftMouse><C-\><C-o>:call <SID>GetWord2(2)<CR>
 endif
 
 " mck - TODO can/should we paste selection here ?
@@ -5957,6 +6012,8 @@ imap <silent> <A-S-Del>  <Esc>l
 tnoremap <silent> <F20>     <A-Del>
 tnoremap <silent> <A-S-Del> <A-Del>
 
+" -------------------------------------
+" mck - could save <F16> for future use
 call <SID>MapFastKeycode('<F16>', "\e[3;7~", 16) " A-C-Del
 map <silent>  <F16>         <Nop>
 map <silent>  <M-C-Del>     <Nop>
@@ -5964,6 +6021,7 @@ imap <silent> <F16>         <Nop>
 imap <silent> <M-C-Del>     <Nop>
 tnoremap <silent> <F16>     <C-Del>
 tnoremap <silent> <M-C-Del> <C-Del>
+" -------------------------------------
 
 " SPECIAL: TODO: add cmap <A-Del> and all the others ...
 
@@ -7021,13 +7079,13 @@ function! s:MapScrollKeys()
 
   " NOTE: tmux could send Up/Down cmds instead of this key ...
   " TODO: wish <C-e>/<C-y> would scroll virtual lines ...
-  noremap   <silent> <expr> <S-F25>        (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
+  "noremap   <silent> <expr> <S-F25>        (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
   noremap   <silent> <expr> <C-S-PageDown> (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
-  inoremap  <silent> <expr> <S-F25>        pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
+  "inoremap  <silent> <expr> <S-F25>        pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
   inoremap  <silent> <expr> <C-S-PageDown> pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
-  noremap   <silent> <expr> <S-F22>        (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
+  "noremap   <silent> <expr> <S-F22>        (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
   noremap   <silent> <expr> <C-S-PageUp>   (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
-  inoremap  <silent> <expr> <S-F22>        pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
+  "inoremap  <silent> <expr> <S-F22>        pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
   inoremap  <silent> <expr> <C-S-PageUp>   pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
 
   " NOTE: tmux could send Up/Down cmds instead of this key ...
@@ -8182,6 +8240,7 @@ function s:GetWord(arg) abort
   " 0 selects in visual mode - (0)ygv is like (1)
   " 1 selects in visual mode and yanks
   " 2 selects, yanks and returns to previous mode
+  "DEBUG echom "GetWord: " . a:arg
   if @i=="2"
     startinsert
   endif
@@ -8215,6 +8274,7 @@ function s:GetPath(arg,ws) abort
   " 2 selects, yanks and returns to previous mode
   " if ws then dont remove : from iskeyword to get https:// etc. urls ...
   " basically all mouse clicks paths thru here set ws ...
+  "DEBUG echom "GetPath: " . a:arg . " " . a:ws
   if @i=="2"
     startinsert
   endif
@@ -8262,6 +8322,7 @@ function s:GetWord2(arg) abort
   " 0 selects in visual mode - (0)ygv is like (1)
   " 1 selects in visual mode and yanks
   " 2 selects, yanks and returns to previous mode
+  "DEBUG echom "GetWord2: " . a:arg
   if @i=="2"
     startinsert
   endif
@@ -8305,6 +8366,7 @@ function s:GetLine(arg) abort
   " 0 selects in visual mode - (0)ygv is like (1)
   " 1 selects in visual mode and yanks
   " 2 selects, yanks and returns to previous mode
+  "DEBUG echom "GetLine: " . a:arg
   if @i=="2"
     startinsert
   endif
