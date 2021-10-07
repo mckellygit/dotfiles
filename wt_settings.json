@@ -34,6 +34,15 @@
             "command":
             {
                 "action": "sendInput",
+                "input": "\u000d"
+            },
+            "keys": "ctrl+enter"
+        },
+
+        {
+            "command":
+            {
+                "action": "sendInput",
                 "input": "\u001b@"
             },
             "keys": "ctrl+alt+backspace"
@@ -91,6 +100,7 @@
                 "size": 10,
                 "weight": "normal"
             },
+            "useAcrylic": true, "acrylicOpacity": 0.92,
             "scrollbarState": "hidden"
         },
         "list": 
