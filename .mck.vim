@@ -4363,6 +4363,7 @@ endif
 "inoremap <C-S-c> <Nop>
 
 " some terminal configs (urxvt) map C-S-c => M-&
+" tmux can send M-& to vim
 call <SID>MapFastKeycode('<S-F36>',  "\e&", 136)
 nnoremap <S-F36> <Nop>
 vmap <expr> <S-F36> (mode() =~ "\<C-v>") ? 'ty' : 'mvty`v'
