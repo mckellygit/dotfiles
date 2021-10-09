@@ -3568,6 +3568,8 @@ function s:InitializeClipboard()
             call setreg('x', [])
             call setreg('y', [])
         endif
+    elseif g:has_wsl > 0 && g:has_clipper > 0
+        let @" = system("win32yank.exe -o --lf")
     endif
 endfunction
 autocmd VimEnter * call <SID>InitializeClipboard()
