@@ -3569,6 +3569,7 @@ function s:InitializeClipboard()
             call setreg('y', [])
         endif
     elseif g:has_wsl > 0 && g:has_clipper > 0
+        " doesnt capture regtype but ...
         let @" = system("win32yank.exe -o --lf")
     endif
 endfunction
