@@ -28,7 +28,10 @@ return {
 
   colors = {
     foreground = "#c5c5c5",
-    background = "#2e2e26",
+    -- gray
+    -- background = "#2e2e26",
+    -- blue
+    background = "#14292e",
 
     cursor_fg = "#111111",
     cursor_bg = "#d78700",
@@ -44,7 +47,7 @@ return {
   },
 
   bypass_mouse_reporting_modifiers = "SHIFT",
-  disable_default_mouse_bindings = true,
+  disable_default_mouse_bindings = false,
   mouse_bindings = {
     {
       event={Up={streak=1, button="Left"}},
@@ -54,7 +57,7 @@ return {
   },
 
   use_dead_keys = false,
-  disable_default_key_bindings = true,
+  disable_default_key_bindings = false,
   keys = {
     { key="Backspace", mods="SHIFT",         action=wezterm.action{SendString="\x1e\x08"} },
     { key=" ",         mods="SHIFT",         action=wezterm.action{SendString="\x1e\x20"} },
@@ -65,7 +68,7 @@ return {
     { key="Backspace", mods="ALT|SHIFT",     action=wezterm.action{SendString="\x1f\x7f"} },
     { key=" ",         mods="ALT|SHIFT",     action=wezterm.action{SendString="\x1f\x20"} },
 
-    { key="x",         mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1b\x78"} },
+    -- { key="x",         mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1b\x78"} },
 
     { key="Backspace", mods="CTRL|ALT",      action=wezterm.action{SendString="\x1b\x40"} },
     { key="=",         mods="CTRL|ALT",      action=wezterm.action{SendString="\x1b\x23"} },
@@ -102,10 +105,10 @@ return {
     -- { key="v",         mods="CTRL|SHIFT",    action="Paste" },
     -- { key="c",         mods="CTRL|SUPER",    action="Copy" },
     -- { key="v",         mods="CTRL|SUPER",    action="Paste" },
-    { key="c",         mods="CTRL|ALT",      action="Copy" },
-    { key="v",         mods="CTRL|ALT",      action="Paste" },
     { key="c",         mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1b[2;5~"} },
     { key="v",         mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1b[2;2~"} },
+    { key="c",         mods="CTRL|ALT",      action="Copy" },
+    { key="v",         mods="CTRL|ALT",      action="Paste" },
 
     { key="+",         mods="CTRL",          action="IncreaseFontSize" },
     { key="_",         mods="CTRL",          action="DecreaseFontSize" },
