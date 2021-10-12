@@ -507,6 +507,9 @@ nnoremap <c-u> <c-w>x
 " ------------------------------------------------------------------------------
 " ------------------------------------------------------------------------------
 
+"set cvoptions=autocmds,localopts
+"autocmd DirEnter '*' :!printf '\033]0;'"$(dirs) - VIFM"'\007' > /dev/tty %i
+
 nnoremap <Space>       j
 nnoremap <BS>          k
 
@@ -587,6 +590,9 @@ nnoremap K             5k
 "nnoremap <S-Up>        5k
 "nnoremap <esc>[1;2B    5j
 "nnoremap <esc>[1;2A    5k
+
+nnoremap <C-ScrollWheelDown>   <C-w>w10j<C-w>w
+nnoremap <C-ScrollWheelUp>     <C-w>w10k<C-w>w
 
 " <A-k>
 nnoremap <M-k>         <C-w>w5k<C-w>w

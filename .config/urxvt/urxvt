@@ -228,7 +228,8 @@ URxvt.boldFont: xft:DejaVu Sans Mono:pixelsize=21:weight=bold:antialias=true
 
 URxvt.letterSpace: 0
 URxvt.lineSpace: 0
-URxvt.geometry: 164x48+854+892
+!!URxvt.geometry: 164x48+854+892
+URxvt.geometry: 194x51+690+700
 URxvt*externalBorder: 1
 URxvt.internalBorder: 6
 URxvt.borderColor: #262626

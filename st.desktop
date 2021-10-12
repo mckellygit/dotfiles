@@ -4,6 +4,6 @@ Type=Application
 Name=st
 GenericName=ST Terminal emulator
 Comment=st terminal
-Exec=st -g 164x48+854+856
+Exec=st -g 194x51+690+678
 Icon=terminal
 Categories=System;TerminalEmulator;

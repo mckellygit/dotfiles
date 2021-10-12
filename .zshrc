@@ -633,7 +633,7 @@ fi
 
 # --------------------
 
-alias st='command st -g 164x48+854+856'
+alias st='command st -g 194x51+690+678'
 
 alias bye='echo "dont leave :-("'
 

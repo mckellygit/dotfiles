@@ -1,0 +1,19 @@
+[Desktop Entry]
+Type=Application
+TryExec=wezterm
+Exec=wezterm start -- term_win_loc start
+Icon=/usr/share/icons/hicolor/scalable/apps/wezterm.svg
+Terminal=false
+Categories=System;TerminalEmulator;
+
+Name=wezterm
+GenericName=Terminal
+Comment=A cross-platform, GPU enhanced terminal emulator
+StartupWMClass=wezterm
+Actions=New;
+
+X-Desktop-File-Install-Version=0.23
+
+[Desktop Action New]
+Name=New Terminal
+Exec=wezterm start -- term_win_loc start

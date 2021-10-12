@@ -1,0 +1,91 @@
+#!/bin/bash
+
+# This script programmatically moves around the windows on my screens.
+# The JavaScript can be prototyped in Looking Glass (ALT+F2 lg). The documentation of MetaWindow can be found here:
+# https://developer.gnome.org/meta/stable/MetaWindow.html
+
+set -e
+
+M=0
+
+X=690
+Y=678
+W=2530
+H=1380
+
+if [[ -n "$ST_VERSION" ]] ; then
+    X=690
+    Y=678
+    W=2530
+    H=1380
+fi
+
+JS="""
+const GLib = imports.gi.GLib;
+
+var BreakException = {};
+
+try {
+
+global.get_window_actors().forEach(function (w) {
+    var mw = w.meta_window;
+
+    if ( mw.get_title().toLowerCase().includes('tmux:') ||
+         mw.get_wm_class().toLowerCase() == 'st' ||
+         mw.get_wm_class().toLowerCase() == 'xterm' ||
+         mw.get_wm_class().toLowerCase() == 'urxvt' ||
+         mw.get_wm_class().toLowerCase() == 'kitty' ||
+         mw.get_wm_class().toLowerCase() == 'alacritty' ||
+         mw.get_wm_class().toLowerCase() == 'foot' ||
+         mw.get_wm_class().toLowerCase().includes('.wezterm') ) {
+
+        mw.activate(0);
+
+        if (mw.get_maximized()) {
+            mw.unmaximize(3); // 3 is META_MAXIMIZE_BOTH, so unmaximizing the window in both directions
+        }
+
+        mw.move_resize_frame(0, $X, $Y, $W, $H);
+
+        if ($M) {
+            // Maximization needs to be delayed a little, so that the window has time to move
+            GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, function() { mw.maximize($M); });
+        }
+
+        throw BreakException;
+    }
+
+});
+
+} catch (e) {
+    if (e !== BreakException) throw e;
+}
+"""
+
+if [[ $# -ge 1 ]] ; then
+    if [[ "$1" == "1" ]] ; then
+        sleep 0.65
+        xrdb -load ~/.Xresources
+    elif [[ "$1" == "shell" ]] ; then
+        sleep 0.65
+        xrdb -load ~/.Xresources
+    elif [[ "$1" == "start" ]] ; then
+        sleep 0.65
+        xrdb -load ~/.Xresources
+    fi
+fi
+
+gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval "$JS" >/dev/null
+
+if [[ $# -ge 1 ]] ; then
+    if [[ "$1" == "1" ]] ; then
+        exec $SHELL
+    elif [[ "$1" == "shell" ]] ; then
+        exec $SHELL
+    elif [[ "$1" == "start" ]] ; then
+        exec $SHELL
+    fi
+fi
+
+exit 0
+

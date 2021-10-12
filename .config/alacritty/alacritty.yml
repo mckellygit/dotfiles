@@ -199,12 +199,12 @@ font:
 
 window:
   dimensions:
-    columns: 164
-    lines: 48
+    columns: 194
+    lines: 51
 
   position:
-    x: 854
-    y: 874
+    x: 690
+    y: 678
 
   padding:
     x: 4

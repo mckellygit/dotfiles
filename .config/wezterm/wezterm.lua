@@ -6,8 +6,8 @@ return {
   font = wezterm.font("JetBrains Mono"),
   font_size = 16.0,
 
-  initial_rows = 48,
-  initial_cols = 164,
+  initial_cols = 194,
+  initial_rows = 51,
   line_height = 0.9,
 
   window_background_opacity = 0.97,
@@ -57,7 +57,7 @@ return {
   },
 
   use_dead_keys = false,
-  disable_default_key_bindings = false,
+  disable_default_key_bindings = true,
   keys = {
     { key="Backspace", mods="SHIFT",         action=wezterm.action{SendString="\x1e\x08"} },
     { key=" ",         mods="SHIFT",         action=wezterm.action{SendString="\x1e\x20"} },
@@ -101,6 +101,8 @@ return {
     { key="n",         mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x4e"} },
     { key="p",         mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x50"} },
 
+    { key="Insert",    mods="CTRL",          action=wezterm.action{SendString="\x1b[2;5~"} },
+    { key="Insert",    mods="SHIFT",         action=wezterm.action{SendString="\x1b[2;2~"} },
     -- { key="c",         mods="CTRL|SHIFT",    action="Copy" },
     -- { key="v",         mods="CTRL|SHIFT",    action="Paste" },
     -- { key="c",         mods="CTRL|SUPER",    action="Copy" },
