@@ -1,5 +1,24 @@
 #!/bin/bash
 
+check_delay() {
+    if [[ $have_delay -eq 0 ]] ; then
+        return
+    fi
+    ntime=$(date +%s.%3N)
+    dtime=$(echo "$ntime - $start_time" | bc -l)
+    if (( $(echo "$dtime >= $delay" | bc -l) )) ; then
+        return
+    fi
+    wtime=$(echo "$delay - $dtime" | bc -l)
+    if (( $(echo "$wtime > 0.000" | bc -l) )) ; then
+        echo "sleep ..."
+        sleep $wtime
+    fi
+}
+
+delay=0.30
+start_time=$(date +%s.%3N)
+
 if [[ -n "$SUDO_USER" && -n "$SUDO_UID" ]] ; then
     if [[ -z "$XDG_RUNTIME_DIR" ]] ; then
         uid=$(id -u 2>/dev/null)
@@ -19,6 +38,7 @@ have_sc=0
 have_rmnl=0
 have_dash=0
 have_text=0
+have_delay=0
 sc_val=""
 have_args=0
 while [[ $# -ge 1 ]] ; do
@@ -38,6 +58,9 @@ while [[ $# -ge 1 ]] ; do
             echo "Error, -sc arg requires value [-1,0,1] or file"
             exit 1
         fi
+    elif [[ $1 == '-d' || $1 == '--d' ]] ; then
+        have_delay=1
+        shift
     elif [[ $1 == '-' ]] ; then
         have_dash=1
         shift
@@ -55,6 +78,10 @@ while [[ $# -ge 1 ]] ; do
         break
     fi
 done
+
+if [[ $has_wsl -gt 0 ]]; then
+    have_delay=0
+fi
 
 # ===================================
 
@@ -79,11 +106,12 @@ if [[ $have_args -eq 0 || $have_dash -eq 1 ]] ; then
         fi
     else
         if [[ $have_rmnl -eq 1 && $have_dash -eq 1 ]] ; then
-            sed -z '$s/\n$//' | exec copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input()); text=input(); if (text.length>0) { addUnique(input()) }"
+            sed -z '$s/\n$//' | copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input()); text=input(); if (text.length>0) { addUnique(input()) }"
         else
-            exec copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input()); text=input(); if (text.length>0) { addUnique(input()) }"
+            copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input()); text=input(); if (text.length>0) { addUnique(input()) }"
         fi
     fi
+    check_delay
     exit 0
 elif [[ $have_text -eq 1 ]] ; then
     # could have just -
@@ -102,6 +130,7 @@ elif [[ $have_text -eq 1 ]] ; then
             echo "$escapedtext" | copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input()); text=input(); if (text.length>0) { addUnique(input()) }"
         fi
     fi
+    check_delay
     exit 0
 fi
 
