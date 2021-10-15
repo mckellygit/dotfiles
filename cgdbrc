@@ -10,13 +10,14 @@ map <C-f> <C-d>
 map <C-w>w      sq
 map <C-w><C-w>  sq
 map <C-w><Down> sq
-map q           sq
+map qq          sq
 map \fb o
 map \fB o
 # <C-Up>
 map <Esc>[1;5A <Up>
 # <C-Down>
 map <Esc>[1;5B <Down>
+
 map <Esc>[1;5C <Right>
 map <Esc>[1;5D <Left>
 # ----
@@ -29,10 +30,10 @@ imap <C-k> <C-y>s<Up>
 imap <C-j> <Down>
 # <C-Up>
 imap <Esc>[1;5A <C-y>s<Up>
+imap <C-b>      <C-y>s<C-u>
 # <C-Down>
 imap <Esc>[1;5B <Down>
-imap <C-b> <C-y>s<C-u>
-imap <C-f> <C-y>s<C-d>
+imap <C-f>      <C-y>s<C-d>
 # ----
 set tabstop=4
 highlight StatusLine cterm=reverse,dim ctermfg=Black ctermbg=LightGray
