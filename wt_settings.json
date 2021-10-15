@@ -47,6 +47,7 @@
             },
             "keys": "ctrl+alt+plus"
         },
+
         {
             "command": 
             {
@@ -71,6 +72,9 @@
             },
             "keys": "ctrl+shift+space"
         },
+
+        { "command": "unbound", "keys": "shift+alt+space" },
+        { "command": "unbound", "keys": "shift+alt+backspace" },
 
         {
             "command":
@@ -100,14 +104,6 @@
             "command":
             {
                 "action": "sendInput",
-                "input": "\u001f\u007f"
-            },
-            "keys": "shift+alt+backspace"
-        },
-        {
-            "command":
-            {
-                "action": "sendInput",
                 "input": "\u001b\u0040"
             },
             "keys": "ctrl+alt+backspace"
@@ -120,9 +116,9 @@
     "disableAnimations": true,
     "experimental.rendering.forceFullRepaint": false,
     "experimental.rendering.software": false,
-    "initialCols": 162,
+    "initialCols": 194,
+    "initialRows": 51,
     "initialPosition": "700,700",
-    "initialRows": 40,
     "profiles": 
     {
         "defaults": 
