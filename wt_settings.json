@@ -40,14 +40,6 @@
         },
 
         {
-            "command":
-            {
-                "action": "sendInput",
-                "input": "\u001b@"
-            },
-            "keys": "ctrl+alt+backspace"
-        },
-        {
             "command": 
             {
                 "action": "sendInput",
@@ -78,6 +70,47 @@
                 "input": "\u001f "
             },
             "keys": "ctrl+shift+space"
+        },
+
+        {
+            "command":
+            {
+                "action": "sendInput",
+                "input": "\u001e\u0008"
+            },
+            "keys": "shift+backspace"
+        },
+        {
+            "command":
+            {
+                "action": "sendInput",
+                "input": "\u001e\u007f"
+            },
+            "keys": "ctrl+backspace"
+        },
+        {
+            "command":
+            {
+                "action": "sendInput",
+                "input": "\u001f\u007f"
+            },
+            "keys": "ctrl+shift+backspace"
+        },
+        {
+            "command":
+            {
+                "action": "sendInput",
+                "input": "\u001f\u007f"
+            },
+            "keys": "shift+alt+backspace"
+        },
+        {
+            "command":
+            {
+                "action": "sendInput",
+                "input": "\u001b\u0040"
+            },
+            "keys": "ctrl+alt+backspace"
         }
     ],
     "alwaysShowTabs": true,
