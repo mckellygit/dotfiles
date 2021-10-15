@@ -123,32 +123,6 @@ cd ~/Downloads/vim_bundles
 #   git clone https://github.com/junegunn/fzf.git ~/.fzf
 #   ~/.fzf/install
 
-# alacritty:
-#   git clone https://github.com/alacritty/alacritty.git
-#   rustup override set stable
-#   rustup update stable
-#   cargo build --release
-#
-#   sudo cp target/release/alacritty /usr/local/bin
-#   sudo cp extra/logo/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg
-#   sudo desktop-file-install extra/linux/Alacritty.desktop
-#   sudo update-desktop-database
-#   sudo tic -xe alacritty,alacritty-direct extra/alacritty.info
-#   sudo mkdir -p /usr/local/share/man/man1
-#   gzip -c extra/alacritty.man | sudo tee /usr/local/share/man/man1/alacritty.1.gz > /dev/null
-#
-#   mkdir -p ${ZDOTDIR:-~}/.zsh_functions
-#   echo 'fpath+=${ZDOTDIR:-~}/.zsh_functions' >> ${ZDOTDIR:-~}/.zshrc
-#   cp extra/completions/_alacritty ${ZDOTDIR:-~}/.zsh_functions/_alacritty
-#   mkdir -p ~/.bash_completion
-#   cp extra/completions/alacritty.bash ~/.bash_completion/alacritty
-#   echo "source ~/.bash_completion/alacritty" >> ~/.bashrc
-
-# rxvt:
-#   sudo apt-get install rxvt-unicode
-#   -or-
-#   git clone https://github.com/exg/rxvt-unicode.git
-
 # gnome sound output extension:
 #   sound-output-device-chooser@kgshank.net
 #   ~/.local/share/gnome-shell/extensions
@@ -182,10 +156,7 @@ cd ~/Downloads/vim_bundles
 # CMake:
 #   https://github.com/Kitware/CMake.git
 
-# zsh:
-#   https://github.com/zsh-users/zsh.git
-
-# ==================================
+# ---------------------
 
 # lua:
 #   curl -R -O http://www.lua.org/ftp/lua-5.4.3.tar.gz
@@ -193,39 +164,38 @@ cd ~/Downloads/vim_bundles
 #   cd lua-5.4.3
 #   make all test
 
-# vim:
-#   git clone https://github.com/vim/vim.git
-#   ./configure --enable-python3interp=yes --enable-luainterp=yes --with-lua-prefix=/usr/local
-
 # neovim:
 #   git clone https://github.com/neovim/neovim.git
-
-# kitty:
-#   sudo -s
-#   curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin dest=/usr/local launch=n
-#   git clone https://github.com/kovidgoyal/kitty.git
+#   cd build
+#   rm -rf *
+#   cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
+#   make
+#   sudo make install
+#   once -
+#     pip3 install pynvim
+#     pip3 install neovim
+#     pip3 install neovim-remote (note this puts nvr in ~/.local/bin)
+#     sudo cp ~/.local/bin/nvr /usr/local/bin
+#   upgrade -
+#     pip3 install --upgrade pynvim
+#     pip3 install --upgrade neovim
+#     pip3 install --upgrade neovim-remote # (note this puts nvr in ~/.local/bin)
+#     sudo cp ~/.local/bin/nvr /usr/local/bin
+# Node.js provider (optional)
+#   npm install -g neovim
+# inside nvim -
+#   :checkhealth
 
 # lazygit:
 #   git clone https://github.com/jesseduffield/lazygit.git
 #   cd lazygit
 #   go install
 
-# ==================================
+# ---------------------
 
-# st: (simple terminal)
-#   git clone git@github.com-mckelly:mckellygit/st.git
-#   upstream:
-#       git clone git@github.com-mckelly:LukeSmithxyz/st.git
-#   orig:
-#       git clone https://git.suckless.org/st
-#
-# other terminals:
-#   wezterm:
-#       git clone https://github.com/wez/wezterm.git
-#   foot:
-#       git clone https://codeberg.org/dnkl/foot.git
-#   zutty:
-#       git clone https://github.com/tomszilagyi/zutty.git
+# vim:
+#   git clone https://github.com/vim/vim.git
+#   ./configure --enable-python3interp=yes --enable-luainterp=yes --with-lua-prefix=/usr/local
 
 # cgdb
 #   git clone git@github.com-mckelly:mckellygit/cgdb.git 
@@ -240,19 +210,60 @@ cd ~/Downloads/vim_bundles
 #       git remote add upstream https://github.com/radssh/radssh.git
 #   sudo python3 setup.py install
 
-# ==================================
-
-# FlameGraph
-#   git clone https://github.com/brendangregg/FlameGraph.git
-# perf-tools
-#   git clone https://github.com/brendangregg/perf-tools.git
-# bcc
-#   git clone https://github.com/iovisor/bcc.git
-
 # htop:
 #   git clone git@github.com-mckelly:htop-dev/htop.git
 
-# -------------
+# ---------------------
+
+# st: (simple terminal)
+#   git clone git@github.com-mckelly:mckellygit/st.git
+#   upstream:
+#       git clone git@github.com-mckelly:LukeSmithxyz/st.git
+#   orig:
+#       git clone https://git.suckless.org/st
+
+# alacritty:
+#   git clone https://github.com/alacritty/alacritty.git
+#   rustup override set stable
+#   rustup update stable
+#   cargo build --release
+#
+#   sudo cp target/release/alacritty /usr/local/bin
+#   sudo cp extra/logo/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg
+#   sudo desktop-file-install extra/linux/Alacritty.desktop
+#   sudo update-desktop-database
+#   sudo tic -xe alacritty,alacritty-direct extra/alacritty.info
+#   sudo mkdir -p /usr/local/share/man/man1
+#   gzip -c extra/alacritty.man | sudo tee /usr/local/share/man/man1/alacritty.1.gz > /dev/null
+#
+#   mkdir -p ${ZDOTDIR:-~}/.zsh_functions
+#   echo 'fpath+=${ZDOTDIR:-~}/.zsh_functions' >> ${ZDOTDIR:-~}/.zshrc
+#   cp extra/completions/_alacritty ${ZDOTDIR:-~}/.zsh_functions/_alacritty
+#   mkdir -p ~/.bash_completion
+#   cp extra/completions/alacritty.bash ~/.bash_completion/alacritty
+#   echo "source ~/.bash_completion/alacritty" >> ~/.bashrc
+
+# kitty:
+#   sudo -s
+#   curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin dest=/usr/local launch=n
+#   git clone https://github.com/kovidgoyal/kitty.git
+
+# other terminals:
+#   wezterm:
+#       git clone https://github.com/wez/wezterm.git
+#   foot:
+#       git clone https://codeberg.org/dnkl/foot.git
+#   zutty:
+#       git clone https://github.com/tomszilagyi/zutty.git
+
+# rxvt:
+#   sudo apt-get install rxvt-unicode
+#   -or-
+#   git clone https://github.com/exg/rxvt-unicode.git
+
+# ---------------------
+
+# firefox:
 
 # nixnote:
 #   https://github.com/robert7/nixnote2.git
@@ -270,6 +281,20 @@ cd ~/Downloads/vim_bundles
 #   sudo add-apt-repository 'deb https://repo.vivaldi.com/archive/deb/ stable main'
 #   sudo apt update
 #   sudo apt install vivaldi-stable
+
+# ---------------------
+
+# FlameGraph
+#   git clone https://github.com/brendangregg/FlameGraph.git
+# perf-tools
+#   git clone https://github.com/brendangregg/perf-tools.git
+# bcc
+#   git clone https://github.com/iovisor/bcc.git
+
+# ---------------------
+
+# zsh:
+#   https://github.com/zsh-users/zsh.git
 
 # lf:
 #   cd ~
