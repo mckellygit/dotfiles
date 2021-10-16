@@ -65,8 +65,8 @@ return {
 
     { key="Backspace", mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x7f"} },
     { key=" ",         mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x20"} },
-    { key="Backspace", mods="ALT|SHIFT",     action=wezterm.action{SendString="\x1f\x7f"} },
-    { key=" ",         mods="ALT|SHIFT",     action=wezterm.action{SendString="\x1f\x20"} },
+    { key="Backspace", mods="ALT|SHIFT",     action="Nop"},
+    { key=" ",         mods="ALT|SHIFT",     action="Nop"},
 
     -- { key="x",         mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1b\x78"} },
 

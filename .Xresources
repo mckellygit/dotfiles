@@ -303,8 +303,8 @@ URxvt.keysym.S-space:                   string:\036\040
 URxvt.keysym.C-S-BackSpace:             string:\037\177
 URxvt.keysym.C-S-space:                 string:\037\040
 !! make these the same as C-S-BackSpace/space for now ...
-URxvt.keysym.Shift-Meta-BackSpace:      string:\037\177
-URxvt.keysym.Shift-Meta-space:          string:\037\040
+URxvt.keysym.Shift-Meta-BackSpace:      command:\000
+URxvt.keysym.Shift-Meta-space:          command:\000
 
 URxvt.keysym.Control-Meta-BackSpace:    string:\033\100
 URxvt.keysym.Control-Meta-equal:        string:\033\043

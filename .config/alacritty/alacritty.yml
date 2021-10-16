@@ -29,8 +29,8 @@ key_bindings:
   - { key: Back,      mods: Control|Shift,   chars: "\x1f\x7f"        }
   - { key: Space,     mods: Control|Shift,   chars: "\x1f\x20"        }
     # make these the same as C-S-Back/Space for now ...
-  - { key: Back,      mods: Alt|Shift,       chars: "\x1f\x7f"        }
-  - { key: Space,     mods: Alt|Shift,       chars: "\x1f\x20"        }
+  - { key: Back,      mods: Alt|Shift,       action: None             }
+  - { key: Space,     mods: Alt|Shift,       action: None             }
 
   - { key: Back,      mods: Alt|Control,     chars: "\x1b\x40"        }
   - { key: Equals,    mods: Alt|Control,     chars: "\x1b\x23"        }
