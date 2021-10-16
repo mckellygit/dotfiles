@@ -514,8 +514,11 @@ URxvt.clipboard.pastecmd: myclip --o --rmlastnl --sc 0
 Zutty.altScroll:       false
 Zutty.fontsize:        15
 Zutty.saveLines:       0
-!!Zutty.altSendsEscape:  false
-Zutty.modifyOtherKeys: 2
+
+!! see: https://tomscii.sig7.se/zutty/doc/KEYS.html
+Zutty.altSendsEscape:  true
+!! 0, 1, 2
+Zutty.modifyOtherKeys: 1
 
 !! ==========================================
 
