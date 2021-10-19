@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+TryExec=/home/kellma02/bin/monitor.sh
+Exec=/home/kellma02/bin/monitor.sh
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name[en_US]=monitor-check
+Name=monitor-check
+Comment[en_US]=run term_win_loc when monitor changes
+Comment=run term_win_loc when monitor changes

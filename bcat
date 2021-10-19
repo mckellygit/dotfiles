@@ -8,6 +8,7 @@ fi
 
 bat=$(which $BATNAME 2> /dev/null)
 if [[ -n "$bat" ]] ; then
-    exec $BATNAME -A --plain --paging=never $@
+    #exec $BATNAME -A --plain --paging=never $@
+    exec $BATNAME --pager never --plain $@
 fi
 exec cat $@

@@ -1,9 +1,9 @@
 {
     "$schema": "https://aka.ms/terminal-profiles-schema",
-    "actions": 
+    "actions":
     [
         {
-            "command": 
+            "command":
             {
                 "action": "copy",
                 "singleLine": false
@@ -11,7 +11,7 @@
             "keys": "ctrl+shift+c"
         },
         {
-            "command": 
+            "command":
             {
                 "action": "copy",
                 "singleLine": false
@@ -38,39 +38,104 @@
             },
             "keys": "ctrl+enter"
         },
-
         {
-            "command": 
+            "command":
             {
                 "action": "sendInput",
-                "input": "\u001b#"
+                "input": "\u001e\u000d"
+            },
+            "keys": "alt+enter"
+        },
+        {
+            "command":
+            {
+                "action": "sendInput",
+                "input": "\u001e\u000d"
+            },
+            "keys": "ctrl+alt+enter"
+        },
+
+        {
+            "command":
+            {
+                "action": "sendInput",
+                "input": "\u001b\u0023"
             },
             "keys": "ctrl+alt+plus"
         },
 
         {
-            "command": 
+            "command":
             {
                 "action": "sendInput",
-                "input": "\u001b#"
+                "input": "\u001e\u0020"
+            },
+            "keys": "shift+space"
+        },
+        {
+            "command":
+            {
+                "action": "sendInput",
+                "input": "\u001f\u0020"
+            },
+            "keys": "ctrl+shift+space"
+        },
+        {
+            "command":
+            {
+                "action": "sendInput",
+                "input": "\u001b\u0023"
             },
             "keys": "ctrl+alt+space"
         },
         {
-            "command": 
+            "command":
             {
                 "action": "sendInput",
-                "input": "\u001b "
+                "input": "\u001b\u0020"
             },
             "keys": "alt+space"
         },
+
         {
-            "command": 
+            "command":
             {
                 "action": "sendInput",
-                "input": "\u001f "
+                "input": "\u001f\u004a"
             },
-            "keys": "ctrl+shift+space"
+            "keys": "ctrl+shift+j"
+        },
+        {
+            "command":
+            {
+                "action": "sendInput",
+                "input": "\u001f\u004b"
+            },
+            "keys": "ctrl+shift+k"
+        },
+        {
+            "command":
+            {
+                "action": "sendInput",
+                "input": "\u001f\u0047"
+            },
+            "keys": "ctrl+shift+g"
+        },
+        {
+            "command":
+            {
+                "action": "sendInput",
+                "input": "\u001f\u004e"
+            },
+            "keys": "ctrl+shift+n"
+        },
+        {
+            "command":
+            {
+                "action": "sendInput",
+                "input": "\u001f\u0050"
+            },
+            "keys": "ctrl+shift+p"
         },
 
         { "command": "unbound", "keys": "shift+alt+space" },
@@ -119,11 +184,11 @@
     "initialCols": 194,
     "initialRows": 51,
     "initialPosition": "700,700",
-    "profiles": 
+    "profiles":
     {
-        "defaults": 
+        "defaults":
         {
-            "font": 
+            "font":
             {
                 "face": "Cascadia Mono",
                 "size": 10,
@@ -132,7 +197,7 @@
             "useAcrylic": true, "acrylicOpacity": 0.92,
             "scrollbarState": "hidden"
         },
-        "list": 
+        "list":
         [
             {
                 "commandline": "powershell.exe",
@@ -162,7 +227,7 @@
             }
         ]
     },
-    "schemes": 
+    "schemes":
     [
         {
             "background": "#0C0C0C",
