@@ -1,12 +1,5 @@
 [com/ubuntu/update-notifier]
-release-check-time=uint32 1618573783
-
-[io/github/Pithos]
-last-station-id='3862749000310231591'
-email='my email address'
-pandora-one=true
-volume=1.0
-win-pos=(346, 308)
+release-check-time=uint32 1634911735
 
 [io/github/Pithos/inhibit-screensaver]
 enabled=false
@@ -59,24 +52,33 @@ volume-up='<Super>period'
 volume-mute='<Super>slash'
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0]
-binding='<Alt>w'
-command='wchooser'
+binding='<Super>w'
+command='term_win_loc'
 name='Window Chooser'
 
 [org/gnome/settings-daemon/plugins/xsettings]
 hinting='slight'
 
 [org/gnome/settings-daemon/peripherals/keyboard]
-numlock-state='off'
+numlock-state='on'
 
 [org/gnome/shell]
 app-picker-view=uint32 1
-command-history=['r', 'lg']
-enabled-extensions=['sound-output-device-chooser@kgshank.net', 'clipboard-indicator@tudmotu.com']
-favorite-apps=['org.gnome.Nautilus.desktop', 'rhythmbox.desktop', 'io.github.Pithos.desktop', 'libreoffice-writer.desktop', 'org.gnome.Software.desktop', 'update-manager.desktop', 'yelp.desktop', 'teams-insiders.desktop', 'code.desktop', 'google-chrome.desktop', 'org.remmina.Remmina.desktop', 'vivaldi-stable.desktop', 'nixnote2.desktop', 'Alacritty.desktop', 'rxvt-unicode.desktop', 'kitty.desktop', 'simple-scan.desktop']
+command-history=['r', 'lg', 'r']
+enabled-extensions=['sound-output-device-chooser@kgshank.net', 'clipboard-indicator@tudmotu.com', 'cascade-windows@lytol.com']
+favorite-apps=['org.gnome.Nautilus.desktop', 'rhythmbox.desktop', 'io.github.Pithos.desktop', 'libreoffice-writer.desktop', 'org.gnome.Software.desktop', 'update-manager.desktop', 'yelp.desktop', 'simple-scan.desktop', 'code.desktop', 'google-chrome.desktop', 'org.remmina.Remmina.desktop', 'firefox.desktop', 'nixnote2.desktop', 'Alacritty.desktop', 'kitty.desktop', 'org.wezfurlong.wezterm.desktop', 'st.desktop']
 
 [org/gnome/shell/extensions/sound-output-device-chooser]
 icon-theme='colored'
+
+[org/gnome/gedit/preferences/print]
+print-syntax-highlighting=true
+print-header=true
+print-line-numbers=uint32 0
+print-font-body-pango='Monospace 9'
+print-font-numbers-pango='Sans 8'
+print-font-header-pango='Sans 11'
+print-wrap-mode='word'
 
 [org/gnome/gedit/preferences/ui]
 show-tabs-mode='auto'
@@ -108,7 +110,7 @@ search-filter-time-type='last_modified'
 
 [org/gnome/nautilus/window-state]
 sidebar-width=244
-geometry='1672x786+36+32'
+geometry='2498x1349+36+32'
 maximized=false
 
 [org/gnome/nautilus/desktop]
@@ -123,7 +125,7 @@ info-last-device='wakeups'
 info-page-number=3
 
 [org/gnome/evince/default]
-window-ratio=(3.02755376344086, 2.1084481438959051)
+window-ratio=(3.0277777777777777, 1.25)
 
 [org/gnome/file-roller/listing]
 sort-method='name'
@@ -188,10 +190,10 @@ cursor-blink=true
 clock-show-date=true
 
 [org/gnome/desktop/notifications]
-application-children=['diodon', 'org-gnome-software', 'google-chrome', 'kitty', 'apport-gtk', 'org-gnome-nautilus', 'nixnote2', 'teams-insiders', 'org-remmina-remmina', 'update-manager', 'ca-desrt-dconf-editor', 'clipit', 'org-gnome-dejadup', 'firefox', 'io-github-pithos', 'gnome-network-panel', 'rhythmbox', 'vivaldi-stable', 'gvim']
+application-children=['diodon', 'org-gnome-software', 'google-chrome', 'kitty', 'apport-gtk', 'org-gnome-nautilus', 'nixnote2', 'teams-insiders', 'org-remmina-remmina', 'update-manager', 'ca-desrt-dconf-editor', 'clipit', 'org-gnome-dejadup', 'firefox', 'io-github-pithos', 'gnome-network-panel', 'rhythmbox', 'vivaldi-stable', 'gvim', 'appimagekit-pcloud']
 
-[org/gnome/desktop/notifications/application/io-github-pithos]
-application-id='io.github.Pithos.desktop'
+[org/gnome/desktop/notifications/application/appimagekit-pcloud]
+application-id='appimagekit-pcloud.desktop'
 
 [org/gnome/desktop/notifications/application/google-chrome]
 application-id='google-chrome.desktop'
@@ -307,6 +309,7 @@ switch-to-workspace-down=['<Super>Page_Down']
 switch-to-workspace-right=['<Super><Alt>Right']
 cycle-windows=['<Super>q']
 activate-window-menu=['<Shift><Alt>m']
+cycle-windows-backward=['<Shift><Super>q']
 switch-applications-backward=['<Shift><Super>Tab']
 switch-group-backward=['<Shift><Super>Above_Tab']
 switch-group=['<Super>Above_Tab']
@@ -317,6 +320,9 @@ idle-delay=uint32 900
 
 [org/gnome/desktop/a11y/magnifier]
 mag-factor=1.0
+
+[org/gnome/desktop/a11y/keyboard]
+mousekeys-enable=false
 
 [org/gnome/desktop/background]
 picture-uri='file:///home/kellma02/Pictures/Stream.jpg'
@@ -428,12 +434,12 @@ center-new-windows=true
 experimental-features=['scale-monitor-framebuffer']
 
 [org/gnome/software]
-check-timestamp=int64 1618922574
+check-timestamp=int64 1634646883
 
 [org/gtk/settings/file-chooser]
 sort-column='name'
 sidebar-width=247
-window-position=(36, 32)
+window-position=(1305, 603)
 show-size-column=true
 show-hidden=false
 window-size=(1231, 902)
@@ -501,14 +507,14 @@ saved-player-list=@as []
 
 [apps/update-manager]
 first-run=false
-launch-time=int64 1618261667
+launch-time=int64 1634269599
 window-height=675
 show-details=true
-launch-count=34
+launch-count=48
 window-width=1135
 
 [ca/desrt/dconf-editor]
-saved-view='/org/gnome/desktop/wm/preferences/'
+saved-view='/org/gnome/desktop/wm/keybindings/'
 window-height=1117
 window-width=1866
-window-is-maximized=true
+window-is-maximized=false
