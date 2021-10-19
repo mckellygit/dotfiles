@@ -88,14 +88,6 @@
             },
             "keys": "ctrl+alt+space"
         },
-        {
-            "command":
-            {
-                "action": "sendInput",
-                "input": "\u001b\u0020"
-            },
-            "keys": "alt+space"
-        },
 
         {
             "command":
@@ -138,8 +130,11 @@
             "keys": "ctrl+shift+p"
         },
 
-        { "command": "unbound", "keys": "shift+alt+space" },
         { "command": "unbound", "keys": "shift+alt+backspace" },
+        { "command": "unbound", "keys": "alt+backspace" },
+
+        { "command": "unbound", "keys": "shift+alt+space" },
+        { "command": "unbound", "keys": "alt+space" },
 
         {
             "command":
