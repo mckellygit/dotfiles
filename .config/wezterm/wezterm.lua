@@ -21,6 +21,8 @@ return {
   exit_behavior = "Close",
   window_close_confirmation = "NeverPrompt",
 
+  swallow_mouse_click_on_pane_focus = true,
+
   enable_tab_bar = false,
   hide_tab_bar_if_only_one_tab = true,
 
@@ -61,6 +63,8 @@ return {
       action="OpenLinkAtMouseCursor",
     },
   },
+
+  enable_csi_u_key_encoding = false,
 
   use_dead_keys = false,
   disable_default_key_bindings = true,
