@@ -6,9 +6,15 @@ return {
   font = wezterm.font("JetBrains Mono"),
   font_size = 16.0,
 
+  adjust_window_size_when_changing_font_size = false,
+
   initial_cols = 194,
   initial_rows = 51,
   line_height = 0.9,
+
+  alternate_buffer_wheel_scroll_speed = 5,
+
+  check_for_updates = true,
 
   window_background_opacity = 0.97,
 
@@ -76,7 +82,8 @@ return {
     { key="Backspace", mods="CTRL|ALT",      action=wezterm.action{SendString="\x1b\x40"} },
     { key="=",         mods="CTRL|ALT",      action=wezterm.action{SendString="\x1b\x23"} },
     { key=" ",         mods="CTRL|ALT",      action=wezterm.action{SendString="\x1b\x23"} },
-    { key="\\",        mods="CTRL|ALT",      action="Nop"},
+    -- { key="\\",        mods="CTRL|ALT",      action="Nop"},
+    { key="\\",        mods="CTRL|ALT",      action="ActivateCopyMode" },
 
     { key="[",         mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x5b"} },
     { key="{",         mods="CTRL",          action=wezterm.action{SendString="\x1f\x5b"} },
