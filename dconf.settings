@@ -1,22 +1,6 @@
 [com/ubuntu/update-notifier]
 release-check-time=uint32 1634911735
 
-[io/github/Pithos/inhibit-screensaver]
-enabled=false
-
-[io/github/Pithos/notify]
-enabled=false
-
-[io/github/Pithos/journald-logging]
-data='verbose'
-
-[io/github/Pithos/screensaver-pause]
-enabled=false
-
-[io/github/Pithos/notification-icon]
-data='io.github.Pithos-tray'
-enabled=true
-
 [net/launchpad/diodon/plugins]
 active-plugins=['indicator']
 
@@ -52,7 +36,7 @@ volume-up='<Super>period'
 volume-mute='<Super>slash'
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0]
-binding='<Super>w'
+binding='<Primary><Alt>w'
 command='term_win_loc'
 name='Window Chooser'
 
@@ -66,7 +50,7 @@ numlock-state='on'
 app-picker-view=uint32 1
 command-history=['r', 'lg', 'r']
 enabled-extensions=['sound-output-device-chooser@kgshank.net', 'clipboard-indicator@tudmotu.com', 'cascade-windows@lytol.com']
-favorite-apps=['org.gnome.Nautilus.desktop', 'rhythmbox.desktop', 'io.github.Pithos.desktop', 'libreoffice-writer.desktop', 'org.gnome.Software.desktop', 'update-manager.desktop', 'yelp.desktop', 'simple-scan.desktop', 'code.desktop', 'google-chrome.desktop', 'org.remmina.Remmina.desktop', 'firefox.desktop', 'nixnote2.desktop', 'Alacritty.desktop', 'kitty.desktop', 'org.wezfurlong.wezterm.desktop', 'st.desktop']
+favorite-apps=['org.gnome.Nautilus.desktop', 'rhythmbox.desktop', 'libreoffice-writer.desktop', 'org.gnome.Software.desktop', 'update-manager.desktop', 'yelp.desktop', 'simple-scan.desktop', 'code.desktop', 'google-chrome.desktop', 'org.remmina.Remmina.desktop', 'firefox.desktop', 'nixnote2.desktop', 'Alacritty.desktop', 'kitty.desktop', 'org.wezfurlong.wezterm.desktop', 'st.desktop']
 
 [org/gnome/shell/extensions/sound-output-device-chooser]
 icon-theme='colored'
@@ -190,7 +174,7 @@ cursor-blink=true
 clock-show-date=true
 
 [org/gnome/desktop/notifications]
-application-children=['diodon', 'org-gnome-software', 'google-chrome', 'kitty', 'apport-gtk', 'org-gnome-nautilus', 'nixnote2', 'teams-insiders', 'org-remmina-remmina', 'update-manager', 'ca-desrt-dconf-editor', 'clipit', 'org-gnome-dejadup', 'firefox', 'io-github-pithos', 'gnome-network-panel', 'rhythmbox', 'vivaldi-stable', 'gvim', 'appimagekit-pcloud']
+application-children=['diodon', 'org-gnome-software', 'google-chrome', 'kitty', 'apport-gtk', 'org-gnome-nautilus', 'nixnote2', 'teams-insiders', 'org-remmina-remmina', 'update-manager', 'ca-desrt-dconf-editor', 'clipit', 'org-gnome-dejadup', 'firefox', 'gnome-network-panel', 'rhythmbox', 'vivaldi-stable', 'gvim', 'appimagekit-pcloud']
 
 [org/gnome/desktop/notifications/application/appimagekit-pcloud]
 application-id='appimagekit-pcloud.desktop'
@@ -303,16 +287,17 @@ audible-bell=false
 
 [org/gnome/desktop/wm/keybindings]
 raise-or-lower=['<Shift><Alt>w']
+switch-windows-backward=['<Shift><Super>w']
 switch-to-workspace-left=['<Super><Alt>Left']
 switch-applications=['<Super>Tab']
 switch-to-workspace-down=['<Super>Page_Down']
 switch-to-workspace-right=['<Super><Alt>Right']
 cycle-windows=['<Super>q']
-activate-window-menu=['<Shift><Alt>m']
 cycle-windows-backward=['<Shift><Super>q']
 switch-applications-backward=['<Shift><Super>Tab']
 switch-group-backward=['<Shift><Super>Above_Tab']
 switch-group=['<Super>Above_Tab']
+switch-windows=['<Super>w']
 switch-to-workspace-up=['<Super>Page_Up']
 
 [org/gnome/desktop/session]
@@ -514,7 +499,7 @@ launch-count=48
 window-width=1135
 
 [ca/desrt/dconf-editor]
-saved-view='/org/gnome/desktop/wm/keybindings/'
+saved-view='/org/gnome/desktop/'
 window-height=1117
 window-width=1866
 window-is-maximized=false
