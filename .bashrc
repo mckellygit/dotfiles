@@ -152,6 +152,9 @@ fi
 
 # -----------------------
 
+LS_COLORS=$(echo $LS_COLORS | sed 's/ow=[0-9]*;[0-9]*/ow=30;46/')
+export LS_COLORS
+
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"

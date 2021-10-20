@@ -100,10 +100,13 @@ fi
 
 zmodload -i zsh/complist
 
+LS_COLORS=$(echo $LS_COLORS | sed 's/ow=[0-9]*;[0-9]*/ow=30;46/')
+export LS_COLORS
+#eval "$(dircolors)"
+
 zstyle ':completion:*' menu select
 zstyle ':completion:*' show-completer true
 zstyle ':completion:*' verbose false
-eval "$(dircolors)"
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
 # yes this points to bash - but its correct ...
