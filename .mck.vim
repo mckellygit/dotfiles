@@ -9774,6 +9774,10 @@ endfunction
 " just because hyphen requires no shift, so = is like + w/o shift ...
  noremap <silent> <C-w>=       <C-w>+
 
+" we are using <C-w><,> below for tab nav, so change window horiz resize here
+ noremap <silent> <C-w>,       <C-w><
+ noremap <silent> <C-w>.       <C-w>>
+
 " NOTE: many other mappings for tab nav -
 "       <C-w><S-Left>, <S-Right>
 "       <C-w><Tab>, <S-Tab>
