@@ -18,7 +18,7 @@ if WinExist(WinMatcher)
 {
     Sleep 500
     WinActivate ahk_class CASCADIA_HOSTING_WINDOW_CLASS
-    WinMove, ahk_class CASCADIA_HOSTING_WINDOW_CLASS, , 686, 700, 2374, 1315
+    WinMove, ahk_class CASCADIA_HOSTING_WINDOW_CLASS, , 360, 600, 3154, 1410
     WinShow ahk_class CASCADIA_HOSTING_WINDOW_CLASS
     WinWaitActive ahk_class CASCADIA_HOSTING_WINDOW_CLASS
 }

@@ -176,9 +176,9 @@
     "disableAnimations": true,
     "experimental.rendering.forceFullRepaint": false,
     "experimental.rendering.software": false,
-    "initialCols": 194,
-    "initialRows": 51,
-    "initialPosition": "700,700",
+    "initialCols": 259,
+    "initialPosition": "370,600",
+    "initialRows": 55,
     "profiles":
     {
         "defaults":
