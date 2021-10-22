@@ -41,11 +41,12 @@ return {
     -- blue
     background = "#14292e",
 
-    cursor_fg = "#111111",
+    -- cursor_fg = "#111111",
+    cursor_fg = "#ffffff",
     cursor_bg = "#d78700",
     cursor_border = "#d78700",
 
-    selection_fg = "black",
+    selection_fg = "#000000",
     selection_bg = "#fffacd",
 
     -- ansi =    { "#000000", "#cc0403", "#19cb00", "#cecb00", "#5f87ff", "#ba55d3", "#0dcdcd", "#dddddd" },
