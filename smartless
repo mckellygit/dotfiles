@@ -6,6 +6,11 @@
 # document is short
 # inspired by code at http://unix.stackexchange.com/questions/107315/
 
+# NOTE: why cant we use -F arg to less instead of smartless ?
+# Add mouse scrolling support in less (does not work with older versions of "less")
+# dont use -F without -X - and with -X there is no mouse support ...
+# is this still the case with current version of less ?
+
 # ------------------------------------------------------------------------------
 
 # Copyright 2015 Stefan Heule

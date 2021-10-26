@@ -15,7 +15,9 @@
 
 # Add mouse scrolling support in less (does not work with older versions of "less")
 # dont use -F without -X - and with -X there is no mouse support ...
-#--pager="less -iR -K -x4 -c~"
+# is this still the case with current version of less ?
+
+#--pager="less -iR -K -x4 -c -~"
 --pager="smartless"
 
 # Use C++ syntax (instead of C) for .h header files
@@ -23,4 +25,22 @@
 
 # Use "gitignore" highlighting for ".ignore" files
 --map-syntax .ignore:.gitignore
+
+# bat cache --clear
+# bat cache --build
+
+# add dir: ~/.config/bat/syntaxes/sublime-plaintext-syntax
+# and in this dir, add file: plaintext.sublime-syntax
+# and in this file:
+#
+# https://www.sublimetext.com/docs/syntax.html
+# https://www.gnu.org/software/bash/manual/bash.html
+#name: Plain Text
+#scope: source.shell.bash
+#version: 2
+#
+#extends: Packages/ShellScript/commands-builtin-shell-bash.sublime-syntax
+#
+#file_extensions:
+#  - txt
 

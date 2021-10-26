@@ -660,16 +660,20 @@ alias lessc='less-pyg'
 #alias less='$BATNAME'
 alias less='smartless'
 
+# Add mouse scrolling support in less (does not work with older versions of "less")
+# dont use -F without -X - and with -X there is no mouse support ...
+# is this still the case with current version of less ?
+
 # uses $BATNAME underneath to get $BATNAME syntax color but less driver with multiple files, etc.
 export LESSOPEN="|lessfilter %s"
-export LESS='-iR -K -x4 -c~'
+export LESS='-iR -K -x4 -c -~'
 
 # number of lines to directly display before entering the pager
 export SMARTLESS_NUM_LINES=$((LINES-6))
 # the pager to be used
 export SMARTLESS_PAGER='less'
 # the default arguments to the pager
-export SMARTLESS_PAGER_ARGUMENTS='-iR -K -x4 -c~'
+export SMARTLESS_PAGER_ARGUMENTS='-iR -K -x4 -c -~'
 
 #export PAGER='less -RX'
 #export PAGER='$BATNAME -p'

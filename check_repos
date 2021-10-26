@@ -93,7 +93,7 @@ cd ~/Downloads/vim_bundles
 #   git clone https://github.com/sharkdp/fd.git
 #   rustup override set stable
 #   rustup update stable
-#   cargo build
+#   cargo build --release
 #   cargo test
 #
 #   sudo cp target/release/fd /usr/local/bin
@@ -105,10 +105,18 @@ cd ~/Downloads/vim_bundles
 #   sudo dpkg -i bat_0.15.4_amd64.deb
 #   -or-
 #   git clone --recursive https://github.com/sharkdp/bat.git
+#   git submodule update --init --recursive
 #   rustup override set stable
 #   rustup update stable
-#   cargo build --bins
+#   cargo build --release
 #   cargo test
+#
+#   sudo cp target/release/bat /usr/local/bin
+#   sudo mkdir -p /usr/local/share/man/man1
+#   sudo cp assets/manual/bat.1.in /usr/local/share/man/man1/bat.1
+#
+#   bat cache --clear
+#   bat cache --build
 
 # tig:
 #   git clone git@github.com-mckelly:mckellygit/tig.git
