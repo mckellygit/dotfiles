@@ -190,7 +190,8 @@
                 "weight": "normal"
             },
             "useAcrylic": true, "acrylicOpacity": 0.92,
-            "scrollbarState": "hidden"
+            "scrollbarState": "hidden",
+            "bellStyle": "none"
         },
         "list":
         [
