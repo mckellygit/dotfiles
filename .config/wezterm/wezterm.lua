@@ -3,6 +3,16 @@ return {
 
   enable_wayland = true,
 
+  audible_bell = "Disabled",
+
+  visual_bell = {
+    fade_in_duration_ms = 5,
+    fade_out_duration_ms = 5,
+    target = "CursorColor",
+  },
+
+  bold_brightens_ansi_colors = true,
+
   font = wezterm.font("JetBrains Mono"),
   font_size = 16.0,
 
