@@ -1,4 +1,5 @@
 source ~/.cgdb/ShellPipeCommand.py
+set pagination off
 set confirm off
 set print object on
 set backtrace limit 30
