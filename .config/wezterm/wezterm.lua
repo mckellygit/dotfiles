@@ -1,7 +1,7 @@
 local wezterm = require 'wezterm';
 return {
 
-  enable_wayland = true,
+  enable_wayland = false,
 
   audible_bell = "Disabled",
 
@@ -14,7 +14,9 @@ return {
   bold_brightens_ansi_colors = true,
 
   font = wezterm.font("JetBrains Mono"),
-  font_size = 16.0,
+  -- if wayland then 16.0
+  -- font_size = 16.0,
+  font_size = 12.6,
 
   adjust_window_size_when_changing_font_size = false,
 
