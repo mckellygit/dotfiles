@@ -9222,12 +9222,16 @@ if &diff
       au VimEnter * :Alias! qa!  call\ MyCQuit()
       au VimEnter * :Alias! exi  call\ MyCQuit()
       au VimEnter * :Alias! exit call\ MyCQuit()
-      "au InsertEnter * diffoff
-      "au InsertLeave * diffthis
-      au InsertEnter * call <SID>SaveAndDisableFiller()
-      au InsertLeave * call <SID>RestoreFillerAndUpdate()
-      " work-around tp help keep cursor at correct line ...
-      au TextChanged * call <SID>TempNoFiller()
+
+      " TODO: not sure these are needed anymore ?
+      if 0
+          "au InsertEnter * diffoff
+          "au InsertLeave * diffthis
+          au InsertEnter * call <SID>SaveAndDisableFiller()
+          au InsertLeave * call <SID>RestoreFillerAndUpdate()
+          " work-around tp help keep cursor at correct line ...
+          au TextChanged * call <SID>TempNoFiller()
+      endif
   aug END
 
   " -----------
