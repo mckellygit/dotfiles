@@ -38,8 +38,15 @@ if [[ $rc -eq 0 ]] ; then
     echo ""
 fi
 
-cd ~/Downloads/vim_bundles
-./update.sh
+if [[ -n "$extras" ]] ; then
+    cd ~/Downloads/vim_bundles
+    ./update.sh
+    echo ""
+fi
+
+echo "Also check git:     zsh, CMake ..."
+echo "Also check non-git: gcc/g++, gdb, readline, ncurses, bat ..."
+echo ""
 
 # ---------------------
 
@@ -332,7 +339,3 @@ cd ~/Downloads/vim_bundles
 
 # ---------------------
 
-echo ""
-echo "Also check git:     zsh, CMake ..."
-echo "Also check non-git: gcc/g++, gdb, readline, ncurses, bat ..."
-echo ""
