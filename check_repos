@@ -4,8 +4,15 @@ trap "echo \"\"; exit" INT QUIT TERM
 
 git() { $HOME/bin/git "$@"; }
 
+extras=""
+if [[ $# -gt 0 ]] ; then
+    if [[ "$1" == "-a" || "$1" == "-all" || "$1" == "--a" || "$1" == "--all" ]] ; then
+        extras=" bat wezterm neovim"
+    fi
+fi
+
 cd ~/Downloads
-for d in fd the_silver_searcher ripgrep tmux vifm rtags ccache cgdb tig alacritty zsh-autosuggestions
+for d in fd the_silver_searcher ripgrep tmux vifm rtags ccache cgdb tig alacritty zsh-autosuggestions $extras
 do
     echo "checking $d ..."
     cd $d
