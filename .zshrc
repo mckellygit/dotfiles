@@ -1297,7 +1297,7 @@ bindkey -s "^^\x7f" "\x7f"
 # SPECIAL: some terminals may map <C-S-h> (or <S-C-h>) to <C-^><C-h> ...
 bindkey -s "^^\x08" "\x08"
 
-# SPECIAL: some terminals may map <C-S-x> to <C-_>X ...
+# SPECIAL: some terminals may map <C-S-x> to <C-_>X (or <C-_><C-x> ?)
 bindkey "^_X" noop
 
 # SPECIAL: some terminals may map <C-S-j> to <C-_>J ...
@@ -1311,6 +1311,14 @@ bindkey "^_G" noop
 bindkey "^_N" noop
 # SPECIAL: some terminals may map <C-S-p> to <C-_>P ...
 bindkey "^_P" noop
+
+# M-C-S-Ins/Del/Home/End/PgUp/PgDn
+bindkey "\e[2;8~" noop
+bindkey "\e[3;8~" noop
+bindkey "\e[1;8H" noop
+bindkey "\e[1;8F" noop
+bindkey "\e[5;8~" noop
+bindkey "\e[6;8~" noop
 
 # Ctrl-Enter to execute suggestion
 #bindkey '^\n' autosuggest-execute
