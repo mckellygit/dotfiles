@@ -128,6 +128,9 @@ return {
     { key="n",         mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x4e"} },
     { key="p",         mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x50"} },
 
+    -- { key="x",         mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x58"} },
+    -- old idea was to send M-( \x1b\x28, could also consider <C-_><C-x> \x1f\x18
+
     { key="Insert",    mods="CTRL",          action=wezterm.action{SendString="\x1b[2;5~"} },
     { key="Insert",    mods="SHIFT",         action=wezterm.action{SendString="\x1b[2;2~"} },
     -- { key="c",         mods="CTRL|SHIFT",    action="Copy" },
