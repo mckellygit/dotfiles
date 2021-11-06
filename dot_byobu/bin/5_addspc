@@ -1,0 +1,30 @@
+#!/bin/bash -e
+
+sess=$(tmux list-sessions | head -n 1 | awk -F: '{print $1}')
+
+if [ ! -f /dev/shm/tmux${sess}.spc ] ; then
+    add=1
+else
+    add=$(cat /dev/shm/tmux${sess}.spc)
+fi
+
+addsym="-"
+if [ ${add} -eq 1 ] ; then
+    addsym="+"
+fi
+
+# if we ssh/radssh somewhere then skip gitinfo ...
+pcmd=$(tmux display -p '#{pane_current_command}')
+
+if [ "${pcmd##*ssh*}" ] ; then
+    gdir=$(tmux display -p '#{pane_current_path}')
+    # if there is a hash, add a space after it so the #[default] below works correctly ...
+    ginfo=$(gitinfo ${gdir} | sed 's/\#/\# /')
+else
+    # pcmd contains ssh substring ...
+    ginfo="git:<n/a>"
+fi
+
+symbol="${addsym} ${ginfo}"
+
+echo "#[default]#[fg=colour13,bold,bg=$BYOBU_DARK]${symbol}#[default]#[fg=$BYOBU_LIGHT]#[bg=$BYOBU_DARK]"
