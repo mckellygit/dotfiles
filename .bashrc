@@ -275,11 +275,17 @@ alias radssh='python3 -m radssh.shell $@'
 # numcpus=$(getconf _NPROCESSORS_ONLN 2>/dev/null)
 numcpus=$(nproc 2> /dev/null)
 if [ -z "$numcpus" ] ; then
-  export NCPUS=1
+    export NCPUS=1
+    export MAKECPUS=1
 else
-  export NCPUS=$numcpus
+    ncpus=$numcpus
+    if [[ $ncpus -gt 1 ]] ; then
+      ncpus=$((numcpus-1))
+    fi
+    export NCPUS=$numcpus
+    export MAKECPUS=$ncpus
 fi
-alias make='make -j$NCPUS'
+alias make='\make -j$MAKECPUS'
 
 alias fzf='fzf-tmux'
 
