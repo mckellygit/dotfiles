@@ -1071,6 +1071,8 @@ bindkey "\e_" my-fzf-files-widget
 export MANPAGER="sh -c 'col -bx | $BATNAME -l man -pp | less'"
 alias manls="man -k . | fzf --bind=\"ctrl-f:half-page-down\" --bind=\"ctrl-b:half-page-up\" --bind=\"ctrl-k:up,ctrl-j:down\" --bind=\"ctrl-d:delete-char\" --bind=\"alt-bs:half-page-up,alt-space:half-page-down\" --bind=\"alt-k:up,alt-j:down\" --bind=\"ctrl-alt-k:half-page-up,ctrl-alt-j:half-page-down\" --bind=\"ctrl-alt-o:half-page-down\" --bind=\"page-up:page-up\" --bind=\"page-down:page-down\" --bind=\"alt-d:kill-word,alt-u:unix-line-discard\" --bind=\"alt-b:page-up\" --bind=\"alt-f:page-down\" --prompt='Man> ' | awk '{print \$1}' | xargs -r man -P 'sh -c \"col -bx | $BATNAME -l man -pp | less\"'"
 
+alias byobu='start_tmux'
+
 # This can be slow, try it in byobu/tmux status bar ...
 # git repo info/status in prompt
 #if [ -f ~/.git-prompt.sh ] ; then
