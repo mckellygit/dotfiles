@@ -1076,6 +1076,7 @@ function! s:bufopen(e)
         endif
     else
         call win_gotoid(l:winids[0])
+        " TODO: if its a terminal, can we enter insert mode or trigger an autocmd (BufEnter) ...
     endif
 endfunction
 
@@ -3013,11 +3014,13 @@ if has("nvim")
     " this is set below for :terminal ... with the 'i' added at the end
     "autocmd TermOpen term://* startinsert
 
-    autocmd WinEnter term://* startinsert
-    autocmd WinLeave term://* stopinsert
+    "autocmd WinEnter term://* startinsert
+    "autocmd WinLeave term://* stopinsert
     " TODO: why doesnt TermEnter/Leave work ?
     "autocmd TermEnter term://* startinsert
     "autocmd TermLeave term://* stopinsert
+
+    autocmd BufEnter term://* if &buftype == 'terminal' && mode(1) == 'nt' | call nvim_input('i') | endif
 
     " Ignore various filetypes as those will close terminal automatically
     " Ignore fzf, ranger, coc
@@ -3030,10 +3033,15 @@ if has("nvim")
 
     " close terminal shell automatically if it exited ...
     autocmd TermClose term://* if (expand('<afile>') =~ ":/usr/bin/zsh") | call nvim_input('<CR>') | endif
+    autocmd BufDelete term://* if (expand('<afile>') =~ ":/usr/bin/zsh") | call <SID>QuitIfOnlyHidden(bufnr('%')) | endif
+
     autocmd TermOpen  term://* if (expand('<afile>') =~ ":tig") | se scl=no | call nvim_input('i') | endif
     autocmd TermClose term://* if (expand('<afile>') =~ ":tig") | call nvim_input('<CR>') | endif
+    autocmd BufDelete term://* if (expand('<afile>') =~ ":tig") | call <SID>QuitIfOnlyHidden(bufnr('%')) | endif
+
     autocmd TermOpen  term://* if (expand('<afile>') =~ ":lazygit") | se scl=no | call nvim_input('i') | endif
     autocmd TermClose term://* if (expand('<afile>') =~ ":lazygit") | call nvim_input('<CR>') | endif
+    autocmd BufDelete term://* if (expand('<afile>') =~ ":lazygit") | call <SID>QuitIfOnlyHidden(bufnr('%')) | endif
 
     " a click in terminal automatically puts it in normal mode ...
     " which allows for double-click etc to select words
@@ -3054,6 +3062,11 @@ if has("nvim")
   tnoremap <silent> <2-ScrollWheelDown> <Nop>
   tnoremap <silent> <3-ScrollWheelDown> <Nop>
   tnoremap <silent> <4-ScrollWheelDown> <Nop>
+else
+  augroup terminal_settings
+    autocmd!
+    autocmd BufEnter * if &buftype == 'terminal' && mode() == 'n' | call feedkeys("i", "x") | endif
+  augroup END
 endif
 
 " visual/audio bell (terminator light bulb) off ...
@@ -3747,10 +3760,10 @@ if !has("nvim")
     tnoremap <silent> <C-^><Tab>     <C-w>:tabnext<CR>
     tnoremap <silent> <C-^><S-Tab>   <C-w>:tabprevious<CR>
 else
-    tnoremap <silent> <M-Tab>        <C-\><C-n>:<C-u>tabnext<CR>
-    tnoremap <silent> <M-S-Tab>      <C-\><C-n>:<C-u>tabprevious<CR>
-    tnoremap <silent> <C-^><Tab>     <C-\><C-n>:<C-u>tabnext<CR>
-    tnoremap <silent> <C-^><S-Tab>   <C-\><C-n>:<C-u>tabprevious<CR>
+    tnoremap <silent> <M-Tab>        <Cmd>tabnext<CR>
+    tnoremap <silent> <M-S-Tab>      <Cmd>tabprevious<CR>
+    tnoremap <silent> <C-^><Tab>     <Cmd>tabnext<CR>
+    tnoremap <silent> <C-^><S-Tab>   <Cmd>tabprevious<CR>
 endif
 
 " dont do this, it messes up viw ...
@@ -5327,7 +5340,8 @@ if !has("nvim")
     " BUG fix for vim on new terminal first time dragging ...
     function s:VimTermInit()
         let @p="1"
-        silent call feedkeys("\<C-w>Nv\<Right>\<Left>\<Esc>i", "t")
+        " this causes fzf#run() to fail ...
+        "silent call feedkeys("\<C-w>Nv\<Right>\<Left>\<Esc>i", "t")
     endfunction
     au TerminalWinOpen * call <SID>VimTermInit()
 
@@ -8005,8 +8019,8 @@ function s:IsTerminalFinished()
     if empty(lsout)
         return
     endif
-    let blist = split(lsout, '\n')
-    for lline in blist
+    let lblist = split(lsout, '\n')
+    for lline in lblist
         let bdict = split(lline, ' ')
         if bdict[1] ==# 'aF' || bdict[1] ==# '%aF'
             let bnum = str2nr(bdict[0])
@@ -9434,7 +9448,11 @@ function s:ConfNextOrQuit() abort
     endif
     if &buftype ==# 'terminal' && mode() == 'n'
         try
-            quit
+            if has("nvim")
+                call nvim_input('i')
+            else
+                call feedkeys("i", "x")
+            endif
             return
         catch /.*/
             " just to clear the cmdline of this function ...
@@ -9474,6 +9492,43 @@ function s:ConfNextOrQuit() abort
     catch /.*/
         silent! FloatermKill!
     endtry
+endfunction
+
+function s:QuitIfOnlyHidden(bnum) abort
+    " just to clear the cmdline of this function ...
+    redraw!
+    echo "\r"
+    "echom "a:bnum = " . a:bnum
+    let l:doquit = 1
+    for b in getbufinfo()
+        "echom "bufnr = " . b.bufnr
+        "echom "bname = " . bufname(b.bufnr)
+        "echom "hidden = " . b.hidden
+        "echom "listed = " . b.listed
+        "echom "changd = " . b.changed
+        if b.bufnr == a:bnum
+            continue
+        elseif empty(bufname(b.bufnr)) && !b.listed
+            continue
+        elseif !b.hidden
+            let l:doquit = 0
+            break
+        elseif b.changed
+            let l:doquit = 0
+            break
+        elseif getbufvar(b.bufnr, '&modified')
+            let l:doquit = 0
+            break
+        elseif getbufvar(b.bufnr, '&buftype') ==# 'terminal'
+            let l:doquit = 0
+            break
+        endif
+    endfor
+    "echom "l:doquit = " . l:doquit
+    if l:doquit == 1
+        " TODO: is it ok to quit like this ?
+        cquit
+    endif
 endfunction
 
 " could also look into autowrite for :n to write (if modified) ...
