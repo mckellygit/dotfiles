@@ -5340,9 +5340,16 @@ if !has("nvim")
     " BUG fix for vim on new terminal first time dragging ...
     function s:VimTermInit()
         let @p="1"
-        " this causes fzf#run() to fail ...
-        "silent call feedkeys("\<C-w>Nv\<Right>\<Left>\<Esc>i", "t")
+        " this feedkeys work-around causes fzf#run() to fail, so only do it for some
+        " (fzf terminal is unlisted) ...
+        if !buflisted('%')
+            return
+        endif
+        " and it still does not really solve the problem, as
+        " sometimes a mouse drag will stop abruptly and incorrectly
+        silent call feedkeys("\<C-w>Nv\<C-LeftDrag>\<C-LeftDrag>\<Esc>i", "m")
     endfunction
+    " VIM BUG
     au TerminalWinOpen * call <SID>VimTermInit()
 
     tnoremap <LeftMouse>        <Cmd>let @t="0"<CR><C-w>N<LeftMouse>
