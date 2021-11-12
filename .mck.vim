@@ -1077,6 +1077,13 @@ function! s:bufopen(e)
     else
         call win_gotoid(l:winids[0])
         " TODO: if its a terminal, can we enter insert mode or trigger an autocmd (BufEnter) ...
+        if getbufvar(l:bufid, '&buftype') == 'terminal' && mode() ==# 't'
+            if has("nvim")
+                call nvim_input('i')
+            else
+                " TODO can we get into insert mode here ?
+            endif
+        endif
     endif
 endfunction
 
@@ -9453,7 +9460,7 @@ function s:ConfNextOrQuit() abort
         echohl None
         return
     endif
-    if &buftype ==# 'terminal' && mode() == 'n'
+    if &buftype == 'terminal' && mode() == 'n'
         try
             if has("nvim")
                 call nvim_input('i')
