@@ -2604,7 +2604,8 @@ if !exists("g:vless")
         " 32/28/28 is slightly different than Floaterm and normal vi backgrounds
         "let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w70% -h63% -E \"tmux new \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; tmux set -w status off ; " . &shell . "\\\"\""
         " leave status bar on
-        let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w70% -h63% -E \"tmux new -s popup_vim \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; " . &shell . "\\\"\""
+        "let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w70% -h63% -E \"tmux new -s popup_vim \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; " . &shell . "\\\"\""
+        let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -s bg=colour236 -w70% -h63% -E \"tmux new -s popup_vim \\\" " . &shell . "\\\"\""
         nnoremap <silent> <Leader>zf :call system(syscmd)<CR>
         command! Tterm call system(syscmd)
         command! TTerm Tterm
