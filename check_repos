@@ -7,7 +7,12 @@ git() { $HOME/bin/git "$@"; }
 extras=""
 if [[ $# -gt 0 ]] ; then
     if [[ "$1" == "-a" || "$1" == "-all" || "$1" == "--a" || "$1" == "--all" ]] ; then
-        extras=" bat wezterm alacritty vim neovim"
+        extras=" bat wezterm neovim"
+    fi
+    if [[ $# -gt 1 ]] ; then
+        if [[ "$2" == "-a" || "$2" == "-all" || "$2" == "--a" || "$2" == "--all" ]] ; then
+            extras="${extras} alacritty vim"
+        fi
     fi
 fi
 
