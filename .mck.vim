@@ -1735,6 +1735,11 @@ function! s:MyGVF(args) abort
     else
         execute 'GV -- ' . expand("%")
     endif
+    "nmap <buffer> o <Cmd>call <SID>open(0, 1)<CR>
+    nmap <buffer> o O
+    xmap <buffer> o O
+    redraw!
+    echo " "
 endfunction
 
 command! -nargs=* GF  call s:MyGVF(<q-args>)
