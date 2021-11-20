@@ -31,7 +31,7 @@ return {
   window_background_opacity = 0.97,
 
   exit_behavior = "Close",
-  window_close_confirmation = "NeverPrompt",
+  window_close_confirmation = "AlwaysPrompt",
 
   swallow_mouse_click_on_pane_focus = true,
 

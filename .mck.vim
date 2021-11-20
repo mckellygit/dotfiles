@@ -1747,19 +1747,7 @@ command! -nargs=* GFP call s:MyGVF("-p")
 
 " -------------
 
-function! s:MyLC() abort
-    let git_dir = s:find_git_root()
-    if empty(git_dir)
-        let errmsg = 'Not in a git repository'
-        call s:warn(errmsg)
-        sleep 951m
-        redraw!
-        echo " "
-        return
-    endif
-    exec 'lcd ' . git_dir
-    execute 'tabnew | :Gllog | redraw! | wincmd p'
-endfunction
+" fugitive version of GF ...
 
 function! s:MyLCF() abort
     let git_dir = s:find_git_root()
@@ -1775,8 +1763,23 @@ function! s:MyLCF() abort
     execute 'tabnew ' . expand("%") ' | :0Gllog | redraw! | wincmd p'
 endfunction
 
-command! -nargs=0 LC  call s:MyLC()
-command! -nargs=0 LCF call s:MyLCF()
+command! -nargs=0 LF call s:MyLCF()
+
+function! s:MyLC_ALL() abort
+    let git_dir = s:find_git_root()
+    if empty(git_dir)
+        let errmsg = 'Not in a git repository'
+        call s:warn(errmsg)
+        sleep 951m
+        redraw!
+        echo " "
+        return
+    endif
+    exec 'lcd ' . git_dir
+    execute 'tabnew | :Gllog | redraw! | wincmd p'
+endfunction
+
+command! -nargs=0 LC call s:MyLC_ALL()
 " gv ------------------
 
 " vimagit -------------
