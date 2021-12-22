@@ -402,6 +402,9 @@ endif
     "Plugin 'nvim-treesitter/nvim-treesitter'
 "endif
 "
+" quick left-right line movement
+Plugin 'unblevable/quick-scope'
+"
 " -----------------------------------------
 "
 "" All of your Plugins must be added before the following line
@@ -2722,6 +2725,15 @@ let g:better_whitespace_operator='___s'
 let g:cursorhold_updatetime = 10000
 " fixCursorHold ----
 
+" quick-scope ------
+" use :QuickScopeToggle to toggle off/on
+let g:qs_highlight_on_keys = ['f', 'F']
+let g:qs_max_chars=200
+let g:qs_buftype_blacklist = ['terminal', 'nofile']
+let g:qs_filetype_blacklist = ['dashboard', 'startify']
+let g:qs_lazy_highlight = 1
+" quick-scope ------
+
 " ====================================================
 " --- plugin configurations --------------------------
 " ====================================================
@@ -2950,6 +2962,12 @@ if !has("nvim")
 endif
 
 " -------------------------
+
+augroup qs_colors
+  autocmd!
+  autocmd ColorScheme * highlight QuickScopePrimary   guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
+  autocmd ColorScheme * highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81  cterm=underline
+augroup END
 
 "let g:solarized_termcolors=256
 "colorscheme solarized
