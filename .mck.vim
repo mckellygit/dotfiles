@@ -2982,6 +2982,8 @@ set lazyredraw
 
 set redrawtime=10000
 " :syntax sync minlines=1000
+" :syntax sync fromstart
+" :syntax sync ccomment
 " TODO: add a mapping to syntax sync ?
 
 set confirm
