@@ -1,0 +1,100 @@
+#!/bin/bash
+
+# this is a script saved in a global path, such as /usr/local/bin/cycle_wins
+# with a gnome hot-key mapping, such as Ctrl-Alt-q ...
+
+set -e
+
+export GITER=0
+
+JS="""
+const GLib = imports.gi.GLib;
+
+var BreakException = {};
+
+var eiter = GLib.getenv('GITER');
+if (eiter == '' || eiter == 'NaN') {
+    eiter = '0';
+    GLib.setenv('GITER', eiter, true);
+}
+
+var giter;
+var gmax = 0;
+
+try {
+
+gmax = 0;
+
+global.get_window_actors().forEach(function (w) {
+    var mw = w.meta_window;
+    var wtitle = mw.get_wm_class();
+    if (wtitle != 'Nautilus' && wtitle != 'Gnome-shell' && wtitle != '') {
+        gmax = gmax + 1;
+    }
+});
+
+global.get_window_actors().forEach(function (w) {
+    var mw = w.meta_window;
+
+    // var wtitle = mw.get_title();
+    var wtitle = mw.get_wm_class();
+
+    // global.log('1title: ', wtitle);
+
+    if (wtitle != 'Nautilus' && wtitle != 'Gnome-shell' && wtitle != '') {
+
+        if (mw.has_focus()) {
+
+            // global.log('has_focus: ', wtitle);
+
+        } else {
+
+            // global.log('2title: ', wtitle);
+
+            eiter = GLib.getenv('GITER');
+            if (eiter == '' || eiter == 'NaN') {
+                eiter = '0';
+            }
+
+            giter = parseInt(eiter, 10);
+
+            if (giter >= gmax) {
+                giter = 0;
+            }
+
+            // global.log('cxwins: giter', giter);
+            // global.log('cxwins: eiter', eiter);
+            // global.log('cxwins: gmax', gmax);
+
+            if (giter == 1) {
+                mw.activate(0);
+                throw BreakException;
+            } else {
+                giter = giter + 1;
+                if (giter >= gmax) {
+                    giter = 0;
+                }
+                throw BreakException;
+            }
+
+        }
+
+    }
+
+});
+
+mw.activate(0);
+
+} catch (e) {
+    // global.log('cywins: giter', giter);
+    eiter = giter.toString();
+    // global.log('cywins: eiter', eiter);
+    GLib.setenv('GITER', eiter, true);
+    if (e !== BreakException) throw e;
+}
+"""
+
+gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval "$JS" >/dev/null
+
+exit 0
+
