@@ -68,6 +68,7 @@ global.get_window_actors().forEach(function (w) {
 
             if (giter == 1) {
                 mw.activate(0);
+                GLib.usleep(100000);
                 throw BreakException;
             } else {
                 giter = giter + 1;
@@ -83,7 +84,7 @@ global.get_window_actors().forEach(function (w) {
 
 });
 
-mw.activate(0);
+// mw.activate(0);
 
 } catch (e) {
     // global.log('cywins: giter', giter);
