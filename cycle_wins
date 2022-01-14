@@ -29,7 +29,9 @@ global.get_window_actors().forEach(function (w) {
     var mw = w.meta_window;
     var wtitle = mw.get_wm_class();
     if (wtitle != 'Nautilus' && wtitle != 'Gnome-shell' && wtitle != '') {
-        gmax = gmax + 1;
+        if (!mw.has_focus()) {
+            gmax = gmax + 1;
+        }
     }
 });
 
@@ -66,7 +68,7 @@ global.get_window_actors().forEach(function (w) {
             // global.log('cxwins: eiter', eiter);
             // global.log('cxwins: gmax', gmax);
 
-            if (giter == 1) {
+            if (giter == 0) {
                 mw.activate(0);
                 GLib.usleep(100000);
                 throw BreakException;
