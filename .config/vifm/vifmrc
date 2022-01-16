@@ -581,6 +581,8 @@ nnoremap <S-F23>      <C-w>w10k<C-w>w
 " to scroll preview without entering ...
 nnoremap F             <C-w>w<C-f><C-w>w
 nnoremap B             <C-w>w<C-b><C-w>w
+nnoremap <C-f>         <C-w>w10j<C-w>w
+nnoremap <C-b>         <C-w>w10k<C-w>w
 
 nnoremap J             5j
 nnoremap K             5k
@@ -628,8 +630,10 @@ nnoremap <Esc><C-o>    <C-w>w5j<C-w>w
 nnoremap <Esc>       <C-w>w5j<C-w>w
 nnoremap <C-o>       <C-w>w5j<C-w>w
 
-nnoremap <C-j>         <C-w>w10j<C-w>w
-nnoremap <C-k>         <C-w>w10k<C-w>w
+"nnoremap <C-j>         <C-w>w10j<C-w>w
+"nnoremap <C-k>         <C-w>w10k<C-w>w
+nnoremap <C-j>         j
+nnoremap <C-k>         k
 
 " <C-Down/Up>
 nnoremap <Esc>[1;5B    <C-w>w5j<C-w>w
