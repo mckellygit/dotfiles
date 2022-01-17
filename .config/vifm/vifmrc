@@ -536,10 +536,6 @@ nnoremap <C-^>       <C-w>w5k<C-w>w
 " <S-Space>
 nnoremap <C-^><Space>  <C-w>w5j<C-w>w
 
-" <A-Down/Up>
-nnoremap <esc>[1;3B    <C-w>w10j<C-w>w
-nnoremap <esc>[1;3A    <C-w>w10k<C-w>w
-
 " <C-S-j/k>
 nnoremap <C-_>J        <C-w>w10j<C-w>w
 nnoremap <C-_>K        <C-w>w10k<C-w>w
@@ -555,6 +551,9 @@ qnoremap <Esc><C-p>    <C-w>w
 qnoremap <Esc>       <C-w>w
 qnoremap <C-p>       <C-w>w
 qnoremap           <C-w>w
+
+nnoremap <PageDown>   10j
+nnoremap <PageUp>     10k
 
 nnoremap <C-PageDown> <C-w>w10j<C-w>w
 nnoremap <C-PageUp>   <C-w>w10k<C-w>w
@@ -792,6 +791,29 @@ qnoremap <C-k>         10k
 qnoremap g             <nop>
 qnoremap gg            1G0
 
+" ----
+
+qnoremap <PageDown>   10j
+qnoremap <PageUp>     10k
+
+qnoremap <C-PageDown> 10j
+qnoremap <C-PageUp>   10k
+
+qnoremap <M-PageDown> 10j
+qnoremap <M-PageUp>   10k
+
+qnoremap <Esc>[6;5~   10j
+qnoremap <Esc>[5;5~   10k
+
+qnoremap <Esc>[6;3~   10j
+qnoremap <Esc>[5;3~   10k
+
+qnoremap <S-F24>      10j
+qnoremap <S-F21>      10k
+
+qnoremap <S-F26>      10j
+qnoremap <S-F23>      10k
+
 " --------------
 
 " TODO: these do not work correctly ...
@@ -805,19 +827,29 @@ qnoremap <c-up>        k
 qnoremap <esc>[1;5A    k
 qnoremap [1;5A       k
 
-qnoremap <home>        <nop>
-qnoremap <c-home>      1G0
-qnoremap <esc>[1;5H    1G0
+" <A-S-Down/Up>
+qnoremap <Esc>[1;4B    <C-w>wj<C-w>w
+qnoremap <Esc>[1;4A    <C-w>wk<C-w>w
+
+" <C-S-Down/Up>
+qnoremap <Esc>[1;6B    <C-w>wj<C-w>w
+qnoremap <Esc>[1;6A    <C-w>wk<C-w>w
+
+" ------
+
+qnoremap <Home>        <nop>
+qnoremap <C-Home>      1G0
+qnoremap <Esc>[1;5H    1G0
 qnoremap [1;5H       1G0
 
-qnoremap <end>         <nop>
-qnoremap <c-end>       G0
-qnoremap <esc>[1;5F    G0
+qnoremap <End>         <nop>
+qnoremap <C-End>       G0
+qnoremap <Esc>[1;5F    G0
 qnoremap [1;5F       G0
 
 " <A-Down/Up>
-qnoremap <esc>[1;3B    10j
-qnoremap <esc>[1;3A    10k
+qnoremap <Esc>[1;3B    <C-w>wj<C-w>w
+qnoremap <Esc>[1;3A    <C-w>wk<C-w>w
 
 " --------------
 
