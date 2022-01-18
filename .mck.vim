@@ -2616,7 +2616,9 @@ if !exists("g:vless")
         "let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w70% -h63% -E \"tmux new \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; tmux set -w status off ; " . &shell . "\\\"\""
         " leave status bar on
         "let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w70% -h63% -E \"tmux new -s popup_vim \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; " . &shell . "\\\"\""
-        let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -s bg=colour236 -w70% -h63% -E \"tmux new -s popup_vim \\\" " . &shell . "\\\"\""
+        "let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -s bg=colour236 -w70% -h63% -E \"tmux new -s popup_vim \\\" " . &shell . "\\\"\""
+        " dont use -s <name> as that sometimes might already exist and then it wont work, probably dont need to specify shell either ...
+        let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -s bg=colour236 -w70% -h63% -E \"tmux new\""
         nnoremap <silent> <Leader>zf :call system(syscmd)<CR>
         command! Tterm call system(syscmd)
         command! TTerm Tterm
