@@ -3058,7 +3058,8 @@ if has("nvim")
     "autocmd TermEnter term://* startinsert
     "autocmd TermLeave term://* stopinsert
 
-    autocmd BufEnter term://* if &buftype == 'terminal' && mode(1) == 'nt' | call nvim_input('i') | endif
+    " seems not needed anymore ?
+    "autocmd BufEnter term://* if &buftype == 'terminal' && mode(1) == 'nt' | call nvim_input('i') | endif
 
     " Ignore various filetypes as those will close terminal automatically
     " Ignore fzf, ranger, coc
