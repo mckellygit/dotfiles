@@ -7627,7 +7627,9 @@ if !has("nvim")
     tnoremap <C-w>w <C-w>.w
     tnoremap <C-w><C-w> <C-w>.w
 else
-    tnoremap <C-w><C-w> <C-w>w
+    "tnoremap <C-w><C-w> <C-w>w
+    tnoremap <silent> <C-w>w              <C-\><C-N><C-w>w0
+    tnoremap <silent> <C-w><C-w>          <C-\><C-N><C-w>w0
 endif
 
 " to match normal mode ...
