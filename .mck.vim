@@ -3058,8 +3058,8 @@ if has("nvim")
     "autocmd TermEnter term://* startinsert
     "autocmd TermLeave term://* stopinsert
 
-    " seems not needed anymore ?
-    "autocmd BufEnter term://* if &buftype == 'terminal' && mode(1) == 'nt' | call nvim_input('i') | endif
+    " not needed for Floaterm if its autoinsert is enabled, but needed for regular term ...
+    autocmd BufEnter term://* if &buftype == 'terminal' && mode(1) == 'nt' && &ft != 'floaterm' | call nvim_input('i') | endif
 
     " Ignore various filetypes as those will close terminal automatically
     " Ignore fzf, ranger, coc
@@ -7628,8 +7628,8 @@ if !has("nvim")
     tnoremap <C-w><C-w> <C-w>.w
 else
     "tnoremap <C-w><C-w> <C-w>w
-    tnoremap <silent> <C-w>w              <C-\><C-N><C-w>w0
-    tnoremap <silent> <C-w><C-w>          <C-\><C-N><C-w>w0
+    tnoremap <C-w>w              <C-\><C-N><C-w>w0
+    tnoremap <C-w><C-w>          <C-\><C-N><C-w>w0
 endif
 
 " to match normal mode ...
