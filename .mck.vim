@@ -7624,13 +7624,18 @@ endif
 " but if its for vifm then <S-Tab> also works to switch to/from preview for scrolling
 if !has("nvim")
     tnoremap <C-@> <C-Space>
-    tnoremap <C-w>w <C-w>.w
-    tnoremap <C-w><C-w> <C-w>.w
+    "tnoremap <C-w>w <C-w>.w
+    "tnoremap <C-w><C-w> <C-w>.w
+    tnoremap <silent> <expr> <C-w>w      (mode() == 'n') ? '<C-w>.w' : ''
+    tnoremap <silent> <expr> <C-w><C-w>  (mode() == 'n') ? '<C-w>.w' : ''
 else
     "tnoremap <C-w><C-w> <C-w>w
+    tnoremap <silent> <expr> <C-w>w      (mode() == 'n') ? '<C-w>w' : ''
+    tnoremap <silent> <expr> <C-w><C-w>  (mode() == 'n') ? '<C-w>w' : ''
     " if winnr('$') == 1 then only one window, so dont go into normal mode ...
-    tnoremap <silent> <expr> <C-w>w      (winnr('$') > 1) ? '<C-\><C-N><C-w>w0' : ''
-    tnoremap <silent> <expr> <C-w><C-w>  (winnr('$') > 1) ? '<C-\><C-N><C-w>w0' : ''
+    " but then keys never get thru to app ...
+    "tnoremap <silent> <expr> <C-w>w      (winnr('$') > 1) ? '<C-\><C-N><C-w>w0' : ''
+    "tnoremap <silent> <expr> <C-w><C-w>  (winnr('$') > 1) ? '<C-\><C-N><C-w>w0' : ''
 endif
 
 " to match normal mode ...
