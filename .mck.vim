@@ -7628,8 +7628,9 @@ if !has("nvim")
     tnoremap <C-w><C-w> <C-w>.w
 else
     "tnoremap <C-w><C-w> <C-w>w
-    tnoremap <C-w>w              <C-\><C-N><C-w>w0
-    tnoremap <C-w><C-w>          <C-\><C-N><C-w>w0
+    " if winnr('$') == 1 then only one window, so dont go into normal mode ...
+    tnoremap <silent> <expr> <C-w>w      (winnr('$') > 1) ? '<C-\><C-N><C-w>w0' : ''
+    tnoremap <silent> <expr> <C-w><C-w>  (winnr('$') > 1) ? '<C-\><C-N><C-w>w0' : ''
 endif
 
 " to match normal mode ...
