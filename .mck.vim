@@ -116,6 +116,14 @@ Plugin 'mattn/vim-findroot'
 "Plugin 'lyuts/vim-rtags'
 Plugin 'mckellygit/vim-rtags'
 "
+if g:has_wsl == 0 && has("nvim")
+    Plugin 'neovim/nvim-lspconfig'
+    Plugin 'nvim-treesitter/nvim-treesitter'
+    Plugin 'hrsh7th/nvim-compe'
+    " coc.nvim ?
+    "Plugin 'nvim-telescope/telescope.nvim'
+endif
+"
 " echodoc function completion
 "Plugin 'Shougo/echodoc.vim'
 "
