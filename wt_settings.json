@@ -1,14 +1,115 @@
 {
+    "$help": "https://aka.ms/terminal-documentation",
     "$schema": "https://aka.ms/terminal-profiles-schema",
     "actions":
     [
         {
+            "command": "unbound",
+            "keys": "ctrl+insert"
+        },
+        {
+            "command": "unbound",
+            "keys": "shift+insert"
+        },
+        {
+            "command": "unbound",
+            "keys": "alt+shift+backspace"
+        },
+        {
+            "command": "unbound",
+            "keys": "alt+backspace"
+        },
+        {
+            "command": "unbound",
+            "keys": "alt+shift+space"
+        },
+        {
+            "command": "unbound",
+            "keys": "alt+space"
+        },
+        {
+            "command": "unbound",
+            "keys": "ctrl+minus"
+        },
+        {
+            "command": "unbound",
+            "keys": "ctrl+plus"
+        },
+        {
+            "command": "unbound",
+            "keys": "ctrl+shift+c"
+        },
+        {
+            "command": "unbound",
+            "keys": "ctrl+numpad0"
+        },
+        {
+            "command": "unbound",
+            "keys": "alt+shift+left"
+        },
+        {
+            "command": "unbound",
+            "keys": "alt+shift+right"
+        },
+        {
+            "command": "unbound",
+            "keys": "alt+shift+up"
+        },
+        {
+            "command": "unbound",
+            "keys": "alt+shift+down"
+        },
+        {
+            "command": "unbound",
+            "keys": "ctrl+shift+down"
+        },
+        {
+            "command": "unbound",
+            "keys": "ctrl+shift+pgdn"
+        },
+        {
+            "command": "unbound",
+            "keys": "ctrl+shift+end"
+        },
+        {
+            "command": "unbound",
+            "keys": "ctrl+shift+home"
+        },
+        {
+            "command": "unbound",
+            "keys": "ctrl+shift+up"
+        },
+        {
+            "command": "unbound",
+            "keys": "ctrl+shift+pgup"
+        },
+        {
+            "command": "unbound",
+            "keys": "alt+right"
+        },
+        {
+            "command": "unbound",
+            "keys": "alt+left"
+        },
+        {
+            "command": "unbound",
+            "keys": "alt+up"
+        },
+        {
+            "command": "unbound",
+            "keys": "alt+down"
+        },
+        {
+            "command": "paste",
+            "keys": "ctrl+alt+v"
+        },
+        {
             "command":
             {
-                "action": "copy",
-                "singleLine": false
+                "action": "sendInput",
+                "input": "\u001e\u0008"
             },
-            "keys": "ctrl+shift+c"
+            "keys": "shift+backspace"
         },
         {
             "command":
@@ -19,24 +120,36 @@
             "keys": "ctrl+alt+c"
         },
         {
-            "command": "paste",
-            "keys": "ctrl+shift+v"
+            "command":
+            {
+                "action": "sendInput",
+                "input": "\u001b\u0023"
+            },
+            "keys": "ctrl+alt+plus"
         },
-        {
-            "command": "paste",
-            "keys": "ctrl+alt+v"
-        },
-
-        { "command": "unbound", "keys": "ctrl+insert" },
-        { "command": "unbound", "keys": "shift+insert" },
-
         {
             "command":
             {
                 "action": "sendInput",
-                "input": "\u000d"
+                "input": "\u001b\u0023"
             },
-            "keys": "ctrl+enter"
+            "keys": "ctrl+alt+space"
+        },
+        {
+            "command":
+            {
+                "action": "sendInput",
+                "input": "\u001f\u007f"
+            },
+            "keys": "ctrl+shift+backspace"
+        },
+        {
+            "command":
+            {
+                "action": "sendInput",
+                "input": "\u001f\u004a"
+            },
+            "keys": "ctrl+shift+j"
         },
         {
             "command":
@@ -54,23 +167,25 @@
             },
             "keys": "ctrl+alt+enter"
         },
-
         {
             "command":
             {
                 "action": "sendInput",
-                "input": "\u001b\u0023"
+                "input": "\u001b\u005b\u0032\u003b\u0032\u007e"
             },
-            "keys": "ctrl+alt+plus"
+            "keys": "ctrl+shift+v"
         },
-
+        {
+            "command": "resetFontSize",
+            "keys": "ctrl+shift+0"
+        },
         {
             "command":
             {
                 "action": "sendInput",
-                "input": "\u001e\u0020"
+                "input": "\u000d"
             },
-            "keys": "shift+space"
+            "keys": "ctrl+enter"
         },
         {
             "command":
@@ -84,24 +199,23 @@
             "command":
             {
                 "action": "sendInput",
-                "input": "\u001b\u0023"
+                "input": "\u001e\u0020"
             },
-            "keys": "ctrl+alt+space"
+            "keys": "shift+space"
         },
-
+        {
+            "command":
+            {
+                "action": "adjustFontSize",
+                "delta": -1
+            },
+            "keys": "ctrl+shift+minus"
+        },
         {
             "command":
             {
                 "action": "sendInput",
                 "input": "\u001f\u004a"
-            },
-            "keys": "ctrl+shift+j"
-        },
-        {
-            "command":
-            {
-                "action": "sendInput",
-                "input": "\u001f\u004b"
             },
             "keys": "ctrl+shift+k"
         },
@@ -125,24 +239,17 @@
             "command":
             {
                 "action": "sendInput",
-                "input": "\u001f\u0050"
+                "input": "\u001b\u0040"
             },
-            "keys": "ctrl+shift+p"
+            "keys": "ctrl+alt+backspace"
         },
-
-        { "command": "unbound", "keys": "shift+alt+backspace" },
-        { "command": "unbound", "keys": "alt+backspace" },
-
-        { "command": "unbound", "keys": "shift+alt+space" },
-        { "command": "unbound", "keys": "alt+space" },
-
         {
             "command":
             {
                 "action": "sendInput",
-                "input": "\u001e\u0008"
+                "input": "\u001f\u0050"
             },
-            "keys": "shift+backspace"
+            "keys": "ctrl+shift+p"
         },
         {
             "command":
@@ -155,18 +262,50 @@
         {
             "command":
             {
-                "action": "sendInput",
-                "input": "\u001f\u007f"
+                "action": "adjustFontSize",
+                "delta": 1
             },
-            "keys": "ctrl+shift+backspace"
+            "keys": "ctrl+shift+plus"
         },
         {
             "command":
             {
-                "action": "sendInput",
-                "input": "\u001b\u0040"
+                "action": "moveFocus",
+                "direction": "left"
             },
-            "keys": "ctrl+alt+backspace"
+            "keys": "ctrl+alt+left"
+        },
+        {
+            "command":
+            {
+                "action": "moveFocus",
+                "direction": "previous"
+            },
+            "keys": "ctrl+alt+end"
+        },
+        {
+            "command":
+            {
+                "action": "moveFocus",
+                "direction": "right"
+            },
+            "keys": "ctrl+alt+right"
+        },
+        {
+            "command":
+            {
+                "action": "moveFocus",
+                "direction": "up"
+            },
+            "keys": "ctrl+alt+up"
+        },
+        {
+            "command":
+            {
+                "action": "moveFocus",
+                "direction": "down"
+            },
+            "keys": "ctrl+alt+down"
         }
     ],
     "alwaysShowTabs": true,
@@ -183,26 +322,25 @@
     {
         "defaults":
         {
+            "bellStyle": "none",
             "font":
             {
                 "face": "Cascadia Mono",
                 "size": 10,
                 "weight": "normal"
             },
-            "useAcrylic": true, "acrylicOpacity": 0.92,
+            "opacity": 92,
             "scrollbarState": "hidden",
-            "bellStyle": "none"
+            "useAcrylic": true
         },
         "list":
         [
             {
-                "commandline": "powershell.exe",
                 "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
                 "hidden": false,
                 "name": "Windows PowerShell"
             },
             {
-                "commandline": "cmd.exe",
                 "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
                 "hidden": false,
                 "name": "Command Prompt"
@@ -212,8 +350,8 @@
                 "guid": "{07b52e3e-de2c-5db4-bd2d-ba144ed6c273}",
                 "hidden": false,
                 "name": "Ubuntu-20.04",
-                "startingDirectory" : "//wsl$/Ubuntu-20.04/home/kellma02",
-                "source": "Windows.Terminal.Wsl"
+                "source": "Windows.Terminal.Wsl",
+                "startingDirectory": "//wsl$/Ubuntu-20.04/home/kellma02"
             },
             {
                 "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
