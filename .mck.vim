@@ -915,7 +915,8 @@ if 1 " use vim popup ...
     "       (after <C-\> vim terminal always expects another key) ...
     let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.65, 'yoffset': 0.5, 'xoffset': 0.5 } }
 else
-if &term =~ "^screen" || &term =~ "^tmux"
+" in nvim &term could be 'builtin_tmux' so dont use ^tmux but just tmux
+if &term =~ "^screen" || &term =~ "tmux"
     " use tmux popup ...
     let g:fzf_layout = { 'tmux': '-p -x C -y 38% -w 80% -h 65%' }
 else
@@ -925,6 +926,11 @@ endif
 endif
 
 let g:fzf_preview_window = ['right:60%:hidden', 'ctrl-alt-p']
+
+let g:fzf_action = {
+    \ 'ctrl-t': 'tab split',
+    \ 'ctrl-x': 'split',
+    \ 'ctrl-v': 'vsplit' }
 
 " ------------
 
@@ -1230,6 +1236,8 @@ autocmd FileType fugitiveblame nmap <buffer> qq         gq
 autocmd FileType fugitiveblame nmap <buffer> <C-q>      gq
 autocmd FileType fugitiveblame nmap <buffer> <Leader><Tab> O
 autocmd FileType fugitiveblame nmap <buffer> <C-t> O
+autocmd FileType fugitiveblame nmap <buffer> <C-t>t O
+autocmd FileType fugitiveblame nmap <buffer> <C-t><C-t> O
 " NOTE: FileType autocmd does not work for this map,
 "       plugin probably overwrites it, this seems to work ...
 autocmd BufEnter *.fugitiveblame  nmap <buffer> <Return> O
@@ -1240,6 +1248,8 @@ autocmd BufEnter fugitive://**    nmap <buffer> <2-LeftMouse> O
 
 autocmd FileType git              nmap <buffer> <Leader><Tab> O
 autocmd FileType git              nmap <buffer> <C-t> O
+autocmd FileType git              nmap <buffer> <C-t>t O
+autocmd FileType git              nmap <buffer> <C-t><C-t> O
 
 aug gv_lqq
     au!
@@ -1285,15 +1295,23 @@ autocmd FileType git              map <buffer> <C-_>P ?^+\\|^-<CR>
 
 autocmd FileReadCmd fugitive://** nmap <buffer> <Leader><Tab> O
 autocmd FileReadCmd fugitive://** nmap <buffer> <C-t> O
+autocmd FileReadCmd fugitive://** nmap <buffer> <C-t>t O
+autocmd FileReadCmd fugitive://** nmap <buffer> <C-t><C-t> O
 autocmd BufReadCmd  fugitive://** nmap <buffer> <Leader><Tab> O
 autocmd BufReadCmd  fugitive://** nmap <buffer> <C-t> O
+autocmd BufReadCmd  fugitive://** nmap <buffer> <C-t>t O
+autocmd BufReadCmd  fugitive://** nmap <buffer> <C-t><C-t> O
 autocmd BufWriteCmd fugitive://** nmap <buffer> <Leader><Tab> O
 autocmd BufWriteCmd fugitive://** nmap <buffer> <C-t> O
+autocmd BufWriteCmd fugitive://** nmap <buffer> <C-t>t O
+autocmd BufWriteCmd fugitive://** nmap <buffer> <C-t><C-t> O
 
 autocmd BufReadCmd  index{,.lock}
     \ if FugitiveIsGitDir(expand('<amatch>:p:h')) |
     \     nmap <buffer> <Leader><Tab> O |
     \     nmap <buffer> <C-t> O |
+    \     nmap <buffer> <C-t>t O |
+    \     nmap <buffer> <C-t><C-t> O |
     \ endif
 
 function MyGitHelper(ff)
@@ -1419,6 +1437,8 @@ let g:Gitv_WipeAllOnClose = 0
 " gv ------------------
 autocmd FileType GV nmap <buffer> <Leader><Tab> O
 autocmd FileType GV nmap <buffer> <C-t> O
+autocmd FileType GV nmap <buffer> <C-t>t O
+autocmd FileType GV nmap <buffer> <C-t><C-t> O
 autocmd FileType GV nmap <buffer> <Return> O
 autocmd FileType GV nmap <buffer> o O
 autocmd FileType GV nmap <buffer> <Space> <Down>
@@ -1429,6 +1449,8 @@ autocmd FileType GV nmap <buffer> u <Up>
 autocmd FileType GV nmap <buffer> d <Down>
 autocmd FileType GV xmap <buffer> <Leader><Tab> O
 autocmd FileType GV xmap <buffer> <C-t> O
+autocmd FileType GV xmap <buffer> <C-t>t O
+autocmd FileType GV xmap <buffer> <C-t><C-t> O
 autocmd FileType GV xmap <buffer> <Return> O
 autocmd FileType GV xmap <buffer> o O
 autocmd FileType GV xmap <buffer> <Space> <Down>
@@ -2237,7 +2259,7 @@ let g:dispatch_no_maps = 1
 " QFEnter -------------
 " add C-t, C-v, C-x to open consistently with fzf ...
 let g:qfenter_keymap = {}
-let g:qfenter_keymap.topen = ['<Leader><Tab>', '<C-t>']
+let g:qfenter_keymap.topen = ['<Leader><Tab>', '<C-t>', '<C-t>t', '<C-t><C-t>']
 let g:qfenter_keymap.vopen = ['<Leader>V',     '<C-v>']
 let g:qfenter_keymap.hopen = ['<Leader>H',     '<C-x>']
 let g:qf_loclist_window_bottom = 0
@@ -2931,7 +2953,7 @@ if has("nvim")
     set guicursor=n-v-c:block,o-i-r-ci-cr:ver25,a:blinkon500-blinkoff300
 endif
 
-if !has("nvim") && (&term =~ "^screen" || &term =~ "^tmux")
+if !has("nvim") && (&term =~ "^screen" || &term =~ "tmux")
   " seems we need this for blinking cursor ...
   " vim uses vi, vs, VS, ve and may not get these from cnorm, civis, cvvis correctly
   "let &t_ve="\e[?12;25h"
@@ -3017,7 +3039,7 @@ let g:netrw_dirhistmax = 0
 "set title titlestring=%{progname}\ %f\ +%l\ #%{tabpagenr()}.%{winnr()}
 set titleold=
 set title titlestring=@v:%.12t
-if (&term =~ "^screen" || &term =~ "^tmux") && !has('nvim')
+if (&term =~ "^screen" || &term =~ "tmux") && !has('nvim')
   exec "set t_ts=\e]2; t_fs=\7"
 endif
 
@@ -3044,7 +3066,7 @@ function! s:MyUpdateTitle()
   else
     set title titlestring=@v:%.12t
   endif
-  if (&term =~ "^screen" || &term =~ "^tmux") && !has('nvim')
+  if (&term =~ "^screen" || &term =~ "tmux") && !has('nvim')
     exec "set t_ts=\e]2; t_fs=\7"
   endif
   " if want to force insert mode upon entering
@@ -3868,7 +3890,7 @@ function! s:MapFastKeycode(key, keycode, indx)
     endif
 endfunction
 
-" NOTE: only for term =~ ^screen || ^tmux || ^xterm || ^alacritty || ^rxvt || ^urxvt ?
+" NOTE: only for term =~ ^screen || tmux || ^xterm || ^alacritty || ^rxvt || ^urxvt ?
 
 " NOTE: if we use these then they do not work in popups,
 "       do not map <Up>/<Down>/<Home><End> this way,
@@ -10281,7 +10303,7 @@ endif
 
 " NOTE: add ^xterm || ^rxvt || ^urxvt here ?
 " enable bracketed paste in terminal mode
-if &term =~ "^screen" || &term =~ "^tmux" || &term =~ "^alacritty"
+if &term =~ "^screen" || &term =~ "tmux" || &term =~ "^alacritty"
   let &t_BE="\<Esc>[?2004h"
   let &t_BD="\<Esc>[?2004l"
   let &t_PS="\<Esc>[200~"
@@ -10293,6 +10315,12 @@ if &term =~ "^screen" || &term =~ "^tmux" || &term =~ "^alacritty"
   exec "set <xDown>=\e[1;*B"
   exec "set <xRight>=\e[1;*C"
   exec "set <xLeft>=\e[1;*D"
+endif
+
+" nvim BUG: we add this for vim because we forced Home -> \e[H and End -> \e[F in tmux
+if !has("nvim") && &term =~ "tmux"
+  exec "set <Home>=\e[H"
+  exec "set <End>=\e[F"
 endif
 
 " -----------------------------

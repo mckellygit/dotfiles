@@ -1,6 +1,9 @@
 local wezterm = require 'wezterm';
 return {
 
+  -- requires wezterm terminfo installed ...
+  -- term = "wezterm",
+
   enable_wayland = false,
 
   audible_bell = "Disabled",
@@ -42,7 +45,7 @@ return {
   enable_scroll_bar = false,
 
   default_cursor_style = "BlinkingBlock",
-  cursor_blink_rate = 500,
+  cursor_blink_rate = 1000,
 
   -- color_scheme = "SpaceGray",
 
