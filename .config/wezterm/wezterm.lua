@@ -1,7 +1,7 @@
 local wezterm = require 'wezterm';
 return {
 
-  -- requires wezterm terminfo installed ...
+  -- NOTE: requires the termwiz/data/wezterm.terminfo compiled and installed ...
   -- term = "wezterm",
 
   enable_wayland = false,
@@ -44,8 +44,13 @@ return {
   scrollback_lines = 0,
   enable_scroll_bar = false,
 
+  -- default_cursor_style = "SteadyBlock",
   default_cursor_style = "BlinkingBlock",
-  cursor_blink_rate = 1000,
+  cursor_blink_rate = 800,
+  -- needed to prevent 'easing' from using 40%+ cpu util ...
+  animation_fps = 1,
+
+  -- max_fps = 60,
 
   -- color_scheme = "SpaceGray",
 
