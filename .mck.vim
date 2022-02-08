@@ -230,6 +230,7 @@ Plugin 'morhetz/gruvbox'
 "Plugin 'rafi/awesome-vim-colorschemes'
 " one for all colors
 "Plugin 'flazz/vim-colorschemes'
+"Plugin 'srcery-colors/srcery-vim'
 "
 " localvimrc
 Plugin 'embear/vim-localvimrc'
@@ -621,6 +622,7 @@ let g:FerretExecutableArguments = {
 
 " lightline ----------
 " colorscheme and some tab mods
+" 'colorscheme': 'srcery',
 let g:lightline = {
     \ 'component': {
     \   'lineinfo': '%7l:%-4v%<',
@@ -3005,6 +3007,7 @@ augroup END
 "colorscheme solarized
 colorscheme deus
 "colorscheme gruvbox
+"colorscheme srcery
 
 " do not use delete/wipe with qf/ll ...
 set nohidden
