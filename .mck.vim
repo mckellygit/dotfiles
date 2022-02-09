@@ -9793,14 +9793,36 @@ vnoremap <Leader>cx <C-\><C-n>:echo<CR>
 " tab open
 nnoremap <silent> <Leader>to           :$tabnew<CR>
 vnoremap <silent> <Leader>to <C-\><C-n>:$tabnew<CR>
+
+" ---------------
 " tab quit/close (same as window quit/close)
+" skip for now as <Leader>qq or :q cmd should be only ways to close buffer/tab ...
+ noremap <silent> <Leader>tc  <Nop>
+ noremap <silent> <Leader>tq  <Nop>
+ noremap <silent> <Leader>tx  <Nop>
 "nnoremap <silent> <Leader>tc           :conf q<CR>
 "vnoremap <silent> <Leader>tc <C-\><C-n>:conf q<CR>
-nnoremap <silent> <Leader>tq           :conf q<CR>
-vnoremap <silent> <Leader>tq <C-\><C-n>:conf q<CR>
+"nnoremap <silent> <Leader>tq           :conf q<CR>
+"vnoremap <silent> <Leader>tq <C-\><C-n>:conf q<CR>
+"nnoremap <silent> <Leader>tx           :conf q<CR>
+"vnoremap <silent> <Leader>tx <C-\><C-n>:conf q<CR>
+" ---------------
+
 " tab keep current and close all others
 nnoremap <silent> <Leader>tk           :tabonly<CR>
 vnoremap <silent> <Leader>tk <C-\><C-n>:tabonly<CR>
+
+ noremap <silent> <Leader>t1 1gt
+ noremap <silent> <Leader>t2 2gt
+ noremap <silent> <Leader>t3 3gt
+ noremap <silent> <Leader>t4 4gt
+ noremap <silent> <Leader>t5 5gt
+ noremap <silent> <Leader>t6 6gt
+ noremap <silent> <Leader>t7 7gt
+ noremap <silent> <Leader>t8 8gt
+ noremap <silent> <Leader>t9 9gt
+nnoremap <silent> <Leader>t0           :tablast<CR>
+vnoremap <silent> <Leader>t0 <C-\><C-n>:tablast<CR>
 
 " window quit/close (same as tab close)
 "nnoremap <silent> <Leader>wc           :conf q<CR>
