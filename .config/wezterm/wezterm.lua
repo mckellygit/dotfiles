@@ -111,6 +111,8 @@ return {
     -- { key="\\",             mods="CTRL|ALT",      action="Nop"},
     { key="\\",             mods="CTRL|ALT",      action="ActivateCopyMode" },
 
+    { key="phys:Return",mods="CTRL|ALT",      action=wezterm.action{SendString="\x1e\x0d"} },
+
     { key="[",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x5b"} },
     { key="{",          mods="CTRL",          action=wezterm.action{SendString="\x1f\x5b"} },
 
