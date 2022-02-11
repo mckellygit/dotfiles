@@ -332,6 +332,9 @@ endif
 "Plugin 'powerman/vim-plugin-AnsiEsc'
 Plugin 'chrisbra/Colorizer'
 "
+" csv
+"Plugin 'chrisbra/csv.vim'
+"
 " man pages
 if has("nvim")
     " to not load nvim man plugin which overwrites Man command
@@ -2597,6 +2600,11 @@ endfunction
 au! CompleteChanged * call <SID>MyVimadeWinDisable()
 au! CompleteDone    * call <SID>MyVimadeWinEnable()
 " vimade -----------
+
+" csv --------------
+" for B to move backward 1 column
+let g:csv_bind_B = 1
+" csv --------------
 
 " vim-man ----------
 " use vim-man instead of default vim K at root level ...
