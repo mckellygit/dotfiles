@@ -1,7 +1,7 @@
 {
     "$help": "https://aka.ms/terminal-documentation",
     "$schema": "https://aka.ms/terminal-profiles-schema",
-    "actions":
+    "actions": 
     [
         {
             "command": "unbound",
@@ -104,7 +104,7 @@
             "keys": "ctrl+alt+v"
         },
         {
-            "command":
+            "command": 
             {
                 "action": "sendInput",
                 "input": "\u001e\u0008"
@@ -112,7 +112,7 @@
             "keys": "shift+backspace"
         },
         {
-            "command":
+            "command": 
             {
                 "action": "copy",
                 "singleLine": false
@@ -120,7 +120,7 @@
             "keys": "ctrl+alt+c"
         },
         {
-            "command":
+            "command": 
             {
                 "action": "sendInput",
                 "input": "\u001b\u0023"
@@ -128,7 +128,7 @@
             "keys": "ctrl+alt+plus"
         },
         {
-            "command":
+            "command": 
             {
                 "action": "sendInput",
                 "input": "\u001b\u0023"
@@ -136,7 +136,7 @@
             "keys": "ctrl+alt+space"
         },
         {
-            "command":
+            "command": 
             {
                 "action": "sendInput",
                 "input": "\u001f\u007f"
@@ -144,7 +144,7 @@
             "keys": "ctrl+shift+backspace"
         },
         {
-            "command":
+            "command": 
             {
                 "action": "sendInput",
                 "input": "\u001f\u004a"
@@ -152,7 +152,7 @@
             "keys": "ctrl+shift+j"
         },
         {
-            "command":
+            "command": 
             {
                 "action": "sendInput",
                 "input": "\u001e\u000d"
@@ -160,7 +160,7 @@
             "keys": "alt+enter"
         },
         {
-            "command":
+            "command": 
             {
                 "action": "sendInput",
                 "input": "\u001e\u000d"
@@ -168,7 +168,7 @@
             "keys": "ctrl+alt+enter"
         },
         {
-            "command":
+            "command": 
             {
                 "action": "sendInput",
                 "input": "\u001b\u005b\u0032\u003b\u0032\u007e"
@@ -180,7 +180,7 @@
             "keys": "ctrl+shift+0"
         },
         {
-            "command":
+            "command": 
             {
                 "action": "sendInput",
                 "input": "\u000d"
@@ -188,7 +188,7 @@
             "keys": "ctrl+enter"
         },
         {
-            "command":
+            "command": 
             {
                 "action": "sendInput",
                 "input": "\u001f\u0020"
@@ -196,7 +196,7 @@
             "keys": "ctrl+shift+space"
         },
         {
-            "command":
+            "command": 
             {
                 "action": "sendInput",
                 "input": "\u001e\u0020"
@@ -204,7 +204,7 @@
             "keys": "shift+space"
         },
         {
-            "command":
+            "command": 
             {
                 "action": "adjustFontSize",
                 "delta": -1
@@ -212,7 +212,7 @@
             "keys": "ctrl+shift+minus"
         },
         {
-            "command":
+            "command": 
             {
                 "action": "sendInput",
                 "input": "\u001f\u004a"
@@ -220,7 +220,7 @@
             "keys": "ctrl+shift+k"
         },
         {
-            "command":
+            "command": 
             {
                 "action": "sendInput",
                 "input": "\u001f\u0047"
@@ -228,7 +228,7 @@
             "keys": "ctrl+shift+g"
         },
         {
-            "command":
+            "command": 
             {
                 "action": "sendInput",
                 "input": "\u001f\u004e"
@@ -236,7 +236,7 @@
             "keys": "ctrl+shift+n"
         },
         {
-            "command":
+            "command": 
             {
                 "action": "sendInput",
                 "input": "\u001b\u0040"
@@ -244,7 +244,7 @@
             "keys": "ctrl+alt+backspace"
         },
         {
-            "command":
+            "command": 
             {
                 "action": "sendInput",
                 "input": "\u001f\u0050"
@@ -252,7 +252,7 @@
             "keys": "ctrl+shift+p"
         },
         {
-            "command":
+            "command": 
             {
                 "action": "sendInput",
                 "input": "\u001e\u007f"
@@ -260,7 +260,7 @@
             "keys": "ctrl+backspace"
         },
         {
-            "command":
+            "command": 
             {
                 "action": "adjustFontSize",
                 "delta": 1
@@ -268,7 +268,7 @@
             "keys": "ctrl+shift+plus"
         },
         {
-            "command":
+            "command": 
             {
                 "action": "moveFocus",
                 "direction": "left"
@@ -276,7 +276,7 @@
             "keys": "ctrl+alt+left"
         },
         {
-            "command":
+            "command": 
             {
                 "action": "moveFocus",
                 "direction": "previous"
@@ -284,7 +284,7 @@
             "keys": "ctrl+alt+end"
         },
         {
-            "command":
+            "command": 
             {
                 "action": "moveFocus",
                 "direction": "right"
@@ -292,7 +292,7 @@
             "keys": "ctrl+alt+right"
         },
         {
-            "command":
+            "command": 
             {
                 "action": "moveFocus",
                 "direction": "up"
@@ -300,7 +300,7 @@
             "keys": "ctrl+alt+up"
         },
         {
-            "command":
+            "command": 
             {
                 "action": "moveFocus",
                 "direction": "down"
@@ -318,14 +318,14 @@
     "initialCols": 259,
     "initialPosition": "370,600",
     "initialRows": 55,
-    "profiles":
+    "profiles": 
     {
-        "defaults":
+        "defaults": 
         {
             "bellStyle": "none",
-            "font":
+            "font": 
             {
-                "face": "Cascadia Mono",
+                "face": "Lucida Sans Typewriter",
                 "size": 10,
                 "weight": "normal"
             },
@@ -333,7 +333,7 @@
             "scrollbarState": "hidden",
             "useAcrylic": true
         },
-        "list":
+        "list": 
         [
             {
                 "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
@@ -361,7 +361,7 @@
             }
         ]
     },
-    "schemes":
+    "schemes": 
     [
         {
             "background": "#0C0C0C",
