@@ -18,6 +18,11 @@ if [[ -n "$ST_VERSION" ]] ; then
     Y=678
     W=2530
     H=1380
+elif [[ -n "$WEZTERM_PANE" ]] ; then
+    X=690
+    Y=678
+    W=2540
+    H=1362
 fi
 
 JS="""
@@ -45,7 +50,12 @@ global.get_window_actors().forEach(function (w) {
             mw.unmaximize(3); // 3 is META_MAXIMIZE_BOTH, so unmaximizing the window in both directions
         }
 
-        mw.move_resize_frame(0, $X, $Y, $W, $H);
+        if ( ( (mw.get_title().toLowerCase().includes('tmux:xterm')) && !(mw.get_title().toLowerCase().includes('kitty')) ) ||
+             mw.get_wm_class().toLowerCase().includes('.wezterm') ) {
+            mw.move_resize_frame(0, $X, $Y, 2540, 1362);
+        } else {
+            mw.move_resize_frame(0, $X, $Y, $W, $H);
+        }
 
         GLib.usleep(100000);
 
