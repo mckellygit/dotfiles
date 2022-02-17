@@ -6725,49 +6725,153 @@ inoremap <silent> <expr> <C-k>      pumvisible() ? '<C-k>'  : '<C-\><C-o>:call <
 " C- already used to adjust font size ...
 " A- to speed up scrolling ...
 
-nnoremap <silent> <expr> <ScrollWheelDown>     (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
-nnoremap <silent> <expr> <S-ScrollWheelDown>   (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
-" C-Wheel is often font scaling but ...
-nnoremap <silent> <expr> <C-ScrollWheelDown>   (line('.') == line('w0')) ? '24j' : ((line('$') - line('w$')) < 24) ? 'mfG`f24j' : '24<C-e>24j'
-nnoremap <silent> <expr> <A-C-ScrollWheelDown> (line('.') == line('w0')) ? '24j' : ((line('$') - line('w$')) < 24) ? 'mfG`f24j' : '24<C-e>24j'
-nnoremap <silent> <expr> <A-ScrollWheelDown>   (line('.') == line('w0')) ? '48j' : ((line('$') - line('w$')) < 48) ? 'mfG`f48j' : '48<C-e>48j'
+nnoremap <silent> <expr> <ScrollWheelDown>       (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
+nnoremap <silent> <expr> <2-ScrollWheelDown>     (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
+nnoremap <silent> <expr> <3-ScrollWheelDown>     (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
+nnoremap <silent> <expr> <4-ScrollWheelDown>     (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
 
-nnoremap <silent> <expr> <C-S-ScrollWheelDown> (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
-nnoremap <silent> <expr> <A-S-ScrollWheelDown> (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
+nnoremap <silent> <expr> <S-ScrollWheelDown>     (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
+nnoremap <silent> <expr> <S-2-ScrollWheelDown>   (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
+nnoremap <silent> <expr> <S-3-ScrollWheelDown>   (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
+nnoremap <silent> <expr> <S-4-ScrollWheelDown>   (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
+
+" C-Wheel is often font scaling but ...
+nnoremap <silent> <expr> <C-ScrollWheelDown>     (line('.') == line('w0')) ? '24j' : ((line('$') - line('w$')) < 24) ? 'mfG`f24j' : '24<C-e>24j'
+nnoremap <silent> <expr> <C-2-ScrollWheelDown>   (line('.') == line('w0')) ? '24j' : ((line('$') - line('w$')) < 24) ? 'mfG`f24j' : '24<C-e>24j'
+nnoremap <silent> <expr> <C-3-ScrollWheelDown>   (line('.') == line('w0')) ? '24j' : ((line('$') - line('w$')) < 24) ? 'mfG`f24j' : '24<C-e>24j'
+nnoremap <silent> <expr> <C-4-ScrollWheelDown>   (line('.') == line('w0')) ? '24j' : ((line('$') - line('w$')) < 24) ? 'mfG`f24j' : '24<C-e>24j'
+
+nnoremap <silent> <expr> <A-C-ScrollWheelDown>   (line('.') == line('w0')) ? '24j' : ((line('$') - line('w$')) < 24) ? 'mfG`f24j' : '24<C-e>24j'
+nnoremap <silent> <expr> <A-C-2-ScrollWheelDown> (line('.') == line('w0')) ? '24j' : ((line('$') - line('w$')) < 24) ? 'mfG`f24j' : '24<C-e>24j'
+nnoremap <silent> <expr> <A-C-3-ScrollWheelDown> (line('.') == line('w0')) ? '24j' : ((line('$') - line('w$')) < 24) ? 'mfG`f24j' : '24<C-e>24j'
+nnoremap <silent> <expr> <A-C-4-ScrollWheelDown> (line('.') == line('w0')) ? '24j' : ((line('$') - line('w$')) < 24) ? 'mfG`f24j' : '24<C-e>24j'
+
+nnoremap <silent> <expr> <A-ScrollWheelDown>     (line('.') == line('w0')) ? '48j' : ((line('$') - line('w$')) < 48) ? 'mfG`f48j' : '48<C-e>48j'
+nnoremap <silent> <expr> <A-2-ScrollWheelDown>   (line('.') == line('w0')) ? '48j' : ((line('$') - line('w$')) < 48) ? 'mfG`f48j' : '48<C-e>48j'
+nnoremap <silent> <expr> <A-3-ScrollWheelDown>   (line('.') == line('w0')) ? '48j' : ((line('$') - line('w$')) < 48) ? 'mfG`f48j' : '48<C-e>48j'
+nnoremap <silent> <expr> <A-4-ScrollWheelDown>   (line('.') == line('w0')) ? '48j' : ((line('$') - line('w$')) < 48) ? 'mfG`f48j' : '48<C-e>48j'
+
+nnoremap <silent> <expr> <C-S-ScrollWheelDown>   (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
+nnoremap <silent> <expr> <C-S-2-ScrollWheelDown> (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
+nnoremap <silent> <expr> <C-S-3-ScrollWheelDown> (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
+nnoremap <silent> <expr> <C-S-4-ScrollWheelDown> (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
+
+nnoremap <silent> <expr> <A-S-ScrollWheelDown>   (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
+nnoremap <silent> <expr> <A-S-2-ScrollWheelDown> (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
+nnoremap <silent> <expr> <A-S-3-ScrollWheelDown> (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
+nnoremap <silent> <expr> <A-S-4-ScrollWheelDown> (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
 
 " see below
 "vnoremap <silent>        <ScrollWheelDown> <C-\><C-n>:call <SID>Saving_scrollV("gv10<C-V><C-D>")<CR>
 
-inoremap <silent> <expr> <ScrollWheelDown>     pumvisible() ? '<ScrollWhellDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-D>")<CR>'
-inoremap <silent> <expr> <S-ScrollWheelDown>   pumvisible() ? '<ScrollWhellDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-D>")<CR>'
-inoremap <silent> <expr> <C-ScrollWheelDown>   pumvisible() ? '<ScrollWhellDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("24<C-V><C-D>")<CR>'
-inoremap <silent> <expr> <A-C-ScrollWheelDown> pumvisible() ? '<ScrollWhellDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("24<C-V><C-D>")<CR>'
-inoremap <silent> <expr> <A-ScrollWheelDown>   pumvisible() ? '<ScrollWhellDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("48<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <ScrollWheelDown>       pumvisible() ? '<ScrollWheelDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <2-ScrollWheelDown>     pumvisible() ? '<ScrollWheelDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <3-ScrollWheelDown>     pumvisible() ? '<ScrollWheelDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <4-ScrollWheelDown>     pumvisible() ? '<ScrollWheelDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-D>")<CR>'
 
-inoremap <silent> <expr> <C-S-ScrollWheelDown> pumvisible() ? '<ScrollWhellDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-D>")<CR>'
-inoremap <silent> <expr> <A-S-ScrollWheelDown> pumvisible() ? '<ScrollWhellDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <S-ScrollWheelDown>     pumvisible() ? '<ScrollWheelDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <S-2-ScrollWheelDown>   pumvisible() ? '<ScrollWheelDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <S-3-ScrollWheelDown>   pumvisible() ? '<ScrollWheelDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <S-4-ScrollWheelDown>   pumvisible() ? '<ScrollWheelDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-D>")<CR>'
 
-nnoremap <silent> <expr> <ScrollWheelUp>       (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
-nnoremap <silent> <expr> <S-ScrollWheelUp>     (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
+inoremap <silent> <expr> <C-ScrollWheelDown>     pumvisible() ? '<ScrollWheelDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("24<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <C-2-ScrollWheelDown>   pumvisible() ? '<ScrollWheelDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("24<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <C-3-ScrollWheelDown>   pumvisible() ? '<ScrollWheelDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("24<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <C-4-ScrollWheelDown>   pumvisible() ? '<ScrollWheelDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("24<C-V><C-D>")<CR>'
+
+inoremap <silent> <expr> <A-C-ScrollWheelDown>   pumvisible() ? '<ScrollWheelDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("24<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <A-C-2-ScrollWheelDown> pumvisible() ? '<ScrollWheelDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("24<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <A-C-3-ScrollWheelDown> pumvisible() ? '<ScrollWheelDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("24<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <A-C-4-ScrollWheelDown> pumvisible() ? '<ScrollWheelDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("24<C-V><C-D>")<CR>'
+
+inoremap <silent> <expr> <A-ScrollWheelDown>     pumvisible() ? '<ScrollWheelDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("48<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <A-2-ScrollWheelDown>   pumvisible() ? '<ScrollWheelDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("48<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <A-3-ScrollWheelDown>   pumvisible() ? '<ScrollWheelDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("48<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <A-4-ScrollWheelDown>   pumvisible() ? '<ScrollWheelDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("48<C-V><C-D>")<CR>'
+
+inoremap <silent> <expr> <C-S-ScrollWheelDown>   pumvisible() ? '<ScrollWheelDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <C-S-2-ScrollWheelDown> pumvisible() ? '<ScrollWheelDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <C-S-3-ScrollWheelDown> pumvisible() ? '<ScrollWheelDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <C-S-4-ScrollWheelDown> pumvisible() ? '<ScrollWheelDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-D>")<CR>'
+
+inoremap <silent> <expr> <A-S-ScrollWheelDown>   pumvisible() ? '<ScrollWheelDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <A-S-2-ScrollWheelDown> pumvisible() ? '<ScrollWheelDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <A-S-3-ScrollWheelDown> pumvisible() ? '<ScrollWheelDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-D>")<CR>'
+inoremap <silent> <expr> <A-S-4-ScrollWheelDown> pumvisible() ? '<ScrollWheelDown>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-D>")<CR>'
+
+nnoremap <silent> <expr> <ScrollWheelUp>         (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
+nnoremap <silent> <expr> <2-ScrollWheelUp>       (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
+nnoremap <silent> <expr> <3-ScrollWheelUp>       (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
+nnoremap <silent> <expr> <4-ScrollWheelUp>       (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
+
+nnoremap <silent> <expr> <S-ScrollWheelUp>       (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
+nnoremap <silent> <expr> <S-2-ScrollWheelUp>     (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
+nnoremap <silent> <expr> <S-3-ScrollWheelUp>     (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
+nnoremap <silent> <expr> <S-4-ScrollWheelUp>     (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
+
 " C-Wheel is often font scaling but ...
-nnoremap <silent> <expr> <C-ScrollWheelUp>     (line('.') == line('w$')) ? '24k' : '24<C-y>24k'
-nnoremap <silent> <expr> <A-C-ScrollWheelUp>   (line('.') == line('w$')) ? '24k' : '24<C-y>24k'
-nnoremap <silent> <expr> <A-ScrollWheelUp>     (line('.') == line('w$')) ? '48k' : '48<C-y>48k'
+nnoremap <silent> <expr> <C-ScrollWheelUp>       (line('.') == line('w$')) ? '24k' : '24<C-y>24k'
+nnoremap <silent> <expr> <C-2-ScrollWheelUp>     (line('.') == line('w$')) ? '24k' : '24<C-y>24k'
+nnoremap <silent> <expr> <C-3-ScrollWheelUp>     (line('.') == line('w$')) ? '24k' : '24<C-y>24k'
+nnoremap <silent> <expr> <C-4-ScrollWheelUp>     (line('.') == line('w$')) ? '24k' : '24<C-y>24k'
 
-nnoremap <silent> <expr> <C-S-ScrollWheelUp>   (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
-nnoremap <silent> <expr> <A-S-ScrollWheelUp>   (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
+nnoremap <silent> <expr> <A-C-ScrollWheelUp>     (line('.') == line('w$')) ? '24k' : '24<C-y>24k'
+nnoremap <silent> <expr> <A-C-2-ScrollWheelUp>   (line('.') == line('w$')) ? '24k' : '24<C-y>24k'
+nnoremap <silent> <expr> <A-C-3-ScrollWheelUp>   (line('.') == line('w$')) ? '24k' : '24<C-y>24k'
+nnoremap <silent> <expr> <A-C-4-ScrollWheelUp>   (line('.') == line('w$')) ? '24k' : '24<C-y>24k'
+
+nnoremap <silent> <expr> <A-ScrollWheelUp>       (line('.') == line('w$')) ? '48k' : '48<C-y>48k'
+nnoremap <silent> <expr> <A-2-ScrollWheelUp>     (line('.') == line('w$')) ? '48k' : '48<C-y>48k'
+nnoremap <silent> <expr> <A-3-ScrollWheelUp>     (line('.') == line('w$')) ? '48k' : '48<C-y>48k'
+nnoremap <silent> <expr> <A-4-ScrollWheelUp>     (line('.') == line('w$')) ? '48k' : '48<C-y>48k'
+
+nnoremap <silent> <expr> <C-S-ScrollWheelUp>     (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
+nnoremap <silent> <expr> <C-S-2-ScrollWheelUp>   (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
+nnoremap <silent> <expr> <C-S-3-ScrollWheelUp>   (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
+nnoremap <silent> <expr> <C-S-4-ScrollWheelUp>   (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
+
+nnoremap <silent> <expr> <A-S-ScrollWheelUp>     (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
+nnoremap <silent> <expr> <A-S-2-ScrollWheelUp>   (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
+nnoremap <silent> <expr> <A-S-3-ScrollWheelUp>   (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
+nnoremap <silent> <expr> <A-S-4-ScrollWheelUp>   (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
 
 " see below
 "vnoremap <silent>        <ScrollWheelUp>   <C-\><C-n>:call <SID>Saving_scrollV("gv10<C-V><C-U>")<CR>
 
-inoremap <silent> <expr> <ScrollWheelUp>       pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-U>")<CR>'
-inoremap <silent> <expr> <S-ScrollWheelUp>     pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-U>")<CR>'
-inoremap <silent> <expr> <C-ScrollWheelUp>     pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("24<C-V><C-U>")<CR>'
-inoremap <silent> <expr> <A-C-ScrollWheelUp>   pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("24<C-V><C-U>")<CR>'
-inoremap <silent> <expr> <A-ScrollWheelUp>     pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("48<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <ScrollWheelUp>         pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <2-ScrollWheelUp>       pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <3-ScrollWheelUp>       pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <4-ScrollWheelUp>       pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-U>")<CR>'
 
-inoremap <silent> <expr> <C-S-ScrollWheelUp>   pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-U>")<CR>'
-inoremap <silent> <expr> <A-S-ScrollWheelUp>   pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <S-ScrollWheelUp>       pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <S-2-ScrollWheelUp>     pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <S-3-ScrollWheelUp>     pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <S-4-ScrollWheelUp>     pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-U>")<CR>'
+
+inoremap <silent> <expr> <C-ScrollWheelUp>       pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("24<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <C-2-ScrollWheelUp>     pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("24<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <C-3-ScrollWheelUp>     pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("24<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <C-4-ScrollWheelUp>     pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("24<C-V><C-U>")<CR>'
+
+inoremap <silent> <expr> <A-C-ScrollWheelUp>     pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("24<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <A-C-2-ScrollWheelUp>   pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("24<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <A-C-3-ScrollWheelUp>   pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("24<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <A-C-4-ScrollWheelUp>   pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("24<C-V><C-U>")<CR>'
+
+inoremap <silent> <expr> <A-ScrollWheelUp>       pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("48<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <A-2-ScrollWheelUp>     pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("48<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <A-3-ScrollWheelUp>     pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("48<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <A-4-ScrollWheelUp>     pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("48<C-V><C-U>")<CR>'
+
+inoremap <silent> <expr> <C-S-ScrollWheelUp>     pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <C-S-2-ScrollWheelUp>   pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <C-S-3-ScrollWheelUp>   pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <C-S-4-ScrollWheelUp>   pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-U>")<CR>'
+
+inoremap <silent> <expr> <A-S-ScrollWheelUp>     pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <A-S-2-ScrollWheelUp>   pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <A-S-3-ScrollWheelUp>   pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-U>")<CR>'
+inoremap <silent> <expr> <A-S-4-ScrollWheelUp>   pumvisible() ? '<ScrollWheelUp>' : '<C-\><C-o>:call <SID>Saving_scrollV("10<C-V><C-U>")<CR>'
 
 " ---------
 
@@ -6781,15 +6885,46 @@ inoremap <silent> <expr> <A-S-ScrollWheelUp>   pumvisible() ? '<ScrollWheelUp>' 
 
 " NOTE: add selection to beg/end of next line ...
 " do we bother to look at reg to see if its V for this ?
-vnoremap <ScrollWheelUp>       5gkg0
-vnoremap <ScrollWheelDown>     5gjg$
+vnoremap <ScrollWheelUp>         5gkg0
+vnoremap <2-ScrollWheelUp>       5gkg0
+vnoremap <3-ScrollWheelUp>       5gkg0
+vnoremap <4-ScrollWheelUp>       5gkg0
+
+vnoremap <ScrollWheelDown>       5gjg$
+vnoremap <2-ScrollWheelDown>     5gjg$
+vnoremap <3-ScrollWheelDown>     5gjg$
+vnoremap <4-ScrollWheelDown>     5gjg$
+
 " C-Wheel is often font scaling but ...
-vnoremap <C-ScrollWheelUp>     10gkg0
-vnoremap <C-ScrollWheelDown>   10gjg$
-vnoremap <A-C-ScrollWheelUp>   10gkg0
-vnoremap <A-C-ScrollWheelDown> 10gjg$
-vnoremap <A-ScrollWheelUp>     20gkg0
-vnoremap <A-ScrollWheelDown>   20gjg$
+vnoremap <C-ScrollWheelUp>       10gkg0
+vnoremap <C-2-ScrollWheelUp>     10gkg0
+vnoremap <C-3-ScrollWheelUp>     10gkg0
+vnoremap <C-4-ScrollWheelUp>     10gkg0
+
+vnoremap <C-ScrollWheelDown>     10gjg$
+vnoremap <C-2-ScrollWheelDown>   10gjg$
+vnoremap <C-3-ScrollWheelDown>   10gjg$
+vnoremap <C-4-ScrollWheelDown>   10gjg$
+
+vnoremap <A-C-ScrollWheelUp>     10gkg0
+vnoremap <A-C-2-ScrollWheelUp>   10gkg0
+vnoremap <A-C-3-ScrollWheelUp>   10gkg0
+vnoremap <A-C-4-ScrollWheelUp>   10gkg0
+
+vnoremap <A-C-ScrollWheelDown>   10gjg$
+vnoremap <A-C-2-ScrollWheelDown> 10gjg$
+vnoremap <A-C-3-ScrollWheelDown> 10gjg$
+vnoremap <A-C-4-ScrollWheelDown> 10gjg$
+
+vnoremap <A-ScrollWheelUp>       20gkg0
+vnoremap <A-2-ScrollWheelUp>     20gkg0
+vnoremap <A-3-ScrollWheelUp>     20gkg0
+vnoremap <A-4-ScrollWheelUp>     20gkg0
+
+vnoremap <A-ScrollWheelDown>     20gjg$
+vnoremap <A-2-ScrollWheelDown>   20gjg$
+vnoremap <A-3-ScrollWheelDown>   20gjg$
+vnoremap <A-4-ScrollWheelDown>   20gjg$
 
 "inoremap <silent> <ScrollWheelUp>     <C-\><C-o>5k
 "inoremap <silent> <ScrollWheelDown>   <C-\><C-o>5j
