@@ -241,6 +241,12 @@ Plugin 'embear/vim-localvimrc'
 " and that is deprecated anyway (defaults in vim 8.0+)
 " .cap files are for me usually from tcpdump and not ruby
 " and c/c++ is covered in vim-cpp-modern ...
+" ------------------------------------------
+" polyglot has some vim9script in it since after this commit -
+" git checkout c312d30231f136d2fbb32a2cfea554af5066e6b0
+" so for now just stay at this commit ...
+" HEAD detached at c312d302
+" ------------------------------------------
 let g:polyglot_disabled = ['tmux', 'c/c++', 'ruby']
 Plugin 'sheerun/vim-polyglot'
 " enhanced c++ syntax
@@ -7536,7 +7542,8 @@ function! s:IdleToNormalMode()
         endif
     endif
 endfunction
-autocmd CursorHoldI * call <SID>IdleToNormalMode()
+" skip this if using My_Nvim_CursorHoldI_Fix below
+"autocmd CursorHoldI * call <SID>IdleToNormalMode()
 autocmd User MyCursorHoldI call <SID>IdleToNormalMode()
 
 function! s:ClearCmdWindow()
@@ -7550,17 +7557,30 @@ function! s:ClearCmdWindow()
     echo "\r"
 endfunction
 " nice but can clear asyncrun status in cmdline ...
-autocmd CursorHold * call <SID>ClearCmdWindow()
+" skip this if using My_Nvim_CursorHold_Fix below
+"autocmd CursorHold * call <SID>ClearCmdWindow()
 autocmd User MyCursorHold call <SID>ClearCmdWindow()
 
 " ---------
 
-let g:my_cursorhold_updatetime = 10000
+let g:my2_cursorhold_updatetime = 1000
 
 function My_Nvim_CursorHold_Cb(timer_id) abort
+  if v:exiting isnot v:null
+    return
+  endif
   set eventignore-=CursorHold
   doautocmd <nomodeline> CursorHold
   set eventignore+=CursorHold
+endfunction
+
+function My_Nvim_CursorHoldI_Cb(timer_id) abort
+  if v:exiting isnot v:null
+    return
+  endif
+  set eventignore-=CursorHoldI
+  doautocmd <nomodeline> CursorHoldI
+  set eventignore+=CursorHoldI
 endfunction
 
 let g:my_cursorhold_nvim_timer = -1
@@ -7568,16 +7588,34 @@ function My_Nvim_CursorHold_Fix() abort
     if !has("nvim")
         return
     endif
+    call timer_stop(g:my_cursorhold_nvim_timer)
     if mode() != 'n'
         return
     endif
-    call timer_stop(g:my_cursorhold_nvim_timer)
-    let g:my_cursorhold_nvim_timer = timer_start(g:my_cursorhold_updatetime, 'My_Nvim_CursorHold_Cb')
+    let g:my_cursorhold_nvim_timer = timer_start(g:my2_cursorhold_updatetime, 'My_Nvim_CursorHold_Cb')
 endfunction
+
+function My_Nvim_CursorHoldI_Fix() abort
+    if !has("nvim")
+        return
+    endif
+    call timer_stop(g:my_cursorhold_nvim_timer)
+    let g:my_cursorhold_nvim_timer = timer_start(g:my2_cursorhold_updatetime, 'My_Nvim_CursorHoldI_Cb')
+endfunction
+
+set eventignore+=CursorHold,CursorHoldI
+
+augroup fix_cursorhold_nvim
+  autocmd!
+  autocmd CursorMoved * call My_Nvim_CursorHold_Fix()
+  autocmd CursorMovedI * call My_Nvim_CursorHoldI_Fix()
+augroup end
 
 " ---------
 
 " work-around for nvim CursorHold[I] issue ...
+
+let g:my_cursorhold_updatetime = 10000
 
 let g:my_insertidle_nvim_timer = -1
 function My_StartIdleTimer_Cb(timer_id) abort
