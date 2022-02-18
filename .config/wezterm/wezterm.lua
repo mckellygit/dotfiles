@@ -77,10 +77,12 @@ return {
 
   bypass_mouse_reporting_modifiers = "SHIFT",
   disable_default_mouse_bindings = false,
+
   mouse_bindings = {
     {
       event={Up={streak=1, button="Left"}},
       mods="SHIFT",
+      -- NOTE: if firefox is not already open then this starts firefox but then blocks until firefox exits
       action="OpenLinkAtMouseCursor",
     },
   },
