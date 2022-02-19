@@ -248,10 +248,10 @@ Plugin 'embear/vim-localvimrc'
 " HEAD detached at c312d302
 " ------------------------------------------
 let g:polyglot_disabled = ['tmux', 'c/c++', 'ruby']
-Plugin 'sheerun/vim-polyglot'
+"Plugin 'sheerun/vim-polyglot'
 " enhanced c++ syntax
 "Plugin 'octol/vim-cpp-enhanced-highlight'
-Plugin 'bfrg/vim-cpp-modern'
+"Plugin 'bfrg/vim-cpp-modern'
 "
 " statusline
 Plugin 'itchyny/lightline.vim'
