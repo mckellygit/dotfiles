@@ -31,7 +31,7 @@
     hunk = magenta
     context = 249
 [pager]
-	diff = less -R
+    diff = less -R
 [alias]
     undo = "!f() { git reset --hard $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
     dt = difftool
@@ -82,7 +82,7 @@
 [diff]
 	algorithm = histogram
 #	compactionHeuristic = true
-	tool = vimgitdiff
+    tool = nvimgitdiff
 [difftool "vimgitdiff"]
     cmd = vimdiff "$REMOTE" "$LOCAL"
 [difftool "nvimgitdiff"]
@@ -91,7 +91,9 @@
 	prompt = false
 	trustExitCode = true
 [mergetool]
-	trustExitCode = true
+    trustExitCode = true
+[delta]
+    navigate = true  # use n and N to move between diff sections
 [fetch]
 	prune = true
 [pull]

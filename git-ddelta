@@ -1,0 +1,18 @@
+#!/bin/bash
+
+unset BASH_ENV
+shopt -u expand_aliases
+
+gdir=""
+gdir=$(git rev-parse --show-superproject-working-tree 2> /dev/null)
+if [[ -z "${gdir}" ]]; then
+    gdir=$(git rev-parse --show-toplevel 2> /dev/null)
+fi
+if [[ -z "$gdir" ]]
+then
+    echo "fatal: not a git repository (or any of the parent directories): .git"
+    exit 1
+fi
+export GIT_PAGER="delta -s --navigate"
+git diff $@
+

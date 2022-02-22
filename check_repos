@@ -7,7 +7,7 @@ git() { $HOME/bin/git "$@"; }
 extras=""
 if [[ $# -gt 0 ]] ; then
     if [[ "$1" == "-a" || "$1" == "-all" || "$1" == "--a" || "$1" == "--all" ]] ; then
-        extras=" bat wezterm neovim"
+        extras=" bat wezterm neovim delta"
     fi
     if [[ $# -gt 1 ]] ; then
         if [[ "$2" == "-a" || "$2" == "-all" || "$2" == "--a" || "$2" == "--all" ]] ; then
@@ -217,6 +217,12 @@ echo ""
 #   git clone https://github.com/jesseduffield/lazygit.git
 #   cd lazygit
 #   go install
+
+# delta:
+#   git clone git@github.com-mckelly:dandavison/delta.git
+#   cd delta
+#   make
+#   sudo cp target/release/delta /usr/local/bin
 
 # ---------------------
 
