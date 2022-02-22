@@ -13,5 +13,6 @@ then
     echo "fatal: not a git repository (or any of the parent directories): .git"
     exit 1
 fi
-git --no-pager whatchanged --color=always $@ |& less -R +k -x4
+#git --no-pager whatchanged --color=always $@ |& less -R +k -x4
+git --no-pager log --color=always $@ |& less -R +k -x4
 
