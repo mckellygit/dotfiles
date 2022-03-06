@@ -3679,9 +3679,9 @@ function s:InitializeClipboard()
     if g:has_wsl == 0 && g:has_clipper > 0 && executable("copyq") && !exists('$SSH_CLIENT')
         " if copyq and myclip exe and copyq not running and not ssh shell then start it ...
         if executable("pgrep") && executable("copyq")
-            let copyqpid = system('pgrep --exact copyq')
+            let copyqpid = system('pgrep --exact copyq 2>/dev/null')
             if empty(copyqpid)
-                silent call system('setsid copyq &')
+                silent call system('setsid -f copyq >/dev/null 2>/dev/null &')
                 sleep 651m
             endif
         endif
