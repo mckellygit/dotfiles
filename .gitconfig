@@ -35,6 +35,8 @@
 [alias]
     undo = "!f() { git reset --hard $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
     dt = difftool
+    dd = ddelta
+    dv = difftool --tool=nvimgitdiff
     gvdiff = difftool
     nvdiff = difftool --tool=nvimgitdiff
     difff = dless
@@ -84,9 +86,9 @@
 #	compactionHeuristic = true
     tool = nvimgitdiff
 [difftool "vimgitdiff"]
-    cmd = vimdiff "$REMOTE" "$LOCAL"
+    cmd = vimdiff "$LOCAL" "$REMOTE"
 [difftool "nvimgitdiff"]
-    cmd = nvimdiff "$REMOTE" "$LOCAL"
+    cmd = nvimdiff "$LOCAL" "$REMOTE"
 [difftool]
 	prompt = false
 	trustExitCode = true
