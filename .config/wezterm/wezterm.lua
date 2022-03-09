@@ -155,6 +155,8 @@ return {
     { key="c",          mods="CTRL|ALT",      action="Copy" },
     { key="v",          mods="CTRL|ALT",      action="Paste" },
 
+    { key="phys:Minus", mods="CTRL",          action=wezterm.action{SendString="\x1e\x2d"} },
+
     -- { key="+",          mods="CTRL",          action="IncreaseFontSize" },
     -- { key="_",          mods="CTRL",          action="DecreaseFontSize" },
     -- { key=")",          mods="CTRL",          action="ResetFontSize" },
