@@ -8417,16 +8417,27 @@ function s:MyUPIndentAfter() abort
     execute 'keepjumps normal 0^'
     let ncol = col('.')
     execute 'keepjumps normal `x'
-    " TODO: can we paste at ncol ?
-    if ncol > ccol
+    " keep going up until non-blank line ...
+    call search('^.\+', 'bW')
+    execute 'keepjumps normal 0^'
+    let pcol = col('.')
+    execute 'keepjumps normal `x'
+    if ncol >= pcol
+        let xcol = ncol
+    else
+        let xcol = pcol
+    endif
+    if xcol > ccol
         "call feedkeys('\p.')
-        execute "keepjumps normal \<Plug>UnconditionalPasteMoreIndentAfter"
+        let l:mm = (xcol - ccol) / 4
+        execute "keepjumps normal " . l:mm . "\<Plug>UnconditionalPasteMoreIndentAfter"
     else
         "call feedkeys('\pi')
         execute "keepjumps normal \<Plug>UnconditionalPasteIndentedAfter"
     endif
 endfunction
 nmap <silent> <Leader>pi <C-\><C-n>:<C-u>call <SID>MyUPIndentAfter()<CR>
+"nmap <silent> <Leader>pi g]p
 
 function s:MyUPIndentBefore() abort
     execute 'keepjumps normal mx^'
@@ -8436,16 +8447,27 @@ function s:MyUPIndentBefore() abort
     execute 'keepjumps normal 0^'
     let pcol = col('.')
     execute 'keepjumps normal `x'
-    " TODO: can we paste at pcol ?
-    if pcol > ccol
+    " keep going down until non-blank line ...
+    call search('^.\+', 'W')
+    execute 'keepjumps normal 0^'
+    let ncol = col('.')
+    execute 'keepjumps normal `x'
+    if pcol >= ncol
+        let xcol = pcol
+    else
+        let xcol = ncol
+    endif
+    if xcol > ccol
         "call feedkeys('\P.')
-        execute "keepjumps normal \<Plug>UnconditionalPasteMoreIndentBefore"
+        let l:mm = (xcol - ccol) / 4
+        execute "keepjumps normal " . l:mm . "\<Plug>UnconditionalPasteMoreIndentBefore"
     else
         "call feedkeys('\Pi')
         execute "keepjumps normal \<Plug>UnconditionalPasteIndentedBefore"
     endif
 endfunction
 nmap <silent> <Leader>Pi <C-\><C-n>:<C-u>call <SID>MyUPIndentBefore()<CR>
+"nmap <silent> <Leader>Pi g]P
 
 " unconditional-paste may map <C-u> to something ...
 inoremap <silent> <C-u> <C-\><C-o><C-b>
