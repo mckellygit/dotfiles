@@ -246,6 +246,11 @@ echo ""
 # htop:
 #   git clone git@github.com-mckelly:htop-dev/htop.git
 
+# btop:
+#   git clone https://github.com/aristocratos/btop.git
+
+# there is also glances (https://github.com/nicolargo/glances.git), tiptop
+
 # ---------------------
 
 # st: (simple terminal)
