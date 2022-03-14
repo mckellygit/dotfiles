@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [[ $# == 1 ]] ; then
+    rm -f ~/.zsh_hist.$$
+    exec $0
+fi
+
 export BYOBU_CONFIG_DIR=~/.byobu
 
 PKG="byobu"
@@ -29,5 +34,5 @@ if [ ! -d "$BYOBU_RUN_DIR" ] || [ ! -O "$BYOBU_RUN_DIR" ] || [ ! -w "$BYOBU_RUN_
 	fi
 fi
 
-tmux -u -2 -f $BYOBU_CONFIG_DIR/tmuxrc
+exec tmux -u -2 -f $BYOBU_CONFIG_DIR/tmuxrc
 

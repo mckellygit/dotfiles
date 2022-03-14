@@ -640,6 +640,8 @@ fi
 
 # --------------------
 
+alias start_tmux='exec \start_tmux 1'
+
 alias st='command st -g 194x51+690+678'
 
 alias bye='echo "dont leave :-("'
