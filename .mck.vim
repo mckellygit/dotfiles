@@ -122,6 +122,7 @@ if g:has_wsl == 0 && has("nvim")
     Plugin 'hrsh7th/nvim-compe'
     " coc.nvim ?
     "Plugin 'nvim-telescope/telescope.nvim'
+    "https://github.com/tree-sitter/tree-sitter.git
 endif
 "
 " echodoc function completion
