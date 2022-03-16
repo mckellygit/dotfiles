@@ -251,6 +251,12 @@ echo ""
 
 # there is also glances (https://github.com/nicolargo/glances.git), tiptop
 
+# nethogs - net by process
+#   git glone git@github.com-mckelly:raboof/nethogs.git
+
+# iftop - net by IP
+#   git clone https://code.blinkace.com/pdw/iftop.git
+
 # ---------------------
 
 # st: (simple terminal)
