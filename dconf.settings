@@ -1,349 +1,403 @@
+[apps/audio-recorder]
+append-to-file=false
+audio-device-id='alsa_input.pci-0000_00_1f.3.analog-stereo'
+audio-device-name='Built-in Audio Analog Stereo (Microphone)'
+audio-device-type=8
+filename-pattern='%Y-%m-%d-%H:%M:%S'
+folder-name='/home/kellma02/Audio'
+media-format='CD Quality, MP3 Lossy 44KHz'
+saved-profiles=@a(ssss) []
+settings-expanded=true
+show-systray-icon=true
+started-first-time=false
+timer-active=false
+timer-expanded=true
+timer-setting-counter=4
+timer-text='#start at 02:20 pm\n#stop at 15:00\n#stop after 1h 30min\nstop if silence 4s 20%\n#stop if silence | 100MB\n#start if voice 0.3\n#start if voice 30%'
+
+[apps/audio-recorder/players]
+device-type-64=['alsa_input.pci-0000_00_1f.3.analog-stereo']
+saved-player-list=@as []
+
+[apps/update-manager]
+first-run=false
+launch-count=62
+launch-time=int64 1646831206
+show-details=true
+window-height=2089
+window-width=3768
+
+[ca/desrt/dconf-editor]
+saved-pathbar-path='/org/gnome/shell/window-switcher/'
+saved-view='/org/gnome/shell/'
+window-height=1117
+window-is-maximized=false
+window-width=1866
+
 [com/ubuntu/update-notifier]
-release-check-time=uint32 1634911735
+release-check-time=uint32 1647382868
 
-[net/launchpad/diodon/plugins]
-active-plugins=['indicator']
+[org/gnome/Totem]
+active-plugins=['skipto', 'screensaver', 'media_player_keys', 'vimeo', 'apple-trailers', 'screenshot', 'autoload-subtitles', 'movie-properties', 'save-file', 'variable-rate', 'recent']
+subtitle-encoding='UTF-8'
 
-[net/launchpad/diodon/clipboard]
-add-images=false
-keep-clipboard-content=false
-instant-paste=false
-recent-items-size=uint32 1
-use-clipboard=true
-synchronize-clipboards=true
-use-primary=true
+[org/gnome/calendar]
+active-view='year'
+window-maximized=false
+window-position=(320, 182)
+window-size=(1690, 1045)
 
-[org/gnome/terminal/legacy]
-schema-version=uint32 3
+[org/gnome/cheese]
+burst-delay=1000
+camera='Integrated_Webcam_HD: Integrate'
+photo-x-resolution=640
+photo-y-resolution=480
+video-x-resolution=640
+video-y-resolution=480
 
-[org/gnome/settings-daemon/plugins/power]
-sleep-inactive-ac-timeout=3600
-sleep-inactive-ac-type='suspend'
-sleep-inactive-battery-timeout=900
+[org/gnome/control-center]
+last-panel='mouse'
 
-[org/gnome/settings-daemon/plugins/color]
-night-light-schedule-automatic=false
-night-light-schedule-to=0.5
-night-light-schedule-from=5.0
-night-light-enabled=true
-night-light-temperature=uint32 5250
+[org/gnome/deja-dup]
+backend='local'
+prompt-check='disabled'
 
-[org/gnome/settings-daemon/plugins/media-keys]
-custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']
-logout='<Primary><Shift><Alt>Delete'
-volume-down='<Super>comma'
-volume-up='<Super>period'
-volume-mute='<Super>slash'
+[org/gnome/deja-dup/file]
+migrated=true
 
-[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0]
-binding='<Primary><Alt>w'
-command='term_win_loc'
-name='Window Chooser'
+[org/gnome/deja-dup/gcs]
+folder='hal9009'
 
-[org/gnome/settings-daemon/plugins/xsettings]
-hinting='slight'
+[org/gnome/deja-dup/goa]
+folder='hal9009'
+type='google'
 
-[org/gnome/settings-daemon/peripherals/keyboard]
-numlock-state='on'
+[org/gnome/deja-dup/local]
+folder='hal9009'
 
-[org/gnome/shell]
-app-picker-view=uint32 1
-command-history=['r', 'lg', 'r']
-enabled-extensions=['sound-output-device-chooser@kgshank.net', 'clipboard-indicator@tudmotu.com', 'cascade-windows@lytol.com']
-favorite-apps=['org.gnome.Nautilus.desktop', 'rhythmbox.desktop', 'libreoffice-writer.desktop', 'org.gnome.Software.desktop', 'update-manager.desktop', 'yelp.desktop', 'simple-scan.desktop', 'code.desktop', 'google-chrome.desktop', 'org.remmina.Remmina.desktop', 'firefox.desktop', 'nixnote2.desktop', 'Alacritty.desktop', 'kitty.desktop', 'org.wezfurlong.wezterm.desktop', 'st.desktop']
+[org/gnome/deja-dup/openstack]
+container='hal9009'
 
-[org/gnome/shell/extensions/sound-output-device-chooser]
-icon-theme='colored'
+[org/gnome/deja-dup/rackspace]
+container='hal9009'
 
-[org/gnome/gedit/preferences/print]
-print-syntax-highlighting=true
-print-header=true
-print-line-numbers=uint32 0
-print-font-body-pango='Monospace 9'
-print-font-numbers-pango='Sans 8'
-print-font-header-pango='Sans 11'
-print-wrap-mode='word'
+[org/gnome/deja-dup/remote]
+folder='hal9009'
 
-[org/gnome/gedit/preferences/ui]
-show-tabs-mode='auto'
+[org/gnome/deja-dup/s3]
+folder='hal9009'
 
-[org/gnome/gedit/plugins/filebrowser]
-virtual-root='file:///home/kellma02'
-tree-view=true
-root='file:///'
+[org/gnome/desktop/a11y/keyboard]
+mousekeys-enable=false
 
-[org/gnome/gedit/plugins]
-active-plugins=['docinfo', 'filebrowser', 'time', 'spell', 'modelines']
+[org/gnome/desktop/a11y/magnifier]
+mag-factor=1.0
 
-[org/gnome/gedit/state/window]
-size=(900, 700)
-state=87168
-bottom-panel-size=140
-side-panel-size=200
-side-panel-active-page='GeditWindowDocumentsPanel'
+[org/gnome/desktop/app-folders]
+folder-children=['Utilities', 'Sundry', 'YaST']
 
-[org/gnome/gnome-screenshot]
-include-pointer=false
-include-border=true
-border-effect='none'
-last-save-directory='file:///home/kellma02/Downloads'
+[org/gnome/desktop/app-folders/folders/Sundry]
+apps=['alacarte.desktop', 'authconfig.desktop', 'ca.desrt.dconf-editor.desktop', 'fedora-release-notes.desktop', 'firewall-config.desktop', 'flash-player-properties.desktop', 'gconf-editor.desktop', 'gnome-abrt.desktop', 'gnome-power-statistics.desktop', 'ibus-setup-anthy.desktop', 'ibus-setup.desktop', 'ibus-setup-hangul.desktop', 'ibus-setup-libbopomofo.desktop', 'ibus-setup-libpinyin.desktop', 'ibus-setup-m17n.desktop', 'ibus-setup-typing-booster.desktop', 'im-chooser.desktop', 'itweb-settings.desktop', 'jhbuild.desktop', 'javaws.desktop', 'java-1.7.0-openjdk-jconsole.desktop', 'java-1.7.0-openjdk-policytool.desktop', 'log4j-chainsaw.desktop', 'log4j-logfactor5.desktop', 'nm-connection-editor.desktop', 'orca.desktop', 'setroubleshoot.desktop', 'system-config-date.desktop', 'system-config-firewall.desktop', 'system-config-keyboard.desktop', 'system-config-language.desktop', 'system-config-printer.desktop', 'system-config-users.desktop', 'vino-preferences.desktop']
+categories=['X-GNOME-Sundry']
+name='X-GNOME-Sundry.directory'
+translate=true
 
-[org/gnome/nautilus/preferences]
-default-folder-viewer='list-view'
-search-filter-time-type='last_modified'
+[org/gnome/desktop/app-folders/folders/Utilities]
+apps=['org.gnome.baobab.desktop', 'deja-dup-preferences.desktop', 'eog.desktop', 'evince.desktop', 'org.gnome.FileRoller.desktop', 'gnome-calculator.desktop', 'gnome-dictionary.desktop', 'org.gnome.Characters.desktop', 'org.gnome.DiskUtility.desktop', 'org.gnome.font-viewer.desktop', 'org.gnome.Terminal.desktop', 'org.gnome.Screenshot.desktop', 'gnome-system-log.desktop', 'gnome-system-monitor.desktop', 'gnome-tweak-tool.desktop', 'gucharmap.desktop', 'seahorse.desktop', 'vinagre.desktop', 'yelp.desktop']
+categories=['X-GNOME-Utilities']
+name='X-GNOME-Utilities.directory'
+translate=true
 
-[org/gnome/nautilus/window-state]
-sidebar-width=244
-geometry='2498x1349+36+32'
-maximized=false
+[org/gnome/desktop/app-folders/folders/YaST]
+categories=['X-SuSE-YaST']
+name='suse-yast.directory'
+translate=true
 
-[org/gnome/nautilus/desktop]
-home-icon-visible=false
-volumes-visible=false
-trash-icon-visible=false
+[org/gnome/desktop/background]
+color-shading-type='solid'
+picture-options='zoom'
+picture-uri='file:///home/kellma02/Pictures/CanadaSky.jpg'
+primary-color='#000000000000'
+secondary-color='#000000000000'
 
-[org/gnome/power-manager]
-info-history-type='charge'
-info-stats-type='discharge-accuracy'
-info-last-device='wakeups'
-info-page-number=3
+[org/gnome/desktop/calendar]
+show-weekdate=false
+
+[org/gnome/desktop/input-sources]
+sources=[('xkb', 'us')]
+xkb-options=['ctrl:nocaps']
+
+[org/gnome/desktop/interface]
+clock-show-date=true
+cursor-blink=true
+cursor-size=24
+document-font-name='Sans 13'
+font-name='Ubuntu 13'
+gtk-enable-primary-paste=false
+gtk-im-module='gtk-im-context-simple'
+gtk-key-theme='Default'
+gtk-theme='Yaru'
+monospace-font-name='Ubuntu Mono 13'
+text-scaling-factor=1.25
+
+[org/gnome/desktop/notifications]
+application-children=['diodon', 'org-gnome-software', 'google-chrome', 'kitty', 'apport-gtk', 'org-gnome-nautilus', 'nixnote2', 'teams-insiders', 'org-remmina-remmina', 'update-manager', 'ca-desrt-dconf-editor', 'clipit', 'org-gnome-dejadup', 'firefox', 'gnome-network-panel', 'rhythmbox', 'vivaldi-stable', 'gvim', 'appimagekit-pcloud', 'org-wezfurlong-wezterm', 'org-gnome-extensions-desktop', 'gnome-power-panel', 'gnome-printers-panel', 'st']
+
+[org/gnome/desktop/notifications/application/appimagekit-pcloud]
+application-id='appimagekit-pcloud.desktop'
+
+[org/gnome/desktop/notifications/application/apport-gtk]
+application-id='apport-gtk.desktop'
+
+[org/gnome/desktop/notifications/application/ca-desrt-dconf-editor]
+application-id='ca.desrt.dconf-editor.desktop'
+
+[org/gnome/desktop/notifications/application/clipit]
+application-id='clipit.desktop'
+
+[org/gnome/desktop/notifications/application/diodon]
+application-id='diodon.desktop'
+
+[org/gnome/desktop/notifications/application/firefox]
+application-id='firefox.desktop'
+
+[org/gnome/desktop/notifications/application/gnome-network-panel]
+application-id='gnome-network-panel.desktop'
+
+[org/gnome/desktop/notifications/application/gnome-power-panel]
+application-id='gnome-power-panel.desktop'
+
+[org/gnome/desktop/notifications/application/gnome-printers-panel]
+application-id='gnome-printers-panel.desktop'
+
+[org/gnome/desktop/notifications/application/google-chrome]
+application-id='google-chrome.desktop'
+
+[org/gnome/desktop/notifications/application/gvim]
+application-id='gvim.desktop'
+
+[org/gnome/desktop/notifications/application/io-github-pithos]
+application-id='io.github.Pithos.desktop'
+
+[org/gnome/desktop/notifications/application/kitty]
+application-id='kitty.desktop'
+
+[org/gnome/desktop/notifications/application/nixnote2]
+application-id='nixnote2.desktop'
+
+[org/gnome/desktop/notifications/application/org-gnome-dejadup]
+application-id='org.gnome.DejaDup.desktop'
+
+[org/gnome/desktop/notifications/application/org-gnome-extensions-desktop]
+application-id='org.gnome.Extensions.desktop.desktop'
+
+[org/gnome/desktop/notifications/application/org-gnome-nautilus]
+application-id='org.gnome.Nautilus.desktop'
+
+[org/gnome/desktop/notifications/application/org-gnome-software]
+application-id='org.gnome.Software.desktop'
+
+[org/gnome/desktop/notifications/application/org-remmina-remmina]
+application-id='org.remmina.Remmina.desktop'
+
+[org/gnome/desktop/notifications/application/org-wezfurlong-wezterm]
+application-id='org.wezfurlong.wezterm.desktop'
+
+[org/gnome/desktop/notifications/application/rhythmbox]
+application-id='rhythmbox.desktop'
+
+[org/gnome/desktop/notifications/application/st]
+application-id='st.desktop'
+
+[org/gnome/desktop/notifications/application/teams-insiders]
+application-id='teams-insiders.desktop'
+
+[org/gnome/desktop/notifications/application/update-manager]
+application-id='update-manager.desktop'
+
+[org/gnome/desktop/notifications/application/vivaldi-stable]
+application-id='vivaldi-stable.desktop'
+
+[org/gnome/desktop/peripherals/mouse]
+speed=-0.79856115107913672
+
+[org/gnome/desktop/peripherals/touchpad]
+speed=0.044117647058823595
+two-finger-scrolling-enabled=true
+
+[org/gnome/desktop/privacy]
+disable-microphone=false
+old-files-age=uint32 1
+recent-files-max-age=7
+remember-recent-files=false
+remove-old-temp-files=false
+remove-old-trash-files=false
+
+[org/gnome/desktop/screensaver]
+color-shading-type='solid'
+lock-delay=uint32 0
+picture-options='zoom'
+picture-uri='file:///home/kellma02/Pictures/AngkorWat.jpg'
+primary-color='#000000000000'
+secondary-color='#000000000000'
+
+[org/gnome/desktop/search-providers]
+disable-external=true
+disabled=['org.gnome.Nautilus.desktop', 'org.gnome.Calendar.desktop', 'seahorse.desktop', 'org.gnome.Terminal.desktop']
+sort-order=['org.gnome.Contacts.desktop', 'org.gnome.Documents.desktop', 'org.gnome.Nautilus.desktop']
+
+[org/gnome/desktop/session]
+idle-delay=uint32 900
+
+[org/gnome/desktop/sound]
+allow-volume-above-100-percent=false
+
+[org/gnome/desktop/wm/keybindings]
+cycle-windows=['<Super>q']
+cycle-windows-backward=['<Shift><Super>q']
+raise-or-lower=['<Shift><Alt>w']
+switch-applications=['<Super>Tab']
+switch-applications-backward=['<Shift><Super>Tab']
+switch-group=['<Super>Above_Tab']
+switch-group-backward=['<Shift><Super>Above_Tab']
+switch-to-workspace-down=['<Super>Page_Down']
+switch-to-workspace-left=['<Super><Alt>Left']
+switch-to-workspace-right=['<Super><Alt>Right']
+switch-to-workspace-up=['<Super>Page_Up']
+switch-windows=['<Super>w']
+switch-windows-backward=['<Shift><Super>w']
+
+[org/gnome/desktop/wm/preferences]
+action-double-click-titlebar='toggle-maximize-horizontally'
+audible-bell=false
+auto-raise=false
+focus-mode='sloppy'
+visual-bell-type='frame-flash'
+
+[org/gnome/eog/ui]
+statusbar=true
+
+[org/gnome/eog/view]
+background-color='rgb(0,0,0)'
+use-background-color=true
 
 [org/gnome/evince/default]
 window-ratio=(3.0277777777777777, 1.25)
 
+[org/gnome/evolution-data-server]
+migrated=true
+network-monitor-gio-name=''
+
 [org/gnome/file-roller/listing]
-sort-method='name'
-name-column-width=250
-sort-type='ascending'
 list-mode='as-folder'
+name-column-width=250
 show-path=false
+sort-method='name'
+sort-type='ascending'
 
 [org/gnome/file-roller/ui]
 sidebar-width=200
 window-height=480
 window-width=600
 
-[org/gnome/calendar]
-window-position=(320, 182)
-active-view='year'
-window-maximized=false
-window-size=(1690, 1045)
+[org/gnome/gedit/plugins]
+active-plugins=['docinfo', 'filebrowser', 'time', 'spell', 'modelines']
 
-[org/gnome/evolution-data-server]
-network-monitor-gio-name=''
-migrated=true
+[org/gnome/gedit/plugins/filebrowser]
+root='file:///'
+tree-view=true
+virtual-root='file:///home/kellma02'
 
-[org/gnome/deja-dup]
-backend='local'
-prompt-check='disabled'
+[org/gnome/gedit/preferences/print]
+print-font-body-pango='Monospace 9'
+print-font-header-pango='Sans 11'
+print-font-numbers-pango='Sans 8'
+print-header=true
+print-line-numbers=uint32 0
+print-syntax-highlighting=true
+print-wrap-mode='word'
 
-[org/gnome/deja-dup/s3]
-folder='hal9009'
+[org/gnome/gedit/preferences/ui]
+show-tabs-mode='auto'
 
-[org/gnome/deja-dup/openstack]
-container='hal9009'
+[org/gnome/gedit/state/window]
+bottom-panel-size=140
+side-panel-active-page='GeditWindowDocumentsPanel'
+side-panel-size=200
+size=(900, 700)
+state=87168
 
-[org/gnome/deja-dup/gcs]
-folder='hal9009'
+[org/gnome/gnome-screenshot]
+border-effect='none'
+include-border=true
+include-pointer=false
+last-save-directory='file:///home/kellma02/Downloads'
 
-[org/gnome/deja-dup/local]
-folder='hal9009'
+[org/gnome/mutter]
+center-new-windows=true
+experimental-features=['scale-monitor-framebuffer']
+overlay-key='Super_R'
 
-[org/gnome/deja-dup/remote]
-folder='hal9009'
+[org/gnome/nautilus/desktop]
+home-icon-visible=false
+trash-icon-visible=false
+volumes-visible=false
 
-[org/gnome/deja-dup/rackspace]
-container='hal9009'
+[org/gnome/nautilus/preferences]
+default-folder-viewer='list-view'
+search-filter-time-type='last_modified'
 
-[org/gnome/deja-dup/goa]
-folder='hal9009'
-type='google'
+[org/gnome/nautilus/window-state]
+geometry='1920x1060+36+32'
+initial-size=(1841, 1064)
+maximized=false
+sidebar-width=244
 
-[org/gnome/deja-dup/file]
-migrated=true
+[org/gnome/nm-applet/eap/2ccca922-4956-4b08-8d62-a237b849436e]
+ignore-ca-cert=false
+ignore-phase2-ca-cert=false
 
-[org/gnome/desktop/interface]
-text-scaling-factor=1.25
-cursor-size=24
-font-name='Ubuntu 13'
-document-font-name='Sans 13'
-gtk-im-module='gtk-im-context-simple'
-cursor-theme='DMZ-White'
-monospace-font-name='Ubuntu Mono 13'
-cursor-blink=true
-clock-show-date=true
+[org/gnome/nm-applet/eap/9bb7dd3d-c198-46cb-8ac5-dd688a1d6120]
+ignore-ca-cert=false
+ignore-phase2-ca-cert=false
 
-[org/gnome/desktop/notifications]
-application-children=['diodon', 'org-gnome-software', 'google-chrome', 'kitty', 'apport-gtk', 'org-gnome-nautilus', 'nixnote2', 'teams-insiders', 'org-remmina-remmina', 'update-manager', 'ca-desrt-dconf-editor', 'clipit', 'org-gnome-dejadup', 'firefox', 'gnome-network-panel', 'rhythmbox', 'vivaldi-stable', 'gvim', 'appimagekit-pcloud']
+[org/gnome/nm-applet/eap/e79b5425-4347-471f-9d44-af4ac6fac4e7]
+ignore-ca-cert=false
+ignore-phase2-ca-cert=false
 
-[org/gnome/desktop/notifications/application/appimagekit-pcloud]
-application-id='appimagekit-pcloud.desktop'
+[org/gnome/power-manager]
+info-history-type='charge'
+info-last-device='wakeups'
+info-page-number=3
+info-stats-type='discharge-accuracy'
 
-[org/gnome/desktop/notifications/application/google-chrome]
-application-id='google-chrome.desktop'
+[org/gnome/rhythmbox]
+paned-position=217
+position=(36, 32)
+size=(1921, 1034)
+statusbar-visible=false
 
-[org/gnome/desktop/notifications/application/firefox]
-application-id='firefox.desktop'
+[org/gnome/rhythmbox/library]
+layout-filename='%tN - %tt'
+layout-path='%aa/%at'
 
-[org/gnome/desktop/notifications/application/kitty]
-application-id='kitty.desktop'
+[org/gnome/rhythmbox/library/encoding]
+media-type='audio/x-vorbis'
 
-[org/gnome/desktop/notifications/application/org-gnome-nautilus]
-application-id='org.gnome.Nautilus.desktop'
+[org/gnome/rhythmbox/library/source]
+show-browser=false
 
-[org/gnome/desktop/notifications/application/clipit]
-application-id='clipit.desktop'
+[org/gnome/rhythmbox/player]
+volume=1.0
 
-[org/gnome/desktop/notifications/application/vivaldi-stable]
-application-id='vivaldi-stable.desktop'
+[org/gnome/rhythmbox/plugins]
+active-plugins=['notification', 'mpris', 'audiocd', 'iradio', 'android', 'dbus-media-server', 'ipod', 'power-manager', 'daap', 'generic-player', 'mmkeys', 'rb', 'alternative-toolbar', 'artsearch', 'audioscrobbler', 'mtpdevice']
+seen-plugins=['notification', 'mpris', 'dbus-media-server', 'rblirc', 'ipod', 'grilo', 'pythonconsole', 'daap', 'rb', 'alternative-toolbar', 'artsearch', 'sendto', 'soundcloud', 'lyrics', 'magnatune', 'im-status', 'replaygain', 'audioscrobbler', 'webremote', 'fmradio', 'mtpdevice']
 
-[org/gnome/desktop/notifications/application/org-gnome-dejadup]
-application-id='org.gnome.DejaDup.desktop'
-
-[org/gnome/desktop/notifications/application/teams-insiders]
-application-id='teams-insiders.desktop'
-
-[org/gnome/desktop/notifications/application/diodon]
-application-id='diodon.desktop'
-
-[org/gnome/desktop/notifications/application/gnome-network-panel]
-application-id='gnome-network-panel.desktop'
-
-[org/gnome/desktop/notifications/application/org-gnome-software]
-application-id='org.gnome.Software.desktop'
-
-[org/gnome/desktop/notifications/application/update-manager]
-application-id='update-manager.desktop'
-
-[org/gnome/desktop/notifications/application/ca-desrt-dconf-editor]
-application-id='ca.desrt.dconf-editor.desktop'
-
-[org/gnome/desktop/notifications/application/nixnote2]
-application-id='nixnote2.desktop'
-
-[org/gnome/desktop/notifications/application/rhythmbox]
-application-id='rhythmbox.desktop'
-
-[org/gnome/desktop/notifications/application/apport-gtk]
-application-id='apport-gtk.desktop'
-
-[org/gnome/desktop/notifications/application/org-remmina-remmina]
-application-id='org.remmina.Remmina.desktop'
-
-[org/gnome/desktop/notifications/application/gvim]
-application-id='gvim.desktop'
-
-[org/gnome/desktop/app-folders]
-folder-children=['Utilities', 'Sundry', 'YaST']
-
-[org/gnome/desktop/app-folders/folders/Utilities]
-translate=true
-categories=['X-GNOME-Utilities']
-apps=['org.gnome.baobab.desktop', 'deja-dup-preferences.desktop', 'eog.desktop', 'evince.desktop', 'org.gnome.FileRoller.desktop', 'gnome-calculator.desktop', 'gnome-dictionary.desktop', 'org.gnome.Characters.desktop', 'org.gnome.DiskUtility.desktop', 'org.gnome.font-viewer.desktop', 'org.gnome.Terminal.desktop', 'org.gnome.Screenshot.desktop', 'gnome-system-log.desktop', 'gnome-system-monitor.desktop', 'gnome-tweak-tool.desktop', 'gucharmap.desktop', 'seahorse.desktop', 'vinagre.desktop', 'yelp.desktop']
-name='X-GNOME-Utilities.directory'
-
-[org/gnome/desktop/app-folders/folders/Sundry]
-translate=true
-categories=['X-GNOME-Sundry']
-apps=['alacarte.desktop', 'authconfig.desktop', 'ca.desrt.dconf-editor.desktop', 'fedora-release-notes.desktop', 'firewall-config.desktop', 'flash-player-properties.desktop', 'gconf-editor.desktop', 'gnome-abrt.desktop', 'gnome-power-statistics.desktop', 'ibus-setup-anthy.desktop', 'ibus-setup.desktop', 'ibus-setup-hangul.desktop', 'ibus-setup-libbopomofo.desktop', 'ibus-setup-libpinyin.desktop', 'ibus-setup-m17n.desktop', 'ibus-setup-typing-booster.desktop', 'im-chooser.desktop', 'itweb-settings.desktop', 'jhbuild.desktop', 'javaws.desktop', 'java-1.7.0-openjdk-jconsole.desktop', 'java-1.7.0-openjdk-policytool.desktop', 'log4j-chainsaw.desktop', 'log4j-logfactor5.desktop', 'nm-connection-editor.desktop', 'orca.desktop', 'setroubleshoot.desktop', 'system-config-date.desktop', 'system-config-firewall.desktop', 'system-config-keyboard.desktop', 'system-config-language.desktop', 'system-config-printer.desktop', 'system-config-users.desktop', 'vino-preferences.desktop']
-name='X-GNOME-Sundry.directory'
-
-[org/gnome/desktop/app-folders/folders/YaST]
-translate=true
-categories=['X-SuSE-YaST']
-name='suse-yast.directory'
-
-[org/gnome/desktop/screensaver]
-picture-uri='file:///home/kellma02/Pictures/AngkorWat.jpg'
-color-shading-type='solid'
-primary-color='#000000000000'
-picture-options='zoom'
-secondary-color='#000000000000'
-
-[org/gnome/desktop/peripherals/touchpad]
-speed=-0.78417266187050361
-
-[org/gnome/desktop/peripherals/mouse]
-speed=-0.79856115107913672
-
-[org/gnome/desktop/calendar]
-show-weekdate=false
-
-[org/gnome/desktop/search-providers]
-sort-order=['org.gnome.Contacts.desktop', 'org.gnome.Documents.desktop', 'org.gnome.Nautilus.desktop']
-disabled=['org.gnome.Nautilus.desktop', 'org.gnome.Calendar.desktop', 'seahorse.desktop', 'org.gnome.Terminal.desktop']
-
-[org/gnome/desktop/privacy]
-recent-files-max-age=7
-remove-old-temp-files=false
-old-files-age=uint32 1
-remember-recent-files=false
-remove-old-trash-files=false
-
-[org/gnome/desktop/wm/preferences]
-focus-mode='sloppy'
-action-double-click-titlebar='toggle-maximize-horizontally'
-audible-bell=false
-
-[org/gnome/desktop/wm/keybindings]
-raise-or-lower=['<Shift><Alt>w']
-switch-windows-backward=['<Shift><Super>w']
-switch-to-workspace-left=['<Super><Alt>Left']
-switch-applications=['<Super>Tab']
-switch-to-workspace-down=['<Super>Page_Down']
-switch-to-workspace-right=['<Super><Alt>Right']
-cycle-windows=['<Super>q']
-cycle-windows-backward=['<Shift><Super>q']
-switch-applications-backward=['<Shift><Super>Tab']
-switch-group-backward=['<Shift><Super>Above_Tab']
-switch-group=['<Super>Above_Tab']
-switch-windows=['<Super>w']
-switch-to-workspace-up=['<Super>Page_Up']
-
-[org/gnome/desktop/session]
-idle-delay=uint32 900
-
-[org/gnome/desktop/a11y/magnifier]
-mag-factor=1.0
-
-[org/gnome/desktop/a11y/keyboard]
-mousekeys-enable=false
-
-[org/gnome/desktop/background]
-picture-uri='file:///home/kellma02/Pictures/Stream.jpg'
-color-shading-type='solid'
-primary-color='#000000000000'
-picture-options='zoom'
-secondary-color='#000000000000'
-
-[org/gnome/desktop/input-sources]
-sources=[('xkb', 'us')]
-xkb-options=['ctrl:nocaps']
-
-[org/gnome/cheese]
-photo-y-resolution=480
-burst-delay=1000
-video-y-resolution=480
-camera='Integrated_Webcam_HD: Integrate'
-photo-x-resolution=640
-video-x-resolution=640
-
-[org/gnome/control-center]
-last-panel='keyboard'
-
-[org/gnome/todo]
-view='grid'
-default-provider='local'
-window-position=[36, 32]
-window-maximized=false
-window-size=[1887, 1066]
-
-[org/gnome/eog/view]
-background-color='rgb(0,0,0)'
-use-background-color=true
-
-[org/gnome/eog/ui]
-statusbar=true
+[org/gnome/rhythmbox/plugins/alternative_toolbar]
+display-type=1
+expanders='{1: True, 2: False, 0: False, 3: False}'
+show-source-toolbar=false
 
 [org/gnome/rhythmbox/plugins/audioscrobbler/Last.fm]
 scrobbling-enabled=true
@@ -357,149 +411,125 @@ initial-stations-loaded=true
 [org/gnome/rhythmbox/plugins/iradio/source]
 show-browser=true
 
-[org/gnome/rhythmbox/plugins]
-active-plugins=['notification', 'mpris', 'audiocd', 'iradio', 'android', 'dbus-media-server', 'ipod', 'power-manager', 'daap', 'generic-player', 'mmkeys', 'rb', 'alternative-toolbar', 'artsearch', 'audioscrobbler', 'mtpdevice']
-seen-plugins=['notification', 'mpris', 'dbus-media-server', 'rblirc', 'ipod', 'grilo', 'pythonconsole', 'daap', 'rb', 'alternative-toolbar', 'artsearch', 'sendto', 'soundcloud', 'lyrics', 'magnatune', 'im-status', 'replaygain', 'audioscrobbler', 'webremote', 'fmradio', 'mtpdevice']
-
-[org/gnome/rhythmbox/plugins/alternative_toolbar]
-expanders='{1: True, 2: False, 0: False, 3: False}'
-display-type=1
-show-source-toolbar=false
-
-[org/gnome/rhythmbox/player]
-volume=1.0
-
 [org/gnome/rhythmbox/podcast]
 download-location='file:///home/kellma02/Music'
 
 [org/gnome/rhythmbox/podcast/source]
 show-browser=true
 
-[org/gnome/rhythmbox]
-position=(36, 32)
-size=(1921, 1034)
-paned-position=217
-statusbar-visible=false
-
-[org/gnome/rhythmbox/library]
-layout-filename='%tN - %tt'
-layout-path='%aa/%at'
-
-[org/gnome/rhythmbox/library/encoding]
-media-type='audio/x-vorbis'
-
-[org/gnome/rhythmbox/library/source]
-show-browser=false
+[org/gnome/rhythmbox/rhythmdb]
+locations=['file:///home/kellma02/Music']
 
 [org/gnome/rhythmbox/sources]
 visible-columns=['post-time', 'artist', 'duration', 'genre', 'track-number', 'album']
 
-[org/gnome/rhythmbox/rhythmdb]
-locations=['file:///home/kellma02/Music']
+[org/gnome/settings-daemon/peripherals/keyboard]
+numlock-state='on'
 
-[org/gnome/nm-applet/eap/9bb7dd3d-c198-46cb-8ac5-dd688a1d6120]
-ignore-phase2-ca-cert=false
-ignore-ca-cert=false
+[org/gnome/settings-daemon/plugins/color]
+night-light-enabled=true
+night-light-schedule-automatic=false
+night-light-schedule-from=5.0
+night-light-schedule-to=0.5
+night-light-temperature=uint32 5250
 
-[org/gnome/nm-applet/eap/e79b5425-4347-471f-9d44-af4ac6fac4e7]
-ignore-phase2-ca-cert=false
-ignore-ca-cert=false
+[org/gnome/settings-daemon/plugins/media-keys]
+custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/']
+logout=['<Primary><Shift><Alt>Delete']
+volume-down=['<Super>comma']
+volume-mute=['<Super>slash']
+volume-up=['<Super>period']
 
-[org/gnome/nm-applet/eap/2ccca922-4956-4b08-8d62-a237b849436e]
-ignore-phase2-ca-cert=false
-ignore-ca-cert=false
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0]
+binding='<Primary><Alt>w'
+command='term_win_loc'
+name='Window Chooser'
 
-[org/gnome/Totem]
-subtitle-encoding='UTF-8'
-active-plugins=['skipto', 'screensaver', 'media_player_keys', 'vimeo', 'apple-trailers', 'screenshot', 'autoload-subtitles', 'movie-properties', 'save-file', 'variable-rate', 'recent']
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1]
+binding='<Primary><Alt>q'
+command='cycle_wins'
+name='Window Cycler'
 
-[org/gnome/mutter]
-overlay-key='Super_R'
-center-new-windows=true
-experimental-features=['scale-monitor-framebuffer']
+[org/gnome/settings-daemon/plugins/power]
+sleep-inactive-ac-timeout=3600
+sleep-inactive-ac-type='suspend'
+sleep-inactive-battery-timeout=900
+
+[org/gnome/settings-daemon/plugins/xsettings]
+hinting='slight'
+
+[org/gnome/shell]
+app-picker-view=uint32 1
+command-history=['gconf-editor', 'l2', 'r', '?', 'lg']
+enabled-extensions=['sound-output-device-chooser@kgshank.net', 'clipboard-indicator@tudmotu.com', 'cascade-windows@lytol.com']
+favorite-apps=['org.gnome.Nautilus.desktop', 'rhythmbox.desktop', 'libreoffice-writer.desktop', 'update-manager.desktop', 'yelp.desktop', 'simple-scan.desktop', 'code.desktop', 'firefox.desktop', 'vivaldi-stable.desktop', 'st.desktop', 'org.wezfurlong.wezterm.desktop']
+looking-glass-history=['exit', 'quit']
+
+[org/gnome/shell/extensions/dash-to-dock]
+hot-keys=false
+hotkeys-overlay=false
+hotkeys-show-dock=false
+preferred-monitor=0
+
+[org/gnome/shell/extensions/desktop-icons]
+show-home=false
+show-trash=false
+
+[org/gnome/shell/extensions/sound-output-device-chooser]
+icon-theme='colored'
 
 [org/gnome/software]
-check-timestamp=int64 1634646883
+check-timestamp=int64 1643554035
 
-[org/gtk/settings/file-chooser]
-sort-column='name'
-sidebar-width=247
-window-position=(1305, 603)
-show-size-column=true
-show-hidden=false
-window-size=(1231, 902)
-sort-directories-first=true
-date-format='regular'
-sort-order='ascending'
-location-mode='path-bar'
+[org/gnome/terminal/legacy]
+schema-version=uint32 3
+
+[org/gnome/todo]
+default-provider='local'
+view='grid'
+window-maximized=false
+window-position=[36, 32]
+window-size=[1887, 1066]
 
 [org/gtk/settings/color-chooser]
-selected-color=(true, 0.74509803921568629, 0.80784313725490198, 0.8666666666666667, 1.0)
 custom-colors=[(0.84705882352941175, 0.37254901960784315, 0.0, 1.0), (0.74509803921568629, 0.80784313725490198, 0.8666666666666667, 1.0)]
+selected-color=(true, 0.74509803921568629, 0.80784313725490198, 0.8666666666666667, 1.0)
+
+[org/gtk/settings/file-chooser]
+date-format='regular'
+location-mode='path-bar'
+show-hidden=false
+show-size-column=true
+show-type-column=true
+sidebar-width=247
+sort-column='name'
+sort-directories-first=true
+sort-order='ascending'
+type-format='category'
+window-position=(928, 580)
+window-size=(1231, 902)
 
 [org/yorba/shotwell/preferences/ui]
-sidebar-position=187
-display-sidebar=true
-photo-thumbnail-scale=360
 display-basic-properties=true
-display-photo-tags=true
 display-event-comments=false
-display-search-bar=false
-display-photo-titles=false
-show-welcome-dialog=false
-display-photo-ratings=true
-events-sort-ascending=false
-library-photos-sort-by=2
-library-photos-sort-ascending=false
+display-extended-properties=false
 display-photo-comments=false
+display-photo-ratings=true
+display-photo-tags=true
+display-photo-titles=false
+display-search-bar=false
+display-sidebar=true
+events-sort-ascending=false
+library-photos-sort-ascending=false
+library-photos-sort-by=2
+photo-thumbnail-scale=360
+show-welcome-dialog=false
+sidebar-position=290
 
 [org/yorba/shotwell/preferences/window]
-direct-maximize=false
 direct-height=768
+direct-maximize=false
 direct-width=1024
 library-height=768
-library-width=1024
 library-maximize=false
-
-[apps/audio-recorder]
-show-systray-icon=true
-timer-setting-counter=4
-filename-pattern='%Y-%m-%d-%H:%M:%S'
-started-first-time=false
-append-to-file=false
-timer-text='#start at 02:20 pm\n#stop at 15:00\n#stop after 1h 30min\nstop if silence 4s 20%\n#stop if silence | 100MB\n#start if voice 0.3\n#start if voice 30%'
-audio-device-type=8
-audio-device-id='alsa_input.pci-0000_00_1f.3.analog-stereo'
-timer-active=false
-folder-name='/home/kellma02/Audio'
-audio-device-name='Built-in Audio Analog Stereo (Microphone)'
-media-format='CD Quality, MP3 Lossy 44KHz'
-settings-expanded=true
-timer-expanded=true
-saved-profiles=@a(ssss) []
-
-[apps/audio-recorder/track]
-track-len=0
-track-pos=0
-album-name=''
-last-file-name='/home/kellma02/Audio/2020-07-12-10:33:25.mp3'
-artist-name=''
-track-name=''
-
-[apps/audio-recorder/players]
-device-type-64=['alsa_input.pci-0000_00_1f.3.analog-stereo']
-saved-player-list=@as []
-
-[apps/update-manager]
-first-run=false
-launch-time=int64 1634269599
-window-height=675
-show-details=true
-launch-count=48
-window-width=1135
-
-[ca/desrt/dconf-editor]
-saved-view='/org/gnome/desktop/'
-window-height=1117
-window-width=1866
-window-is-maximized=false
+library-width=1024
