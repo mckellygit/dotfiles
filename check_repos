@@ -257,6 +257,9 @@ echo ""
 # iftop - net by IP
 #   git clone https://code.blinkace.com/pdw/iftop.git
 
+# bmon
+#   git clone git@github.com-mckelly:tgraf/bmon.git
+
 # ---------------------
 
 # st: (simple terminal)
