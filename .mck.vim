@@ -2776,6 +2776,7 @@ let g:cursorhold_updatetime = 10000
 
 " quick-scope ------
 " use :QuickScopeToggle to toggle off/on
+" type 'f' and then see highlighted chars of each word to choose from ...
 let g:qs_highlight_on_keys = ['f', 'F']
 let g:qs_max_chars=200
 let g:qs_buftype_blacklist = ['terminal', 'nofile']
