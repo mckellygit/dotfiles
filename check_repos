@@ -222,7 +222,7 @@ echo ""
 #   go install
 
 # delta:
-#   git clone git@github.com-mckelly:dandavison/delta.git
+#   git clone https://github.com/dandavison/delta.git
 #   cd delta
 #   make
 #   sudo cp target/release/delta /usr/local/bin
