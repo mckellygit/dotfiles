@@ -8431,7 +8431,7 @@ function s:MyUPIndentAfter() abort
     else
         let xcol = pcol
     endif
-    if xcol > ccol
+    if xcol >= ccol
         "call feedkeys('\p.')
         let l:mm = (xcol - ccol) / 4
         execute "keepjumps normal " . l:mm . "\<Plug>UnconditionalPasteMoreIndentAfter"
@@ -8461,7 +8461,7 @@ function s:MyUPIndentBefore() abort
     else
         let xcol = ncol
     endif
-    if xcol > ccol
+    if xcol >= ccol
         "call feedkeys('\P.')
         let l:mm = (xcol - ccol) / 4
         execute "keepjumps normal " . l:mm . "\<Plug>UnconditionalPasteMoreIndentBefore"
