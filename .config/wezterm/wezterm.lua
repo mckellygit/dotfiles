@@ -37,6 +37,7 @@ return {
   window_close_confirmation = "AlwaysPrompt",
 
   swallow_mouse_click_on_pane_focus = true,
+  swallow_mouse_click_on_window_focus = true,
 
   enable_tab_bar = false,
   hide_tab_bar_if_only_one_tab = true,
