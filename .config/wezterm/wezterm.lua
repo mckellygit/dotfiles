@@ -33,6 +33,9 @@ return {
 
   window_background_opacity = 0.97,
 
+  -- if bracketed-paste is not enabled/active, then -
+  -- canonicalize_pasted_newlines = "CarriageReturnAndLineFeed",
+
   exit_behavior = "Close",
   window_close_confirmation = "AlwaysPrompt",
 
