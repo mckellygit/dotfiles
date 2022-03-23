@@ -1176,6 +1176,8 @@ endfunction
 noremap <silent> <Leader>ls <C-\><C-n>:<C-u>call <SID>Mylsfzf(0)<CR>
 noremap <silent> <Leader>lb <C-\><C-n>:<C-u>call <SID>Mylsfzf(1)<CR>
 
+noremap <silent> <Leader>lv <Esc>V
+
 " NOTE: seems like a better Buffers command than the fzf default ...
 command! Buffers call <SID>Mylsfzf(1)
 
