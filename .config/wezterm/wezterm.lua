@@ -1,8 +1,13 @@
 local wezterm = require 'wezterm';
 return {
 
-  -- NOTE: requires the termwiz/data/wezterm.terminfo compiled and installed ...
-  -- term = "wezterm",
+  -- NOTE: if not set, default is term=xterm-256color,
+  --       setting term=wezterm requires the termwiz/data/wezterm.terminfo to be compiled and installed ...
+  -- set_environment_variables = {
+  --   TERMINFO_DIRS='/home/user/.terminfo',
+  --   WSLENV='TERMINFO_DIRS'
+  -- },
+  term = "wezterm",
 
   enable_wayland = false,
 
