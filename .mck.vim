@@ -193,6 +193,9 @@ Plugin 'tpope/vim-dispatch'
 " git w/NERDtree
 "Plugin 'Xuyuanp/nerdtree-git-plugin'
 "
+" added to get around an issue with FixCursorHold plugin/logic
+let $VIM_GITGUTTER_TEST=1
+" --------------------------
 " gitgutter
 Plugin 'airblade/vim-gitgutter'
 " there is also -
