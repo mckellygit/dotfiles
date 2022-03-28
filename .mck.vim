@@ -2637,8 +2637,9 @@ let g:choosewin_overlay_font_size = "small"
 "nmap -          <Plug>(choosewin)
 nmap <C-w><C-a>    <Plug>(choosewin)
 nmap <C-w>a        <Plug>(choosewin)
-imap <C-w><C-a>    <C-\><C-o><Plug>(choosewin)
-imap <C-w>a        <C-\><C-o><Plug>(choosewin)
+"imap <C-w><C-a>    <C-\><C-o><Plug>(choosewin)
+"imap <C-w>a        <C-\><C-o><Plug>(choosewin)
+nmap <Leader>lc    <Plug>(choosewin)
 if !has("nvim")
     tmap <C-w><C-a>     <C-w>:ChooseWin<CR>
     tmap <C-w>a         <C-w>:ChooseWin<CR>
