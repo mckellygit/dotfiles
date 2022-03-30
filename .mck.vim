@@ -8375,12 +8375,13 @@ nnoremap <C-y> <Nop>
 noremap <Leader><C-y> <C-y>
 
 nmap <Leader>pc <Plug>UnconditionalPasteCharAfter
-nmap <Leader>p1 <Plug>UnconditionalPasteCharAfter
+nmap <Leader>p1 <Plug>UnconditionalPasteCharAfter`]li<Space><Esc>w
 
 nmap <Leader>Pc <Plug>UnconditionalPasteCharBefore
 nmap <Leader>p- <Plug>UnconditionalPasteCharBefore
 " p0 adds a trailing space
 nmap <Leader>p0 <Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w
+nmap <Leader>po <Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w
 " pp is p0 unless at end and then it is pE
 nmap <expr> <Leader>pp (col('.') < (col('$')-1)) ? '<Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w' : '$A<Space><Esc><Plug>UnconditionalPasteCharAfter`]'
 
