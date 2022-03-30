@@ -3027,6 +3027,12 @@ augroup qs_colors
   autocmd ColorScheme * highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81  cterm=underline
 augroup END
 
+" ===================================================================
+" NOTE: in tmux, some colorschemes causes problems with unicode chars
+"       even if lang/LC_ALL is set to en_US.UTF-8
+"       elflord is a colorscheme that seems to work ok in nvim
+" ===================================================================
+
 "let g:solarized_termcolors=256
 "colorscheme solarized
 colorscheme deus
