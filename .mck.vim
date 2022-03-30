@@ -4900,7 +4900,7 @@ vmap <silent> <S-Del> tx
 
 " set paste mode, paste, set nopaste mode
 function! WrapForTmux_NOTUSED(as)
-  if !exists('$TMUX')
+  if !exists('$TMUX_PANE')
     return a:as
   endif
   let tmux_start = "\<Esc>Ptmux;"
