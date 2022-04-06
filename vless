@@ -2,14 +2,14 @@
 
 if [[ -z "$VLESS" ]] ; then
     if [[ -z "$VISUAL" ]] ; then
-        vimless $@
+        exec nvimless $@
     elif [[ "$VISUAL" == "vim" ]] ; then
-        vimless $@
+        exec vimless $@
     else
-        nvimless $@
+        exec nvimless $@
     fi
 elif [[ "$VLESS" == "vless" ]] ; then
-    vimless $@
+    exec vimless $@
 else
-    nvimless $@
+    exec nvimless $@
 fi

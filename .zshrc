@@ -640,7 +640,15 @@ fi
 
 # --------------------
 
-alias start_tmux='exec \start_tmux 1'
+#alias start_tmux='exec \start_tmux 1'
+start_tmux()
+{
+    if [ -z "$TMUX" ] ; then
+        exec command start_tmux 1
+    else
+        echo "\$TMUX set ..."
+    fi
+}
 
 alias st='command st -g 194x51+690+678'
 
