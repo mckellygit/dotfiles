@@ -7892,6 +7892,8 @@ vmap <silent> <buffer> <C-Return> gj
 
 " move lines or selected text up/down
 
+" NOTE: see also Plugin 'matze/vim-move'
+
 " NOTE: these mappings start with <Esc> and keys pressed quickly
 "       enough could be incorrectly interpreted as a mapping
 " TODO: look into alternate esc-seq for these sequences ...
