@@ -68,10 +68,6 @@ migrated=true
 [org/gnome/deja-dup/gcs]
 folder='hal9009'
 
-[org/gnome/deja-dup/goa]
-folder='hal9009'
-type='google'
-
 [org/gnome/deja-dup/local]
 folder='hal9009'
 
@@ -141,7 +137,7 @@ monospace-font-name='Ubuntu Mono 13'
 text-scaling-factor=1.25
 
 [org/gnome/desktop/notifications]
-application-children=['diodon', 'org-gnome-software', 'google-chrome', 'kitty', 'apport-gtk', 'org-gnome-nautilus', 'nixnote2', 'teams-insiders', 'org-remmina-remmina', 'update-manager', 'ca-desrt-dconf-editor', 'clipit', 'org-gnome-dejadup', 'firefox', 'gnome-network-panel', 'rhythmbox', 'vivaldi-stable', 'gvim', 'appimagekit-pcloud', 'org-wezfurlong-wezterm', 'org-gnome-extensions-desktop', 'gnome-power-panel', 'gnome-printers-panel', 'st']
+application-children=['org-gnome-software', 'apport-gtk', 'org-gnome-nautilus', 'nixnote2', 'teams-insiders', 'org-remmina-remmina', 'update-manager', 'ca-desrt-dconf-editor', 'clipit', 'org-gnome-dejadup', 'firefox', 'gnome-network-panel', 'rhythmbox', 'vivaldi-stable', 'gvim', 'appimagekit-pcloud', 'org-wezfurlong-wezterm', 'org-gnome-extensions-desktop', 'gnome-power-panel', 'gnome-printers-panel', 'st']
 
 [org/gnome/desktop/notifications/application/appimagekit-pcloud]
 application-id='appimagekit-pcloud.desktop'
@@ -155,9 +151,6 @@ application-id='ca.desrt.dconf-editor.desktop'
 [org/gnome/desktop/notifications/application/clipit]
 application-id='clipit.desktop'
 
-[org/gnome/desktop/notifications/application/diodon]
-application-id='diodon.desktop'
-
 [org/gnome/desktop/notifications/application/firefox]
 application-id='firefox.desktop'
 
@@ -169,9 +162,6 @@ application-id='gnome-power-panel.desktop'
 
 [org/gnome/desktop/notifications/application/gnome-printers-panel]
 application-id='gnome-printers-panel.desktop'
-
-[org/gnome/desktop/notifications/application/google-chrome]
-application-id='google-chrome.desktop'
 
 [org/gnome/desktop/notifications/application/gvim]
 application-id='gvim.desktop'
@@ -470,6 +460,7 @@ hot-keys=false
 hotkeys-overlay=false
 hotkeys-show-dock=false
 preferred-monitor=0
+show-running=false
 
 [org/gnome/shell/extensions/desktop-icons]
 show-home=false
