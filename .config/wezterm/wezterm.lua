@@ -34,7 +34,7 @@ return {
 
   alternate_buffer_wheel_scroll_speed = 5,
 
-  check_for_updates = true,
+  check_for_updates = false,
 
   window_background_opacity = 0.97,
 
