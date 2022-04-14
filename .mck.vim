@@ -1464,6 +1464,9 @@ autocmd FileType GV nmap <buffer> <BS> <Up>
 autocmd FileType GV nmap <buffer> <S-Tab> <Up>
 autocmd FileType GV nmap <buffer> u <Up>
 autocmd FileType GV nmap <buffer> d <Down>
+autocmd FileType GV nmap <buffer> J j
+autocmd FileType GV nmap <buffer> K k
+autocmd FileType GV nmap <buffer> <C-q> <Nop>
 autocmd FileType GV xmap <buffer> <Leader><Tab> O
 autocmd FileType GV xmap <buffer> <C-t> O
 autocmd FileType GV xmap <buffer> <C-t>t O
@@ -1476,6 +1479,9 @@ autocmd FileType GV xmap <buffer> <BS> <Up>
 autocmd FileType GV xmap <buffer> <S-Tab> <Up>
 autocmd FileType GV xmap <buffer> u <Up>
 autocmd FileType GV xmap <buffer> d <Down>
+autocmd FileType GV xmap <buffer> J j
+autocmd FileType GV xmap <buffer> K k
+autocmd FileType GV xmap <buffer> <C-q> <Nop>
 
 " or use ! ?
 " do we want QQ to open, QQ to close, S-Space to move down pattern ?
@@ -4765,8 +4771,8 @@ function! s:MyVisV2()
 endfunction
 
 " <C-q> seems to start visual mode ...
-nmap <C-q> <Nop>
-nmap <silent> <expr> <C-q><C-q> (&buftype == 'terminal') ? 'i' : ''
+nmap <buffer> <C-q> <Nop>
+nmap <silent> <buffer> <expr> <C-q><C-q> (&buftype == 'terminal') ? 'i' : ''
 " TODO can we get <C-q> to leave normal mode of terminal ?
 "      or use <M-q> for that ?
 

@@ -2,18 +2,18 @@
 
 if [[ -n "$TMUX" ]] ; then
     if [[ -z "$VISUAL" ]] ; then
-        TMUX= exec nvim $@
+        TMUX= exec nvim "$@"
     elif [[ "$VISUAL" == "vim" ]] ; then
-        exec vim $@
+        exec vim "$@"
     else
-        TMUX= exec nvim $@
+        TMUX= exec nvim "$@"
     fi
 else
     if [[ -z "$VISUAL" ]] ; then
-        exec nvim $@
+        exec nvim "$@"
     elif [[ "$VISUAL" == "vim" ]] ; then
-        exec vim $@
+        exec vim "$@"
     else
-        exec nvim $@
+        exec nvim "$@"
     fi
 fi
