@@ -5,13 +5,23 @@ trap "echo \"\"; exit" INT QUIT TERM
 git() { $HOME/bin/git "$@"; }
 
 extras=""
+do_vim_bundles=""
 if [[ $# -gt 0 ]] ; then
     if [[ "$1" == "-a" || "$1" == "-all" || "$1" == "--a" || "$1" == "--all" ]] ; then
         extras=" bat wezterm neovim delta"
-    fi
-    if [[ $# -gt 1 ]] ; then
-        if [[ "$2" == "-a" || "$2" == "-all" || "$2" == "--a" || "$2" == "--all" ]] ; then
-            extras="${extras} alacritty vim"
+        if [[ $# -gt 1 ]] ; then
+            if [[ "$2" == "-a" || "$2" == "-all" || "$2" == "--a" || "$2" == "--all" ]] ; then
+                do_vim_bundles="yes"
+            elif [[ "$2" == "-v" ]] ; then
+                do_vim_bundles="yes"
+            fi
+        fi
+    elif [[ "$1" == "-v" ]] ; then
+        do_vim_bundles="yes"
+        if [[ $# -gt 1 ]] ; then
+            if [[ "$2" == "-a" || "$2" == "-all" || "$2" == "--a" || "$2" == "--all" ]] ; then
+                extras=" bat wezterm neovim delta"
+            fi
         fi
     fi
 fi
@@ -43,14 +53,16 @@ if [[ $rc -eq 0 ]] ; then
     echo ""
 fi
 
-if [[ -n "$extras" ]] ; then
+if [[ -n "$do_vim_bundles" ]] ; then
     cd ~/Downloads/vim_bundles
     ./update.sh
     echo ""
+else
+    echo "Also check vim bundles ..."
 fi
 
 echo "Also check git:     zsh, CMake ..."
-echo "Also check non-git: gcc/g++, gdb, readline, ncurses, bat ..."
+echo "Also check non-git: gcc/g++, gdb, readline, ncurses ..."
 echo ""
 
 # ---------------------
