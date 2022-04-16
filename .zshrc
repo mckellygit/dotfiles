@@ -706,6 +706,8 @@ alias tailrdm='tail -f /tmp/rdm-$LOGNAME.log'
 alias difff='diff'
 alias dif='diff'
 
+alias ifconfig='ip -4 a'
+
 # gv.vim uses noremap so need to override q, x here, look into using :Alias ?
 # could also nnoremap qq qa!<CR> here
 #alias vigv="vim -R -c \"GV2 \$1\" -c \":nnoremap <silent> <buffer> q <Nop>\" -c \":cnoreabbrev <silent> <buffer> q Tabcloserightquit\" -c \":cnoreabbrev <silent> <buffer> q! Tabcloserightquit\" -c \":nnoremap <silent> <buffer> x <Nop>\" -c \":cnoreabbrev <silent> <buffer> x Tabcloserightquit\" -c \":se bt=nowrite|:tabn|:hide|:redraw!\""

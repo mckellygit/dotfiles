@@ -227,6 +227,9 @@ echo ""
 #   make
 #   sudo cp target/release/delta /usr/local/bin
 
+# difftastic:
+#   git clone https://github.com/Wilfred/difftastic.git
+
 # ---------------------
 
 # vim:
@@ -252,19 +255,22 @@ echo ""
 # btop:
 #   git clone https://github.com/aristocratos/btop.git
 
-# there is also glances (https://github.com/nicolargo/glances.git), tiptop
-
 # nethogs - net by process
 #   git glone git@github.com-mckelly:raboof/nethogs.git
 
 # iftop - net by IP
 #   git clone https://code.blinkace.com/pdw/iftop.git
 
+# zenith
+#   git clone https://github.com/bvaisvil/zenith.git
+
+# btm (bottom)
+#   git clone https://github.com/ClementTsang/bottom.git
+
+# there is also glances (https://github.com/nicolargo/glances.git), tiptop
+
 # bmon
 #   git clone git@github.com-mckelly:tgraf/bmon.git
-
-# zenith
-#   git clone git@github.com-mckelly:bvaisvil/zenith.git
 
 # ---------------------
 

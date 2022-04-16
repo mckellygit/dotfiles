@@ -223,6 +223,7 @@ alias nsmesg='nvimless /var/log/syslog'
 
 alias tailrdm='tail -f /tmp/rdm-$LOGNAME.log'
 alias difff='diff'
+alias dif='diff'
 # gv.vim uses noremap so need to override q, x here
 alias vigv='vi -R -c GV -c ":nnoremap <buffer> q <Nop>" -c ":cnoreabbrev <buffer> q Tabcloserightquit" -c ":cnoreabbrev <buffer> q! Tabcloserightquit" -c ":nnoremap <buffer> x <Nop>" -c ":cnoreabbrev <buffer> x Tabcloserightquit" -c ":redraw!"'
 alias vvigv='vim -R -c GV -c ":nnoremap <buffer> q <Nop>" -c ":cnoreabbrev <buffer> q Tabcloserightquit" -c ":cnoreabbrev <buffer> q! Tabcloserightquit" -c ":nnoremap <buffer> x <Nop>" -c ":cnoreabbrev <buffer> x Tabcloserightquit" -c ":redraw!"'
@@ -247,6 +248,8 @@ alias start-rdm="rdm --tempdir /tmp/rdm-${LOGNAME} --log-file /tmp/rdm-${LOGNAME
 alias start_rdm="rdm --tempdir /tmp/rdm-${LOGNAME} --log-file /tmp/rdm-${LOGNAME}.log --daemon"
 alias stop-rdm='rc -q'
 alias stop_rdm='rc -q'
+
+alias ifconfig='ip -4 a'
 
 # also could use -u or -U instead of --all-text
 #alias ag='\ag -U --hidden -- '
