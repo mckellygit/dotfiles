@@ -150,6 +150,9 @@ return {
     { key="n",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x4e"} },
     { key="p",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x50"} },
 
+    -- Super + v to send same as Alt + Ins ?
+    { key="v",          mods="SUPER",         action=wezterm.action{SendString="\x1b[2;3~"} },
+
     -- { key="x",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x58"} },
     -- old idea was to send M-( \x1b\x28, could also consider <C-_><C-x> \x1f\x18
 
