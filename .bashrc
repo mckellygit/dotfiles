@@ -251,6 +251,8 @@ alias stop_rdm='rc -q'
 
 alias ifconfig='ip -4 a'
 
+alias ztop='zenith'
+
 # also could use -u or -U instead of --all-text
 #alias ag='\ag -U --hidden -- '
 # skip -- as we might want to add -i for case-insensitive etc. ...
