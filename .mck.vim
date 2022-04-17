@@ -6447,8 +6447,11 @@ inoremap <silent> <C-^>.     <C-\><C-o>10zl<C-\><C-o>10l
 
 " could skip ()&,[]{}'"+-/:;
 "
-nnoremap <C-Right> w
-nnoremap <C-Left> b
+nnoremap <C-Right> W
+nnoremap <C-Left> B
+" but these might have already been mapped by the terminal/tmux to just Right and Left ...
+nnoremap <M-C-Right> w
+nnoremap <M-C-Left> b
 "
 " NOTE: this is good for when sel is adding to the right
 "       and erasing to the left from what was added
@@ -9140,10 +9143,11 @@ endfunction
 
 " -----------------------------
 
-" <Leader>: in visual mode for raw cmdline without range (can still use : or <C-w>:)
+" : in visual mode for raw cmdline without range (can still use <Leader>: or <C-w>:)
 "vnoremap : <C-\><C-n>:<C-u>call <SID>MyVisQ()<CR>:
 "vnoremap : <C-w>:
-vnoremap <Leader>: <C-\><C-n>:<C-u>call <SID>MyVisQ()<CR>:
+vnoremap : <C-\><C-n>:<C-u>call <SID>MyVisQ()<CR>:
+vnoremap <Leader>: :
 
 " -----------------------------
 
