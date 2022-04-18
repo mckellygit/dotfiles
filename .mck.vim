@@ -251,7 +251,7 @@ Plugin 'embear/vim-localvimrc'
 " so for now just stay at this commit ...
 " HEAD detached at c312d302
 " ------------------------------------------
-let g:polyglot_disabled = ['tmux', 'c/c++', 'ruby']
+let g:polyglot_disabled = ['csv', 'tmux', 'c/c++', 'ruby']
 Plugin 'sheerun/vim-polyglot'
 " enhanced c++ syntax
 "Plugin 'octol/vim-cpp-enhanced-highlight'
@@ -2921,7 +2921,8 @@ else
             endif
         endfunction
 
-        autocmd TextYankPost * call WSLYankDebounced()
+        "autocmd TextYankPost * call WSLYankDebounced()
+        autocmd TextYankPost * call WSLYank(1000)
 
         function! WSLPaste(mode) abort
             if g:wslyanklast == 'y'
