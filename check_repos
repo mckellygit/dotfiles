@@ -284,6 +284,12 @@ echo ""
 # bmon
 #   git clone git@github.com-mckelly:tgraf/bmon.git
 
+# atop
+#   https://www.atoptool.nl/
+
+# iotop
+#   http://guichaz.free.fr/iotop/
+
 # ---------------------
 
 # st: (simple terminal)
