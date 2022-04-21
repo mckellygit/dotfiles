@@ -2921,8 +2921,9 @@ else
             endif
         endfunction
 
-        "autocmd TextYankPost * call WSLYankDebounced()
-        autocmd TextYankPost * call WSLYank(1000)
+        autocmd TextYankPost * call WSLYankDebounced()
+
+        " NOTE: see also WinUpdateClip() for S-Insert paste etc.
 
         function! WSLPaste(mode) abort
             if g:wslyanklast == 'y'
@@ -4377,6 +4378,24 @@ function! s:SwapReg(arg)
     endif
 endfunction
 
+function! s:SwapReg2(arg)
+    if g:has_wsl > 0 && !has("nvim")
+        call setreg('y', getreg('"'), getregtype('"'))
+        call setreg('"', getreg('o'), getregtype('o'))
+    else
+        call setreg('y', getreg('*'), getregtype('*'))
+        call setreg('*', getreg('o'), getregtype('o'))
+    endif
+    call setreg('o', getreg('y'), getregtype('y'))
+    call setreg('y', [])
+    if a:arg == 1
+        echohl DiffText | echo "@* <-> @o ; registers swapped" | echohl None
+        sleep 851m
+        redraw!
+        echo " "
+    endif
+endfunction
+
 " swap @* with @x ...
 nnoremap <silent> <Leader>zx :call <SID>SwapReg(1)<CR>
 vnoremap <silent> <Leader>zx :<C-u>call <SID>SwapReg(1)<CR>gv
@@ -4473,23 +4492,26 @@ endfunction
 "cnoremap <C-S-v> <C-r>+
 "tnoremap <C-S-v> <C-w>"+
 
+" NOTE: for wsl, key p mapped to WSLPaste() which also updates @" reg from clipboard ...
+
+function WinUpdateClip()
+    let @" = system('win32yank.exe -o --lf')
+    " NOTE: if we wanted to strip trailing newline ...
+    "let @" = substitute(@", "\\n\\+$", "", "")
+endfunction
+
 " <F34> paste after
 nnoremap <expr> <F34>      (&buftype == 'terminal') ? '' : 'p'
 nnoremap <expr> <S-Insert> (&buftype == 'terminal') ? '' : 'p'
 " NOTE: <F34>/<S-Insert> vmapped below ...
 "vnoremap <expr> <F34> (&buftype == 'terminal') ? '' : '<Esc>p'
 if g:has_wsl > 0 && !has("nvim")
-    inoremap <silent> <F34>      <C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
-    inoremap <silent> <S-Insert> <C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
-    cnoremap <F34>      <C-r>"
-    cnoremap <S-Insert> <C-r>"
-    if has("nvim")
-        tnoremap <F34>      <C-\><C-n>""pi
-        tnoremap <S-Insert> <C-\><C-n>""pi
-    else
-        tnoremap <F34>      <C-w>""
-        tnoremap <S-Insert> <C-w>""
-    endif
+    inoremap <silent> <F34>      <C-\><C-o>:call WinUpdateClip()<CR><C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
+    inoremap <silent> <S-Insert> <C-\><C-o>:call WinUpdateClip()<CR><C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
+    cnoremap <F34>      call WinUpdateClip()<CR>:<C-r>"
+    cnoremap <S-Insert> call WinUpdateClip()<CR>:<C-r>"
+    tnoremap <F34>      <C-w>:call WinUpdateClip()<CR><C-w>""
+    tnoremap <S-Insert> <C-w>:call WinUpdateClip()<CR><C-w>""
 else
     inoremap <silent> <F34>      <C-\><C-o>:set paste<CR><C-r>*<C-\><C-o>:set nopaste<CR>
     inoremap <silent> <S-Insert> <C-\><C-o>:set paste<CR><C-r>*<C-\><C-o>:set nopaste<CR>
@@ -4507,28 +4529,25 @@ endif
 " <M-!> paste after [menu?]
 call <SID>MapFastKeycode('<S-F34>',  "\e!", 134)
 nnoremap <expr> <S-F34> (&buftype == 'terminal') ? '' : 'p'
-vnoremap <expr> <S-F34> (&buftype == 'terminal') ? '' : '<Esc>p'
+nnoremap <expr> <M-!>   (&buftype == 'terminal') ? '' : 'p'
 if g:has_wsl > 0 && !has("nvim")
-    inoremap <silent> <S-F34> <C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
-    cnoremap <S-F34> <C-r>"
-    tnoremap <S-F34> <C-w>""
-    if has("nvim")
-        nnoremap <expr> <M-!> (&buftype == 'terminal') ? '' : 'p'
-        vnoremap <expr> <M-!> (&buftype == 'terminal') ? '' : '<Esc>p'
-        inoremap <silent> <M-!> <C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
-        cnoremap <M-!> <C-r>"
-        tnoremap <M-!> <C-\><C-n>""pi
-    endif
+    inoremap <silent> <S-F34> <C-\><C-o>:call WinUpdateClip()<CR><C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
+    inoremap <silent> <M-!>   <C-\><C-o>:call WinUpdateClip()<CR><C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
+    cnoremap <S-F34>  call WinUpdateClip()<CR>:<C-r>"
+    cnoremap <M-!>    call WinUpdateClip()<CR>:<C-r>"
+    tnoremap <S-F34>  <C-w>:call WinUpdateClip()<CR><C-w>""
+    tnoremap <M-!>    <C-w>:call WinUpdateClip()<CR><C-w>""
 else
     inoremap <silent> <S-F34> <C-\><C-o>:set paste<CR><C-r>*<C-\><C-o>:set nopaste<CR>
+    inoremap <silent> <M-!>   <C-\><C-o>:set paste<CR><C-r>*<C-\><C-o>:set nopaste<CR>
     cnoremap <S-F34> <C-r>*
-    tnoremap <S-F34> <C-w>"*
+    cnoremap <M-!>   <C-r>*
     if has("nvim")
-        nnoremap <expr> <M-!> (&buftype == 'terminal') ? '' : 'p'
-        vnoremap <expr> <M-!> (&buftype == 'terminal') ? '' : '<Esc>p'
-        inoremap <silent> <M-!> <C-\><C-o>:set paste<CR><C-r>*<C-\><C-o>:set nopaste<CR>
-        cnoremap <M-!> <C-r>*
-        tnoremap <M-!> <C-\><C-n>"*pi
+        tnoremap <S-F34> <C-\><C-n>"*pi
+        tnoremap <M-!>   <C-\><C-n>"*pi
+    else
+        tnoremap <S-F34> <C-w>"*
+        tnoremap <M-!>   <C-w>"*
     endif
 endif
 
@@ -4538,17 +4557,12 @@ nnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '' : 'P`['
 " NOTE: <F35>/<C-S-Insert> vmapped below ...
 "vnoremap <expr> <F35> (&buftype == 'terminal') ? '' : '<Esc>P`['
 if g:has_wsl > 0 && !has("nvim")
-    inoremap <silent> <F35>        <C-\><C-o>:set paste<CR><C-\><C-o>mp<C-r>"<C-\><C-o>:set nopaste<CR><C-\><C-o>`p
-    inoremap <silent> <C-S-Insert> <C-\><C-o>:set paste<CR><C-\><C-o>mp<C-r>"<C-\><C-o>:set nopaste<CR><C-\><C-o>`p
-    cnoremap <F35>        <C-r>"
-    cnoremap <C-S-Insert> <C-r>"
-    if has("nvim")
-        tnoremap <F35>        <C-\><C-n>""Pi
-        tnoremap <C-S-Insert> <C-\><C-n>""Pi
-    else
-        tnoremap <F35>        <C-w>""
-        tnoremap <C-S-Insert> <C-w>""
-    endif
+    inoremap <silent> <F35>        <C-\><C-o>:call WinUpdateClip()<CR><C-\><C-o>:set paste<CR><C-\><C-o>mp<C-r>"<C-\><C-o>:set nopaste<CR><C-\><C-o>`p
+    inoremap <silent> <C-S-Insert> <C-\><C-o>:call WinUpdateClip()<CR><C-\><C-o>:set paste<CR><C-\><C-o>mp<C-r>"<C-\><C-o>:set nopaste<CR><C-\><C-o>`p
+    cnoremap <F35>        call WinUpdateClip()<CR>:<C-r>"
+    cnoremap <C-S-Insert> call WinUpdateClip()<CR>:<C-r>"
+    tnoremap <F35>        <C-w>:call WinUpdateClip()<CR>:<C-w>""
+    tnoremap <C-S-Insert> <C-w>:call WinUpdateClip()<CR>:<C-w>""
 else
     inoremap <silent> <F35>        <C-\><C-o>:set paste<CR><C-\><C-o>mp<C-r>*<C-\><C-o>:set nopaste<CR><C-\><C-o>`p
     inoremap <silent> <C-S-Insert> <C-\><C-o>:set paste<CR><C-\><C-o>mp<C-r>*<C-\><C-o>:set nopaste<CR><C-\><C-o>`p
@@ -4566,28 +4580,25 @@ endif
 " <M-*> paste before [menu?]
 call <SID>MapFastKeycode('<S-F35>',  "\e*", 135)
 nnoremap <expr> <S-F35> (&buftype == 'terminal') ? '' : 'P`]'
-vnoremap <expr> <S-F35> (&buftype == 'terminal') ? '' : '<Esc>P`]'
+nnoremap <expr> <M-*>   (&buftype == 'terminal') ? '' : 'P`]'
 if g:has_wsl > 0 && !has("nvim")
-    inoremap <silent> <S-F35> <C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
-    cnoremap <S-F35> <C-r>"
-    tnoremap <S-F35> <C-w>""
-    if has("nvim")
-        nnoremap <expr> <M-*> (&buftype == 'terminal') ? 'yPi' : 'P`]'
-        vnoremap <expr> <M-*> (&buftype == 'terminal') ? 'yPi' : '<Esc>P`]'
-        inoremap <silent> <M-*> <C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
-        cnoremap <M-*> <C-r>"
-        tnoremap <M-*> <C-\><C-n>""Pi
-    endif
+    inoremap <silent> <S-F35> <C-\><C-o>:call WinUpdateClip()<CR><C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
+    inoremap <silent> <M-*>   <C-\><C-o>:call WinUpdateClip()<CR><C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
+    cnoremap <S-F35> call WinUpdateClip()<CR>:<C-r>"
+    cnoremap <M-*>   call WinUpdateClip()<CR>:<C-r>"
+    tnoremap <S-F35> <C-w>:call WinUpdateClip()<CR>:<C-w>""
+    tnoremap <M-*>   <C-w>:call WinUpdateClip()<CR>:<C-w>""
 else
     inoremap <silent> <S-F35> <C-\><C-o>:set paste<CR><C-r>*<C-\><C-o>:set nopaste<CR>
+    inoremap <silent> <M-*>   <C-\><C-o>:set paste<CR><C-r>*<C-\><C-o>:set nopaste<CR>
     cnoremap <S-F35> <C-r>*
-    tnoremap <S-F35> <C-w>"*
+    cnoremap <M-*>   <C-r>*
     if has("nvim")
-        nnoremap <expr> <M-*> (&buftype == 'terminal') ? 'yPi' : 'P`]'
-        vnoremap <expr> <M-*> (&buftype == 'terminal') ? 'yPi' : '<Esc>P`]'
-        inoremap <silent> <M-*> <C-\><C-o>:set paste<CR><C-r>*<C-\><C-o>:set nopaste<CR>
-        cnoremap <M-*> <C-r>*
-        tnoremap <M-*> <C-\><C-n>"*Pi
+        tnoremap <S-F35> <C-\><C-n>"*Pi
+        tnoremap <M-*>   <C-\><C-n>"*Pi
+    else
+        tnoremap <S-F35> <C-w>"*
+        tnoremap <M-*>   <C-w>"*
     endif
 endif
 
@@ -4844,7 +4855,10 @@ endif
 
 " Make p in Visual mode replace the selected text with the previous + register.
 " NOTE: see also <Leader>zx / <Leader>zp above ...
-"vnoremap <silent> <buffer> <expr> p (&buftype == 'terminal') ? '' : ':<C-u>call <SID>SwapReg(0)<CR>gv"_x"xP'
+vnoremap <silent> <buffer> <expr> p (&buftype == 'terminal') ? '' : ':<C-u>call <SID>SwapReg(0)<CR>gv"_x"xp:<C-u>call <SID>SwapReg(0)<CR>'
+vnoremap <silent> <buffer> <expr> P (&buftype == 'terminal') ? '' : ':<C-u>call <SID>SwapReg(0)<CR>gv"_x"xP:<C-u>call <SID>SwapReg(0)<CR>'
+
+if 0
 if g:has_wsl > 0 && !has("nvim")
     if has("nvimSKIP_MINIYANK") " miniyank
         vmap <silent> <buffer> <expr> p (&buftype == 'terminal') ? '' : '"_x""<Plug>(miniyank-autoPut)'
@@ -4862,10 +4876,24 @@ else
         vmap <silent> <buffer> <expr> P (&buftype == 'terminal') ? '' : '"_x"*P'
     endif
 endif
+endif
 
 " skip <F34> as a vis-mode 'replace' ...
 "vnoremap <silent> <buffer> <expr> <F34>   (&buftype == 'terminal') ? '' : 's'
 
+vnoremap <silent> <buffer> <expr> <F34>        (&buftype == 'terminal') ? '' : ':<C-u>call <SID>SwapReg(0)<CR>gv"_x"xp:<C-u>call <SID>SwapReg(0)<CR>'
+vnoremap <silent> <buffer> <expr> <S-Insert>   (&buftype == 'terminal') ? '' : ':<C-u>call <SID>SwapReg(0)<CR>gv"_x"xp:<C-u>call <SID>SwapReg(0)<CR>'
+
+vnoremap <silent> <buffer> <expr> <S-F34>      (&buftype == 'terminal') ? '' : ':<C-u>call <SID>SwapReg(0)<CR>gv"_x"xp:<C-u>call <SID>SwapReg(0)<CR>'
+vnoremap <silent> <buffer> <expr> <M-!>        (&buftype == 'terminal') ? '' : ':<C-u>call <SID>SwapReg(0)<CR>gv"_x"xp:<C-u>call <SID>SwapReg(0)<CR>'
+
+vnoremap <silent> <buffer> <expr> <F35>        (&buftype == 'terminal') ? '' : ':<C-u>call <SID>SwapReg(0)<CR>gv"_x"xP:<C-u>call <SID>SwapReg(0)<CR>'
+vnoremap <silent> <buffer> <expr> <C-S-Insert> (&buftype == 'terminal') ? '' : ':<C-u>call <SID>SwapReg(0)<CR>gv"_x"xP:<C-u>call <SID>SwapReg(0)<CR>'
+
+vnoremap <silent> <buffer> <expr> <S-F35>      (&buftype == 'terminal') ? '' : ':<C-u>call <SID>SwapReg(0)<CR>gv"_x"xP:<C-u>call <SID>SwapReg(0)<CR>'
+vnoremap <silent> <buffer> <expr> <M-*>        (&buftype == 'terminal') ? '' : ':<C-u>call <SID>SwapReg(0)<CR>gv"_x"xP:<C-u>call <SID>SwapReg(0)<CR>'
+
+if 0
 if g:has_wsl > 0 && !has("nvim")
     if has("nvimSKIP_MINIYANK") " miniyank
         vmap <silent> <buffer> <expr> <F34>      (&buftype == 'terminal') ? '' : '"_x""<Plug>(miniyank-autoPut)'
@@ -4890,6 +4918,7 @@ else
         vmap <silent> <buffer> <expr> <F35>        (&buftype == 'terminal') ? '' : '"_x"*P'
         vmap <silent> <buffer> <expr> <C-S-Insert> (&buftype == 'terminal') ? '' : '"_x"*P'
     endif
+endif
 endif
 
 " NOTE: to match legacy editors/DOS/etc -
@@ -6046,14 +6075,18 @@ if g:has_wsl > 0 && !has("nvim")
     if has("nvimSKIP_MINIYANK") " miniyank
         vmap <silent> <Leader>wx "_x""<Plug>(miniyank-autoPut)
     else
-        vmap <silent> <Leader>wx "_x""P
+        "vmap <silent> <Leader>wx "_x""P
+        "vmap <silent> <Leader>wx :<C-u>call <SID>SwapReg2(0)<CR>gv"_x"oP:<C-u>call <SID>SwapReg2(0)<CR>
+        vmap <silent> <Leader>wx p
     endif
 else
     nnoremap <silent> <Leader>wx "_ciw<C-r>*<Esc>
     if has("nvimSKIP_MINIYANK") " miniyank
         vmap <silent> <Leader>wx "_x"*<Plug>(miniyank-autoPut)
     else
-        vmap <silent> <Leader>wx "_x"*P
+        "vmap <silent> <Leader>wx "_x"*P
+        "vmap <silent> <Leader>wx :<C-u>call <SID>SwapReg2(0)<CR>gv"_x"oP:<C-u>call <SID>SwapReg2(0)<CR>
+        vmap <silent> <Leader>wx p
     endif
 endif
 
@@ -6063,14 +6096,18 @@ if g:has_wsl > 0 && !has("nvim")
     if has("nvimSKIP_MINIYANK") " miniyank
         vmap <silent> <Leader>wr "_x""<Plug>(miniyank-autoPut)
     else
-        vmap <silent> <Leader>wr "_x""P
+        "vmap <silent> <Leader>wr "_x""P
+        "vmap <silent> <Leader>wr :<C-u>call <SID>SwapReg2(0)<CR>gv"_x"oP:<C-u>call <SID>SwapReg2(0)<CR>
+        vmap <silent> <Leader>wr p
     endif
 else
     nnoremap <silent> <Leader>wr "_cw<C-r>*<Esc>
     if has("nvimSKIP_MINIYANK") " miniyank
         vmap <silent> <Leader>wr "_x"*<Plug>(miniyank-autoPut)
     else
-        vmap <silent> <Leader>wr "_x"*P
+        "vmap <silent> <Leader>wr "_x"*P
+        "vmap <silent> <Leader>wr :<C-u>call <SID>SwapReg2(0)<CR>gv"_x"oP:<C-u>call <SID>SwapReg2(0)<CR>
+        vmap <silent> <Leader>wr p
     endif
 endif
 
