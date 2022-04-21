@@ -102,6 +102,8 @@
     rebase = false
 [user]
     useConfigOnly = true
+[merge]
+	conflictstyle = diff3
 [user "ident1"]
     name = My Name1
     email = my email address1
