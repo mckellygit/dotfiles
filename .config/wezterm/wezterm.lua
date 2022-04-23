@@ -91,15 +91,14 @@ return {
     {
       event={Up={streak=1, button="Left"}},
       mods="SHIFT",
-      -- NOTE: if firefox is not already open then this starts firefox but then blocks until firefox exits
       action="OpenLinkAtMouseCursor",
     },
   },
 
   enable_csi_u_key_encoding = false,
-
   use_dead_keys = false,
   disable_default_key_bindings = true,
+
   keys = {
     { key="phys:Backspace", mods="SHIFT",         action=wezterm.action{SendString="\x1e\x08"} },
     { key="phys:Space",     mods="SHIFT",         action=wezterm.action{SendString="\x1e\x20"} },
@@ -150,7 +149,8 @@ return {
     { key="n",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x4e"} },
     { key="p",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x50"} },
 
-    -- Super + v to send same as Alt + Ins ?
+    -- Super + v to send same as Alt + Ins  for tmux to start/toggle copyq, but could we
+    -- start copyq directly ?
     { key="v",          mods="SUPER",         action=wezterm.action{SendString="\x1b[2;3~"} },
 
     -- { key="x",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x58"} },
