@@ -4495,9 +4495,11 @@ endfunction
 " NOTE: for wsl, key p mapped to WSLPaste() which also updates @" reg from clipboard ...
 
 function WinUpdateClip()
-    let @" = system('win32yank.exe -o --lf')
-    " NOTE: if we wanted to strip trailing newline ...
-    "let @" = substitute(@", "\\n\\+$", "", "")
+    if g:has_wsl > 0 && !has("nvim")
+        let @" = system('win32yank.exe -o --lf')
+        " NOTE: if we wanted to strip trailing newline ...
+        "let @" = substitute(@", "\\n\\+$", "", "")
+    endif
 endfunction
 
 " <F34> paste after
@@ -8423,55 +8425,107 @@ nnoremap <C-y> <Nop>
 " to get back orig if needed
 noremap <Leader><C-y> <C-y>
 
-nmap <Leader>pc <Plug>UnconditionalPasteCharAfter
-nmap <Leader>p1 <Plug>UnconditionalPasteCharAfter`]li<Space><Esc>w
+if g:has_wsl == 0 || has("nvim")
+    nmap <Leader>pc <Plug>UnconditionalPasteCharAfter
+    nmap <Leader>p1 <Plug>UnconditionalPasteCharAfter`]li<Space><Esc>w
 
-nmap <Leader>Pc <Plug>UnconditionalPasteCharBefore
-nmap <Leader>p- <Plug>UnconditionalPasteCharBefore
-" p0 adds a trailing space
-nmap <Leader>p0 <Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w
-nmap <Leader>po <Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w
-" pp is p0 unless at end and then it is pE
-nmap <expr> <Leader>pp (col('.') < (col('$')-1)) ? '<Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w' : '$A<Space><Esc><Plug>UnconditionalPasteCharAfter`]'
+    nmap <Leader>Pc <Plug>UnconditionalPasteCharBefore
+    nmap <Leader>p- <Plug>UnconditionalPasteCharBefore
+    " p0 adds a trailing space
+    nmap <Leader>p0 <Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w
+    nmap <Leader>po <Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w
+    " pp is p0 unless at end and then it is pE
+    nmap <expr> <Leader>pp (col('.') < (col('$')-1)) ? '<Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w' : '$A<Space><Esc><Plug>UnconditionalPasteCharAfter`]'
 
-nmap <Leader>pj <Plug>UnconditionalPasteJustJoinedAfter
-nmap <Leader>Pj <Plug>UnconditionalPasteJustJoinedBefore
-"
-" at end of line
-nmap <Leader>pe $<Plug>UnconditionalPasteCharAfter`]
-" adds a leading space
-nmap <Leader>pE $A<Space><Esc><Plug>UnconditionalPasteCharAfter`]
-" at beg of first word (^ not 0)
-nmap <Leader>pa ^<Plug>UnconditionalPasteCharBefore`]
-" NOTE: use <Esc>hlb instead of <Esc>B because M-B is mapped to A-3click in tmux ...
-"nmap <Leader>pA ^<Plug>UnconditionalPasteCharBefore`]li<Space><Esc>hlb
-" adds a trailing space
-nmap <Leader>pA ^<Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w
+    nmap <Leader>pj <Plug>UnconditionalPasteJustJoinedAfter
+    nmap <Leader>Pj <Plug>UnconditionalPasteJustJoinedBefore
 
-" change l to i to match current indentation ...
-"nmap <Leader>Pl <Plug>UnconditionalPasteIndentedBefore
-"nmap <Leader>pl <Plug>UnconditionalPasteIndentedAfter
-" at orig offset
-nmap <Leader>pl <Plug>UnconditionalPasteLineAfter
-nmap <Leader>Pl <Plug>UnconditionalPasteLineBefore
-"
-" indented (used to be pi/Pi, but switched with px/Px below)
-nmap <Leader>px <Plug>UnconditionalPasteIndentedAfter
-nmap <Leader>Px <Plug>UnconditionalPasteIndentedBefore
+    " at end of line
+    nmap <Leader>pe $<Plug>UnconditionalPasteCharAfter`]
+    " adds a leading space
+    nmap <Leader>pE $A<Space><Esc><Plug>UnconditionalPasteCharAfter`]
+    " at beg of first word (^ not 0)
+    nmap <Leader>pa ^<Plug>UnconditionalPasteCharBefore`]
+    " NOTE: use <Esc>hlb instead of <Esc>B because M-B is mapped to A-3click in tmux ...
+    "nmap <Leader>pA ^<Plug>UnconditionalPasteCharBefore`]li<Space><Esc>hlb
+    " adds a trailing space
+    nmap <Leader>pA ^<Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w
 
-" use . for more (>) and , for less (<) indentation
-nmap <Leader>p. <Plug>UnconditionalPasteMoreIndentAfter
-nmap <Leader>P. <Plug>UnconditionalPasteMoreIndentBefore
+    " change l to i to match current indentation ...
+    "nmap <Leader>Pl <Plug>UnconditionalPasteIndentedBefore
+    "nmap <Leader>pl <Plug>UnconditionalPasteIndentedAfter
+    " at orig offset
+    nmap <Leader>pl <Plug>UnconditionalPasteLineAfter
+    nmap <Leader>Pl <Plug>UnconditionalPasteLineBefore
 
-nmap <Leader>p, <Plug>UnconditionalPasteLessIndentAfter
-nmap <Leader>P, <Plug>UnconditionalPasteLessIndentBefore
+    " indented (used to be pi/Pi, but switched with px/Px below)
+    nmap <Leader>px <Plug>UnconditionalPasteIndentedAfter
+    nmap <Leader>Px <Plug>UnconditionalPasteIndentedBefore
 
-nmap <Leader>pb <Plug>UnconditionalPasteBlockAfter
-nmap <Leader>Pb <Plug>UnconditionalPasteBlockBefore
+    " use . for more (>) and , for less (<) indentation
+    nmap <Leader>p. <Plug>UnconditionalPasteMoreIndentAfter
+    nmap <Leader>P. <Plug>UnconditionalPasteMoreIndentBefore
 
-" slightly confusing and has some delay ...
-"nmap <Leader>P> <Plug>UnconditionalPasteShiftedBefore
-"nmap <Leader>p> <Plug>UnconditionalPasteShiftedAfter
+    nmap <Leader>p, <Plug>UnconditionalPasteLessIndentAfter
+    nmap <Leader>P, <Plug>UnconditionalPasteLessIndentBefore
+
+    nmap <Leader>pb <Plug>UnconditionalPasteBlockAfter
+    nmap <Leader>Pb <Plug>UnconditionalPasteBlockBefore
+
+    " slightly confusing and has some delay ...
+    "nmap <Leader>P> <Plug>UnconditionalPasteShiftedBefore
+    "nmap <Leader>p> <Plug>UnconditionalPasteShiftedAfter
+else
+    nmap <silent> <Leader>pc :call WinUpdateClip()<CR><Plug>UnconditionalPasteCharAfter
+    nmap <silent> <Leader>p1 :call WinUpdateClip()<CR><Plug>UnconditionalPasteCharAfter`]li<Space><Esc>w
+
+    nmap <silent> <Leader>Pc :call WinUpdateClip()<CR><Plug>UnconditionalPasteCharBefore
+    nmap <silent> <Leader>p- :call WinUpdateClip()<CR><Plug>UnconditionalPasteCharBefore
+    " p0 adds a trailing space
+    nmap <silent> <Leader>p0 :call WinUpdateClip()<CR><Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w
+    nmap <silent> <Leader>po :call WinUpdateClip()<CR><Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w
+    " pp is p0 unless at end and then it is pE
+    nmap <silent> <expr> <Leader>pp (col('.') < (col('$')-1)) ? ':call WinUpdateClip()<CR><Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w' : ':call WinUpdateClip()<CR>$A<Space><Esc><Plug>UnconditionalPasteCharAfter`]'
+
+    nmap <silent> <Leader>pj :call WinUpdateClip()<CR><Plug>UnconditionalPasteJustJoinedAfter
+    nmap <silent> <Leader>Pj :call WinUpdateClip()<CR><Plug>UnconditionalPasteJustJoinedBefore
+
+    " at end of line
+    nmap <silent> <Leader>pe :call WinUpdateClip()<CR>$<Plug>UnconditionalPasteCharAfter`]
+    " adds a leading space
+    nmap <silent> <Leader>pE :call WinUpdateClip()<CR>$A<Space><Esc><Plug>UnconditionalPasteCharAfter`]
+    " at beg of first word (^ not 0)
+    nmap <silent> <Leader>pa :call WinUpdateClip()<CR>^<Plug>UnconditionalPasteCharBefore`]
+    " NOTE: use <Esc>hlb instead of <Esc>B because M-B is mapped to A-3click in tmux ...
+    "nmap <silent> <Leader>pA :call WinUpdateClip()<CR>^<Plug>UnconditionalPasteCharBefore`]li<Space><Esc>hlb
+    " adds a trailing space
+    nmap <silent> <Leader>pA :call WinUpdateClip()<CR>^<Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w
+
+    " change l to i to match current indentation ...
+    "nmap <silent> <Leader>Pl :call WinUpdateClip()<CR><Plug>UnconditionalPasteIndentedBefore
+    "nmap <silent> <Leader>pl :call WinUpdateClip()<CR><Plug>UnconditionalPasteIndentedAfter
+    " at orig offset
+    nmap <silent> <Leader>pl :call WinUpdateClip()<CR><Plug>UnconditionalPasteLineAfter
+    nmap <silent> <Leader>Pl :call WinUpdateClip()<CR><Plug>UnconditionalPasteLineBefore
+
+    " indented (used to be pi/Pi, but switched with px/Px below)
+    nmap <silent> <Leader>px :call WinUpdateClip()<CR><Plug>UnconditionalPasteIndentedAfter
+    nmap <silent> <Leader>Px :call WinUpdateClip()<CR><Plug>UnconditionalPasteIndentedBefore
+
+    " use . for more (>) and , for less (<) indentation
+    nmap <silent> <Leader>p. :call WinUpdateClip()<CR><Plug>UnconditionalPasteMoreIndentAfter
+    nmap <silent> <Leader>P. :call WinUpdateClip()<CR><Plug>UnconditionalPasteMoreIndentBefore
+
+    nmap <silent> <Leader>p, :call WinUpdateClip()<CR><Plug>UnconditionalPasteLessIndentAfter
+    nmap <silent> <Leader>P, :call WinUpdateClip()<CR><Plug>UnconditionalPasteLessIndentBefore
+
+    nmap <silent> <Leader>pb :call WinUpdateClip()<CR><Plug>UnconditionalPasteBlockAfter
+    nmap <silent> <Leader>Pb :call WinUpdateClip()<CR><Plug>UnconditionalPasteBlockBefore
+
+    " slightly confusing and has some delay ...
+    "nmap <silent> <Leader>P> :call WinUpdateClip()<CR><Plug>UnconditionalPasteShiftedBefore
+    "nmap <silent> <Leader>p> :call WinUpdateClip()<CR><Plug>UnconditionalPasteShiftedAfter
+endif
 
 " paste indented line, like <Leader>px/Px, but with more indent logic
 " (used to be px/Px but switched with pi/Pi above)
@@ -8493,6 +8547,11 @@ function s:MyUPIndentAfter() abort
     else
         let xcol = pcol
     endif
+
+    if g:has_wsl > 0 && !has("nvim")
+        call WinUpdateClip()
+    endif
+
     if xcol >= ccol
         "call feedkeys('\p.')
         let l:mm = (xcol - ccol) / 4
@@ -8523,6 +8582,11 @@ function s:MyUPIndentBefore() abort
     else
         let xcol = ncol
     endif
+
+    if g:has_wsl > 0 && !has("nvim")
+        call WinUpdateClip()
+    endif
+
     if xcol >= ccol
         "call feedkeys('\P.')
         let l:mm = (xcol - ccol) / 4
