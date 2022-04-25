@@ -3614,6 +3614,9 @@ function s:CrossHairs() abort
     set nocursorcolumn
 endfunction
 nmap <silent> + :call <SID>CrossHairs()<CR>
+if has("nvim")
+    nmap <silent> <M-+> <Nop>
+endif
 
 " -------- mouse / cut - paste - clipboard --------
 
