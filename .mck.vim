@@ -8140,9 +8140,24 @@ endif " has("autocmd")
 "================================================================
 "================================================================
 
-set completeopt=longest,menuone,preview,noselect
+set completeopt=longest,menuone,preview,noselect,noinsert
+if !has("nvim")
+    set completeopt+=popup
+endif
 inoremap <silent> <expr> <Tab> pumvisible() ? '<C-n>' : '<Tab>'
 inoremap <silent> <expr> <S-Tab> pumvisible() ? '<C-p>' : '<S-Tab>'
+
+"set wildmode=full
+"set pumheight=0
+
+"function! s:check_back_space() abort
+"    let col = col('.') - 1
+"    return !col || getline('.')[col - 1] =~ '\s'
+"endfunction
+
+"inoremap <silent> <expr> <Tab>
+"	\ pumvisible() ? "\<C-n>" :
+"	\ <SID>check_back_space() ? "\<Tab>" :
 
 " NOTE: vim needs -python/3 support for YouCompleteMe and rtags
 " +python/dyn +python3/dyn
@@ -10562,6 +10577,16 @@ function! MyGSCloseHandlerNvim(job_id, data, event)
 endfunction
 
 function! MyGSStart(timer)
+  " without this popup menus with <Tab> completion sometimes get reset to top item
+  if pumvisible()
+    return
+  endif
+
+  let m = mode()
+  if m == 'c' || m == 'r' || m == 't'
+    return
+  endif
+
   let l:jstat = "complete"
   if exists('b:MyGSJob')
     "echomsg "MyGSStart: b:MyGSJob = " . b:MyGSJob
