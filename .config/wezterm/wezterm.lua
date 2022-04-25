@@ -121,6 +121,12 @@ return {
     -- { key="\\",             mods="CTRL|ALT",      action="Nop"},
     { key="\\",             mods="CTRL|ALT",      action="ActivateCopyMode" },
 
+    -- Super same as Ctrl + Alt for tmux switching windows
+    { key="phys:Backspace", mods="SUPER",         action=wezterm.action{SendString="\x1b\x40"} },
+    { key="phys:Equal",     mods="SUPER",         action=wezterm.action{SendString="\x1b\x23"} },
+    -- NOTE: had to change gnome 'switch input source' binding to something else
+    { key="phys:Space",     mods="SUPER",         action=wezterm.action{SendString="\x1b\x23"} },
+
     { key="phys:Return",mods="CTRL|ALT",      action=wezterm.action{SendString="\x1e\x0d"} },
 
     { key="[",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x5b"} },
@@ -152,6 +158,7 @@ return {
     -- Super + v to send same as Alt + Ins  for tmux to start/toggle copyq, but could we
     -- start copyq directly ?
     { key="v",          mods="SUPER",         action=wezterm.action{SendString="\x1b[2;3~"} },
+    { key="Insert",     mods="SUPER",         action=wezterm.action{SendString="\x1b[2;3~"} },
 
     -- { key="x",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x58"} },
     -- old idea was to send M-( \x1b\x28, could also consider <C-_><C-x> \x1f\x18

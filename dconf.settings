@@ -21,21 +21,21 @@ saved-player-list=@as []
 
 [apps/update-manager]
 first-run=false
-launch-count=62
-launch-time=int64 1646831206
+launch-count=65
+launch-time=int64 1650458161
 show-details=true
 window-height=2089
 window-width=3768
 
 [ca/desrt/dconf-editor]
-saved-pathbar-path='/org/gnome/shell/window-switcher/'
-saved-view='/org/gnome/shell/'
+saved-pathbar-path='/org/gnome/shell/extensions/dash-to-dock/'
+saved-view='/org/gnome/shell/extensions/dash-to-dock/'
 window-height=1117
 window-is-maximized=false
 window-width=1866
 
 [com/ubuntu/update-notifier]
-release-check-time=uint32 1647382868
+release-check-time=uint32 1649802919
 
 [org/gnome/Totem]
 active-plugins=['skipto', 'screensaver', 'media_player_keys', 'vimeo', 'apple-trailers', 'screenshot', 'autoload-subtitles', 'movie-properties', 'save-file', 'variable-rate', 'recent']
@@ -56,7 +56,7 @@ video-x-resolution=640
 video-y-resolution=480
 
 [org/gnome/control-center]
-last-panel='mouse'
+last-panel='keyboard'
 
 [org/gnome/deja-dup]
 backend='local'
@@ -250,6 +250,8 @@ switch-applications=['<Super>Tab']
 switch-applications-backward=['<Shift><Super>Tab']
 switch-group=['<Super>Above_Tab']
 switch-group-backward=['<Shift><Super>Above_Tab']
+switch-input-source=['<Primary><Super>space']
+switch-input-source-backward=['<Primary><Shift><Super>space']
 switch-to-workspace-down=['<Super>Page_Down']
 switch-to-workspace-left=['<Super><Alt>Left']
 switch-to-workspace-right=['<Super><Alt>Right']
@@ -469,6 +471,9 @@ show-trash=false
 [org/gnome/shell/extensions/sound-output-device-chooser]
 icon-theme='colored'
 
+[org/gnome/shell/keybindings]
+toggle-message-tray=['<Super>m']
+
 [org/gnome/software]
 check-timestamp=int64 1643554035
 
@@ -497,7 +502,7 @@ sort-column='name'
 sort-directories-first=true
 sort-order='ascending'
 type-format='category'
-window-position=(928, 580)
+window-position=(1907, 205)
 window-size=(1231, 902)
 
 [org/yorba/shotwell/preferences/ui]
