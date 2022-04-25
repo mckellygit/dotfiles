@@ -6743,6 +6743,16 @@ inoremap <expr> <Home> pumvisible() ? '<Home>' : '<C-\><C-o>g<Home>'
 noremap         <End>  g<End>
 inoremap <expr> <End>  pumvisible() ? '<End>'  : '<C-\><C-o>g<End>'
 
+" to make popups all alike
+cnoremap <expr> <Up>    pumvisible() ? '<C-p>' : '<Up>'
+cnoremap <expr> <Down>  pumvisible() ? '<C-n>' : '<Down>'
+
+inoremap <expr> <Left>  pumvisible() ? '' : '<Left>'
+inoremap <expr> <Right> pumvisible() ? '' : '<Right>'
+
+cnoremap <expr> <Left>  pumvisible() ? '' : '<Left>'
+cnoremap <expr> <Right> pumvisible() ? '' : '<Right>'
+
 " ---------
 
 function AtTop(strict)
@@ -8144,8 +8154,8 @@ set completeopt=longest,menuone,preview,noselect,noinsert
 if !has("nvim")
     set completeopt+=popup
 endif
-inoremap <silent> <expr> <Tab> pumvisible() ? '<C-n>' : '<Tab>'
-inoremap <silent> <expr> <S-Tab> pumvisible() ? '<C-p>' : '<S-Tab>'
+inoremap <silent> <expr> <Tab>   pumvisible() ? '<Down>' : '<Tab>'
+inoremap <silent> <expr> <S-Tab> pumvisible() ? '<Up>' : '<S-Tab>'
 
 "set wildmode=full
 "set pumheight=0
@@ -8189,7 +8199,7 @@ noremap <silent> <Leader>dc :ClangCloseWindow<CR>
 
 " extra info in popup menu ...
 "let g:clang_verbose_pmenu = 1
-let g:clang_exec = 'clang++-9'
+let g:clang_exec = 'clang++-10'
 let g:clang_cpp_options = '-std=c++11 -DNDEBUG -Wno-inconsistent-missing-override'
 " put this in the local .lvimrc now ...
 "let g:clang_compilation_database = '~/lnrs/wip/buildln/compile_commands.json'
@@ -8197,8 +8207,8 @@ let g:clang_cpp_options = '-std=c++11 -DNDEBUG -Wno-inconsistent-missing-overrid
 if has("nvim")
     " adding preview here without popup isnt great as we get preview window split
     " there is a nvim float-preview plugin but that doesnt stop the preview split
-    let g:clang_c_completeopt = 'longest,menuone,preview'
-    let g:clang_cpp_completeopt = 'longest,menuone,preview'
+    let g:clang_c_completeopt = 'longest,menuone,preview,noselect,noinsert'
+    let g:clang_cpp_completeopt = 'longest,menuone,preview,noselect,noinsert'
     " is there a way to supress preview window ?
     " this works, but it flashes the preview window for a brief moment ...
     "autocmd User FloatPreviewWinOpen pclose
@@ -8211,8 +8221,8 @@ if has("nvim")
     aug END
 else
     " vim has popup option ...
-    let g:clang_c_completeopt = 'longest,menuone,preview,popup'
-    let g:clang_cpp_completeopt = 'longest,menuone,preview,popup'
+    let g:clang_c_completeopt = 'longest,menuone,preview,noselect,noinsert,popup'
+    let g:clang_cpp_completeopt = 'longest,menuone,preview,noselect,noinsert,popup'
 endif
 let g:clang_complete_copen = 1
 let g:clang_auto = 1
