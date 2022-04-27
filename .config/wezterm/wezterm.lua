@@ -112,6 +112,9 @@ return {
     { key="phys:Space",     mods="ALT|SHIFT",     action="Nop"},
     { key="phys:Space",     mods="ALT",           action="Nop"},
 
+    { key="phys:Equal",     mods="ALT",           action=wezterm.action{SendString="\x3d"} },
+    { key="phys:Equal",     mods="ALT|SHIFT",     action="Nop" },
+
     -- { key="x",              mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1b\x78"} },
 
     { key="phys:Backspace", mods="CTRL|ALT",      action=wezterm.action{SendString="\x1b\x40"} },
