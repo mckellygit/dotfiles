@@ -1,5 +1,6 @@
-source ~/.cgdb/ShellPipeCommand.py
 set pagination off
+set auto-load safe-path /
+source ~/.cgdb/ShellPipeCommand.py
 set confirm off
 set print object on
 set backtrace limit 30
