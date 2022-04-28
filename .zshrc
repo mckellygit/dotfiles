@@ -1295,6 +1295,9 @@ zle -N enter-cmdline
 # used to be M-<, but change to M-{
 bindkey "\e{" enter-cmdline
 
+# just to be consistent ...
+bindkey "\e}" noop
+
 function copy-cmdline() {
     if [[ $CURSOR != 0 || -n $BUFFER ]]
     then
