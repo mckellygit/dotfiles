@@ -99,6 +99,8 @@ return {
   use_dead_keys = false,
   disable_default_key_bindings = true,
 
+  -- debug_key_events = true,
+
   keys = {
     { key="phys:Backspace", mods="SHIFT",         action=wezterm.action{SendString="\x1e\x08"} },
     { key="phys:Space",     mods="SHIFT",         action=wezterm.action{SendString="\x1e\x20"} },
@@ -132,31 +134,44 @@ return {
 
     { key="phys:Return",mods="CTRL|ALT",      action=wezterm.action{SendString="\x1e\x0d"} },
 
+    -- NOTE: if want shift then used shifted key and |SHIFT
+
     { key="[",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x5b"} },
     { key="{",          mods="CTRL",          action=wezterm.action{SendString="\x1f\x5b"} },
+    { key="{",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x5b"} },
 
     { key="[",          mods="CTRL|ALT",      action="Nop"},
 
     { key="]",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x5d"} },
     { key="}",          mods="CTRL",          action=wezterm.action{SendString="\x1f\x5d"} },
+    { key="}",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x5d"} },
 
     { key="]",          mods="CTRL|ALT",      action="Nop"},
 
     { key="\\",         mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x5c"} },
     { key="|",          mods="CTRL",          action=wezterm.action{SendString="\x1f\x5c"} },
+    { key="|",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x5c"} },
 
     { key="/",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x2f"} },
     { key="?",          mods="CTRL",          action=wezterm.action{SendString="\x1f\x2f"} },
+    { key="?",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x2f"} },
 
     { key="f",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x06"} },
+    { key="F",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x06"} },
     { key="b",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x02"} },
+    { key="B",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x02"} },
 
     { key="j",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x4a"} },
+    { key="J",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x4a"} },
     { key="k",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x4b"} },
+    { key="K",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x4b"} },
 
     { key="g",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x47"} },
+    { key="G",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x47"} },
     { key="n",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x4e"} },
+    { key="N",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x4e"} },
     { key="p",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x50"} },
+    { key="P",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x50"} },
 
     -- Super + v to send same as Alt + Ins  for tmux to start/toggle copyq, but could we
     -- start copyq directly ?
@@ -173,15 +188,20 @@ return {
     -- { key="c",          mods="CTRL|SUPER",    action="Copy" },
     -- { key="v",          mods="CTRL|SUPER",    action="Paste" },
     { key="c",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1b[2;5~"} },
+    { key="C",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1b[2;5~"} },
     { key="v",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1b[2;2~"} },
+    { key="V",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1b[2;2~"} },
     { key="c",          mods="CTRL|ALT",      action="Copy" },
     { key="v",          mods="CTRL|ALT",      action="Paste" },
 
     { key="phys:Minus", mods="CTRL",          action=wezterm.action{SendString="\x1e\x2d"} },
 
     -- { key="+",          mods="CTRL",          action="IncreaseFontSize" },
+    -- { key="+",          mods="CTRL|SHIFT",    action="IncreaseFontSize" },
     -- { key="_",          mods="CTRL",          action="DecreaseFontSize" },
+    -- { key="_",          mods="CTRL|SHIFT",    action="DecreaseFontSize" },
     -- { key=")",          mods="CTRL",          action="ResetFontSize" },
+    -- { key=")",          mods="CTRL|SHIFT",    action="ResetFontSize" },
     { key="phys:Equal", mods="CTRL|SHIFT",    action="IncreaseFontSize" },
     { key="phys:Minus", mods="CTRL|SHIFT",    action="DecreaseFontSize" },
     { key="phys:0",     mods="CTRL|SHIFT",    action="ResetFontSize" },
