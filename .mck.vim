@@ -2508,7 +2508,9 @@ autocmd User AsyncRunStop if g:asyncrun_code != 0 | echohl DiffText | echo 'Asyn
 autocmd User AsyncRunInterrupt echohl DiffText | echo 'AsyncRun complete: [TERM]' | echohl None | let g:asyncrun_code = 2 | let g:asyncrun_string = '' | let g:asyncrun_copen = 1
 " NOTE: add '| wincmd p' to go back to orig window
 " NOTE: add '| set ma' after copen to make qf modifiable
+
 " use <Leader>sx to cancel AsyncRun job in flight ...
+if 0
 " in vim, <C-\> _may_ stop system() cmds (if stty quit is ^\) [but not nvim] - but may generate core file
 " <C-S-\> (or <C-|>) might be mapped to <C-_>\ in some terminals ...
 noremap <silent> <expr> <C-_>\ (&buftype ==# 'terminal') ? 'i' : '<C-c>:AsyncStop!<CR>:sleep 500m<CR>:AsyncStop!<CR>'
@@ -2516,12 +2518,22 @@ noremap <silent> <expr> <C-_>\ (&buftype ==# 'terminal') ? 'i' : '<C-c>:AsyncSto
 "       or can we change AsyncRun to know if <C-c> was pressed ?
 "       or change any-jump searches to use AsyncRun ?
 " ok with vim -
-" NOTE: tmux can map <C-c> to send <C-c> + sleep 500m + send <C-_>\ ...
+" NOTE: fixed in nvim as of 04/29/22, PR #18310, commit 2ba539f449a95f38463a61b189e203a5fe306fc0
 if !has("nvim")
     if !exists('$TMUX_PANE')
+        " NOTE: tmux can map <C-c> to send <C-c> + sleep 500m + send <C-_>\ ...
         noremap <C-c> <Cmd>AsyncStop!<CR><Cmd>sleep 500m<CR><Cmd>AsyncStop!<CR><Cmd>call feedkeys("\<C-c>", "Lnt")<CR>
     endif
 endif
+endif
+
+if has("nvim")
+    let ctrl_c_key = nvim_replace_termcodes("<C-c>", v:true, v:false, v:true)
+    noremap <C-c> <Cmd>AsyncStop!<CR><Cmd>sleep 500m<CR><Cmd>AsyncStop!<CR><Cmd>call nvim_feedkeys(ctrl_c_key, 'nt', v:false)<CR>
+else
+    noremap <C-c> <Cmd>AsyncStop!<CR><Cmd>sleep 500m<CR><Cmd>AsyncStop!<CR><Cmd>call feedkeys("\<C-c>", "Lnt")<CR>
+endif
+
 " To run a cmd without quickfix at end ...
 "let g:asyncrun_copen = 0 | AsyncRun -silent -post=call\ VimRoutine() bash -c "sleep 5"
 " asyncrun -----------
