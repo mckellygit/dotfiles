@@ -3985,6 +3985,8 @@ call <SID>MapFastKeycode('<F22>',           "\e[2;7~", 22) " A-C-Insert
 "call <SID>MapFastKeycode('<A-S-Left>',     "\e[1;4D", xx)
 "call <SID>MapFastKeycode('<A-S-Right>',    "\e[1;4C", xx)
 
+" also have <A-C-arrow> ...
+
 " --------- x maps -----------
 
 call <SID>MapFastKeycode('<F33>',     "\e[2;5~", 33) " C-Insert
@@ -6504,7 +6506,7 @@ inoremap <silent> <C-^>.     <C-\><C-o>10zl<C-\><C-o>10l
 "
 nnoremap <C-Right> W
 nnoremap <C-Left> B
-" but these might have already been mapped by the terminal/tmux to just Right and Left ...
+" NOTE: tmux may send these for vim, otherwise its terminal sending Right/Left ...
 nnoremap <M-C-Right> w
 nnoremap <M-C-Left> b
 "
@@ -6632,8 +6634,11 @@ func! VisAtEnd(strict) "{{{
      endif
 endfunc "}}}
 
-vnoremap <expr> <C-Right> VisAtEnd(0) ? 'e' : 'w'
-vnoremap <expr> <C-Left>  VisAtStart(0) ? 'b' : 'ge'
+vnoremap <expr> <C-Right> VisAtEnd(0) ? 'E' : 'W'
+vnoremap <expr> <C-Left>  VisAtStart(0) ? 'B' : 'gE'
+" NOTE: tmux may send these for vim, otherwise its terminal sending Right/Left ...
+vnoremap <expr> <M-C-Right> VisAtEnd(0) ? 'e' : 'w'
+vnoremap <expr> <M-C-Left>  VisAtStart(0) ? 'b' : 'ge'
 
 " ---------
 
