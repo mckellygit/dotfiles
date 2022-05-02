@@ -6505,6 +6505,7 @@ inoremap <silent> <C-^>.     <C-\><C-o>10zl<C-\><C-o>10l
 " could skip ()&,[]{}'"+-/:;
 "
 nnoremap <C-Right> W
+" or perhaps BBhE to go to end of word ?
 nnoremap <C-Left> B
 " NOTE: tmux may send these for vim, otherwise its terminal sending Right/Left ...
 nnoremap <M-C-Right> w
