@@ -132,7 +132,11 @@ return {
     -- NOTE: had to change gnome 'switch input source' binding to something else
     { key="phys:Space",     mods="SUPER",         action=wezterm.action{SendString="\x1b\x23"} },
 
-    { key="phys:Return",mods="CTRL|ALT",      action=wezterm.action{SendString="\x1e\x0d"} },
+    { key="phys:Return",    mods="CTRL|ALT",      action=wezterm.action{SendString="\x1e\x0d"} },
+
+    -- { key="phys:Return",    mods="SHIFT",         action=wezterm.action{SendString="\x1b[13;2u"} },
+    -- { key="phys:Return",    mods="CTRL",          action=wezterm.action{SendString="\x1b[13;5u"} },
+    -- (where 2 is 2-7 based on the usual modifiers)
 
     -- NOTE: if want shift then used shifted key and |SHIFT
 
