@@ -2488,6 +2488,8 @@ nnoremap <leader>ab :AnyJumpBack<CR>
 " Normal mode: open last closed search window again
 nnoremap <leader>al :AnyJumpLastResults<CR>
 au FileType any-jump nnoremap <silent> <buffer> <M-C-P> :call g:AnyJumpHandlePreview()<CR>
+
+" like <Leader>r: but use 'a' for AnyJump ...
 nnoremap <Leader>a: :call rtags#ToggleColonKeyword()<CR>
 xnoremap <Leader>a: <C-\><C-n>:<C-u>call rtags#ToggleColonKeyword()<CR>
 " any-jump -----------
