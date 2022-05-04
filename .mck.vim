@@ -5638,8 +5638,18 @@ aug END
 
 " see mousetime for double-click delay
 
+function! s:MyDblClick() abort
+    let l:oldiskeyword = &iskeyword
+    if (&filetype !=# "cpp" && &filetype !=# "c")
+        setlocal iskeyword+=.
+    endif
+    execute 'normal mvviwTygvzygv'
+    let &iskeyword = l:oldiskeyword
+endfunction
+
 " DoubleClick for word (lbvhe/lbve) (is h needed ?)
-nmap <2-LeftMouse> mvviwTygvzygv
+"nmap <silent> <2-LeftMouse> :setlocal iskeyword+=.<CR>mvviwTygvzygv
+nmap <silent> <2-LeftMouse> <Cmd>call <SID>MyDblClick()<CR>
 if !has("nvim")
     vmap <expr> <2-LeftMouse> (@i=="2") ? '<Esc>i<C-\><C-o>viwTy<C-\><C-o>gvzy<C-\><C-o>gv' : '<C-\><C-n>viwTy<C-\><C-n>gvzy<C-\><C-n>gv'
     imap <2-LeftMouse> <C-\><C-o>viwTy<C-\><C-o>gvzy<C-\><C-o>gv
@@ -5656,7 +5666,7 @@ endif
 " NOTE: Use GetPath instead of lBvhE/lBvE (is h needed ?)
 "nnoremap <3-LeftMouse> <LeftMouse>:call GetPath(1,1)<CR>
 "vnoremap <3-LeftMouse> <LeftMouse><C-\><C-n>:call GetPath(1,1)<CR>
-nmap <3-LeftMouse> mvviWTygvzygv
+nmap <silent> <3-LeftMouse> mvviWTygvzygv
 if !has("nvim")
     vmap <expr> <3-LeftMouse> (@i=="2") ? '<Esc>i<C-\><C-o>viWTy<C-\><C-o>gvzy<C-\><C-o>gv' : '<C-\><C-n>viWTy<C-\><C-n>gvzy<C-\><C-n>gv'
     imap <3-LeftMouse> <C-\><C-o>viWTy<C-\><C-o>gvzy<C-\><C-o>gv
@@ -5667,7 +5677,7 @@ endif
 "imap <silent> <3-LeftMouse> <C-\><C-o>:let @i="2"<bar>:call <SID>GetWord2(1)<CR>
 
 " QuadrupleClick for whole line
-nmap <4-LeftMouse> mvVTygvzygv
+nmap <silent> <4-LeftMouse> mvVTygvzygv
 if !has("nvim")
     vmap <expr> <4-LeftMouse> (@i=="2") ? '<Esc>i<C-\><C-o>VTy<C-\><C-o>gvzy<C-\><C-o>gv' : '<C-\><C-n>VTy<C-\><C-n>gvzy<C-\><C-n>gv'
     imap <4-LeftMouse> <C-\><C-o>VTy<C-\><C-o>gvzy<C-\><C-o>gv
@@ -5974,7 +5984,10 @@ function! s:MySelWord() abort
     if (g:rtagsUseColonKeyword == 1)
         setlocal iskeyword+=:
     endif
-    let keyword = expand('<cword>')
+    if (&filetype !=# "cpp" && &filetype !=# "c")
+        setlocal iskeyword+=.
+    endif
+    "let keyword = expand('<cword>')
     execute 'normal mvviw'
     let &iskeyword = l:oldiskeyword
 endfunction
