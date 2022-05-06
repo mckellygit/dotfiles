@@ -1500,6 +1500,10 @@ autocmd FileType GV nmap <buffer> <A-C-LeftDrag> <Nop>
 autocmd FileType GV nmap <buffer> <A-C-LeftRelease> <Nop>
 autocmd FileType GV nmap <buffer> <A-C-2-LeftRelease> <Nop>
 autocmd FileType GV nmap <buffer> <A-C-2-LeftMouse> <C-\><C-n>:<C-u>call feedkeys("O")<CR>
+autocmd FileType GV nmap <buffer> <A-S-LeftDrag> <Nop>
+autocmd FileType GV nmap <buffer> <A-S-LeftRelease> <Nop>
+autocmd FileType GV nmap <buffer> <A-S-2-LeftRelease> <Nop>
+autocmd FileType GV nmap <buffer> <A-S-2-LeftMouse> <Nop>
 " M/A-q to quit like q, but M/A-q is used by Unity/Gnome
 
 " start with folds open
@@ -3174,6 +3178,7 @@ if has("nvim")
     autocmd TermOpen term://* tnoremap <silent> <buffer> <LeftRelease> <Nop>
     autocmd TermOpen term://* tnoremap <silent> <buffer> <C-LeftMouse> <C-\><C-n>:let @t="1"<CR><LeftMouse>
     autocmd TermOpen term://* tnoremap <silent> <buffer> <A-C-LeftMouse> <C-\><C-n>:let @t="1"<CR><LeftMouse>
+    autocmd TermOpen term://* tnoremap <silent> <buffer> <A-S-LeftMouse> <C-\><C-n>:let @t="1"<CR><LeftMouse>
   augroup END
 
   " dont enter normal mode with a wheel up ...
@@ -5464,6 +5469,35 @@ nnoremap <A-C-LeftMouse> <LeftMouse>
 vnoremap <A-C-LeftMouse> <LeftMouse>
 "inoremap <A-C-LeftMouse> <LeftMouse>
 
+" go into rectangular visual mode here ...
+nnoremap <A-S-LeftDrag>  <LeftDrag><Cmd>call <SID>EnterVisualBlockMode()<CR>
+vnoremap <A-S-LeftDrag>  <LeftDrag>
+inoremap <A-S-LeftDrag>  <LeftDrag>
+
+function s:EnterVisualBlockMode()
+    if mode() != "\<C-v>"
+        if has("nvim")
+            let ctrl_v_key = nvim_replace_termcodes("<C-v>", v:true, v:false, v:true)
+            call nvim_feedkeys(ctrl_v_key, 'nt', v:false)
+        else
+            call feedkeys("\<C-v>", "Lnt")
+        endif
+    endif
+endfunction
+
+nnoremap <A-S-LeftMouse> <LeftMouse>
+vnoremap <A-S-LeftMouse> <LeftMouse>
+"inoremap <A-S-LeftMouse> <LeftMouse>
+
+" TODO: should we map these to same as A-C or A-S or C-S ?
+nnoremap <A-C-S-LeftDrag> <Nop>
+vnoremap <A-C-S-LeftDrag> <Nop>
+inoremap <A-C-S-LeftDrag> <Nop>
+
+nnoremap <A-C-S-LeftMouse> <Nop>
+vnoremap <A-C-S-LeftMouse> <Nop>
+inoremap <A-C-S-LeftMouse> <Nop>
+
 " ----------
 
 function s:VimTermMouse(arg)
@@ -5930,6 +5964,9 @@ endif
 " it seems nvim_input() or feedkeys() works but w/o bracketed-paste ...
 vmap <silent> <expr> <A-C-LeftRelease> (@t=="1") ? 'tygv:<C-u>call <SID>Delay(0)<CR>:let @t="0"<CR><Esc>i' : 'tygv:<C-u>call <SID>Delay(0)<CR><Esc>'
 imap <silent> <A-C-LeftMouse> <C-\><C-o>:let @i="2"<CR><LeftMouse>
+
+vmap <silent> <expr> <A-S-LeftRelease> (@t=="1") ? 'tygv:<C-u>call <SID>Delay(0)<CR>:let @t="0"<CR><Esc>i' : 'tygv:<C-u>call <SID>Delay(0)<CR><Esc>'
+imap <silent> <A-S-LeftMouse> <C-\><C-o>:let @i="2"<CR><LeftMouse>
 
 " ------------------------------
 

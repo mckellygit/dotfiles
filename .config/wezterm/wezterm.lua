@@ -93,6 +93,42 @@ return {
       mods="SHIFT",
       action="OpenLinkAtMouseCursor",
     },
+    {
+      event={Down={streak=1, button="Left"}},
+      mods="SHIFT",
+      action="Nop",
+    },
+    -- NOTE: with tmux also need SHIFT to get these to wezterm ...
+    {
+      event={Up={streak=1, button="Left"}},
+      mods="CTRL",
+      action="Nop",
+    },
+    {
+      event={Down={streak=1, button="Left"}},
+      mods="CTRL",
+      action=wezterm.action{SelectTextAtMouseCursor="Cell"},
+    },
+    {
+      event={Drag={streak=1, button="Left"}},
+      mods="CTRL",
+      action=wezterm.action{ExtendSelectionToMouseCursor="Block"},
+    },
+    {
+      event={Up={streak=1, button="Left"}},
+      mods="ALT",
+      action="DisableDefaultAssignment",
+    },
+    {
+      event={Down={streak=1, button="Left"}},
+      mods="ALT",
+      action="DisableDefaultAssignment",
+    },
+    {
+      event={Drag={streak=1, button="Left"}},
+      mods="ALT",
+      action="DisableDefaultAssignment",
+    },
   },
 
   enable_csi_u_key_encoding = false,
