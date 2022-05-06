@@ -102,7 +102,7 @@ return {
     {
       event={Up={streak=1, button="Left"}},
       mods="CTRL",
-      action="Nop",
+      action=wezterm.action{CompleteSelection="PrimarySelection"},
     },
     {
       event={Down={streak=1, button="Left"}},
