@@ -42,7 +42,7 @@ return {
   -- canonicalize_pasted_newlines = "CarriageReturnAndLineFeed",
 
   exit_behavior = "Close",
-  window_close_confirmation = "AlwaysPrompt",
+  window_close_confirmation = "NeverPrompt",
 
   swallow_mouse_click_on_pane_focus = true,
   swallow_mouse_click_on_window_focus = true,
