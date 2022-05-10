@@ -706,7 +706,11 @@ alias tailrdm='tail -f /tmp/rdm-$LOGNAME.log'
 alias difff='diff'
 alias dif='diff'
 
-alias ifconfig='ip -4 a'
+# make it a function instead of an alias so it can ignore extra arguments ...
+ifconfig()
+{
+    ip -4 a
+}
 
 alias ztop='zenith'
 
