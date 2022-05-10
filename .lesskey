@@ -83,3 +83,5 @@ qq   quit
 \eP noaction
 N noaction
 P noaction
+\e[1;6H noaction <
+\e[1;6F noaction >
