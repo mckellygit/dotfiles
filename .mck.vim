@@ -134,11 +134,6 @@ Plugin 'yssl/QFEnter'
 " restores to before entering qf
 "Plugin 'mckellygit/QFEnter'
 "
-" for managing and moving windows/tabs
-"Plugin 'yssl/TWcmd.vim'
-" Alias q TWcmd wcm q
-" nmap <Leader>qq :TWcmd wcm q<CR>
-"
 " qf grep / filter
 Plugin 'sk1418/QFGrep'
 "Plugin 'tommcdo/vim-lister'
@@ -146,6 +141,9 @@ Plugin 'sk1418/QFGrep'
 "
 " qf edit
 "Plugin 'itchyny/vim-qfedit'
+"
+" find and replace
+"Plugin 'brooth/far.vim'
 "
 " qf preview popup
 " NOTE: qf-preview is not compatible with nvim
@@ -160,6 +158,11 @@ Plugin 'mckellygit/quickr-preview.vim'
 "
 " other bufutils
 "Plugin 'smitajit/bufutils.vim'
+"
+" for managing and moving windows/tabs
+"Plugin 'yssl/TWcmd.vim'
+" Alias q TWcmd wcm q
+" nmap <Leader>qq :TWcmd wcm q<CR>
 "
 " fswitch to switch between .cpp/.h{pp} (**modified++)
 "Plugin 'derekwyatt/vim-fswitch'
@@ -186,6 +189,7 @@ Plugin 'sodapopcan/vim-twiggy'
 "Plugin 'Odie/gitabra'
 "Plugin 'plenary.nvim'
 "Plugin 'TimUntersberger/neogit'
+"Plugin 'idanarye/vim-merginal'
 "
 " dispatch make/etc utils
 Plugin 'tpope/vim-dispatch'
