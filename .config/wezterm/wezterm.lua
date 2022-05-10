@@ -84,35 +84,80 @@ return {
     brights = { "#808080", "#df0000", "#00d700", "#ffd700", "#5f87ff", "#875faf", "#00ffff", "#ffffff" },
   },
 
-  bypass_mouse_reporting_modifiers = "SHIFT",
-  disable_default_mouse_bindings = false,
+  bypass_mouse_reporting_modifiers = "NONE",
+  disable_default_mouse_bindings = true,
 
   mouse_bindings = {
     {
       event={Up={streak=1, button="Left"}},
       mods="SHIFT",
-      action="OpenLinkAtMouseCursor",
+      action=wezterm.action{CompleteSelectionOrOpenLinkAtMouseCursor="PrimarySelection"},
     },
     {
       event={Down={streak=1, button="Left"}},
       mods="SHIFT",
-      action="Nop",
-    },
-    -- NOTE: with tmux also need SHIFT to get these to wezterm ...
-    {
-      event={Up={streak=1, button="Left"}},
-      mods="CTRL",
-      action=wezterm.action{CompleteSelection="PrimarySelection"},
-    },
-    {
-      event={Down={streak=1, button="Left"}},
-      mods="CTRL",
       action=wezterm.action{SelectTextAtMouseCursor="Cell"},
     },
     {
       event={Drag={streak=1, button="Left"}},
-      mods="CTRL",
+      mods="SHIFT",
+      action=wezterm.action{ExtendSelectionToMouseCursor="Cell"},
+    },
+    {
+      event={Down={streak=2, button="Left"}},
+      mods="SHIFT",
+      action=wezterm.action{SelectTextAtMouseCursor="Word"},
+    },
+    {
+      event={Down={streak=3, button="Left"}},
+      mods="SHIFT",
+      action=wezterm.action{SelectTextAtMouseCursor="Line"},
+    },
+    {
+      event={Up={streak=2, button="Left"}},
+      mods="SHIFT",
+      action=wezterm.action{CompleteSelection="PrimarySelection"},
+    },
+    {
+      event={Up={streak=3, button="Left"}},
+      mods="SHIFT",
+      action=wezterm.action{CompleteSelection="PrimarySelection"},
+    },
+    -- NOTE: with tmux also need SHIFT to get these to wezterm ...
+    {
+      event={Up={streak=1, button="Left"}},
+      mods="CTRL|SHIFT",
+      action=wezterm.action{CompleteSelection="PrimarySelection"},
+    },
+    {
+      event={Down={streak=1, button="Left"}},
+      mods="CTRL|SHIFT",
+      action=wezterm.action{SelectTextAtMouseCursor="Cell"},
+    },
+    {
+      event={Drag={streak=1, button="Left"}},
+      mods="CTRL|SHIFT",
       action=wezterm.action{ExtendSelectionToMouseCursor="Block"},
+    },
+    {
+      event={Down={streak=2, button="Left"}},
+      mods="CTRL|SHIFT",
+      action=wezterm.action{SelectTextAtMouseCursor="Word"},
+    },
+    {
+      event={Down={streak=3, button="Left"}},
+      mods="CTRL|SHIFT",
+      action=wezterm.action{SelectTextAtMouseCursor="Line"},
+    },
+    {
+      event={Up={streak=2, button="Left"}},
+      mods="CTRL|SHIFT",
+      action=wezterm.action{CompleteSelection="PrimarySelection"},
+    },
+    {
+      event={Up={streak=3, button="Left"}},
+      mods="CTRL|SHIFT",
+      action=wezterm.action{CompleteSelection="PrimarySelection"},
     },
     {
       event={Up={streak=1, button="Left"}},
@@ -245,5 +290,35 @@ return {
     { key="phys:Equal", mods="CTRL|SHIFT",    action="IncreaseFontSize" },
     { key="phys:Minus", mods="CTRL|SHIFT",    action="DecreaseFontSize" },
     { key="phys:0",     mods="CTRL|SHIFT",    action="ResetFontSize" },
-  }
+  },
+
+  key_tables = {
+    copy_mode = {
+      { key="q",          mods="CTRL",        action="Nop" },
+      { key="Q",          mods="NONE",        action=wezterm.action{CopyMode="Close"} },
+      { key="\\",         mods="CTRL|ALT",    action=wezterm.action{CopyMode="Close"} },
+      { key="Escape",     mods="NONE",        action=wezterm.action{CopyMode="Close"} },
+      { key="c",          mods="CTRL",        action=wezterm.action{CopyMode="Close"} },
+
+      { key="LeftArrow",  mods="NONE",        action=wezterm.action{CopyMode="MoveLeft"}},
+      { key="DownArrow",  mods="NONE",        action=wezterm.action{CopyMode="MoveDown"}},
+      { key="UpArrow",    mods="NONE",        action=wezterm.action{CopyMode="MoveUp"}},
+      { key="RightArrow", mods="NONE",        action=wezterm.action{CopyMode="MoveRight"}},
+
+      -- { key="v",          mods="NONE",        action=wezterm.action{CopyMode="ToggleSelectionByCell"}},
+      -- { key="v",          mods="CTRL",        action=wezterm.action{CopyMode={SetSelectionMode="Block"}}},
+
+      -- { key="y",          mods="NONE",        action = wezterm.action_callback(function(window, pane)
+      --   local has_selection = window:get_selection_text_for_pane(pane) ~= ""
+      --     if has_selection then
+      --       window:perform_action(wezterm.action{CopyTo="PrimarySelection"}, pane)
+      --       window:perform_action("ClearSelection", pane)
+      --     end
+      --   end) },
+      -- { key="q",          mods="NONE",        action = wezterm.action_callback(function(window, pane)
+      --     window:perform_action("ClearSelection", pane)
+      --   end) },
+
+    },
+  },
 }
