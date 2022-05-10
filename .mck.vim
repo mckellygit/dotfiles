@@ -4534,8 +4534,8 @@ nnoremap <expr> <S-Insert> (&buftype == 'terminal') ? '' : 'p'
 if g:has_wsl > 0 && !has("nvim")
     inoremap <silent> <F34>      <C-\><C-o>:call WinUpdateClip()<CR><C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
     inoremap <silent> <S-Insert> <C-\><C-o>:call WinUpdateClip()<CR><C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
-    cnoremap <F34>      call WinUpdateClip()<CR>:<C-r>"
-    cnoremap <S-Insert> call WinUpdateClip()<CR>:<C-r>"
+    cnoremap <F34>      <Cmd>call WinUpdateClip()<CR><C-r>"
+    cnoremap <S-Insert> <Cmd>call WinUpdateClip()<CR><C-r>"
     tnoremap <F34>      <C-w>:call WinUpdateClip()<CR><C-w>""
     tnoremap <S-Insert> <C-w>:call WinUpdateClip()<CR><C-w>""
 else
@@ -4559,8 +4559,8 @@ nnoremap <expr> <M-!>   (&buftype == 'terminal') ? '' : 'p'
 if g:has_wsl > 0 && !has("nvim")
     inoremap <silent> <S-F34> <C-\><C-o>:call WinUpdateClip()<CR><C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
     inoremap <silent> <M-!>   <C-\><C-o>:call WinUpdateClip()<CR><C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
-    cnoremap <S-F34>  call WinUpdateClip()<CR>:<C-r>"
-    cnoremap <M-!>    call WinUpdateClip()<CR>:<C-r>"
+    cnoremap <S-F34>  <Cmd>call WinUpdateClip()<CR><C-r>"
+    cnoremap <M-!>    <Cmd>call WinUpdateClip()<CR><C-r>"
     tnoremap <S-F34>  <C-w>:call WinUpdateClip()<CR><C-w>""
     tnoremap <M-!>    <C-w>:call WinUpdateClip()<CR><C-w>""
 else
@@ -4585,8 +4585,8 @@ nnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '' : 'P`['
 if g:has_wsl > 0 && !has("nvim")
     inoremap <silent> <F35>        <C-\><C-o>:call WinUpdateClip()<CR><C-\><C-o>:set paste<CR><C-\><C-o>mp<C-r>"<C-\><C-o>:set nopaste<CR><C-\><C-o>`p
     inoremap <silent> <C-S-Insert> <C-\><C-o>:call WinUpdateClip()<CR><C-\><C-o>:set paste<CR><C-\><C-o>mp<C-r>"<C-\><C-o>:set nopaste<CR><C-\><C-o>`p
-    cnoremap <F35>        call WinUpdateClip()<CR>:<C-r>"
-    cnoremap <C-S-Insert> call WinUpdateClip()<CR>:<C-r>"
+    cnoremap <F35>        <Cmd>call WinUpdateClip()<CR><C-r>"
+    cnoremap <C-S-Insert> <Cmd>call WinUpdateClip()<CR><C-r>"
     tnoremap <F35>        <C-w>:call WinUpdateClip()<CR>:<C-w>""
     tnoremap <C-S-Insert> <C-w>:call WinUpdateClip()<CR>:<C-w>""
 else
@@ -4610,8 +4610,8 @@ nnoremap <expr> <M-*>   (&buftype == 'terminal') ? '' : 'P`]'
 if g:has_wsl > 0 && !has("nvim")
     inoremap <silent> <S-F35> <C-\><C-o>:call WinUpdateClip()<CR><C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
     inoremap <silent> <M-*>   <C-\><C-o>:call WinUpdateClip()<CR><C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
-    cnoremap <S-F35> call WinUpdateClip()<CR>:<C-r>"
-    cnoremap <M-*>   call WinUpdateClip()<CR>:<C-r>"
+    cnoremap <S-F35> <Cmd>call WinUpdateClip()<CR><C-r>"
+    cnoremap <M-*>   <Cmd>call WinUpdateClip()<CR><C-r>"
     tnoremap <S-F35> <C-w>:call WinUpdateClip()<CR>:<C-w>""
     tnoremap <M-*>   <C-w>:call WinUpdateClip()<CR>:<C-w>""
 else
@@ -5937,8 +5937,13 @@ if has("nvim")
     imap <silent> <M-B> <LeftMouse><C-\><C-o>:call <SID>GetPath(2,1)<CR>
 endif
 
-" NOTE: tmux maps A-C-Triple to M-H for vi to be able to know its a triple-click ...
-call <SID>MapFastKeycode('<S-F25>',  "\eH", 125)
+" NOTE: tmux maps A-C-Triple to M-) for vi to be able to know its a triple-click ...
+" ----------------------------------------------
+" used to be M-H
+" M-H is NOT a good char to use as there is A-H/J/K/L for movement ...
+" now it is M-)
+" ----------------------------------------------
+call <SID>MapFastKeycode('<S-F25>',  "\e)", 125)
 "nmap <silent> <S-F25> mvviWty:call <SID>Delay(1)<CR><Esc>
 "vmap <silent> <S-F25> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
 "nmap <silent> <expr> <S-F25> (@j=="0") ? '<LeftMouse>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse>:call <SID>GetPath(2,1)<CR>'
@@ -5948,16 +5953,16 @@ vmap <silent> <S-F25> <LeftMouse><C-\><C-n>:call <SID>GetWord2(2)<CR>
 imap <silent> <S-F25> <LeftMouse><C-\><C-o>:call <SID>GetWord2(2)<CR>
 tnoremap <S-F25> <Nop>
 if has("nvim")
-    "nmap <silent> <M-H> mvviWty:call <SID>Delay(1)<CR><Esc>
-    "vmap <silent> <M-H> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
-    "nmap <silent> <expr> <M-H> (@j=="0") ? '<LeftMouse>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse>:call <SID>GetPath(2,1)<CR>'
-    "vmap <silent> <expr> <M-H> (@j=="0") ? '<LeftMouse><C-\><C-n>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-n>:call <SID>GetPath(2,1)<CR>'
-    nmap <silent> <M-H> <LeftMouse>:call <SID>GetWord2(2)<CR>
+    "nmap <silent> <M-)> mvviWty:call <SID>Delay(1)<CR><Esc>
+    "vmap <silent> <M-)> <Esc>mvviWty:call <SID>Delay(1)<CR><Esc>
+    "nmap <silent> <expr> <M-)> (@j=="0") ? '<LeftMouse>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse>:call <SID>GetPath(2,1)<CR>'
+    "vmap <silent> <expr> <M-)> (@j=="0") ? '<LeftMouse><C-\><C-n>:let @j="1"<bar>:call <SID>GetWord(2)<CR>' : '<LeftMouse><C-\><C-n>:call <SID>GetPath(2,1)<CR>'
+    nmap <silent> <M-)> <LeftMouse>:call <SID>GetWord2(2)<CR>
     " if wanted to paste selection on cmdline ... (but still doesn't handle trailing space)
-    "nmap <silent> <expr> <M-H> (&buftype == 'terminal') ? '<LeftMouse>:call <SID>GetPath(2,1)<CR><S-Insert>' : '<LeftMouse>:call <SID>GetPath(2,1)<CR>'
+    "nmap <silent> <expr> <M-)> (&buftype == 'terminal') ? '<LeftMouse>:call <SID>GetPath(2,1)<CR><S-Insert>' : '<LeftMouse>:call <SID>GetPath(2,1)<CR>'
     " C-M-LeftDrag doesn't paste in nvim terminal either ...
-    vmap <silent> <M-H> <LeftMouse><C-\><C-n>:call <SID>GetWord2(2)<CR>
-    imap <silent> <M-H> <LeftMouse><C-\><C-o>:call <SID>GetWord2(2)<CR>
+    vmap <silent> <M-)> <LeftMouse><C-\><C-n>:call <SID>GetWord2(2)<CR>
+    imap <silent> <M-)> <LeftMouse><C-\><C-o>:call <SID>GetWord2(2)<CR>
 endif
 
 " mck - TODO can/should we paste selection here ?
@@ -6551,6 +6556,17 @@ inoremap <silent> <C-^>,     <C-\><C-o>10zh<C-\><C-o>10h
 inoremap <silent> <C-^>.     <C-\><C-o>10zl<C-\><C-o>10l
 
 " NOTE: there is also M-H, M-L, M-<, M->
+" NOTE: \eH and \eL are NOT mapped for vim ...
+
+noremap <silent> <C-^>H     10zh10h
+noremap <silent> <C-^>L     10zl10l
+noremap <silent> <C-^><lt>  10zh10h
+noremap <silent> <C-^>>     10zl10l
+
+noremap <silent> <M-H>      10zh10h
+noremap <silent> <M-L>      10zl10l
+noremap <silent> <M-<lt>>   10zh10h
+noremap <silent> <M->>      10zl10l
 
 " ---------
 
@@ -7183,6 +7199,8 @@ endif
 inoremap <C-_>J <C-\><C-o>10gj
 
 " ---------
+
+" NOTE: \eH and \eL are NOT mapped for vim ...
 
 call <SID>MapFastKeycode('<F26>',  "\eK", 26)
 noremap <silent> <expr> <F26>    (line('.') == line('w$')) ? '5k' : '5<C-y>5k'
@@ -10402,27 +10420,27 @@ endfunction
 "       <Leader>s<S-Left>, <S-Right>
 "       <Leader>s<, >
 
-nnoremap <silent> <C-w><                   :tabprevious<CR>
+nnoremap <silent> <C-w><lt>                :tabprevious<CR>
 nnoremap <silent> <C-w>>                   :tabnext<CR>
 nnoremap <silent> <C-w><S-Left>            :tabprevious<CR>
 nnoremap <silent> <C-w><S-Right>           :tabnext<CR>
-vnoremap <silent> <C-w><         <C-\><C-n>:tabprevious<CR>
+vnoremap <silent> <C-w><lt>      <C-\><C-n>:tabprevious<CR>
 vnoremap <silent> <C-w>>         <C-\><C-n>:tabnext<CR>
 vnoremap <silent> <C-w><S-Left>  <C-\><C-n>:tabprevious<CR>
 vnoremap <silent> <C-w><S-Right> <C-\><C-n>:tabnext<CR>
-inoremap <silent> <C-w><         <C-\><C-o>:tabprevious<CR>
+inoremap <silent> <C-w><lt>      <C-\><C-o>:tabprevious<CR>
 inoremap <silent> <C-w>>         <C-\><C-o>:tabnext<CR>
 inoremap <silent> <C-w><S-Left>  <C-\><C-o>:tabprevious<CR>
 inoremap <silent> <C-w><S-Right> <C-\><C-o>:tabnext<CR>
 if !has("nvim")
     " this leaves terminal in insert mode
-    tnoremap <silent> <C-w><              <C-w>:tabprevious<CR>
+    tnoremap <silent> <C-w><lt>           <C-w>:tabprevious<CR>
     tnoremap <silent> <C-w>>              <C-w>:tabnext<CR>
     tnoremap <silent> <C-w><S-Left>       <C-w>:tabprevious<CR>
     tnoremap <silent> <C-w><S-Right>      <C-w>:tabnext<CR>
 else
     " this leaves terminal in normal mode
-    tnoremap <silent> <C-w><         <C-\><C-n>:tabprevious<CR>
+    tnoremap <silent> <C-w><lt>      <C-\><C-n>:tabprevious<CR>
     tnoremap <silent> <C-w>>         <C-\><C-n>:tabnext<CR>
     tnoremap <silent> <C-w><S-Left>  <C-\><C-n>:tabprevious<CR>
     tnoremap <silent> <C-w><S-Right> <C-\><C-n>:tabnext<CR>
