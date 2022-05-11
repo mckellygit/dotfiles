@@ -3838,6 +3838,9 @@ vnoremap J <Nop>
 " tag stack (<C-t>) remapped ...
  noremap <C-t> <Nop>
 
+" fzf
+noremap <C-r> <Nop>
+
 nnoremap <silent> <C-t>t         :tabnext<CR>
 nnoremap <silent> <C-t><C-t>     :tabnext<CR>
 nnoremap <silent> <C-t><Left>    :tabprevious<CR>
@@ -5532,19 +5535,31 @@ nnoremap <silent> <expr> <C-w>0 (&buftype == 'terminal') ? 'i' : '<Ignore>'
 vnoremap <silent> <expr> <C-w>0 (&buftype == 'terminal') ? '<Esc>i' : '<Ignore>'
 tnoremap <silent> <C-w>0 <Nop>
 
+" for fzf tmux prefix C-t and C-r -
+" NOTE: \e" and \e_ NOT mapped for vim ...
+noremap <M-"> <Nop>
+noremap <M-_> <Nop>
+
+let g:fterm = 0
+
 " mck - TODO - vim can we get into visual mode for C- and A-C- mouse drag ?
 if !has("nvim")
     " BUG fix for vim on new terminal first time dragging ...
     function s:VimTermInit()
         let @p="1"
         " this feedkeys work-around causes fzf#run() to fail, so only do it for some
-        " (fzf terminal is unlisted) ...
-        if !buflisted('%')
+        " (fzf terminal is unlisted, but so is a regular shell terminal) ...
+        "if !buflisted('%')
+        "    return
+        "endif
+        if g:fterm != 1
             return
         endif
+        let g:fterm = 0
+        "echom "VimTermInit: " . bufname()
         " and it still does not really solve the problem, as
         " sometimes a mouse drag will stop abruptly and incorrectly
-        silent call feedkeys("\<C-w>Nv\<C-LeftDrag>\<C-LeftDrag>\<Esc>i", "m")
+        silent call feedkeys("\<C-w>Nv\<C-LeftDrag>\<C-LeftDrag>\<Esc>\<Esc>\<Esc>i", "Lnt")
     endfunction
     " VIM BUG
     au TerminalWinOpen * call <SID>VimTermInit()
@@ -10090,8 +10105,8 @@ if has("nvim")
     nnoremap <silent> <Leader>zs           :terminal<CR><C-\><C-n>:se scl=no<CR>i
     vnoremap <silent> <Leader>zs <C-\><C-n>:terminal<CR><C-\><C-n>:se scl=no<CR>i
 else
-    nnoremap <silent> <Leader>zs           :terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
-    vnoremap <silent> <Leader>zs <C-\><C-n>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
+    nnoremap <silent> <Leader>zs           :let g:fterm=1<CR>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
+    vnoremap <silent> <Leader>zs <C-\><C-n>:let g:fterm=1<CR>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
 endif
 " terminal in new tab NOTE: added <C-w>:se scl=no<CR> at end to turn off signcolumn in terminal only ...
 noremap <silent> zt <Nop>
@@ -10101,9 +10116,9 @@ if has("nvim")
     command Zterm execute "normal! :$tabnew\<bar>terminal\<CR>\<C-\>\<C-n>:se scl=no\<CR>\<C-\>\<C-n>:\<BS>i"
     command ZTerm Zterm
 else
-    nnoremap <silent> <Leader>zt           :$tabnew<bar>terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
-    vnoremap <silent> <Leader>zt <C-\><C-n>:$tabnew<bar>terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
-    command Zterm execute "normal :$tabnew\<bar>terminal ++close ++norestore ++kill=term ++curwin\<CR>\<C-w>:se scl=no\<CR>"
+    nnoremap <silent> <Leader>zt           :$tabnew<bar>let g:fterm=1<CR>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
+    vnoremap <silent> <Leader>zt <C-\><C-n>:$tabnew<bar>let g:fterm=1<CR>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
+    command Zterm execute "normal :$tabnew\<bar>let g:fterm=1<CR>:terminal ++close ++norestore ++kill=term ++curwin\<CR>\<C-w>:se scl=no\<CR>"
     command ZTerm Zterm
 endif
 "
@@ -10122,12 +10137,12 @@ if has("nvim")
     tnoremap <silent> <M-x>v <C-\><C-n>:$tabnew<CR>
 else
     tnoremap <silent> <F17> <Nop>
-    tnoremap <silent> <F17><Tab> <C-w>:$tabnew<bar>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
-    tnoremap <silent> <F17>t <C-w>:$tabnew<bar>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
+    tnoremap <silent> <F17><Tab> <C-w>:$tabnew<bar>let g:fterm=1<CR>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
+    tnoremap <silent> <F17>t <C-w>:$tabnew<bar>let g:fterm=1<CR>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
     tnoremap <silent> <F17>v <C-w>:$tabnew<CR>
     tnoremap <silent> <M-x> <Nop>
-    tnoremap <silent> <M-x>t <C-w>:$tabnew<bar>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
-    tnoremap <silent> <M-x><Tab> <C-w>:$tabnew<bar>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
+    tnoremap <silent> <M-x>t <C-w>:$tabnew<bar>let g:fterm=1<CR>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
+    tnoremap <silent> <M-x><Tab> <C-w>:$tabnew<bar>let g:fterm=1<CR>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
     tnoremap <silent> <M-x>v <C-w>:$tabnew<CR>
 endif
 " window in new tab when already in a terminal

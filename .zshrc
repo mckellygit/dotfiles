@@ -995,7 +995,7 @@ export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND -t d"
 # fzf from cmdline uses FZF_DEFAULT_OPTS and has a 250 line preview limit
 # fzf from vim plugin does not have the 250 line max
 
-export FZF_DEFAULT_OPTS='--ansi --preview "$BATNAME --style=numbers --color=always --line-range :250 {}" --bind="ctrl-alt-p:toggle-preview" --bind="alt-g:preview-top,alt-G:preview-bottom" --bind="ctrl-f:preview-half-page-down" --bind="ctrl-b:preview-half-page-up" --bind="ctrl-k:preview-up,ctrl-j:preview-down" --bind="ctrl-d:delete-char" --bind="alt-bs:preview-half-page-up,alt-space:preview-half-page-down" --bind="alt-k:up,alt-j:down" --bind="alt-K:preview-half-page-up,alt-J:preview-half-page-down" --bind="ctrl-alt-k:preview-half-page-up,ctrl-alt-j:preview-half-page-down" --bind="ctrl-alt-o:preview-half-page-down" --bind="page-up:page-up" --bind="page-down:page-down" --bind="alt-d:kill-word,alt-u:unix-line-discard" --bind="alt-b:page-up" --bind="alt-f:page-down" --preview-window=right:hidden --color fg:242,bg:236,hl:65,fg+:15,bg+:239,hl+:108 --color info:108,prompt:109,spinner:108,pointer:168,marker:168'
+export FZF_DEFAULT_OPTS='--height 40% --ansi --preview "$BATNAME --style=numbers --color=always --line-range :250 {}" --bind="ctrl-alt-p:toggle-preview" --bind="alt-g:preview-top,alt-G:preview-bottom" --bind="ctrl-f:preview-half-page-down" --bind="ctrl-b:preview-half-page-up" --bind="ctrl-k:preview-up,ctrl-j:preview-down" --bind="ctrl-d:delete-char" --bind="alt-bs:preview-half-page-up,alt-space:preview-half-page-down" --bind="alt-k:up,alt-j:down" --bind="alt-K:preview-half-page-up,alt-J:preview-half-page-down" --bind="ctrl-alt-k:preview-half-page-up,ctrl-alt-j:preview-half-page-down" --bind="ctrl-alt-o:preview-half-page-down" --bind="page-up:page-up" --bind="page-down:page-down" --bind="alt-d:kill-word,alt-u:unix-line-discard" --bind="alt-b:page-up" --bind="alt-f:page-down" --preview-window=right:hidden --color fg:242,bg:236,hl:65,fg+:15,bg+:239,hl+:108 --color info:108,prompt:109,spinner:108,pointer:168,marker:168'
 
 # Options to fzf command
 export FZF_COMPLETION_OPTS='+c -x'
@@ -1048,8 +1048,11 @@ _fzf_compgen_dir() {
 # -----------------------
 
 my-fzfcmd() {
-  [ -n "$TMUX_PANE" ] &&
-    echo "fzf-tmux -p -x C -y C -w 80% -h 65% " || echo "fzf --height 50% "
+  if [ -n "$TMUX_PANE" -a -z "$VIM_TERMINAL" ] ; then
+    echo "fzf-tmux -p -x C -y C -w 80% -h 65% "
+  else
+    echo "fzf --height 40% "
+  fi
 }
 
 my-fzf-history-widget() {
