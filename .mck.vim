@@ -5544,6 +5544,67 @@ let g:fterm = 0
 
 " mck - TODO - vim can we get into visual mode for C- and A-C- mouse drag ?
 if !has("nvim")
+
+    " vim popup terminal special things to disable mouse drag selection etc
+    function s:VimTermPopup()
+        if &buftype !=# 'terminal' && win_gettype(win_getid()) !=# 'popup'
+            return
+        endif
+        "echom "VimTermPopup"
+
+        map <buffer> <LeftMouse>        <Nop>
+
+        tnoremap <LeftMouse>        <Nop>
+        tnoremap <LeftDrag>         <Nop>
+        tnoremap <LeftRelease>      <Nop>
+
+        tnoremap <2-LeftMouse>      <Nop>
+        tnoremap <2-LeftDrag>       <Nop>
+        tnoremap <2-LeftRelease>    <Nop>
+
+        tnoremap <3-LeftMouse>      <Nop>
+        tnoremap <3-LeftDrag>       <Nop>
+        tnoremap <3-LeftRelease>    <Nop>
+
+        tnoremap <4-LeftMouse>      <Nop>
+        tnoremap <4-LeftDrag>       <Nop>
+        tnoremap <4-LeftRelease>    <Nop>
+
+        tnoremap <C-LeftMouse>      <Nop>
+        tnoremap <C-LeftDrag>       <Nop>
+        tnoremap <C-LeftRelease>    <Nop>
+
+        tnoremap <C-2-LeftMouse>    <Nop>
+        tnoremap <C-2-LeftDrag>     <Nop>
+        tnoremap <C-2-LeftRelease>  <Nop>
+
+        tnoremap <C-3-LeftMouse>    <Nop>
+        tnoremap <C-3-LeftDrag>     <Nop>
+        tnoremap <C-3-LeftRelease>  <Nop>
+
+        tnoremap <C-4-LeftMouse>    <Nop>
+        tnoremap <C-4-LeftDrag>     <Nop>
+        tnoremap <C-4-LeftRelease>  <Nop>
+
+        tnoremap <A-C-LeftMouse>    <Nop>
+        tnoremap <A-C-LeftDrag>     <Nop>
+        tnoremap <A-C-LeftRelease>  <Nop>
+
+        tnoremap <A-C-2-LeftMouse>    <Nop>
+        tnoremap <A-C-2-LeftDrag>     <Nop>
+        tnoremap <A-C-2-LeftRelease>  <Nop>
+
+        tnoremap <A-C-3-LeftMouse>    <Nop>
+        tnoremap <A-C-3-LeftDrag>     <Nop>
+        tnoremap <A-C-3-LeftRelease>  <Nop>
+
+        tnoremap <A-C-4-LeftMouse>    <Nop>
+        tnoremap <A-C-4-LeftDrag>     <Nop>
+        tnoremap <A-C-4-LeftRelease>  <Nop>
+    endfunction
+
+    au BufEnter * call <SID>VimTermPopup()
+
     " BUG fix for vim on new terminal first time dragging ...
     function s:VimTermInit()
         let @p="1"
