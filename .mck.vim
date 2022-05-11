@@ -7204,6 +7204,14 @@ inoremap <C-_>J <C-\><C-o>10gj
 
 " ---------
 
+" to match <M-C-J(O)> (\e<C-j(o)>) and <M-C-K> (\e<C-k>) for moving ...
+" NOTE: \e<C-h> and \e<C-l> are NOT mapped for vim ...
+
+noremap <M-C-H> 10h
+noremap <M-C-L> 10l
+
+" ---------
+
 " NOTE: \eH and \eL are NOT mapped for vim ...
 
 call <SID>MapFastKeycode('<F26>',  "\eK", 26)
