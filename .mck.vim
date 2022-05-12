@@ -5479,7 +5479,8 @@ vnoremap <A-C-LeftMouse> <LeftMouse>
 " go into rectangular visual mode here ...
 nnoremap <A-S-LeftDrag>  <LeftDrag><Cmd>call <SID>EnterVisualBlockMode()<CR>
 vnoremap <A-S-LeftDrag>  <LeftDrag>
-inoremap <A-S-LeftDrag>  <LeftDrag>
+inoremap <A-S-LeftDrag>  <C-\><C-o>v<LeftDrag><Cmd>call <SID>EnterVisualBlockMode()<CR>
+"inoremap <A-S-LeftDrag>  <LeftDrag>
 
 function s:EnterVisualBlockMode()
     if mode() != "\<C-v>"
@@ -5554,9 +5555,9 @@ if !has("nvim")
 
         map <buffer> <LeftMouse>        <Nop>
 
-        tnoremap <LeftMouse>        <Nop>
-        tnoremap <LeftDrag>         <Nop>
-        tnoremap <LeftRelease>      <Nop>
+        tnoremap <buffer> <LeftMouse>        <Nop>
+        tnoremap <buffer> <LeftDrag>         <Nop>
+        tnoremap <buffer> <LeftRelease>      <Nop>
 
         tnoremap <2-LeftMouse>      <Nop>
         tnoremap <2-LeftDrag>       <Nop>
@@ -5570,9 +5571,9 @@ if !has("nvim")
         tnoremap <4-LeftDrag>       <Nop>
         tnoremap <4-LeftRelease>    <Nop>
 
-        tnoremap <C-LeftMouse>      <Nop>
-        tnoremap <C-LeftDrag>       <Nop>
-        tnoremap <C-LeftRelease>    <Nop>
+        tnoremap <buffer> <C-LeftMouse>      <Nop>
+        tnoremap <buffer> <C-LeftDrag>       <Nop>
+        tnoremap <buffer> <C-LeftRelease>    <Nop>
 
         tnoremap <C-2-LeftMouse>    <Nop>
         tnoremap <C-2-LeftDrag>     <Nop>
@@ -5601,6 +5602,22 @@ if !has("nvim")
         tnoremap <A-C-4-LeftMouse>    <Nop>
         tnoremap <A-C-4-LeftDrag>     <Nop>
         tnoremap <A-C-4-LeftRelease>  <Nop>
+
+        tnoremap <A-S-LeftMouse>    <Nop>
+        tnoremap <A-S-LeftDrag>     <Nop>
+        tnoremap <A-S-LeftRelease>  <Nop>
+
+        tnoremap <A-S-2-LeftMouse>    <Nop>
+        tnoremap <A-S-2-LeftDrag>     <Nop>
+        tnoremap <A-S-2-LeftRelease>  <Nop>
+
+        tnoremap <A-S-3-LeftMouse>    <Nop>
+        tnoremap <A-S-3-LeftDrag>     <Nop>
+        tnoremap <A-S-3-LeftRelease>  <Nop>
+
+        tnoremap <A-S-4-LeftMouse>    <Nop>
+        tnoremap <A-S-4-LeftDrag>     <Nop>
+        tnoremap <A-S-4-LeftRelease>  <Nop>
     endfunction
 
     au BufEnter * call <SID>VimTermPopup()
@@ -5672,6 +5689,22 @@ if !has("nvim")
     tnoremap <A-C-4-LeftMouse>    <Nop>
     tnoremap <A-C-4-LeftDrag>     <Nop>
     tnoremap <A-C-4-LeftRelease>  <Nop>
+
+    tnoremap <A-S-LeftMouse>    <Nop>
+    tnoremap <A-S-LeftDrag>     <Nop>
+    tnoremap <A-S-LeftRelease>  <Nop>
+
+    tnoremap <A-S-2-LeftMouse>    <Nop>
+    tnoremap <A-S-2-LeftDrag>     <Nop>
+    tnoremap <A-S-2-LeftRelease>  <Nop>
+
+    tnoremap <A-S-3-LeftMouse>    <Nop>
+    tnoremap <A-S-3-LeftDrag>     <Nop>
+    tnoremap <A-S-3-LeftRelease>  <Nop>
+
+    tnoremap <A-S-4-LeftMouse>    <Nop>
+    tnoremap <A-S-4-LeftDrag>     <Nop>
+    tnoremap <A-S-4-LeftRelease>  <Nop>
 
     let s:term_pos = {} " { bufnr: [winheight, n visible lines] }
 
@@ -6050,7 +6083,9 @@ endif
 vmap <silent> <expr> <A-C-LeftRelease> (@t=="1") ? 'tygv:<C-u>call <SID>Delay(0)<CR>:let @t="0"<CR><Esc>i' : 'tygv:<C-u>call <SID>Delay(0)<CR><Esc>'
 imap <silent> <A-C-LeftMouse> <C-\><C-o>:let @i="2"<CR><LeftMouse>
 
-vmap <silent> <expr> <A-S-LeftRelease> (@t=="1") ? 'tygv:<C-u>call <SID>Delay(0)<CR>:let @t="0"<CR><Esc>i' : 'tygv:<C-u>call <SID>Delay(0)<CR><Esc>'
+" NOTE: use this if we want A-S-LeftDrag to end visual mode ...
+"vmap <silent> <expr> <A-S-LeftRelease> (@t=="1") ? 'tygv:<C-u>call <SID>Delay(0)<CR>:let @t="0"<CR><Esc>i' : 'tygv:<C-u>call <SID>Delay(0)<CR><Esc>'
+
 imap <silent> <A-S-LeftMouse> <C-\><C-o>:let @i="2"<CR><LeftMouse>
 
 " ------------------------------
