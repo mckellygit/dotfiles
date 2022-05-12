@@ -792,7 +792,7 @@ alias git='~/bin/git'
 # ------------------
 
 # -x S -y R are not supported values
-if [[ -n "$TMUX_PANE" ]] ; then
+if [ -n "$TMUX_PANE" -a -z "$VIM_TERMINAL" ] ; then
     alias fzf='fzf-tmux -p -x C -y 38 -w 80% -h 65%'
 fi
 

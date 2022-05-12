@@ -3838,9 +3838,6 @@ vnoremap J <Nop>
 " tag stack (<C-t>) remapped ...
  noremap <C-t> <Nop>
 
-" fzf
-noremap <C-r> <Nop>
-
 nnoremap <silent> <C-t>t         :tabnext<CR>
 nnoremap <silent> <C-t><C-t>     :tabnext<CR>
 nnoremap <silent> <C-t><Left>    :tabprevious<CR>
@@ -7210,6 +7207,16 @@ vnoremap <A-ScrollWheelDown>     20gjg$
 vnoremap <A-2-ScrollWheelDown>   20gjg$
 vnoremap <A-3-ScrollWheelDown>   20gjg$
 vnoremap <A-4-ScrollWheelDown>   20gjg$
+
+vnoremap <A-S-ScrollWheelUp>         5gk
+vnoremap <A-S-2-ScrollWheelUp>       5gk
+vnoremap <A-S-3-ScrollWheelUp>       5gk
+vnoremap <A-S-4-ScrollWheelUp>       5gk
+
+vnoremap <A-S-ScrollWheelDown>       5gj
+vnoremap <A-S-2-ScrollWheelDown>     5gj
+vnoremap <A-S-3-ScrollWheelDown>     5gj
+vnoremap <A-S-4-ScrollWheelDown>     5gj
 
 "inoremap <silent> <ScrollWheelUp>     <C-\><C-o>5k
 "inoremap <silent> <ScrollWheelDown>   <C-\><C-o>5j
