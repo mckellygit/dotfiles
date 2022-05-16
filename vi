@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#if [[ -n "$FLOATERM" ]] ; then
+#    floaterm "$@"
+#fi
+
 if [[ -n "$TMUX" ]] ; then
     if [[ -z "$VISUAL" ]] ; then
         unset TMUX

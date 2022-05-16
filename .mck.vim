@@ -2740,6 +2740,8 @@ endif
 "       <C-v> - vsplit, <C-x> - split, <C-t> - tabe, etc.
 let g:floaterm_open_command = 'tabe'
 
+let g:floaterm_opener = 'tabe'
+
 " install lf (go) -
 "   env CGO_ENABLED=0 GO111MODULE=on go get -u -ldflags="-s -w" github.com/gokcehan/lf
 "   NOTE: use 'i' to enter preview window (inspect) to scroll, then exit less/bat (qq etc.) to go back ...
