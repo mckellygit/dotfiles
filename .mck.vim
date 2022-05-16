@@ -3195,11 +3195,22 @@ if has("nvim")
   tnoremap <silent> <2-ScrollWheelDown> <Nop>
   tnoremap <silent> <3-ScrollWheelDown> <Nop>
   tnoremap <silent> <4-ScrollWheelDown> <Nop>
+
+  tnoremap <silent> <S-ScrollWheelUp>   <Nop>
+  tnoremap <silent> <S-ScrollWheelDown> <Nop>
 else
   augroup terminal_settings
     autocmd!
     autocmd BufEnter * if &buftype == 'terminal' && mode() == 'n' | call feedkeys("i", "x") | endif
   augroup END
+  tnoremap <silent> <C-ScrollWheelUp>   <C-w>N
+  tnoremap <silent> <C-ScrollWheelDown> <C-w>N
+  tnoremap <silent> <A-C-ScrollWheelUp>   <C-w>N
+  tnoremap <silent> <A-C-ScrollWheelDown> <C-w>N
+  tnoremap <silent> <S-ScrollWheelUp>   <Nop>
+  tnoremap <silent> <S-ScrollWheelDown> <Nop>
+  tnoremap <silent> <A-ScrollWheelUp>   <C-w>N
+  tnoremap <silent> <A-ScrollWheelDown> <C-w>N
 endif
 
 " visual/audio bell (terminator light bulb) off ...
