@@ -2538,8 +2538,8 @@ endif
 endif
 
 if has("nvim")
-    let ctrl_c_key = nvim_replace_termcodes("<C-c>", v:true, v:false, v:true)
-    noremap <C-c> <Cmd>AsyncStop!<CR><Cmd>sleep 500m<CR><Cmd>AsyncStop!<CR><Cmd>call nvim_feedkeys(ctrl_c_key, 'nt', v:false)<CR>
+    let g:ctrl_c_key = nvim_replace_termcodes("<C-c>", v:true, v:false, v:true)
+    noremap <C-c> <Cmd>AsyncStop!<CR><Cmd>sleep 500m<CR><Cmd>AsyncStop!<CR><Cmd>call nvim_feedkeys(g:ctrl_c_key, 'nt', v:false)<CR>
 else
     noremap <C-c> <Cmd>AsyncStop!<CR><Cmd>sleep 500m<CR><Cmd>AsyncStop!<CR><Cmd>call feedkeys("\<C-c>", "Lnt")<CR>
 endif
