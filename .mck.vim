@@ -431,6 +431,9 @@ endif
 " quick left-right line movement
 Plugin 'unblevable/quick-scope'
 "
+" there is also -
+"Plugin 'justinmk/vim-sneak'
+"
 " -----------------------------------------
 "
 "" All of your Plugins must be added before the following line
