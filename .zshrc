@@ -1197,6 +1197,7 @@ function my-as-accept() {
 zle -N my-as-accept
 
 # zsh-suggestions
+# https://github.com/zsh-users/zsh-autosuggestions
 source ~/Downloads/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 export ZSH_AUTOSUGGEST_MANUAL_REBIND=1
@@ -1370,3 +1371,10 @@ bindkey "\e[6;8~" noop
 #bindkey "\e\n" autosuggest-execute
 
 # --------------------
+
+# zsh-syntax highlighting, for <= v5.8 should be at end
+# https://github.com/zsh-users/zsh-syntax-highlighting.git
+source ~/Downloads/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# --------------------
+
