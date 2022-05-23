@@ -27,7 +27,7 @@ if [[ $# -gt 0 ]] ; then
 fi
 
 cd ~/Downloads
-for d in fd the_silver_searcher ripgrep tmux vifm rtags ccache cgdb tig zsh-autosuggestions $extras
+for d in fd the_silver_searcher ripgrep tmux vifm rtags ccache cgdb tig zsh-autosuggestions zsh-syntax-highlighting $extras
 do
     echo "checking $d ..."
     cd $d
@@ -85,6 +85,9 @@ echo ""
 
 # zsh-autosuggestions
 #   git clone https://github.com/zsh-users/zsh-autosuggestions
+
+# zsh-syntax-highlighting
+#   git clone https://github.com/zsh-users/zsh-syntax-highlighting
 
 # ack:
 #   sudo apt-get install ack-grep
