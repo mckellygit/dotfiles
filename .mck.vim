@@ -2535,16 +2535,22 @@ noremap <silent> <expr> <C-_>\ (&buftype ==# 'terminal') ? 'i' : '<C-c>:AsyncSto
 if !has("nvim")
     if !exists('$TMUX_PANE')
         " NOTE: tmux can map <C-c> to send <C-c> + sleep 500m + send <C-_>\ ...
-        noremap <C-c> <Cmd>AsyncStop!<CR><Cmd>sleep 500m<CR><Cmd>AsyncStop!<CR><Cmd>call feedkeys("\<C-c>", "Lnt")<CR>
+        " separate out n and o mappings from noremap (nvo but vmap <C-c> is below ...) b/c quick-scope plugin expects only the n ...
+        nnoremap <C-c> <Cmd>AsyncStop!<CR><Cmd>sleep 500m<CR><Cmd>AsyncStop!<CR><Cmd>call feedkeys("\<C-c>", "Lnt")<CR>
+        onoremap <C-c> <Cmd>AsyncStop!<CR><Cmd>sleep 500m<CR><Cmd>AsyncStop!<CR><Cmd>call feedkeys("\<C-c>", "Lnt")<CR>
     endif
 endif
 endif
 
 if has("nvim")
     let g:ctrl_c_key = nvim_replace_termcodes("<C-c>", v:true, v:false, v:true)
-    noremap <C-c> <Cmd>AsyncStop!<CR><Cmd>sleep 500m<CR><Cmd>AsyncStop!<CR><Cmd>call nvim_feedkeys(g:ctrl_c_key, 'nt', v:false)<CR>
+    " separate out n and o mappings from noremap (nvo but vmap <C-c> is below ...) b/c quick-scope plugin expects only the n ...
+    nnoremap <C-c> <Cmd>AsyncStop!<CR><Cmd>sleep 500m<CR><Cmd>AsyncStop!<CR><Cmd>call nvim_feedkeys(g:ctrl_c_key, 'nt', v:false)<CR>
+    onoremap <C-c> <Cmd>AsyncStop!<CR><Cmd>sleep 500m<CR><Cmd>AsyncStop!<CR><Cmd>call nvim_feedkeys(g:ctrl_c_key, 'nt', v:false)<CR>
 else
-    noremap <C-c> <Cmd>AsyncStop!<CR><Cmd>sleep 500m<CR><Cmd>AsyncStop!<CR><Cmd>call feedkeys("\<C-c>", "Lnt")<CR>
+    " separate out n and o mappings from noremap (nvo but vmap <C-c> is below ...) b/c quick-scope plugin expects only the n ...
+    nnoremap <C-c> <Cmd>AsyncStop!<CR><Cmd>sleep 500m<CR><Cmd>AsyncStop!<CR><Cmd>call feedkeys("\<C-c>", "Lnt")<CR>
+    onoremap <C-c> <Cmd>AsyncStop!<CR><Cmd>sleep 500m<CR><Cmd>AsyncStop!<CR><Cmd>call feedkeys("\<C-c>", "Lnt")<CR>
 endif
 
 " To run a cmd without quickfix at end ...
