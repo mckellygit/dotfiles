@@ -727,6 +727,7 @@ vvical() { vim -c "Calendar $1 $2 $3" -c ":nnoremap <silent> <buffer> q <Nop>" -
 nvical() { nvi -c "Calendar $1 $2 $3" -c ":nnoremap <silent> <buffer> q <Nop>" -c ":cnoreabbrev <silent> <buffer> q Tabcloserightquit" -c ":cnoreabbrev <silent> <buffer> q! Tabcloserightquit" -c ":nnoremap <silent> <buffer> x <Nop>" -c ":cnoreabbrev <silent> <buffer> x Tabcloserightquit" }
 
 magit()  { vi -c "Magit2 $1" }
+vimagit()  { vi -c "Magit2 $1" }
 vmagit() { vim -c "Magit2 $1" }
 nmagit() { nvi -c "Magit2 $1" }
 
@@ -1371,6 +1372,14 @@ bindkey "\e[6;8~" noop
 #bindkey "\e\n" autosuggest-execute
 
 # --------------------
+
+# turn off underline of all file/path arguments ...
+(( ${+ZSH_HIGHLIGHT_STYLES} )) || typeset -A ZSH_HIGHLIGHT_STYLES
+ZSH_HIGHLIGHT_STYLES[path]=none
+ZSH_HIGHLIGHT_STYLES[path_prefix]=none
+
+# disable paste being highlighted/reverse ...
+zle_highlight+=(paste:none)
 
 # zsh-syntax highlighting, for <= v5.8 should be at end
 # https://github.com/zsh-users/zsh-syntax-highlighting.git
