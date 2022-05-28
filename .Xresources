@@ -285,7 +285,9 @@ URxvt.background: [96]#2e2e26
 !! screen #0:
 !!   dimensions:    3840x2160 pixels (1016x572 millimeters)
 !!   resolution:    96x96 dots per inch
-Xft.dpi: 96
+!! used to use 96, but when changing monitors it gets set to 120
+!! so use 120 always ...
+Xft.dpi: 120
 
 !! ==========================================
 

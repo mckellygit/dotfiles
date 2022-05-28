@@ -61,7 +61,7 @@ global.get_window_actors().forEach(function (w) {
 
         if ($M) {
             // Maximization needs to be delayed a little, so that the window has time to move
-            GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, function() { mw.maximize($M); });
+            GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, function() { mw.maximize(3); });
         }
 
         throw BreakException;
