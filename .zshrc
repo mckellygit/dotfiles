@@ -640,6 +640,16 @@ fi
 
 # --------------------
 
+# wsl git cred mgr ...
+
+if [[ -n "$WSL_DISTRO_NAME" || -n "$WSLENV" ]] ; then
+    if [[ -n "GCM_CREDENTIAL_STORE" ]] ; then
+        export GCM_CREDENTIAL_STORE=cache
+    fi
+fi
+
+# --------------------
+
 #alias start_tmux='exec \start_tmux 1'
 start_tmux()
 {
