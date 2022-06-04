@@ -1,0 +1,36 @@
+#!/bin/bash
+
+#set -x
+
+# 1-user, 2-nice, 3-system, 4-idle, 5-iowait, 6-irq, 7-softirq
+
+#cpu_sum="${cpu_line[@]:1}"
+#echo "cpu_sum = $cpu_sum"
+
+cpu_line=($(grep 'cpu ' /proc/stat))
+
+# do we include iowait in cpu_time ?
+cpu_2=$((cpu_line[1] + cpu_line[2] + cpu_line[3]))
+tot_2=$((cpu_line[1] + cpu_line[2] + cpu_line[3] + cpu_line[4] + cpu_line[5]))
+
+while :; do
+
+  cpu_1=$((cpu_2))
+  tot_1=$((tot_2))
+
+  sleep 1
+
+  cpu_line=($(grep 'cpu ' /proc/stat))
+
+  # do we include iowait in cpu_time ?
+  cpu_2=$((cpu_line[1] + cpu_line[2] + cpu_line[3]))
+  tot_2=$((cpu_line[1] + cpu_line[2] + cpu_line[3] + cpu_line[4] + cpu_line[5]))
+
+  cpu_time=$((cpu_2 - cpu_1))
+  tot_time=$((tot_2 - tot_1))
+
+  cpu_usage=$((100 * cpu_time / tot_time))
+
+  echo "CPU usage: $cpu_usage%"
+
+done
