@@ -752,6 +752,15 @@ qnoremap <M-j>         5j
 qnoremap <Esc>j        5j
 qnoremap j           5j
 
+" <A-K>
+qnoremap <M-K>         5k
+qnoremap <Esc>K        5k
+qnoremap K           5k
+" <A-J>
+qnoremap <M-J>         5j
+qnoremap <Esc>J        5j
+qnoremap J           5j
+
 " <A-S-k/j> ... <A-K/J>
 qnoremap <Esc>K        10k
 qnoremap <Esc>J        10j
