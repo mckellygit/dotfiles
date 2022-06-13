@@ -5,6 +5,10 @@
     [
         {
             "command": "unbound",
+            "keys": "alt+insert"
+        },
+        {
+            "command": "unbound",
             "keys": "ctrl+insert"
         },
         {

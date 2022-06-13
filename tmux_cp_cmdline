@@ -15,8 +15,15 @@ trap "rm -f /tmp/.ex /tmp/.ey" SIGINT SIGQUIT SIGTERM
 ox=$1
 oy=$2
 
+tmux copy-mode -H
+sleep 0.05
+tmux copy-mode -q
+sleep 0.05
+
 tmux send-keys C-a
+sleep 0.05
 tmux send-keys C-e
+sleep 0.05
 tmux run "echo #{cursor_x} > /tmp/.ex"
 ex=$(cat /tmp/.ex)
 rm -f /tmp/.ex
@@ -26,6 +33,7 @@ rm -f /tmp/.ey
 ex=$((ex-1))
 
 tmux send-keys C-a
+sleep 0.05
 tmux run "echo #{cursor_x} > /tmp/.ex"
 bx=$(cat /tmp/.ex)
 rm -f /tmp/.ex
@@ -35,16 +43,17 @@ rm -f /tmp/.ey
 
 num_lines=$((ey-by))
 
-#echo "ex = $ex"
-#echo "ey = $ey"
-#echo "bx = $bx"
-#echo "by = $by"
+#echo "ex = $ex" >> /tmp/foo
+#echo "ey = $ey" >> /tmp/foo
+#echo "bx = $bx" >> /tmp/foo
+#echo "by = $by" >> /tmp/foo
 
-#echo "num_lines = $num_lines"
+#echo "num_lines = $num_lines" >> /tmp/foo
 
 if [[ $num_lines -eq 0 ]]
 then
     num_cols=$((ex-bx))
+    #echo "num_cols = $num_cols" >> /tmp/foo
     if [[ $num_cols -lt 0 ]]
     then
         exit 0
@@ -60,12 +69,15 @@ then
 fi
 
 tmux copy-mode -H
+sleep 0.05
 tmux send-keys v
+sleep 0.05
 
 if [[ $num_lines -eq 0 ]]
 then
     num_cols=$((ex-bx))
     tmux send-keys -XN $num_cols cursor-right
+    sleep 0.05
     tmux send-keys -X copy-pipe-and-cancel "tmux wait -S pipe"
     tmux wait pipe
     tmux set-buffer -n cmdx
@@ -83,6 +95,7 @@ then
     #num_cols=$((ox-bx))
     #tmux send-keys -N $num_cols Right
     tmux send-keys C-e
+    sleep 0.05
 
     tmux display-message "copied cmdlne to clipboard"
 
@@ -101,6 +114,7 @@ do
     then
         num_cols=$ex
         tmux send-keys -X end-of-line
+        sleep 0.05
         tmux send-keys -X copy-pipe-and-cancel "tmux wait -S pipe"
         tmux wait pipe
         tmux set-buffer -n cmdx
@@ -119,6 +133,7 @@ do
         #tmux send-keys -N $tx Right
         #echo "tx = $tx"
         tmux send-keys C-e
+        sleep 0.05
 
         tmux display-message "copied cmdlne to clipboard"
 
@@ -132,6 +147,7 @@ do
         rm -f /tmp/.ey
 
         tmux send-keys -X end-of-line
+        sleep 0.05
 
         tmux run "echo #{copy_cursor_x} > /tmp/.ex"
         mx=$(cat /tmp/.ex)
@@ -139,7 +155,9 @@ do
         dx=$((mx-px))
         tx=$((tx+mx))
         tmux send-keys -X cursor-down
+        sleep 0.05
         tmux send-keys -X cursor-right
+        sleep 0.05
     fi
     l=$((l+1))
 done
