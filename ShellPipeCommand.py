@@ -13,8 +13,8 @@ class ShellPipe (gdb.Command):
         super (ShellPipe, self).__init__("shell-pipe",
                 gdb.COMMAND_DATA,
                 gdb.COMPLETE_NONE, True)
-        gdb.execute("alias -a sp = shell-pipe", True)
-        gdb.execute("alias -a cmd-pipe = shell-pipe", True)
+        # gdb.execute("alias -a sp = shell-pipe", True)
+        # gdb.execute("alias -a cmd-pipe = shell-pipe", True)
 
     def invoke(self, arg, from_tty):
         arg = arg.strip()
