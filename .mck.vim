@@ -9335,6 +9335,7 @@ function! s:MyWindow()
       " qf highlight on
       "hi QuickFixLine cterm=None ctermbg=60
       setlocal cursorline
+      nnoremap <buffer> <C-q> <Nop>
     endif
   elseif &filetype !=# 'GV'
     " qf highlight off
@@ -9352,6 +9353,7 @@ function! s:MyWindow2()
     " qf highlight on
     "hi QuickFixLine cterm=None ctermbg=60
     setlocal cursorline
+    nnoremap <buffer> <C-q> <Nop>
   elseif &filetype !=# 'GV'
     " qf highlight off
     "hi QuickFixLine cterm=None ctermbg=239
