@@ -191,6 +191,9 @@ Plugin 'sodapopcan/vim-twiggy'
 "Plugin 'TimUntersberger/neogit'
 "Plugin 'idanarye/vim-merginal'
 "
+" git mergetool
+"Plugin 'whiteinge/diffconflicts'
+"
 " dispatch make/etc utils
 Plugin 'tpope/vim-dispatch'
 "
@@ -207,8 +210,8 @@ Plugin 'airblade/vim-gitgutter'
 "
 " gitk like repo viewer
 "Plugin 'gregsexton/gitv'
-"Plugin 'junegunn/gv.vim'
-Plugin 'mckellygit/gv.vim'
+Plugin 'junegunn/gv.vim'
+"Plugin 'mckellygit/gv.vim'
 "
 " vim-flog - newer git viewer
 "Plugin 'rbong/vim-flog'
@@ -1603,7 +1606,7 @@ function! s:type(visual)
     if len(shas) < 2
       return [0, 0]
     endif
-    return ['diff', fugitive#repo().git_command('diff', shas[-1], shas[0])]
+    return ['diff', FugitiveShellCommand(['diff', shas[-1], shas[0]])]
   endif
 
   if exists('b:git_origin')
@@ -1618,7 +1621,7 @@ function! s:type(visual)
 
   let sha = gv#sha()
   if !empty(sha)
-    return ['commit', FugitiveFind(sha, b:git_dir)]
+    return ['commit', FugitiveFind(sha, g:my_git_dir)]
   endif
   return [0, 0]
 endfunction
@@ -1640,6 +1643,11 @@ function! s:split(tab)
 endfunction
 
 function! s:open(visual, ...)
+
+  if empty(g:my_git_dir)
+    let g:my_git_dir = FugitiveGitDir()
+  endif
+
   let [type, target] = s:type(a:visual)
 
   if empty(type)
@@ -1739,6 +1747,7 @@ function! s:MyGV(args) abort
         endif
         return
     endif
+    let g:my_git_dir = git_dir
     if !empty(a:args)
         let l:alist = split(a:args)
         let fname = l:alist[-1]
@@ -1796,6 +1805,7 @@ function! s:MyGVF(args) abort
         echo " "
         return
     endif
+    let g:my_git_dir = git_dir
     exec 'lcd ' . git_dir
     if !empty(a:args)
         execute 'GV ' . a:args . ' -- ' . expand("%")
