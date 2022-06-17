@@ -52,6 +52,22 @@ periodic()
 {
     update_zhist
     purge_old_zhfiles
+#   if [[ -z "$WSL_DISTRO_NAME" && -z "$WSLENV" ]] ; then
+#       which pgrep > /dev/null 2>&1
+#       rc=$?
+#       if [[ $rc -eq 0 ]] ; then
+#           which wmctrl > /dev/null 2>&1
+#           rc=$?
+#           if [[ $rc -eq 0 ]] ; then
+#               # remove copyq from app-switcher window list ...
+#               pgrep -x copyq > /dev/null 2>&1
+#               rc=$?
+#               if [[ $rc -eq 0 ]] ; then
+#                   wmctrl -r copyq -b add,skip_taskbar > /dev/null 2>&1
+#               fi
+#           fi
+#       fi
+#   fi
 }
 
 # NOTE: dont add SIGINT here as then its not handled from ^c key press on cmdline ...

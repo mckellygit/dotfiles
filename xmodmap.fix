@@ -21,11 +21,3 @@ log running xhost command
 xhost +local: > /dev/null 2>&1
 
 log xmodmap completed
-
-# remove copyq from app-switcher window list ...
-pgrep -x copyq > /dev/null 2>&1
-rc=$?
-if [[ $rc -eq 0 ]] ; then
-    wmctrl -r copyq -b add,skip_taskbar
-fi
-
