@@ -43,7 +43,7 @@ global.get_window_actors().forEach(function (w) {
 
     // global.log('1title: ', wtitle);
 
-    if (wtitle != 'Nautilus' && wtitle != 'Gnome-shell' && wtitle != '') {
+    if (wtitle != '' && wtitle != 'Nautilus' && wtitle != 'Gnome-shell' && (!wtitle.toLowerCase().includes('copyq'))) {
 
         if (mw.has_focus()) {
 
