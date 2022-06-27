@@ -601,22 +601,22 @@ nnoremap <C-ScrollWheelDown>   <C-w>w10j<C-w>w
 nnoremap <C-ScrollWheelUp>     <C-w>w10k<C-w>w
 
 " <A-k>
-nnoremap <M-k>         <C-w>w5k<C-w>w
-nnoremap <Esc>k        <C-w>w5k<C-w>w
-nnoremap k           <C-w>w5k<C-w>w
+nnoremap <M-k>         5k
+nnoremap <Esc>k        5k
+nnoremap k           5k
 " <A-j>
-nnoremap <M-j>         <C-w>w5j<C-w>w
-nnoremap <Esc>j        <C-w>w5j<C-w>w
-nnoremap j           <C-w>w5j<C-w>w
+nnoremap <M-j>         5j
+nnoremap <Esc>j        5j
+nnoremap j           5j
 
-" <A-K>
-nnoremap <M-K>         <C-w>w5k<C-w>w
-nnoremap <Esc>K        <C-w>w5k<C-w>w
-nnoremap K           <C-w>w5k<C-w>w
-" <A-J>
-nnoremap <M-J>         <C-w>w5j<C-w>w
-nnoremap <Esc>J        <C-w>w5j<C-w>w
-nnoremap J           <C-w>w5j<C-w>w
+" <A-K> - note need -S- for capital Alt keys ...
+nnoremap <M-S-K>       <C-w>w10k<C-w>w
+nnoremap <Esc>K        <C-w>w10k<C-w>w
+nnoremap K           <C-w>w10k<C-w>w
+" <A-J> - note need -S- for capital Alt keys ...
+nnoremap <M-S-J>       <C-w>w10j<C-w>w
+nnoremap <Esc>J        <C-w>w10j<C-w>w
+nnoremap J           <C-w>w10j<C-w>w
 
 " <C-A-k>
 nnoremap <M-C-K>       <C-w>w5k<C-w>w
@@ -636,16 +636,37 @@ nnoremap <C-o>       <C-w>w5j<C-w>w
 
 "nnoremap <C-j>         <C-w>w10j<C-w>w
 "nnoremap <C-k>         <C-w>w10k<C-w>w
-nnoremap <C-j>         j
-nnoremap <C-k>         k
+nnoremap <C-j>         5j
+nnoremap <C-k>         5k
 
 " <C-Down/Up>
-nnoremap <Esc>[1;5B    <C-w>w5j<C-w>w
-nnoremap <Esc>[1;5A    <C-w>w5k<C-w>w
+nnoremap <C-Down>      <C-w>w10j<C-w>w
+nnoremap <C-Up>        <C-w>w10k<C-w>w
+nnoremap <Esc>[1;5B    <C-w>w10j<C-w>w
+nnoremap <Esc>[1;5A    <C-w>w10k<C-w>w
+
+
+" <C-S-Down/Up>
+"nnoremap <C-S-Down>    <C-w>w20j<C-w>w
+"nnoremap <C-S-Up>      <C-w>w20k<C-w>w
+nnoremap <Esc>[1;6B    <C-w>w20j<C-w>w
+nnoremap <Esc>[1;6A    <C-w>w20k<C-w>w
 
 " <A-Down/Up>
+"nnoremap <M-Down>      <C-w>w10j<C-w>w
+"nnoremap <M-Up>        <C-w>w10k<C-w>w
 nnoremap <Esc>[1;3B    <C-w>w10j<C-w>w
 nnoremap <Esc>[1;3A    <C-w>w10k<C-w>w
+
+" <A-S-Down/Up>
+"nnoremap <M-S-Down>    <C-w>w40j<C-w>w
+"nnoremap <M-S-Up>      <C-w>w40k<C-w>w
+nnoremap <Esc>[1;4B    <C-w>w40j<C-w>w
+nnoremap <Esc>[1;4A    <C-w>w40k<C-w>w
+
+" <C-A-Down/Up>
+nnoremap <Esc>[1;7B    <C-w>w20j<C-w>w
+nnoremap <Esc>[1;7A    <C-w>w20k<C-w>w
 
 nnoremap \`            <C-w>w<C-u>w
 nnoremap \1            <C-w>w<C-d>w
@@ -752,18 +773,14 @@ qnoremap <M-j>         5j
 qnoremap <Esc>j        5j
 qnoremap j           5j
 
-" <A-K>
-qnoremap <M-K>         5k
-qnoremap <Esc>K        5k
-qnoremap K           5k
-" <A-J>
-qnoremap <M-J>         5j
-qnoremap <Esc>J        5j
-qnoremap J           5j
-
-" <A-S-k/j> ... <A-K/J>
-qnoremap <Esc>K        10k
-qnoremap <Esc>J        10j
+" <A-K> - note need -S- for capital Alt keys ...
+qnoremap <M-S-K>       20k
+qnoremap <Esc>K        20k
+qnoremap K           20k
+" <A-J> - note need -S- for capital Alt keys ...
+qnoremap <M-S-J>       20j
+qnoremap <Esc>J        20j
+qnoremap J           20j
 
 qnoremap K             5k
 qnoremap J             5j
@@ -833,21 +850,35 @@ qnoremap <S-F23>      10k
 " TODO: these do not work correctly ...
 "       it needs the keyok(false) for KEY_MAX:2000 fix ...
 
-qnoremap <c-down>      j
-qnoremap <esc>[1;5B    j
+qnoremap <C-Down>      j
+qnoremap <Esc>[1;5B    j
 qnoremap [1;5B       j
 
-qnoremap <c-up>        k
-qnoremap <esc>[1;5A    k
+qnoremap <C-Up>        k
+qnoremap <Esc>[1;5A    k
 qnoremap [1;5A       k
 
-" <A-S-Down/Up>
-qnoremap <Esc>[1;4B    <C-w>wj<C-w>w
-qnoremap <Esc>[1;4A    <C-w>wk<C-w>w
-
 " <C-S-Down/Up>
-qnoremap <Esc>[1;6B    <C-w>wj<C-w>w
-qnoremap <Esc>[1;6A    <C-w>wk<C-w>w
+"qnoremap <C-S-Down>    20j
+"qnoremap <C-S-Up>      20k
+qnoremap <Esc>[1;6B    20j
+qnoremap <Esc>[1;6A    20k
+
+" <A-Down/Up>
+"qnoremap <M-Down>      10j
+"qnoremap <M-Up>        10k
+qnoremap <Esc>[1;3B    10j
+qnoremap <Esc>[1;3A    10k
+
+" <A-S-Down/Up>
+"qnoremap <M-S-Down>    40j
+"qnoremap <M-S-Up>      40k
+qnoremap <Esc>[1;4B    40j
+qnoremap <Esc>[1;4A    40k
+
+" <C-A-Down/Up>
+qnoremap <Esc>[1;7B    20j
+qnoremap <Esc>[1;7A    20k
 
 " ------
 
@@ -860,10 +891,6 @@ qnoremap <End>         <nop>
 qnoremap <C-End>       G0
 qnoremap <Esc>[1;5F    G0
 qnoremap [1;5F       G0
-
-" <A-Down/Up>
-qnoremap <Esc>[1;3B    <C-w>wj<C-w>w
-qnoremap <Esc>[1;3A    <C-w>wk<C-w>w
 
 " --------------
 
