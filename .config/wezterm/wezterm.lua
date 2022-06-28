@@ -26,6 +26,8 @@ return {
   -- font_size = 16.0,
   font_size = 12.6,
 
+  warn_about_missing_glyphs = false,
+
   adjust_window_size_when_changing_font_size = false,
 
   initial_cols = 194,

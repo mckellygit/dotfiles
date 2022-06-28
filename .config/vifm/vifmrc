@@ -594,8 +594,10 @@ nnoremap K             5k
 " these dont seem to work
 "nnoremap <S-Down>      5j
 "nnoremap <S-Up>        5k
-"nnoremap <esc>[1;2B    5j
-"nnoremap <esc>[1;2A    5k
+"nnoremap <Esc>[1;2B    5j
+"nnoremap <Esc>[1;2A    5k
+"nnoremap <SFwd>        5j
+"nnoremap <SBack>       5k
 
 nnoremap <C-ScrollWheelDown>   <C-w>w10j<C-w>w
 nnoremap <C-ScrollWheelUp>     <C-w>w10k<C-w>w
@@ -687,8 +689,10 @@ nnoremap <Space>     <C-w>w10j<C-w>w
 " these dont seem to work
 "qnoremap <S-Down>      5j
 "qnoremap <S-Up>        5k
-"qnoremap <esc>[1;2B    5j
-"qnoremap <esc>[1;2A    5k
+"qnoremap <Esc>[1;2B    5j
+"qnoremap <Esc>[1;2A    5k
+"qnoremap <SFwd>        5j
+"qnoremap <SBack>       5k
 
 nnoremap qq            :q<cr>
 nnoremap \qq           :q<cr>

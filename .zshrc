@@ -1210,6 +1210,9 @@ export LC_ALL=en_US.UTF-8
 #export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
 
+export LC_COLLATE=C
+setopt COMBINING_CHARS
+
 if [[ -z "$GRUVBOX" ]] && [[ -n "$TMUX" ]] && [[ -f ~/.gruvbox_256palette.sh ]] ; then
     export GRUVBOX=1
     source ~/.gruvbox_256palette.sh
