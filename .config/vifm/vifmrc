@@ -560,6 +560,9 @@ qnoremap           <C-w>w
 nnoremap <PageDown>   10j
 nnoremap <PageUp>     10k
 
+nnoremap <S-PageDown> 20j
+nnoremap <S-PageUp>   20k
+
 nnoremap <C-PageDown> <C-w>w10j<C-w>w
 nnoremap <C-PageUp>   <C-w>w10k<C-w>w
 
@@ -580,8 +583,6 @@ nnoremap <S-F23>      <C-w>w10k<C-w>w
 
 " --------
 
-" NOTE: <S-Up/Down> do not seem to be mappable ...
-
 " to scroll preview without entering ...
 nnoremap F             <C-w>w<C-f><C-w>w
 nnoremap B             <C-w>w<C-b><C-w>w
@@ -591,16 +592,17 @@ nnoremap <C-b>         <C-w>w10k<C-w>w
 nnoremap J             5j
 nnoremap K             5k
 
-" these dont seem to work
-"nnoremap <S-Down>      5j
-"nnoremap <S-Up>        5k
-"nnoremap <Esc>[1;2B    5j
-"nnoremap <Esc>[1;2A    5k
-"nnoremap <SFwd>        5j
-"nnoremap <SBack>       5k
+nnoremap <S-Down>      5j
+nnoremap <S-Up>        5k
 
-nnoremap <C-ScrollWheelDown>   <C-w>w10j<C-w>w
-nnoremap <C-ScrollWheelUp>     <C-w>w10k<C-w>w
+nnoremap <S-Home>       1G
+nnoremap <S-End>        G
+
+nnoremap <S-Delete>     <Nop>
+nnoremap <S-Insert>     <Nop>
+
+"nnoremap <C-ScrollWheelDown>   <C-w>w10j<C-w>w
+"nnoremap <C-ScrollWheelUp>     <C-w>w10k<C-w>w
 
 " <A-k>
 nnoremap <M-k>         5k
@@ -686,13 +688,14 @@ nnoremap <Space>     <C-w>w10j<C-w>w
 
 " --------
 
-" these dont seem to work
-"qnoremap <S-Down>      5j
-"qnoremap <S-Up>        5k
-"qnoremap <Esc>[1;2B    5j
-"qnoremap <Esc>[1;2A    5k
-"qnoremap <SFwd>        5j
-"qnoremap <SBack>       5k
+qnoremap <S-Down>      5j
+qnoremap <S-Up>        5k
+
+qnoremap <S-Home>       1G
+qnoremap <S-End>        G
+
+qnoremap <S-Delete>     <Nop>
+qnoremap <S-Insert>     <Nop>
 
 nnoremap qq            :q<cr>
 nnoremap \qq           :q<cr>
@@ -830,6 +833,9 @@ qnoremap gg            1G0
 
 qnoremap <PageDown>   10j
 qnoremap <PageUp>     10k
+
+qnoremap <S-PageDown> 20j
+qnoremap <S-PageUp>   20k
 
 qnoremap <C-PageDown> 10j
 qnoremap <C-PageUp>   10k
