@@ -221,6 +221,9 @@ return {
     -- { key="phys:Return",    mods="CTRL",          action=wezterm.action{SendString="\x1b[13;5u"} },
     -- (where 2 is 2-7 based on the usual modifiers)
 
+    -- same as prefix + Return for tmux enter copy-mode ?
+    -- { key="phys:Return",    mods="SUPER",         action=wezterm.action{SendString="\x13\x0d"} },
+
     -- NOTE: if want shift then used shifted key and |SHIFT
 
     { key="[",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x5b"} },
