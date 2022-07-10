@@ -1023,59 +1023,7 @@ noremap <silent> <Leader>f. <C-\><C-n>:Files<CR>
 " you can always run
 " :Files       - to get list from current dir
 " "Files <dir> - to get list from <dir>
-"
-" "Raw" version of ag; arguments directly passed to ag
-" e.g.
-"   " Search 'foo bar' in ~/projects
-"   :Ag "foo bar" ~/projects
-"   " Start in fullscreen mode
-"   :Ag! "foo bar"
-"command! -bang -nargs=+ -complete=file Ag call fzf#vim#ag_raw(<q-args>, <bang>0)
-" Raw version with preview
-"command! -bang -nargs=+ -complete=file Ags call fzf#vim#ag_raw(<q-args>, fzf#vim#with_preview(), <bang>0)
-"
-" Agit: Start ag in the git/root directory
-" e.g.
-"   :Agit foo
-"function! s:ag_inM1(bang, ...)
-"  let gdir = s:find_git_root()
-"  "if !isdirectory(a:1)
-"  if !isdirectory(gdir)
-"    throw 'not a valid directory: ' .. gdir
-"  endif
-"  " Use 'ctrl-alt-p' to toggle preview window
-"  "call fzf#vim#ag(join(a:000[1:], ' '), fzf#vim#with_preview({'dir': a:1}, 'up:50%:hidden', 'ctrl-alt-p'), a:bang)
-"  call fzf#vim#ag(join(a:000[0:], ' '), fzf#vim#with_preview({'dir': gdir}, 'up:50%:hidden', 'ctrl-alt-p'), a:bang)
-"  " If you don't want preview option, use this
-"  " call fzf#vim#ag(join(a:000[1:], ' '), {'dir': a:1}, a:bang)
-"endfunction
-"command! -bang -nargs=+ -complete=dir Agits call s:ag_inM1(<bang>0, <f-args>)
-"
-command! -bang -nargs=* Ag
-  \ call fzf#vim#grep('\ag -U --hidden --nogroup --column --color -- '.shellescape(<q-args>),
-  \ 1,
-  \ {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']},
-  \ <bang>0)
-"
-command! -bang -nargs=* Agit
-  \ call fzf#vim#grep('\ag -U --hidden --nogroup --column --color -- '.shellescape(<q-args>).' '.s:find_git_root(),
-  \ 1,
-  \ {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']},
-  \ <bang>0)
-"
-" TODO: see Rg command that reloads search string dynamically - can we do this with Ag ?
-"
-" fzf env vars:
-"export FZF_PREVIEW_LINES=20
-"export FZF_DEFAULT_COMMAND='ag -U --hidden --nocolor -g ""'
-"
-" fzf preview.sh fix:
-"-FIRST=$(($CENTER-$LINES/3))
-"+# to account for when preview is set to 'up:50%'
-"+# as lines is then less than FZF_PREVIEW_LINES ...
-"+#FIRST=$(($CENTER-$LINES/3))
-"+FIRST=$(($CENTER-$LINES/7))
-"
+
 function! s:buflist(arg)
     if a:arg == 0
         redir => lsout
@@ -9087,26 +9035,113 @@ vnoremap <silent> <Leader>s/ "sy<Esc>:call <SID>MyVisSearch(3)<CR>
 nnoremap <silent> <Leader>s? :call <SID>MySearch(3)<CR>
 vnoremap <silent> <Leader>s? <Esc>:call <SID>MySearch(3)<CR>
 
-function! RipgrepFzf(query, fullscreen)
+" -------------------------------------------------------------
+
+" "Raw" version of ag; arguments directly passed to ag
+" e.g.
+"   " Search 'foo bar' in ~/projects
+"   :Ag "foo bar" ~/projects
+"   " Start in fullscreen mode
+"   :Ag! "foo bar"
+"command! -bang -nargs=+ -complete=file Ag call fzf#vim#ag_raw(<q-args>, <bang>0)
+" Raw version with preview
+"command! -bang -nargs=+ -complete=file Ags call fzf#vim#ag_raw(<q-args>, fzf#vim#with_preview(), <bang>0)
+"
+" Agit: Start ag in the git/root directory
+" e.g.
+"   :Agit foo
+"function! s:ag_inM1(bang, ...)
+"  let gdir = s:find_git_root()
+"  "if !isdirectory(a:1)
+"  if !isdirectory(gdir)
+"    throw 'not a valid directory: ' .. gdir
+"  endif
+"  " Use 'ctrl-alt-p' to toggle preview window
+"  "call fzf#vim#ag(join(a:000[1:], ' '), fzf#vim#with_preview({'dir': a:1}, 'up:50%:hidden', 'ctrl-alt-p'), a:bang)
+"  call fzf#vim#ag(join(a:000[0:], ' '), fzf#vim#with_preview({'dir': gdir}, 'up:50%:hidden', 'ctrl-alt-p'), a:bang)
+"  " If you don't want preview option, use this
+"  " call fzf#vim#ag(join(a:000[1:], ' '), {'dir': a:1}, a:bang)
+"endfunction
+"command! -bang -nargs=+ -complete=dir Agits call s:ag_inM1(<bang>0, <f-args>)
+"
+command! -bang -nargs=* Ag
+  \ call fzf#vim#grep('\ag -U --hidden --nogroup --column --color -- '.shellescape(<q-args>),
+  \ 1,
+  \ {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']},
+  \ <bang>0)
+"
+command! -bang -nargs=* Agit
+  \ call fzf#vim#grep('\ag -U --hidden --nogroup --column --color -- '.shellescape(<q-args>).' '.s:find_git_root(),
+  \ 1,
+  \ {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']},
+  \ <bang>0)
+"
+" TODO: see Rg command that reloads search string dynamically - can we do this with Ag ?
+"
+" fzf env vars:
+"export FZF_PREVIEW_LINES=20
+"export FZF_DEFAULT_COMMAND='ag -U --hidden --nocolor -g ""'
+
+" fzf preview.sh fix:
+"-FIRST=$(($CENTER-$LINES/3))
+"+# to account for when preview is set to 'up:50%'
+"+# as lines is then less than FZF_PREVIEW_LINES ...
+"+#FIRST=$(($CENTER-$LINES/3))
+"+FIRST=$(($CENTER-$LINES/7))
+
+" -------------------------------------------------------------
+
+function! RipgrepFzf(aquery, ufzf, fullscreen)
+  " TODO: if something was visually selected then use that, else ...
+  if empty(a:aquery)
+    let query = expand('<cword>')
+  else
+    let query = a:aquery
+  endif
   let command_fmt = '\rg --column --line-number --no-heading --color=always --smart-case --hidden --iglob \!".git" -- %s || true'
-  let initial_command = printf(command_fmt, shellescape(a:query))
+  let initial_command = printf(command_fmt, shellescape(query))
   let reload_command = printf(command_fmt, '{q}')
-  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  if a:ufzf
+    let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--disabled', '--query', query, '--bind', 'change:reload:'.reload_command]}
+  else
+    let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--prompt', printf('Rg'.'%s > ', empty(query) ? '' : (' ('.query.')'))]}
+  endif
+  let @/=query
+  set hlsearch
   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
 endfunction
 
-function! RipgrepGitFzf(query, fullscreen)
+function! RipgrepGitFzf(aquery, ufzf, fullscreen)
+  " TODO: if something was visually selected then use that, else ...
+  if empty(a:aquery)
+    let query = expand('<cword>')
+  else
+    let query = a:aquery
+  endif
   let command_fmt = '\rg --column --line-number --no-heading --color=always --smart-case --hidden --iglob \!".git" -- %s ' . s:find_git_root() . ' || true'
-  let initial_command = printf(command_fmt, shellescape(a:query))
+  let initial_command = printf(command_fmt, shellescape(query))
   let reload_command = printf(command_fmt, '{q}')
-  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  if a:ufzf
+    let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--disabled', '--query', query, '--bind', 'change:reload:'.reload_command]}
+  else
+    let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--prompt', printf('Rgit'.'%s > ', empty(query) ? '' : (' ('.query.')'))]}
+  endif
+  let @/=query
+  set hlsearch
   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
 endfunction
 
-command! -nargs=* -bang Rg call RipgrepFzf(<q-args>, <bang>0)
-command! -nargs=* -bang Rgit call RipgrepGitFzf(<q-args>, <bang>0)
+command! -nargs=* -bang Rg   call RipgrepFzf(<q-args>, 0, <bang>0)
+command! -nargs=* -bang Rgit call RipgrepGitFzf(<q-args>, 0, <bang>0)
 
-" TODO: can we do this with Ag also ?
+nnoremap <silent> <Leader>sr         :call RipgrepFzf('', 0, 0)<CR>
+vnoremap <silent> <Leader>sr "sy<Esc>:call RipgrepFzf(@s, 0, 0)<CR>
+
+nnoremap <silent> <Leader>sR         :call RipgrepGitFzf('', 0, 0)<CR>
+vnoremap <silent> <Leader>sR "sy<Esc>:call RipgrepGitFzf(@s, 0, 0)<CR>
+
+command! -nargs=* -bang RG   call RipgrepFzf(<q-args>, 1, <bang>0)
+command! -nargs=* -bang RGit call RipgrepGitFzf(<q-args>, 1, <bang>0)
 
 "================================================================
 
@@ -10994,16 +11029,26 @@ packadd termdebug
 " To filter a quickfix/location list:
 " :Cfilter[!] /{pat}/
 " :Lfilter[!] /{pat}/
-
-" NOTE: QFGrep plugin can also do this
+" ! means not pattern, like grep -v
+" NOTE: QFGrep plugin can also do this (QFGrepPat[V], QFRestore but it is case insensitive)
 
 packadd cfilter
 
 aug cfilter_alias
   au!
+  au VimEnter * :Alias CFilter  Cfilter
   au VimEnter * :Alias Cold  colder
+  au VimEnter * :Alias Crestore  colder
+  au VimEnter * :Alias CRestore  colder
+  au VimEnter * :Alias Cprev  colder
+  au VimEnter * :Alias CPrev  colder
   au VimEnter * :Alias Cnew  cnewer
+  au VimEnter * :Alias LFilter  Lfilter
   au VimEnter * :Alias Lold  lolder
+  au VimEnter * :Alias Lrestore  lolder
+  au VimEnter * :Alias LRestore  lolder
+  au VimEnter * :Alias Lprev  lolder
+  au VimEnter * :Alias LPrev  lolder
   au VimEnter * :Alias Lnew  lnewer
 aug END
 
