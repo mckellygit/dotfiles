@@ -624,11 +624,11 @@ let g:FerretQFCommands=0
 let g:FerretQFOptions=0
 let g:FerretQFMap=1
 let g:FerretHlsearch=1
-let g:FerretExecutable='ag,ack'
-" TODO: add rg and args ...
+let g:FerretExecutable='rg,ag,ack'
 let g:FerretExecutableArguments = {
-  \   'ag': '--vimgrep -U --hidden -- ',
-  \   'ack': '-s -H --nopager --nocolor --nogroup --column --smart-case --follow '
+  \   '\rg': '--vimgrep --color=always --smart-case --hidden --iglob \!".git" -- ',
+  \   '\ag': '--vimgrep -U --hidden -- ',
+  \   '\ack': '-s -H --nopager --nocolor --nogroup --column --smart-case --follow '
   \ }
 "nmap <leader>Fa <Plug>(FerretAck)
 "nmap <leader>Fl <Plug>(FerretLack)
@@ -9020,10 +9020,10 @@ vnoremap <silent> <Leader>sG <Esc>:call <SID>MySearch(1)<CR>
 "  au VimEnter * :Alias LAcks  ldo
 "  au VimEnter * :Alias LAckfs lfdo
 "aug END
-command! -nargs=+ -bang Acks   execute ':cdo<bang> '  . <q-args>
-command! -nargs=+ -bang Ackfs  execute ':cfdo<bang> ' . <q-args>
-command! -nargs=+ -bang LAcks  execute ':ldo<bang> '  . <q-args>
-command! -nargs=+ -bang LAckfs execute ':lfdo<bang> ' . <q-args>
+"command! -nargs=+ -bang Acks   execute ':cdo<bang> '  . <q-args>
+"command! -nargs=+ -bang Ackfs  execute ':cfdo<bang> ' . <q-args>
+"command! -nargs=+ -bang LAcks  execute ':ldo<bang> '  . <q-args>
+"command! -nargs=+ -bang LAckfs execute ':lfdo<bang> ' . <q-args>
 
 function s:MyGAck(query) abort
     let l:git_dir = s:find_git_root()
