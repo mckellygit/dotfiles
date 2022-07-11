@@ -231,8 +231,8 @@ Plugin 'junegunn/fzf.vim'
 " together with regex patterns ...
 " Plugin 'othree/eregex.vim'
 " Quickfix multi-file search/replace (**modified++)
-"Plugin 'wincent/ferret'
-Plugin 'mckellygit/ferret'
+Plugin 'wincent/ferret'
+"Plugin 'mckellygit/ferret'
 "
 " colorscheme
 Plugin 'ajmwagar/vim-deus'
@@ -599,6 +599,7 @@ endfunction
 " ack ------------
 "let g:ackprg = 'ack -k --nogroup --nocolor --column --smart-case --follow'
 " use ag (silver-searcher) instead of ack, if possible
+" TODO: check for rg
 if executable('ag')
   " NOTE: ag can miss some matches without -U --hidden ...
   let g:ackprg = '\ag --vimgrep -U --hidden -- '
@@ -611,10 +612,10 @@ endif
 let g:ackhighlight = 1
 let g:ack_use_dispatch = 1
 "set grepprg=ack\ -k
-set grepprg=ag\ --vimgrep\ -U\ --hidden\ --\ 
-set grepformat=%f:%l:%c:%m
+"set grepprg=ag\ --vimgrep\ -U\ --hidden\ --\ 
+"set grepformat=%f:%l:%c:%m
 " open :grep output in qf ...
-autocmd QuickFixCmdPost ++nested *grep* cwindow
+"autocmd QuickFixCmdPost ++nested *grep* cwindow
 " ack ------------
 
 " ferret ---------
@@ -622,8 +623,9 @@ let g:FerretMap=0
 let g:FerretQFCommands=0
 let g:FerretQFOptions=0
 let g:FerretQFMap=1
-let g:FerretHlsearch=0
+let g:FerretHlsearch=1
 let g:FerretExecutable='ag,ack'
+" TODO: add rg and args ...
 let g:FerretExecutableArguments = {
   \   'ag': '--vimgrep -U --hidden -- ',
   \   'ack': '-s -H --nopager --nocolor --nogroup --column --smart-case --follow '
@@ -635,6 +637,8 @@ let g:FerretExecutableArguments = {
 " :Ack <string> - or use other cmds <Leader>s[b|d|g] to fill qf/ll ...
 " manipulate qf/ll to remove any entries not wanting to be used for substitution ...
 " :Acks /<old>/<new>/
+" TODO: need a wrapper to add git path as last argument
+" :GAck ... -> :Ack ... <git-dir>
 " ferret ---------
 
 " airline ---------
