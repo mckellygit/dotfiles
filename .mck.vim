@@ -599,7 +599,7 @@ endfunction
 " ack ------------
 "let g:ackprg = 'ack -k --nogroup --nocolor --column --smart-case --follow'
 " use ag (silver-searcher) instead of ack, if possible
-" TODO: check for rg
+" NOTE: check for rg - but is this plugin still used ?
 if executable('ag')
   " NOTE: ag can miss some matches without -U --hidden ...
   let g:ackprg = '\ag --vimgrep -U --hidden -- '
@@ -1075,7 +1075,7 @@ function! s:bufopen(e)
             if has("nvim")
                 call nvim_input('i')
             else
-                " TODO can we get into insert mode here ?
+                " TODO: can we get into insert mode here ?
             endif
         endif
     endif
@@ -2489,7 +2489,7 @@ if 0
 " in vim, <C-\> _may_ stop system() cmds (if stty quit is ^\) [but not nvim] - but may generate core file
 " <C-S-\> (or <C-|>) might be mapped to <C-_>\ in some terminals ...
 noremap <silent> <expr> <C-_>\ (&buftype ==# 'terminal') ? 'i' : '<C-c>:AsyncStop!<CR>:sleep 500m<CR>:AsyncStop!<CR>'
-" TODO: is there a way to map <C-c> to both send <C-c> AND also run :AsyncStop ?
+" DONE: is there a way to map <C-c> to both send <C-c> AND also run :AsyncStop ?
 "       or can we change AsyncRun to know if <C-c> was pressed ?
 "       or change any-jump searches to use AsyncRun ?
 " ok with vim -
@@ -2502,17 +2502,17 @@ if !has("nvim")
         onoremap <C-c> <Cmd>AsyncStop!<CR><Cmd>sleep 500m<CR><Cmd>AsyncStop!<CR><Cmd>call feedkeys("\<C-c>", "Lnt")<CR>
     endif
 endif
-endif
+endif "if 0
 
 if has("nvim")
     let g:ctrl_c_key = nvim_replace_termcodes("<C-c>", v:true, v:false, v:true)
     " separate out n and o mappings from noremap (nvo but vmap <C-c> is below ...) b/c quick-scope plugin expects only the n ...
-    nnoremap <C-c> <Cmd>AsyncStop!<CR><Cmd>sleep 500m<CR><Cmd>AsyncStop!<CR><Cmd>call nvim_feedkeys(g:ctrl_c_key, 'nt', v:false)<CR>
-    onoremap <C-c> <Cmd>AsyncStop!<CR><Cmd>sleep 500m<CR><Cmd>AsyncStop!<CR><Cmd>call nvim_feedkeys(g:ctrl_c_key, 'nt', v:false)<CR>
+    nnoremap <C-c> <Cmd>AsyncStop!<CR><Cmd>FerretCancelAsync<CR><Cmd>sleep 500m<CR><Cmd>AsyncStop!<CR><Cmd>call nvim_feedkeys(g:ctrl_c_key, 'nt', v:false)<CR>
+    onoremap <C-c> <Cmd>AsyncStop!<CR><Cmd>FerretCancelAsync<CR><Cmd>sleep 500m<CR><Cmd>AsyncStop!<CR><Cmd>call nvim_feedkeys(g:ctrl_c_key, 'nt', v:false)<CR>
 else
     " separate out n and o mappings from noremap (nvo but vmap <C-c> is below ...) b/c quick-scope plugin expects only the n ...
-    nnoremap <C-c> <Cmd>AsyncStop!<CR><Cmd>sleep 500m<CR><Cmd>AsyncStop!<CR><Cmd>call feedkeys("\<C-c>", "Lnt")<CR>
-    onoremap <C-c> <Cmd>AsyncStop!<CR><Cmd>sleep 500m<CR><Cmd>AsyncStop!<CR><Cmd>call feedkeys("\<C-c>", "Lnt")<CR>
+    nnoremap <C-c> <Cmd>AsyncStop!<CR><Cmd>FerretCancelAsync<CR><Cmd>sleep 500m<CR><Cmd>AsyncStop!<CR><Cmd>call feedkeys("\<C-c>", "Lnt")<CR>
+    onoremap <C-c> <Cmd>AsyncStop!<CR><Cmd>FerretCancelAsync<CR><Cmd>sleep 500m<CR><Cmd>AsyncStop!<CR><Cmd>call feedkeys("\<C-c>", "Lnt")<CR>
 endif
 
 " To run a cmd without quickfix at end ...
@@ -3089,7 +3089,7 @@ else
 endif
 function! s:MyUpdateTitle()
   set titleold=
-  " TODO: skip for now as we handle all mappings in both normal and terminal
+  " ????: skip for now as we handle all mappings in both normal and terminal
   if &buftype==#"terminal"
     if !has("nvim")
         set title titlestring=@v:t:%.10t
@@ -4799,8 +4799,8 @@ endfunction
 " <C-q> seems to start visual mode ...
 nmap <buffer> <C-q> <Nop>
 nmap <silent> <buffer> <expr> <C-q><C-q> (&buftype == 'terminal') ? 'i' : ''
-" TODO can we get <C-q> to leave normal mode of terminal ?
-"      or use <M-q> for that ?
+" TODO: can we get <C-q> to leave normal mode of terminal ?
+"       or use <M-q> for that ?
 
 " q to exit visual-mode and clear previous w:v* states
 " if we just map q to <Esc> then q works well to go back to original mode,
@@ -4821,7 +4821,7 @@ endfunction
 
 " if leaving cmd-mode and we return to vis-mode then clear any modeless-selection
 " TODO: can we also clear cmd-line ? how ?
-" skip for now - could cause flashing or extra work ...
+"       skip for now - could cause flashing or extra work ...
 "autocmd CmdlineLeave * call MyCmdLeave()
 function! MyCmdLeave()
     if !empty(getcmdline())
@@ -5061,7 +5061,7 @@ tnoremap <M-C-4-RightMouse> <Nop>
 
 " -----------------
 
-" TODO: S- clicks
+" DONE: S- clicks
 
 nnoremap <S-LeftMouse> <Nop>
 vnoremap <S-LeftMouse> <Nop>
@@ -5125,7 +5125,7 @@ tnoremap <S-4-RightMouse> <Nop>
 
 " -----------------
 
-" TODO: C-S- clicks
+" DONE: C-S- clicks
 
 nnoremap <C-S-LeftMouse> <Nop>
 vnoremap <C-S-LeftMouse> <Nop>
@@ -5187,7 +5187,7 @@ vnoremap <C-S-4-RightMouse> <Nop>
 inoremap <C-S-4-RightMouse> <Nop>
 tnoremap <C-S-4-RightMouse> <Nop>
 
-" TODO: A-S- clicks
+" DONE: A-S- clicks
 
 nnoremap <M-S-LeftMouse> <Nop>
 vnoremap <M-S-LeftMouse> <Nop>
@@ -5524,7 +5524,7 @@ noremap <M-_> <Nop>
 
 let g:fterm = 0
 
-" mck - TODO - vim can we get into visual mode for C- and A-C- mouse drag ?
+" TODO: vim can we get into visual mode for C- and A-C- mouse drag ?
 if !has("nvim")
 
     " vim popup terminal special things to disable mouse drag selection etc
@@ -5914,7 +5914,7 @@ if has("nvim")
 endif
 
 " --------------------------------------------------------------------
-" mck - TODO - this is recvd on C-2-LeftMouse also ...
+" mck - TODO: this is recvd on C-2-LeftMouse also ...
 " strange vim ISSUE on first time click from terminal
 " also if we do not release ctrl key it, clipboard may not get updated
 "if !has("nvim")
@@ -6059,7 +6059,7 @@ if has("nvim")
     imap <silent> <M-)> <LeftMouse><C-\><C-o>:call <SID>GetWord2(2)<CR>
 endif
 
-" mck - TODO can/should we paste selection here ?
+" mck - TODO: can/should we paste selection here ?
 " it seems nvim_input() or feedkeys() works but w/o bracketed-paste ...
 vmap <silent> <expr> <A-C-LeftRelease> (@t=="1") ? 'tygv:<C-u>call <SID>Delay(0)<CR>:let @t="0"<CR><Esc>i' : 'tygv:<C-u>call <SID>Delay(0)<CR><Esc>'
 imap <silent> <A-C-LeftMouse> <C-\><C-o>:let @i="2"<CR><LeftMouse>
@@ -8332,7 +8332,7 @@ if has("autocmd")
  "        call inputrestore()
  "        let ans=nr2char(c)
  "        if ans ==# 'y' || ans ==# 'Y'
- "            "TODO mkdir -p dname ...
+ "            "TODO: mkdir -p dname ...
  "            echom "mkdir " . dname " ..."
  "        else
  "            call <SID>ConfNextOrQuit()
@@ -8881,7 +8881,7 @@ endfunction
 "================================================================
 
 function s:MySearch(meth) abort
-  " TODO: - make it so there are 2 modes, prompt or expand("<cword>") ...
+  " TODO: make it so there are 2 modes, prompt or expand("<cword>") ...
   if (a:meth == 0)
     let promptstr = 'sqf-buf:/'
   elseif (a:meth == 1)
@@ -8985,11 +8985,11 @@ function s:MyVisSearch(meth) abort
 endfunction
 
 " use :let @/="" to clear out search pattern and stop any running search - wish we could use <C-c>
-nnoremap <silent> <Leader>sx :let @/=""<bar>:redraw!<CR>:echo " "<CR>:let g:asyncrun_code=2<CR>:AsyncStop!<CR>:sleep 500m<CR>:AsyncStop!<CR>
-vnoremap <silent> <Leader>sx <Esc>:let @/=""<bar>:redraw!<CR>:echo " "<CR>:let g:asyncrun_code=2<CR>:AsyncStop!<CR>:sleep 500m<CR>:AsyncStop!<CR>
+nnoremap <silent> <Leader>sx :let @/=""<bar>:redraw!<CR>:echo " "<CR>:let g:asyncrun_code=2<CR>:AsyncStop!<CR>:FerretCancelAsync<CR>:sleep 500m<CR>:AsyncStop!<CR>
+vnoremap <silent> <Leader>sx <Esc>:let @/=""<bar>:redraw!<CR>:echo " "<CR>:let g:asyncrun_code=2<CR>:AsyncStop!<CR>:FerretCancelAsync<CR>:sleep 500m<CR>:AsyncStop!<CR>
 " stop running search - wish we could use <C-c>
-nnoremap <silent> <Leader>sk :let g:asyncrun_code=2<CR>:AsyncStop!<CR>:sleep 500m<CR>:AsyncStop!<CR>
-vnoremap <silent> <Leader>sk <Esc>:let g:asyncrun_code=2<CR>:AsyncStop!<CR>:sleep 500m<CR>:AsyncStop!<CR>
+nnoremap <silent> <Leader>sk :let g:asyncrun_code=2<CR>:AsyncStop!<CR>:sleep 500m<CR>:AsyncStop!<CR>:FerretCancelAsync<CR>
+vnoremap <silent> <Leader>sk <Esc>:let g:asyncrun_code=2<CR>:AsyncStop!<CR>:sleep 500m<CR>:AsyncStop!<CR>:FerretCancelAsync<CR>
 " search normally
 nnoremap <Leader>sn :let @/=""<bar>:set hlsearch<CR>/
 vnoremap <Leader>sn "sy<Esc>:let @/=""<bar>:set hlsearch<CR>/<C-r>"
@@ -9024,6 +9024,14 @@ command! -nargs=+ -bang Acks   execute ':cdo<bang> '  . <q-args>
 command! -nargs=+ -bang Ackfs  execute ':cfdo<bang> ' . <q-args>
 command! -nargs=+ -bang LAcks  execute ':ldo<bang> '  . <q-args>
 command! -nargs=+ -bang LAckfs execute ':lfdo<bang> ' . <q-args>
+
+function s:MyGAck(query) abort
+    let l:git_dir = s:find_git_root()
+    execute ':Ack ' . a:query . ' ' . l:git_dir
+endfunction
+
+command! -nargs=* -bang Gack   call <SID>MyGAck(<q-args>)
+command! -nargs=* -bang GAck   call <SID>MyGAck(<q-args>)
 
 " search dir (root/project/git dir) with results in fzf/Ag list
 " same as :Ag ...
@@ -10361,7 +10369,7 @@ nnoremap <silent> <expr> <C-w>]      (&buftype == 'terminal') ? 'i' : ''
 nnoremap <silent> <expr> <C-w><C-]>  (&buftype == 'terminal') ? 'i' : ''
 
 "nnoremap <silent> <expr> <M-]>       (&buftype == 'terminal') ? 'i' : ''
-" TODO can we use <M-q> to leave normal mode of terminal ?
+" TODO: can we use <M-q> to leave normal mode of terminal ?
 
 " this causes sign column to disappear on popups that are terminal windows ...
 "au TerminalOpen * setlocal signcolumn=no
@@ -10806,7 +10814,7 @@ nnoremap <silent> <Leader>sV       :vsplit<CR>
 nnoremap <silent> <Leader>sH       :split<CR>
 " split buffer new tab
 nnoremap <silent> <Leader>s<S-Tab> :tab split<CR>
-" TODO should we also use sT ?
+" TODO: should we also use sT ?
 nnoremap <silent> <Leader>sT       :tab split<CR>
 
 " new, empty splits - to match tmux
@@ -10827,7 +10835,7 @@ nnoremap <silent> <Leader>s<Tab> :$tabnew<CR>
 " also these ...
 nnoremap <silent> <Leader>sv     :vnew<CR>
 nnoremap <silent> <Leader>sh     :new<CR>
-" TODO should we also use st ?
+" TODO: should we also use st ?
 nnoremap <silent> <Leader>st     :$tabnew<CR>
 
 noremap <silent> <Leader>ss       <C-w>w
