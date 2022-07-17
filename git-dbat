@@ -10,7 +10,7 @@ else
 fi
 
 # NOTE: there is also:
-# git diff --name-only --diff-filter=d | xargs $BATNAME --diff
+# git diff --name-only --diff-filter=d | xargs -r $BATNAME --diff
 
 gdir=""
 gdir=$(git rev-parse --show-superproject-working-tree 2> /dev/null)
