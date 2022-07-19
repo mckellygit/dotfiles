@@ -1008,6 +1008,26 @@ alias nvdiff='nvimdiff'
 alias nvdifff='nvimdiff'
 alias nvdif='nvimdiff'
 
+# -----------------------
+
+#lo() {
+#    cd "$(llama "$@")"
+#}
+
+cx() {
+    if [[ $# -ge 1 ]] ; then
+        cd $1 2> /dev/null
+        shift
+        local result=$(tere -d -f -S --autocd-timeout off --history-file '' "$@")
+        [ -n "$result" ] && cd -- "$result"
+    else
+        local result=$(tere -d -f -S --autocd-timeout off --history-file '' "$@")
+        [ -n "$result" ] && cd -- "$result"
+    fi
+}
+
+# -----------------------
+
 # fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 # export FZF_DEFAULT_OPTS="--extended --cycle --reverse"
@@ -1020,7 +1040,7 @@ alias nvdif='nvimdiff'
 export FZF_PREVIEW_LINES=20
 # use $FDNAME instead of ag to get dirs listed ...
 #export FZF_DEFAULT_COMMAND='ag -U --hidden --nocolor -g ""'
-export FZF_DEFAULT_COMMAND='$FDNAME -u --hidden --follow --exclude .git --color=always'
+export FZF_DEFAULT_COMMAND='$FDNAME --color=always --strip-cwd-prefix -u --hidden --follow --exclude .git '
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # could make alt-c for dirs only (add -t d) - then it automatically chdir to there ...
 export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND -t d"
@@ -1046,17 +1066,54 @@ export FZF_COMPLETION_TRIGGER="\`\`"
 #  ag -u --hidden --nocolor -g "" "$1" | awk 'function dirname(fn) { if (fn == "") return ".";  if (fn !~ "[^/]") return "/"; sub("/*$", "", fn); if (fn !~ "/") return ".";# sub("/[^/]*$", "", fn); if (fn == "") fn = "/"; return fn } {$0 = dirname($0)} !a[$0]++'
 #}
 
+# NOTE: recent fd is not breadth-first-search (bfs) but depth-first-search (dfs)
+#       and so it can take a while before all first level dirs show up ...
+#       Ideally we want bfs to help when wanting to select nearer dirs
+# NOTE: after selecting from fzf the parent fd does not terminate, so it can take _a while_ ...
+# TODO: can we stop parent fd if fzf returns ?
+#       if we use process substitution with input redirection then YES -
+#       fzf < <(fd -t d --color always .)
+#       this will stop the long running fd if we have made a selection in fzf and fzf ends ...
+
+function paths_breadth_first() {
+  while IFS= read -r line; do
+    dirn=${line%/*}         ## dirname(line)
+    echo ${#dirn},$line     ## len(dirn),line
+  done | sort -n | cut -d ',' -f 2-
+}
+
+# This works ok if fd cmd completes quickly ...
+
+#function d2() {
+#  dir_name="$(fd --strip-cwd-prefix -td | paths_breadth_first | fzf)"
+#  if [ -d "$dir_name" ]; then
+#     cd "$dir_name"
+#  fi
+#}
+
+# TODO: do we want --stript-cwd-prefix ?
+
 # Use $FDNAME (https://github.com/sharkdp/fd) instead of the default find
 # command for listing path candidates.
 # - The first argument to the function ($1) is the base path to start traversal
 # - See the source code (completion.{bash,zsh}) for the details.
 _fzf_compgen_path() {
-  $FDNAME -u --hidden --follow --exclude ".git" . "$1"
+  if [[ -z "$1" ]] ; then
+      dir="."
+  else
+      dir="$1"
+  fi
+  $FDNAME --color=always --strip-cwd-prefix -u --hidden --follow --exclude ".git" "$dir"
 }
 
 # Use $FDNAME to generate the list for directory completion
 _fzf_compgen_dir() {
-  $FDNAME -t d -u --hidden --follow --exclude ".git" . "$1"
+  if [[ -z "$1" ]] ; then
+      dir="."
+  else
+      dir="$1"
+  fi
+  $FDNAME --color=always --strip-cwd-prefix -t d -u --hidden --follow --exclude ".git" "$dir"
 }
 
 # (EXPERIMENTAL) Advanced customization of fzf options via _fzf_comprun function
@@ -1085,7 +1142,7 @@ my-fzfcmd() {
   if [ -n "$TMUX_PANE" -a -z "$VIM_TERMINAL" ] ; then
     echo "fzf-tmux -p -x C -y C -w 80% -h 65% "
   else
-    echo "fzf --height 40% "
+    echo "\\fzf --height 40% "
   fi
 }
 
@@ -1110,7 +1167,7 @@ bindkey "\e\"" my-fzf-history-widget
 
 my-fzf-files-widget() {
   local selected
-  selected=( $($FDNAME --color always --hidden --follow --exclude ".git" . | $(my-fzfcmd)) )
+  selected=( $($FDNAME --color always --strip-cwd-prefix -u --hidden --follow --exclude ".git" . | $(my-fzfcmd)) )
   local ret=$?
   if [ -n "$selected" ]; then
     zle -U "$selected"
