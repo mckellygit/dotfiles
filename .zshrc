@@ -1149,7 +1149,7 @@ my-fzfcmd() {
 my-fzf-history-widget() {
   local selected num
   setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2> /dev/null
-  selected=( $(fc -rl 1 | perl -ne 'print if !$seen{(/^\s*[0-9]+\**\s+(.*)/, $1)}++' | $(my-fzfcmd) +m +s -n 2.. --preview="" --tiebreak=index --bind=ctrl-r:toggle-sort --bind="ctrl-f:half-page-down" --bind="ctrl-b:half-page-up" --bind="page-up:page-up" --bind="page-down:page-down" --bind="alt-b:page-up" --bind="alt-f:page-down") )
+  selected=( $(fc -rl 1 | awk '{ cmd=$0; sub(/^\s*[0-9]+\**\s+/, "", cmd); if (!seen[cmd]++) print $0 }' | $(my-fzfcmd) +m +s -n 2.. --preview="" --tiebreak=index --bind=ctrl-r:toggle-sort --bind="ctrl-f:half-page-down" --bind="ctrl-b:half-page-up" --bind="page-up:page-up" --bind="page-down:page-down" --bind="alt-b:page-up" --bind="alt-f:page-down") )
   local ret=$?
   if [ -n "$selected" ]; then
     num=$selected[1]
