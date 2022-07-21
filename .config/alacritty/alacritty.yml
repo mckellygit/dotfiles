@@ -274,7 +274,7 @@ colors:
     text:     '#111111'
 
   # these are supposed to be the wayland client-side decoration colors
-  search:
+  footer:
     bar:
       background: '#000000'
       foreground: '#000000'
