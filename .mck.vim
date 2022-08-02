@@ -10999,7 +10999,7 @@ endif
 
 " NOTE: add ^xterm || ^rxvt || ^urxvt here ?
 " enable bracketed paste in terminal mode
-if &term =~ "^screen" || &term =~ "tmux" || &term =~ "^alacritty"
+if !has("nvim") && (&term =~ "^screen" || &term =~ "tmux" || &term =~ "^alacritty" || &term =~ "^xterm" || &term =~ "^wezterm")
   let &t_BE="\<Esc>[?2004h"
   let &t_BD="\<Esc>[?2004l"
   let &t_PS="\<Esc>[200~"
@@ -11014,7 +11014,7 @@ if &term =~ "^screen" || &term =~ "tmux" || &term =~ "^alacritty"
 endif
 
 " nvim BUG: we add this for vim because we forced Home -> \e[H and End -> \e[F in tmux
-if !has("nvim") && &term =~ "tmux"
+if !has("nvim") && (&term =~ "tmux" || exists('$TMUX_PANE'))
   exec "set <Home>=\e[H"
   exec "set <End>=\e[F"
 endif
