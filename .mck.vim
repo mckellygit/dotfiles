@@ -43,6 +43,12 @@ endif
 
 " ====================================================
 
+" nvim checkhealth skip ...
+let g:loaded_perl_provider = 0
+
+" nvim checkhealth skip ...
+"let g:loaded_node_provider = 0
+
 " skip loading this plugin for now ...
 let loaded_bufkill = 1
 
