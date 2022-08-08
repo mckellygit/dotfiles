@@ -1052,7 +1052,7 @@ export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND -t d"
 export FZF_DEFAULT_OPTS='--height 40% --ansi --preview "$BATNAME --style=numbers --color=always --line-range :250 {}" --bind="ctrl-alt-p:toggle-preview" --bind="alt-g:preview-top,alt-G:preview-bottom" --bind="ctrl-f:preview-half-page-down" --bind="ctrl-b:preview-half-page-up" --bind="ctrl-k:preview-up,ctrl-j:preview-down" --bind="ctrl-d:delete-char" --bind="alt-bs:preview-half-page-up,alt-space:preview-half-page-down" --bind="alt-k:up,alt-j:down" --bind="alt-K:preview-half-page-up,alt-J:preview-half-page-down" --bind="ctrl-alt-k:preview-half-page-up,ctrl-alt-j:preview-half-page-down" --bind="ctrl-alt-o:preview-half-page-down" --bind="page-up:page-up" --bind="page-down:page-down" --bind="alt-d:kill-word,alt-u:unix-line-discard" --bind="alt-b:page-up" --bind="alt-f:page-down" --preview-window=right:hidden --color fg:242,bg:236,hl:65,fg+:15,bg+:239,hl+:108 --color info:108,prompt:109,spinner:108,pointer:168,marker:168'
 
 # Options to fzf command
-export FZF_COMPLETION_OPTS='+c -x'
+export FZF_COMPLETION_OPTS='+c -x --color=dark'
 
 export FZF_COMPLETION_TRIGGER="\`\`"
 
@@ -1127,6 +1127,15 @@ _fzf_compgen_dir() {
 #     *)            fzf -d "$@" ;;
 #   esac
 # }
+
+_fzf_comprun2() {
+  shift
+  fzf-tmux -- "$@"
+}
+
+_fzf_compgen_dir2() {
+    \rg --hidden --files . 2>/dev/null | awk 'function dirname(fn) { if (fn == "") return ".";  if (fn !~ "[^/]") return "/"; sub("/*$", "", fn); if (fn !~ "/") return "."; sub("/[^/]*$", "", fn); if (fn == "") fn = "/"; return fn } {$0 = dirname($0)} !a[$0]++'
+}
 
 # -----------------------
 
