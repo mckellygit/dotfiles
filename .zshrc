@@ -796,15 +796,15 @@ alias stop-rdm='rc -q'
 alias stop_rdm='rc -q'
 
 # also could use -u or -U instead of --all-text
-#alias ag='\ag -U --hidden -- '
+#alias ag='\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" -- '
 # skip -- as we might want to add -i for case-insensitive etc. ...
-#alias ag='command ag -U --hidden '
-#alias rg='command rg --color=always --smart-case --hidden --iglob !".git" '
+#alias ag='command ag -U --one-device --hidden --ignore ".git" --ignore ".cache" '
+#alias rg='command rg --color=always --smart-case --one-file-system --hidden --iglob !".git" '
 
 # use these instead of aliasas above, only because git is a custom command now
 # and ag git wont find anything, you need ag 'git' ...
-ag() { command ag -U --hidden "$@"; }
-rg() { command rg --color=always --smart-case --hidden --iglob !".git" "$@"; }
+ag() { command ag -U --one-device --hidden --ignore ".git" --ignore ".cache" "$@"; }
+rg() { command rg --color=always --smart-case --one-file-system --hidden --iglob !".git" --iglob !".cache" "$@"; }
 
 # cannot override builtin git diff with git cmds/aliases so do it this way ...
 # also add git log
@@ -1039,31 +1039,33 @@ cx() {
 # fzf + ag or $FDNAME configuration
 export FZF_PREVIEW_LINES=20
 # use $FDNAME instead of ag to get dirs listed ...
-#export FZF_DEFAULT_COMMAND='ag -U --hidden --nocolor -g ""'
-export FZF_DEFAULT_COMMAND='$FDNAME --color=always --strip-cwd-prefix -u --hidden --follow --exclude .git '
+#export FZF_DEFAULT_COMMAND='ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --nocolor -g ""'
+export FZF_DEFAULT_COMMAND="$FDNAME --color=always --strip-cwd-prefix -u --one-file-system --hidden --follow --exclude '.git' --exclude '.cache' --exclude '.npm' --exclude '.mozilla' --exclude '.fingerprint' --exclude '.git_keep' "
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # could make alt-c for dirs only (add -t d) - then it automatically chdir to there ...
 export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND -t d"
 # add --ansi because $FDNAME above uses --color=always ...
+
+export FZF_ALT_C_OPTS="--bind='ctrl-f:half-page-down' --bind='ctrl-b:half-page-up'"
 
 # fzf from cmdline uses FZF_DEFAULT_OPTS and has a 250 line preview limit
 # fzf from vim plugin does not have the 250 line max
 
 export FZF_DEFAULT_OPTS='--height 40% --ansi --preview "$BATNAME --style=numbers --color=always --line-range :250 {}" --bind="ctrl-alt-p:toggle-preview" --bind="alt-g:preview-top,alt-G:preview-bottom" --bind="ctrl-f:preview-half-page-down" --bind="ctrl-b:preview-half-page-up" --bind="ctrl-k:preview-up,ctrl-j:preview-down" --bind="ctrl-d:delete-char" --bind="alt-bs:preview-half-page-up,alt-space:preview-half-page-down" --bind="alt-k:up,alt-j:down" --bind="alt-K:preview-half-page-up,alt-J:preview-half-page-down" --bind="ctrl-alt-k:preview-half-page-up,ctrl-alt-j:preview-half-page-down" --bind="ctrl-alt-o:preview-half-page-down" --bind="page-up:page-up" --bind="page-down:page-down" --bind="alt-d:kill-word,alt-u:unix-line-discard" --bind="alt-b:page-up" --bind="alt-f:page-down" --preview-window=right:hidden --color fg:242,bg:236,hl:65,fg+:15,bg+:239,hl+:108 --color info:108,prompt:109,spinner:108,pointer:168,marker:168'
 
-# Options to fzf command
-export FZF_COMPLETION_OPTS='+c -x --color=dark'
+# dont want to disable color with +c and dont want to add -x for extended-search as that is already enabled by default ...
+#export FZF_COMPLETION_OPTS='+c -x'
 
 export FZF_COMPLETION_TRIGGER="\`\`"
 
 # use ag instead of the default find ...
 # _fzf_compgen_path() {
-#  ag -u --hidden --nocolor -g "" "$1"
+#  ag -u --one-device --hidden --ignore ".git" --ignore ".cache" --nocolor -g "" "$1"
 #}
 
 # Ag only lists files not directories, so we can use awk to get dirnames
 # _fzf_compgen_dir() {
-#  ag -u --hidden --nocolor -g "" "$1" | awk 'function dirname(fn) { if (fn == "") return ".";  if (fn !~ "[^/]") return "/"; sub("/*$", "", fn); if (fn !~ "/") return ".";# sub("/[^/]*$", "", fn); if (fn == "") fn = "/"; return fn } {$0 = dirname($0)} !a[$0]++'
+#  ag -u --one-device --hidden --ignore ".git" --ignore ".cache" --nocolor -g "" "$1" | awk 'function dirname(fn) { if (fn == "") return ".";  if (fn !~ "[^/]") return "/"; sub("/*$", "", fn); if (fn !~ "/") return ".";# sub("/[^/]*$", "", fn); if (fn == "") fn = "/"; return fn } {$0 = dirname($0)} !a[$0]++'
 #}
 
 # NOTE: recent fd is not breadth-first-search (bfs) but depth-first-search (dfs)
@@ -1103,7 +1105,7 @@ _fzf_compgen_path() {
   else
       dir="$1"
   fi
-  $FDNAME --color=always --strip-cwd-prefix -u --hidden --follow --exclude ".git" "$dir"
+  $FDNAME --color=always --strip-cwd-prefix -u --one-file-system --hidden --follow --exclude '.git' --exclude '.cache' --exclude '.npm' --exclude '.mozilla' --exclude '.fingerprint' --exclude '.git_keep' "$dir"
 }
 
 # Use $FDNAME to generate the list for directory completion
@@ -1113,7 +1115,7 @@ _fzf_compgen_dir() {
   else
       dir="$1"
   fi
-  $FDNAME --color=always --strip-cwd-prefix -t d -u --hidden --follow --exclude ".git" "$dir"
+  $FDNAME --color=always --strip-cwd-prefix -t d -u --one-file-system --hidden --follow --exclude '.git' --exclude '.cache' --exclude '.npm' --exclude '.mozilla' --exclude '.fingerprint' --exclude '.git_keep' "$dir"
 }
 
 # (EXPERIMENTAL) Advanced customization of fzf options via _fzf_comprun function
@@ -1128,13 +1130,8 @@ _fzf_compgen_dir() {
 #   esac
 # }
 
-_fzf_comprun2() {
-  shift
-  fzf-tmux -- "$@"
-}
-
 _fzf_compgen_dir2() {
-    \rg --hidden --files . 2>/dev/null | awk 'function dirname(fn) { if (fn == "") return ".";  if (fn !~ "[^/]") return "/"; sub("/*$", "", fn); if (fn !~ "/") return "."; sub("/[^/]*$", "", fn); if (fn == "") fn = "/"; return fn } {$0 = dirname($0)} !a[$0]++'
+    \rg --one-file-system --hidden --iglob !".git" --iglob !".cache" --files . 2>/dev/null | awk 'function dirname(fn) { if (fn == "") return ".";  if (fn !~ "[^/]") return "/"; sub("/*$", "", fn); if (fn !~ "/") return "."; sub("/[^/]*$", "", fn); if (fn == "") fn = "/"; return fn } {$0 = dirname($0)} !a[$0]++'
 }
 
 # -----------------------
@@ -1146,6 +1143,29 @@ _fzf_compgen_dir2() {
 # bindkey '^[v' tmuxup
 
 # -----------------------
+
+# fzf-tmux -d 20 uses tmux bottom split for 20 lines ...
+
+fzf-cd-widget2() {
+  local cmd="${FZF_ALT_C_COMMAND:-"command find -L . -mindepth 1 \\( -path '*/\\.*' -o -fstype 'sysfs' -o -fstype 'devfs' -o -fstype 'devtmpfs' -o -fstype 'proc' \\) -prune \
+    -o -type d -print 2> /dev/null | cut -b3-"}"
+  setopt localoptions pipefail no_aliases 2> /dev/null
+  local dir="$(eval "$cmd" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse --bind=ctrl-z:ignore $FZF_DEFAULT_OPTS $FZF_ALT_C_OPTS" fzf-tmux -d 20)"
+  #FZF_DEFAULT_OPTS="--reverse --bind=ctrl-z:ignore $FZF_DEFAULT_OPTS $FZF_ALT_C_OPTS"
+  #echo "FZF_DEF_OPTS = $FZF_DEFAULT_OPTS"
+  #local dir=$(eval "fzf-tmux -d 20 -- < <($cmd)")
+  if [[ -z "$dir" ]]; then
+    zle redisplay
+    return 0
+  fi
+  zle push-line # Clear buffer. Auto-restored on next prompt.
+  BUFFER="builtin cd -- ${(q)dir}"
+  zle accept-line
+  local ret=$?
+  unset dir # ensure this doesn't end up appearing in prompt expansion
+  zle reset-prompt
+  return $ret
+}
 
 my-fzfcmd() {
   if [ -n "$TMUX_PANE" -a -z "$VIM_TERMINAL" ] ; then
@@ -1176,7 +1196,7 @@ bindkey "\e\"" my-fzf-history-widget
 
 my-fzf-files-widget() {
   local selected
-  selected=( $($FDNAME --color always --strip-cwd-prefix -u --hidden --follow --exclude ".git" . | $(my-fzfcmd)) )
+  selected=( $($FDNAME --color always --strip-cwd-prefix -u --one-file-system --hidden --follow --exclude '.git' --exclude '.cache' --exclude '.npm' --exclude '.mozilla' --exclude '.fingerprint' --exclude '.git_keep' | $(my-fzfcmd)) )
   local ret=$?
   if [ -n "$selected" ]; then
     zle -U "$selected"
