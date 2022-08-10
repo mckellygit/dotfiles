@@ -1146,6 +1146,10 @@ _fzf_compgen_dir2() {
 
 # fzf-tmux -d 20 uses tmux bottom split for 20 lines ...
 
+# if we FZF_DEFAULT_COMMAND="sleep 20" fzf then an esc or ctrl-c will stop the sleep
+# but if we sleep 20 | fzf then an esc or ctrl-c will NOT stop the sleep as it does 
+# not end on SIGPIPE raised when its stdout is closed because fzf ends
+
 fzf-cd-widget2() {
   local cmd="${FZF_ALT_C_COMMAND:-"command find -L . -mindepth 1 \\( -path '*/\\.*' -o -fstype 'sysfs' -o -fstype 'devfs' -o -fstype 'devtmpfs' -o -fstype 'proc' \\) -prune \
     -o -type d -print 2> /dev/null | cut -b3-"}"

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [[ $# -lt 1 ]] ; then
+    export FZF_DEFAULT_COMMAND="fd --color=always --strip-cwd-prefix -u --one-file-system --hidden --follow --exclude '.git' --exclude '.cache' --exclude '.npm' --exclude '.mozilla' --exclude '.fingerprint' --exclude '.git_keep' -t d"
+else
+    export FZF_DEFAULT_COMMAND="$@"
+fi
+
+fzf-tmux -d 22
+
+exit $?
+
