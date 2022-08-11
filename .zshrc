@@ -1041,8 +1041,8 @@ export FZF_PREVIEW_LINES=20
 # use $FDNAME instead of ag to get dirs listed ...
 #export FZF_DEFAULT_COMMAND='ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --nocolor -g ""'
 
-export FZF_DEFAULT_COMMAND="$FDNAME --color=always --strip-cwd-prefix -u --one-file-system --hidden --follow --exclude '.git' --exclude '.cache' --exclude '.npm' --exclude '.mozilla' --exclude '.fingerprint' --exclude '.git_keep' "
-#(for testing slow fd)export FZF_DEFAULT_COMMAND="$FDNAME --color=always --strip-cwd-prefix -u --hidden --follow --exclude '.git' --exclude '.cache' --exclude '.npm' --exclude '.mozilla' --exclude '.fingerprint' --exclude '.git_keep' "
+export FZF_DEFAULT_COMMAND="$FDNAME --color=always --strip-cwd-prefix --full-path -u --one-file-system --hidden --follow --exclude '.git' --exclude '.cache' --exclude '.npm' --exclude '.mozilla' --exclude '.fingerprint' --exclude '.git_keep' "
+#for testing - export FZF_DEFAULT_COMMAND="$FDNAME --color=always --strip-cwd-prefix --full-path -u --hidden --follow --exclude '.git' --exclude '.cache' --exclude '.npm' --exclude '.mozilla' --exclude '.fingerprint' --exclude '.git_keep' "
 
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # could make alt-c for dirs only (add -t d) - then it automatically chdir to there ...
@@ -1093,7 +1093,7 @@ function paths_breadth_first() {
 # This works ok if fd cmd completes quickly ...
 
 #function d2() {
-#  dir_name="$(fd --strip-cwd-prefix -td | paths_breadth_first | fzf)"
+#  dir_name="$(fd --strip-cwd-prefix --full-path -td | paths_breadth_first | fzf)"
 #  if [ -d "$dir_name" ]; then
 #     cd "$dir_name"
 #  fi
@@ -1111,7 +1111,7 @@ _fzf_compgen_path() {
   else
       dir="$1"
   fi
-  $FDNAME --color=always --strip-cwd-prefix -u --one-file-system --hidden --follow --exclude '.git' --exclude '.cache' --exclude '.npm' --exclude '.mozilla' --exclude '.fingerprint' --exclude '.git_keep' "$dir"
+  $FDNAME --color=always --strip-cwd-prefix --full-path -u --one-file-system --hidden --follow --exclude '.git' --exclude '.cache' --exclude '.npm' --exclude '.mozilla' --exclude '.fingerprint' --exclude '.git_keep' "$dir"
 }
 
 # Use $FDNAME to generate the list for directory completion
@@ -1121,7 +1121,7 @@ _fzf_compgen_dir() {
   else
       dir="$1"
   fi
-  $FDNAME --color=always --strip-cwd-prefix -t d -u --one-file-system --hidden --follow --exclude '.git' --exclude '.cache' --exclude '.npm' --exclude '.mozilla' --exclude '.fingerprint' --exclude '.git_keep' "$dir"
+  $FDNAME --color=always --strip-cwd-prefix --full-path -t d -u --one-file-system --hidden --follow --exclude '.git' --exclude '.cache' --exclude '.npm' --exclude '.mozilla' --exclude '.fingerprint' --exclude '.git_keep' "$dir"
 }
 
 # (EXPERIMENTAL) Advanced customization of fzf options via _fzf_comprun function
@@ -1138,6 +1138,48 @@ _fzf_compgen_dir() {
 
 _fzf_compgen_dir2() {
     \rg --one-file-system --hidden --iglob !".git" --iglob !".cache" --files . 2>/dev/null | awk 'function dirname(fn) { if (fn == "") return ".";  if (fn !~ "[^/]") return "/"; sub("/*$", "", fn); if (fn !~ "/") return "."; sub("/[^/]*$", "", fn); if (fn == "") fn = "/"; return fn } {$0 = dirname($0)} !a[$0]++'
+}
+
+__fzf_generic_path_completion() {
+  local base lbuf cmd compgen fzf_opts suffix tail dir leftover matches
+  base=$1
+  lbuf=$2
+  cmd=$(__fzf_extract_command "$lbuf")
+  compgen=$3
+  fzf_opts=$4
+  suffix=$5
+  tail=$6
+
+  setopt localoptions nonomatch
+  eval "base=$base"
+  [[ $base = *"/"* ]] && dir="$base"
+  while [ 1 ]; do
+    if [[ -z "$dir" || -d ${dir} ]]; then
+      leftover=${base/#"$dir"}
+      leftover=${leftover/#\/}
+      [ -z "$dir" ] && dir='.'
+      [ "$dir" != "/" ] && dir="${dir/%\//}"
+
+      # NOTE: this method will not end cmd when fzf ends unless cmd writes to stdout and raises SIGPIPE when fzf encs and closes pipe ...
+
+      matches=$(eval "$compgen $(printf %q "$dir")" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse --bind=ctrl-z:ignore $FZF_DEFAULT_OPTS $FZF_COMPLETION_OPTS" __fzf_comprun "$cmd" ${(Q)${(Z+n+)fzf_opts}} -q "$leftover" | while read item; do
+        echo -n "${(q)item}$suffix "
+      done)
+      #echo "lbuf    = ${lbuf}"
+      #echo "matches = ${matches}"
+      #echo "tail    = ${tail}"
+      matches=${matches% }
+      if [ -n "$matches" ]; then
+        #LBUFFER="$lbuf$matches$tail"
+        dirbuf="$lbuf$matches$tail"
+        LBUFFER="${dirbuf%/}"
+      fi
+      zle reset-prompt
+      break
+    fi
+    dir=$(dirname "$dir")
+    dir=${dir%/}/
+  done
 }
 
 # -----------------------
@@ -1160,10 +1202,7 @@ fzf-cd-widget2() {
   local cmd="${FZF_ALT_C_COMMAND:-"command find -L . -mindepth 1 \\( -path '*/\\.*' -o -fstype 'sysfs' -o -fstype 'devfs' -o -fstype 'devtmpfs' -o -fstype 'proc' \\) -prune \
     -o -type d -print 2> /dev/null | cut -b3-"}"
   setopt localoptions pipefail no_aliases 2> /dev/null
-  local dir="$(eval "$cmd" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse --bind=ctrl-z:ignore $FZF_DEFAULT_OPTS $FZF_ALT_C_OPTS" fzf-tmux -d 20)"
-  #FZF_DEFAULT_OPTS="--reverse --bind=ctrl-z:ignore $FZF_DEFAULT_OPTS $FZF_ALT_C_OPTS"
-  #echo "FZF_DEF_OPTS = $FZF_DEFAULT_OPTS"
-  #local dir=$(eval "fzf-tmux -d 20 -- < <($cmd)")
+  local dir="$(FZF_DEFAULT_COMMAND="$cmd" FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse --bind=ctrl-z:ignore $FZF_DEFAULT_OPTS $FZF_ALT_C_OPTS" $(__fzfcmd) +m < /dev/tty)"
   if [[ -z "$dir" ]]; then
     zle redisplay
     return 0
@@ -1188,7 +1227,8 @@ my-fzfcmd() {
 my-fzf-history-widget() {
   local selected num
   setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2> /dev/null
-  selected=( $(fc -rl 1 | awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, "", cmd); if (!seen[cmd]++) print $0 }' | $(my-fzfcmd) +m +s -n 2.. --preview="" --tiebreak=index --bind=ctrl-r:toggle-sort --bind="ctrl-f:half-page-down" --bind="ctrl-b:half-page-up" --bind="page-up:page-up" --bind="page-down:page-down" --bind="alt-b:page-up" --bind="alt-f:page-down") )
+  selected=( $(fc -rl 1 | awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, "", cmd); if (!seen[cmd]++) print $0 }' |
+    FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index --bind=ctrl-r:toggle-sort,ctrl-z:ignore $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} +m" $(my-fzfcmd)) )
   local ret=$?
   if [ -n "$selected" ]; then
     num=$selected[1]
@@ -1205,11 +1245,22 @@ zle -N my-fzf-history-widget
 bindkey "\e\"" my-fzf-history-widget
 
 my-fzf-files-widget() {
+  local cmd="${FZF_CTRL_T_COMMAND:-"command find -L . -mindepth 1 \\( -path '*/\\.*' -o -fstype 'sysfs' -o -fstype 'devfs' -o -fstype 'devtmpfs' -o -fstype 'proc' \\) -prune \
+    -o -type f -print \
+    -o -type d -print \
+    -o -type l -print 2> /dev/null | cut -b3-"}"
+  setopt localoptions pipefail no_aliases 2> /dev/null
+  local item
   local selected
-  selected=( $($FDNAME --color always --strip-cwd-prefix -u --one-file-system --hidden --follow --exclude '.git' --exclude '.cache' --exclude '.npm' --exclude '.mozilla' --exclude '.fingerprint' --exclude '.git_keep' | $(my-fzfcmd)) )
+  selected=""
+  FZF_DEFAULT_COMMAND="$cmd" FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse --bind=ctrl-z:ignore $FZF_DEFAULT_OPTS $FZF_CTRL_T_OPTS" $(my-fzfcmd) -m "$@" < /dev/tty | while read item; do
+    selected="${selected} ${(q)item} "
+    #echo -n "${(q)item} "
+  done
   local ret=$?
+# echo
   if [ -n "$selected" ]; then
-    zle -U "$selected"
+    zle -U "${selected:1}"
   fi
   zle reset-prompt
   return $ret
@@ -1218,6 +1269,21 @@ zle -N my-fzf-files-widget
 
 # an unusual and vim harmless mapping from tmux for M-_
 bindkey "\e_" my-fzf-files-widget
+
+__fsel() {
+  local cmd="${FZF_CTRL_T_COMMAND:-"command find -L . -mindepth 1 \\( -path '*/\\.*' -o -fstype 'sysfs' -o -fstype 'devfs' -o -fstype 'devtmpfs' -o -fstype 'proc' \\) -prune \
+    -o -type f -print \
+    -o -type d -print \
+    -o -type l -print 2> /dev/null | cut -b3-"}"
+  setopt localoptions pipefail no_aliases 2> /dev/null
+  local item
+  FZF_DEFAULT_COMMAND="$cmd" FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse --bind=ctrl-z:ignore $FZF_DEFAULT_OPTS $FZF_CTRL_T_OPTS" $(__fzfcmd) -m "$@" < /dev/tty | while read item; do
+    echo -n "${(q)item} "
+  done
+  local ret=$?
+# echo
+  return $ret
+}
 
 # -----------------------
 
