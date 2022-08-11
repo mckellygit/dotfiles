@@ -607,8 +607,8 @@ endfunction
 " use ag (silver-searcher) instead of ack, if possible
 " NOTE: check for rg - but is this plugin still used ?
 if executable('ag')
-  " NOTE: ag can miss some matches without -U --one-file-system --hidden --ignore ".git" --ignore ".cache" ...
-  let g:ackprg = '\ag --vimgrep -U --one-device --hidden --ignore ".git" --ignore ".cache" -- '
+  " NOTE: ag can miss some matches without -U --one-file-system --hidden --ignore ".git" --ignore ".cache" --ignore ".cargo" ...
+  let g:ackprg = '\ag --vimgrep -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".cargo" -- '
 endif
 " example: (cdo/cfdo ldo/lfdo [!])
 " :Ack foo
@@ -618,7 +618,7 @@ endif
 let g:ackhighlight = 1
 let g:ack_use_dispatch = 1
 "set grepprg=ack\ -k
-"set grepprg=ag\ --vimgrep\ -U\ --one-device --hidden\ --ignore\ ".git"\ --ignore\ ".cache"\ --\ 
+"set grepprg=ag\ --vimgrep\ -U\ --one-device --hidden\ --ignore\ ".git"\ --ignore\ ".cache"\ --ignore ".cargo" --\ 
 "set grepformat=%f:%l:%c:%m
 " open :grep output in qf ...
 "autocmd QuickFixCmdPost ++nested *grep* cwindow
@@ -632,8 +632,8 @@ let g:FerretQFMap=1
 let g:FerretHlsearch=1
 let g:FerretExecutable='rg,ag,ack'
 let g:FerretExecutableArguments = {
-  \   '\rg': '--vimgrep --color=always --smart-case --one-file-system --hidden --iglob \!".git" --iglob \!".cache" -- ',
-  \   '\ag': '--vimgrep -U --one-device --hidden --ignore ".git" --ignore ".cache" -- ',
+  \   '\rg': '--vimgrep --color=always --smart-case --one-file-system --hidden --iglob \!".git" --iglob \!".cache" --iglob \!".cargo" -- ',
+  \   '\ag': '--vimgrep -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".cargo" -- ',
   \   '\ack': '-s -H --nopager --nocolor --nogroup --column --smart-case --follow '
   \ }
 "nmap <leader>Fa <Plug>(FerretAck)
@@ -8935,14 +8935,14 @@ function s:MySearch(meth) abort
     endif
   elseif (a:meth == 1)
     "execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
-    execute 'AsyncRun! -strip \ag --vimgrep -U --one-device --hidden --ignore ".git" --ignore ".cache" -- ' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
+    execute 'AsyncRun! -strip \ag --vimgrep -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".cargo" -- ' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
   elseif (a:meth == 2)
     "execute 'AsyncRun! -strip -cwd ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) ' 2>/dev/null'
-    execute 'AsyncRun! -strip \ag --vimgrep -U --one-device --hidden --ignore ".git" --ignore ".cache" -- ' shellescape(string, 1) ' 2>/dev/null'
+    execute 'AsyncRun! -strip \ag --vimgrep -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".cargo" -- ' shellescape(string, 1) ' 2>/dev/null'
   elseif (a:meth == 3)
-    call fzf#vim#grep('\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root(), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']}, 0)
+    call fzf#vim#grep('\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".cargo" --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root(), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']}, 0)
   elseif (a:meth == 4)
-    call fzf#vim#grep('\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --nogroup --column --color -- '.shellescape(string, 1), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']}, 0)
+    call fzf#vim#grep('\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".cargo" --nogroup --column --color -- '.shellescape(string, 1), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']}, 0)
   endif
   let @/=string
   set hlsearch
@@ -8977,14 +8977,14 @@ function s:MyVisSearch(meth) abort
     endif
   elseif (a:meth == 1)
     "execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
-    execute 'AsyncRun! -strip \ag --vimgrep -U --one-device --hidden --ignore ".git" --ignore ".cache" -- ' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
+    execute 'AsyncRun! -strip \ag --vimgrep -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".cargo" -- ' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
   elseif (a:meth == 2)
     "execute 'AsyncRun! -strip -cwd ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) ' 2>/dev/null'
-    execute 'AsyncRun! -strip \ag --vimgrep -U --one-device --hidden --ignore ".git" --ignore ".cache" -- ' shellescape(string, 1) ' 2>/dev/null'
+    execute 'AsyncRun! -strip \ag --vimgrep -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".cargo" -- ' shellescape(string, 1) ' 2>/dev/null'
   elseif (a:meth == 3)
-    call fzf#vim#grep('\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root(), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']}, 0)
+    call fzf#vim#grep('\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".cargo" --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root(), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']}, 0)
   elseif (a:meth == 4)
-    call fzf#vim#grep('\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --nogroup --column --color -- '.shellescape(string, 1), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']}, 0)
+    call fzf#vim#grep('\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".cargo" --nogroup --column --color -- '.shellescape(string, 1), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']}, 0)
   endif
   let @/=string
   set hlsearch
@@ -9088,7 +9088,7 @@ function! AgFzf(aquery)
   else
     let query = a:aquery
   endif
-  let command = '\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --nogroup --column --color -- '.shellescape(query)
+  let command = '\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".cargo" --nogroup --column --color -- '.shellescape(query)
   let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--disabled']}
   let @/=query
   set hlsearch
@@ -9101,7 +9101,7 @@ function! AgitFzf(aquery)
   else
     let query = a:aquery
   endif
-  let command = '\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --nogroup --column --color -- '.shellescape(query).' '.s:find_git_root()
+  let command = '\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".cargo" --nogroup --column --color -- '.shellescape(query).' '.s:find_git_root()
   let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--disabled']}
   let @/=query
   set hlsearch
@@ -9109,7 +9109,7 @@ function! AgitFzf(aquery)
 endfunction
 
 command! -bang -nargs=* AgitOLD
-  \ call fzf#vim#grep('\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --nogroup --column --color -- '.shellescape(<q-args>).' '.s:find_git_root(),
+  \ call fzf#vim#grep('\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".cargo" --nogroup --column --color -- '.shellescape(<q-args>).' '.s:find_git_root(),
   \ 1,
   \ {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']},
   \ <bang>0)
@@ -9122,7 +9122,7 @@ command! -nargs=* -bang Agit call AgitFzf(<q-args>)
 "
 " fzf env vars:
 "export FZF_PREVIEW_LINES=20
-"export FZF_DEFAULT_COMMAND='ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --nocolor -g ""'
+"export FZF_DEFAULT_COMMAND='ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".cargo" --nocolor -g ""'
 
 " fzf preview.sh fix:
 "-FIRST=$(($CENTER-$LINES/3))
@@ -9140,7 +9140,7 @@ function! RipgrepFzf(aquery, ufzf, fullscreen)
   else
     let query = a:aquery
   endif
-  let command_fmt = '\rg --column --line-number --no-heading --color=always --smart-case --one-file-system --hidden --iglob \!".git" --iglob \!".cache" -- %s || true'
+  let command_fmt = '\rg --column --line-number --no-heading --color=always --smart-case --one-file-system --hidden --iglob \!".git" --iglob \!".cache" --iglob \!".cargo" -- %s || true'
   let initial_command = printf(command_fmt, shellescape(query))
   let reload_command = printf(command_fmt, '{q}')
   if a:ufzf
@@ -9160,7 +9160,7 @@ function! RipgrepGitFzf(aquery, ufzf, fullscreen)
   else
     let query = a:aquery
   endif
-  let command_fmt = '\rg --column --line-number --no-heading --color=always --smart-case --one-file-system --hidden --iglob \!".git" --iglob \!".cache" -- %s ' . s:find_git_root() . ' || true'
+  let command_fmt = '\rg --column --line-number --no-heading --color=always --smart-case --one-file-system --hidden --iglob \!".git" --iglob \!".cache" --iglob \!".cargo" -- %s ' . s:find_git_root() . ' || true'
   let initial_command = printf(command_fmt, shellescape(query))
   let reload_command = printf(command_fmt, '{q}')
   if a:ufzf

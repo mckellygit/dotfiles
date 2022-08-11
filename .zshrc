@@ -796,15 +796,15 @@ alias stop-rdm='rc -q'
 alias stop_rdm='rc -q'
 
 # also could use -u or -U instead of --all-text
-#alias ag='\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" -- '
+#alias ag='\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".cargo" -- '
 # skip -- as we might want to add -i for case-insensitive etc. ...
-#alias ag='command ag -U --one-device --hidden --ignore ".git" --ignore ".cache" '
+#alias ag='command ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".cargo" '
 #alias rg='command rg --color=always --smart-case --one-file-system --hidden --iglob !".git" '
 
 # use these instead of aliasas above, only because git is a custom command now
 # and ag git wont find anything, you need ag 'git' ...
-ag() { command ag -U --one-device --hidden --ignore ".git" --ignore ".cache" "$@"; }
-rg() { command rg --color=always --smart-case --one-file-system --hidden --iglob !".git" --iglob !".cache" "$@"; }
+ag() { command ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".cargo" "$@"; }
+rg() { command rg --color=always --smart-case --one-file-system --hidden --iglob !".git" --iglob !".cache" --iglob !".cargo" "$@"; }
 
 # cannot override builtin git diff with git cmds/aliases so do it this way ...
 # also add git log
@@ -1039,10 +1039,10 @@ cx() {
 # fzf + ag or $FDNAME configuration
 export FZF_PREVIEW_LINES=20
 # use $FDNAME instead of ag to get dirs listed ...
-#export FZF_DEFAULT_COMMAND='ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --nocolor -g ""'
+#export FZF_DEFAULT_COMMAND='ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".cargo" --nocolor -g ""'
 
-export FZF_DEFAULT_COMMAND="$FDNAME --color=always --strip-cwd-prefix --full-path -u --one-file-system --hidden --follow --exclude '.git' --exclude '.cache' --exclude '.npm' --exclude '.mozilla' --exclude '.fingerprint' --exclude '.git_keep' "
-#for testing - export FZF_DEFAULT_COMMAND="$FDNAME --color=always --strip-cwd-prefix --full-path -u --hidden --follow --exclude '.git' --exclude '.cache' --exclude '.npm' --exclude '.mozilla' --exclude '.fingerprint' --exclude '.git_keep' "
+export FZF_DEFAULT_COMMAND="$FDNAME --color=always --strip-cwd-prefix --full-path -u --one-file-system --hidden --follow --exclude '.git' --exclude '.cache' --exclude '.npm' --exclude '.mozilla' --exclude '.fingerprint' --exclude '.git_keep' --exclude '.cargo' "
+#for testing - export FZF_DEFAULT_COMMAND="$FDNAME --color=always --strip-cwd-prefix --full-path -u --hidden --follow --exclude '.git' --exclude '.cache' --exclude '.npm' --exclude '.mozilla' --exclude '.fingerprint' --exclude '.git_keep' --exclude '.cargo' "
 
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # could make alt-c for dirs only (add -t d) - then it automatically chdir to there ...
@@ -1066,12 +1066,12 @@ export FZF_COMPLETION_TRIGGER="\`\`"
 
 # use ag instead of the default find ...
 # _fzf_compgen_path() {
-#  ag -u --one-device --hidden --ignore ".git" --ignore ".cache" --nocolor -g "" "$1"
+#  ag -u --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".cargo" --nocolor -g "" "$1"
 #}
 
 # Ag only lists files not directories, so we can use awk to get dirnames
 # _fzf_compgen_dir() {
-#  ag -u --one-device --hidden --ignore ".git" --ignore ".cache" --nocolor -g "" "$1" | awk 'function dirname(fn) { if (fn == "") return ".";  if (fn !~ "[^/]") return "/"; sub("/*$", "", fn); if (fn !~ "/") return ".";# sub("/[^/]*$", "", fn); if (fn == "") fn = "/"; return fn } {$0 = dirname($0)} !a[$0]++'
+#  ag -u --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".cargo" --nocolor -g "" "$1" | awk 'function dirname(fn) { if (fn == "") return ".";  if (fn !~ "[^/]") return "/"; sub("/*$", "", fn); if (fn !~ "/") return ".";# sub("/[^/]*$", "", fn); if (fn == "") fn = "/"; return fn } {$0 = dirname($0)} !a[$0]++'
 #}
 
 # NOTE: recent fd is not breadth-first-search (bfs) but depth-first-search (dfs)
@@ -1111,7 +1111,7 @@ _fzf_compgen_path() {
   else
       dir="$1"
   fi
-  $FDNAME --color=always --strip-cwd-prefix --full-path -u --one-file-system --hidden --follow --exclude '.git' --exclude '.cache' --exclude '.npm' --exclude '.mozilla' --exclude '.fingerprint' --exclude '.git_keep' "$dir"
+  $FDNAME --color=always --strip-cwd-prefix --full-path -u --one-file-system --hidden --follow --exclude '.git' --exclude '.cache' --exclude '.npm' --exclude '.mozilla' --exclude '.fingerprint' --exclude '.git_keep' --exclude '.cargo' "$dir"
 }
 
 # Use $FDNAME to generate the list for directory completion
@@ -1121,7 +1121,7 @@ _fzf_compgen_dir() {
   else
       dir="$1"
   fi
-  $FDNAME --color=always --strip-cwd-prefix --full-path -t d -u --one-file-system --hidden --follow --exclude '.git' --exclude '.cache' --exclude '.npm' --exclude '.mozilla' --exclude '.fingerprint' --exclude '.git_keep' "$dir"
+  $FDNAME --color=always --strip-cwd-prefix --full-path -t d -u --one-file-system --hidden --follow --exclude '.git' --exclude '.cache' --exclude '.npm' --exclude '.mozilla' --exclude '.fingerprint' --exclude '.git_keep' --exclude '.cargo' "$dir"
 }
 
 # (EXPERIMENTAL) Advanced customization of fzf options via _fzf_comprun function
@@ -1137,7 +1137,7 @@ _fzf_compgen_dir() {
 # }
 
 _fzf_compgen_dir2() {
-    \rg --one-file-system --hidden --iglob !".git" --iglob !".cache" --files . 2>/dev/null | awk 'function dirname(fn) { if (fn == "") return ".";  if (fn !~ "[^/]") return "/"; sub("/*$", "", fn); if (fn !~ "/") return "."; sub("/[^/]*$", "", fn); if (fn == "") fn = "/"; return fn } {$0 = dirname($0)} !a[$0]++'
+    \rg --one-file-system --hidden --iglob !".git" --iglob !".cache" --iglob !".cargo" --files . 2>/dev/null | awk 'function dirname(fn) { if (fn == "") return ".";  if (fn !~ "[^/]") return "/"; sub("/*$", "", fn); if (fn !~ "/") return "."; sub("/[^/]*$", "", fn); if (fn == "") fn = "/"; return fn } {$0 = dirname($0)} !a[$0]++'
 }
 
 __fzf_generic_path_completion() {
