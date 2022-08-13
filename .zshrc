@@ -1042,6 +1042,10 @@ export FZF_PREVIEW_LINES=20
 #export FZF_DEFAULT_COMMAND='ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".cargo" --nocolor -g ""'
 
 export FZF_DEFAULT_COMMAND="$FDNAME --color=always --strip-cwd-prefix --full-path -u --one-file-system --hidden --follow --exclude '.git' --exclude '.cache' --exclude '.npm' --exclude '.mozilla' --exclude '.fingerprint' --exclude '.git_keep' --exclude '.cargo' "
+
+# fd without --one-file-system can search into ~/pCloudDrive and take a long time without echoing anything to stdout, which can cause
+# fd | fzf to hang even if we esc/ctrl-c out of fzf since fd doesnt write to stdout and see SIGPIPE while its searching without printing
+
 #for testing - export FZF_DEFAULT_COMMAND="$FDNAME --color=always --strip-cwd-prefix --full-path -u --hidden --follow --exclude '.git' --exclude '.cache' --exclude '.npm' --exclude '.mozilla' --exclude '.fingerprint' --exclude '.git_keep' --exclude '.cargo' "
 
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
@@ -1160,14 +1164,27 @@ __fzf_generic_path_completion() {
       [ -z "$dir" ] && dir='.'
       [ "$dir" != "/" ] && dir="${dir/%\//}"
 
-      # NOTE: this method will not end cmd when fzf ends unless cmd writes to stdout and raises SIGPIPE when fzf encs and closes pipe ...
+      # we do it this way so an esac/ctrl-c that ends fzf also stops the fd cmd ...
 
-      matches=$(eval "$compgen $(printf %q "$dir")" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse --bind=ctrl-z:ignore $FZF_DEFAULT_OPTS $FZF_COMPLETION_OPTS" __fzf_comprun "$cmd" ${(Q)${(Z+n+)fzf_opts}} -q "$leftover" | while read item; do
-        echo -n "${(q)item}$suffix "
-      done)
+      if [[ "$compgen" == "_fzf_compgen_dir" ]] ; then
+          matches=$(FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse --bind=ctrl-z:ignore $FZF_DEFAULT_OPTS $FZF_COMPLETION_OPTS" FZF_DEFAULT_COMMAND="${FZF_DEFAULT_COMMAND} -t d $(printf %q "$dir")" __fzf_comprun "$cmd" ${(Q)${(Z+n+)fzf_opts}} -q "$leftover" < /dev/tty | while read item; do
+            echo -n "${(q)item}$suffix "
+          done)
+      elif [[ "$compgen" == "_fzf_compgen_path" ]] ; then
+          matches=$(FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse --bind=ctrl-z:ignore $FZF_DEFAULT_OPTS $FZF_COMPLETION_OPTS" FZF_DEFAULT_COMMAND="${FZF_DEFAULT_COMMAND} $(printf %q "$dir")" __fzf_comprun "$cmd" ${(Q)${(Z+n+)fzf_opts}} -q "$leftover" < /dev/tty | while read item; do
+            echo -n "${(q)item}$suffix "
+          done)
+      else
+          # NOTE: this method will not end cmd when fzf ends unless cmd writes to stdout and raises SIGPIPE when fzf encs and closes pipe ...
+          matches=$(eval "$compgen $(printf %q "$dir")" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse --bind=ctrl-z:ignore $FZF_DEFAULT_OPTS $FZF_COMPLETION_OPTS" __fzf_comprun "$cmd" ${(Q)${(Z+n+)fzf_opts}} -q "$leftover" | while read item; do
+            echo -n "${(q)item}$suffix "
+          done)
+      fi
+
       #echo "lbuf    = ${lbuf}"
       #echo "matches = ${matches}"
       #echo "tail    = ${tail}"
+
       matches=${matches% }
       if [ -n "$matches" ]; then
         #LBUFFER="$lbuf$matches$tail"
