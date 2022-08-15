@@ -1010,6 +1010,14 @@ alias nvdif='nvimdiff'
 
 # -----------------------
 
+# an example (like with fzf history) where a zsh binding is used
+# instead of a tmux binding - to get into copy-mode from shell and not when inside an app ...
+# tmuxup(){ tmux copy-mode -u }
+# zle -N tmuxup
+# bindkey '^[v' tmuxup
+
+# -----------------------
+
 #lo() {
 #    cd "$(llama "$@")"
 #}
@@ -1053,7 +1061,8 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND -t d"
 # add --ansi because $FDNAME above uses --color=always ...
 
-#export FZF_ALT_C_OPTS="--bind='ctrl-f:half-page-down' --bind='ctrl-b:half-page-up'"
+#export FZF_ALT_C_OPTS="--bind='page-down:page-down' --bind='page-up:page-up'"
+#export FZF_CTRL_R_OPTS="--bind='page-down:page-down' --bind='page-up:page-up'"
 
 # fzf from cmdline uses FZF_DEFAULT_OPTS and has a 250 line preview limit
 # fzf from vim plugin does not have the 250 line max
@@ -1140,9 +1149,29 @@ _fzf_compgen_dir() {
 #   esac
 # }
 
+# ------------------------------
+
+# NOTE: comment _fzf_comprun() out (or change its name) to get back to original fzf without tmux window
+#       or run fzf in here instead ...
+_fzf_comprun() {
+    # first arg is name of the command, skip over it ...
+    shift
+    fzf-tmux -d 20
+}
+
+# NOTE: in all below, change $(_fzfcmd) to $(__fzfcmd) to get back to original fzf without tmux window ...
+#       or echo fzf in here instead ...
+_fzfcmd() {
+    echo "fzf-tmux -d 20 "
+}
+
+# ------------------------------
+
 _fzf_compgen_dir2() {
     \rg --one-file-system --hidden --iglob !".git" --iglob !".cache" --iglob !".cargo" --files . 2>/dev/null | awk 'function dirname(fn) { if (fn == "") return ".";  if (fn !~ "[^/]") return "/"; sub("/*$", "", fn); if (fn !~ "/") return "."; sub("/[^/]*$", "", fn); if (fn == "") fn = "/"; return fn } {$0 = dirname($0)} !a[$0]++'
 }
+
+# ------------------------------
 
 __fzf_generic_path_completion() {
   local base lbuf cmd compgen fzf_opts suffix tail dir leftover matches
@@ -1201,25 +1230,37 @@ __fzf_generic_path_completion() {
 
 # -----------------------
 
-# an example (like with fzf history below) where a zsh binding is used
-# instead of a tmux binding - to get into copy-mode from shell and not when inside an app ...
-# tmuxup(){ tmux copy-mode -u }
-# zle -N tmuxup
-# bindkey '^[v' tmuxup
-
-# -----------------------
-
 # fzf-tmux -d 20 uses tmux bottom split for 20 lines ...
 
 # if we FZF_DEFAULT_COMMAND="sleep 20" fzf then an esc or ctrl-c will stop the sleep
 # but if we sleep 20 | fzf then an esc or ctrl-c will NOT stop the sleep as it does 
 # not end on SIGPIPE raised when its stdout is closed because fzf ends
 
-fzf-cd-widget2() {
+# NOTE: in all below, change $(_fzfcmd) to $(__fzfcmd) to get back to original fzf without tmux window
+#       or run fzf inside _fzfcmd() instead ...
+
+# ------------------------------
+
+__fsel() {
+  local cmd="${FZF_CTRL_T_COMMAND:-"command find -L . -mindepth 1 \\( -path '*/\\.*' -o -fstype 'sysfs' -o -fstype 'devfs' -o -fstype 'devtmpfs' -o -fstype 'proc' \\) -prune \
+    -o -type f -print \
+    -o -type d -print \
+    -o -type l -print 2> /dev/null | cut -b3-"}"
+  setopt localoptions pipefail no_aliases 2> /dev/null
+  local item
+  FZF_DEFAULT_COMMAND="$cmd" FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse --bind=ctrl-z:ignore $FZF_DEFAULT_OPTS $FZF_CTRL_T_OPTS" $(_fzfcmd) -m "$@" < /dev/tty | while read item; do
+    echo -n "${(q)item} "
+  done
+  local ret=$?
+# echo
+  return $ret
+}
+
+fzf-cd-widget() {
   local cmd="${FZF_ALT_C_COMMAND:-"command find -L . -mindepth 1 \\( -path '*/\\.*' -o -fstype 'sysfs' -o -fstype 'devfs' -o -fstype 'devtmpfs' -o -fstype 'proc' \\) -prune \
     -o -type d -print 2> /dev/null | cut -b3-"}"
   setopt localoptions pipefail no_aliases 2> /dev/null
-  local dir="$(FZF_DEFAULT_COMMAND="$cmd" FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse --bind=ctrl-z:ignore $FZF_DEFAULT_OPTS $FZF_ALT_C_OPTS" $(__fzfcmd) +m < /dev/tty)"
+  local dir="$(FZF_DEFAULT_COMMAND="$cmd" FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse --bind=ctrl-z:ignore $FZF_DEFAULT_OPTS $FZF_ALT_C_OPTS" $(_fzfcmd) +m < /dev/tty)"
   if [[ -z "$dir" ]]; then
     zle redisplay
     return 0
@@ -1232,6 +1273,24 @@ fzf-cd-widget2() {
   zle reset-prompt
   return $ret
 }
+
+fzf-history-widget() {
+  local selected num
+  setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2> /dev/null
+  selected=( $(fc -rl 1 | awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, "", cmd); if (!seen[cmd]++) print $0 }' |
+    FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index --bind=ctrl-r:toggle-sort,ctrl-z:ignore $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} +m" $(_fzfcmd)) )
+  local ret=$?
+  if [ -n "$selected" ]; then
+    num=$selected[1]
+    if [ -n "$num" ]; then
+      zle vi-fetch-history -n $num
+    fi
+  fi
+  zle reset-prompt
+  return $ret
+}
+
+# ------------------------------
 
 my-fzfcmd() {
   if [ -n "$TMUX_PANE" -a -z "$VIM_TERMINAL" ] ; then
@@ -1286,21 +1345,6 @@ zle -N my-fzf-files-widget
 
 # an unusual and vim harmless mapping from tmux for M-_
 bindkey "\e_" my-fzf-files-widget
-
-__fsel() {
-  local cmd="${FZF_CTRL_T_COMMAND:-"command find -L . -mindepth 1 \\( -path '*/\\.*' -o -fstype 'sysfs' -o -fstype 'devfs' -o -fstype 'devtmpfs' -o -fstype 'proc' \\) -prune \
-    -o -type f -print \
-    -o -type d -print \
-    -o -type l -print 2> /dev/null | cut -b3-"}"
-  setopt localoptions pipefail no_aliases 2> /dev/null
-  local item
-  FZF_DEFAULT_COMMAND="$cmd" FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse --bind=ctrl-z:ignore $FZF_DEFAULT_OPTS $FZF_CTRL_T_OPTS" $(__fzfcmd) -m "$@" < /dev/tty | while read item; do
-    echo -n "${(q)item} "
-  done
-  local ret=$?
-# echo
-  return $ret
-}
 
 # -----------------------
 
