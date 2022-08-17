@@ -8192,13 +8192,14 @@ vmap <silent> <buffer> <C-Return> gj
 "xnoremap ,<Up>   :<C-u>silent! '<,'>move-2<CR>gv=gv
 "xnoremap ,<Down> :<C-u>silent! '<,'>move'>+<CR>gv=gv
 
-nnoremap  z<Down>  :m .+1<CR>==
-nnoremap  z<Up>    :m .-2<CR>==
-vnoremap  z<Down>  :m '>+1<CR>gv=gv
-vnoremap  z<Up>    :m '<-2<CR>gv=gv
+nnoremap  Z<S-Down>  :m .+1<CR>==
+nnoremap  Z<S-Up>    :m .-2<CR>==
+vnoremap  Z<S-Down>  :m '>+1<CR>gv=gv
+vnoremap  Z<S-Up>    :m '<-2<CR>gv=gv
+
 " NOTE: these cannot be z* mappings or it adds delay when inserting z ...
-"inoremap  z<Down>  <Esc>:m .+1<CR>==gi
-"inoremap  z<Up>    <Esc>:m .-2<CR>==gi
+"inoremap  Z<S-Down>  <Esc>:m .+1<CR>==gi
+"inoremap  Z<S-Up>    <Esc>:m .-2<CR>==gi
 
 " -----------------------------
 

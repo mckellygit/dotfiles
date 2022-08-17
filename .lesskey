@@ -13,6 +13,7 @@
 \e back-line
 \e\  forw-line
 \e\e quit
+\eq  quit
 \e[1;5B  forw-line
 \e[1;5A  back-line
 \e[1;5C  noaction 10\e)
