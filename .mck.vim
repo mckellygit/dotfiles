@@ -10207,7 +10207,23 @@ function MyNextOrQuit() abort
     " just to clear the cmdline of this function ...
     redraw!
     echo "\r"
-    update
+    try
+        update
+    catch /E506:/
+        if &backup == 0 && &writebackup == 1
+            " cant write to backup file (prob . does not have write perms)
+            "set nowritebackup
+            set backupdir=~/
+            update
+        endif
+    catch /E509:/
+        if &backup == 0 && &writebackup == 1
+            " cant write to backup file (prob . does not have write perms)
+            "set nowritebackup
+            set backupdir=~/
+            update
+        endif
+    endtry
     try
         next
     catch /E163:/
