@@ -1193,20 +1193,23 @@ __fzf_generic_path_completion() {
       [ -z "$dir" ] && dir='.'
       [ "$dir" != "/" ] && dir="${dir/%\//}"
 
-      # we do it this way so an esac/ctrl-c that ends fzf also stops the fd cmd ...
+      # we do it this way so an esc/ctrl-c that ends fzf also stops the fd cmd ...
 
       if [[ "$compgen" == "_fzf_compgen_dir" ]] ; then
           matches=$(FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse --bind=ctrl-z:ignore $FZF_DEFAULT_OPTS $FZF_COMPLETION_OPTS" FZF_DEFAULT_COMMAND="${FZF_DEFAULT_COMMAND} -t d $(printf %q "$dir")" __fzf_comprun "$cmd" ${(Q)${(Z+n+)fzf_opts}} -q "$leftover" < /dev/tty | while read item; do
-            echo -n "${(q)item}$suffix "
+            item="${item%$suffix}$suffix"
+            echo -n "${(q)item} "
           done)
       elif [[ "$compgen" == "_fzf_compgen_path" ]] ; then
           matches=$(FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse --bind=ctrl-z:ignore $FZF_DEFAULT_OPTS $FZF_COMPLETION_OPTS" FZF_DEFAULT_COMMAND="${FZF_DEFAULT_COMMAND} $(printf %q "$dir")" __fzf_comprun "$cmd" ${(Q)${(Z+n+)fzf_opts}} -q "$leftover" < /dev/tty | while read item; do
-            echo -n "${(q)item}$suffix "
+            item="${item%$suffix}$suffix"
+            echo -n "${(q)item} "
           done)
       else
           # NOTE: this method will not end cmd when fzf ends unless cmd writes to stdout and raises SIGPIPE when fzf encs and closes pipe ...
           matches=$(eval "$compgen $(printf %q "$dir")" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse --bind=ctrl-z:ignore $FZF_DEFAULT_OPTS $FZF_COMPLETION_OPTS" __fzf_comprun "$cmd" ${(Q)${(Z+n+)fzf_opts}} -q "$leftover" | while read item; do
-            echo -n "${(q)item}$suffix "
+            item="${item%$suffix}$suffix"
+            echo -n "${(q)item} "
           done)
       fi
 
