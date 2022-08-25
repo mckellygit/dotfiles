@@ -8,7 +8,7 @@ extras=""
 do_vim_bundles=""
 if [[ $# -gt 0 ]] ; then
     if [[ "$1" == "-a" || "$1" == "-all" || "$1" == "--a" || "$1" == "--all" ]] ; then
-        extras=" bat wezterm neovim delta"
+        extras=" bat wezterm neovim delta fzf-git.sh fzf-tab-completion"
         if [[ $# -gt 1 ]] ; then
             if [[ "$2" == "-a" || "$2" == "-all" || "$2" == "--a" || "$2" == "--all" ]] ; then
                 do_vim_bundles="yes"
@@ -20,7 +20,7 @@ if [[ $# -gt 0 ]] ; then
         do_vim_bundles="yes"
         if [[ $# -gt 1 ]] ; then
             if [[ "$2" == "-a" || "$2" == "-all" || "$2" == "--a" || "$2" == "--all" ]] ; then
-                extras=" bat wezterm neovim delta"
+                extras=" bat wezterm neovim delta fzf-git.sh fzf-tab-completion"
             fi
         fi
     fi
@@ -164,6 +164,12 @@ echo ""
 # fzf:
 #   git clone https://github.com/junegunn/fzf.git ~/.fzf
 #   ~/.fzf/install
+
+# fzf-git.sh
+#   https://github.com/junegunn/fzf-git.sh.git
+
+# fzf-tab-completion:
+#   https://github.com/lincheney/fzf-tab-completion
 
 # gnome sound output extension:
 #   sound-output-device-chooser@kgshank.net
