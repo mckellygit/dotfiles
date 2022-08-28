@@ -803,8 +803,8 @@ alias stop_rdm='rc -q'
 
 # use these instead of aliasas above, only because git is a custom command now
 # and ag git wont find anything, you need ag 'git' ...
-ag() { command ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".cargo" "$@"; }
-rg() { command rg --color=always --smart-case --one-file-system --hidden --iglob !".git" --iglob !".cache" --iglob !".cargo" "$@"; }
+ag() { command ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" "$@"; }
+rg() { command rg --color=always --smart-case --one-file-system --hidden --iglob !".git" --iglob !".cache" --iglob !".ccache" --iglob !".debug" --iglob !".vscode" --iglob !".pcloud" --iglob !".rustup" --iglob !".cargo" "$@"; }
 
 # cannot override builtin git diff with git cmds/aliases so do it this way ...
 # also add git log
@@ -1049,7 +1049,7 @@ export FZF_PREVIEW_LINES=20
 # use $FDNAME instead of ag to get dirs listed ...
 #export FZF_DEFAULT_COMMAND='ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".cargo" --nocolor -g ""'
 
-export FZF_DEFAULT_COMMAND="$FDNAME --color=always --strip-cwd-prefix --full-path -u --one-file-system --hidden --follow --exclude '.git' --exclude '.cache' --exclude '.npm' --exclude '.mozilla' --exclude '.fingerprint' --exclude '.git_keep' --exclude '.cargo' "
+export FZF_DEFAULT_COMMAND="$FDNAME --color=always --strip-cwd-prefix --full-path -u --one-file-system --hidden --follow --exclude '.git' --exclude '.cache' --exclude '.ccache' --exclude '.debug' --exclude '.vscode' --exclude '.pcloud' --exclude '.npm' --exclude '.mozilla' --exclude '.fingerprint' --exclude '.git_keep' --exclude '.rustup' --exclude '.cargo' "
 
 # fd without --one-file-system can search into ~/pCloudDrive and take a long time without echoing anything to stdout, which can cause
 # fd | fzf to hang even if we esc/ctrl-c out of fzf since fd doesnt write to stdout and see SIGPIPE while its searching without printing
@@ -1124,7 +1124,7 @@ _fzf_compgen_path() {
   else
       dir="$1"
   fi
-  $FDNAME --color=always --strip-cwd-prefix --full-path -u --one-file-system --hidden --follow --exclude '.git' --exclude '.cache' --exclude '.npm' --exclude '.mozilla' --exclude '.fingerprint' --exclude '.git_keep' --exclude '.cargo' "$dir"
+  $FDNAME --color=always --strip-cwd-prefix --full-path -u --one-file-system --hidden --follow --exclude '.git' --exclude '.cache' --exclude '.ccache' --exclude '.debug' --exclude '.vscode' --exclude '.pcloud' --exclude '.npm' --exclude '.mozilla' --exclude '.fingerprint' --exclude '.git_keep' --exclude '.rustup' --exclude '.cargo' "$dir"
 }
 
 # Use $FDNAME to generate the list for directory completion
@@ -1134,7 +1134,7 @@ _fzf_compgen_dir() {
   else
       dir="$1"
   fi
-  $FDNAME --color=always --strip-cwd-prefix --full-path -t d -u --one-file-system --hidden --follow --exclude '.git' --exclude '.cache' --exclude '.npm' --exclude '.mozilla' --exclude '.fingerprint' --exclude '.git_keep' --exclude '.cargo' "$dir"
+  $FDNAME --color=always --strip-cwd-prefix --full-path -t d -u --one-file-system --hidden --follow --exclude '.git' --exclude '.cache' --exclude '.ccache' --exclude '.debug' --exclude '.vscode' --exclude '.pcloud' --exclude '.npm' --exclude '.mozilla' --exclude '.fingerprint' --exclude '.git_keep' --exclude '.rustup' --exclude '.cargo' "$dir"
 }
 
 # (EXPERIMENTAL) Advanced customization of fzf options via _fzf_comprun function
@@ -1168,7 +1168,7 @@ _fzfcmd() {
 # ------------------------------
 
 _fzf_compgen_dir2() {
-    \rg --one-file-system --hidden --iglob !".git" --iglob !".cache" --iglob !".cargo" --files . 2>/dev/null | awk 'function dirname(fn) { if (fn == "") return ".";  if (fn !~ "[^/]") return "/"; sub("/*$", "", fn); if (fn !~ "/") return "."; sub("/[^/]*$", "", fn); if (fn == "") fn = "/"; return fn } {$0 = dirname($0)} !a[$0]++'
+    \rg --one-file-system --hidden --iglob !".git" --iglob !".cache" --iglob !".ccache" --iglob !".debug" --iglob !".vscode" --iglob !".pcloud" --iglob !".rustup" --iglob !".cargo" --files . 2>/dev/null | awk 'function dirname(fn) { if (fn == "") return ".";  if (fn !~ "[^/]") return "/"; sub("/*$", "", fn); if (fn !~ "/") return "."; sub("/[^/]*$", "", fn); if (fn == "") fn = "/"; return fn } {$0 = dirname($0)} !a[$0]++'
 }
 
 # ------------------------------

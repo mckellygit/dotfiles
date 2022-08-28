@@ -80,7 +80,10 @@
 #   git show - to describe last commit ...
 #   ls-changes = !git diff HEAD~1 --name-only
 #   cout = "!f() { git checkout "$(git branch -a --sort=-committerdate | fzf-tmux -p -w 80% -h 60% | sed 's/^\\*//' | tr -d '[:space:]')"; }; f"
-    cout = "!f() { git checkout "$(git branch -a --sort=-committerdate | fzf-tmux -r | awk '{print $NF}')"; }; f"
+#   cout = "!f() { git checkout "$(git branch -a --sort=-committerdate | fzf-tmux -r | awk '{print $NF}')"; }; f"
+#   these are scripts now ...
+#   cout = "!f() { br="$(git branch -a --sort=-committerdate | fzf-tmux -d 22 | awk '{print $NF}')"; if [ -z \"$br\" ] ; then exit ; fi ; stty -echo ; tmux send "git\\ checkout\\ $br" ; stty echo ; }; f"
+#   chko = "!f() { br="$(git branch -a --sort=-committerdate | fzf-tmux -d 22 | awk '{print $NF}')"; if [ -z \"$br\" ] ; then exit ; fi ; stty -echo ; tmux send "git\\ checkout\\ $br" ; stty echo ; }; f"
 [diff]
 	algorithm = histogram
 #	compactionHeuristic = true
