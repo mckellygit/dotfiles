@@ -16,6 +16,11 @@ if [[ -z "$selbr" ]] ; then
     exit
 fi
 
+if [[ -z "$TMUX_PANE" ]] ; then
+    echo "git checkout $selbr"
+    exit
+fi
+
 stty -echo
 tmux send-keys "git checkout $selbr"
 stty echo
