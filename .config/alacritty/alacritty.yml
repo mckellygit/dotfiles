@@ -36,8 +36,11 @@ key_bindings:
   - { key: Space,     mods: Alt,             action: None             }
 
   - { key: Back,      mods: Alt|Control,     chars: "\x1b\x40"        }
+  - { key: Back,      mods: Super,           chars: "\x1b\x40"        }
   - { key: Equals,    mods: Alt|Control,     chars: "\x1b\x23"        }
+  - { key: Equals,    mods: Super,           chars: "\x1b\x23"        }
   - { key: Space,     mods: Alt|Control,     chars: "\x1b\x23"        }
+  - { key: Space,     mods: Super,           chars: "\x1b\x23"        }
   - { key: 43,        mods: Alt|Control,     action: None             }
 
   - { key: 26,        mods: Control|Shift,   chars: "\x1f\x5b"        }
@@ -134,7 +137,10 @@ key_bindings:
   - { key: Insert,    mods: Control,         chars: "\x1b[2;5~"       }
   - { key: Insert,    mods: Shift,           chars: "\x1b[2;2~"       }
   - { key: Insert,    mods: Control|Shift,   chars: "\x1b[2;6~"       }
-  - { key: Insert,    mods: Alt,             chars: "\x1b[2;3~"       }
+    # - { key: Insert,    mods: Alt,             chars: "\x1b[2;3~"       }
+  - { key: Insert,    mods: Alt,             command: { program: "copyq", args: ["toggle"] } }
+  - { key: Insert,    mods: Super,           command: { program: "copyq", args: ["toggle"] } }
+  - { key: V,         mods: Super,           command: { program: "copyq", args: ["toggle"] } }
   - { key: Insert,    mods: Alt|Shift,       chars: "\x1b[2;4~"       }
   - { key: Insert,    mods: Alt|Control,     chars: "\x1b[2;7~"       }
 
