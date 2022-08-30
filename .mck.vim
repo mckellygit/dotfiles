@@ -2849,8 +2849,11 @@ nnoremap <silent> tY    <Nop>
 nnoremap <silent> tx    <Nop>
 nnoremap <silent> tX    <Nop>
 
-" sometimes press C instead of D on selection ...
-vmap <silent> C <Nop>
+" sometimes press C instead of D on selection, make it CC ...
+vnoremap <silent> CC C
+vmap     <silent> C  <Nop>
+nnoremap <silent> CC C
+nmap     <silent> C  <Nop>
 
 " copy (yank) selection, stay at end unless rectangular region ...
 "vmap <silent> <expr> <C-c> (mode() =~ "\<C-v>") ? 'ty' : 'mvty`v'
