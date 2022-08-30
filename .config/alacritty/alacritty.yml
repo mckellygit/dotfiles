@@ -221,7 +221,7 @@ window:
 
   dynamic_padding: false
 
-  # use alt+shift+m for window menu to move, resize etc.
+  # use alt+space for window menu to move, resize etc.
   # (foreground color csd titlebar can be distracting)
   decorations: full
 
