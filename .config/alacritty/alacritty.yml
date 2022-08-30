@@ -229,6 +229,13 @@ window:
 
   title: Alacritty
 
+  # Window class (Linux/BSD only):
+  class:
+    # Application instance name
+    instance: Alacritty
+    # General application class
+    general: Alacritty
+
   # Allow terminal applications to change Alacritty's window title.
   dynamic_title: true
 
