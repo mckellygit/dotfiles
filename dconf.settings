@@ -20,12 +20,13 @@ device-type-64=['alsa_input.pci-0000_00_1f.3.analog-stereo']
 saved-player-list=@as []
 
 [apps/update-manager]
+check-new-release-ignore='jammy'
 first-run=false
-launch-count=65
-launch-time=int64 1650458161
+launch-count=78
+launch-time=int64 1661384102
 show-details=true
-window-height=2089
-window-width=3768
+window-height=711
+window-width=1774
 
 [ca/desrt/dconf-editor]
 saved-pathbar-path='/org/gnome/shell/extensions/dash-to-dock/'
@@ -35,7 +36,7 @@ window-is-maximized=false
 window-width=1866
 
 [com/ubuntu/update-notifier]
-release-check-time=uint32 1649802919
+release-check-time=uint32 1661459112
 
 [org/gnome/Totem]
 active-plugins=['skipto', 'screensaver', 'media_player_keys', 'vimeo', 'apple-trailers', 'screenshot', 'autoload-subtitles', 'movie-properties', 'save-file', 'variable-rate', 'recent']
@@ -56,17 +57,17 @@ video-x-resolution=640
 video-y-resolution=480
 
 [org/gnome/control-center]
-last-panel='keyboard'
-
-[org/gnome/deja-dup]
-backend='local'
-prompt-check='disabled'
+last-panel='applications'
 
 [org/gnome/deja-dup/file]
 migrated=true
 
 [org/gnome/deja-dup/gcs]
 folder='hal9009'
+
+[org/gnome/deja-dup/goa]
+folder='hal9009'
+type='google'
 
 [org/gnome/deja-dup/local]
 folder='hal9009'
@@ -112,7 +113,7 @@ translate=true
 [org/gnome/desktop/background]
 color-shading-type='solid'
 picture-options='zoom'
-picture-uri='file:///home/kellma02/Pictures/CanadaSky.jpg'
+picture-uri='file:///home/kellma02/.local/share/backgrounds/2022-04-25-00-06-02-Night_Yosemite.jpg'
 primary-color='#000000000000'
 secondary-color='#000000000000'
 
@@ -137,7 +138,7 @@ monospace-font-name='Ubuntu Mono 13'
 text-scaling-factor=1.25
 
 [org/gnome/desktop/notifications]
-application-children=['org-gnome-software', 'apport-gtk', 'org-gnome-nautilus', 'nixnote2', 'teams-insiders', 'org-remmina-remmina', 'update-manager', 'ca-desrt-dconf-editor', 'clipit', 'org-gnome-dejadup', 'firefox', 'gnome-network-panel', 'rhythmbox', 'vivaldi-stable', 'gvim', 'appimagekit-pcloud', 'org-wezfurlong-wezterm', 'org-gnome-extensions-desktop', 'gnome-power-panel', 'gnome-printers-panel', 'st']
+application-children=['org-gnome-software', 'google-chrome', 'kitty', 'apport-gtk', 'org-gnome-nautilus', 'nixnote2', 'org-remmina-remmina', 'update-manager', 'ca-desrt-dconf-editor', 'clipit', 'org-gnome-dejadup', 'firefox', 'gnome-network-panel', 'rhythmbox', 'vivaldi-stable', 'gvim', 'appimagekit-pcloud', 'org-wezfurlong-wezterm', 'org-gnome-extensions-desktop', 'gnome-power-panel', 'gnome-printers-panel', 'st', 'org-gnome-chromegnomeshell']
 
 [org/gnome/desktop/notifications/application/appimagekit-pcloud]
 application-id='appimagekit-pcloud.desktop'
@@ -227,7 +228,7 @@ remove-old-trash-files=false
 color-shading-type='solid'
 lock-delay=uint32 0
 picture-options='zoom'
-picture-uri='file:///home/kellma02/Pictures/AngkorWat.jpg'
+picture-uri='file:///home/kellma02/.local/share/backgrounds/2022-04-25-00-06-02-Night_Yosemite.jpg'
 primary-color='#000000000000'
 secondary-color='#000000000000'
 
@@ -341,7 +342,7 @@ search-filter-time-type='last_modified'
 
 [org/gnome/nautilus/window-state]
 geometry='1920x1060+36+32'
-initial-size=(1841, 1064)
+initial-size=(1841, 999)
 maximized=false
 sidebar-width=244
 
@@ -452,9 +453,10 @@ hinting='slight'
 
 [org/gnome/shell]
 app-picker-view=uint32 1
-command-history=['gconf-editor', 'l2', 'r', '?', 'lg']
-enabled-extensions=['sound-output-device-chooser@kgshank.net', 'clipboard-indicator@tudmotu.com', 'cascade-windows@lytol.com']
-favorite-apps=['org.gnome.Nautilus.desktop', 'rhythmbox.desktop', 'libreoffice-writer.desktop', 'update-manager.desktop', 'yelp.desktop', 'simple-scan.desktop', 'code.desktop', 'firefox.desktop', 'vivaldi-stable.desktop', 'st.desktop', 'org.wezfurlong.wezterm.desktop']
+command-history=['gconf-editor', 'l2', '?', 'r', 'looking glass', 'lg']
+disable-user-extensions=true
+enabled-extensions=['sound-output-device-chooser@kgshank.net', 'clipboard-indicator@tudmotu.com', 'cascade-windows@lytol.com', 'arrangeWindows@sun.wxg@gmail.com']
+favorite-apps=['org.gnome.Nautilus.desktop', 'rhythmbox.desktop', 'libreoffice-writer.desktop', 'update-manager.desktop', 'yelp.desktop', 'simple-scan.desktop', 'code.desktop', 'firefox.desktop', 'vivaldi-stable.desktop', 'st.desktop', 'org.wezfurlong.wezterm.desktop', 'Alacritty.desktop']
 looking-glass-history=['exit', 'quit']
 
 [org/gnome/shell/extensions/dash-to-dock]
@@ -502,7 +504,7 @@ sort-column='name'
 sort-directories-first=true
 sort-order='ascending'
 type-format='category'
-window-position=(1907, 205)
+window-position=(1969, 314)
 window-size=(1231, 902)
 
 [org/yorba/shotwell/preferences/ui]
