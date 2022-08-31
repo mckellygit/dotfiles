@@ -1,0 +1,8 @@
+.git
+.cache
+.ccache
+.debug
+.vscode
+.pcloud
+.rustup
+.cargo

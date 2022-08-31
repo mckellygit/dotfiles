@@ -803,7 +803,14 @@ alias stop_rdm='rc -q'
 
 # use these instead of aliasas above, only because git is a custom command now
 # and ag git wont find anything, you need ag 'git' ...
+
+# use ~/.agignore for ignore patterns ...
+
 ag() { command ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" "$@"; }
+
+# could put all these rg cmdline options in this file ...
+export RIPGREP_CONFIG_PATH=~/.rgrc
+
 rg() { command rg --color=always --smart-case --one-file-system --hidden --iglob !".git" --iglob !".cache" --iglob !".ccache" --iglob !".debug" --iglob !".vscode" --iglob !".pcloud" --iglob !".rustup" --iglob !".cargo" "$@"; }
 
 # cannot override builtin git diff with git cmds/aliases so do it this way ...

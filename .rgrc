@@ -1,0 +1,1 @@
+--color=always --smart-case --one-file-system --hidden --iglob !".git" --iglob !".cache" --iglob !".ccache" --iglob !".debug" --iglob !".vscode" --iglob !".pcloud" --iglob !".rustup" --iglob !".cargo" 
