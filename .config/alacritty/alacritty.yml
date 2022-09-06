@@ -42,7 +42,9 @@ key_bindings:
   - { key: Space,     mods: Alt|Control,     chars: "\x1b\x23"        }
   - { key: Space,     mods: Super,           chars: "\x1b\x23"        }
     # - { key: 43,        mods: Alt|Control,     action: None             }
-  - { key: 43,        mods: Alt|Control,     action: ToggleViMode     }
+    # - { key: 43,        mods: Alt|Control,     action: ToggleViMode     }
+    # ctrl-s + ] (\x13\x5d) tmux copy-mode
+  - { key: 43,        mods: Alt|Control,     chars: "\x13\x5d"        }
 
   - { key: 26,        mods: Control|Shift,   chars: "\x1f\x5b"        }
   - { key: 26,        mods: Alt|Control,     action: None             }
