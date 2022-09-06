@@ -41,7 +41,8 @@ key_bindings:
   - { key: Equals,    mods: Super,           chars: "\x1b\x23"        }
   - { key: Space,     mods: Alt|Control,     chars: "\x1b\x23"        }
   - { key: Space,     mods: Super,           chars: "\x1b\x23"        }
-  - { key: 43,        mods: Alt|Control,     action: None             }
+    # - { key: 43,        mods: Alt|Control,     action: None             }
+  - { key: 43,        mods: Alt|Control,     action: ToggleViMode     }
 
   - { key: 26,        mods: Control|Shift,   chars: "\x1f\x5b"        }
   - { key: 26,        mods: Alt|Control,     action: None             }
