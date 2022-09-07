@@ -39,6 +39,7 @@
     dv = difftool --tool=nvimgitdiff
     gvdiff = difftool
     nvdiff = difftool --tool=nvimgitdiff
+    dtastic = difft
     difff = dless
     olddiff = diff
     oldiff = diff
