@@ -2418,6 +2418,7 @@ let g:any_jump_results_ui_style = 'filename_first'
 let g:any_jump_max_search_results = 8
 let g:any_jump_list_numbers = 0
 let g:any_jump_references_enabled = 1
+let g:any_jump_ignored_files = [ '.git', '.cache', '.ccache', '.debug', '.vscode', '.pcloud', '.rustup', '.cargo' ]
 " if -1 then center popup vertically, otherwise use offset
 let g:any_jump_window_top_offset = -1
 
