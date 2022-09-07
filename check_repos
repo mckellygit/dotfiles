@@ -404,5 +404,12 @@ echo ""
 # standard notes:
 #   TBD
 
+# less:
+#   https://greenwoodsoftware.com/less
+
+# smartless:
+#   git clone git@github.com-mckelly:mckellygit/smartless.git
+#   git clone https://github.com/stefanheule/smartless.git
+
 # ---------------------
 
