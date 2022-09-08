@@ -36,6 +36,7 @@
     undo = "!f() { git reset --hard $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
     dt = difftool
     dd = ddelta
+    delta = ddelta
     dv = difftool --tool=nvimgitdiff
     gvdiff = difftool
     nvdiff = difftool --tool=nvimgitdiff
