@@ -55,6 +55,7 @@ return {
   scrollback_lines = 0,
   enable_scroll_bar = false,
 
+  -- NOTE: cursor will NOT blink in wezterm or tmux copy-mode
   -- default_cursor_style = "SteadyBlock",
   default_cursor_style = "BlinkingBlock",
   cursor_blink_rate = 800,
