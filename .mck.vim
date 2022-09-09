@@ -7924,13 +7924,11 @@ function My_StartIdleTimer() abort
     let g:my_insertidle_nvim_timer = timer_start(g:my_cursorhold_updatetime, 'My_StartIdleTimer_Cb')
 endfunction
 
-if has("nvim")
-    autocmd CmdlineLeave * call My_StartIdleTimer()
-    autocmd InsertEnter *  call My_StartIdleTimer()
-    " TODO: ouch ...
-    autocmd CursorMovedI * call My_StartIdleTimer()
-    autocmd CursorMoved  * call My_StartIdleTimer()
-endif
+autocmd CmdlineLeave * call My_StartIdleTimer()
+autocmd InsertEnter *  call My_StartIdleTimer()
+" TODO: ouch ...
+autocmd CursorMovedI * call My_StartIdleTimer()
+autocmd CursorMoved  * call My_StartIdleTimer()
 
 " ---------
 
