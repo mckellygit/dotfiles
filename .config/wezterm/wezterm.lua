@@ -72,8 +72,8 @@ return {
     -- blue
     background = "#14292e",
 
-    -- cursor_fg = "#111111",
-    cursor_fg = "#ffffff",
+    cursor_fg = "#111111",
+    -- cursor_fg = "#ffffff",
     cursor_bg = "#d78700",
     cursor_border = "#d78700",
 
