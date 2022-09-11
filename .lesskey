@@ -3,12 +3,12 @@
    back-scroll
 \    forw-scroll
    back-scroll
-\  noaction 10j
- noaction 10k
-\340 forw-line
+\  forw-line
+ back-line
+\340 forw-scroll
 # vim terminal BUG - send M-- instead of C-@ (C-Space) - may be fixed now with tnoremap
-\e-  forw-line
- back-line
+\e-  forw-scroll
+ back-scroll
 \e\n back-line
 \e back-line
 \e\  forw-line
@@ -63,8 +63,8 @@ gg   noaction <
 \e[5;3~ noaction 80^B
 \e[6;6~ noaction 10^F
 \e[5;6~ noaction 10^B
-\  forw-scroll
- back-scroll
+\  forw-line
+ back-line
 qq   quit
 \\qq quit
    noaction
@@ -86,3 +86,5 @@ qq   quit
 P noaction
 \e[1;6H noaction <
 \e[1;6F noaction >
+# in less v5.9+ there is clear-search ...
+\eu clear-search
