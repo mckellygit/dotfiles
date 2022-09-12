@@ -307,8 +307,8 @@ return {
     { key="phys:Space",     mods="CTRL|ALT",      action=wezterm.action{SendString="\x1b\x23"} },
     -- { key="\\",             mods="CTRL|ALT",      action="Nop"},
     -- { key="\\",             mods="CTRL|ALT",      action="ActivateCopyMode" },
-    -- ctrl-s + ] (\x13\x5d) tmux copy-mode
-    { key="\\",             mods="CTRL|ALT",      action=wezterm.action{SendString="\x13\x5d"} },
+    -- send ctrl-s + ] (\x13\x5d) tmux copy-mode
+    -- { key="\\",             mods="CTRL|ALT",      action=wezterm.action{SendString="\x13\x5d"} },
 
     -- Super same as Ctrl + Alt for tmux switching windows
     { key="phys:Backspace", mods="SUPER",         action=wezterm.action{SendString="\x1b\x40"} },
@@ -337,7 +337,7 @@ return {
     { key="}",          mods="CTRL",          action=wezterm.action{SendString="\x1f\x5d"} },
     { key="}",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x5d"} },
 
-    { key="]",          mods="CTRL|ALT",      action="Nop"},
+    -- { key="]",          mods="CTRL|ALT",      action="Nop"},
 
     { key="\\",         mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x5c"} },
     { key="|",          mods="CTRL",          action=wezterm.action{SendString="\x1f\x5c"} },
