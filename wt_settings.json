@@ -310,6 +310,14 @@
                 "direction": "down"
             },
             "keys": "ctrl+alt+down"
+        },
+        {
+            "command": 
+            {
+                "action": "sendInput",
+                "input": "\u001b\u001c"
+            },
+            "keys": "ctrl+alt+\\"
         }
     ],
     "alwaysShowTabs": true,
