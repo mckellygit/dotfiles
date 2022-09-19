@@ -9,6 +9,8 @@ export GITER=0
 
 JS="""
 const GLib = imports.gi.GLib;
+const Clutter = imports.gi.Clutter;
+const Meta = imports.gi.Meta;
 
 var BreakException = {};
 
@@ -71,6 +73,36 @@ global.get_window_actors().forEach(function (w) {
             if (giter == 0) {
                 mw.activate(0);
                 GLib.usleep(100000);
+
+                // global.log('cxwins: pos 1');
+
+                const [x, y] = global.get_pointer();
+                const rect = new Meta.Rectangle({ x, y, width: 1, height: 1 });
+
+                if ( ! rect.intersect(mw.get_frame_rect())[0] ) {
+                    // pointer is not inside newly focused window, move it to window center ...
+                    // global.log('cxwins: pos 2');
+                    const rect1 = mw.get_frame_rect();
+                    const x1 = rect1.x + rect1.width / 2;
+                    const y1 = rect1.y + rect1.height / 2;
+                    const seat = Clutter.get_default_backend().get_default_seat();
+                    seat.warp_pointer(x1, y1);
+                    // //const vdevice = seat.create_virtual_device( Clutter.InputDeviceType.POINTER_DEVICE );
+                    // //vdevice.notify_absolute_motion(global.get_current_time()+5, x1, y1);
+                    // global.log('cxwins: pos 2a');
+                } else {
+                    // pointer is already inside newly focused window, should we still move it ?
+                    // global.log('cxwins: pos 3');
+                    // const rect1 = mw.get_frame_rect();
+                    // const x1 = rect1.x + rect1.width / 2;
+                    // const y1 = rect1.y + rect1.height / 2;
+                    // const seat = Clutter.get_default_backend().get_default_seat();
+                    // seat.warp_pointer(x1, y1);
+                    // //const vdevice = seat.create_virtual_device( Clutter.InputDeviceType.POINTER_DEVICE );
+                    // //vdevice.notify_absolute_motion(global.get_current_time()+5, x1, y1);
+                    // global.log('cxwins: pos 3a');
+                }
+
                 throw BreakException;
             } else {
                 giter = giter + 1;
