@@ -27,12 +27,36 @@ fi
 
 JS="""
 const GLib = imports.gi.GLib;
+const Clutter = imports.gi.Clutter;
+const Meta = imports.gi.Meta;
 
 var BreakException = {};
 
 try {
 
+// 
+// global.get_window_actors().forEach(function (w) {
+//     var mw = w.meta_window;
+// 
+//     // var wtitle = mw.get_title();
+//     var wtitle = mw.get_wm_class();
+// 
+//     // global.log('1title: ', wtitle);
+// 
+//     if (wtitle != '' && wtitle != 'Nautilus' && wtitle != 'Gnome-shell' && (!wtitle.toLowerCase().includes('copyq'))) {
+// 
+//         if ( !wtitle.toLowerCase().includes('alacritty') ) {
+//             GLib.timeout_add(GLib.PRIORITY_DEFAULT, 1, function() { mw.activate(0); });
+//             GLib.usleep(100000);
+//         }
+// 
+//     }
+// 
+// });
+// 
+
 global.get_window_actors().forEach(function (w) {
+    var once = 1;
     var mw = w.meta_window;
 
     if ( mw.get_title().toLowerCase().includes('tmux:') ||
@@ -44,24 +68,58 @@ global.get_window_actors().forEach(function (w) {
          mw.get_wm_class().toLowerCase() == 'foot' ||
          mw.get_wm_class().toLowerCase().includes('.wezterm') ) {
 
-        mw.activate(0);
+        GLib.timeout_add(GLib.PRIORITY_DEFAULT, 1, function() { mw.activate(0); });
 
         if (mw.get_maximized()) {
             mw.unmaximize(3); // 3 is META_MAXIMIZE_BOTH, so unmaximizing the window in both directions
         }
 
-        if ( ( (mw.get_title().toLowerCase().includes('tmux:xterm')) && !(mw.get_title().toLowerCase().includes('kitty')) ) ||
-             mw.get_wm_class().toLowerCase().includes('.wezterm') ) {
-            mw.move_resize_frame(0, $X, $Y, 2540, 1362);
-        } else {
-            mw.move_resize_frame(0, $X, $Y, $W, $H);
-        }
-
         GLib.usleep(100000);
 
-        if ($M) {
-            // Maximization needs to be delayed a little, so that the window has time to move
-            GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, function() { mw.maximize(3); });
+        if ( ( (mw.get_title().toLowerCase().includes('tmux:xterm')) && !(mw.get_title().toLowerCase().includes('kitty')) ) ||
+             mw.get_wm_class().toLowerCase().includes('.wezterm') ) {
+            // mw.move_resize_frame(0, $X, $Y, 2540, 1362);
+            GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, function() { mw.move_resize_frame(1, 690, 678, 2540, 1362); });
+        } else {
+            // mw.move_resize_frame(0, $X, $Y, $W, $H);
+            GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, function() { mw.move_resize_frame(1, 690, 678, 2530, 1380); });
+        }
+
+        // if ($M) {
+        //     // Maximization needs to be delayed a little, so that the window has time to move
+        //     GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, function() { mw.maximize(3); });
+        // }
+
+        if (once) {
+
+            once = 0;
+            const [x, y] = global.get_pointer();
+            const rect = new Meta.Rectangle({ x, y, width: 1, height: 1 });
+
+            if ( ! rect.intersect(mw.get_frame_rect())[0] ) {
+                // pointer is not inside newly focused window, move it to window center ...
+                // global.log('cxwins: pos 2');
+                const rect1 = mw.get_frame_rect();
+                const x1 = rect1.x + rect1.width / 2;
+                const y1 = rect1.y + rect1.height / 2;
+                const seat = Clutter.get_default_backend().get_default_seat();
+                seat.warp_pointer(x1, y1);
+                // //const vdevice = seat.create_virtual_device( Clutter.InputDeviceType.POINTER_DEVICE );
+                // //vdevice.notify_absolute_motion(global.get_current_time()+5, x1, y1);
+                // global.log('cxwins: pos 2a');
+            } else {
+                // pointer is already inside newly focused window, should we still move it ?
+                // global.log('cxwins: pos 3');
+                // const rect1 = mw.get_frame_rect();
+                // const x1 = rect1.x + rect1.width / 2;
+                // const y1 = rect1.y + rect1.height / 2;
+                // const seat = Clutter.get_default_backend().get_default_seat();
+                // seat.warp_pointer(x1, y1);
+                // //const vdevice = seat.create_virtual_device( Clutter.InputDeviceType.POINTER_DEVICE );
+                // //vdevice.notify_absolute_motion(global.get_current_time()+5, x1, y1);
+                // global.log('cxwins: pos 3a');
+            }
+
         }
 
         // throw BreakException;
