@@ -1828,9 +1828,9 @@ let g:magit_ignore_mapping='\mI'
 let g:magit_close_commit_mapping='\mU'
 let g:magit_commit_args=''
 let g:magit_discard_hunk_mapping='\mD'
-let g:magit_folding_toggle_mapping=[ '<Leader><Space>', '<Leader>ff' ]
-let g:magit_folding_open_mapping=[ '<Leader>fo', '<Leader>fO', 'za', 'zA', 'zo', 'zO' ]
-let g:magit_folding_close_mapping=[ '<Leader>fc', '<Leader>fC', 'zc', 'zC' ]
+let g:magit_folding_toggle_mapping=[ '<Leader><Space>' ]
+let g:magit_folding_open_mapping=[ 'za', 'zA', 'zo', 'zO', 'zR' ]
+let g:magit_folding_close_mapping=[ 'zc', 'zC', 'zM' ]
 
 " use R to refresh/update magit buffer (also <C-L> and <Leader>mR)
 " use FF to stage/unstage a file
@@ -3876,6 +3876,8 @@ vnoremap <silent> <C-t><Space>   <C-\><C-n>:<C-u>tabprevious<CR>
 vnoremap <silent> <C-t><C-Space> <C-\><C-n>:<C-u>tabprevious<CR>
 vnoremap <silent> <C-t><C-@>     <C-\><C-n>:<C-u>tabprevious<CR>
 
+" NOTE: <M-Tab> is application spreader/picker in Windows ...
+
 nnoremap <silent> <M-Tab>        :tabnext<CR>
 nnoremap <silent> <M-S-Tab>      :tabprevious<CR>
 nnoremap <silent> <C-^><Tab>     :tabnext<CR>
@@ -3897,6 +3899,8 @@ else
     tnoremap <silent> <C-^><Tab>     <Cmd>tabnext<CR>
     tnoremap <silent> <C-^><S-Tab>   <Cmd>tabprevious<CR>
 endif
+
+" NOTE: there is also <Leader>tn, tp, etc. for changing tabs ...
 
 " dont do this, it messes up viw ...
 "vnoremap i <Nop>
@@ -10555,8 +10559,8 @@ vnoremap <silent> <Leader>to <C-\><C-n>:$tabnew<CR>
 " ---------------
 
 " tab keep current and close all others
-nnoremap <silent> <Leader>tk           :tabonly<CR>
-vnoremap <silent> <Leader>tk <C-\><C-n>:tabonly<CR>
+nnoremap <silent> <Leader>tK           :tabonly<CR>
+vnoremap <silent> <Leader>tK <C-\><C-n>:tabonly<CR>
 
  noremap <silent> <Leader>t1 1gt
  noremap <silent> <Leader>t2 2gt
@@ -10608,6 +10612,8 @@ nnoremap <silent> <Leader>tT           :tabprevious<CR>
 vnoremap <silent> <Leader>tT <C-\><C-n>:tabprevious<CR>
 nnoremap <silent> <Leader><<           :tabprevious<CR>
 vnoremap <silent> <Leader><< <C-\><C-n>:tabprevious<CR>
+
+" NOTE: there is also <M-Tab> for changing tabs ...
 
 " ----------------------
 
