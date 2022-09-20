@@ -3876,7 +3876,7 @@ vnoremap <silent> <C-t><Space>   <C-\><C-n>:<C-u>tabprevious<CR>
 vnoremap <silent> <C-t><C-Space> <C-\><C-n>:<C-u>tabprevious<CR>
 vnoremap <silent> <C-t><C-@>     <C-\><C-n>:<C-u>tabprevious<CR>
 
-" NOTE: <M-Tab> is application spreader/picker in Windows ...
+" NOTE: <M-Tab> is application spreader/picker in Windows (and possibly gnome)
 
 nnoremap <silent> <M-Tab>        :tabnext<CR>
 nnoremap <silent> <M-S-Tab>      :tabprevious<CR>
@@ -10544,6 +10544,10 @@ vnoremap <Leader>cx <C-\><C-n>:echo<CR>
 nnoremap <silent> <Leader>to           :$tabnew<CR>
 vnoremap <silent> <Leader>to <C-\><C-n>:$tabnew<CR>
 
+" tab only - keep current and close all others
+nnoremap <silent> <Leader>tK           :tabonly<CR>
+vnoremap <silent> <Leader>tK <C-\><C-n>:tabonly<CR>
+
 " ---------------
 " tab quit/close (same as window quit/close)
 " skip for now as <Leader>qq or :q cmd should be only ways to close buffer/tab ...
@@ -10557,10 +10561,6 @@ vnoremap <silent> <Leader>to <C-\><C-n>:$tabnew<CR>
 "nnoremap <silent> <Leader>tx           :conf q<CR>
 "vnoremap <silent> <Leader>tx <C-\><C-n>:conf q<CR>
 " ---------------
-
-" tab keep current and close all others
-nnoremap <silent> <Leader>tK           :tabonly<CR>
-vnoremap <silent> <Leader>tK <C-\><C-n>:tabonly<CR>
 
  noremap <silent> <Leader>t1 1gt
  noremap <silent> <Leader>t2 2gt

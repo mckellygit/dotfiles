@@ -29,14 +29,14 @@ window-height=711
 window-width=1774
 
 [ca/desrt/dconf-editor]
-saved-pathbar-path='/org/gnome/shell/extensions/dash-to-dock/'
-saved-view='/org/gnome/shell/extensions/dash-to-dock/'
+saved-pathbar-path='/org/gnome/mutter/'
+saved-view='/org/gnome/mutter/'
 window-height=1117
 window-is-maximized=false
 window-width=1866
 
 [com/ubuntu/update-notifier]
-release-check-time=uint32 1661459112
+release-check-time=uint32 1662668955
 
 [org/gnome/Totem]
 active-plugins=['skipto', 'screensaver', 'media_player_keys', 'vimeo', 'apple-trailers', 'screenshot', 'autoload-subtitles', 'movie-properties', 'save-file', 'variable-rate', 'recent']
@@ -57,7 +57,7 @@ video-x-resolution=640
 video-y-resolution=480
 
 [org/gnome/control-center]
-last-panel='applications'
+last-panel='keyboard'
 
 [org/gnome/deja-dup/file]
 migrated=true
@@ -257,8 +257,8 @@ switch-to-workspace-down=['<Super>Page_Down']
 switch-to-workspace-left=['<Super><Alt>Left']
 switch-to-workspace-right=['<Super><Alt>Right']
 switch-to-workspace-up=['<Super>Page_Up']
-switch-windows=['<Super>w']
-switch-windows-backward=['<Shift><Super>w']
+switch-windows=['<Alt>Tab']
+switch-windows-backward=['<Shift><Alt>Tab']
 
 [org/gnome/desktop/wm/preferences]
 action-double-click-titlebar='toggle-maximize-horizontally'
@@ -366,7 +366,7 @@ info-stats-type='discharge-accuracy'
 
 [org/gnome/rhythmbox]
 paned-position=217
-position=(36, 32)
+position=(26, 23)
 size=(1921, 1034)
 statusbar-visible=false
 
@@ -445,7 +445,7 @@ name='Window Cycler'
 
 [org/gnome/settings-daemon/plugins/power]
 sleep-inactive-ac-timeout=3600
-sleep-inactive-ac-type='suspend'
+sleep-inactive-ac-type='nothing'
 sleep-inactive-battery-timeout=900
 
 [org/gnome/settings-daemon/plugins/xsettings]
@@ -455,7 +455,8 @@ hinting='slight'
 app-picker-view=uint32 1
 command-history=['gconf-editor', 'l2', '?', 'r', 'looking glass', 'lg']
 disable-user-extensions=true
-enabled-extensions=['sound-output-device-chooser@kgshank.net', 'clipboard-indicator@tudmotu.com', 'cascade-windows@lytol.com', 'arrangeWindows@sun.wxg@gmail.com']
+disabled-extensions=@as []
+enabled-extensions=['sound-output-device-chooser@kgshank.net', 'clipboard-indicator@tudmotu.com', 'cascade-windows@lytol.com', 'arrangeWindows@sun.wxg@gmail.com', 'alt-tab-move-mouse@buzztaiki.github.com']
 favorite-apps=['org.gnome.Nautilus.desktop', 'rhythmbox.desktop', 'libreoffice-writer.desktop', 'update-manager.desktop', 'yelp.desktop', 'simple-scan.desktop', 'code.desktop', 'firefox.desktop', 'vivaldi-stable.desktop', 'st.desktop', 'org.wezfurlong.wezterm.desktop', 'Alacritty.desktop']
 looking-glass-history=['exit', 'quit']
 
@@ -504,7 +505,7 @@ sort-column='name'
 sort-directories-first=true
 sort-order='ascending'
 type-format='category'
-window-position=(1969, 314)
+window-position=(1979, 283)
 window-size=(1231, 902)
 
 [org/yorba/shotwell/preferences/ui]
