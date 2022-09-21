@@ -196,8 +196,10 @@ Plugin 'sodapopcan/vim-twiggy'
 "Plugin 'plenary.nvim'
 "Plugin 'TimUntersberger/neogit'
 "Plugin 'idanarye/vim-merginal'
-"
 "Plugin 'stsewd/fzf-checkout.vim'
+"
+" get git branch name
+"Plugin 'itchyny/vim-gitbranch'
 "
 " git mergetool
 "Plugin 'whiteinge/diffconflicts'
