@@ -184,19 +184,30 @@ Plugin 'mckellygit/vim-filebeagle'
 "
 " fugitive for more git utils
 Plugin 'tpope/vim-fugitive'
-" for :Gbrowse to open GitHub urls
+" for :Gbrowse to open GitHub urls (via xdg-open)
 "Plugin 'tpope/vim-rhubarb'
+"
+" --------------------------
+"
 " vimagit ...
 "Plugin 'jreybert/vimagit.git'
 Plugin 'mckellygit/vimagit.git'
+"
 " twiggy ...
 Plugin 'sodapopcan/vim-twiggy'
+"
 " some other neovim magit-like alternatives -
 "Plugin 'Odie/gitabra'
 "Plugin 'plenary.nvim'
 "Plugin 'TimUntersberger/neogit'
 "Plugin 'idanarye/vim-merginal'
 "Plugin 'stsewd/fzf-checkout.vim'
+"
+" telescope - fuzzy finder over lists for vim
+"Plugin 'nvim-telescope/telescope.nvim'
+"
+" vgit
+"Plugin 'tanvirtin/vgit.nvim'
 "
 " get git branch name
 "Plugin 'itchyny/vim-gitbranch'
@@ -207,12 +218,16 @@ Plugin 'sodapopcan/vim-twiggy'
 " dispatch make/etc utils
 Plugin 'tpope/vim-dispatch'
 "
+" neo-tree - nerd-like viewer
+"Plugin 'nvim-neo-tree/neo-tree.nvim.git'
+"
 " git w/NERDtree
 "Plugin 'Xuyuanp/nerdtree-git-plugin'
 "
+" --------------------------
+"
 " added to get around an issue with FixCursorHold plugin/logic
 let $VIM_GITGUTTER_TEST=1
-" --------------------------
 " gitgutter
 Plugin 'airblade/vim-gitgutter'
 " there is also -
