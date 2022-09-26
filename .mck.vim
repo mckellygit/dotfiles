@@ -6690,13 +6690,34 @@ inoremap <silent> <C-^>.     <C-\><C-o>10zl<C-\><C-o>10l
 
 noremap <silent> <C-^>H     10zh10h
 noremap <silent> <C-^>L     10zl10l
-noremap <silent> <C-^><lt>  10zh10h
-noremap <silent> <C-^>>     10zl10l
 
 noremap <silent> <M-H>      10zh10h
 noremap <silent> <M-L>      10zl10l
-noremap <silent> <M-<lt>>   10zh10h
-noremap <silent> <M->>      10zl10l
+
+noremap <silent> <C-^><lt>  <Cmd>:tabprevious<CR>
+noremap <silent> <C-^>>     <Cmd>:tabnext<CR>
+noremap <silent> <M-<lt>>   <Cmd>:tabprevious<CR>
+noremap <silent> <M->>      <Cmd>:tabnext<CR>
+
+tnoremap <silent> <C-^><lt>  <Cmd>:tabprevious<CR>
+tnoremap <silent> <C-^>>     <Cmd>:tabnext<CR>
+tnoremap <silent> <M-<lt>>   <Cmd>:tabprevious<CR>
+tnoremap <silent> <M->>      <Cmd>:tabnext<CR>
+
+" not sure why we need these, but good to override ???
+" the <C-^> part is really from an alt- press, must be from tmux ?
+
+tnoremap <C-^>,    ,
+tnoremap <C-^>.    .
+tnoremap <C-^>h    h
+tnoremap <C-^>l    l
+tnoremap <C-^>p    p
+tnoremap <C-^>n    n
+
+tnoremap <C-^>H    H
+tnoremap <C-^>L    L
+tnoremap <C-^>P    P
+tnoremap <C-^>N    N
 
 " ---------
 
