@@ -449,8 +449,10 @@ bindkey -M menuselect '^[[Z' reverse-menu-complete
 bindkey '^I' expand-or-complete-prefix
 
 # Home
-bindkey -M viins '^a' beginning-of-line
-bindkey -M vicmd '^a' beginning-of-line
+#bindkey -M viins '^a' beginning-of-line
+#bindkey -M vicmd '^a' beginning-of-line
+bindkey -M vicmd '^a' vi-first-non-blank
+bindkey -M viins '^a' vi-first-non-blank
 bindkey -M viins "\e[H" beginning-of-line
 bindkey -M vicmd "\e[H" beginning-of-line
 bindkey -M viins "\e[1~" beginning-of-line

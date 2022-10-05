@@ -3744,7 +3744,7 @@ function s:InitializeClipboard()
         if executable("pgrep") && executable("copyq")
             let copyqpid = system('pgrep --exact copyq 2>/dev/null')
             if empty(copyqpid)
-                silent call system('setsid -f copyq >/dev/null 2>/dev/null &')
+                silent call system('setsid -f copyq --start-server hide >/dev/null 2>/dev/null')
                 sleep 651m
             endif
         endif
@@ -6606,6 +6606,11 @@ set virtualedit=block
 set nostartofline
 set scrolloff=0
 
+" new smoothscrolling for when line wraps ...
+"if !has("nvim")
+"    set smoothscroll
+"endif
+
 " ---------
 
 aug scrjump
@@ -6996,16 +7001,44 @@ cnoremap <expr> <Right> pumvisible() ? '' : '<Right>'
 " ---------
 
 function AtTop(strict)
-    return winline() == 1
+    "return winline() == 1
+    return (line(".") == line("w0"))
 endfunction
 
 function AtBot(strict)
-    return winline() == g:full
+    "return winline() == g:full
+    return (line(".") == line("w$"))
 endfunction
 
+function MyScrollDown()
+    if !has("nvim") && &smoothscroll
+        let cmdstr = 'keepjumps normal! ' . 1 . 'gj'
+        silent execute cmdstr
+        return
+    endif
+    let size = (strwidth(getline('w0')) / winwidth(0) ) + 1
+    let cmdstr = 'keepjumps normal! ' . size . 'gj'
+    silent execute cmdstr
+endfunction
+
+function MyScrollUp()
+    if !has("nvim") && &smoothscroll
+        let cmdstr = 'keepjumps normal! ' . 1 . 'gk'
+        silent execute cmdstr
+        return
+    endif
+    let cmdstr = 'keepjumps normal! '
+    silent execute cmdstr
+    let size = (strwidth(getline('w0')) / winwidth(0) ) + 1
+    let cmdstr = 'keepjumps normal! ' . size . 'gk'
+    silent execute cmdstr
+endfunction
+
+" TODO: if smoothscroll on then use gj instead of j ...
 "call <SID>NoremapNormalCmd("<C-j>",    0, "1<C-D>")
-noremap <silent> <expr> <C-Down>   ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>j'
-noremap <silent> <expr> <C-j>      ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>j'
+"noremap <silent> <expr> <C-Down>   ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>gj'
+noremap <silent> <expr> <C-Down>   ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<Cmd>call MyScrollDown()<CR>'
+noremap <silent> <expr> <C-j>      ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<Cmd>call MyScrollDown()<CR>'
 
 noremap <C-S-Space>   gj
 noremap <C-_><Space>  gj
@@ -7028,9 +7061,11 @@ cnoremap <C-_><Space> <Space>
 inoremap <silent> <expr> <C-Down>   pumvisible() ? '<C-Down>' : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-D>")<CR>'
 inoremap <silent> <expr> <C-j>      pumvisible() ? '<C-j>'    : '<C-\><C-o>:call <SID>Saving_scrollV("1<C-V><C-D>")<CR>'
 
+" TODO: if smoothscroll on then use gk instead of k ...
 "call <SID>NoremapNormalCmd("<C-k>",    0, "1<C-U>")
-noremap <silent> <expr> <C-Up>     AtBot(0) ? '<C-y>' : '<C-y>k'
-noremap <silent> <expr> <C-k>      AtBot(0) ? '<C-y>' : '<C-y>k'
+"noremap <silent> <expr> <C-Up>     AtBot(0) ? '<C-y>' : '<C-y>gk'
+noremap <silent> <expr> <C-Up>     AtBot(0) ? '<C-y>' : '<Cmd>call MyScrollUp()<CR>'
+noremap <silent> <expr> <C-k>      AtBot(0) ? '<C-y>' : '<Cmd>call MyScrollUp()<CR>'
 
 noremap <C-S-BS>   gk
 noremap <C-_><BS>  gk
@@ -9952,6 +9987,12 @@ function s:SwapDiffWins(arg)
     execute "normal \<C-w>x"
 endfunction
 command! -nargs=* SwapDiffs call s:SwapDiffWins(<q-args>)
+
+func Eatchar(pat)
+  let c = nr2char(getchar(0))
+  return (c ==# a:pat) ? '' : c
+endfunc
+"cabbr <silent> {lhs} {rhs}<c-r>=Eatchar('\s')<cr>
 
 if &diff
   " TODO: do we want conf qa here ? ...
