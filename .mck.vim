@@ -461,6 +461,7 @@ Plugin 'unblevable/quick-scope'
 "
 " there is also -
 "Plugin 'justinmk/vim-sneak'
+"Plugin 'ggandor/leap.nvim'
 "
 " -----------------------------------------
 "
