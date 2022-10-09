@@ -202,6 +202,8 @@ Plugin 'sodapopcan/vim-twiggy'
 "Plugin 'TimUntersberger/neogit'
 "Plugin 'idanarye/vim-merginal'
 "Plugin 'stsewd/fzf-checkout.vim'
+" neovim dependency for tig-explorer -
+"Plugin 'rbgrouleff/bclose.vim'
 "Plugin 'iberianpig/tig-explorer.vim'
 "
 " telescope - fuzzy finder over lists for vim
