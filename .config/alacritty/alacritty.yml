@@ -204,7 +204,7 @@ font:
     family: Liberation Mono
 
   # use size 16.5 for wayland and 13.0 for x11 (WAYLAND_DISPLAY= alacritty -e term_win_loc start)
-  size: 16.5
+  size: 16.2
     # size: 13.0
 
   offset:
