@@ -201,7 +201,7 @@ Plugin 'sodapopcan/vim-twiggy'
 "Plugin 'plenary.nvim'
 "Plugin 'TimUntersberger/neogit'
 "Plugin 'idanarye/vim-merginal'
-"Plugin 'stsewd/fzf-checkout.vim'
+Plugin 'stsewd/fzf-checkout.vim'
 " neovim dependency for tig-explorer -
 "Plugin 'rbgrouleff/bclose.vim'
 "Plugin 'iberianpig/tig-explorer.vim'
@@ -2245,7 +2245,7 @@ command! -bang -nargs=* MGit call s:MagitGitCmd(1,<q-args>)
 " vimagit -------------
 
 " twiggy --------------
-function! <SID>LaunchTwiggy()
+function! LaunchTwiggy()
     let git_dir = FugitiveGitDir()
     if empty(git_dir)
         let errmsg = 'Not in a git repository'
@@ -2255,6 +2255,8 @@ function! <SID>LaunchTwiggy()
         echo " "
         return
     else
+        redraw!
+        echo " "
         let b:git_dir = git_dir
         let t:twiggy_git_dir = git_dir
         "let t:twiggy_git_cmd = fugitive#repo().git_command()
@@ -2263,7 +2265,10 @@ function! <SID>LaunchTwiggy()
         execute "Twiggy"
     endif
 endfunction
-nnoremap <silent> <Leader>br :call <SID>LaunchTwiggy()<CR>
+nnoremap <silent> <Leader>br :call LaunchTwiggy()<CR>
+" a way to get :Twiggy command to have twiggy_git_dir and twiggy_git_cmd set before running actual command ...
+" but then it does not support the branch arg to checkout/create
+au VimEnter * :Alias Twiggy   call\ LaunchTwiggy()
 
 function! <SID>RefreshTwiggy()
     let magitNr = bufwinnr('magit://')
@@ -2276,6 +2281,54 @@ function! <SID>RefreshTwiggy()
 endfunction
 autocmd User TwiggyCheckoutCommand call <SID>RefreshTwiggy()
 " twiggy --------------
+
+" fzf-checkout --------
+" use :GBranches ...
+let g:fzf_checkout_git_options = '--sort=-committerdate'
+let g:fzf_checkout_merge_settings = v:false
+let g:fzf_branch_actions = {
+      \ 'checkout': {
+      \   'prompt': 'Checkout> ',
+      \   'execute': 'echo system("{git} -C {cwd} checkout {branch}")',
+      \   'multiple': v:false,
+      \   'keymap': 'enter',
+      \   'required': ['branch'],
+      \   'confirm': v:false,
+      \ },
+      \ 'track': {
+      \   'keymap': '',
+      \ },
+      \ 'create': {
+      \   'keymap': '',
+      \ },
+      \ 'delete': {
+      \   'keymap': '',
+      \ },
+      \ 'merge':{
+      \   'keymap': '',
+      \ },
+      \ 'rebase':{
+      \   'keymap': '',
+      \ },
+      \}
+
+let g_fzf_tag_actions = {
+      \ 'checkout': {
+      \   'prompt': 'Checkout> ',
+      \   'execute': 'echo system("{git} -C {cwd} checkout {tag}")',
+      \   'multiple': v:false,
+      \   'keymap': 'enter',
+      \   'required': ['tag'],
+      \   'confirm': v:false,
+      \ },
+      \ 'create': {
+      \   'keymap': '',
+      \ },
+      \ 'delete': {
+      \   'keymap': '',
+      \ },
+      \}
+" fzf-checkout --------
 
 " dispatch ------------
 let g:dispatch_no_maps = 1
