@@ -194,7 +194,8 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'mckellygit/vimagit.git'
 "
 " twiggy ...
-Plugin 'sodapopcan/vim-twiggy'
+"Plugin 'sodapopcan/vim-twiggy'
+Plugin 'mckellygit/vim-twiggy'
 "
 " some other neovim magit-like alternatives -
 "Plugin 'Odie/gitabra'
@@ -7069,33 +7070,53 @@ endfunction
 
 function MyScrollDown()
     if !has("nvim") && &smoothscroll
-        let cmdstr = 'keepjumps normal! ' . 1 . 'gj'
+        let cmdstr = 'keepjumps normal! gj'
         silent execute cmdstr
         return
     endif
-    let size = (strwidth(getline('w0')) / winwidth(0) ) + 1
-    let cmdstr = 'keepjumps normal! ' . size . 'gj'
-    silent execute cmdstr
+    " ---------------------
+    if ((line('$') - line('w$')) < 1)
+        silent execute 'keepjumps normal! gj'
+    elseif AtTop(0)
+        silent execute 'keepjumps normal! '
+    else
+        let size = (strwidth(getline('w0')) / winwidth(0) ) + 1
+        let cmdstr = 'keepjumps normal! ' . size . 'gj'
+        silent execute cmdstr
+    endif
 endfunction
 
 function MyScrollUp()
     if !has("nvim") && &smoothscroll
-        let cmdstr = 'keepjumps normal! ' . 1 . 'gk'
-        silent execute cmdstr
+        if (winline() == 1)
+            let cmdstr = 'keepjumps normal! gk'
+            silent execute cmdstr
+        else
+            let cmdstr = 'keepjumps normal! gk'
+            silent execute cmdstr
+        endif
         return
     endif
-    let cmdstr = 'keepjumps normal! '
-    silent execute cmdstr
-    let size = (strwidth(getline('w0')) / winwidth(0) ) + 1
-    let cmdstr = 'keepjumps normal! ' . size . 'gk'
-    silent execute cmdstr
+    " ---------------------
+    if (line('w0') == 1)
+        silent execute 'keepjumps normal! gk'
+    elseif AtBot(0)
+        silent execute 'keepjumps normal! '
+    else
+        silent execute 'keepjumps normal! '
+        let size = (strwidth(getline('w0')) / winwidth(0) ) + 1
+        let cmdstr = 'keepjumps normal! ' . size . 'gk'
+        silent execute cmdstr
+    endif
 endfunction
 
 " TODO: if smoothscroll on then use gj instead of j ...
 "call <SID>NoremapNormalCmd("<C-j>",    0, "1<C-D>")
 "noremap <silent> <expr> <C-Down>   ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>gj'
-noremap <silent> <expr> <C-Down>   ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<Cmd>call MyScrollDown()<CR>'
-noremap <silent> <expr> <C-j>      ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<Cmd>call MyScrollDown()<CR>'
+"noremap <silent> <expr> <C-Down>   ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<Cmd>call MyScrollDown()<CR>'
+noremap <silent> <C-Down>          <Cmd>call MyScrollDown()<CR>
+"noremap <silent> <expr> <C-j>      ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<Cmd>call MyScrollDown()<CR>'
+noremap <silent> <C-j>             <Cmd>call MyScrollDown()<CR>
 
 noremap <C-S-Space>   gj
 noremap <C-_><Space>  gj
@@ -7121,8 +7142,10 @@ inoremap <silent> <expr> <C-j>      pumvisible() ? '<C-j>'    : '<C-\><C-o>:call
 " TODO: if smoothscroll on then use gk instead of k ...
 "call <SID>NoremapNormalCmd("<C-k>",    0, "1<C-U>")
 "noremap <silent> <expr> <C-Up>     AtBot(0) ? '<C-y>' : '<C-y>gk'
-noremap <silent> <expr> <C-Up>     AtBot(0) ? '<C-y>' : '<Cmd>call MyScrollUp()<CR>'
-noremap <silent> <expr> <C-k>      AtBot(0) ? '<C-y>' : '<Cmd>call MyScrollUp()<CR>'
+"noremap <silent> <expr> <C-Up>     AtBot(0) ? '<C-y>' : '<Cmd>call MyScrollUp()<CR>'
+noremap <silent> <C-Up>            <Cmd>call MyScrollUp()<CR>
+"noremap <silent> <expr> <C-k>      AtBot(0) ? '<C-y>' : '<Cmd>call MyScrollUp()<CR>'
+noremap <silent> <C-k>             <Cmd>call MyScrollUp()<CR>
 
 noremap <C-S-BS>   gk
 noremap <C-_><BS>  gk
