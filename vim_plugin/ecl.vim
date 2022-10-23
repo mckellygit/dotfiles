@@ -1,8 +1,8 @@
 " Vim syntax file
-" Language:    ECL
-" Maintainer:    Mark Kelly
+" Language: Enterprise Control Language (ECL)
+" Original Author: Nathaniel Graham
+" Modified: Mark Kelly
 
-" quit when a syntax file was already loaded
 if exists("b:current_syntax")
   finish
 endif
@@ -10,61 +10,94 @@ endif
 let s:cpo_save = &cpo
 set cpo&vim
 
-autocmd BufNewFile,BufRead *.{ecl} set filetype=ecl
+" Case insensitive
+syn case ignore
 
-" case is not significant
-syn case	ignore
+" Scope keywords
+syn keyword eclScope IMPORT EXPORT SHARED
 
-" A bunch of useful ECL keywords
-syn keyword eclStatement    join project hash transform output group
+" Conditional keywords
+syn keyword eclConditional IF CASE MAP CHOOSE REJECTED WHICH
 
-syn keyword eclFunction     abs sin cos tan log exp pow
+" Operator keywords
+syn keyword eclOperator IN BETWEEN
 
-syn keyword eclTodo contained    TODO
+" Regular int like number with - + or nothing in front
+syn match eclNumber '\d\+' contained display
+syn match eclNumber '[-+]\d\+' contained display
 
-"integer number, or floating point number without a dot.
-syn match  eclNumber        "\<\d\+\>"
-"floating point number, with dot
-syn match  eclNumber        "\<\d\+\.\d*\>"
-"floating point number, starting with a dot
-syn match  eclNumber        "\.\d\+\>"
+" Floating point number with decimal no E or e (+,-)
+syn match eclNumber '\d\+\.\d*' contained display
+syn match eclNumber '[-+]\d\+\.\d*' contained display
 
-" String and Character contstants
-syn match   eclSpecial  contained "\\\d\d\d\|\\."
-syn region  eclString   start=+"+  skip=+\\\\\|\\"+  end=+"+  contains=eclSpecial
+" Floating point like number with E and no decimal point (+,-)
 
-syn region  eclComment          start="REM" end="$" contains=eclTodo
-syn region  eclComment          start="^[ \t]*'" end="$" contains=eclTodo
-syn region  eclLineNumber       start="^\d" end="\s"
-syn match   eclTypeSpecifier    "[a-zA-Z0-9][\$%&!#]"ms=s+1
-" Used with OPEN statement
-syn match   eclFilenumber       "#\d\+"
-"syn sync ccomment eclComment
-"syn match   eclMathsOperator   "[<>+\*^/\\=-]"
-syn match   eclMathsOperator    "-\|=\|[:<>+\*^/\\]\|AND\|OR"
+syn match eclNumber '[-+]\=\d[[:digit:]]*[eE][\-+]\=\d\+' contained display
+syn match eclNumber '\d[[:digit:]]*[eE][\-+]\=\d\+' contained display
 
-" Define the default highlighting.
-" Only when an item doesn't have highlighting yet
+" Floating point like number with E and decimal point (+,-)
+syn match eclNumber '[-+]\=\d[[:digit:]]*\.\d*[eE][\-+]\=\d\+' contained display
+syn match eclNumber '\d[[:digit:]]*\.\d*[eE][\-+]\=\d\+' contained display
 
-hi def link eclLabel            Label
-hi def link eclConditional      Conditional
-hi def link eclRepeat           Repeat
-hi def link eclLineNumber       Comment
-hi def link eclNumber           Number
-hi def link eclError            Error
-hi def link eclStatement        Statement
-hi def link eclString           String
-hi def link eclComment          Comment
-hi def link eclSpecial          Special
-hi def link eclTodo             Todo
-hi def link eclFunction         Identifier
-hi def link eclTypeSpecifier    Type
-hi def link eclFilenumber       eclTypeSpecifier
-"hi eclMathsOperator term=bold cterm=bold gui=bold
+" Special structures
+syn keyword eclReturn RETURN contained
+syn region eclStruct start=/:\=\w*FUNCTION/ end="END" contains=eclReturn
+syn region eclStruct start=/:\=\w*RECORD/ end="END" transparent
+syn region eclStruct start=/:\=\w*TRANSFORM/ end="END" transparent
+syn region eclStruct start=/:\=\w*MODULE/ end="END" transparent
+
+" Other Special structures TODO
+" BEGINC++ Structure
+" EMBED Structure
+" FUNCTIONMACRO Structure
+" INTERFACE Structure
+" MACRO Structure
+
+" Special keywords
+syn keyword Constant FUNCTION RECORD MODULE TRANSFORM END DATASET DICTIONARY INDEX SET OF TYPEOF RECORDOF ENUM
+
+" Built-in value types
+syn keyword eclType BOOLEAN UTF8
+syn match eclType "^\s*UNSIGNED\d*"
+syn match eclType "^\s*STRING\d*"
+syn match eclType "^\s*QSTRING\d*"
+syn match eclType "^\s*VARSTRING\d*"
+syn match eclType "^\s*VARUNICODE\d*"
+syn match eclType "^\s*INTEGER\d*"
+syn match eclType "^\s*REAL\d*"
+syn match eclType "^\s*DECIMAL\d\+_\d\+"
+
+" String
+syn region eclString start='\'' skip=/\\'/ end='\''
+syn region eclString start='"' skip=/\\"/ end='"'
+
+" Comments
+syn keyword eclCommentTodo    contained TODO FIXME XXX TBD NOTE
+syn region  eclComment        start=+//+ end=/$/ contains=eclCommentTodo extend keepend
+syn region  eclComment        start=+/\*+  end=+\*/+ contains=eclCommentTodo fold extend keepend
+
+" Reserved keywords
+syn keyword eclReserved ALL EXCEPT EXPORT GROUP IMPORT KEYED WILD LEFT RIGHT LIKELY UNLIKELY ROWS SELF SHARED SKIP TRUE FALSE COUNTER INDEPENDENT HINT
+"syn keyword eclType     COUNTER
+
+" Built-in function keywords
+syn keyword Statement ABS ACOS AGGREGATE ALLNODES APPLY ASCII ASIN ASSERT ASSTRING ATAN ATAN2 AVE BUILD CASE CATCH CHOOSE CHOOSEN CHOOSESETS CLUSTERSIZE COMBINE CORRELATION COS COSH COUNT COVARIANCE CRON DEDUP DEFINE DENORMALIZE DISTRIBUTE DISTRIBUTED DISTRIBUTION EBCDIC ENTH ERROR EVALUATE EVENT EVENTNAME EVENTEXTRA EXISTS EXP FAIL FAILCODE FAILMESSAGE FETCH FROMJSON FROMUNICODE FROMXML GETENV GLOBAL GRAPH GROUP HASH HASH32 HASH64 HASHCRC HASHMD5 HAVING HTTPCALL IF IFF INTFORMAT ISVALID ITERATE JOIN KEYDIFF KEYPATCH KEYUNICODE LENGTH LIBRARY LIMIT LN LOADXML LOCAL LOG LOOP MAP MAX MERGE MERGEJOIN MIN NOLOCAL NONEMPTY NORMALIZE NOFOLD NOTHOR NOTIFY ORDERED OUTPUT PARALLEL PARSE PIPE POWER PRELOAD PROCESS PROJECT PULL RANDOM RANGE RANK RANKED REALFORMAT REGEXFIND REGEXFINDSET REGEXREPLACE REGROUP REJECTED ROLLUP ROUND ROUNDUP ROW ROWDIFF SAMPLE SEQUENTIAL SET SIN SINH SIZEOF SOAPCALL SORT SORTED SQRT STEPPED STORED SUM TABLE TAN TANH THISNODE TOJSON TOPN TOUNICODE TOXML TRACE TRANSFER TRIM TRUNCATE UNGROUP UNICODEORDER UNORDERED VARIANCE WAIT WHEN WHICH WORKUNIT XMLDECODE XMLENCODE
 
 let b:current_syntax = "ecl"
+
+hi def link eclComment     Comment
+hi def link eclReserved    Constant
+hi def link eclKeyword     Statement
+hi def link eclFunction    Error
+hi def link eclConditional Statement
+hi def link eclOperator    Statement
+hi def link eclReturn      Statement
+hi def link eclStruct      Error
+hi def link eclType        Type
+hi def link eclString      Constant
+hi def link eclNumber      Constant
+hi def link eclScope       PreProc
 
 let &cpo = s:cpo_save
 unlet s:cpo_save
 " vim: ts=4
-
