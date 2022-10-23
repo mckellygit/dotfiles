@@ -7059,12 +7059,18 @@ cnoremap <expr> <Right> pumvisible() ? '' : '<Right>'
 " ---------
 
 function AtTop(strict)
-    "return winline() == 1
-    return (line(".") == line("w0"))
+    return winline() == 1
 endfunction
 
 function AtBot(strict)
-    "return winline() == g:full
+    return winline() == g:full
+endfunction
+
+function AtTop2(strict)
+    return (line(".") == line("w0"))
+endfunction
+
+function AtBot2(strict)
     return (line(".") == line("w$"))
 endfunction
 
@@ -7077,7 +7083,7 @@ function MyScrollDown()
     " ---------------------
     if ((line('$') - line('w$')) < 1)
         silent execute 'keepjumps normal! gj'
-    elseif AtTop(0)
+    elseif AtTop2(0)
         silent execute 'keepjumps normal! '
     else
         let size = (strwidth(getline('w0')) / winwidth(0) ) + 1
@@ -7100,7 +7106,7 @@ function MyScrollUp()
     " ---------------------
     if (line('w0') == 1)
         silent execute 'keepjumps normal! gk'
-    elseif AtBot(0)
+    elseif AtBot2(0)
         silent execute 'keepjumps normal! '
     else
         silent execute 'keepjumps normal! '
@@ -7114,9 +7120,11 @@ endfunction
 "call <SID>NoremapNormalCmd("<C-j>",    0, "1<C-D>")
 "noremap <silent> <expr> <C-Down>   ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>gj'
 "noremap <silent> <expr> <C-Down>   ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<Cmd>call MyScrollDown()<CR>'
-noremap <silent> <C-Down>          <Cmd>call MyScrollDown()<CR>
+"noremap <silent> <C-Down>          <Cmd>call MyScrollDown()<CR>
 "noremap <silent> <expr> <C-j>      ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<Cmd>call MyScrollDown()<CR>'
-noremap <silent> <C-j>             <Cmd>call MyScrollDown()<CR>
+"noremap <silent> <C-j>             <Cmd>call MyScrollDown()<CR>
+noremap <silent> <expr> <C-Down>   ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>gj'
+noremap <silent> <expr> <C-j>      ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>gj'
 
 noremap <C-S-Space>   gj
 noremap <C-_><Space>  gj
@@ -7143,9 +7151,11 @@ inoremap <silent> <expr> <C-j>      pumvisible() ? '<C-j>'    : '<C-\><C-o>:call
 "call <SID>NoremapNormalCmd("<C-k>",    0, "1<C-U>")
 "noremap <silent> <expr> <C-Up>     AtBot(0) ? '<C-y>' : '<C-y>gk'
 "noremap <silent> <expr> <C-Up>     AtBot(0) ? '<C-y>' : '<Cmd>call MyScrollUp()<CR>'
-noremap <silent> <C-Up>            <Cmd>call MyScrollUp()<CR>
+"noremap <silent> <C-Up>            <Cmd>call MyScrollUp()<CR>
 "noremap <silent> <expr> <C-k>      AtBot(0) ? '<C-y>' : '<Cmd>call MyScrollUp()<CR>'
-noremap <silent> <C-k>             <Cmd>call MyScrollUp()<CR>
+"noremap <silent> <C-k>             <Cmd>call MyScrollUp()<CR>
+noremap <silent> <expr> <C-Up>     AtBot(0) ? (line('w0') == 1) ? 'gk' : '<C-y>' : '<C-y>gk'
+noremap <silent> <expr> <C-k>      AtBot(0) ? (line('w0') == 1) ? 'gk' : '<C-y>' : '<C-y>gk'
 
 noremap <C-S-BS>   gk
 noremap <C-_><BS>  gk
@@ -8652,6 +8662,8 @@ let g:localvimrc_persistent = 1
 " gtags -----------------
 
 " gtags-cscope -----------
+" NOTE: not supported in latest nvim, probably just disable for both vim/nvim ...
+let loaded_gtags_cscope=1
 " manual plugin in ~/.vim/plugin
 " https://www.gnu.org/software/global/
 "
