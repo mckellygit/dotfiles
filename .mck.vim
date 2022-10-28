@@ -455,11 +455,6 @@ endif
 "
 " -----------------------------------------
 "
-"if has("nvim")
-    "Plugin 'neovim/nvim-lspconfig'
-    "Plugin 'nvim-treesitter/nvim-treesitter'
-"endif
-"
 " quick left-right line movement
 Plugin 'unblevable/quick-scope'
 "
@@ -488,6 +483,38 @@ filetype plugin indent on " required
 " ====================================================
 " --- vundle -----------------------------------------
 " ====================================================
+
+" ================== tree-sitter =====================
+if has("nvim")
+    "autocmd VimEnter *      TSUpdate
+    autocmd FileType c      TSBufEnable highlight
+    autocmd FileType c      TSBufEnable incremental_selection
+    autocmd FileType go     TSBufEnable highlight
+    autocmd FileType go     TSBufEnable incremental_selection
+    autocmd FileType cpp    TSBufEnable highlight
+    autocmd FileType cpp    TSBufEnable incremental_selection
+    autocmd FileType lua    TSBufEnable highlight
+    autocmd FileType lua    TSBufEnable incremental_selection
+    autocmd FileType vim    TSBufEnable highlight
+    autocmd FileType vim    TSBufEnable incremental_selection
+    autocmd FileType bash   TSBufEnable highlight
+    autocmd FileType bash   TSBufEnable incremental_selection
+    autocmd FileType html   TSBufEnable highlight
+    autocmd FileType html   TSBufEnable incremental_selection
+    autocmd FileType http   TSBufEnable highlight
+    autocmd FileType http   TSBufEnable incremental_selection
+    autocmd FileType help   TSBufEnable highlight
+    autocmd FileType help   TSBufEnable incremental_selection
+    autocmd FileType java   TSBufEnable highlight
+    autocmd FileType java   TSBufEnable incremental_selection
+    autocmd FileType json   TSBufEnable highlight
+    autocmd FileType json   TSBufEnable incremental_selection
+    autocmd FileType yaml   TSBufEnable highlight
+    autocmd FileType yaml   TSBufEnable incremental_selection
+    autocmd FileType python TSBufEnable highlight
+    autocmd FileType python TSBufEnable incremental_selection
+endif
+" ================== tree-sitter =====================
 
 " use :Silentrun <cmd> to run <cmd> without prompting:
 " Press ENTER or type command to continue
