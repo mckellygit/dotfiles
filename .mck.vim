@@ -683,7 +683,7 @@ let g:FerretQFMap=1
 let g:FerretHlsearch=1
 let g:FerretExecutable='rg,ag,ack'
 let g:FerretExecutableArguments = {
-  \   '\rg': '--vimgrep --color=always --smart-case --one-file-system --hidden --iglob \!".git" --iglob \!".cache" --iglob \!".cache" --iglob \!".ccache" --iglob \!".debug" --iglob \!".vscode" --iglob \!".pcloud" --iglob \!".rustup" --iglob \!".cargo" -- ',
+  \   '\rg': '--vimgrep --color=always --smart-case --one-file-system --hidden --iglob \!".git" --iglob \!".cache" --iglob \!".ccache" --iglob \!".debug" --iglob \!".vscode" --iglob \!".pcloud" --iglob \!".rustup" --iglob \!".cargo" -- ',
   \   '\ag': '--vimgrep -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" -- ',
   \   '\ack': '-s -H --nopager --nocolor --nogroup --column --smart-case --follow '
   \ }
@@ -9320,6 +9320,26 @@ function! AgFzf(aquery, ufzf)
   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), 0)
 endfunction
 
+function! AgFileFzf(aquery, ufzf)
+  if empty(a:aquery)
+    let query = expand('<cword>')
+  else
+    let query = a:aquery
+  endif
+  let command_fmt = '\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --nogroup --column --vimgrep --color -- %s %s || true'
+  let initial_command = printf(command_fmt, shellescape(query), expand('%'))
+  let reload_command = printf(command_fmt, '{q}', expand('%'))
+  "let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--disabled']}
+  if a:ufzf
+    let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--disabled', '--query', query, '--bind', 'change:reload:'.reload_command]}
+  else
+    let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--prompt', printf('Ag'.'%s > ', empty(query) ? '' : (' ('.query.')'))]}
+  endif
+  let @/=query
+  set hlsearch
+  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), 0)
+endfunction
+
 function! AgitFzf(aquery, ufzf)
   if empty(a:aquery)
     let query = expand('<cword>')
@@ -9347,6 +9367,7 @@ command! -bang -nargs=* AgitOLD
   \ <bang>0)
 
 command! -nargs=* -bang Ag   call AgFzf(<q-args>, 0)
+command! -nargs=* -bang Agf  call AgFileFzf(<q-args>, 0)
 command! -nargs=* -bang Agit call AgitFzf(<q-args>, 0)
 
 command! -nargs=* -bang AG   call AgFzf(<q-args>, 1)
@@ -9375,13 +9396,33 @@ function! RipgrepFzf(aquery, ufzf, fullscreen)
   else
     let query = a:aquery
   endif
-  let command_fmt = '\rg --column --line-number --no-heading --color=always --smart-case --one-file-system --hidden --iglob \!".git" --iglob \!".cache" --iglob \!".cache" --iglob \!".ccache" --iglob \!".debug" --iglob \!".vscode" --iglob \!".pcloud" --iglob \!".rustup" --iglob \!".cargo" -- %s || true'
+  let command_fmt = '\rg --column --line-number --no-heading --color=always --smart-case --one-file-system --hidden --iglob \!".git" --iglob \!".cache" --iglob \!".ccache" --iglob \!".debug" --iglob \!".vscode" --iglob \!".pcloud" --iglob \!".rustup" --iglob \!".cargo" -- %s || true'
   let initial_command = printf(command_fmt, shellescape(query))
   let reload_command = printf(command_fmt, '{q}')
   if a:ufzf
     let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--disabled', '--query', query, '--bind', 'change:reload:'.reload_command]}
   else
     let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--prompt', printf('Rg'.'%s > ', empty(query) ? '' : (' ('.query.')'))]}
+  endif
+  let @/=query
+  set hlsearch
+  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+endfunction
+
+function! RipgrepFileFzf(aquery, ufzf, fullscreen)
+  " TODO: if something was visually selected then use that, else ...
+  if empty(a:aquery)
+    let query = expand('<cword>')
+  else
+    let query = a:aquery
+  endif
+  let command_fmt = '\rg --vimgrep --color=always --smart-case --one-file-system --hidden --iglob \!".git" --iglob \!".cache" --iglob \!".ccache" --iglob \!".debug" --iglob \!".vscode" --iglob \!".pcloud" --iglob \!".rustup" --iglob \!".cargo" -- %s %s || true'
+  let initial_command = printf(command_fmt, shellescape(query), expand('%'))
+  let reload_command = printf(command_fmt, '{q}', expand('%'))
+  if a:ufzf
+    let spec = {'options': ['--tac', '--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--disabled', '--query', query, '--bind', 'change:reload:'.reload_command]}
+  else
+    let spec = {'options': ['--tac', '--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--prompt', printf('Rg'.'%s > ', empty(query) ? '' : (' ('.query.')'))]}
   endif
   let @/=query
   set hlsearch
@@ -9395,7 +9436,7 @@ function! RipgrepGitFzf(aquery, ufzf, fullscreen)
   else
     let query = a:aquery
   endif
-  let command_fmt = '\rg --column --line-number --no-heading --color=always --smart-case --one-file-system --hidden --iglob \!".git" --iglob \!".cache" --iglob \!".cache" --iglob \!".ccache" --iglob \!".debug" --iglob \!".vscode" --iglob \!".pcloud" --iglob \!".rustup" --iglob \!".cargo" -- %s ' . s:find_git_root() . ' || true'
+  let command_fmt = '\rg --column --line-number --no-heading --color=always --smart-case --one-file-system --hidden --iglob \!".git" --iglob \!".cache" --iglob \!".ccache" --iglob \!".debug" --iglob \!".vscode" --iglob \!".pcloud" --iglob \!".rustup" --iglob \!".cargo" -- %s ' . s:find_git_root() . ' || true'
   let initial_command = printf(command_fmt, shellescape(query))
   let reload_command = printf(command_fmt, '{q}')
   if a:ufzf
@@ -9414,11 +9455,16 @@ command! -nargs=* -bang Rgit call RipgrepGitFzf(<q-args>, 0, <bang>0)
 nnoremap <silent> <Leader>sr         :call RipgrepFzf('', 0, 0)<CR>
 vnoremap <silent> <Leader>sr "sy<Esc>:call RipgrepFzf(@s, 0, 0)<CR>
 
-nnoremap <silent> <Leader>sR         :call RipgrepGitFzf('', 0, 0)<CR>
-vnoremap <silent> <Leader>sR "sy<Esc>:call RipgrepGitFzf(@s, 0, 0)<CR>
+command! -nargs=* -bang Rgf  call RipgrepFileFzf(<q-args>, 0, <bang>0)
+
+nnoremap <silent> <Leader>sw         :call RipgrepFileFzf('', 0, 0)<CR>
+vnoremap <silent> <Leader>sw "sy<Esc>:call RipgrepFileFzf(@s, 0, 0)<CR>
 
 command! -nargs=* -bang RG   call RipgrepFzf(<q-args>, 1, <bang>0)
 command! -nargs=* -bang RGit call RipgrepGitFzf(<q-args>, 1, <bang>0)
+
+nnoremap <silent> <Leader>sR         :call RipgrepGitFzf('', 0, 0)<CR>
+vnoremap <silent> <Leader>sR "sy<Esc>:call RipgrepGitFzf(@s, 0, 0)<CR>
 
 "================================================================
 
