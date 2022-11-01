@@ -3914,6 +3914,8 @@ set ttimeout ttimeoutlen=7
 " NOTE: cannot nmap <Tab> because it affects code nav <C-i> to go back to previous jump
 "nnoremap <buffer> <Tab> 4l
 "vnoremap <buffer> <Tab> 4l
+" but for some weird reason <Tab> ends visual mode ...
+"vnoremap <buffer> <Tab> <Nop>
 
 " <S-Tab> as an undo or as a 4h ?
 "nnoremap <buffer> <S-Tab> 4h
@@ -10392,7 +10394,7 @@ else
     au VimEnter * :Alias qui!  call\ MyQuit("q!")
     au VimEnter * :Alias quit! call\ MyQuit("q!")
     if has("nvim")
-        au VimEnter * :Alias PU    TSUpdateSync<bar>PluginUpdate
+        au VimEnter * :Alias PU    TSUpdateSync<bar>sleep\ 1000m<bar>PluginUpdate
     else
         au VimEnter * :Alias PU    PluginUpdate
     endif
