@@ -486,6 +486,7 @@ filetype plugin indent on " required
 
 " ================== tree-sitter =====================
 if has("nvim")
+    "Part of PU Alias ...
     "autocmd VimEnter *      TSUpdate
     autocmd FileType c      TSBufEnable highlight
     autocmd FileType c      TSBufEnable incremental_selection
@@ -10153,10 +10154,10 @@ function s:SwapDiffWins(arg)
 endfunction
 command! -nargs=* SwapDiffs call s:SwapDiffWins(<q-args>)
 
-func Eatchar(pat)
+function Eatchar(pat)
   let c = nr2char(getchar(0))
   return (c ==# a:pat) ? '' : c
-endfunc
+endfunction
 "cabbr <silent> {lhs} {rhs}<c-r>=Eatchar('\s')<cr>
 
 if &diff
@@ -10390,7 +10391,11 @@ else
     au VimEnter * :Alias qu!   call\ MyQuit("q!")
     au VimEnter * :Alias qui!  call\ MyQuit("q!")
     au VimEnter * :Alias quit! call\ MyQuit("q!")
-    au VimEnter * :Alias PU    PluginUpdate
+    if has("nvim")
+        au VimEnter * :Alias PU    TSUpdateSync<bar>PluginUpdate
+    else
+        au VimEnter * :Alias PU    PluginUpdate
+    endif
   aug END
 
   "cnoreabbrev <silent> <expr> x (getcmdtype() == ':' && getcmdline() =~ '\s*x\s*')  ? 'call <SID>NextOrQuit()' : 'x'
