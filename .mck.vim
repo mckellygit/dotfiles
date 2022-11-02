@@ -314,6 +314,10 @@ Plugin 'mckellygit/any-jump.vim'
 "
 " conque-gdb plugin
 "Plugin 'Conque-GDB'
+" nvim gdb (also works with gdb-dashboard)
+"Plugin 'sakhnik/nvim-gdb'
+" vimnspector
+"Plugin 'puremourning/vimspector'
 "
 " process utility
 "Plugin 'Shougo/vimproc.vim'
