@@ -85,6 +85,9 @@ key_bindings:
     #- { key: V,         mods: Control|Super,   action: Paste            }
     #- { key: C,         mods: Control|Super,   action: Copy             }
 
+  - { key: I,         mods: Control,         chars: "\x1e\x09"        }
+    # - { key: Tab,                              chars: "\x09"            }
+
   - { key: 11,        mods: Control|Shift,   action: ResetFontSize    }
   - { key: 12,        mods: Control|Shift,   action: DecreaseFontSize }
   - { key: 13,        mods: Control|Shift,   action: IncreaseFontSize }

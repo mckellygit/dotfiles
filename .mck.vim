@@ -3911,15 +3911,44 @@ set ttimeout ttimeoutlen=7
 "       <A-Up/Down/Right/Left> as app keys and not tmux ...
 " And <A-e> for undo
 
+function MyMoveFourRight()
+    let ll = col('$')
+    let cc = col('.')
+    if (ll - cc) <= 1
+        execute "normal! 1 "
+    elseif (ll - cc) > 4
+        execute "normal! 4 "
+    else
+        execute "normal! $"
+    endif
+endfunction
+
+function MyMoveFourLeft()
+    let cc = col('.')
+    if (cc <= 1)
+        execute "normal! 1\<BS>"
+    elseif (cc > 4)
+        execute "normal! 4\<BS>"
+    else
+        execute "normal! 0"
+    endif
+endfunction
+
 " NOTE: cannot nmap <Tab> because it affects code nav <C-i> to go back to previous jump
-"nnoremap <buffer> <Tab> 4l
-"vnoremap <buffer> <Tab> 4l
+" NOTE: alacritty can map <C-i> to <C-^><Tab> and tmux can then send <C-^><Tab> when in vi ...
+" then we can have <C-i> different than <Tab>
+nmap <Tab> <Cmd>call MyMoveFourRight()<CR>
+vmap <Tab> <Cmd>call MyMoveFourRight()<CR>
+nnoremap <C-^><Tab> <C-i>
+vnoremap <C-^><Tab> <C-i>
 " but for some weird reason <Tab> ends visual mode ...
 "vnoremap <buffer> <Tab> <Nop>
 
 " <S-Tab> as an undo or as a 4h ?
 "nnoremap <buffer> <S-Tab> 4h
 "vnoremap <buffer> <S-Tab> 4h
+nmap <S-Tab> <Cmd>call MyMoveFourLeft()<CR>
+vmap <S-Tab> <Cmd>call MyMoveFourLeft()<CR>
 
 " a for insert after cursor is confusing, and accidentally typed often, use i instead
 nnoremap a <Nop>
@@ -3982,27 +4011,28 @@ vnoremap <silent> <C-t><C-Space> <C-\><C-n>:<C-u>tabprevious<CR>
 vnoremap <silent> <C-t><C-@>     <C-\><C-n>:<C-u>tabprevious<CR>
 
 " NOTE: <M-Tab> is application spreader/picker in Windows (and possibly gnome)
+" And <C-^><Tab> may be used by alacritty for <C-i> ...
 
 nnoremap <silent> <M-Tab>        :tabnext<CR>
 nnoremap <silent> <M-S-Tab>      :tabprevious<CR>
-nnoremap <silent> <C-^><Tab>     :tabnext<CR>
-nnoremap <silent> <C-^><S-Tab>   :tabprevious<CR>
+"nnoremap <silent> <C-^><Tab>     :tabnext<CR>
+"nnoremap <silent> <C-^><S-Tab>   :tabprevious<CR>
 
 vnoremap <silent> <M-Tab>        <C-\><C-n>:<C-u>tabnext<CR>
 vnoremap <silent> <M-S-Tab>      <C-\><C-n>:<C-u>tabprevious<CR>
-vnoremap <silent> <C-^><Tab>     <C-\><C-n>:<C-u>tabnext<CR>
-vnoremap <silent> <C-^><S-Tab>   <C-\><C-n>:<C-u>tabprevious<CR>
+"vnoremap <silent> <C-^><Tab>     <C-\><C-n>:<C-u>tabnext<CR>
+"vnoremap <silent> <C-^><S-Tab>   <C-\><C-n>:<C-u>tabprevious<CR>
 
 if !has("nvim")
     tnoremap <silent> <M-Tab>        <C-w>:tabnext<CR>
     tnoremap <silent> <M-S-Tab>      <C-w>:tabprevious<CR>
-    tnoremap <silent> <C-^><Tab>     <C-w>:tabnext<CR>
-    tnoremap <silent> <C-^><S-Tab>   <C-w>:tabprevious<CR>
+"    tnoremap <silent> <C-^><Tab>     <C-w>:tabnext<CR>
+"    tnoremap <silent> <C-^><S-Tab>   <C-w>:tabprevious<CR>
 else
     tnoremap <silent> <M-Tab>        <Cmd>tabnext<CR>
     tnoremap <silent> <M-S-Tab>      <Cmd>tabprevious<CR>
-    tnoremap <silent> <C-^><Tab>     <Cmd>tabnext<CR>
-    tnoremap <silent> <C-^><S-Tab>   <Cmd>tabprevious<CR>
+"    tnoremap <silent> <C-^><Tab>     <Cmd>tabnext<CR>
+"    tnoremap <silent> <C-^><S-Tab>   <Cmd>tabprevious<CR>
 endif
 
 " NOTE: there is also <Leader>tn, tp, etc. for changing tabs ...
@@ -8586,6 +8616,7 @@ if !has("nvim")
 endif
 inoremap <silent> <expr> <Tab>   pumvisible() ? '<Down>' : '<Tab>'
 inoremap <silent> <expr> <S-Tab> pumvisible() ? '<Up>' : '<S-Tab>'
+inoremap <silent> <C-^><Tab> <C-i>
 
 "set wildmode=full
 "set pumheight=0
