@@ -3934,21 +3934,33 @@ function MyMoveFourLeft()
     endif
 endfunction
 
+function s:MyReadTmpBuffer(b) abort
+  " + add test to be sure the buffer exists
+  let b0 = bufnr('%')
+  exe 'b ' . a:b
+  let lines = getline(1, '$')
+  exe 'b ' . b0
+  $put=lines
+endfunction
+
 " NOTE: cannot nmap <Tab> because it affects code nav <C-i> to go back to previous jump
 " NOTE: alacritty can map <C-i> to <C-^><Tab> and tmux can then send <C-^><Tab> when in vi ...
 " then we can have <C-i> different than <Tab>
-nmap <Tab> <Cmd>call MyMoveFourRight()<CR>
-vmap <Tab> <Cmd>call MyMoveFourRight()<CR>
-nnoremap <C-^><Tab> <C-i>
-vnoremap <C-^><Tab> <C-i>
-" but for some weird reason <Tab> ends visual mode ...
-"vnoremap <buffer> <Tab> <Nop>
+" TODO: can we determine at runtime if <C-i> sends <C-^><Tab> ?
+" bufadd, switch to it, insert C-v C-i, grab buffer contents and see if its <C-^><Tab> or just <Tab> or <C-i>
+if !exists('$ST_VERSION')
+    nmap <Tab> <Cmd>call MyMoveFourRight()<CR>
+    vmap <Tab> <Cmd>call MyMoveFourRight()<CR>
+    nnoremap <C-^><Tab> <C-i>
+    vnoremap <C-^><Tab> <C-i>
+    cnoremap <C-^><Tab> <C-i>
+    " but for some weird reason <Tab> ends visual mode ...
+    "vnoremap <buffer> <Tab> <Nop>
 
-" <S-Tab> as an undo or as a 4h ?
-"nnoremap <buffer> <S-Tab> 4h
-"vnoremap <buffer> <S-Tab> 4h
-nmap <S-Tab> <Cmd>call MyMoveFourLeft()<CR>
-vmap <S-Tab> <Cmd>call MyMoveFourLeft()<CR>
+    " <S-Tab> as an undo or as a cursor move ?
+    nmap <S-Tab> <Cmd>call MyMoveFourLeft()<CR>
+    vmap <S-Tab> <Cmd>call MyMoveFourLeft()<CR>
+endif
 
 " a for insert after cursor is confusing, and accidentally typed often, use i instead
 nnoremap a <Nop>
