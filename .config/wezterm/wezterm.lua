@@ -364,6 +364,9 @@ return {
     { key="p",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x50"} },
     { key="P",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x50"} },
 
+    -- tmux can send this to vi and Tab to everything else
+    { key="i",          mods="CTRL",          action=wezterm.action{SendString="\x1e\x09"} },
+
     -- Super + v to send same as Alt + Ins  for tmux to start/toggle copyq, but could we
     -- start copyq directly ?
     { key="v",          mods="SUPER",         action=wezterm.action{SendString="\x1b[2;3~"} },

@@ -85,6 +85,7 @@ key_bindings:
     #- { key: V,         mods: Control|Super,   action: Paste            }
     #- { key: C,         mods: Control|Super,   action: Copy             }
 
+    # tmux can send this to vi and Tab to everything else
   - { key: I,         mods: Control,         chars: "\x1e\x09"        }
     # - { key: Tab,                              chars: "\x09"            }
 
