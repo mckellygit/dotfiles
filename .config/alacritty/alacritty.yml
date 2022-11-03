@@ -218,10 +218,10 @@ font:
 window:
   dimensions:
     # use 0,0 for winmgr to decide, but otherwise both must be >= 2
-    # columns: 194
-    # lines: 51
-    columns: 3
-    lines: 3
+    columns: 194
+    lines: 53
+    # columns: 3
+    # lines: 3
 
   position:
     # use 0,0 for winmgr to decide
