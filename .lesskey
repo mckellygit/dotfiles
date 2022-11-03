@@ -86,5 +86,6 @@ qq   quit
 P noaction
 \e[1;6H noaction <
 \e[1;6F noaction >
+	 noaction 	
 # in less v5.9+ there is clear-search ...
 \eu clear-search
