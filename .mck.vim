@@ -3947,7 +3947,7 @@ endfunction
 nnoremap <C-^><Tab> <C-i>
 vnoremap <C-^><Tab> <C-i>
 cnoremap <C-^><Tab> <C-i>
-if !exists('$ST_VERSION')
+if exists('$ST_VERSION_MCK') || exists('$WEZTERM_PANE') || exists('$ALACRITTY_WINDOW_ID') || exists('$KITTY_WINDOW_ID')
     " but for some weird reason <Tab> ends visual mode ...
     "vnoremap <buffer> <Tab> <Nop>
     nmap <Tab>   <Cmd>call MyMoveFourRight()<CR>
