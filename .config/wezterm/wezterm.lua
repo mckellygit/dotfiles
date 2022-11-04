@@ -364,6 +364,7 @@ return {
     { key="p",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x50"} },
     { key="P",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x50"} },
 
+    -- CSI (Control Sequence Introducer) is \x1b[ or \x9b ...
     -- tmux can send this to vi and Tab to everything else
     { key="i",          mods="CTRL",          action=wezterm.action{SendString="\x1e\x09"} },
 
