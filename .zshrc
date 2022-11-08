@@ -52,6 +52,7 @@ periodic()
 {
     update_zhist
     purge_old_zhfiles
+
 #   if [[ -z "$WSL_DISTRO_NAME" && -z "$WSLENV" ]] ; then
 #       which pgrep > /dev/null 2>&1
 #       rc=$?
@@ -68,6 +69,23 @@ periodic()
 #           fi
 #       fi
 #   fi
+
+    if [[ -z "$WSL_DISTRO_NAME" && -z "$WSLENV" ]] ; then
+        if [[ -s /sys/class/power_supply/BAT0/status ]] ; then
+            cat /sys/class/power_supply/BAT0/status 2>/dev/null | grep -q Discharging
+            rc1=$?
+            if [[ $rc1 -ne 0 ]] ; then
+                # we are plugged in, try to inhibit idle check ...
+                who 2>/dev/null | grep -q ttyUSB0
+                rc2=$?
+                if [[ $rc2 -eq 0 ]] ; then
+                    # someone logged in via serial port ...
+                    gnome-session-inhibit sleep 0.1
+                    #xdg-screensaver reset
+                fi
+            fi
+        fi
+    fi
 }
 
 # NOTE: dont add SIGINT here as then its not handled from ^c key press on cmdline ...
@@ -94,18 +112,35 @@ bindkey -v
 # The following lines were added by compinstall
 zstyle :compinstall filename '/home/$LOGNAME/.zshrc'
 
-# if we are just xterm then try xterm-256color
-if [ -n "$TERM" ] ; then
-    if [ "$TERM" = "xterm" ] ; then
-        export TERM=xterm-256color
-    fi
-fi
+# --------------
 
 # so vim terminal TERM is set properly (xterm by default)
 # NOTE: vim should set it to xterm-256color as that is what it expects/uses
 #if [[ -n "$VIM_TERMINAL" ]] && [[ -n "$TMUX_PANE" ]] ; then
 #  export TERM=screen-256color
 #fi
+
+if [ -n "$TERM" ] ; then
+    # if we are just xterm then try xterm-256color ...
+    if [ "$TERM" = "xterm" ] ; then
+        export TERM=xterm-256color
+    # if screen is used to connect via serial line ...
+    # NOTE: C-a \ to exit screen (or perhaps C-\ Q)
+    elif [ "$TERM" = "ttyterm" ] ; then
+        if [[ -z "$WSL_DISTRO_NAME" && -z "$WSLENV" ]] ; then
+            export SSH_CLIENT=ttyterm
+            # xterm-256color has problems with bce ...
+            # export TERM=screen-256color-bce
+            # alt-screen scrollback buffer works ok with tmux-256color
+            # when tmux own default-terminal is also tmux-256color
+            export TERM=tmux-256color
+            tset
+            resize
+        fi
+    fi
+fi
+
+# --------------
 
 #fpath+=${ZDOTDIR:-~}/.zsh_functions
 fpath=( ~/.zsh_functions "${fpath[@]}" )
@@ -214,7 +249,7 @@ WORDCHARS="${WORDCHARS:s#/#}"
 # why do we need to run tmux set-window-option automatic-rename in precmd() ?
 # precmd () { if [[ -n "$SSH_CLIENT" ]] ; then PS1='%F{007}ssh%f-%F{100}%n@%m%f:%F{150}%12<..<%~%<<%f%% '; print -Pn '\e]2;ssh-%M:%12<..<%~%<<\a'; else ; PS1='%F{100}%n@%m%f:%F{150}%12<..<%~%<<%f%% '; print -Pn '\e]2;%12<..<%~%<<\a' ; fi ; if [[ -n "$TMUX_PANE" ]] ; then tmux set-window-option automatic-rename on; fi }
 
-  precmd () { if [[ -n "$SSH_CLIENT" ]] ; then PS1='%F{007}ssh%f-%F{100}%n@%m%f:%F{150}%12<..<%~%<<%f%% '; print -Pn '\e]2;ssh-%M:%12<..<%~%<<\a'; else ; PS1='%F{100}%n@%m%f:%F{150}%12<..<%~%<<%f%% '; print -Pn '\e]2;%12<..<%~%<<\a' ; fi }
+  precmd () { if [[ -z "$SSH_CLIENT" ]] ; then PS1='%F{100}%n@%m%f:%F{150}%12<..<%~%<<%f%% '; print -Pn '\e]2;%12<..<%~%<<\a' ; elif [[ "$SSH_CLIENT" == "ttyterm" ]] ; then PS1='%F{007}tty%f-%F{100}%n@%m%f:%F{150}%12<..<%~%<<%f%% '; print -Pn '\e]2;tty-%M:%12<..<%~%<<\a'; else ; PS1='%F{007}ssh%f-%F{100}%n@%m%f:%F{150}%12<..<%~%<<%f%% '; print -Pn '\e]2;ssh-%M:%12<..<%~%<<\a'; fi }
 
 # on each cd/chdir ...
 
@@ -1626,6 +1661,9 @@ bindkey "^_G" noop
 bindkey "^_N" noop
 # SPECIAL: some terminals may map <C-S-p> to <C-_>P ...
 bindkey "^_P" noop
+
+# SPECIAL: some terminals may map <C-i> to <C-^><Tab> ...
+bindkey -s "^^\x09" "\x09"
 
 # M-C-S-Ins/Del/Home/End/PgUp/PgDn
 bindkey "\e[2;8~" noop

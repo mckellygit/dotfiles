@@ -1,0 +1,8 @@
+#!/bin/bash
+
+export SSH_CLIENT=ttyterm
+
+# use ctrl-a \ (or perhapsd ctrl-\ ctrl-\) to exit
+
+/usr/local/bin/screen -a -A -h 0 /dev/ttyS3 921600
+

@@ -3064,7 +3064,7 @@ set t_Co=256
 "if &term=~"kitty"
 " if we set term for kitty from xterm-kitty to xterm-256color
 " then we need to also set this ...
-if &term=~"xterm"
+if &term=~"xterm" || &term=~"kitty"
   let &t_ut=''
 endif
 
@@ -3076,11 +3076,10 @@ endif
 "if &term=="alacritty"
 "  set term=xterm-256color
 "endif
-" NOTE: seems we need to force xterm* if alacritty ?
 " NOTE: we can set TERM in alacritty to xterm-256color
 " ------------------------------
 
-if &term=="xterm"
+if &term==#"xterm"
   set t_Co=8
   set t_Sb=^[[4%dm
   set t_Sf=^[[3%dm
@@ -11417,6 +11416,29 @@ function! s:GitStatusXX()
   wincmd P
 endfunction
 "cnoreabbrev <silent> <expr> GstatusXX (getcmdtype() == ':' && getcmdline() =~ '\s*GstatusXX\s*')  ? 'call <SID>GitStatusXX()' : 'GstatusXX'
+
+" -----------------------------
+
+" if screen is used to connect via serial line ...
+" NOTE: C-a \ to exit screen (or perhaps C-\ Q)
+if exists('$SSHIP') && g:has_wsl == 0
+    let sship = $SSHIP
+    if sship == 'ttyterm'
+        " needed for both vim and nvim ... as its a screen bug when mouse=a
+        set mouse=nv
+        " only helpful with nvim because vim supports t_ut='' bce termcap setting
+        if 0
+            if has('nvim')
+                highlight Normal ctermbg=none
+                highlight SignColumn ctermbg=none
+                highlight GitGutterAdd ctermbg=none
+                highlight GitGutterChange ctermbg=none
+                highlight GitGutterDelete ctermbg=none
+                highlight GitGutterChangeDelete ctermbg=none
+            endif
+        endif
+    endif
+endif
 
 " -----------------------------
 

@@ -35,6 +35,7 @@ if [[ -n "$WSL_DISTRO_NAME" || -n "$WSLENV" ]] ; then
 fi
 
 have_sc=0
+have_tty=0
 have_rmnl=0
 have_dash=0
 have_text=0
@@ -45,7 +46,7 @@ while [[ $# -ge 1 ]] ; do
     have_args=1
     if [[ $1 == '-o' || $1 == '--o' ]] ; then
         shift
-    elif [[ $1 == '-rmlastnl' || $1 == '--rmlastnl' ]] ; then
+    elif [[ $1 == '-rmlastnl' || $1 == '--rmlastnl' || $1 == '-rml' || $1 == '--rml' ]] ; then
         have_rmnl=1
         shift
     elif [[ $1 == '-sc' || $1 == '--sc' ]] ; then
@@ -83,6 +84,12 @@ if [[ $has_wsl -gt 0 ]]; then
     have_delay=0
 fi
 
+if [[ "$SSH_CLIENT" == "ttyterm" ]] ; then
+    have_tty=1
+fi
+
+# ===================================
+# COPY
 # ===================================
 
 # NOTE: copyq requires copySelection(); addUnique() to set selection and add to item list
@@ -104,6 +111,15 @@ if [[ $have_args -eq 0 || $have_dash -eq 1 ]] ; then
         else
             win32yank.exe -i --crlf
         fi
+    elif [[ $has_tty -gt 0 ]]; then
+        # osc 52 ...
+        if [[ $have_rmnl -eq 1 && $have_dash -eq 1 ]] ; then
+            inputtext=$(cat - | sed -z '$s/\n$//')
+            printf "\e]52;c;%s\a" "$(echo -n \"$inputtext\" | base64 -i)"
+        else
+            inputtext=$(cat -)
+            printf "\e]52;c;%s\a" "$(echo \"$inputtext\" | base64 -i)"
+        fi
     else
         if [[ $have_rmnl -eq 1 && $have_dash -eq 1 ]] ; then
             sed -z '$s/\n$//' | copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input()); text=input(); if (text.length>0) { addUnique(input()) }"
@@ -123,6 +139,13 @@ elif [[ $have_text -eq 1 ]] ; then
         else
             echo "$escapedtext" | win32yank.exe -i --crlf
         fi
+    elif [[ $has_tty -gt 0 ]]; then
+        # osc 52 ...
+        if [[ $have_rmnl -eq 1 ]] ; then
+            printf "\e]52;c;%s\a" "$(echo -n \"$escapedtext\" | base64 -i)"
+        else
+            printf "\e]52;c;%s\a" "$(echo \"$escapedtext\" | base64 -i)"
+        fi
     else
         if [[ $have_rmnl -eq 1 ]] ; then
             echo -n "$escapedtext" | copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input()); text=input(); if (text.length>0) { addUnique(input()) }"
@@ -134,6 +157,8 @@ elif [[ $have_text -eq 1 ]] ; then
     exit 0
 fi
 
+# ===================================
+# PASTE
 # ===================================
 
 add=0
