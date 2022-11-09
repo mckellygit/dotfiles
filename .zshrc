@@ -79,10 +79,12 @@ periodic()
                 who 2>/dev/null | grep -q ttyUSB0
                 rc2=$?
                 if [[ $rc2 -eq 0 ]] ; then
-                    # someone logged in via serial port ...
-                    # TODO: is there a cmd we can run to prevent suspend or reset idle timer ?
-                    gnome-session-inhibit --inhibit suspend:idle sleep 0.1 >/dev/null 2>&1
-                    #xdg-screensaver reset
+                    # logged in via serial tty ...
+                    # if inhibit process is not running then start one
+                    #dbus-send --session --type=method_call --print-reply --dest=org.gnome.SessionManager /org/gnome/SessionManager org.gnome.SessionManager.GetInhibitors
+                    #user pid ppid 0 17:17 ? 00:00:00 gnome-session-inhibit --inhibit suspend:idle sleep 1000000
+                    #setsid -f gnome-session-inhibit --inhibit suspend:idle sleep 1000000 >/dev/null 2>&1
+                    # but then kill this inhibit process at serial tty logout ?
                 fi
             fi
         fi
