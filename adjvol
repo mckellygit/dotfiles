@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# amixer -D pulse sset Master 5%+
+# pactl set-sink-volume @DEFAULT_SINK@ -10%
+
+if [[ $# -lt 1 ]] ; then
+    echo "$0 error, need argument +/- u/d"
+    exit 1
+fi
+
+arg=$1
+
+if [[ "$arg" == "+" || "$arg" == "u" || "$arg" == "up" ]] ; then
+    vol="+10%"
+elif [[ "$arg" == "-" || "$arg" == "d" || "$arg" == "dn" || "$arg" == "down" ]] ; then
+    vol="-10%"
+elif [[ "$arg" == "." || "$arg" == "full" ]] ; then
+    vol="100%"
+else
+    vol="${arg}%"
+fi
+
+pactl set-sink-volume @DEFAULT_SINK@ ${vol} >/dev/null 2>&1
+
