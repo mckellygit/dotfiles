@@ -80,7 +80,8 @@ periodic()
                 rc2=$?
                 if [[ $rc2 -eq 0 ]] ; then
                     # someone logged in via serial port ...
-                    gnome-session-inhibit sleep 0.1
+                    # TODO: is there a cmd we can run to prevent suspend or reset idle timer ?
+                    gnome-session-inhibit --inhibit suspend:idle sleep 0.1 >/dev/null 2>&1
                     #xdg-screensaver reset
                 fi
             fi
