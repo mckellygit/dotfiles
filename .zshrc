@@ -132,6 +132,7 @@ if [ -n "$TERM" ] ; then
     elif [ "$TERM" = "ttyterm" ] ; then
         if [[ -z "$WSL_DISTRO_NAME" && -z "$WSLENV" ]] ; then
             export SSH_CLIENT=ttyterm
+            export SSH_TTY=$(tty)
             # xterm-256color has problems with bce ...
             # export TERM=screen-256color-bce
             # alt-screen scrollback buffer works ok with tmux-256color
@@ -677,7 +678,8 @@ bindkey '^d' bash-ctrl-d
 setopt NO_HUP
 #setopt NO_CHECK_JOBS
 
-export KEYTIMEOUT=5
+# units are in hundredths of a sec (so 7 == 70 ms)
+export KEYTIMEOUT=7
 
 # fzf
 export ESCDELAY=100

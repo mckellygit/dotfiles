@@ -514,6 +514,13 @@ URxvt.clipboard.pastecmd: myclip --o --rmlastnl --sc 0
 
 !! ==========================================
 
+!! Xterm RCE mitigation (patch #375)
+!! something to do with zsh vi line-editing  mode and ^G
+
+*allowFontOps: false
+
+!! ==========================================
+
 !! Zutty options
 
 Zutty.altScroll:       false

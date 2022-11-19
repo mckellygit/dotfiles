@@ -1,4 +1,4 @@
-maptimeout 10
+maptimeout 30
 escape ^||
 altscreen on
 
@@ -7,14 +7,32 @@ term tmux-256color
 #terminfo tmux-256color ti=\E[?1049l:te=\E[?1049h
 terminfo tmux-256color ti@:te@
 
+setenv SCREEN_TERM tmux
+
 #remove some stupid / dangerous key bindings
 bind ^k
 #make them better
-bind \\
 bind Q quit
 bind ^\ quit
 bind K kill
 bind I login on
 bind O login off
-bind } history
-
+bind }
+bind {
+bind \\
+bind ^@
+bind ^I
+bind ^S
+bind ^Q
+bind ^N
+bind n
+bind ^H
+bind ^P
+bind p
+bind ^?
+bind ^F
+bind f
+bind s
+bind q
+bind ^[
+bind ' '
