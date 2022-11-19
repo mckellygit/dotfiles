@@ -1,5 +1,7 @@
 #!/bin/bash
 
+max_osc52_len=500000
+
 check_delay() {
     if [[ $have_delay -eq 0 ]] ; then
         return
@@ -35,12 +37,16 @@ if [[ -n "$WSL_DISTRO_NAME" || -n "$WSLENV" ]] ; then
 fi
 
 have_sc=0
+have_dcs=0
 have_tty=0
+have_ssh=0
 have_rmnl=0
 have_dash=0
 have_text=0
 have_delay=0
+have_nocopy=0
 sc_val=""
+
 have_args=0
 while [[ $# -ge 1 ]] ; do
     have_args=1
@@ -73,6 +79,9 @@ while [[ $# -ge 1 ]] ; do
         have_text=1
         escapedtext=$(printf %q "$@")
         break
+    elif [[ $1 == '-nocopy' || $1 == '--nocopy' ]] ; then
+        have_nocopy=1
+        shift
     else
         have_text=1
         escapedtext=$(printf %q "$@")
@@ -84,8 +93,25 @@ if [[ $has_wsl -gt 0 ]]; then
     have_delay=0
 fi
 
-if [[ "$SSH_CLIENT" == "ttyterm" ]] ; then
+if [[ "$SSH_CLIENT" == "ttyterm" || "$SSHIP" == "ttyterm" ]] ; then
+    # with fixed screen supporting proper osc52 we can use ssh method
     have_tty=1
+    if [[ -n "$SSH_TTY" ]] ; then
+        out_tty=$SSH_TTY
+    else
+        # TODO: reliable way to get tty of oldest grandparent process ...
+        # who ?
+        #out_tty=$((tty </proc/$PPID/fd/0) 2>/dev/null | grep '/dev/')
+        out_tty=/dev/ttyUSB0
+    fi
+elif [[ -n "$SSH_CLIENT" ]] ; then
+    have_ssh=1
+    if [[ -n "$SSH_TTY" ]] ; then
+        out_tty=$SSH_TTY
+    else
+        # TODO: reliable way to get tty
+        out_tty=/dev/tty
+    fi
 fi
 
 # ===================================
@@ -101,7 +127,35 @@ fi
 #echo "have_rmnl = $have_rmnl"
 #echo "have_dash = $have_dash"
 
+screen_dcs_ttyterm() {
+  # Screen limits the length of string sequences, so we have to break it up.
+  # Going by the screen history:
+  #   (v4.2.1) Apr 2014 - today: 768 bytes
+  #   Aug 2008 - Apr 2014 (v4.2.0): 512 bytes
+  #   ??? - Aug 2008 (v4.0.3): 256 bytes
+  # Since v4.2.0 is only ~4 years old, we'll use the 256 limit.
+  # We can probably switch to the 768 limit in 2022.
+  local limit=256
+  # We go 4 bytes under the limit because we're going to insert two bytes
+  # before (\eP) and 2 bytes after (\e\) each string.
+  #echo "$1" | \
+  #  sed -E "s:.{$(( limit - 4 ))}:&\n:g" | \
+  #  sed -E -e 's:^:\x1bP:' -e 's:$:\x1b\\:' | \
+  #  tr -d '\n' > /dev/ttyUSB0
+  #echo "$1" | \
+  #  sed -E "s:.{$(( limit - 4 ))}:&\n:g" | \
+  #  sed -E -e 's:^:\x1bP:' -e 's:$:\x1b\\:' | \
+  #  tr -d '\n' > /tmp/screen_dcs
+  echo "$1" | \
+    sed -E "s:.{$(( limit - 4 ))}:&\n:g" | \
+    sed -E -e 's:^:\x1bP:' -e 's:$:\x1b\\:' | \
+    tr -d '\n' > $out_tty
+}
+
 if [[ $have_args -eq 0 || $have_dash -eq 1 ]] ; then
+    if [[ $have_nocopy -gt 0 ]] ; then
+        exit 0
+    fi
     # could have just -
     # exec xsel -i -b
     # since copyq would have then synced clipboard to selection ...
@@ -111,15 +165,39 @@ if [[ $have_args -eq 0 || $have_dash -eq 1 ]] ; then
         else
             win32yank.exe -i --crlf
         fi
-    elif [[ $has_tty -gt 0 ]]; then
+    elif [[ $have_dcs -gt 0 ]]; then
+        # osc 52 to screen over serial (DCS) ...
+        if [[ $have_rmnl -eq 1 && $have_dash -eq 1 ]] ; then
+            inputtext=$(tee | sed -z '$s/\n$//' | base64 | tr -d '\n')
+        else
+            inputtext=$(tee | base64 | tr -d '\n')
+        fi
+        if [[ ${#inputtext} -gt ${max_osc52_len} ]] ; then
+            exit 0
+        fi
+        screen_dcs_ttyterm "$(printf '\033]52;c;%s\a' "${inputtext}")"
+    elif [[ $have_tty -gt 0 ]]; then
         # osc 52 ...
         if [[ $have_rmnl -eq 1 && $have_dash -eq 1 ]] ; then
-            inputtext=$(cat - | sed -z '$s/\n$//')
-            printf "\e]52;c;%s\a" "$(echo -n \"$inputtext\" | base64 -i)"
+            inputtext=$(tee | sed -z '$s/\n$//' | base64 | tr -d '\n')
         else
-            inputtext=$(cat -)
-            printf "\e]52;c;%s\a" "$(echo \"$inputtext\" | base64 -i)"
+            inputtext=$(tee | base64 | tr -d '\n')
         fi
+        if [[ ${#inputtext} -gt ${max_osc52_len} ]] ; then
+            exit 0
+        fi
+        printf "\e]52;c;%s\a" "$inputtext" > $out_tty
+    elif [[ $have_ssh -gt 0 ]]; then
+        # osc 52 ...
+        if [[ $have_rmnl -eq 1 && $have_dash -eq 1 ]] ; then
+            inputtext=$(tee | sed -z '$s/\n$//' | base64 | tr -d '\n')
+        else
+            inputtext=$(tee | base64 | tr -d '\n')
+        fi
+        if [[ ${#inputtext} -gt ${max_osc52_len} ]] ; then
+            exit 0
+        fi
+        printf "\ePtmux;\e\e]52;c;%s\a\e\\" "$inputtext" > $out_tty
     else
         if [[ $have_rmnl -eq 1 && $have_dash -eq 1 ]] ; then
             sed -z '$s/\n$//' | copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input()); text=input(); if (text.length>0) { addUnique(input()) }"
@@ -130,6 +208,9 @@ if [[ $have_args -eq 0 || $have_dash -eq 1 ]] ; then
     check_delay
     exit 0
 elif [[ $have_text -eq 1 ]] ; then
+    if [[ $have_nocopy -gt 0 ]] ; then
+        exit 0
+    fi
     # could have just -
     #echo "$escapedtext" | xsel -i -b
     # since copyq would have then synced clipboard to selection ...
@@ -139,13 +220,39 @@ elif [[ $have_text -eq 1 ]] ; then
         else
             echo "$escapedtext" | win32yank.exe -i --crlf
         fi
-    elif [[ $has_tty -gt 0 ]]; then
+    elif [[ $have_dcs -gt 0 ]]; then
+        # osc 52 to screen over serial (DCS) ...
+        if [[ $have_rmnl -eq 1 ]] ; then
+            inputtext=$(echo -n "${escapedtext}" | base64 | tr -d '\n')
+        else
+            inputtext=$(echo "${escapedtext}" | base64 | tr -d '\n')
+        fi
+        if [[ ${#inputtext} -gt ${max_osc52_len} ]] ; then
+            exit 0
+        fi
+        screen_dcs_ttyterm "$(printf '\033]52;c;%s\a' "${inputtext}")"
+    elif [[ $have_tty -gt 0 ]]; then
         # osc 52 ...
         if [[ $have_rmnl -eq 1 ]] ; then
-            printf "\e]52;c;%s\a" "$(echo -n \"$escapedtext\" | base64 -i)"
+            inputtext=$(echo -n "${escapedtext}" | base64 | tr -d '\n')
         else
-            printf "\e]52;c;%s\a" "$(echo \"$escapedtext\" | base64 -i)"
+            inputtext=$(echo "${escapedtext}" | base64 | tr -d '\n')
         fi
+        if [[ ${#inputtext} -gt ${max_osc52_len} ]] ; then
+            exit 0
+        fi
+        printf "\e]52;c;%s\a" "$inputtext" > $out_tty
+    elif [[ $have_ssh -gt 0 ]]; then
+        # osc 52 ...
+        if [[ $have_rmnl -eq 1 ]] ; then
+            inputtext=$(echo -n "${escapedtext}" | base64 | tr -d '\n')
+        else
+            inputtext=$(echo "${escapedtext}" | base64 | tr -d '\n')
+        fi
+        if [[ ${#inputtext} -gt ${max_osc52_len} ]] ; then
+            exit 0
+        fi
+        printf "\ePtmux;\e\e]52;c;%s\a\e\\" "$inputtext" > $out_tty
     else
         if [[ $have_rmnl -eq 1 ]] ; then
             echo -n "$escapedtext" | copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input()); text=input(); if (text.length>0) { addUnique(input()) }"
