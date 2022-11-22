@@ -5,7 +5,7 @@ keybinding:
         OpenStatusFilter: '<f10>'
     universal:
         quit: '<f12>'
-        return: '<c-q>'
+        return: '<esc>'
         redo: '<c-6>'
         undo: '<c-8>'
         scrollUpMain-alt1: '<c-b>' # main panel scrool up
