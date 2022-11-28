@@ -9,5 +9,6 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 case "${1}" in
     resume)
         sudo -u kellma02 env DISPLAY=:0 /home/kellma02/bin/xmodmap.fix
+        systemctl --no-block restart serial-getty@ttyUSB0.service
 ;;
 esac
