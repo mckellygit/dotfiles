@@ -86,7 +86,7 @@ endif
 let g:in_gv2 = 0
 
 let @t="0"
-let @p="0"
+let @l="0"
 
 " ====================================================
 " --- vundle -----------------------------------------
@@ -3957,6 +3957,10 @@ if &t_Co > 2 || has("gui_running")
 " hi Comment      term=NONE    ctermfg=LightGray
 endif
 
+" to prevent flashing bright green status line sometimes ...
+hi StatusLine   ctermbg=none
+hi StatusLineNC ctermbg=none
+
 " NOTE: if want terminal default background (opacity etc.) ...
 let g:opaqbg=0
 "hi Normal cterm=none ctermbg=none
@@ -3985,7 +3989,7 @@ set nobackup    " do not keep a backup file
 " read/write .viminfo file, don't save/restore registers -
 " NOTE: do not want to overwrite existing */+ registers
 "       as that is the current selection/clipboard
-set viminfo='20,/20,:20,<0
+set viminfo='20,/20,:20,<0,s50000,h
 " keep 20 lines of command line history
 set history=20
 " :help 'viminfo' (with quotes) for more info
@@ -4852,6 +4856,7 @@ vnoremap <silent> <Leader>zc y:<C-u>call <SID>CopyReg(1)<CR>gv
 function! PostPaste(code)
     stopinsert
     set nopaste
+    set mouse=a
     " make sure we are in ttyterm_tmp buffer ...
     if bufname() !=# '/dev/shm/ttyterm_tmp'
         redraw!
@@ -4926,6 +4931,7 @@ function! s:CopyDefReg(arg)
         setlocal eventignore-=CursorHoldI
         setlocal eventignore-=CompleteChanged
         setlocal eventignore-=CompleteDone
+        setlocal mouse=
 
         if has("nvim")
             TSBufDisable highlight
@@ -6327,7 +6333,7 @@ if !has("nvim")
 
     " BUG fix for vim on new terminal first time dragging ...
     function s:VimTermInit()
-        let @p="1"
+        let @l="1"
         " this feedkeys work-around causes fzf#run() to fail, so only do it for some
         " (fzf terminal is unlisted, but so is a regular shell terminal) ...
         "if !buflisted('%')
@@ -6343,7 +6349,7 @@ if !has("nvim")
         silent call feedkeys("\<C-w>Nv\<C-LeftDrag>\<C-LeftDrag>\<Esc>\<Esc>\<Esc>i", "Lnt")
     endfunction
     " VIM BUG
-    au TerminalWinOpen * call <SID>VimTermInit()
+    "au TerminalWinOpen * call <SID>VimTermInit()
 
     tnoremap <LeftMouse>        <Cmd>let @t="0"<CR><C-w>N<LeftMouse>
     tnoremap <LeftDrag>         <Nop>
@@ -6640,7 +6646,7 @@ endif
 " strange vim ISSUE on first time click from terminal
 " also if we do not release ctrl key it, clipboard may not get updated
 "if !has("nvim")
-"    nmap <silent> <expr> <C-LeftRelease> (@t=="1" && @p=="1") ? '<Cmd>call <SID>Delay(100)<CR><Cmd>let @t="0"<CR>' : '<Ignore>'
+"    nmap <silent> <expr> <C-LeftRelease> (@t=="1" && @l=="1") ? '<Cmd>call <SID>Delay(100)<CR><Cmd>let @t="0"<CR>' : '<Ignore>'
 "endif
 " --------------------------------------------------------------------
 
@@ -6654,7 +6660,7 @@ imap <silent> <C-LeftMouse> <C-\><C-o>:let @i="2"<CR><LeftMouse>
 " ------------------------------
 
 function! s:Delay(arg) abort
-    let @p="0"
+    let @l="0"
     if !exists('w:vc')
         let w:vc = 'u'
         let w:vp = 'u'
