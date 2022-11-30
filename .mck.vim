@@ -4853,30 +4853,34 @@ vnoremap <silent> <Leader>zc y:<C-u>call <SID>CopyReg(1)<CR>gv
 "       if ttyterm == 1 then somehow contact remote daemon and have it
 "       send file to save in reg
 
-let s:lines = ['']
 function! TTYPaste(job_id, data, event) dict
-    let eof = (a:data == [''])
-    " Complete the previous line.
-    let s:lines[-1] .= a:data[0]
-    " Append (last item may be a partial line, until EOF).
-    call extend(s:lines, a:data[1:])
-
     stopinsert
     set nopaste
     set mouse=a
+
+    if a:event == "stdout"
+        let b:tty_clipboard = join(a:data)
+    endif
+
     " make sure we are in ttyterm_tmp buffer ...
     if bufname() !=# '/dev/shm/ttyterm_tmp'
         redraw!
         echo " "
         return
     endif
-    silent! write!
+
+    "silent! write!
+
     if !empty(s:cur_buf)
         exe s:cur_buf."buffer"
     else
         silent! bprev
     endif
-    redraw!
+
+    call delete('/dev/shm/ttyterm_tmp')
+
+    "redraw!
+
 endfunction
 
 let s:cur_buf = ''
@@ -4970,7 +4974,7 @@ function! s:CopyDefReg(arg)
         " osc esc seq coming back will make sure to start the insert ...
         "startinsert
 
-        "let ttyjob = jobstart(["/bin/bash", "-c", 'ttypaste'], {'pty':v:false, 'on_stdin':function('TTYPaste'), 'stdin_buffered':v:true })
+        "let ttyjob = jobstart(["/bin/bash", "-c", "ttypaste"], {'pty':v:false, 'on_stdout':function('TTYPaste'), 'stdout_buffered':v:true })
 
         let astr = "\e]52;x;\x07"
         if has("win32") && has("nvim")
