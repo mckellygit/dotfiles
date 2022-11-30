@@ -82,11 +82,18 @@ __ip_address() {
 			fi
 		;;
 	esac
-	if [ -z "$ipaddr" ]; then
-		ipaddr=$(hostname -i)
-	fi
 	if [ -n "$WSL_DISTRO_NAME" ] || [ -n "$WSLENV" ]; then
-		ipaddr=$(ipconfig.exe 2>/dev/null | grep IPv4 | head -n 1 | awk '{print $NF}' | tr -d '\r\n')
+		ipaddr=$(route.exe PRINT -4 2>/dev/null | grep '0.0.0.0          0.0.0.0' | tail -n 1 | awk '{print $4}' | tr -d '\r\n')
+		if [ -z "$ipaddr" ]; then
+			ipaddr=$(ipconfig.exe 2>/dev/null | grep IPv4 | head -n 1 | awk '{print $NF}' | tr -d '\r\n')
+		fi
+	else
+		if [ -z "$ipaddr" ]; then
+			ipaddr=$(hostname -i)
+		fi
+	fi
+	if [ -z "$ipaddr" ]; then
+		ipaddr="ip ???"
 	fi
 	if [ -n "$ipaddr" ]; then
 		if [ "$1" = "t" ]; then

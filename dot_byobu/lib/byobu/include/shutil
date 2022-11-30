@@ -77,7 +77,7 @@ attr_map() {
 	case "$1" in
 		"d") _RET=,dim ;;
 		"u") _RET=,underscore ;;
-		"b") _RET=,bold ;;
+		"b") _RET= ;;
 		"r") _RET=,reverse ;;
 		"s") _RET=,standout ;;
 		"B") _RET=,blinking ;;
