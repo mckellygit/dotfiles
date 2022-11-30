@@ -3958,8 +3958,8 @@ if &t_Co > 2 || has("gui_running")
 endif
 
 " to prevent flashing bright green status line sometimes ...
-hi StatusLine   ctermbg=none
-hi StatusLineNC ctermbg=none
+hi StatusLine   ctermbg=238 ctermfg=238
+hi StatusLineNC ctermbg=238 ctermfg=238
 
 " NOTE: if want terminal default background (opacity etc.) ...
 let g:opaqbg=0
@@ -4853,6 +4853,33 @@ vnoremap <silent> <Leader>zc y:<C-u>call <SID>CopyReg(1)<CR>gv
 "       if ttyterm == 1 then somehow contact remote daemon and have it
 "       send file to save in reg
 
+let s:lines = ['']
+function! TTYPaste(job_id, data, event) dict
+    let eof = (a:data == [''])
+    " Complete the previous line.
+    let s:lines[-1] .= a:data[0]
+    " Append (last item may be a partial line, until EOF).
+    call extend(s:lines, a:data[1:])
+
+    stopinsert
+    set nopaste
+    set mouse=a
+    " make sure we are in ttyterm_tmp buffer ...
+    if bufname() !=# '/dev/shm/ttyterm_tmp'
+        redraw!
+        echo " "
+        return
+    endif
+    silent! write!
+    if !empty(s:cur_buf)
+        exe s:cur_buf."buffer"
+    else
+        silent! bprev
+    endif
+    redraw!
+endfunction
+
+let s:cur_buf = ''
 function! PostPaste(code)
     stopinsert
     set nopaste
@@ -4864,7 +4891,11 @@ function! PostPaste(code)
         return
     endif
     silent! write!
-    silent! bprev!
+    if !empty(s:cur_buf)
+        exe s:cur_buf."buffer"
+    else
+        silent! bprev
+    endif
     redraw!
     if a:code != 0
         silent! bwipe! /dev/shm/ttyterm_tmp
@@ -4911,13 +4942,10 @@ inoremap <silent> <F16> <Esc>:call PostPaste()<CR>
 function! s:CopyDefReg(arg)
     if g:is_ttyterm == 2
 
-        " create a hidden / temp buffer
-        let l:match_buf_nr = bufnr("/dev/shm/ttyterm_tmp", 1)
-        let l:match_buf_name = bufname(l:match_buf_nr)
+        let s:cur_buf = bufnr("")
 
-        " won't be able to write to this buffer until it has been opened
-        " at least once, so switch to it and then back again without redrawing
-        let l:cur_buf = bufnr("")
+        let l:match_buf_nr = bufnr("/dev/shm/ttyterm_tmp", 1)
+
         exe l:match_buf_nr."buffer"
 
         "setlocal noswapfile
@@ -4942,6 +4970,8 @@ function! s:CopyDefReg(arg)
         " osc esc seq coming back will make sure to start the insert ...
         "startinsert
 
+        "let ttyjob = jobstart(["/bin/bash", "-c", 'ttypaste'], {'pty':v:false, 'on_stdin':function('TTYPaste'), 'stdin_buffered':v:true })
+
         let astr = "\e]52;x;\x07"
         if has("win32") && has("nvim")
             silent call chansend(v:stderr, astr)
@@ -4955,6 +4985,9 @@ function! s:CopyDefReg(arg)
         endif
 
         " osc esc seq coming back will call PostPaste(code) ...
+
+        "call jobwait([ttyjob], -1)[0]
+
         return
 
     elseif g:is_ttyterm == 1
@@ -8601,6 +8634,7 @@ function! s:MapScrollKeys()
 
   " NOTE: tmux could send Up/Down cmds instead of this key ...
   " TODO: wish <C-e>/<C-y> would scroll virtual lines ...
+  " save <S-F22> for tmux to use for C-triple-click
   "noremap   <silent> <expr> <S-F25>        (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
   noremap   <silent> <expr> <C-S-PageDown> (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
   "inoremap  <silent> <expr> <S-F25>        pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
