@@ -5037,6 +5037,67 @@ endfunction
 nnoremap <silent> <Leader>z/ :noautocmd call <SID>CopyDefReg(1)<CR>
 vnoremap <silent> <Leader>z/ <Nop>
 
+function! MyTabPaste()
+    "echom "MyTabPaste"
+    let s:cur_buf = bufnr("")
+    let l:match_buf_nr = bufnr("/dev/shm/ttyterm_tmp", 1)
+    exe "tabnew|b".l:match_buf_nr
+    mapclear! <buffer>
+    imap <buffer> <C-@> <Nop>
+    imap <buffer> <C-a> <Nop>
+    imap <buffer> <C-c> <Nop>
+    setlocal eventignore-=CursorHold
+    setlocal eventignore-=CursorHoldI
+    setlocal eventignore-=CompleteChanged
+    setlocal eventignore-=CompleteDone
+    setlocal syntax=off
+    if has("nvim")
+        TSBufDisable highlight
+    endif
+    set mouse=
+    set paste
+endfunction
+
+function! MyTabCopy()
+    "echom "MyTabCopy"
+    set nopaste
+    set mouse=a
+    " make sure we are in ttyterm_tmp buffer ...
+    if bufname() !=# '/dev/shm/ttyterm_tmp'
+        let etxt = "Error: remote (tty) clipboard copy failed: " . "not in tty tab buffer"
+        echohl DiffText | echo etxt | echohl None
+        sleep 1251m
+        redraw!
+        echo " "
+        return
+    endif
+    silent! write!
+    tabclose
+    redraw!
+    if empty(expand(glob("/dev/shm/ttyterm_tmp")))
+        let etxt = "Error: remote (tty) clipboard copy failed: " . "no tmp file"
+        echohl DiffText | echo etxt | echohl None
+        sleep 851m
+        redraw!
+        echo " "
+        return
+    endif
+    silent! let @p=system('cat /dev/shm/ttyterm_tmp 2>/dev/null')
+    silent! bwipe! /dev/shm/ttyterm_tmp
+    call delete('/dev/shm/ttyterm_tmp')
+    if !empty(@p)
+        let @"=@p
+        call setreg('p', [])
+        echohl DiffText | echo "remote (tty) clipboard -> @\" reg copy" | echohl None
+        sleep 851m
+        redraw!
+        echo " "
+    endif
+endfunction
+
+nnoremap <silent> <Leader>z<BS>  :call MyTabPaste()<CR>
+nnoremap <silent> <Leader>z<DEL> :call MyTabCopy()<CR>
+
 " too close to . (dot)
 nnoremap <silent> <Leader>z. <Nop>
 vnoremap <silent> <Leader>z. <Nop>
@@ -9561,6 +9622,7 @@ if g:has_wsl == 0 || has("nvim")
     " at orig offset
     nmap <Leader>pl <Plug>UnconditionalPasteLineAfter
     nmap <Leader>Pl <Plug>UnconditionalPasteLineBefore
+    nmap <Leader>pL <Plug>UnconditionalPasteLineBefore
 
     " indented (used to be pi/Pi, but switched with px/Px below)
     nmap <Leader>px <Plug>UnconditionalPasteIndentedAfter
@@ -9575,6 +9637,7 @@ if g:has_wsl == 0 || has("nvim")
 
     nmap <Leader>pb <Plug>UnconditionalPasteBlockAfter
     nmap <Leader>Pb <Plug>UnconditionalPasteBlockBefore
+    nmap <Leader>pB <Plug>UnconditionalPasteBlockBefore
 
     " slightly confusing and has some delay ...
     "nmap <Leader>P> <Plug>UnconditionalPasteShiftedBefore
