@@ -1147,7 +1147,7 @@ function! s:bufopen(e)
         else
             " open hidden buffer in a new tab ...
             " TODO: or hsplit or vsplit or in current window ...
-            execute 'tabnew|b'.l:bufid
+            execute 'tab sb'.l:bufid
         endif
     else
         call win_gotoid(l:winids[0])
@@ -4863,7 +4863,7 @@ function! TTYPaste(job_id, data, event) dict
     endif
 
     " make sure we are in ttyterm_tmp buffer ...
-    if bufname() !=# '/dev/shm/ttyterm_tmp'
+    if bufname('') !=# '/dev/shm/ttyterm_tmp'
         redraw!
         echo " "
         return
@@ -4872,7 +4872,7 @@ function! TTYPaste(job_id, data, event) dict
     "silent! write!
 
     if !empty(s:cur_buf)
-        exe s:cur_buf."buffer"
+        exe s:cur_buf."b"
     else
         silent! bprev
     endif
@@ -4889,19 +4889,20 @@ function! PostPaste(code)
     set nopaste
     set mouse=a
     " make sure we are in ttyterm_tmp buffer ...
-    if bufname() !=# '/dev/shm/ttyterm_tmp'
+    if bufname('') !=# '/dev/shm/ttyterm_tmp'
+        let etxt = "Error: remote (tty) clipboard copy failed: " . "not in tty tab buffer"
+        echohl DiffText | echo etxt | echohl None
+        sleep 1251m
         redraw!
         echo " "
         return
     endif
-    silent! write!
-    if !empty(s:cur_buf)
-        exe s:cur_buf."buffer"
-    else
-        silent! bprev
-    endif
-    redraw!
     if a:code != 0
+        tabclose
+        if !empty(s:cur_buf)
+            exe s:cur_buf."b"
+        endif
+        redraw!
         silent! bwipe! /dev/shm/ttyterm_tmp
         call delete('/dev/shm/ttyterm_tmp')
         if a:code == 3
@@ -4910,15 +4911,21 @@ function! PostPaste(code)
             let etxt = "Error: remote (tty) clipboard copy failed: " . a:code
         endif
         echohl DiffText | echo etxt | echohl None
-        sleep 851m
+        sleep 1251m
         redraw!
         echo " "
         return
     endif
+    silent! write!
+    tabclose
+    if !empty(s:cur_buf)
+        exe s:cur_buf."b"
+    endif
+    redraw!
     if empty(expand(glob("/dev/shm/ttyterm_tmp")))
         let etxt = "Error: remote (tty) clipboard copy failed: " . "no tmp file"
         echohl DiffText | echo etxt | echohl None
-        sleep 851m
+        sleep 1251m
         redraw!
         echo " "
         return
@@ -4944,13 +4951,28 @@ endif
 inoremap <silent> <F16> <Esc>:call PostPaste()<CR>
 
 function! s:CopyDefReg(arg)
+    for b in range(1, bufnr('$'))
+        if bufexists(b)
+            if bufname(b) ==# "/dev/shm/ttyterm_tmp"
+                " TODO: goto to that tab/buffer
+                augroup mypasteag
+                    autocmd! BufUnload /dev/shm/ttyterm_tmp call MyTabExit()
+                augroup end
+                let l:winids = win_findbuf(bufnr(b))
+                if empty(l:winids)
+                    exe "tab sb".bufnr(b)
+                else
+                    call win_gotoid(l:winids[0])
+                endif
+                return
+            endif
+        endif
+    endfor
     if g:is_ttyterm == 2
 
         let s:cur_buf = bufnr("")
-
         let l:match_buf_nr = bufnr("/dev/shm/ttyterm_tmp", 1)
-
-        exe l:match_buf_nr."buffer"
+        exe "tab sb".l:match_buf_nr
 
         "setlocal noswapfile
         "setlocal bufhidden=hide
@@ -4959,18 +4981,18 @@ function! s:CopyDefReg(arg)
         imap <buffer> <C-@> <Nop>
         imap <buffer> <C-a> <Nop>
         imap <buffer> <C-c> <Nop>
+        ColorClear
         setlocal eventignore-=CursorHold
         setlocal eventignore-=CursorHoldI
         setlocal eventignore-=CompleteChanged
         setlocal eventignore-=CompleteDone
-        setlocal mouse=
-
+        setlocal syntax=off
         if has("nvim")
             TSBufDisable highlight
         endif
+        set mouse=
+        set paste
 
-        setlocal syntax=off
-        setlocal paste
         " osc esc seq coming back will make sure to start the insert ...
         "startinsert
 
@@ -5040,12 +5062,35 @@ vnoremap <silent> <Leader>z/ <Nop>
 function! MyTabPaste()
     "echom "MyTabPaste"
     let s:cur_buf = bufnr("")
+    for b in range(1, bufnr('$'))
+        if bufexists(b)
+            if bufname(b) ==# "/dev/shm/ttyterm_tmp"
+                " TODO: goto to that tab/buffer
+                augroup mypasteag
+                    autocmd! BufUnload /dev/shm/ttyterm_tmp call MyTabExit()
+                augroup end
+                let l:winids = win_findbuf(bufnr(b))
+                if empty(l:winids)
+                    exe "tab sb".bufnr(b)
+                else
+                    call win_gotoid(l:winids[0])
+                endif
+                return
+            endif
+        endif
+    endfor
     let l:match_buf_nr = bufnr("/dev/shm/ttyterm_tmp", 1)
-    exe "tabnew|b".l:match_buf_nr
+    exe "tab sb".l:match_buf_nr
+    nnoremap <silent> <buffer> <Leader>z<BS> :call MyTabCopy()<CR>
+    " quit should also clean up
+    augroup mypasteag
+        autocmd! TabLeave /dev/shm/ttyterm_tmp call MyTabExit()
+    augroup end
     mapclear! <buffer>
     imap <buffer> <C-@> <Nop>
     imap <buffer> <C-a> <Nop>
     imap <buffer> <C-c> <Nop>
+    ColorClear
     setlocal eventignore-=CursorHold
     setlocal eventignore-=CursorHoldI
     setlocal eventignore-=CompleteChanged
@@ -5058,12 +5103,26 @@ function! MyTabPaste()
     set paste
 endfunction
 
+function! MyTabExit()
+    "echom "MyTabExit"
+    augroup mypasteag
+        autocmd!
+    augroup end
+    set nopaste
+    set mouse=a
+    "bdelete! /dev/shm/ttyterm_tmp
+    "call delete('/dev/shm/ttyterm_tmp')
+endfunction
+
 function! MyTabCopy()
     "echom "MyTabCopy"
+    augroup mypasteag
+        autocmd!
+    augroup end
     set nopaste
     set mouse=a
     " make sure we are in ttyterm_tmp buffer ...
-    if bufname() !=# '/dev/shm/ttyterm_tmp'
+    if bufname('') !=# '/dev/shm/ttyterm_tmp'
         let etxt = "Error: remote (tty) clipboard copy failed: " . "not in tty tab buffer"
         echohl DiffText | echo etxt | echohl None
         sleep 1251m
@@ -5073,6 +5132,9 @@ function! MyTabCopy()
     endif
     silent! write!
     tabclose
+    if !empty(s:cur_buf)
+        exe s:cur_buf."b"
+    endif
     redraw!
     if empty(expand(glob("/dev/shm/ttyterm_tmp")))
         let etxt = "Error: remote (tty) clipboard copy failed: " . "no tmp file"
@@ -6441,7 +6503,7 @@ if !has("nvim")
             return
         endif
         let g:fterm = 0
-        "echom "VimTermInit: " . bufname()
+        "echom "VimTermInit: " . bufname('')
         " and it still does not really solve the problem, as
         " sometimes a mouse drag will stop abruptly and incorrectly
         silent call feedkeys("\<C-w>Nv\<C-LeftDrag>\<C-LeftDrag>\<Esc>\<Esc>\<Esc>i", "Lnt")
@@ -9809,7 +9871,7 @@ function LessInitFunc() abort
   let g:opaqbg=1
   hi Normal cterm=none ctermbg=none
   nnoremap <silent> <expr> <Leader>bg (g:opaqbg == 1) ? ':hi Normal cterm=none ctermbg=235<bar>let g:opaqbg=0<CR>' : ':hi Normal cterm=none ctermbg=none<bar>let g:opaqbg=1<CR>'
-  if empty(bufname())
+  if empty(bufname(''))
       exec ":f vless:stdin"
   endif
 endfunction
@@ -10639,14 +10701,14 @@ function! SkipTerminalsQuitCmd(cmd) abort
             if getbufvar(b.bufnr, '&buftype') !=# 'terminal' && getbufvar(b.bufnr, '&buftype') !=# 'popup'
                 if !b.changed
                     execute "silent! bd " . b.bufnr
-                else
+                elseif bufname(b.bufnr) !=# '/dev/shm/ttyterm_tmp'
                     if l:bmod == 0
                         echo "buffer: " . b.bufnr . " modified"
                         let l:bmod = 1
                     endif
                     let l:doquit = 0
                 endif
-            else
+            elseif bufname(b.bufnr) !=# '/dev/shm/ttyterm_tmp'
                 let l:doquit = 0
             endif
         endif
@@ -10671,14 +10733,14 @@ function! SkipTerminalsConfQA() abort
             if getbufvar(b.bufnr, '&buftype') !=# 'terminal' && getbufvar(b.bufnr, '&buftype') !=# 'popup'
                 if !b.changed
                     execute "silent! bd " . b.bufnr
-                else
+                elseif bufname(b.bufnr) !=# '/dev/shm/ttyterm_tmp'
                     if l:bmod == 0
                         echo "buffer: " . b.bufnr . " modified"
                         let l:bmod = 1
                     endif
                     let l:doquit = 0
                 endif
-            else
+            elseif bufname(b.bufnr) !=# '/dev/shm/ttyterm_tmp'
                 let l:doquit = 0
             endif
         endif
@@ -10707,7 +10769,7 @@ function! s:QuitIfOnlyNoNameLeft() abort
                 let bname = bufname(b.bufnr)
                 " echomsg 'bname = ' . bname
                 " a [No Name] buffer ...
-                if bname !=# ''
+                if bname !=# '' && bname !=# '/dev/shm/ttyterm_tmp'
                     let l:doquit = 0
                     break
                 endif
@@ -11263,8 +11325,25 @@ function s:ConfNextOrQuit() abort
         echohl None
         return
     endif
-    if &modified
-        echo "Buffer " . bufname("") . " modified, save now? (y/N): "
+
+    if bufname('') ==# '/dev/shm/ttyterm_tmp'
+        tabprevious
+        silent! bwipe! /dev/shm/ttyterm_tmp
+        call delete('/dev/shm/ttyterm_tmp')
+        return
+    endif
+
+    for b in range(1, bufnr('$'))
+        if bufexists(b)
+            if bufname(b) ==# "/dev/shm/ttyterm_tmp"
+                silent! bwipe! /dev/shm/ttyterm_tmp
+                call delete('/dev/shm/ttyterm_tmp')
+            endif
+        endif
+    endfor
+
+    if &modified && &confirm == 0
+        echo "Buffer " . bufname('') . " modified, save now? (y/N): "
         call inputsave()
         let c = getchar()
         while type(c) != 0
@@ -11280,6 +11359,7 @@ function s:ConfNextOrQuit() abort
         redraw!
         echo "\r"
     endif
+
     try
         next
     catch /E163:/
@@ -11314,6 +11394,8 @@ function s:QuitIfOnlyHidden(bnum) abort
         if b.bufnr == a:bnum
             continue
         elseif empty(bufname(b.bufnr)) && !b.listed
+            continue
+        elseif bufname(b.bufnr) ==# '/dev/shm/ttyterm_tmp'
             continue
         elseif !b.hidden
             let l:doquit = 0
