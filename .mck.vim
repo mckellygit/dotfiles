@@ -4789,7 +4789,7 @@ function! ForceLoadNammedReg() abort
         return
     endif
     if len(@")> g:max_osc52_len
-        echohl DiffText | echo "@\" reg exceeds max osc52 length" | echohl None
+        echohl WarningMsg | echo "Error: @\" reg exceeds max osc52 length" | echohl None
         sleep 851m
         redraw!
         echo " "
@@ -4798,7 +4798,7 @@ function! ForceLoadNammedReg() abort
     if g:has_wsl > 0
         if g:has_clipper > 0
             silent call system("win32yank.exe -i --crlf", getreg('"'))
-            echohl DiffText | echo "@\" reg -> clipboard copy" | echohl None
+            echohl DiffAdd | echo "@\" reg -> clipboard copy" | echohl None
             sleep 851m
             redraw!
             echo " "
@@ -4808,7 +4808,7 @@ function! ForceLoadNammedReg() abort
     else
         if g:has_clipper > 0
             silent call system("myclip -", getreg('"'))
-            echohl DiffText | echo "@\" reg -> clipboard copy" | echohl None
+            echohl DiffAdd | echo "@\" reg -> clipboard copy" | echohl None
             sleep 851m
             redraw!
             echo " "
@@ -4834,7 +4834,7 @@ function! s:CopyReg(arg)
         call setreg('x', getreg('*'), getregtype('*'))
     endif
     if a:arg == 1
-        echohl DiffText | echo "clipboard -> @x reg copy" | echohl None
+        echohl DiffAdd | echo "clipboard -> @x reg copy" | echohl None
         sleep 851m
         redraw!
         echo " "
@@ -4880,7 +4880,6 @@ function! TTYPaste(job_id, data, event) dict
     call delete('/dev/shm/ttyterm_tmp')
 
     "redraw!
-
 endfunction
 
 let s:cur_buf = ''
@@ -4891,7 +4890,7 @@ function! PostPaste(code)
     " make sure we are in ttyterm_tmp buffer ...
     if bufname('') !=# '/dev/shm/ttyterm_tmp'
         let etxt = "Error: remote (tty) clipboard copy failed: " . "not in tty tab buffer"
-        echohl DiffText | echo etxt | echohl None
+        echohl WarningMsg | echo etxt | echohl None
         sleep 1251m
         redraw!
         echo " "
@@ -4910,7 +4909,7 @@ function! PostPaste(code)
         else
             let etxt = "Error: remote (tty) clipboard copy failed: " . a:code
         endif
-        echohl DiffText | echo etxt | echohl None
+        echohl WarningMsg | echo etxt | echohl None
         sleep 1251m
         redraw!
         echo " "
@@ -4924,7 +4923,7 @@ function! PostPaste(code)
     redraw!
     if empty(expand(glob("/dev/shm/ttyterm_tmp")))
         let etxt = "Error: remote (tty) clipboard copy failed: " . "no tmp file"
-        echohl DiffText | echo etxt | echohl None
+        echohl WarningMsg | echo etxt | echohl None
         sleep 1251m
         redraw!
         echo " "
@@ -4936,7 +4935,7 @@ function! PostPaste(code)
     if !empty(@p)
         let @"=@p
         call setreg('p', [])
-        echohl DiffText | echo "remote (tty) clipboard -> @\" reg copy" | echohl None
+        echohl DiffAdd | echo "remote (tty) clipboard -> @\" reg copy" | echohl None
         sleep 851m
         redraw!
         echo " "
@@ -4969,6 +4968,12 @@ function! s:CopyDefReg(arg)
         endif
     endfor
     if g:is_ttyterm == 2
+
+        echohl WarningMsg | echo "tty remote clipboard -> @\" reg copy not reliable yet" | echohl None
+        sleep 1251m
+        redraw!
+        echo " "
+        return
 
         let s:cur_buf = bufnr("")
         let l:match_buf_nr = bufnr("/dev/shm/ttyterm_tmp", 1)
@@ -5018,7 +5023,7 @@ function! s:CopyDefReg(arg)
 
     elseif g:is_ttyterm == 1
 
-        echohl DiffText | echo "Error: ssh remote clipboard -> @\" reg copy not supported yet" | echohl None
+        echohl WarningMsg | echo "ssh remote clipboard -> @\" reg copy not supported yet" | echohl None
         sleep 1251m
         redraw!
         echo " "
@@ -5047,7 +5052,7 @@ function! s:CopyDefReg(arg)
         let @"=@p
         call setreg('p', [])
         if a:arg == 1
-            echohl DiffText | echo "clipboard -> @\" reg copy" | echohl None
+            echohl DiffAdd | echo "clipboard -> @\" reg copy" | echohl None
             sleep 851m
             redraw!
             echo " "
@@ -5124,7 +5129,7 @@ function! MyTabCopy()
     " make sure we are in ttyterm_tmp buffer ...
     if bufname('') !=# '/dev/shm/ttyterm_tmp'
         let etxt = "Error: remote (tty) clipboard copy failed: " . "not in tty tab buffer"
-        echohl DiffText | echo etxt | echohl None
+        echohl WarningMsg | echo etxt | echohl None
         sleep 1251m
         redraw!
         echo " "
@@ -5138,8 +5143,8 @@ function! MyTabCopy()
     redraw!
     if empty(expand(glob("/dev/shm/ttyterm_tmp")))
         let etxt = "Error: remote (tty) clipboard copy failed: " . "no tmp file"
-        echohl DiffText | echo etxt | echohl None
-        sleep 851m
+        echohl WarningMsg | echo etxt | echohl None
+        sleep 1251m
         redraw!
         echo " "
         return
@@ -5150,7 +5155,7 @@ function! MyTabCopy()
     if !empty(@p)
         let @"=@p
         call setreg('p', [])
-        echohl DiffText | echo "remote (tty) clipboard -> @\" reg copy" | echohl None
+        echohl DiffAdd | echo "remote (tty) clipboard -> @\" reg copy" | echohl None
         sleep 851m
         redraw!
         echo " "
@@ -5179,7 +5184,7 @@ function! s:SwapReg(arg)
     call setreg('x', getreg('y'), getregtype('y'))
     call setreg('y', [])
     if a:arg == 1
-        echohl DiffText | echo "@\" <-> @x regs swapped" | echohl None
+        echohl DiffAdd | echo "@\" <-> @x regs swapped" | echohl None
         sleep 851m
         redraw!
         echo " "
@@ -5197,7 +5202,7 @@ function! s:SwapReg2(arg)
     call setreg('o', getreg('y'), getregtype('y'))
     call setreg('y', [])
     if a:arg == 1
-        echohl DiffText | echo "@\" <-> @o regs swapped" | echohl None
+        echohl DiffAdd | echo "@\" <-> @o regs swapped" | echohl None
         sleep 851m
         redraw!
         echo " "
@@ -5312,13 +5317,13 @@ endfunction
 
 function RemoteClip(ch, befor)
     if a:ch == 2 && a:befor == 0
-        echohl DiffText | echo "Error: tty remote clipboard paste not supported yet" | echohl None
+        echohl WarningMsg | echo "Error: tty remote clipboard paste not supported yet" | echohl None
     elseif a:ch == 2 && a:befor == 1
-        echohl DiffText | echo "Error: tty remote clipboard Paste not supported yet" | echohl None
+        echohl WarningMsg | echo "Error: tty remote clipboard Paste not supported yet" | echohl None
     elseif a:ch == 1 && a:befor == 0
-        echohl DiffText | echo "Error: ssh remote clipboard paste not supported yet" | echohl None
+        echohl WarningMsg | echo "Error: ssh remote clipboard paste not supported yet" | echohl None
     elseif a:ch == 1 && a:befor == 1
-        echohl DiffText | echo "Error: ssh remote clipboard Paste not supported yet" | echohl None
+        echohl WarningMsg | echo "Error: ssh remote clipboard Paste not supported yet" | echohl None
     else
         return
     endif
