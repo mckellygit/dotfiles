@@ -12184,7 +12184,7 @@ if g:is_ttyterm > 1
     " with modified screen we can skip this ...
     "set mouse=nv
     " only helpful with nvim because vim supports t_ut='' bce termcap setting
-    set signcolumn=no
+    "set signcolumn=no
     exec 'normal <Cmd>GitGutterDisable<CR>'
     if 1
         if has("nvim")
