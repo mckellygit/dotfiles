@@ -5324,13 +5324,13 @@ endfunction
 
 function RemoteClip(ch, befor)
     if a:ch == 2 && a:befor == 0
-        echohl WarningMsg | echo "Error: tty remote clipboard paste not supported yet" | echohl None
+        echohl WarningMsg | echo "tty remote clipboard paste not supported yet" | echohl None
     elseif a:ch == 2 && a:befor == 1
-        echohl WarningMsg | echo "Error: tty remote clipboard Paste not supported yet" | echohl None
+        echohl WarningMsg | echo "tty remote clipboard Paste not supported yet" | echohl None
     elseif a:ch == 1 && a:befor == 0
-        echohl WarningMsg | echo "Error: ssh remote clipboard paste not supported yet" | echohl None
+        echohl WarningMsg | echo "ssh remote clipboard paste not supported yet" | echohl None
     elseif a:ch == 1 && a:befor == 1
-        echohl WarningMsg | echo "Error: ssh remote clipboard Paste not supported yet" | echohl None
+        echohl WarningMsg | echo "ssh remote clipboard Paste not supported yet" | echohl None
     else
         return
     endif
@@ -5341,7 +5341,7 @@ endfunction
 
 function UpdateClipCmd(cmd)
     if g:is_ttyterm > 0
-        echohl WarningMsg | echo "Error: remote clipboard copy not supported yet" | echohl None
+        echohl WarningMsg | echo "remote clipboard copy not supported yet" | echohl None
         return
     endif
     if g:has_wsl > 0 && !has("nvim")
@@ -11275,7 +11275,10 @@ function s:ConfNextOrQuit() abort
     catch /E163:/
         if &buftype ==# 'nofile' && bufname('') =~ 'health://'
             let bn = bufnr('%')
-            close
+            try
+                close
+            catch /E444:/
+            endtry
             execute "silent! bwipe! " . bn
         else
             silent! FloatermKill!
@@ -12090,8 +12093,8 @@ if g:is_ttyterm > 1
     "set mouse=nv
     " only helpful with nvim because vim supports t_ut='' bce termcap setting
     "set signcolumn=no
-    exec 'normal <Cmd>GitGutterDisable<CR>'
-    if 1
+    if 0
+        exec 'normal <Cmd>GitGutterDisable<CR>'
         if has("nvim")
             " WARNING: these seem to be needed to paste > 10kb
             highlight Normal ctermbg=none
@@ -12104,9 +12107,10 @@ if g:is_ttyterm > 1
                 "autocmd InsertEnter * syntax off | TSBufDisable highlight | set paste
                 "autocmd InsertLeave * syntax on  | TSBufEnable  highlight | set nopaste
             endif
-        else
-            set nottyfast
         endif
+    endif " if 0 ...
+    if !has("nvim")
+        set nottyfast
     endif
 endif
 
