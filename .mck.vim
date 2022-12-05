@@ -508,7 +508,10 @@ filetype plugin indent on " required
 " ====================================================
 
 " ================== tree-sitter =====================
-if has("nvim")
+" treesitter can cause slowness/laggyness with large files ...
+" try a 'dd' then hold down '.' (dot) for repeat and check update speed and laggyness ...
+let g:use_treesitter = 0
+if has("nvim") && g:use_treesitter > 0
     "Part of PU Alias ...
     "autocmd VimEnter *      TSUpdate
     autocmd FileType c      TSBufEnable highlight
@@ -3049,7 +3052,10 @@ function! s:YankAndRestoreWinPos(cmd, mx)
 endfunction
 
 "vmap <silent> <expr> <C-c> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty' : 'mvty`v'
-vmap <silent> <expr> <C-c> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+"vmap <silent> <expr> <C-c> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+" NOTE: since in vim <C-x>, <C-v> do not cut, paste, make <C-c> also not copy.  Use <C-S-x>, <C-S-v> and <C-S-c> for cut, paste, copy ...
+" See also <C-Insert> and <F33> below
+vnoremap <silent> <C-c> <Esc>
 vmap <silent> <expr> y     (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 0)<CR>'
 vmap <silent> <expr> Y     (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'omvVtY`v' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("tY", 0)<CR>'
 vmap <silent> <expr> <Leader>yy (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
@@ -3153,8 +3159,8 @@ function! TTYTermCopyDCS()
         if filewritable('/dev/fd/2')
             call writefile([astr], '/dev/fd/2', 'b')
         else
-            " is the > /dev/ttyUSB0 required ?
-            exec("silent! !echo " . shellescape(astr) . " > /dev/ttyUSB0")
+            " is the > /dev/comport required ?
+            exec("silent! !echo " . shellescape(astr) . " > /dev/comport")
             redraw!
         endif
     endif
@@ -3182,8 +3188,8 @@ function! TTYTermCopy()
         if filewritable('/dev/fd/2')
             call writefile([astr], '/dev/fd/2', 'b')
         else
-            " is the > /dev/ttyUSB0 required ?
-            exec("silent! !echo " . shellescape(astr) . " > /dev/ttyUSB0")
+            " is the > /dev/comport required ?
+            exec("silent! !echo " . shellescape(astr) . " > /dev/comport")
             redraw!
         endif
     endif
@@ -3209,8 +3215,8 @@ function! TTYTermCopyTMUX()
         if filewritable('/dev/fd/2')
             call writefile([astr], '/dev/fd/2', 'b')
         else
-            " is the > /dev/ttyUSB0 required ?
-            exec("silent! !echo " . shellescape(astr) . " > /dev/ttyUSB0")
+            " is the > /dev/comport required ?
+            exec("silent! !echo " . shellescape(astr) . " > /dev/comport")
             redraw!
         endif
     endif
@@ -3246,7 +3252,7 @@ if has("nvim")
             \   'cache_enabled': 0,
             \ }
     elseif g:is_ttyterm > 0
-        " NOTE: if myclip outputs to /dev/ttyUSB0 then it can be used ...
+        " NOTE: if myclip outputs to /dev/comport then it can be used ...
         let g:clipboard = {
             \   'name': 'ttyterm',
             \   'copy': {},
@@ -3306,8 +3312,8 @@ else
                 return a:mode
             endfunction
 
-            map <expr> p WSLPaste('p')
-            map <expr> P WSLPaste('P')
+            map <silent> <expr> p WSLPaste('p')
+            map <silent> <expr> P WSLPaste('P')
         endif " old way
     endif
 endif
@@ -4807,6 +4813,7 @@ function! ForceLoadNammedReg() abort
         endif
     else
         if g:has_clipper > 0
+            " NOTE: if g:is_ttyterm then myclip will use osc52 to send to remote clipboard ...
             silent call system("myclip -", getreg('"'))
             echohl DiffAdd | echo "@\" reg -> clipboard copy" | echohl None
             sleep 851m
@@ -4943,11 +4950,11 @@ function! PostPaste(code)
 endfunction
 
 " do we send \e:call PostPaste(x) or \e\e[29~ ?
-if !has("nim")
-    call <SID>MapFastKeycode('<F16>',   "\e[29~", 16) " vt220 <F16> esc code ...
-endif
- noremap <silent> <F16> :call PostPaste()<CR>
-inoremap <silent> <F16> <Esc>:call PostPaste()<CR>
+"if !has("nim")
+"    call <SID>MapFastKeycode('<F16>',   "\e[29~", 16) " vt220 <F16> esc code ...
+"endif
+" noremap <silent> <F16> :call PostPaste()<CR>
+"inoremap <silent> <F16> <Esc>:call PostPaste()<CR>
 
 function! s:CopyDefReg(arg)
     for b in range(1, bufnr('$'))
@@ -4992,7 +4999,7 @@ function! s:CopyDefReg(arg)
         setlocal eventignore-=CompleteChanged
         setlocal eventignore-=CompleteDone
         setlocal syntax=off
-        if has("nvim")
+        if has("nvim") && g:use_treesitter > 0
             TSBufDisable highlight
         endif
         set mouse=
@@ -5010,8 +5017,8 @@ function! s:CopyDefReg(arg)
             if filewritable('/dev/fd/2')
                 silent call writefile([astr], '/dev/fd/2', 'b')
             else
-                " is the > /dev/ttyUSB0 required ?
-                silent exec("silent! !echo " . shellescape(astr) . " > /dev/ttyUSB0")
+                " is the > /dev/comport required ?
+                silent exec("silent! !echo " . shellescape(astr) . " > /dev/comport")
             endif
         endif
 
@@ -5101,7 +5108,7 @@ function! MyTabPaste()
     setlocal eventignore-=CompleteChanged
     setlocal eventignore-=CompleteDone
     setlocal syntax=off
-    if has("nvim")
+    if has("nvim") && g:use_treesitter > 0
         TSBufDisable highlight
     endif
     set mouse=
@@ -5332,170 +5339,98 @@ function RemoteClip(ch, befor)
     echo " "
 endfunction
 
-" <F34> paste after
-if g:is_ttyterm == 2
-    " BUG if Windows clipboard history is disabled then in nvim it appears a <S-Insert> key is sent ?
-    nnoremap <expr> <F34>      (&buftype == 'terminal') ? '' : ':call RemoteClip(2,0)<CR>'
-    nnoremap <expr> <S-Insert> (&buftype == 'terminal') ? '' : ':<C-u>call RemoteClip(2,0)<CR>'
-    " TODO: imap, cmap, tmap
-    " noremap <F34>      <Nop>
-    "inoremap <F34>      <Nop>
-    "cnoremap <F34>      <Nop>
-    "tnoremap <F34>      <Nop>
-    " noremap <S-Insert> <Nop>
-    "inoremap <S-Insert> <Nop>
-    "cnoremap <S-Insert> <Nop>
-    "tnoremap <S-Insert> <Nop>
-elseif g:is_ttyterm == 1
-    nnoremap <expr> <F34>      (&buftype == 'terminal') ? '' : ':call RemoteClip(1,0)<CR>'
-    nnoremap <expr> <S-Insert> (&buftype == 'terminal') ? '' : ':<C-u>call RemoteClip(1,0)<CR>'
-    " TODO: imap, cmap, tmap
-    " noremap <F34>      <Nop>
-    "inoremap <F34>      <Nop>
-    "cnoremap <F34>      <Nop>
-    "tnoremap <F34>      <Nop>
-    " noremap <S-Insert> <Nop>
-    "inoremap <S-Insert> <Nop>
-    "cnoremap <S-Insert> <Nop>
-    "tnoremap <S-Insert> <Nop>
-else
-    " TODO: do we update " from clipboard first ?
-    nnoremap <expr> <F34>      (&buftype == 'terminal') ? '' : 'p'
-    nnoremap <expr> <S-Insert> (&buftype == 'terminal') ? '' : 'p'
-    " NOTE: <F34>/<S-Insert> vmapped below ...
-    "vnoremap <expr> <F34> (&buftype == 'terminal') ? '' : '<Esc>p'
-    if g:has_wsl > 0 && !has("nvim")
-        inoremap <silent> <F34>      <C-\><C-o>:call WinUpdateClip()<CR><C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
-        inoremap <silent> <S-Insert> <C-\><C-o>:call WinUpdateClip()<CR><C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
-        cnoremap <F34>      <Cmd>call WinUpdateClip()<CR><C-r>"
-        cnoremap <S-Insert> <Cmd>call WinUpdateClip()<CR><C-r>"
-        tnoremap <F34>      <C-w>:call WinUpdateClip()<CR><C-w>""
-        tnoremap <S-Insert> <C-w>:call WinUpdateClip()<CR><C-w>""
-    else
-        inoremap <silent> <F34>      <C-\><C-o>:set paste<CR><C-r>*<C-\><C-o>:set nopaste<CR>
-        inoremap <silent> <S-Insert> <C-\><C-o>:set paste<CR><C-r>*<C-\><C-o>:set nopaste<CR>
-        cnoremap <F34>      <C-r>*
-        cnoremap <S-Insert> <C-r>*
-        if has("nvim")
-            tnoremap <F34>      <C-\><C-n>"*pi
-            tnoremap <S-Insert> <C-\><C-n>"*pi
-        else
-            tnoremap <F34>      <C-w>"*
-            tnoremap <S-Insert> <C-w>"*
-        endif
+function UpdateClipCmd(cmd)
+    if g:is_ttyterm > 0
+        echohl WarningMsg | echo "Error: remote clipboard copy not supported yet" | echohl None
+        return
     endif
+    if g:has_wsl > 0 && !has("nvim")
+        let @p = system('win32yank.exe -o --lf')
+    else
+        let @p = system('myclip --o')
+    endif
+    if empty(@p) || len(@p) == 0
+        echohl DiffText | echo "clipboard empty" | echohl None
+        sleep 851m
+        redraw!
+        echo " "
+        return
+    endif
+    let @"=@p
+    call setreg('p', [])
+    if empty(a:cmd)
+        return
+    endif
+    silent execute 'normal ' . a:cmd
+endfunction
+
+" <F34> paste after
+nnoremap <silent> <expr> <F34>          (&buftype == 'terminal') ? '' : '<Cmd>call UpdateClipCmd("p")<CR>'
+nnoremap <silent> <expr> <S-Insert>     (&buftype == 'terminal') ? '' : '<Cmd>call UpdateClipCmd("p")<CR>'
+" NOTE: <F34>/<S-Insert> vmapped below ...
+inoremap <silent> <F34>                 <C-\><C-o>:call UpdateClipCmd('')<CR><C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
+inoremap <silent> <S-Insert>            <C-\><C-o>:call UpdateClipCmd('')<CR><C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
+cnoremap <silent> <F34>                 <Cmd>call UpdateClipCmd('')<CR><C-r>"
+cnoremap <silent> <S-Insert>            <Cmd>call UpdateClipCmd('')<CR><C-r>"
+if !has("nvim")
+    tnoremap <silent> <F34>             <C-w>:call UpdateClipCmd('')<CR><C-w>""
+    tnoremap <silent> <S-Insert>        <C-w>:call UpdateClipCmd('')<CR><C-w>""
+else
+    tnoremap <silent> <F34>             <C-\><C-n>:call UpdateClipCmd('')<CR><C-\><C-n>""pi
+    tnoremap <silent> <S-Insert>        <C-\><C-n>:call UpdateClipCmd('')<CR><C-\><C-n>""pi
 endif
 
 call <SID>MapFastKeycode('<S-F34>',  "\e!", 134)
 " <M-!> paste after [menu?]
-if g:is_ttyterm == 2
-    nnoremap <expr> <S-F34>      (&buftype == 'terminal') ? '' : ':call RemoteClip(2,0)<CR>'
-    nnoremap <expr> <M-!>        (&buftype == 'terminal') ? '' : ':<C-u>call RemoteClip(2,0)<CR>'
-    " TODO: imap, cmap, tmap
-elseif g:is_ttyterm == 1
-    nnoremap <expr> <S-F34>      (&buftype == 'terminal') ? '' : ':call RemoteClip(1,0)<CR>'
-    nnoremap <expr> <M-!>        (&buftype == 'terminal') ? '' : ':<C-u>call RemoteClip(1,0)<CR>'
-    " TODO: imap, cmap, tmap
+nnoremap <silent> <expr> <S-F34>        (&buftype == 'terminal') ? '' : '<Cmd>call UpdateClipCmd("p")<CR>'
+nnoremap <silent> <expr> <M-!>          (&buftype == 'terminal') ? '' : '<Cmd>call UpdateClipCmd("p")<CR>'
+" NOTE: <S-F34>/<M-!> vmapped below ...
+inoremap <silent> <S-F34>               <C-\><C-o>:call UpdateClipCmd('')<CR><C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
+inoremap <silent> <M-!>                 <C-\><C-o>:call UpdateClipCmd('')<CR><C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
+cnoremap <silent> <S-F34>               <Cmd>call UpdateClipCmd('')<CR><C-r>"
+cnoremap <silent> <M-!>                 <Cmd>call UpdateClipCmd('')<CR><C-r>"
+if !has("nvim")
+    tnoremap <silent> <S-F34>           <C-w>:call UpdateClipCmd('')<CR><C-w>""
+    tnoremap <silent> <M-!>             <C-w>:call UpdateClipCmd('')<CR><C-w>""
 else
-    " TODO: do we update " from clipboard first ?
-    nnoremap <expr> <S-F34> (&buftype == 'terminal') ? '' : 'p'
-    nnoremap <expr> <M-!>   (&buftype == 'terminal') ? '' : 'p'
-    if g:has_wsl > 0 && !has("nvim")
-        inoremap <silent> <S-F34> <C-\><C-o>:call WinUpdateClip()<CR><C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
-        inoremap <silent> <M-!>   <C-\><C-o>:call WinUpdateClip()<CR><C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
-        cnoremap <S-F34>  <Cmd>call WinUpdateClip()<CR><C-r>"
-        cnoremap <M-!>    <Cmd>call WinUpdateClip()<CR><C-r>"
-        tnoremap <S-F34>  <C-w>:call WinUpdateClip()<CR><C-w>""
-        tnoremap <M-!>    <C-w>:call WinUpdateClip()<CR><C-w>""
-    else
-        inoremap <silent> <S-F34> <C-\><C-o>:set paste<CR><C-r>*<C-\><C-o>:set nopaste<CR>
-        inoremap <silent> <M-!>   <C-\><C-o>:set paste<CR><C-r>*<C-\><C-o>:set nopaste<CR>
-        cnoremap <S-F34> <C-r>*
-        cnoremap <M-!>   <C-r>*
-        if has("nvim")
-            tnoremap <S-F34> <C-\><C-n>"*pi
-            tnoremap <M-!>   <C-\><C-n>"*pi
-        else
-            tnoremap <S-F34> <C-w>"*
-            tnoremap <M-!>   <C-w>"*
-        endif
-    endif
+    tnoremap <silent> <S-F34>           <C-\><C-n>:call UpdateClipCmd('')<CR><C-\><C-n>""pi
+    tnoremap <silent> <M-!>             <C-\><C-n>:call UpdateClipCmd('')<CR><C-\><C-n>""pi
 endif
 
 " <F35> paste before
-if g:is_ttyterm == 2
-    nnoremap <expr> <F35>      (&buftype == 'terminal') ? '' : ':call RemoteClip(2,1)<CR>'
-    nnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '' : ':<C-u>call RemoteClip(2,1)<CR>'
-    " TODO: imap, cmap, tmap
-elseif g:is_ttyterm == 1
-    nnoremap <expr> <F35>      (&buftype == 'terminal') ? '' : ':call RemoteClip(1,1)<CR>'
-    nnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '' : ':<C-u>call RemoteClip(1,1)<CR>'
-    " TODO: imap, cmap, tmap
+nnoremap <silent> <expr> <F35>          (&buftype == 'terminal') ? '' : '<Cmd>call UpdateClipCmd("P`[")<CR>'
+nnoremap <silent> <expr> <C-S-Insert>   (&buftype == 'terminal') ? '' : '<Cmd>call UpdateClipCmd("P`[")<CR>'
+" NOTE: <F35>/<C-S-Insert> vmapped below ...
+inoremap <silent> <F35>                 <C-\><C-o>:call UpdateClipCmd('')<CR><C-\><C-o>:set paste<CR><C-\><C-o>mp<C-r>"<C-\><C-o>:set nopaste<CR><C-\><C-o>`p
+inoremap <silent> <C-S-Insert>          <C-\><C-o>:call UpdateClipCmd('')<CR><C-\><C-o>:set paste<CR><C-\><C-o>mp<C-r>"<C-\><C-o>:set nopaste<CR><C-\><C-o>`p
+cnoremap <silent> <F35>                 <Cmd>call UpdateClipCmd('')<CR><C-r>"
+cnoremap <silent> <C-S-Insert>          <Cmd>call UpdateClipCmd('')<CR><C-r>"
+if !has("nvim")
+    tnoremap <silent> <F35>             <C-w>:call UpdateClipCmd('')<CR><C-w>""
+    tnoremap <silent> <C-S-Insert>      <C-w>:call UpdateClipCmd('')<CR><C-w>""
 else
-    " TODO: do we update " from clipboard first ?
-    nnoremap <expr> <F35>        (&buftype == 'terminal') ? '' : 'P`['
-    nnoremap <expr> <C-S-Insert> (&buftype == 'terminal') ? '' : 'P`['
-    " NOTE: <F35>/<C-S-Insert> vmapped below ...
-    "vnoremap <expr> <F35> (&buftype == 'terminal') ? '' : '<Esc>P`['
-    if g:has_wsl > 0 && !has("nvim")
-        inoremap <silent> <F35>        <C-\><C-o>:call WinUpdateClip()<CR><C-\><C-o>:set paste<CR><C-\><C-o>mp<C-r>"<C-\><C-o>:set nopaste<CR><C-\><C-o>`p
-        inoremap <silent> <C-S-Insert> <C-\><C-o>:call WinUpdateClip()<CR><C-\><C-o>:set paste<CR><C-\><C-o>mp<C-r>"<C-\><C-o>:set nopaste<CR><C-\><C-o>`p
-        cnoremap <F35>        <Cmd>call WinUpdateClip()<CR><C-r>"
-        cnoremap <C-S-Insert> <Cmd>call WinUpdateClip()<CR><C-r>"
-        tnoremap <F35>        <C-w>:call WinUpdateClip()<CR>:<C-w>""
-        tnoremap <C-S-Insert> <C-w>:call WinUpdateClip()<CR>:<C-w>""
-    else
-        inoremap <silent> <F35>        <C-\><C-o>:set paste<CR><C-\><C-o>mp<C-r>*<C-\><C-o>:set nopaste<CR><C-\><C-o>`p
-        inoremap <silent> <C-S-Insert> <C-\><C-o>:set paste<CR><C-\><C-o>mp<C-r>*<C-\><C-o>:set nopaste<CR><C-\><C-o>`p
-        cnoremap <F35>        <C-r>*
-        cnoremap <C-S-Insert> <C-r>*
-        if has("nvim")
-            tnoremap <F35>        <C-\><C-n>"*Pi
-            tnoremap <C-S-Insert> <C-\><C-n>"*Pi
-        else
-            tnoremap <F35>        <C-w>"*
-            tnoremap <C-S-Insert> <C-w>"*
-        endif
-    endif
+    tnoremap <silent> <F35>             <C-\><C-n>:call UpdateClipCmd('')<CR><C-\><C-n>""Pi
+    tnoremap <silent> <C-S-Insert>      <C-\><C-n>:call UpdateClipCmd('')<CR><C-\><C-n>""Pi
 endif
 
 " <M-*> paste before [menu?]
 call <SID>MapFastKeycode('<S-F35>',  "\e*", 135)
-if g:is_ttyterm == 2
-    nnoremap <expr> <S-F35>      (&buftype == 'terminal') ? '' : ':call RemoteClip(2,1)<CR>'
-    nnoremap <expr> <M-*>        (&buftype == 'terminal') ? '' : ':<C-u>call RemoteClip(2,1)<CR>'
-    " TODO: imap, cmap, tmap
-elseif g:is_ttyterm == 1
-    nnoremap <expr> <S-F35>      (&buftype == 'terminal') ? '' : ':call RemoteClip(1,1)<CR>'
-    nnoremap <expr> <M-*>        (&buftype == 'terminal') ? '' : ':<C-u>call RemoteClip(1,1)<CR>'
-    " TODO: imap, cmap, tmap
+nnoremap <silent> <expr> <S-F35>        (&buftype == 'terminal') ? '' : '<Cmd>call UpdateClipCmd("P`]")<CR>'
+nnoremap <silent> <expr> <M-*>          (&buftype == 'terminal') ? '' : '<Cmd>call UpdateClipCmd("P`]")<CR>'
+" NOTE: <S-F35>/<M-*> vmapped below ...
+inoremap <silent> <S-F35>               <C-\><C-o>:call UpdateClipCmd('')<CR><C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
+inoremap <silent> <M-*>                 <C-\><C-o>:call UpdateClipCmd('')<CR><C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
+cnoremap <silent> <S-F35>               <Cmd>call UpdateClipCmd('')<CR><C-r>"
+cnoremap <silent> <M-*>                 <Cmd>call UpdateClipCmd('')<CR><C-r>"
+if !has("nvim")
+    tnoremap <silent> <S-F35>           <C-w>:call UpdateClipCmd('')<CR><C-w>""
+    tnoremap <silent> <M-*>             <C-w>:call UpdateClipCmd('')<CR><C-w>""
 else
-    " TODO: do we update " from clipboard first ?
-    nnoremap <expr> <S-F35> (&buftype == 'terminal') ? '' : 'P`]'
-    nnoremap <expr> <M-*>   (&buftype == 'terminal') ? '' : 'P`]'
-    if g:has_wsl > 0 && !has("nvim")
-        inoremap <silent> <S-F35> <C-\><C-o>:call WinUpdateClip()<CR><C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
-        inoremap <silent> <M-*>   <C-\><C-o>:call WinUpdateClip()<CR><C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
-        cnoremap <S-F35> <Cmd>call WinUpdateClip()<CR><C-r>"
-        cnoremap <M-*>   <Cmd>call WinUpdateClip()<CR><C-r>"
-        tnoremap <S-F35> <C-w>:call WinUpdateClip()<CR>:<C-w>""
-        tnoremap <M-*>   <C-w>:call WinUpdateClip()<CR>:<C-w>""
-    else
-        inoremap <silent> <S-F35> <C-\><C-o>:set paste<CR><C-r>*<C-\><C-o>:set nopaste<CR>
-        inoremap <silent> <M-*>   <C-\><C-o>:set paste<CR><C-r>*<C-\><C-o>:set nopaste<CR>
-        cnoremap <S-F35> <C-r>*
-        cnoremap <M-*>   <C-r>*
-        if has("nvim")
-            tnoremap <S-F35> <C-\><C-n>"*Pi
-            tnoremap <M-*>   <C-\><C-n>"*Pi
-        else
-            tnoremap <S-F35> <C-w>"*
-            tnoremap <M-*>   <C-w>"*
-        endif
-    endif
+    tnoremap <silent> <S-F35>           <C-\><C-n>:call UpdateClipCmd('')<CR><C-\><C-n>""Pi
+    tnoremap <silent> <M-*>             <C-\><C-n>:call UpdateClipCmd('')<CR><C-\><C-n>""Pi
 endif
 
-" C-S-c / M-& copy ...
+" C-S-c / M-& copy ... see also <F33> and <C-Insert>
 
 " cannot differentiate between C-S-c and C-c ...
 "nnoremap <C-S-c> <Nop>
@@ -5506,19 +5441,21 @@ endif
 " tmux can send M-& to vim
 call <SID>MapFastKeycode('<S-F36>',  "\e&", 136)
 nnoremap <S-F36> <Nop>
-vmap <expr> <S-F36> (mode() =~ "\<C-v>") ? 'ty' : 'mvty`v'
+"vmap <expr> <S-F36> (mode() =~ "\<C-v>") ? 'ty' : 'mvty`v'
+vmap <silent> <expr> <S-F36>   (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
 cnoremap <S-F36> <C-v><Esc>&
 inoremap <S-F36> <C-v><Esc>&
 tnoremap <S-F36> <Esc>&
 if has("nvim")
     nnoremap <M-&> <Nop>
-    vmap <expr> <M-&> (mode() =~ "\<C-v>") ? 'ty' : 'mvty`v'
+    "vmap <expr> <M-&> (mode() =~ "\<C-v>") ? 'ty' : 'mvty`v'
+    vmap <silent> <expr> <M-&> (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
     cnoremap <S-F36> <M-&>
     inoremap <S-F36> <M-&>
     tnoremap <S-F36> <M-&>
 endif
 
-" C-S-x / M-( cut selection ...
+" C-S-x / M-( cut selection ... see also <F37> and <S-Del>
 
 " ---------------
 " TODO: should <C-x> or <C-S-x> cut ?
@@ -5532,13 +5469,15 @@ endif
 
 call <SID>MapFastKeycode('<S-F37>',  "\e(", 137)
 nnoremap <S-F37> <Nop>
-vmap <expr> <S-F37> (&buftype == 'terminal') ? '' : 'tx'
+"vmap <expr> <S-F37> (&buftype == 'terminal') ? '' : 'tx'
+vmap <silent> <expr> <S-F37>   (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNammedReg()<CR>'
 cnoremap <S-F37> <C-v><Esc>(
 inoremap <S-F37> <C-v><Esc>(
 tnoremap <S-F37> <Esc>(
 if has("nvim")
     nnoremap <M-(> <Nop>
-    vmap <expr> <M-(> (&buftype == 'terminal') ? '' : 'tx'
+    "vmap <expr> <M-(> (&buftype == 'terminal') ? '' : 'tx'
+    vmap <silent> <expr> <M-(> (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNammedReg()<CR>'
     cnoremap <S-F37> <M-(>
     inoremap <S-F37> <M-(>
     tnoremap <S-F37> <M-(>
@@ -5551,6 +5490,12 @@ nnoremap <C-x> <Nop>
 "vmap <expr> <C-x> (&buftype == 'terminal') ? '' : 'tx'
 "vmap <expr> <C-x> (&buftype == 'terminal') ? '' : '<Esc>'
 vmap <C-x> <Nop>
+
+" ---------------
+
+"call <SID>MapFastKeycode('<F16>', "\e\<C-x>", 16) " C-A-x, M-C-X, etc
+"noremap <F16>   <Nop>
+"noremap <M-C-X> <Nop>
 
 " ---------------
 
@@ -5815,13 +5760,13 @@ endif
 endif
 
 " NOTE: to match legacy editors/DOS/etc -
-"  <F33> is copy
-"  <F34> is paste (mapped below)
-"  <F37> is cut (mapped below)
-vmap <silent> <expr> <F33>      (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty' : 'mvty`v'
-vmap <silent> <expr> <C-Insert> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty' : 'mvty`v'
-vmap <silent> <F37>   tx
-vmap <silent> <S-Del> tx
+"  <F33> is copy (C-Insert) see also <M-&>
+"  <F34> is paste [replace in vis mode] (mapped below) (S-Insert) see also <M-*>
+"  <F37> is cut (mapped below) (S-Del) see also <S-F37> and <M-(>
+vmap <silent> <expr> <F33>      (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+vmap <silent> <expr> <C-Insert> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+vmap <silent> <expr> <F37>      (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNammedReg()<CR>'
+vmap <silent> <expr> <S-Del>    (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNammedReg()<CR>'
 
 " ---------------------------------------------------------------------------------
 " NOTE: TMUX C-Insert in terminal does not use bracketed-paste, but <C-S-v> is ok
@@ -7467,10 +7412,10 @@ set virtualedit=block
 set nostartofline
 set scrolloff=0
 
-" new smoothscrolling for when lines wrap ...
-if !has("nvim") && has('patch-9.0.0911')
-    set smoothscroll
-endif
+" new vim smoothscrolling for when lines wrap ...
+"if !has("nvim") && has('patch-9.0.1000')
+"    set smoothscroll
+"endif
 
 " ---------
 
@@ -7926,6 +7871,7 @@ endfunction
 "noremap <silent> <C-Down>          <Cmd>call MyScrollDown()<CR>
 "noremap <silent> <expr> <C-j>      ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<Cmd>call MyScrollDown()<CR>'
 "noremap <silent> <C-j>             <Cmd>call MyScrollDown()<CR>
+" TODO: this is not really right if smoothscroll is enabled ...
 noremap <silent> <expr> <C-Down>   ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>gj'
 noremap <silent> <expr> <C-j>      ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>gj'
 
@@ -7957,6 +7903,7 @@ inoremap <silent> <expr> <C-j>      pumvisible() ? '<C-j>'    : '<C-\><C-o>:call
 "noremap <silent> <C-Up>            <Cmd>call MyScrollUp()<CR>
 "noremap <silent> <expr> <C-k>      AtBot(0) ? '<C-y>' : '<Cmd>call MyScrollUp()<CR>'
 "noremap <silent> <C-k>             <Cmd>call MyScrollUp()<CR>
+" TODO: this is not really right if smoothscroll is enabled ...
 noremap <silent> <expr> <C-Up>     AtBot(0) ? (line('w0') == 1) ? 'gk' : '<C-y>' : '<C-y>gk'
 noremap <silent> <expr> <C-k>      AtBot(0) ? (line('w0') == 1) ? 'gk' : '<C-y>' : '<C-y>gk'
 
@@ -9657,109 +9604,63 @@ nnoremap <C-y> <Nop>
 " to get back orig if needed
 noremap <Leader><C-y> <C-y>
 
-if g:has_wsl == 0 || has("nvim")
-    nmap <Leader>pc <Plug>UnconditionalPasteCharAfter
-    nmap <Leader>p1 <Plug>UnconditionalPasteCharAfter`]li<Space><Esc>w
+" Used to have these for g:has_wsl && !has("nvim") ...
+"nmap <silent> <Leader>po :call WinUpdateClip()<CR><Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w
+"nmap <silent> <expr> <Leader>pp (col('.') < (col('$')-1)) ? ':call WinUpdateClip()<CR><Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w' : ':call WinUpdateClip()<CR>$A<Space><Esc><Plug>UnconditionalPasteCharAfter`]'
 
-    nmap <Leader>Pc <Plug>UnconditionalPasteCharBefore
-    nmap <Leader>p- <Plug>UnconditionalPasteCharBefore
-    " p0 adds a trailing space
-    nmap <Leader>p0 <Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w
-    nmap <Leader>po <Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w
-    " pp is p0 unless at end and then it is pE
-    nmap <expr> <Leader>pp (col('.') < (col('$')-1)) ? '<Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w' : '$A<Space><Esc><Plug>UnconditionalPasteCharAfter`]'
+nmap <Leader>pc <Plug>UnconditionalPasteCharAfter
+nmap <Leader>p1 <Plug>UnconditionalPasteCharAfter`]li<Space><Esc>w
 
-    nmap <Leader>pj <Plug>UnconditionalPasteJustJoinedAfter
-    nmap <Leader>Pj <Plug>UnconditionalPasteJustJoinedBefore
+nmap <Leader>Pc <Plug>UnconditionalPasteCharBefore
+nmap <Leader>p- <Plug>UnconditionalPasteCharBefore
+" p0 adds a trailing space
+nmap <Leader>p0 <Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w
+nmap <Leader>po <Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w
+" pp is p0 unless at end and then it is pE
+nmap <expr> <Leader>pp (col('.') < (col('$')-1)) ? '<Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w' : '$A<Space><Esc><Plug>UnconditionalPasteCharAfter`]'
 
-    " at end of line
-    nmap <Leader>pe $<Plug>UnconditionalPasteCharAfter`]
-    " adds a leading space
-    nmap <Leader>pE $A<Space><Esc><Plug>UnconditionalPasteCharAfter`]
-    " at beg of first word (^ not 0)
-    nmap <Leader>pa ^<Plug>UnconditionalPasteCharBefore`]
-    " NOTE: use <Esc>hlb instead of <Esc>B because M-B is mapped to A-3click in tmux ...
-    "nmap <Leader>pA ^<Plug>UnconditionalPasteCharBefore`]li<Space><Esc>hlb
-    " adds a trailing space
-    nmap <Leader>pA ^<Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w
+nmap <Leader>pj <Plug>UnconditionalPasteJustJoinedAfter
+nmap <Leader>Pj <Plug>UnconditionalPasteJustJoinedBefore
 
-    " change l to i to match current indentation ...
-    "nmap <Leader>Pl <Plug>UnconditionalPasteIndentedBefore
-    "nmap <Leader>pl <Plug>UnconditionalPasteIndentedAfter
-    " at orig offset
-    nmap <Leader>pl <Plug>UnconditionalPasteLineAfter
-    nmap <Leader>Pl <Plug>UnconditionalPasteLineBefore
-    nmap <Leader>pL <Plug>UnconditionalPasteLineBefore
+" at end of line
+nmap <Leader>pe $<Plug>UnconditionalPasteCharAfter`]
+" adds a leading space
+nmap <Leader>pE $A<Space><Esc><Plug>UnconditionalPasteCharAfter`]
+" at beg of first word (^ not 0)
+nmap <Leader>pa ^<Plug>UnconditionalPasteCharBefore`]
+" NOTE: use <Esc>hlb instead of <Esc>B because M-B is mapped to A-3click in tmux ...
+"nmap <Leader>pA ^<Plug>UnconditionalPasteCharBefore`]li<Space><Esc>hlb
+" adds a trailing space
+nmap <Leader>pA ^<Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w
 
-    " indented (used to be pi/Pi, but switched with px/Px below)
-    nmap <Leader>px <Plug>UnconditionalPasteIndentedAfter
-    nmap <Leader>Px <Plug>UnconditionalPasteIndentedBefore
+" change l to i to match current indentation ...
+"nmap <Leader>Pl <Plug>UnconditionalPasteIndentedBefore
+"nmap <Leader>pl <Plug>UnconditionalPasteIndentedAfter
+" at orig offset
+nmap <Leader>pl <Plug>UnconditionalPasteLineAfter
+nmap <Leader>Pl <Plug>UnconditionalPasteLineBefore
+nmap <Leader>pL <Plug>UnconditionalPasteLineBefore
 
-    " use . for more (>) and , for less (<) indentation
-    nmap <Leader>p. <Plug>UnconditionalPasteMoreIndentAfter
-    nmap <Leader>P. <Plug>UnconditionalPasteMoreIndentBefore
+" indented (used to be pi/Pi, but switched with px/Px below)
+nmap <Leader>px <Plug>UnconditionalPasteIndentedAfter
+nmap <Leader>Px <Plug>UnconditionalPasteIndentedBefore
 
-    nmap <Leader>p, <Plug>UnconditionalPasteLessIndentAfter
-    nmap <Leader>P, <Plug>UnconditionalPasteLessIndentBefore
+" use . for more (>) and , for less (<) indentation
+nmap <Leader>p. <Plug>UnconditionalPasteMoreIndentAfter
+nmap <Leader>P. <Plug>UnconditionalPasteMoreIndentBefore
 
-    nmap <Leader>pb <Plug>UnconditionalPasteBlockAfter
-    nmap <Leader>Pb <Plug>UnconditionalPasteBlockBefore
-    nmap <Leader>pB <Plug>UnconditionalPasteBlockBefore
+nmap <Leader>p, <Plug>UnconditionalPasteLessIndentAfter
+nmap <Leader>P, <Plug>UnconditionalPasteLessIndentBefore
 
-    " slightly confusing and has some delay ...
-    "nmap <Leader>P> <Plug>UnconditionalPasteShiftedBefore
-    "nmap <Leader>p> <Plug>UnconditionalPasteShiftedAfter
-else
-    nmap <silent> <Leader>pc :call WinUpdateClip()<CR><Plug>UnconditionalPasteCharAfter
-    nmap <silent> <Leader>p1 :call WinUpdateClip()<CR><Plug>UnconditionalPasteCharAfter`]li<Space><Esc>w
+nmap <Leader>pb <Plug>UnconditionalPasteBlockAfter
+nmap <Leader>Pb <Plug>UnconditionalPasteBlockBefore
+nmap <Leader>pB <Plug>UnconditionalPasteBlockBefore
 
-    nmap <silent> <Leader>Pc :call WinUpdateClip()<CR><Plug>UnconditionalPasteCharBefore
-    nmap <silent> <Leader>p- :call WinUpdateClip()<CR><Plug>UnconditionalPasteCharBefore
-    " p0 adds a trailing space
-    nmap <silent> <Leader>p0 :call WinUpdateClip()<CR><Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w
-    nmap <silent> <Leader>po :call WinUpdateClip()<CR><Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w
-    " pp is p0 unless at end and then it is pE
-    nmap <silent> <expr> <Leader>pp (col('.') < (col('$')-1)) ? ':call WinUpdateClip()<CR><Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w' : ':call WinUpdateClip()<CR>$A<Space><Esc><Plug>UnconditionalPasteCharAfter`]'
+" slightly confusing and has some delay ...
+"nmap <Leader>P> <Plug>UnconditionalPasteShiftedBefore
+"nmap <Leader>p> <Plug>UnconditionalPasteShiftedAfter
 
-    nmap <silent> <Leader>pj :call WinUpdateClip()<CR><Plug>UnconditionalPasteJustJoinedAfter
-    nmap <silent> <Leader>Pj :call WinUpdateClip()<CR><Plug>UnconditionalPasteJustJoinedBefore
-
-    " at end of line
-    nmap <silent> <Leader>pe :call WinUpdateClip()<CR>$<Plug>UnconditionalPasteCharAfter`]
-    " adds a leading space
-    nmap <silent> <Leader>pE :call WinUpdateClip()<CR>$A<Space><Esc><Plug>UnconditionalPasteCharAfter`]
-    " at beg of first word (^ not 0)
-    nmap <silent> <Leader>pa :call WinUpdateClip()<CR>^<Plug>UnconditionalPasteCharBefore`]
-    " NOTE: use <Esc>hlb instead of <Esc>B because M-B is mapped to A-3click in tmux ...
-    "nmap <silent> <Leader>pA :call WinUpdateClip()<CR>^<Plug>UnconditionalPasteCharBefore`]li<Space><Esc>hlb
-    " adds a trailing space
-    nmap <silent> <Leader>pA :call WinUpdateClip()<CR>^<Plug>UnconditionalPasteCharBefore`]li<Space><Esc>w
-
-    " change l to i to match current indentation ...
-    "nmap <silent> <Leader>Pl :call WinUpdateClip()<CR><Plug>UnconditionalPasteIndentedBefore
-    "nmap <silent> <Leader>pl :call WinUpdateClip()<CR><Plug>UnconditionalPasteIndentedAfter
-    " at orig offset
-    nmap <silent> <Leader>pl :call WinUpdateClip()<CR><Plug>UnconditionalPasteLineAfter
-    nmap <silent> <Leader>Pl :call WinUpdateClip()<CR><Plug>UnconditionalPasteLineBefore
-
-    " indented (used to be pi/Pi, but switched with px/Px below)
-    nmap <silent> <Leader>px :call WinUpdateClip()<CR><Plug>UnconditionalPasteIndentedAfter
-    nmap <silent> <Leader>Px :call WinUpdateClip()<CR><Plug>UnconditionalPasteIndentedBefore
-
-    " use . for more (>) and , for less (<) indentation
-    nmap <silent> <Leader>p. :call WinUpdateClip()<CR><Plug>UnconditionalPasteMoreIndentAfter
-    nmap <silent> <Leader>P. :call WinUpdateClip()<CR><Plug>UnconditionalPasteMoreIndentBefore
-
-    nmap <silent> <Leader>p, :call WinUpdateClip()<CR><Plug>UnconditionalPasteLessIndentAfter
-    nmap <silent> <Leader>P, :call WinUpdateClip()<CR><Plug>UnconditionalPasteLessIndentBefore
-
-    nmap <silent> <Leader>pb :call WinUpdateClip()<CR><Plug>UnconditionalPasteBlockAfter
-    nmap <silent> <Leader>Pb :call WinUpdateClip()<CR><Plug>UnconditionalPasteBlockBefore
-
-    " slightly confusing and has some delay ...
-    "nmap <silent> <Leader>P> :call WinUpdateClip()<CR><Plug>UnconditionalPasteShiftedBefore
-    "nmap <silent> <Leader>p> :call WinUpdateClip()<CR><Plug>UnconditionalPasteShiftedAfter
-endif
+" ------------------------------------
 
 " paste indented line, like <Leader>px/Px, but with more indent logic
 " (used to be px/Px but switched with pi/Pi above)
@@ -9782,9 +9683,11 @@ function s:MyUPIndentAfter() abort
         let xcol = pcol
     endif
 
-    if g:has_wsl > 0 && !has("nvim")
-        call WinUpdateClip()
-    endif
+    " old way ...
+    "if g:has_wsl > 0 && !has("nvim")
+    "    call WinUpdateClip()
+    "endif
+    " old way ...
 
     if xcol >= ccol
         "call feedkeys('\p.')
@@ -9817,9 +9720,11 @@ function s:MyUPIndentBefore() abort
         let xcol = ncol
     endif
 
-    if g:has_wsl > 0 && !has("nvim")
-        call WinUpdateClip()
-    endif
+    " old way ...
+    "if g:has_wsl > 0 && !has("nvim")
+    "    call WinUpdateClip()
+    "endif
+    " old way ...
 
     if xcol >= ccol
         "call feedkeys('\P.')
@@ -12189,14 +12094,18 @@ if g:is_ttyterm > 1
     if 1
         if has("nvim")
             " WARNING: these seem to be needed to paste > 10kb
-            "autocmd InsertEnter * syntax off | TSBufDisable highlight | set paste
-            "autocmd InsertLeave * syntax on  | TSBufEnable  highlight | set nopaste
             highlight Normal ctermbg=none
             highlight SignColumn ctermbg=none
             highlight GitGutterAdd ctermbg=none
             highlight GitGutterChange ctermbg=none
             highlight GitGutterDelete ctermbg=none
             highlight GitGutterChangeDelete ctermbg=none
+            if g:use_treesitter > 0
+                "autocmd InsertEnter * syntax off | TSBufDisable highlight | set paste
+                "autocmd InsertLeave * syntax on  | TSBufEnable  highlight | set nopaste
+            endif
+        else
+            set nottyfast
         endif
     endif
 endif
