@@ -71,7 +71,7 @@ global.get_window_actors().forEach(function (w) {
             // global.log('cxwins: gmax', gmax);
 
             if (giter == 0) {
-                mw.activate(0);
+                mw.activate(global.get_current_time());
                 GLib.usleep(100000);
 
                 // global.log('cxwins: pos 1');
@@ -118,7 +118,7 @@ global.get_window_actors().forEach(function (w) {
 
 });
 
-// mw.activate(0);
+// mw.activate(global.get_current_time());
 
 } catch (e) {
     // global.log('cywins: giter', giter);

@@ -46,7 +46,7 @@ try {
 //     if (wtitle != '' && wtitle != 'Nautilus' && wtitle != 'Gnome-shell' && (!wtitle.toLowerCase().includes('copyq'))) {
 // 
 //         if ( !wtitle.toLowerCase().includes('alacritty') ) {
-//             GLib.timeout_add(GLib.PRIORITY_DEFAULT, 1, function() { mw.activate(0); });
+//             GLib.timeout_add(GLib.PRIORITY_DEFAULT, 1, function() { mw.activate(global.get_current_time()); });
 //             GLib.usleep(100000);
 //         }
 // 
@@ -68,7 +68,7 @@ global.get_window_actors().forEach(function (w) {
          mw.get_wm_class().toLowerCase() == 'foot' ||
          mw.get_wm_class().toLowerCase().includes('.wezterm') ) {
 
-        GLib.timeout_add(GLib.PRIORITY_DEFAULT, 1, function() { mw.activate(0); });
+        GLib.timeout_add(GLib.PRIORITY_DEFAULT, 1, function() { mw.activate(global.get_current_time()); });
 
         if (mw.get_maximized()) {
             mw.unmaximize(3); // 3 is META_MAXIMIZE_BOTH, so unmaximizing the window in both directions
