@@ -4957,6 +4957,7 @@ endfunction
 "inoremap <silent> <F16> <Esc>:call PostPaste()<CR>
 
 function! s:CopyDefReg(arg)
+    let s:cur_buf = bufnr("")
     for b in range(1, bufnr('$'))
         if bufexists(b)
             if bufname(b) ==# "/dev/shm/ttyterm_tmp"
@@ -4974,6 +4975,7 @@ function! s:CopyDefReg(arg)
             endif
         endif
     endfor
+
     if g:is_ttyterm == 2
 
         echohl WarningMsg | echo "tty remote clipboard -> @\" reg copy not reliable yet" | echohl None
@@ -4982,18 +4984,38 @@ function! s:CopyDefReg(arg)
         echo " "
         return
 
-        let s:cur_buf = bufnr("")
         let l:match_buf_nr = bufnr("/dev/shm/ttyterm_tmp", 1)
         exe "tab sb".l:match_buf_nr
 
-        "setlocal noswapfile
-        "setlocal bufhidden=hide
-
         mapclear! <buffer>
-        imap <buffer> <C-@> <Nop>
-        imap <buffer> <C-a> <Nop>
-        imap <buffer> <C-c> <Nop>
+
+        " should not matter with paste set but remove all imappings anyway ...
+        redir => imapout
+        silent imap
+        redir END
+        if !empty(imapout)
+            let imaplist = split(imapout, '\n')
+            for iline in imaplist
+                let ix = split(iline)
+                if !(ix[1] =~ '<Plug>' || ix[1] =~ 'builtin')
+                    "echom ':inoremap <buffer> <nowait> ' . ix[1] . ' <nop>'
+                    execute ':inoremap <buffer> <nowait> ' . ix[1] ' <nop>'
+                endif
+            endfor
+        endif
+
+        inoremap <buffer> <C-@>     <Nop>
+        inoremap <buffer> <C-a>     <Nop>
+        inoremap <buffer> <C-c>     <Nop>
+        inoremap <buffer> <C-^><CR> <Nop>
+        inoremap <buffer> <M-C-CR>  <Nop>
+        inoremap <buffer> .         .
+        inoremap <buffer> :         :
+        inoremap <buffer> >         >
+        inoremap <buffer> <Tab>     <Tab>
+
         ColorClear
+
         setlocal eventignore-=CursorHold
         setlocal eventignore-=CursorHoldI
         setlocal eventignore-=CompleteChanged
@@ -5091,18 +5113,45 @@ function! MyTabPaste()
             endif
         endif
     endfor
+
     let l:match_buf_nr = bufnr("/dev/shm/ttyterm_tmp", 1)
     exe "tab sb".l:match_buf_nr
+
     nnoremap <silent> <buffer> <Leader>z<BS> :call MyTabCopy()<CR>
     " quit should also clean up
     augroup mypasteag
         autocmd! TabLeave /dev/shm/ttyterm_tmp call MyTabExit()
     augroup end
+
     mapclear! <buffer>
-    imap <buffer> <C-@> <Nop>
-    imap <buffer> <C-a> <Nop>
-    imap <buffer> <C-c> <Nop>
+
+    " should not matter with paste set but remove all imappings anyway ...
+    redir => imapout
+    silent imap
+    redir END
+    if !empty(imapout)
+        let imaplist = split(imapout, '\n')
+        for iline in imaplist
+            let ix = split(iline)
+            if !(ix[1] =~ '<Plug>' || ix[1] =~ 'builtin')
+                "echom ':inoremap <buffer> <nowait> ' . ix[1] . ' <nop>'
+                execute ':inoremap <buffer> <nowait> ' . ix[1] ' <nop>'
+            endif
+        endfor
+    endif
+
+    inoremap <buffer> <C-@>     <Nop>
+    inoremap <buffer> <C-a>     <Nop>
+    inoremap <buffer> <C-c>     <Nop>
+    inoremap <buffer> <C-^><CR> <Nop>
+    inoremap <buffer> <M-C-CR>  <Nop>
+    inoremap <buffer> .         .
+    inoremap <buffer> :         :
+    inoremap <buffer> >         >
+    inoremap <buffer> <Tab>     <Tab>
+
     ColorClear
+
     setlocal eventignore-=CursorHold
     setlocal eventignore-=CursorHoldI
     setlocal eventignore-=CompleteChanged
