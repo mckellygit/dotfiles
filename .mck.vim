@@ -3584,6 +3584,8 @@ endif
 " visual/audio bell (terminator light bulb) off ...
 set belloff=error,backspace,esc
 
+set backspace=indent,start,eol
+
 " issue with mouse in vim when beyond 220 cols ...
 if !has("nvim")
     if has("mouse_sgr")
@@ -5013,6 +5015,8 @@ function! s:CopyDefReg(arg)
         inoremap <buffer> :         :
         inoremap <buffer> >         >
         inoremap <buffer> <Tab>     <Tab>
+        imap <LeftMouseNM> <Nop>
+        imap <RightMouseNM> <Nop>
 
         ColorClear
 
@@ -5149,6 +5153,8 @@ function! MyTabPaste()
     inoremap <buffer> :         :
     inoremap <buffer> >         >
     inoremap <buffer> <Tab>     <Tab>
+    imap <LeftMouseNM> <Nop>
+    imap <RightMouseNM> <Nop>
 
     ColorClear
 
@@ -7462,7 +7468,7 @@ set nostartofline
 set scrolloff=0
 
 " new vim smoothscrolling for when lines wrap ...
-"if !has("nvim") && has('patch-9.0.1000')
+"if !has("nvim") && has('patch-9.0.1019')
 "    set smoothscroll
 "endif
 
