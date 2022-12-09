@@ -5003,12 +5003,12 @@ function! s:CopyDefReg(arg)
             return
         endif " MCK DEBUG MCK DEBUG
 
-        vsplit /dev/shm/ttyterm_tmp
+        silent vsplit /dev/shm/ttyterm_tmp
 
-        call vimade#BufDisable()
-        call gitgutter#buffer_disable()
+        silent call vimade#BufDisable()
+        silent call gitgutter#buffer_disable()
 
-        mapclear! <buffer>
+        silent mapclear! <buffer>
 
         " should not matter with paste set but remove all imappings anyway ...
         redir => imapout
@@ -5144,7 +5144,7 @@ function! MyScratchPadPaste()
         endif
     endfor
 
-    vsplit /dev/shm/ttyterm_tmp
+    silent vsplit /dev/shm/ttyterm_tmp
 
     nnoremap <silent> <buffer> <Leader>z<BS> :call MyScratchPadCopy()<CR>
     " quit should also clean up
@@ -5152,10 +5152,10 @@ function! MyScratchPadPaste()
         autocmd! BufLeave /dev/shm/ttyterm_tmp call MyScratchPadExit()
     augroup end
 
-    call vimade#BufDisable()
-    call gitgutter#buffer_disable()
+    silent call vimade#BufDisable()
+    silent call gitgutter#buffer_disable()
     if has("nvim") && g:use_treesitter > 0
-        TSBufDisable highlight
+        silent TSBufDisable highlight
     endif
 endfunction
 
