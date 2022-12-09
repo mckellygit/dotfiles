@@ -330,6 +330,8 @@
     "initialCols": 259,
     "initialPosition": "370,600",
     "initialRows": 55,
+    "largePasteWarning": false,
+    "multiLinePasteWarning": true,
     "profiles": 
     {
         "defaults": 
@@ -338,7 +340,7 @@
             "font": 
             {
                 "face": "Lucida Sans Typewriter",
-                "size": 10,
+                "size": 10.0,
                 "weight": "normal"
             },
             "opacity": 92,
@@ -359,6 +361,7 @@
             },
             {
                 "colorScheme": "Tmux",
+                "cursorShape": "filledBox",
                 "guid": "{07b52e3e-de2c-5db4-bd2d-ba144ed6c273}",
                 "hidden": false,
                 "name": "Ubuntu-20.04",
@@ -608,5 +611,6 @@
     ],
     "showTabsInTitlebar": true,
     "showTerminalTitleInTitlebar": true,
-    "snapToGridOnResize": true
+    "snapToGridOnResize": true,
+    "themes": []
 }
