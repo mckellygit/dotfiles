@@ -1150,7 +1150,9 @@ function! s:bufopen(e)
         else
             " open hidden buffer in a new tab ...
             " TODO: or hsplit or vsplit or in current window ...
+            "execute 'tabnew|b'.l:bufid
             execute 'tab sb'.l:bufid
+
         endif
     else
         call win_gotoid(l:winids[0])
@@ -2709,7 +2711,7 @@ let g:vimade.fadepriority = 0
 let g:vimade.checkinterval = 300
 let g:vimade.enablefocusfading = 1
 " BUG: alactritty terminal with selected wrapped lines can sometimes flash w/o this -
-let g:vimade.usecursorhold = 1
+"let g:vimade.usecursorhold = 1
 
 " to mitigate pum redraw/flash/lag with vimade -
 " (change in autoload/vimade.vim)
@@ -2747,8 +2749,8 @@ function! s:MyVimadeWinEnable()
         endif
     endif
 endfunction
-au! CompleteChanged * call <SID>MyVimadeWinDisable()
-au! CompleteDone    * call <SID>MyVimadeWinEnable()
+"au! CompleteChanged * call <SID>MyVimadeWinDisable()
+"au! CompleteDone    * call <SID>MyVimadeWinEnable()
 " vimade -----------
 
 " csv --------------
@@ -3460,9 +3462,12 @@ let g:netrw_dirhistmax = 0
 " See https://sunaku.github.io/tmux-select-pane.html for documentation.
 "let progname = substitute($VIM, '.*[/\\]', '', '')
 "set title titlestring=%{progname}\ %f\ +%l\ #%{tabpagenr()}.%{winnr()}
+" TODO: BUG - change the : after the v and t to something more unusual that
+"       a file would not ever start with ...
 set titleold=
 if g:is_ttyterm > 0
-  set title titlestring=@v:x:%.10t
+  " remote clipboard - so that C-S-v and S-Insert paste from tmux instead of sending to vi ...
+  set title titlestring=@v:t:%.10t
 else
   set title titlestring=@v:%.12t
 endif
@@ -3488,11 +3493,14 @@ function! s:MyUpdateTitle()
       " we could leave this @v:t: also and then use same logic
       " to paste from tmux/OS instead of sending special chars here
       "set title titlestring=@v:n:%.10t
-      set title titlestring=@v:t-%.10t
+      "set title titlestring=@v:t-%.10t
+      " nothing special or unique in tmux for nvim terminal now, so use same ...
+      set title titlestring=@v:t:%.10t
     endif
   else
     if g:is_ttyterm > 0
-      set title titlestring=@v:x:%.10t
+      " remote clipboard - so that C-S-v and S-Insert paste from tmux instead of sending to vi ...
+      set title titlestring=@v:t:%.10t
     else
       set title titlestring=@v:%.12t
     endif
@@ -4960,34 +4968,45 @@ endfunction
 
 function! s:CopyDefReg(arg)
     let s:cur_buf = bufnr("")
+
+    if bufname('') ==# "/dev/shm/ttyterm_tmp"
+        call MyScratchPadExit()
+        return
+    endif
+
     for b in range(1, bufnr('$'))
         if bufexists(b)
             if bufname(b) ==# "/dev/shm/ttyterm_tmp"
                 " TODO: goto to that tab/buffer
                 augroup mypasteag
-                    autocmd! BufUnload /dev/shm/ttyterm_tmp call MyTabExit()
+                    autocmd! BufUnload /dev/shm/ttyterm_tmp call MyScratchPadExit()
                 augroup end
                 let l:winids = win_findbuf(bufnr(b))
                 if empty(l:winids)
-                    exe "tab sb".bufnr(b)
+                    silent! bwipe! /dev/shm/ttyterm_tmp
+                    call delete('/dev/shm/ttyterm_tmp')
                 else
                     call win_gotoid(l:winids[0])
+                    return
                 endif
-                return
             endif
         endif
     endfor
 
     if g:is_ttyterm == 2
 
-        echohl WarningMsg | echo "tty remote clipboard -> @\" reg copy not reliable yet" | echohl None
-        sleep 1251m
-        redraw!
-        echo " "
-        return
+        if 0 " MCK DEBUG MCK DEBUG
+            echohl WarningMsg | echo "tty remote clipboard -> @\" reg copy not reliable yet" | echohl None
+            sleep 1251m
+            redraw!
+            echo " "
+            return
+        endif " MCK DEBUG MCK DEBUG
 
-        let l:match_buf_nr = bufnr("/dev/shm/ttyterm_tmp", 1)
-        exe "tab sb".l:match_buf_nr
+        vsplit /dev/shm/ttyterm_tmp
+
+        call vimade#BufDisable()
+        call gitgutter#buffer_disable()
 
         mapclear! <buffer>
 
@@ -5015,8 +5034,8 @@ function! s:CopyDefReg(arg)
         inoremap <buffer> :         :
         inoremap <buffer> >         >
         inoremap <buffer> <Tab>     <Tab>
-        imap <LeftMouseNM> <Nop>
-        imap <RightMouseNM> <Nop>
+        inoremap <buffer> <LeftMouseNM>  <Nop>
+        inoremap <buffer> <RightMouseNM> <Nop>
 
         ColorClear
 
@@ -5097,97 +5116,63 @@ endfunction
 nnoremap <silent> <Leader>z/ :noautocmd call <SID>CopyDefReg(1)<CR>
 vnoremap <silent> <Leader>z/ <Nop>
 
-function! MyTabPaste()
-    "echom "MyTabPaste"
+function! MyScratchPadPaste()
+    "echom "MyScratchPadPaste"
     let s:cur_buf = bufnr("")
+
+    if bufname('') ==# "/dev/shm/ttyterm_tmp"
+        call MyScratchPadExit()
+        return
+    endif
+
     for b in range(1, bufnr('$'))
         if bufexists(b)
             if bufname(b) ==# "/dev/shm/ttyterm_tmp"
                 " TODO: goto to that tab/buffer
                 augroup mypasteag
-                    autocmd! BufUnload /dev/shm/ttyterm_tmp call MyTabExit()
+                    autocmd! BufUnload /dev/shm/ttyterm_tmp call MyScratchPadExit()
                 augroup end
                 let l:winids = win_findbuf(bufnr(b))
                 if empty(l:winids)
-                    exe "tab sb".bufnr(b)
+                    silent! bwipe! /dev/shm/ttyterm_tmp
+                    call delete('/dev/shm/ttyterm_tmp')
                 else
                     call win_gotoid(l:winids[0])
+                    return
                 endif
-                return
             endif
         endif
     endfor
 
-    let l:match_buf_nr = bufnr("/dev/shm/ttyterm_tmp", 1)
-    exe "tab sb".l:match_buf_nr
+    vsplit /dev/shm/ttyterm_tmp
 
-    nnoremap <silent> <buffer> <Leader>z<BS> :call MyTabCopy()<CR>
+    nnoremap <silent> <buffer> <Leader>z<BS> :call MyScratchPadCopy()<CR>
     " quit should also clean up
     augroup mypasteag
-        autocmd! TabLeave /dev/shm/ttyterm_tmp call MyTabExit()
+        autocmd! BufLeave /dev/shm/ttyterm_tmp call MyScratchPadExit()
     augroup end
 
-    mapclear! <buffer>
-
-    " should not matter with paste set but remove all imappings anyway ...
-    redir => imapout
-    silent imap
-    redir END
-    if !empty(imapout)
-        let imaplist = split(imapout, '\n')
-        for iline in imaplist
-            let ix = split(iline)
-            if !(ix[1] =~ '<Plug>' || ix[1] =~ 'builtin')
-                "echom ':inoremap <buffer> <nowait> ' . ix[1] . ' <nop>'
-                execute ':inoremap <buffer> <nowait> ' . ix[1] ' <nop>'
-            endif
-        endfor
-    endif
-
-    inoremap <buffer> <C-@>     <Nop>
-    inoremap <buffer> <C-a>     <Nop>
-    inoremap <buffer> <C-c>     <Nop>
-    inoremap <buffer> <C-^><CR> <Nop>
-    inoremap <buffer> <M-C-CR>  <Nop>
-    inoremap <buffer> .         .
-    inoremap <buffer> :         :
-    inoremap <buffer> >         >
-    inoremap <buffer> <Tab>     <Tab>
-    imap <LeftMouseNM> <Nop>
-    imap <RightMouseNM> <Nop>
-
-    ColorClear
-
-    setlocal eventignore-=CursorHold
-    setlocal eventignore-=CursorHoldI
-    setlocal eventignore-=CompleteChanged
-    setlocal eventignore-=CompleteDone
-    setlocal syntax=off
+    call vimade#BufDisable()
+    call gitgutter#buffer_disable()
     if has("nvim") && g:use_treesitter > 0
         TSBufDisable highlight
     endif
-    set mouse=
-    set paste
 endfunction
 
-function! MyTabExit()
-    "echom "MyTabExit"
+function! MyScratchPadExit()
+    "echom "MyScratchPadExit"
     augroup mypasteag
         autocmd!
     augroup end
-    set nopaste
-    set mouse=a
     "bdelete! /dev/shm/ttyterm_tmp
     "call delete('/dev/shm/ttyterm_tmp')
 endfunction
 
-function! MyTabCopy()
-    "echom "MyTabCopy"
+function! MyScratchPadCopy()
+    "echom "MyScratchPadCopy"
     augroup mypasteag
         autocmd!
     augroup end
-    set nopaste
-    set mouse=a
     " make sure we are in ttyterm_tmp buffer ...
     if bufname('') !=# '/dev/shm/ttyterm_tmp'
         let etxt = "Error: remote (tty) clipboard copy failed: " . "not in tty tab buffer"
@@ -5198,7 +5183,7 @@ function! MyTabCopy()
         return
     endif
     silent! write!
-    tabclose
+    close
     if !empty(s:cur_buf)
         exe s:cur_buf."b"
     endif
@@ -5217,15 +5202,15 @@ function! MyTabCopy()
     if !empty(@p)
         let @"=@p
         call setreg('p', [])
-        echohl DiffAdd | echo "remote (tty) clipboard -> @\" reg copy" | echohl None
+        echohl DiffAdd | echo "scratch pad -> @\" reg copy" | echohl None
         sleep 851m
         redraw!
         echo " "
     endif
 endfunction
 
-nnoremap <silent> <Leader>z<BS>  :call MyTabPaste()<CR>
-nnoremap <silent> <Leader>z<DEL> :call MyTabCopy()<CR>
+nnoremap <silent> <Leader>z<BS>  :call MyScratchPadPaste()<CR>
+nnoremap <silent> <Leader>z<DEL> :call MyScratchPadCopy()<CR>
 
 " too close to . (dot)
 nnoremap <silent> <Leader>z. <Nop>
@@ -5416,7 +5401,13 @@ function UpdateClipCmd(cmd)
     if empty(a:cmd)
         return
     endif
-    silent execute 'normal ' . a:cmd
+    set paste
+    if bufname('') ==# '/dev/shm/ttyterm_tmp' && a:cmd ==# 'p'
+        silent execute 'normal ' . 'PG$'
+    else
+        silent execute 'normal ' . a:cmd
+    endif
+    set nopaste
 endfunction
 
 " <F34> paste after
@@ -10826,10 +10817,31 @@ function! MyQuit(arg) abort
     echo "                                    "
     redraw!
     echo "\r"
+
+    " if only other buffer is ttyterm_tmp then ok to delete it ...
+    let l:doquit = 1
+    for b in getbufinfo()
+        if b.listed
+            if b.bufnr != bufnr('%')
+                let bname = bufname(b.bufnr)
+                "echomsg 'bname = ' . bname
+                " a [No Name] buffer ...
+                if bname !=# '/dev/shm/ttyterm_tmp'
+                    let l:doquit = 0
+                    break
+                endif
+            endif
+        endif
+    endfor
+    if l:doquit == 1
+        silent! bwipe! /dev/shm/ttyterm_tmp
+        call delete('/dev/shm/ttyterm_tmp')
+    endif
+
     if &buftype != 'terminal' && &buftype != 'popup'
         exe "conf " . a:arg
-        echo " "
-    else
+        echo "\r"
+    elseif &buftype != 'popup'
         exe "silent! normal! i"
     endif
 endfunction
@@ -11292,7 +11304,6 @@ function s:ConfNextOrQuit() abort
     endif
 
     if bufname('') ==# '/dev/shm/ttyterm_tmp'
-        tabprevious
         silent! bwipe! /dev/shm/ttyterm_tmp
         call delete('/dev/shm/ttyterm_tmp')
         return
