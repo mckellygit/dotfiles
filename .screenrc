@@ -1,6 +1,10 @@
 maptimeout 30
 escape ^||
 altscreen on
+slowpaste 1
+defslowpaste 1
+
+#bindkey ^v exec sh -c 'xsel -o >/tmp/sel; screen -X eval "readreg p /tmp/sel" "paste p"'
 
 term tmux-256color
 
