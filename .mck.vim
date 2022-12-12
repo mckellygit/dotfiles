@@ -13,6 +13,14 @@
 " This must be first, because it changes other options as a side effect.
 set nocompatible
 
+let g:scratchpad="/dev/shm/scratchpad-" . getpid()
+function! s:CleanUpScratchPad()
+    if !empty(expand(glob(g:scratchpad)))
+        silent call delete(g:scratchpad)
+    endif
+endfunction
+"autocmd VimEnter * silent call <SID>CleanUpScratchPad()
+
 " one of these is needed in vim on windows to avoid starting in replace mode
 let g:has_wsl=0
 if exists('$WSL_DISTRO_NAME') || exists('$WSLENV')
@@ -4005,7 +4013,11 @@ set nobackup    " do not keep a backup file
 " read/write .viminfo file, don't save/restore registers -
 " NOTE: do not want to overwrite existing */+ registers
 "       as that is the current selection/clipboard
-set viminfo='20,/20,:20,<0,s50000,h
+if has("nvim")
+    set shada='20,/20,:20,<0,s50000,h
+else
+    set viminfo='20,/20,:20,<0,s50000,h
+endif
 " keep 20 lines of command line history
 set history=20
 " :help 'viminfo' (with quotes) for more info
@@ -4804,31 +4816,52 @@ function! ForceLoadNammedReg() abort
         echo " "
         return
     endif
+    " really 4/3 * len(@")
     if len(@")> g:max_osc52_len
         echohl WarningMsg | echo "Error: @\" reg exceeds max osc52 length" | echohl None
-        sleep 851m
+        sleep 1251m
         redraw!
         echo " "
         return
     endif
     if g:has_wsl > 0
         if g:has_clipper > 0
-            silent call system("win32yank.exe -i --crlf", getreg('"'))
-            echohl DiffAdd | echo "@\" reg -> clipboard copy" | echohl None
-            sleep 851m
-            redraw!
-            echo " "
+            call system("win32yank.exe -i --crlf", getreg('"'))
+            if v:shell_error == 0
+                echohl DiffAdd | echo "@\" reg -> clipboard copy" | echohl None
+                sleep 851m
+                redraw!
+                echo " "
+            elseif v:shell_error == 99
+                echohl WarningMsg | echo "Error: @\" reg exceeds max osc52 length" | echohl None
+                sleep 1251m
+                redraw!
+                echo " "
+                return
+            else
+                echohl WarningMsg | echo "Error: @\" reg copy error: " . v:shell_error | echohl None
+            endif
         else
             echohl WarningMsg | echo "win32yank.exe not found, cannot get data from clipboard" | echohl None
         endif
     else
         if g:has_clipper > 0
             " NOTE: if g:is_ttyterm then myclip will use osc52 to send to remote clipboard ...
-            silent call system("myclip -", getreg('"'))
-            echohl DiffAdd | echo "@\" reg -> clipboard copy" | echohl None
-            sleep 851m
-            redraw!
-            echo " "
+            call system("myclip -", getreg('"'))
+            if v:shell_error == 0
+                echohl DiffAdd | echo "@\" reg -> clipboard copy" | echohl None
+                sleep 851m
+                redraw!
+                echo " "
+            elseif v:shell_error == 99
+                echohl WarningMsg | echo "Error: @\" reg exceeds max osc52 length" | echohl None
+                sleep 1251m
+                redraw!
+                echo " "
+                return
+            else
+                echohl WarningMsg | echo "Error: @\" reg copy error: " . v:shell_error | echohl None
+            endif
         else
             echohl WarningMsg | echo "myclip not found, cannot get data from clipboard" | echohl None
         endif
@@ -4879,8 +4912,8 @@ function! TTYPaste(job_id, data, event) dict
         let b:tty_clipboard = join(a:data)
     endif
 
-    " make sure we are in ttyterm_tmp buffer ...
-    if bufname('') !=# '/dev/shm/ttyterm_tmp'
+    " make sure we are in scratch-pad buffer ...
+    if bufname('') !=# g:scratchpad
         redraw!
         echo " "
         return
@@ -4894,7 +4927,7 @@ function! TTYPaste(job_id, data, event) dict
         silent! bprev
     endif
 
-    call delete('/dev/shm/ttyterm_tmp')
+    call delete(g:scratchpad)
 
     "redraw!
 endfunction
@@ -4904,8 +4937,9 @@ function! PostPaste(code)
     stopinsert
     set nopaste
     set mouse=a
-    " make sure we are in ttyterm_tmp buffer ...
-    if bufname('') !=# '/dev/shm/ttyterm_tmp'
+    " make sure we are in scratch-pad buffer ...
+    if bufname('') !=# g:scratchpad
+        silent call lightline#enable()
         let etxt = "Error: remote (tty) clipboard copy failed: " . "not in tty tab buffer"
         echohl WarningMsg | echo etxt | echohl None
         sleep 1251m
@@ -4914,13 +4948,15 @@ function! PostPaste(code)
         return
     endif
     if a:code != 0
-        tabclose
+        silent! close
         if !empty(s:cur_buf)
             exe s:cur_buf."b"
         endif
+        silent call lightline#enable()
         redraw!
-        silent! bwipe! /dev/shm/ttyterm_tmp
-        call delete('/dev/shm/ttyterm_tmp')
+        silent! exec "silent! bwipe! " . g:scratchpad
+        silent! call delete(g:scratchpad)
+        call delete(g:scratchpad)
         if a:code == 3
             let etxt = "Error: remote (tty) clipboard copy failed: " . "too large"
         else
@@ -4933,12 +4969,17 @@ function! PostPaste(code)
         return
     endif
     silent! write!
-    tabclose
+    silent! close
     if !empty(s:cur_buf)
-        exe s:cur_buf."b"
+        silent! exe s:cur_buf."b"
     endif
+    silent call lightline#enable()
     redraw!
-    if empty(expand(glob("/dev/shm/ttyterm_tmp")))
+    tabnew
+    redraw!
+    tabclose
+    redraw!
+    if empty(expand(glob(g:scratchpad)))
         let etxt = "Error: remote (tty) clipboard copy failed: " . "no tmp file"
         echohl WarningMsg | echo etxt | echohl None
         sleep 1251m
@@ -4946,14 +4987,15 @@ function! PostPaste(code)
         echo " "
         return
     endif
-    silent! let @p=system('cat /dev/shm/ttyterm_tmp 2>/dev/null')
-    silent! bwipe! /dev/shm/ttyterm_tmp
-    call delete('/dev/shm/ttyterm_tmp')
+    silent! let @p=system('base64 -d < ' . g:scratchpad . ' 2>/dev/null')
+    silent! exec "silent! bwipe! " . g:scratchpad
+    silent! call delete(g:scratchpad)
     if !empty(@p)
         let @"=@p
         call setreg('p', [])
+        redraw!
         echohl DiffAdd | echo "remote (tty) clipboard -> @\" reg copy" | echohl None
-        sleep 851m
+        sleep 1251m
         redraw!
         echo " "
     endif
@@ -4969,22 +5011,22 @@ endfunction
 function! s:CopyDefReg(arg)
     let s:cur_buf = bufnr("")
 
-    if bufname('') ==# "/dev/shm/ttyterm_tmp"
+    if bufname('') ==# g:scratchpad
         call MyScratchPadExit()
         return
     endif
 
     for b in range(1, bufnr('$'))
         if bufexists(b)
-            if bufname(b) ==# "/dev/shm/ttyterm_tmp"
+            if bufname(b) ==# g:scratchpad
                 " TODO: goto to that tab/buffer
                 augroup mypasteag
-                    autocmd! BufUnload /dev/shm/ttyterm_tmp call MyScratchPadExit()
+                    autocmd! BufUnload /dev/shm/scratchpad-* call MyScratchPadExit()
                 augroup end
                 let l:winids = win_findbuf(bufnr(b))
                 if empty(l:winids)
-                    silent! bwipe! /dev/shm/ttyterm_tmp
-                    call delete('/dev/shm/ttyterm_tmp')
+                    silent exec "silent! bwipe! " . g:scratchpad
+                    call delete(g:scratchpad)
                 else
                     call win_gotoid(l:winids[0])
                     return
@@ -5003,10 +5045,16 @@ function! s:CopyDefReg(arg)
             return
         endif " MCK DEBUG MCK DEBUG
 
-        silent vsplit /dev/shm/ttyterm_tmp
+        echohl DiffText | echo "tty remote clipboard copying ..." | echohl None
+        redraw!
+
+        silent exec "silent 1split " . g:scratchpad
 
         silent call vimade#BufDisable()
         silent call gitgutter#buffer_disable()
+        silent call lightline#disable()
+
+        setlocal complete=
 
         silent mapclear! <buffer>
 
@@ -5120,22 +5168,22 @@ function! MyScratchPadPaste()
     "echom "MyScratchPadPaste"
     let s:cur_buf = bufnr("")
 
-    if bufname('') ==# "/dev/shm/ttyterm_tmp"
+    if bufname('') ==# g:scratchpad
         call MyScratchPadExit()
         return
     endif
 
     for b in range(1, bufnr('$'))
         if bufexists(b)
-            if bufname(b) ==# "/dev/shm/ttyterm_tmp"
+            if bufname(b) ==# g:scratchpad
                 " TODO: goto to that tab/buffer
                 augroup mypasteag
-                    autocmd! BufUnload /dev/shm/ttyterm_tmp call MyScratchPadExit()
+                    autocmd! BufUnload /dev/shm/scratchpad-* call MyScratchPadExit()
                 augroup end
                 let l:winids = win_findbuf(bufnr(b))
                 if empty(l:winids)
-                    silent! bwipe! /dev/shm/ttyterm_tmp
-                    call delete('/dev/shm/ttyterm_tmp')
+                    silent exec "silent! bwipe! " . g:scratchpad
+                    call delete(g:scratchpad)
                 else
                     call win_gotoid(l:winids[0])
                     return
@@ -5144,12 +5192,12 @@ function! MyScratchPadPaste()
         endif
     endfor
 
-    silent vsplit /dev/shm/ttyterm_tmp
+    silent exec "silent vsplit " . g:scratchpad
 
     nnoremap <silent> <buffer> <Leader>z<BS> :call MyScratchPadCopy()<CR>
     " quit should also clean up
     augroup mypasteag
-        autocmd! BufLeave /dev/shm/ttyterm_tmp call MyScratchPadExit()
+        autocmd! BufLeave g:scratchpad call MyScratchPadExit()
     augroup end
 
     silent call vimade#BufDisable()
@@ -5157,6 +5205,8 @@ function! MyScratchPadPaste()
     if has("nvim") && g:use_treesitter > 0
         silent TSBufDisable highlight
     endif
+
+    setlocal complete=
 endfunction
 
 function! MyScratchPadExit()
@@ -5164,8 +5214,8 @@ function! MyScratchPadExit()
     augroup mypasteag
         autocmd!
     augroup end
-    "bdelete! /dev/shm/ttyterm_tmp
-    "call delete('/dev/shm/ttyterm_tmp')
+    "bdelete! g:scratchpad
+    "call delete(g:scratchpad)
 endfunction
 
 function! MyScratchPadCopy()
@@ -5173,8 +5223,8 @@ function! MyScratchPadCopy()
     augroup mypasteag
         autocmd!
     augroup end
-    " make sure we are in ttyterm_tmp buffer ...
-    if bufname('') !=# '/dev/shm/ttyterm_tmp'
+    " make sure we are in scratch-pad buffer ...
+    if bufname('') !=# g:scratchpad
         let etxt = "Error: remote (tty) clipboard copy failed: " . "not in tty tab buffer"
         echohl WarningMsg | echo etxt | echohl None
         sleep 1251m
@@ -5183,12 +5233,12 @@ function! MyScratchPadCopy()
         return
     endif
     silent! write!
-    close
+    silent! close
     if !empty(s:cur_buf)
-        exe s:cur_buf."b"
+        silent! exe s:cur_buf."b"
     endif
     redraw!
-    if empty(expand(glob("/dev/shm/ttyterm_tmp")))
+    if empty(expand(glob(g:scratchpad)))
         let etxt = "Error: remote (tty) clipboard copy failed: " . "no tmp file"
         echohl WarningMsg | echo etxt | echohl None
         sleep 1251m
@@ -5196,9 +5246,10 @@ function! MyScratchPadCopy()
         echo " "
         return
     endif
-    silent! let @p=system('cat /dev/shm/ttyterm_tmp 2>/dev/null')
-    silent! bwipe! /dev/shm/ttyterm_tmp
-    call delete('/dev/shm/ttyterm_tmp')
+    " TODO: improve cat -v method ...
+    silent! let @p=system('cat -v ' . g:scratchpad . ' 2>/dev/null')
+    silent! exec "silent! bwipe! " . g:scratchpad
+    silent! call delete(g:scratchpad)
     if !empty(@p)
         let @"=@p
         call setreg('p', [])
@@ -5402,7 +5453,7 @@ function UpdateClipCmd(cmd)
         return
     endif
     set paste
-    if bufname('') ==# '/dev/shm/ttyterm_tmp' && a:cmd ==# 'p'
+    if bufname('') ==# g:scratchpad && a:cmd ==# 'p'
         silent execute 'normal ' . 'PG$'
     else
         silent execute 'normal ' . a:cmd
@@ -10657,14 +10708,14 @@ function! SkipTerminalsQuitCmd(cmd) abort
             if getbufvar(b.bufnr, '&buftype') !=# 'terminal' && getbufvar(b.bufnr, '&buftype') !=# 'popup'
                 if !b.changed
                     execute "silent! bd " . b.bufnr
-                elseif bufname(b.bufnr) !=# '/dev/shm/ttyterm_tmp'
+                elseif bufname(b.bufnr) !=# g:scratchpad
                     if l:bmod == 0
                         echo "buffer: " . b.bufnr . " modified"
                         let l:bmod = 1
                     endif
                     let l:doquit = 0
                 endif
-            elseif bufname(b.bufnr) !=# '/dev/shm/ttyterm_tmp'
+            elseif bufname(b.bufnr) !=# g:scratchpad
                 let l:doquit = 0
             endif
         endif
@@ -10689,14 +10740,14 @@ function! SkipTerminalsConfQA() abort
             if getbufvar(b.bufnr, '&buftype') !=# 'terminal' && getbufvar(b.bufnr, '&buftype') !=# 'popup'
                 if !b.changed
                     execute "silent! bd " . b.bufnr
-                elseif bufname(b.bufnr) !=# '/dev/shm/ttyterm_tmp'
+                elseif bufname(b.bufnr) !=# g:scratchpad
                     if l:bmod == 0
                         echo "buffer: " . b.bufnr . " modified"
                         let l:bmod = 1
                     endif
                     let l:doquit = 0
                 endif
-            elseif bufname(b.bufnr) !=# '/dev/shm/ttyterm_tmp'
+            elseif bufname(b.bufnr) !=# g:scratchpad
                 let l:doquit = 0
             endif
         endif
@@ -10725,7 +10776,7 @@ function! s:QuitIfOnlyNoNameLeft() abort
                 let bname = bufname(b.bufnr)
                 " echomsg 'bname = ' . bname
                 " a [No Name] buffer ...
-                if bname !=# '' && bname !=# '/dev/shm/ttyterm_tmp'
+                if bname !=# '' && bname !=# g:scratchpad
                     let l:doquit = 0
                     break
                 endif
@@ -10818,7 +10869,7 @@ function! MyQuit(arg) abort
     redraw!
     echo "\r"
 
-    " if only other buffer is ttyterm_tmp then ok to delete it ...
+    " if only other buffer is scratch-pad then ok to delete it ...
     let l:doquit = 1
     for b in getbufinfo()
         if b.listed
@@ -10826,7 +10877,7 @@ function! MyQuit(arg) abort
                 let bname = bufname(b.bufnr)
                 "echomsg 'bname = ' . bname
                 " a [No Name] buffer ...
-                if bname !=# '/dev/shm/ttyterm_tmp'
+                if bname !=# g:scratchpad
                     let l:doquit = 0
                     break
                 endif
@@ -10834,8 +10885,8 @@ function! MyQuit(arg) abort
         endif
     endfor
     if l:doquit == 1
-        silent! bwipe! /dev/shm/ttyterm_tmp
-        call delete('/dev/shm/ttyterm_tmp')
+        silent exec "silent! bwipe! " . g:scratchpad
+        call delete(g:scratchpad)
     endif
 
     if &buftype != 'terminal' && &buftype != 'popup'
@@ -11303,17 +11354,17 @@ function s:ConfNextOrQuit() abort
         return
     endif
 
-    if bufname('') ==# '/dev/shm/ttyterm_tmp'
-        silent! bwipe! /dev/shm/ttyterm_tmp
-        call delete('/dev/shm/ttyterm_tmp')
+    if bufname('') ==# g:scratchpad
+        silent exec "silent! bwipe! " . g:scratchpad
+        call delete(g:scratchpad)
         return
     endif
 
     for b in range(1, bufnr('$'))
         if bufexists(b)
-            if bufname(b) ==# "/dev/shm/ttyterm_tmp"
-                silent! bwipe! /dev/shm/ttyterm_tmp
-                call delete('/dev/shm/ttyterm_tmp')
+            if bufname(b) ==# g:scratchpad
+                silent exec "silent! bwipe! " . g:scratchpad
+                call delete(g:scratchpad)
             endif
         endif
     endfor
@@ -11374,7 +11425,7 @@ function s:QuitIfOnlyHidden(bnum) abort
             continue
         elseif empty(bufname(b.bufnr)) && !b.listed
             continue
-        elseif bufname(b.bufnr) ==# '/dev/shm/ttyterm_tmp'
+        elseif bufname(b.bufnr) ==# g:scratchpad
             continue
         elseif !b.hidden
             let l:doquit = 0

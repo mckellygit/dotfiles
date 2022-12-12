@@ -140,6 +140,7 @@ if [ -n "$TERM" ] ; then
             export TERM=tmux-256color
             tset
             resize
+            stty ixoff > /dev/null 2>&1
         fi
     fi
 fi
@@ -1442,9 +1443,12 @@ if [ -n "$SSH_CLIENT" ] ; then
   export SSHIP=$(echo $SSH_CLIENT | awk '{print $1}')
 fi
 
-# needed to have gdb stop with ^C ...
+# needed to have gdb stop with ^C (add -ixany) ...
 stty ixany > /dev/null 2>&1
 stty werase undef > /dev/null 2>&1
+# also add these ...
+stty brkint ignpar > /dev/null 2>&1
+# stty brkint ignpar -ixoff -imaxbel > /dev/null 2>&1
 
 # not needed -
 # genesis /etc/profile.d/fix_term.sh forces TERM=linux
