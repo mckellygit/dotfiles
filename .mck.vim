@@ -14,6 +14,7 @@
 set nocompatible
 
 let g:scratchpad="/dev/shm/scratchpad-" . getpid()
+let g:scratchpad2=g:scratchpad . "-tmp"
 function! s:CleanUpScratchPad()
     if !empty(expand(glob(g:scratchpad)))
         silent call delete(g:scratchpad)
@@ -4982,10 +4983,13 @@ function! PostPaste(code)
     endif
     silent call lightline#enable()
     redraw!
-    tabnew
+
+    silent exec "tabnew " . g:scratchpad2
     redraw!
     tabclose
+    silent! exec "silent! bwipe! " . g:scratchpad2
     redraw!
+
     if empty(expand(glob(g:scratchpad)))
         let etxt = "Error: remote (tty) clipboard copy failed: " . "no tmp file"
         echohl WarningMsg | echo etxt | echohl None
@@ -5051,6 +5055,8 @@ function! s:CopyDefReg(arg)
             echo " "
             return
         endif " MCK DEBUG MCK DEBUG
+
+        " NOTE: make sure -ixoff is set ...
 
         echohl DiffText | echo "tty remote clipboard copying ..." | echohl None
         redraw!
