@@ -4817,7 +4817,8 @@ function! ForceLoadNammedReg() abort
         return
     endif
     " really 4/3 * len(@")
-    if len(@")> g:max_osc52_len
+    let clen = len(@")
+    if clen > g:max_osc52_len
         echohl WarningMsg | echo "Error: @\" reg exceeds max osc52 length" | echohl None
         sleep 1251m
         redraw!
@@ -4846,8 +4847,14 @@ function! ForceLoadNammedReg() abort
         endif
     else
         if g:has_clipper > 0
+            if g:is_ttyterm > 1 && clen > 10000
+                echohl DiffText | echo "copying @\" to remote clipboard ..." | echohl None
+            endif
             " NOTE: if g:is_ttyterm then myclip will use osc52 to send to remote clipboard ...
             call system("myclip -", getreg('"'))
+            if g:is_ttyterm > 1 && clen > 10000
+                redraw!
+            endif
             if v:shell_error == 0
                 echohl DiffAdd | echo "@\" reg -> clipboard copy" | echohl None
                 sleep 851m
@@ -4987,7 +4994,7 @@ function! PostPaste(code)
         echo " "
         return
     endif
-    silent! let @p=system('base64 -d < ' . g:scratchpad . ' 2>/dev/null')
+    silent! let @p=system('base64 -i -d < ' . g:scratchpad . ' 2>/dev/null')
     silent! exec "silent! bwipe! " . g:scratchpad
     silent! call delete(g:scratchpad)
     if !empty(@p)
@@ -5087,10 +5094,12 @@ function! s:CopyDefReg(arg)
 
         ColorClear
 
-        setlocal eventignore-=CursorHold
-        setlocal eventignore-=CursorHoldI
-        setlocal eventignore-=CompleteChanged
-        setlocal eventignore-=CompleteDone
+        setlocal eventignore+=CursorHold
+        setlocal eventignore+=CursorHoldI
+        setlocal eventignore+=CursorMoved
+        setlocal eventignore+=CursorMovedI
+        setlocal eventignore+=CompleteChanged
+        setlocal eventignore+=CompleteDone
         setlocal syntax=off
         if has("nvim") && g:use_treesitter > 0
             TSBufDisable highlight
@@ -5207,6 +5216,13 @@ function! MyScratchPadPaste()
     endif
 
     setlocal complete=
+
+    setlocal eventignore+=CursorHold
+    setlocal eventignore+=CursorHoldI
+    setlocal eventignore+=CursorMoved
+    setlocal eventignore+=CursorMovedI
+    setlocal eventignore+=CompleteChanged
+    setlocal eventignore+=CompleteDone
 endfunction
 
 function! MyScratchPadExit()
@@ -8854,6 +8870,9 @@ autocmd VimEnter,VimResized * call <SID>MapScrollKeys()
 set updatetime=10000
 function! s:IdleToNormalMode()
     if pumvisible()
+        return
+    endif
+    if bufname('') ==# g:scratchpad
         return
     endif
     let mymode = mode()
