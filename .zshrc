@@ -140,7 +140,7 @@ if [ -n "$TERM" ] ; then
             export TERM=tmux-256color
             tset
             resize
-            #stty -ixoff > /dev/null 2>&1
+            stty ixoff > /dev/null 2>&1
         fi
     fi
 fi
@@ -1447,7 +1447,8 @@ fi
 stty ixany > /dev/null 2>&1
 stty werase undef > /dev/null 2>&1
 # also add these ...
-stty brkint ignpar -ixoff -imaxbel > /dev/null 2>&1
+stty brkint ignpar > /dev/null 2>&1
+#stty brkint ignpar -ixoff -imaxbel > /dev/null 2>&1
 
 # not needed -
 # genesis /etc/profile.d/fix_term.sh forces TERM=linux
