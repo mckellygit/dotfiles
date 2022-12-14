@@ -4984,18 +4984,22 @@ function! PostPaste(code)
         return
     endif
     silent! write!
+    silent call setfperm(g:scratchpad, "rw-------")
     silent! close
     if !empty(s:cur_buf)
         silent! exe s:cur_buf."b"
     endif
+
     silent call lightline#enable()
     redraw!
 
     silent exec "tabnew " . g:scratchpad2
     redraw!
+
     tabclose
-    silent! exec "silent! bwipe! " . g:scratchpad2
     redraw!
+
+    silent! exec "silent! bwipe! " . g:scratchpad2
 
     if empty(expand(glob(g:scratchpad)))
         let etxt = "Error: remote (tty) clipboard copy failed: " . "no tmp file"
@@ -5072,13 +5076,13 @@ function! s:CopyDefReg(arg)
 
         silent call vimade#BufDisable()
         silent call gitgutter#buffer_disable()
+
         silent call lightline#disable()
 
-        setlocal complete=
+        " should not matter with paste set but remove all imappings anyway ...
 
         silent mapclear! <buffer>
 
-        " should not matter with paste set but remove all imappings anyway ...
         redir => imapout
         silent imap
         redir END
@@ -5105,7 +5109,11 @@ function! s:CopyDefReg(arg)
         inoremap <buffer> <LeftMouseNM>  <Nop>
         inoremap <buffer> <RightMouseNM> <Nop>
 
+        " TODO: several other *special* built-in insert mode bindings to consider nullifying ...
+
         ColorClear
+
+        setlocal complete=
 
         setlocal eventignore+=CursorHold
         setlocal eventignore+=CursorHoldI
@@ -5113,10 +5121,13 @@ function! s:CopyDefReg(arg)
         setlocal eventignore+=CursorMovedI
         setlocal eventignore+=CompleteChanged
         setlocal eventignore+=CompleteDone
+
         setlocal syntax=off
+
         if has("nvim") && g:use_treesitter > 0
             TSBufDisable highlight
         endif
+
         set mouse=
         set paste
 
@@ -5216,17 +5227,18 @@ function! MyScratchPadPaste()
 
     silent exec "silent vsplit " . g:scratchpad
 
+    silent call vimade#BufDisable()
+    silent call gitgutter#buffer_disable()
+
     nnoremap <silent> <buffer> <Leader>z<BS> :call MyScratchPadCopy()<CR>
     " quit should also clean up
     augroup mypasteag
         autocmd! BufLeave g:scratchpad call MyScratchPadExit()
     augroup end
 
-    silent call vimade#BufDisable()
-    silent call gitgutter#buffer_disable()
-    if has("nvim") && g:use_treesitter > 0
-        silent TSBufDisable highlight
-    endif
+    " TODO: several other *special* built-in insert mode bindings to consider nullifying ...
+
+    ColorClear
 
     setlocal complete=
 
@@ -5236,6 +5248,11 @@ function! MyScratchPadPaste()
     setlocal eventignore+=CursorMovedI
     setlocal eventignore+=CompleteChanged
     setlocal eventignore+=CompleteDone
+
+    if has("nvim") && g:use_treesitter > 0
+        silent TSBufDisable highlight
+    endif
+
 endfunction
 
 function! MyScratchPadExit()
@@ -5262,11 +5279,14 @@ function! MyScratchPadCopy()
         return
     endif
     silent! write!
+    silent call setfperm(g:scratchpad, "rw-------")
     silent! close
     if !empty(s:cur_buf)
         silent! exe s:cur_buf."b"
     endif
+
     redraw!
+
     if empty(expand(glob(g:scratchpad)))
         let etxt = "Error: remote (tty) clipboard copy failed: " . "no tmp file"
         echohl WarningMsg | echo etxt | echohl None
