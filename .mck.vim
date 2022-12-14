@@ -2635,7 +2635,7 @@ autocmd User AsyncRunInterrupt echohl DiffText | echo 'AsyncRun complete: [TERM]
 " NOTE: add '| set ma' after copen to make qf modifiable
 
 " use <Leader>sx to cancel AsyncRun job in flight ...
-if 0
+if 0 " --- DISABLED ---
 " in vim, <C-\> _may_ stop system() cmds (if stty quit is ^\) [but not nvim] - but may generate core file
 " <C-S-\> (or <C-|>) might be mapped to <C-_>\ in some terminals ...
 noremap <silent> <expr> <C-_>\ (&buftype ==# 'terminal') ? 'i' : '<C-c>:AsyncStop!<CR>:sleep 500m<CR>:AsyncStop!<CR>'
@@ -4087,7 +4087,7 @@ set mouse=a
 " -----------------------------------------------------------------------------
 " old way
 "if g:is_ttyterm == 0
-if 0
+if 0 " --- DISABLED ---
 if !has("nvim")
     set clipboard-=unamed
     set clipboard^=unnamedplus
@@ -4109,19 +4109,21 @@ function! s:PreserveClipboard() abort
         "endif
 
         " -------------------------------------
-        " NOTE: dont seem to need this if block - but why ?
-        let regtype = getregtype('*')
-        if ! (regtype =~ "")
-            silent call system("myclip -", getreg('*'))
+        if 0 " --- DISABLED ---
+            " NOTE: dont seem to need this if block - but why ?
+            let regtype = getregtype('*')
+            if ! (regtype =~ "")
+                silent call system("myclip -", getreg('*'))
+            endif
         endif
         " -------------------------------------
 
         " clear regs ?
         "call setreg('+', [])
         "call setreg('*', [])
-        call setreg('x', [])
-        call setreg('y', [])
     endif
+    call setreg('x', [])
+    call setreg('y', [])
 endfunction
 autocmd VimLeave * silent call <SID>PreserveClipboard()
 
@@ -4152,42 +4154,46 @@ function s:InitializeClipboard()
                 sleep 651m
             endif
         endif
-        if !exists('$VIM_SKIP_PRESERVE_CLIPBOARD')
-            "let clipdata = system("copyq clipboard")
-            let clipdata = system("myclip --o")
-            if empty(clipdata)
-                "echom "clearing out + and * registers"
-                call setreg('+', [])
-                call setreg('*', [])
-            else
-                "echom "initializing + and * registers"
-                if exists('g:preserve_regtype') && g:preserve_regtype > 0
-                    " try to also restore regtype ...
-                    let regtype = []
-                    let fname = fnamemodify("~/.vimsrt", ":p")
-                    " TODO: obtain lock/mutex to prevent collisions ...
-                    let regtype = readfile(fname, "b")
-                    if len(regtype) == 1
-                        call setreg('+', clipdata, regtype[0])
-                        call setreg('*', clipdata, regtype[0])
+        if 0 " --- DISABLED ---
+            if !exists('$VIM_SKIP_PRESERVE_CLIPBOARD')
+                "let clipdata = system("copyq clipboard")
+                let clipdata = system("myclip --o")
+                if empty(clipdata)
+                    "echom "clearing out + and * registers"
+                    call setreg('+', [])
+                    call setreg('*', [])
+                else
+                    "echom "initializing + and * registers"
+                    if exists('g:preserve_regtype') && g:preserve_regtype > 0
+                        " try to also restore regtype ...
+                        let regtype = []
+                        let fname = fnamemodify("~/.vimsrt", ":p")
+                        " TODO: obtain lock/mutex to prevent collisions ...
+                        let regtype = readfile(fname, "b")
+                        if len(regtype) == 1
+                            call setreg('+', clipdata, regtype[0])
+                            call setreg('*', clipdata, regtype[0])
+                        else
+                            call setreg('+', clipdata)
+                            call setreg('*', clipdata)
+                        endif
                     else
                         call setreg('+', clipdata)
                         call setreg('*', clipdata)
                     endif
-                else
-                    call setreg('+', clipdata)
-                    call setreg('*', clipdata)
                 endif
             endif
-            call setreg('x', [])
-            call setreg('y', [])
         endif
     elseif g:has_wsl > 0 && g:has_clipper > 0
         " doesnt capture regtype but ...
-        " old way
-        "let @" = system("win32yank.exe -o --lf")
-        " old way
+        if 0 " --- DISABLED ---
+            " old way
+            let @" = system("win32yank.exe -o --lf")
+            " old way
+        endif
     endif
+    call setreg('x', [])
+    call setreg('y', [])
 endfunction
 autocmd VimEnter * call <SID>InitializeClipboard()
 
@@ -5842,7 +5848,7 @@ endif
 vnoremap <silent> <buffer> <expr> p (&buftype == 'terminal') ? '' : ':<C-u>call <SID>SwapReg(0)<CR>gv"_x"xp:<C-u>call <SID>SwapReg(0)<CR>'
 vnoremap <silent> <buffer> <expr> P (&buftype == 'terminal') ? '' : ':<C-u>call <SID>SwapReg(0)<CR>gv"_x"xP:<C-u>call <SID>SwapReg(0)<CR>'
 
-if 0
+if 0 " --- DISABLED ---
 if g:has_wsl > 0 && !has("nvim")
     if has("nvimSKIP_MINIYANK") " miniyank
         vmap <silent> <buffer> <expr> p (&buftype == 'terminal') ? '' : '"_x""<Plug>(miniyank-autoPut)'
@@ -5877,7 +5883,7 @@ vnoremap <silent> <buffer> <expr> <C-S-Insert> (&buftype == 'terminal') ? '' : '
 vnoremap <silent> <buffer> <expr> <S-F35>      (&buftype == 'terminal') ? '' : ':<C-u>call <SID>SwapReg(0)<CR>gv"_x"xP:<C-u>call <SID>SwapReg(0)<CR>'
 vnoremap <silent> <buffer> <expr> <M-*>        (&buftype == 'terminal') ? '' : ':<C-u>call <SID>SwapReg(0)<CR>gv"_x"xP:<C-u>call <SID>SwapReg(0)<CR>'
 
-if 0
+if 0 " --- DISABLED ---
 if g:has_wsl > 0 && !has("nvim")
     if has("nvimSKIP_MINIYANK") " miniyank
         vmap <silent> <buffer> <expr> <F34>      (&buftype == 'terminal') ? '' : '"_x""<Plug>(miniyank-autoPut)'
@@ -11168,7 +11174,7 @@ if &diff
       au VimEnter * :Alias! exit call\ MyCQuit()
 
       " TODO: not sure these are needed anymore ?
-      if 0
+      if 0 " --- DISABLED ---
           "au InsertEnter * diffoff
           "au InsertLeave * diffthis
           au InsertEnter * call <SID>SaveAndDisableFiller()
@@ -12262,7 +12268,7 @@ if g:is_ttyterm > 1
     "set mouse=nv
     " only helpful with nvim because vim supports t_ut='' bce termcap setting
     "set signcolumn=no
-    if 0
+    if 0 " --- DISABLED ---
         exec 'normal <Cmd>GitGutterDisable<CR>'
         if has("nvim")
             " WARNING: these seem to be needed to paste > 10kb
