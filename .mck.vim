@@ -3656,7 +3656,11 @@ function! s:reglist()
         for item in l:rlist
             "let l:lix = strpart(item, 0, wid)
             let l:lix = item[:wid]
-            call add(l:tlist, l:lix)
+            " only save non-empty registers ...
+            let l:ipp = split(l:lix)
+            if len(l:ipp) > 2
+                call add(l:tlist, l:lix)
+            endif
         endfor
         return l:tlist
     endif
@@ -4817,14 +4821,17 @@ function! ForceLoadNammedReg() abort
         echo " "
         return
     endif
-    " really 4/3 * len(@")
-    let clen = len(@")
-    if clen > g:max_osc52_len
-        echohl WarningMsg | echo "Error: @\" reg exceeds max osc52 length" | echohl None
-        sleep 1251m
-        redraw!
-        echo " "
-        return
+    let clen = 0
+    if g:is_ttyterm > 1
+        " really 4/3 * len(@")
+        let clen = len(@")
+        if clen > g:max_osc52_len
+            echohl WarningMsg | echo "Error: @\" reg exceeds max osc52 length" | echohl None
+            sleep 1251m
+            redraw!
+            echo " "
+            return
+        endif
     endif
     if g:has_wsl > 0
         if g:has_clipper > 0
