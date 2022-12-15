@@ -3995,6 +3995,8 @@ let g:opaqbg=0
 "hi Normal cterm=none ctermbg=none
 nnoremap <silent> <expr> <Leader>bg (g:opaqbg == 1) ? ':hi Normal cterm=none ctermbg=235<bar>let g:opaqbg=0<CR>' : ':hi Normal cterm=none ctermbg=none<bar>let g:opaqbg=1<CR>'
 
+hi invisiblefg ctermfg=235 guifg=#2c323b
+
 " always show tabs
 set showtabline=2
 
@@ -5132,6 +5134,10 @@ function! s:CopyDefReg(arg)
 
         if has("nvim") && g:use_treesitter > 0
             TSBufDisable highlight
+        endif
+
+        if has("nvim")
+            setlocal winhighlight=Normal:invisiblefg
         endif
 
         set mouse=
