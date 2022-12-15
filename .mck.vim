@@ -4097,6 +4097,16 @@ endif
 endif
 " old way
 
+" NOTE: removing autoselect means visual selection is not automatically copied to unnamed clipboard (*)
+"       also removing autoselectml makes things fail weirdly
+"       this also affects getregtype("*") se we need to use visualmode() instead
+" add this to get decent mouse selection and copy to clipboard when in command-mode ...
+if !has("nvim")
+    set clipboard-=autoselect
+    set clipboard-=autoselectplus
+    set clipboard^=autoselectml guioptions+=A
+endif
+
 " preserve clipboard(s) at exit ...
 function! s:PreserveClipboard() abort
     if g:has_wsl == 0 && g:has_clipper > 0 && g:is_ssh_client == 0 && !exists('$VIM_SKIP_PRESERVE_CLIPBOARD')
@@ -4198,16 +4208,6 @@ function s:InitializeClipboard()
     call setreg('y', [])
 endfunction
 autocmd VimEnter * call <SID>InitializeClipboard()
-
-" NOTE: removing autoselect means visual selection is not automatically copied to unnamed clipboard (*)
-"       also removing autoselectml makes things fail weirdly
-"       this also affects getregtype("*") se we need to use visualmode() instead
-set clipboard-=autoselect
-set clipboard-=autoselectplus
-" add this to get decent mouse selection and copy to clipboard when in command-mode ...
-if !has("nvim")
-    set clipboard^=autoselectml guioptions+=A
-endif
 
 " ====================================================
 " --- CLIPBOARD --------------------------------------
