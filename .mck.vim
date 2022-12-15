@@ -9522,6 +9522,7 @@ if has("nvim")
     " same with this ...
     "autocmd WinEnter * if &previewwindow && pumvisible() | pclose | endif
     " this seems ok so far ...
+    " maybe do this only for &filetype == 'cpp' || &filetype == 'c' ?
     aug fltpop
         au!
         autocmd WinEnter <buffer> if pumvisible() | pclose | endif
