@@ -6617,7 +6617,7 @@ if !has("nvim")
         silent call feedkeys("\<C-w>Nv\<C-LeftDrag>\<C-LeftDrag>\<Esc>\<Esc>\<Esc>i", "Lnt")
     endfunction
     " VIM BUG
-    "au TerminalWinOpen * call <SID>VimTermInit()
+    au TerminalWinOpen * silent call <SID>VimTermInit()
 
     tnoremap <LeftMouse>        <Cmd>let @t="0"<CR><C-w>N<LeftMouse>
     tnoremap <LeftDrag>         <Nop>
