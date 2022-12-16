@@ -3,6 +3,8 @@ escape ^||
 altscreen on
 slowpaste 1
 defslowpaste 1
+scrollback 0
+defscrollback 0
 
 #bindkey ^v exec sh -c 'xsel -o >/tmp/sel; screen -X eval "readreg p /tmp/sel" "paste p"'
 
