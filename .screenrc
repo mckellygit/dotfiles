@@ -8,7 +8,7 @@ defslowpaste 1
 
 term tmux-256color
 
-#terminfo tmux-256color ti=\E[?1049l:te=\E[?1049h
+#terminfo tmux-256color ti=\E[?1049h:te=\E[?1049l
 terminfo tmux-256color ti@:te@
 
 setenv SCREEN_TERM tmux
