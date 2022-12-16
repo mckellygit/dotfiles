@@ -9736,6 +9736,11 @@ vnoremap <silent> <Leader>cc <C-\><C-n>:<C-u>call <SID>CloseUtilWins()<CR>
 "nnoremap <silent> <Leader>cc           :ccl<bar>lcl<bar>pcl<bar>:call <SID>CloseClangWin()<CR>
 "vnoremap <silent> <Leader>cc <C-\><C-n>:ccl<bar>lcl<bar>pcl<bar>:call <SID>CloseClangWin()<CR>
 
+nnoremap <silent> <f10>                :call <SID>CloseUtilWins()<CR>
+vnoremap <silent> <f10>      <C-\><C-n>:<C-u>call <SID>CloseUtilWins()<CR>
+nnoremap <silent> <f12>                :call <SID>CloseUtilWins()<CR>
+vnoremap <silent> <f12>      <C-\><C-n>:<C-u>call <SID>CloseUtilWins()<CR>
+
 "noremap <silent> <Leader>cc :windo lcl<bar>ccl<bar>pcl<bar>:echo<CR>
 " qq to also close location list, but we already have a q mapping ...
 "autocmd BufReadPost quickfix nnoremap <silent> <buffer> qq :ccl<bar>lcl<bar>pcl<bar>:echo<CR>
