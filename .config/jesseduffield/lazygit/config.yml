@@ -2,9 +2,9 @@ reporting: "off"
 startuppopupversion: 1
 keybinding:
     files:
-        OpenStatusFilter: '<f10>'
+        openStatusFilter: '<f1>'
     universal:
-        quit: '<f12>'
+        quit: '<f10>'
         return: '<esc>'
         redo: '<c-6>'
         undo: '<c-8>'
