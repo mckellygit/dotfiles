@@ -11,7 +11,7 @@ defscrollback 0
 term tmux-256color
 
 #terminfo tmux-256color ti=\E[?1049h:te=\E[?1049l
-terminfo tmux-256color ti@:te@
+terminfo tmux-256color ti@:te@:op
 
 setenv SCREEN_TERM tmux
 
