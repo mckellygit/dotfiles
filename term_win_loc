@@ -60,40 +60,44 @@ global.get_window_actors().forEach(function (w) {
     var once = 1;
     var mw = w.meta_window;
 
-    if ( mw.get_title().toLowerCase().includes('tmux:') ||
-         mw.get_wm_class().toLowerCase() == 'st' ||
-         mw.get_wm_class().toLowerCase() == 'xterm' ||
-         mw.get_wm_class().toLowerCase() == 'urxvt' ||
-         mw.get_wm_class().toLowerCase() == 'kitty' ||
-         mw.get_wm_class().toLowerCase() == 'alacritty' ||
-         mw.get_wm_class().toLowerCase() == 'foot' ||
-         mw.get_wm_class().toLowerCase().includes('.wezterm') ) {
+    if (once) {
 
-        GLib.timeout_add(GLib.PRIORITY_DEFAULT, 1, function() { mw.activate(global.get_current_time()); });
+        // var wtitle = mw.get_title();
+        // var wclass = mw.get_wm_class();
+        // global.log('wtitle: ', wtitle);
+        // global.log('wclass: ', wclass);
 
-        if (mw.get_maximized()) {
-            mw.unmaximize(3); // 3 is META_MAXIMIZE_BOTH, so unmaximizing the window in both directions
-        }
-
-        GLib.usleep(100000);
-
-        if ( ( (mw.get_title().toLowerCase().includes('tmux:xterm')) && !(mw.get_title().toLowerCase().includes('kitty')) ) ||
+        if ( mw.get_title().toLowerCase().includes('tmux:') ||
+             mw.get_wm_class().toLowerCase() == 'st' ||
+             mw.get_wm_class().toLowerCase() == 'xterm' ||
+             mw.get_wm_class().toLowerCase() == 'urxvt' ||
+             mw.get_wm_class().toLowerCase() == 'kitty' ||
+             mw.get_wm_class().toLowerCase() == 'alacritty' ||
+             mw.get_wm_class().toLowerCase() == 'foot' ||
              mw.get_wm_class().toLowerCase().includes('.wezterm') ) {
-            // mw.move_resize_frame(0, $X, $Y, 2540, 1362);
-            GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, function() { mw.move_resize_frame(1, 690, 678, 2540, 1362); });
-        } else {
-            // mw.move_resize_frame(0, $X, $Y, $W, $H);
-            GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, function() { mw.move_resize_frame(1, 690, 678, 2530, 1380); });
-        }
 
-        // if ($M) {
-        //     // Maximization needs to be delayed a little, so that the window has time to move
-        //     GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, function() { mw.maximize(3); });
-        // }
+            // GLib.timeout_add(GLib.PRIORITY_DEFAULT, 1, function() { mw.activate(global.get_current_time()); });
 
-        if (once) {
+            if (mw.get_maximized()) {
+                mw.unmaximize(3); // 3 is META_MAXIMIZE_BOTH, so unmaximizing the window in both directions
+            }
 
-            once = 0;
+            GLib.usleep(100000);
+
+            if ( ( (mw.get_title().toLowerCase().includes('tmux:xterm')) && !(mw.get_title().toLowerCase().includes('kitty')) ) ||
+                 mw.get_wm_class().toLowerCase().includes('.wezterm') ) {
+                // mw.move_resize_frame(0, $X, $Y, 2540, 1362);
+                GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, function() { mw.move_resize_frame(1, 690, 678, 2540, 1362); });
+            } else {
+                // mw.move_resize_frame(0, $X, $Y, $W, $H);
+                GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, function() { mw.move_resize_frame(1, 690, 678, 2530, 1380); });
+            }
+
+            // if ($M) {
+            //     // Maximization needs to be delayed a little, so that the window has time to move
+            //     GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, function() { mw.maximize(3); });
+            // }
+
             const [x, y] = global.get_pointer();
             const rect = new Meta.Rectangle({ x, y, width: 1, height: 1 });
 
@@ -105,25 +109,12 @@ global.get_window_actors().forEach(function (w) {
                 const y1 = rect1.y + rect1.height / 2;
                 const seat = Clutter.get_default_backend().get_default_seat();
                 seat.warp_pointer(x1, y1);
-                // //const vdevice = seat.create_virtual_device( Clutter.InputDeviceType.POINTER_DEVICE );
-                // //vdevice.notify_absolute_motion(global.get_current_time()+5, x1, y1);
-                // global.log('cxwins: pos 2a');
-            } else {
-                // pointer is already inside newly focused window, should we still move it ?
-                // global.log('cxwins: pos 3');
-                // const rect1 = mw.get_frame_rect();
-                // const x1 = rect1.x + rect1.width / 2;
-                // const y1 = rect1.y + rect1.height / 2;
-                // const seat = Clutter.get_default_backend().get_default_seat();
-                // seat.warp_pointer(x1, y1);
-                // //const vdevice = seat.create_virtual_device( Clutter.InputDeviceType.POINTER_DEVICE );
-                // //vdevice.notify_absolute_motion(global.get_current_time()+5, x1, y1);
-                // global.log('cxwins: pos 3a');
             }
 
+            once = 0;
+            // throw BreakException;
         }
 
-        // throw BreakException;
     }
 
 });
@@ -133,17 +124,25 @@ global.get_window_actors().forEach(function (w) {
     var mw = w.meta_window;
 
     if (once) {
-        if (! ( mw.get_title().toLowerCase().includes('tmux:') ||
-             mw.get_wm_class().toLowerCase() == 'st' ||
-             mw.get_wm_class().toLowerCase() == 'xterm' ||
-             mw.get_wm_class().toLowerCase() == 'urxvt' ||
-             mw.get_wm_class().toLowerCase() == 'kitty' ||
-             mw.get_wm_class().toLowerCase() == 'alacritty' ||
-             mw.get_wm_class().toLowerCase() == 'foot' ||
-             mw.get_wm_class().toLowerCase().includes('.wezterm') ) ) {
+        var wtitle = mw.get_wm_class();
+        if (wtitle != '' && wtitle != 'Nautilus' && wtitle != 'Gnome-shell' && (!wtitle.toLowerCase().includes('copyq'))) {
 
-            GLib.timeout_add(GLib.PRIORITY_DEFAULT, 1, function() { mw.activate(global.get_current_time()); });
-            once = 0;
+            if ( !( mw.get_title().toLowerCase().includes('tmux:') ||
+                 mw.get_wm_class().toLowerCase() == 'st' ||
+                 mw.get_wm_class().toLowerCase() == 'xterm' ||
+                 mw.get_wm_class().toLowerCase() == 'urxvt' ||
+                 mw.get_wm_class().toLowerCase() == 'kitty' ||
+                 mw.get_wm_class().toLowerCase() == 'alacritty' ||
+                 mw.get_wm_class().toLowerCase() == 'foot' ||
+                 mw.get_wm_class().toLowerCase().includes('.wezterm') ) ) {
+
+                GLib.timeout_add(GLib.PRIORITY_DEFAULT, 1, function() { mw.activate(global.get_current_time()); });
+                GLib.usleep(100000);
+                GLib.timeout_add(GLib.PRIORITY_DEFAULT, 1, function() { mw.lower(); });
+
+                once = 0;
+            }
+
         }
     }
 
@@ -163,7 +162,22 @@ global.get_window_actors().forEach(function (w) {
              mw.get_wm_class().toLowerCase() == 'foot' ||
              mw.get_wm_class().toLowerCase().includes('.wezterm') ) {
 
+            GLib.usleep(100000);
+
+            GLib.timeout_add(GLib.PRIORITY_DEFAULT, 1, function() { mw.raise(); });
+            GLib.timeout_add(GLib.PRIORITY_DEFAULT, 1, function() { mw.focus(0); });
+
+            GLib.usleep(100000);
+
             GLib.timeout_add(GLib.PRIORITY_DEFAULT, 1, function() { mw.activate(global.get_current_time()); });
+
+            const [x, y] = global.get_pointer();
+            const rect1 = mw.get_frame_rect();
+            const x1 = rect1.x + rect1.width / 2;
+            const y1 = rect1.y + rect1.height / 2;
+            const seat = Clutter.get_default_backend().get_default_seat();
+            seat.warp_pointer(x1, y1);
+
             once = 0;
         }
     }
