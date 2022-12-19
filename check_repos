@@ -8,19 +8,31 @@ extras=""
 do_vim_bundles=""
 if [[ $# -gt 0 ]] ; then
     if [[ "$1" == "-a" || "$1" == "-all" || "$1" == "--a" || "$1" == "--all" ]] ; then
-        extras=" bat wezterm neovim delta alacritty fzf-git.sh fzf-tab-completion"
+        extras=" bat neovim delta fzf-git.sh fzf-tab-completion libxkbcommon foot"
         if [[ $# -gt 1 ]] ; then
             if [[ "$2" == "-a" || "$2" == "-all" || "$2" == "--a" || "$2" == "--all" ]] ; then
-                do_vim_bundles="yes"
+                extras=" $extras alacritty wezterm kitty vim"
             elif [[ "$2" == "-v" ]] ; then
                 do_vim_bundles="yes"
+            fi
+            if [[ $# -gt 2 ]] ; then
+                if [[ "$3" == "-a" || "$3" == "-all" || "$3" == "--a" || "$3" == "--all" ]] ; then
+                    extras=" $extras alacritty wezterm kitty vim"
+                elif [[ "$3" == "-v" ]] ; then
+                    do_vim_bundles="yes"
+                fi
             fi
         fi
     elif [[ "$1" == "-v" ]] ; then
         do_vim_bundles="yes"
         if [[ $# -gt 1 ]] ; then
             if [[ "$2" == "-a" || "$2" == "-all" || "$2" == "--a" || "$2" == "--all" ]] ; then
-                extras=" bat wezterm neovim delta alacritty fzf-git.sh fzf-tab-completion"
+                extras=" bat neovim delta fzf-git.sh fzf-tab-completion libxkbcommon foot"
+            fi
+            if [[ $# -gt 2 ]] ; then
+                if [[ "$3" == "-a" || "$3" == "-all" || "$3" == "--a" || "$3" == "--all" ]] ; then
+                    extras=" $extras alacritty wezterm kitty vim"
+                fi
             fi
         fi
     fi
@@ -304,6 +316,11 @@ echo ""
 
 # ---------------------
 
+# foot:
+#   git clone https://codeberg.org/dnkl/foot.git
+#   libxkbcommon:
+#       git clone https://github.com/xkbcommon/libxkbcommon.git
+
 # st: (simple terminal)
 #   git clone git@github.com-mckelly:mckellygit/st.git
 #   upstream:
@@ -337,13 +354,11 @@ echo ""
 #   curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin dest=/usr/local launch=n
 #   git clone https://github.com/kovidgoyal/kitty.git
 
-# other terminals:
-#   wezterm:
-#       git clone https://github.com/wez/wezterm.git
-#   foot:
-#       git clone https://codeberg.org/dnkl/foot.git
-#   zutty:
-#       git clone https://github.com/tomszilagyi/zutty.git
+# wezterm:
+#   git clone https://github.com/wez/wezterm.git
+
+# zutty:
+#   git clone https://github.com/tomszilagyi/zutty.git
 
 # rxvt:
 #   sudo apt-get install rxvt-unicode
