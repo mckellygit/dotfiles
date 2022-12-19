@@ -22,9 +22,9 @@ return {
   bold_brightens_ansi_colors = true,
 
   font = wezterm.font("JetBrains Mono"),
-  -- if wayland then 16.0
-  -- font_size = 16.0,
+  -- if x11 then 12.6, if wayland then 16.0 ...
   font_size = 12.6,
+  -- font_size = 16.0,
 
   warn_about_missing_glyphs = false,
 
@@ -370,6 +370,9 @@ return {
     -- CSI (Control Sequence Introducer) is \x1b[ or \x9b ...
     -- tmux can send this to vi and Tab to everything else
     { key="i",          mods="CTRL",          action=wezterm.action{SendString="\x1e\x09"} },
+
+    -- if we could, launch copyq toggle ...
+    { key="Insert",     mods="ALT",           action=wezterm.action{SendString="\x1b[2;3~"} },
 
     -- Super + v to send same as Alt + Ins  for tmux to start/toggle copyq, but could we
     -- start copyq directly ?
