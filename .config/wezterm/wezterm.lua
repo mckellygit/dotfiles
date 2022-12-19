@@ -290,6 +290,9 @@ return {
 
     { key="phys:Backspace", mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x7f"} },
     { key="phys:Space",     mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x20"} },
+
+    -- there is also pass-thru: action=wezterm.action.DisableDefaultAssignment
+
     { key="phys:Backspace", mods="ALT|SHIFT",     action="Nop"},
     { key="phys:Backspace", mods="ALT",           action="Nop"},
     -- these can launch window menu, disable
