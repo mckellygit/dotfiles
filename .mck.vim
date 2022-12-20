@@ -9736,8 +9736,6 @@ vnoremap <silent> <Leader>cc <C-\><C-n>:<C-u>call <SID>CloseUtilWins()<CR>
 "nnoremap <silent> <Leader>cc           :ccl<bar>lcl<bar>pcl<bar>:call <SID>CloseClangWin()<CR>
 "vnoremap <silent> <Leader>cc <C-\><C-n>:ccl<bar>lcl<bar>pcl<bar>:call <SID>CloseClangWin()<CR>
 
-nnoremap <silent> <f10>                :call <SID>CloseUtilWins()<CR>
-vnoremap <silent> <f10>      <C-\><C-n>:<C-u>call <SID>CloseUtilWins()<CR>
 nnoremap <silent> <f12>                :call <SID>CloseUtilWins()<CR>
 vnoremap <silent> <f12>      <C-\><C-n>:<C-u>call <SID>CloseUtilWins()<CR>
 
@@ -11733,6 +11731,8 @@ vnoremap <silent> <Leader>wq <C-\><C-n>:conf q<CR>
 if !&diff
     nmap <silent> <Leader>qq           :call <SID>ConfNextOrQuit()<CR>
     vmap <silent> <Leader>qq <C-\><C-n>:call <SID>ConfNextOrQuit()<CR>
+    nmap <silent> <f10><f10>           :call <SID>ConfNextOrQuit()<CR>
+    vmap <silent> <f10><f10> <C-\><C-n>:call <SID>ConfNextOrQuit()<CR>
 endif
 " window keep current and close all others
 nnoremap <silent> <Leader>wk           :only<CR>
@@ -12344,6 +12344,13 @@ if !has("nvim")
     if !exists('$NVIM_LOG_FILE')
         packadd! editexisting
     endif
+endif
+
+" -----------------------------
+
+if has("nvim")
+lua << EOF
+EOF
 endif
 
 " -----------------------------
