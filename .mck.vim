@@ -2810,7 +2810,7 @@ let g:floaterm_height = 0.65
 let g:floaterm_autoclose = 2
 let g:floaterm_autoinsert = v:true
 " NOTE: there is also <Leader>zs and <Leader>zt for terminals mapped above ...
-if !exists("g:vless")
+if !exists("g:vlessSKIP")
     if exists('$TMUX_PANE')
         " printf \033]11;rgb:<R>/<G>/<B>\007 sets the terminal background colour (only when inside tmux)
         " many RGB values do not work, perhaps has to be one of 256 colours ?
@@ -2853,7 +2853,15 @@ if !exists("g:vless")
     tnoremap <silent> <expr> <F17>d (&filetype ==# 'floaterm') ? '<C-\><C-n><C-w>:FloatermHide<CR>' : ''
     tnoremap <silent> <expr> <M-x>d (&filetype ==# 'floaterm') ? '<C-\><C-n><C-w>:FloatermHide<CR>' : ''
 else
-    nnoremap <Leader>zf :call <SID>NoFloatermVless()<CR>
+    if exists('$TMUX_PANE')
+        let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -s bg=colour236 -w70% -h63% -E \"tmux new\""
+        nnoremap <silent> <Leader>zf :call system(syscmd)<CR>
+        command! Tterm call system(syscmd)
+        command! TTerm Tterm
+    else
+        nnoremap <Leader>zf :call <SID>NoFloatermVless()<CR>
+    endif
+    nnoremap <Leader>zF :call <SID>NoFloatermVless()<CR>
 endif
 
 " how to open file selected in floaterm - can be 'edit', 'split', 'vsplit', 'tabe'

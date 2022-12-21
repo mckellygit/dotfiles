@@ -404,7 +404,7 @@ noremap <silent> <Leader>tq :call QuitVless()<CR>
 
 " unmap terminal cmds
 noremap <Leader>zs <Nop>
-noremap <Leader>zt <Nop>
+"noremap <Leader>zt <Nop>
 
 if has("nvim")
     highlight! link ErrorMsg deusRedBold
