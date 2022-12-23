@@ -1023,12 +1023,21 @@ alias roxie_regression='./ecl-test run --target roxie -e=embedded,3rdparty'
 alias hpcc_regression='./ecl-test run --timeout -1 -e=embedded,3rdparty'
 
 # also look at ~/.selected_editor file
-export VISUAL=nvim
-export EDITOR=nvim
-export TIG_EDITOR=nvim
+if [[ -z "$WSL_DISTRO_NAME" && -z "$WSLENV" ]] ; then
+    export VISUAL=nvim
+    export EDITOR=nvim
+    export TIG_EDITOR=nvim
 
-export VLESS=nvimless
-export VDIFF=nvimdiff
+    export VLESS=nvimless
+    export VDIFF=nvimdiff
+else
+    export VISUAL=vim
+    export EDITOR=vim
+    export TIG_EDITOR=vim
+
+    export VLESS=vimless
+    export VDIFF=vimdiff
+fi
 
 vdiff()
 {

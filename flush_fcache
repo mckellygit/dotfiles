@@ -1,4 +1,9 @@
-#!/bin/sh
+#!/bin/bash
+
+if [[ -n "$WSL_DISTRO_NAME" || -n "$WSLENV" ]] ; then
+    echo "wsl - noop ..."
+    exit 0
+fi
 
 if [ $# -ge 1 ] ; then
   arg=$1
