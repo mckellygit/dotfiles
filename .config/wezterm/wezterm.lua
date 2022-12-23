@@ -392,8 +392,8 @@ return {
     { key="C",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1b[2;5~"} },
     { key="v",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1b[2;2~"} },
     { key="V",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1b[2;2~"} },
-    { key="c",          mods="CTRL|ALT",      action="Copy" },
-    { key="v",          mods="CTRL|ALT",      action="Paste" },
+    { key="c",          mods="CTRL|ALT",      action=wezterm.action.CopyTo "Clipboard" },
+    { key="v",          mods="CTRL|ALT",      action=wezterm.action.PasteFrom "Clipboard" },
 
     { key="phys:Minus", mods="CTRL",          action=wezterm.action{SendString="\x1e\x2d"} },
 
