@@ -21,7 +21,14 @@ return {
 
   bold_brightens_ansi_colors = true,
 
-  font = wezterm.font("JetBrains Mono"),
+  font = wezterm.font("JetBrains Mono Regular"),
+  font_rules = {
+    {
+        intensity = "Bold",
+        font = wezterm.font("JetBrains Mono Regular"),
+    },
+  },
+
   -- if x11 then 12.6, if wayland then 16.0 ...
   font_size = 12.6,
   -- font_size = 16.0,
@@ -30,8 +37,8 @@ return {
 
   adjust_window_size_when_changing_font_size = false,
 
-  initial_cols = 194,
-  initial_rows = 51,
+  initial_cols = 193,
+  initial_rows = 52,
   line_height = 0.9,
 
   alternate_buffer_wheel_scroll_speed = 5,
