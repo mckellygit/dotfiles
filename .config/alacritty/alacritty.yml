@@ -208,6 +208,8 @@ font:
   normal:
     family: Liberation Mono
 
+    style: normal
+
   # use size 16.5 for wayland and 13.0 for x11 (WAYLAND_DISPLAY= alacritty -e term_win_loc start)
   size: 16.2
     # size: 13.0
@@ -215,6 +217,11 @@ font:
   offset:
     x: 0
     y: 0
+
+  bold:
+    family: Liberation Mono
+
+    style: normal
 
 window:
   dimensions:
