@@ -96,6 +96,8 @@ let g:in_gv2 = 0
 
 let @t="0"
 let @l="0"
+let @i="0"
+let @j="0"
 
 " ====================================================
 " --- vundle -----------------------------------------
@@ -5416,6 +5418,7 @@ function! s:YankIt(cmd, arg) abort
         if a:arg == 1
             echo "copied to clipboard"
             sleep 651m
+            call ForceLoadNammedReg()
             redraw!
             echo " "
         endif
@@ -10328,8 +10331,6 @@ vnoremap <silent> <Leader>sR "sy<Esc>:call RipgrepGitFzf(@s, 0, 0)<CR>
 
 let g:orig_pos = getcurpos()
 let g:click_start = reltime()
-let @i="0"
-let @j="0"
 
 " to grab a word - like file path below
 function s:GetWord(arg) abort
@@ -10354,6 +10355,7 @@ function s:GetWord(arg) abort
     "echo "copied to clipboard"
     sleep 351m
     execute 'normal ty`v'
+    call ForceLoadNammedReg()
     "redraw!
     if &buftype == "terminal"
       " NOTE: should we go back to live terminal mode ?
@@ -10405,6 +10407,7 @@ function s:GetPath(arg,ws) abort
     "echo "copied to clipboard"
     sleep 351m
     execute 'normal ty`v'
+    call ForceLoadNammedReg()
     redraw
     if &buftype == "terminal"
       " NOTE: should we go back to live terminal mode ?
@@ -10449,6 +10452,7 @@ function s:GetWord2(arg) abort
     "echo "copied to clipboard"
     sleep 351m
     execute 'normal ty`v'
+    call ForceLoadNammedReg()
     redraw
     if &buftype == "terminal"
       " NOTE: should we go back to live terminal mode ?
@@ -10489,6 +10493,7 @@ function s:GetLine(arg) abort
     "echo "copied to clipboard"
     sleep 651m
     execute 'normal ty`v'
+    call ForceLoadNammedReg()
     redraw
     if &buftype == "terminal"
       " NOTE: should we go back to live terminal mode ?
