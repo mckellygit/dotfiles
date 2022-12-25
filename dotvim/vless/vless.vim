@@ -67,8 +67,15 @@ set lz
 set nostartofline
 " Can't modify the text
 set noma
+
 noremap <silent> K <Nop>
-noremap <silent> i <Nop>
+
+" Cannot just unmap i as then viw does not work ...
+" but then i throws E21: cannot make changes, modifiable is off
+" use n, o but not v ...
+nnoremap <silent> i <Nop>
+onoremap <silent> i <Nop>
+
 " no intro banner
 set shortmess+=I
 
