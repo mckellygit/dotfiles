@@ -76,6 +76,14 @@ noremap <silent> K <Nop>
 nnoremap <silent> i <Nop>
 onoremap <silent> i <Nop>
 
+noremap <silent> c  <Nop>
+noremap <silent> C  <Nop>
+
+noremap <silent> cw <Nop>
+
+noremap <silent> r  <Nop>
+noremap <silent> R  <Nop>
+
 " no intro banner
 set shortmess+=I
 
