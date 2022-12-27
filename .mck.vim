@@ -3040,7 +3040,11 @@ vmap     <silent> d     tx
 vmap     <silent> X     tX
 " delete entire selected line(s) - different than normal D (del to end-of-line)
 vmap     <silent> D     tX
-vmap     <silent> <Del> tx
+
+"vmap     <silent> <Del> tx
+" perhaps better - <Del> does nothing ?
+vmap     <silent> <Del> <Nop>
+
 nnoremap <silent> ty    <Nop>
 nnoremap <silent> tY    <Nop>
 nnoremap <silent> tx    <Nop>
@@ -5344,7 +5348,7 @@ function! MyScratchPadCopy()
 endfunction
 
 nnoremap <silent> <Leader>z<BS>  :call MyScratchPadPaste()<CR>
-nnoremap <silent> <Leader>z<DEL> :call MyScratchPadCopy()<CR>
+nnoremap <silent> <Leader>z<Del> :call MyScratchPadCopy()<CR>
 
 " too close to . (dot)
 nnoremap <silent> <Leader>z. <Nop>
@@ -6758,6 +6762,9 @@ endif
 " -----------------------------
 " -----------------------------
 
+" preserve current visual mode when dragging ...
+vmap <silent> <expr> <LeftMouse> mode() ==# "\<C-v>" ? "<LeftMouse><C-v>" : mode() ==# "V" ? "<LeftMouse>V" : "<LeftMouse>v"
+
 " might as well make C- do the same as normal mode
 nnoremap <C-LeftDrag> <LeftDrag>
 vnoremap <C-LeftDrag> <LeftDrag>
@@ -7227,8 +7234,12 @@ vnoremap <silent> # "sy<C-\><C-n>:set hlsearch<CR>?<C-r>s<CR>
 " dont replace clipboard selection with deleted char (x,X)
 nnoremap x "_x
 nnoremap X "_X
+
 " same for delete
-nnoremap <Del> "_x
+"nnoremap <Del> "_x
+" perhaps better - <Del> does nothing ?
+nnoremap <Del> <Nop>
+
 " but miss the xp swap chars, this works but adds an annoying (timeoutlen) delay to the single typed x
 "nnoremap xp "fx"fph
 "nnoremap Xp "fX"fph
