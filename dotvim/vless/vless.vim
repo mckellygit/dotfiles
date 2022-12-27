@@ -97,6 +97,12 @@ endif
 
 " ---------
 
+" disable remote (tty/ssh) clipboard mappings ...
+noremap <silent> <Leader>z/    <Nop>
+noremap <silent> <Leader>z<BS> <Nop>
+
+" ---------
+
 " Give help
 noremap <Leader>hh :call <SID>Help()<CR>
 "map H h
@@ -261,9 +267,9 @@ map <C-P> <C-k>
 "map <C-K> <C-k>
 "map <Up> k
 "map p <C-k>
-map p <Nop>
+noremap <silent> <buffer> p <Nop>
+" P is mapped below to % ...
 
-" ---------
 " ---------
 
 " Re-read file and page forward "tail -f"
@@ -311,7 +317,8 @@ map <kEnd> G
 " Go to percentage
 "noremap <script> % %<SID>L
 noremap <script> % %M
-map P %
+"map P %
+noremap <silent> <buffer> P %
 
 " ---------
 
