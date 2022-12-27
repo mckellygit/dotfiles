@@ -4966,10 +4966,18 @@ function! TTYPaste(job_id, data, event) dict
 endfunction
 
 let s:cur_buf = ''
+let g:prevsyn = ''
 function! PostPaste(code)
+
+    " ----------
+
     stopinsert
     set nopaste
     set mouse=a
+    let &syntax=g:prevsyn
+
+    " ----------
+
     " make sure we are in scratch-pad buffer ...
     if bufname('') !=# g:scratchpad
         silent call lightline#enable()
@@ -4986,7 +4994,6 @@ function! PostPaste(code)
             exe s:cur_buf."b"
         endif
         silent call lightline#enable()
-        redraw!
         silent! exec "silent! bwipe! " . g:scratchpad
         silent! call delete(g:scratchpad)
         call delete(g:scratchpad)
@@ -5012,9 +5019,10 @@ function! PostPaste(code)
     redraw!
 
     silent exec "tabnew " . g:scratchpad2
+    " append 60+ long, blank lines here ?
     redraw!
 
-    tabclose
+    silent tabclose
     redraw!
 
     silent! exec "silent! bwipe! " . g:scratchpad2
@@ -5140,8 +5148,6 @@ function! s:CopyDefReg(arg)
         setlocal eventignore+=CompleteChanged
         setlocal eventignore+=CompleteDone
 
-        setlocal syntax=off
-
         if has("nvim") && g:use_treesitter > 0
             TSBufDisable highlight
         endif
@@ -5150,8 +5156,14 @@ function! s:CopyDefReg(arg)
             setlocal winhighlight=Normal:invisiblefg
         endif
 
+        " ----------
+
+        let g:prevsyn=&syntax
+        set syntax=off
         set mouse=
         set paste
+
+        " ----------
 
         " osc esc seq coming back will make sure to start the insert ...
         "startinsert
