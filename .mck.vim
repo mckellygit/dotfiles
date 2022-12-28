@@ -3041,9 +3041,23 @@ vmap     <silent> X     tX
 " delete entire selected line(s) - different than normal D (del to end-of-line)
 vmap     <silent> D     tX
 
+" ----------------------
+
+" <Insert> and <Del> do nothing alone, but are mapped with A-, C-, C-S- ...
+
+" same for delete
+"nnoremap <Del> "_x
+" perhaps better - <Del> does nothing ?
+nnoremap <Del> <Nop>
+
 "vmap     <silent> <Del> tx
 " perhaps better - <Del> does nothing ?
 vmap     <silent> <Del> <Nop>
+
+" use i, R instead ...
+map      <silent> <Insert> <Nop>
+
+" ----------------------
 
 nnoremap <silent> ty    <Nop>
 nnoremap <silent> tY    <Nop>
@@ -7235,11 +7249,6 @@ vnoremap <silent> # "sy<C-\><C-n>:set hlsearch<CR>?<C-r>s<CR>
 nnoremap x "_x
 nnoremap X "_X
 
-" same for delete
-"nnoremap <Del> "_x
-" perhaps better - <Del> does nothing ?
-nnoremap <Del> <Nop>
-
 " but miss the xp swap chars, this works but adds an annoying (timeoutlen) delay to the single typed x
 "nnoremap xp "fx"fph
 "nnoremap Xp "fX"fph
@@ -7495,8 +7504,8 @@ endfunction
 nnoremap <silent> <expr> <F37>   (col('.') == 1) ? '"_dW' : (col('.') != col('$')-1) ? '"_db' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
 nnoremap <silent> <expr> <S-Del> (col('.') == 1) ? '"_dW' : (col('.') != col('$')-1) ? '"_db' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
 " NOTE: *-Del in v-mode does not make much sense, Del deletes entire selection etc ...
-vnoremap <silent>        <F37>   <Del>
-vnoremap <silent>        <S-Del> <Del>
+vmap <silent>        <F37>   tx
+vmap <silent>        <S-Del> tx
 inoremap <silent> <expr> <F37>   (col('.') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<C-o>"_db' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
 inoremap <silent> <expr> <S-Del> (col('.') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<C-o>"_db' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
 " <S-Del> does not seem to work ...
@@ -7509,8 +7518,8 @@ tnoremap <silent>        <S-Del> <C-Del>
 nnoremap <silent> <expr> <F36>   (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? '"_de' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
 nnoremap <silent> <expr> <C-Del> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? '"_de' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
 " NOTE: *-Del in v-mode does not make much sense, Del deletes entire selection etc ...
-vnoremap <silent>        <F36>   <Del>
-vnoremap <silent>        <C-Del> <Del>
+vmap <silent>        <F36>   tx
+vmap <silent>        <C-Del> tx
 inoremap <silent> <expr> <F36>   (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<C-o>"_de' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
 inoremap <silent> <expr> <C-Del> (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<C-o>"_de' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
 tnoremap <silent>        <F36>   <C-Del>
@@ -7521,8 +7530,8 @@ tnoremap <silent>        <C-Del> <C-Del>
 nnoremap <silent> <expr> <S-F15>   (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? 'lb"_dW' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
 nnoremap <silent> <expr> <C-S-Del> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? 'lb"_dW' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
 " NOTE: *-Del in v-mode does not make much sense, Del deletes entire selection etc ...
-vnoremap <silent>        <S-F15>   <Del>
-vnoremap <silent>        <C-S-Del> <Del>
+vmap <silent>        <S-F15>   tx
+vmap <silent>        <C-S-Del> tx
 inoremap <silent> <expr> <S-F15>   (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<Esc>llb"_dWi' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
 inoremap <silent> <expr> <C-S-Del> (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<Esc>llb"_dWi' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
 " <C-S-Del> does not seem to work ...
@@ -7534,8 +7543,8 @@ tnoremap <silent>        <C-S-Del> <C-Del>
 nnoremap <silent> <expr> <S-F16> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? 'lb"_dW' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
 nnoremap <silent> <expr> <A-Del> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? 'lb"_dW' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
 " NOTE: *-Del in v-mode does not make much sense, Del deletes entire selection etc ...
-vnoremap <silent>        <S-F16> <Del>
-vnoremap <silent>        <A-Del> <Del>
+vmap <silent>        <S-F16> tx
+vmap <silent>        <A-Del> tx
 inoremap <silent> <expr> <S-F16> (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<Esc>llb"_dWi' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
 inoremap <silent> <expr> <A-Del> (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<Esc>llb"_dWi' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
 tnoremap <silent>        <S-F16> <A-Del>
