@@ -3094,15 +3094,25 @@ endfunction
 "vmap <silent> <expr> <C-c> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
 " NOTE: since in vim <C-x>, <C-v> do not cut, paste, make <C-c> also not copy.  Use <C-S-x>, <C-S-v> and <C-S-c> for cut, paste, copy ...
 " See also <C-Insert> and <F33> below
+
 vnoremap <silent> <C-c> <Esc>
-vmap <silent> <expr> y     (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 0)<CR>'
+
+vmap <silent> <expr> y     (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty'       : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 0)<CR>'
 vmap <silent> <expr> Y     (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'omvVtY`v' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("tY", 0)<CR>'
-vmap <silent> <expr> <Leader>yy (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
-vmap <silent> <expr> <Leader>yY (mode() =~ "\<C-v>") ? 'omvVtY`v:call ForceLoadNammedRef()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("tY", 1)<CR>'
+
+"vmap <silent> <expr> <Leader>yy (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+vmap <silent> <expr> <Leader>yy (&buftype ==# 'terminal') ? (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedRed()<CR>i' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>i' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+
+"vmap <silent> <expr> <Leader>yY (mode() =~ "\<C-v>") ? 'omvVtY`v:call ForceLoadNammedRef()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("tY", 1)<CR>'
+vmap <silent> <expr> <Leader>yY (&buftype ==# 'terminal') ? (mode() =~ "\<C-v>") ? 'omvVtY`v:call ForceLoadNammedRef()<CR>i' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("tY", 1)<CR>i' : (mode() =~ "\<C-v>") ? 'omvVtY`v:call ForceLoadNammedRef()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("tY", 1)<CR>'
+
 " <C-y> like y ...
-vmap <silent> <expr> <C-y> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+"vmap <silent> <expr> <C-y> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+vmap <silent> <expr> <C-y> (&buftype ==# 'terminal') ? (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedRed()<CR>i' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>i' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+
 " and <Leader>z<Space> (see below for others) ...
-vmap <silent> <expr> <Leader>z<Space> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+"vmap <silent> <expr> <Leader>z<Space> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+vmap <silent> <expr> <Leader>z<Space> (&buftype ==# 'terminal') ? (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedRed()<CR>i' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>i' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
 
 " === OSC52 ==================================
 
@@ -5962,8 +5972,11 @@ endif
 "  <F33> is copy (C-Insert) see also <M-&>
 "  <F34> is paste [replace in vis mode] (mapped below) (S-Insert) see also <M-*>
 "  <F37> is cut (mapped below) (S-Del) see also <S-F37> and <M-(>
-vmap <silent> <expr> <F33>      (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
-vmap <silent> <expr> <C-Insert> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+"vmap <silent> <expr> <F33>      (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+vmap <silent> <expr> <F33>      (&buftype ==# 'terminal') ? (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedRed()<CR>i' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>i' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+"vmap <silent> <expr> <C-Insert> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+vmap <silent> <expr> <C-Insert> (&buftype ==# 'terminal') ? (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedRed()<CR>i' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>i' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+
 vmap <silent> <expr> <F37>      (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNammedReg()<CR>'
 vmap <silent> <expr> <S-Del>    (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNammedReg()<CR>'
 
@@ -7499,13 +7512,19 @@ function s:CSDel()
     endif
 endfunction
 
-" shift-del to delete from cursor to beg of word, like backward-kill-word ...
+" REALLY ??? - shift-del to delete from cursor to beg of word, like backward-kill-word ...
+" TODO: Should <S-Del> just be a no-op or like dw ???
 "nnoremap <silent> <expr> <F37> (col('.') == 1) ? '"_dW' : (col('.') != col('$')-1) ? '"_db' : ':call <SID>SDel()<CR>'
 nnoremap <silent> <expr> <F37>   (col('.') == 1) ? '"_dW' : (col('.') != col('$')-1) ? '"_db' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
 nnoremap <silent> <expr> <S-Del> (col('.') == 1) ? '"_dW' : (col('.') != col('$')-1) ? '"_db' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
+
+" ---------------
 " NOTE: *-Del in v-mode does not make much sense, Del deletes entire selection etc ...
-vmap <silent>        <F37>   tx
-vmap <silent>        <S-Del> tx
+"vmap <silent>        <F37>   tx
+"vmap <silent>        <S-Del> tx
+" <F37> and <S-Del> vmapped above with the other two DOS copy/paste/cut keys: <C-Insert> and <S-Insert> ...
+" ---------------
+
 inoremap <silent> <expr> <F37>   (col('.') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<C-o>"_db' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
 inoremap <silent> <expr> <S-Del> (col('.') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<C-o>"_db' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
 " <S-Del> does not seem to work ...
@@ -7517,9 +7536,15 @@ tnoremap <silent>        <S-Del> <C-Del>
 "nnoremap <silent> <expr> <F36> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? '"_de' : ':call <SID>CDel()<CR>'
 nnoremap <silent> <expr> <F36>   (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? '"_de' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
 nnoremap <silent> <expr> <C-Del> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? '"_de' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
+
+" ---------------
 " NOTE: *-Del in v-mode does not make much sense, Del deletes entire selection etc ...
-vmap <silent>        <F36>   tx
-vmap <silent>        <C-Del> tx
+"vmap <silent>        <F36>   tx
+"vmap <silent>        <C-Del> tx
+vmap <silent> <expr> <F36>   (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNammedReg()<CR>'
+vmap <silent> <expr> <C-Del> (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNammedReg()<CR>'
+" ---------------
+
 inoremap <silent> <expr> <F36>   (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<C-o>"_de' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
 inoremap <silent> <expr> <C-Del> (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<C-o>"_de' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
 tnoremap <silent>        <F36>   <C-Del>
@@ -7529,9 +7554,15 @@ tnoremap <silent>        <C-Del> <C-Del>
 "nnoremap <silent> <expr> <S-F15> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? 'lb"_dW' : ':call <SID>CSDel()<CR>'
 nnoremap <silent> <expr> <S-F15>   (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? 'lb"_dW' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
 nnoremap <silent> <expr> <C-S-Del> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? 'lb"_dW' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
+
+" ---------------
 " NOTE: *-Del in v-mode does not make much sense, Del deletes entire selection etc ...
-vmap <silent>        <S-F15>   tx
-vmap <silent>        <C-S-Del> tx
+"vmap <silent>        <S-F15>   tx
+"vmap <silent>        <C-S-Del> tx
+vmap <silent> <expr> <S-F15>   (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNammedReg()<CR>'
+vmap <silent> <expr> <C-S-Del> (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNammedReg()<CR>'
+" ---------------
+
 inoremap <silent> <expr> <S-F15>   (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<Esc>llb"_dWi' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
 inoremap <silent> <expr> <C-S-Del> (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<Esc>llb"_dWi' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
 " <C-S-Del> does not seem to work ...
@@ -7542,21 +7573,27 @@ tnoremap <silent>        <C-S-Del> <C-Del>
 " alt-del to delete whole word under cursor
 nnoremap <silent> <expr> <S-F16> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? 'lb"_dW' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
 nnoremap <silent> <expr> <A-Del> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? 'lb"_dW' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
+
+" ---------------
 " NOTE: *-Del in v-mode does not make much sense, Del deletes entire selection etc ...
-vmap <silent>        <S-F16> tx
-vmap <silent>        <A-Del> tx
+"vmap <silent>        <S-F16> tx
+"vmap <silent>        <A-Del> tx
+vmap <silent> <expr> <S-F16> (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNammedReg()<CR>'
+vmap <silent> <expr> <A-Del> (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNammedReg()<CR>'
+" ---------------
+
 inoremap <silent> <expr> <S-F16> (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<Esc>llb"_dWi' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
 inoremap <silent> <expr> <A-Del> (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<Esc>llb"_dWi' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
 tnoremap <silent>        <S-F16> <A-Del>
 tnoremap <silent>        <A-Del> <A-Del>
 
 " <A-S-Del> - (vim) reverse case four letters at a time ...
-map <silent>  <F20>      <Nop>
-map <silent>  <A-S-Del>  <Nop>
-imap <silent> <F20>      <Esc>l
-imap <silent> <A-S-Del>  <Esc>l
-tnoremap <silent> <F20>     <A-Del>
-tnoremap <silent> <A-S-Del> <A-Del>
+map      <silent> <F20>      <Nop>
+map      <silent> <A-S-Del>  <Nop>
+imap     <silent> <F20>      <Esc>l
+imap     <silent> <A-S-Del>  <Esc>l
+tnoremap <silent> <F20>      <A-Del>
+tnoremap <silent> <A-S-Del>  <A-Del>
 
 " -------------------------------------
 " mck - could save <F16> for future use
