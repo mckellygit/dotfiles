@@ -266,9 +266,6 @@ call NoremapNormalCmd("<expr> u", 0, "(line('.') == line('w$')) ? 'M' : '<C-U>:s
 map <C-P> <C-k>
 "map <C-K> <C-k>
 "map <Up> k
-"map p <C-k>
-noremap <silent> <buffer> p <Nop>
-" P is mapped below to % ...
 
 " ---------
 
@@ -317,8 +314,9 @@ map <kEnd> G
 " Go to percentage
 "noremap <script> % %<SID>L
 noremap <script> % %M
-"map P %
-noremap <silent> <buffer> P %
+"map p %
+noremap <silent> <buffer> p %
+noremap <silent> <buffer> P <Nop>
 
 " ---------
 
