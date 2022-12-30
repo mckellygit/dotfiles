@@ -115,3 +115,5 @@
 [user "ident2"]
     name = My Name2
     email = my email address2
+[stash]
+    showIncludeUntracked = true
