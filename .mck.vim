@@ -1040,7 +1040,7 @@ if 1 " use vim popup ...
     let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.65, 'yoffset': 0.5, 'xoffset': 0.5 } }
 else
 " in nvim &term could be 'builtin_tmux' so dont use ^tmux but just tmux
-if &term =~ "^screen" || &term =~ "tmux"
+if &term =~ "^screen" || &term =~ "^tmux"
     " use tmux popup ...
     let g:fzf_layout = { 'tmux': '-p -x C -y 38% -w 80% -h 65%' }
 else
@@ -3418,7 +3418,7 @@ if has("nvim")
   set guicursor=n-v-c:block,o-i-r-ci-cr:ver25,a:blinkon500-blinkoff300
 endif
 
-if !has("nvim") && (&term =~ "^screen" || &term =~ "tmux")
+if !has("nvim") && (&term =~ "^screen" || &term =~ "^tmux")
   " seems we need this for blinking cursor ...
   " vim uses vi, vs, VS, ve and may not get these from cnorm, civis, cvvis correctly
   "let &t_ve="\e[?12;25h"
@@ -3580,7 +3580,7 @@ if g:is_ttyterm > 0
 else
   set title titlestring=@v:%.12t
 endif
-if (&term =~ "^screen" || &term =~ "tmux") && !has('nvim')
+if !has("nvim") && (&term =~ "^screen" || &term =~ "^tmux")
   exec "set t_ts=\e]2; t_fs=\7"
 endif
 
@@ -3614,7 +3614,7 @@ function! s:MyUpdateTitle()
       set title titlestring=@v:%.12t
     endif
   endif
-  if (&term =~ "^screen" || &term =~ "tmux") && !has('nvim')
+  if !has("nvim") && (&term =~ "^screen" || &term =~ "^tmux")
     exec "set t_ts=\e]2; t_fs=\7"
   endif
   " if want to force insert mode upon entering
@@ -4538,7 +4538,7 @@ function! s:MapFastKeycode(key, keycode, indx)
     endif
 endfunction
 
-" NOTE: only for term =~ ^screen || tmux || ^xterm || ^alacritty || ^rxvt || ^urxvt ?
+" NOTE: only for term =~ ^screen || tmux || ^alacritty || ^xterm || ^wezterm || ^foot || ^kitty ?
 
 " NOTE: if we use these then they do not work in popups,
 "       do not map <Up>/<Down>/<Home><End> this way,
@@ -12383,7 +12383,7 @@ endif
 
 " NOTE: add ^xterm || ^rxvt || ^urxvt here ?
 " enable bracketed paste in terminal mode
-if !has("nvim") && (&term =~ "^screen" || &term =~ "tmux" || &term =~ "^alacritty" || &term =~ "^xterm" || &term =~ "^wezterm")
+if !has("nvim") && (&term =~ "^screen" || &term =~ "^tmux" || &term =~ "^alacritty" || &term =~ "^xterm" || &term =~ "^wezterm" || &term =~ "^foot" || &term =~ "^kitty")
   let &t_BE="\<Esc>[?2004h"
   let &t_BD="\<Esc>[?2004l"
   let &t_PS="\<Esc>[200~"
@@ -12398,7 +12398,7 @@ if !has("nvim") && (&term =~ "^screen" || &term =~ "tmux" || &term =~ "^alacritt
 endif
 
 " nvim BUG: we add this for vim because we forced Home -> \e[H and End -> \e[F in tmux
-if !has("nvim") && (&term =~ "tmux" || exists('$TMUX_PANE'))
+if !has("nvim") && (&term =~ "^tmux" || exists('$TMUX_PANE'))
   exec "set <Home>=\e[H"
   exec "set <End>=\e[F"
 endif
