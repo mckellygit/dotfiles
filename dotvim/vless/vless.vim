@@ -73,8 +73,8 @@ noremap <silent> K <Nop>
 " Cannot just unmap i as then viw does not work ...
 " but then i throws E21: cannot make changes, modifiable is off
 " use n, o but not v ...
-nnoremap <silent> i <Nop>
-onoremap <silent> i <Nop>
+nnoremap <silent> <expr> i (&buftype == "terminal") ? 'i' : ''
+onoremap <silent> <expr> i (&buftype == "terminal") ? 'i' : ''
 
 noremap <silent> c  <Nop>
 noremap <silent> C  <Nop>
@@ -364,7 +364,15 @@ fun! QuitVless()
       " Don't quit at the end of the last file
       quit
     endif
-    next
+    try
+      next
+    catch /E163:/
+      break
+    catch /E165:/
+      break
+    catch /.*/
+      break
+    endtry
     if filereadable(argv(argidx()))
       break
     endif

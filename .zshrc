@@ -1696,6 +1696,41 @@ bindkey "\e[1;8F" noop
 bindkey "\e[5;8~" noop
 bindkey "\e[6;8~" noop
 
+# f1-f12
+bindkey "\eOP"   noop
+bindkey "\eOQ"   noop
+bindkey "\eOR"   noop
+bindkey "\eOS"   noop
+bindkey "\e[15~" noop
+bindkey "\e[17~" noop
+bindkey "\e[18~" noop
+bindkey "\e[19~" noop
+bindkey "\e[20~" noop
+bindkey "\e[21~" noop
+bindkey "\e[23~" noop
+bindkey "\e[24~" noop
+
+# C-f1-f12
+bindkey "\e[1;5P"   noop
+bindkey "\e[1;5Q"   noop
+bindkey "\e[1;5R"   noop
+bindkey "\e[1;5S"   noop
+bindkey "\e[15;5~"  noop
+bindkey "\e[17;5~"  noop
+bindkey "\e[18;5~"  noop
+bindkey "\e[19;5~"  noop
+bindkey "\e[20;5~"  noop
+bindkey "\e[21;5~"  noop
+bindkey "\e[23;5~"  noop
+bindkey "\e[24;5~"  noop
+
+# A-f1-f12
+# S-f1-f12
+# C-A-f1-f12
+# C-S-f1-f12
+# A-S-f1-f12
+# C-A-S-f1-f12
+
 # Ctrl-Enter to execute suggestion
 #bindkey '^\n' autosuggest-execute
 # make it a no-op for safety

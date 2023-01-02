@@ -10090,6 +10090,13 @@ function LessInitFunc() abort
 " set laststatus=1
   set statusline=%f\%=[\ %L\ ][\ %3.3p%%\ ]
   hi StatusLine ctermbg=237 ctermfg=2
+  hi StatusLineNC ctermbg=237 ctermfg=2
+  "hi VertSplit ctermfg=238 ctermbg=238
+  "hi WinSeparator ctermfg=238 ctermbg=238
+  if !has("nvim")
+      hi StatusLineTerm ctermbg=237 ctermfg=2
+      hi StatusLineTermNC ctermbg=237 ctermfg=2
+  endif
   " NOTE: if want terminal default background (opacity etc.) ...
   let g:opaqbg=1
   hi Normal cterm=none ctermbg=none
@@ -11686,9 +11693,9 @@ if has("nvim")
     command Zterm execute "normal! :$tabnew\<bar>terminal\<CR>\<C-\>\<C-n>:se scl=no\<CR>\<C-\>\<C-n>:\<BS>i"
     command ZTerm Zterm
 else
-    nnoremap <silent> <Leader>zt           :$tabnew<bar>let g:fterm=1<CR>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
-    vnoremap <silent> <Leader>zt <C-\><C-n>:$tabnew<bar>let g:fterm=1<CR>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
-    command Zterm execute "normal :$tabnew\<bar>let g:fterm=1<CR>:terminal ++close ++norestore ++kill=term ++curwin\<CR>\<C-w>:se scl=no\<CR>"
+    nnoremap <silent> <Leader>zt           :$tabnew<CR>:let g:fterm=1<CR>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
+    vnoremap <silent> <Leader>zt <C-\><C-n>:$tabnew<CR>:let g:fterm=1<CR>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
+    command Zterm execute "normal :$tabnew\<CR>:let g:fterm=1<CR>:terminal ++close ++norestore ++kill=term ++curwin\<CR>\<C-w>:se scl=no\<CR>"
     command ZTerm Zterm
 endif
 "
@@ -11707,12 +11714,12 @@ if has("nvim")
     tnoremap <silent> <M-x>v <C-\><C-n>:$tabnew<CR>
 else
     tnoremap <silent> <F17> <Nop>
-    tnoremap <silent> <F17><Tab> <C-w>:$tabnew<bar>let g:fterm=1<CR>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
-    tnoremap <silent> <F17>t <C-w>:$tabnew<bar>let g:fterm=1<CR>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
+    tnoremap <silent> <F17><Tab> <C-w>:$tabnew<CR>:let g:fterm=1<CR>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
+    tnoremap <silent> <F17>t <C-w>:$tabnew<CR>:let g:fterm=1<CR>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
     tnoremap <silent> <F17>v <C-w>:$tabnew<CR>
     tnoremap <silent> <M-x> <Nop>
-    tnoremap <silent> <M-x>t <C-w>:$tabnew<bar>let g:fterm=1<CR>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
-    tnoremap <silent> <M-x><Tab> <C-w>:$tabnew<bar>let g:fterm=1<CR>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
+    tnoremap <silent> <M-x>t <C-w>:$tabnew<CR>:let g:fterm=1<CR>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
+    tnoremap <silent> <M-x><Tab> <C-w>:$tabnew<CR>:let g:fterm=1<CR>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
     tnoremap <silent> <M-x>v <C-w>:$tabnew<CR>
 endif
 " window in new tab when already in a terminal
