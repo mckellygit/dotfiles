@@ -573,6 +573,11 @@ bindkey -M viins "^w"  backward-kill-word
 bindkey -M vicmd "^w"  backward-kill-word
 #bindkey '^P' backward-kill-word
 
+# backward-kill-line or vi-kill-line or kill-whole-line ?
+# without binding then after a viins mode it wont go backwards past where it left viins mode
+bindkey -M vicmd "^u" backward-kill-line
+bindkey -M viins "^u" backward-kill-line
+
 # -------
 
 # del current word, but also if at end del backward word
