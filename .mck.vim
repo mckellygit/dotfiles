@@ -3405,7 +3405,7 @@ if !has("nvim") && &term==#"xterm"
 endif
 
 if !has("nvim")
-    set esckeys
+  set esckeys
 endif
 
 " -------------------------
@@ -3415,7 +3415,7 @@ endif
 
 if has("nvim")
   " does not work in st/xterm inside tmux, do we need Ss/Se ?
-  set guicursor=n-v-c:block,o-i-r-ci-cr:ver25,a:blinkon500-blinkoff300
+  set guicursor=n-v-c-o:block,i-ci:ver25,r-cr:hor25,a:blinkon500-blinkoff300
 endif
 
 if !has("nvim") && (&term =~ "^screen" || &term =~ "^tmux")
@@ -3448,6 +3448,7 @@ endif
 "set t_ti=
 "set t_te=
 
+" check for specific term ? (alacritty, wezterm, kitty, foot ?)
 if !has("nvim")
     " change cursor shape to beam in Insert mode ...
     let &t_SI = "\e[5 q"
@@ -3463,6 +3464,7 @@ endif
 " vim terminfo adjustments (from kitty).
 " NOTE: set all these BEFORE setting colorscheme and AFTER setting term
 
+" check for specific term ? (alacritty, wezterm, kitty, foot ?)
 if !has("nvim")
     " Mouse support
     "set mouse=a
@@ -3498,8 +3500,9 @@ if !has("nvim")
     let &t_RC = "\e[?12$p"
     let &t_SH = "\e[%d q"
     let &t_RS = "\eP$q q\e\\"
-    "let &t_SI = "\e[5 q"
+    " blinking underline for replace-mode
     let &t_SR = "\e[3 q"
+    "let &t_SI = "\e[5 q"
     "let &t_EI = "\e[1 q"
 
     " this one is different above ...
@@ -10076,7 +10079,10 @@ nnoremap <silent> <Leader>CC :ColorToggle!<CR>
 " less as a pager --
 function LessInitFunc() abort
 " set mouse-=a
-  call lightline#disable()
+  silent call lightline#disable()
+  silent call vimade#Disable()
+  silent call gitgutter#disable()
+  "set signcolumn=no
   " makes for a nice transparent selection ...
   hi Visual cterm=None ctermbg=243 gui=None guibg=#767676
   set noshowmode
