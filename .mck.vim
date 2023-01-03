@@ -1221,8 +1221,18 @@ endfunction
 "\ })<CR>
 
 function s:Mylsfzf(arg) abort
+    if has("nvim") && bufname('') =~ "health://"
+        " otherwise nvim_open_win() in fzf.vim throws E5555 exception ...
+        let errmsg = 'Not supported from healthcheck window/buffer'
+        call s:warn(errmsg)
+        sleep 1251m
+        redraw!
+        echo " "
+        return
+    endif
+    let l:bl = <SID>buflist(a:arg)
     call fzf#run({
-\       'source' : reverse(<sid>buflist(a:arg)),
+\       'source' : reverse(l:bl),
 \       'sink'   : function('s:bufopen'),
 \       'window' : { 'width': 0.8, 'height': 0.4, 'yoffset': 0.5, 'xoffset': 0.5 }
 \   })
@@ -5231,6 +5241,8 @@ function! s:CopyDefReg(arg)
         " TODO: several other *special* built-in insert mode bindings to consider nullifying ...
 
         ColorClear
+
+        setlocal nomodeline
 
         setlocal complete=
 
