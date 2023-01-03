@@ -3203,13 +3203,13 @@ function! TTYTermCopyDCS()
     let astr = "\eP\e]52;c;" . b64 . "\x07\e\x5c"
     let alen = len(astr)
     if has("win32") && has("nvim")
-        call chansend(v:stderr, astr)
+        silent call chansend(v:stderr, astr)
     else
-        if filewritable('/dev/fd/2')
-            call writefile([astr], '/dev/fd/2', 'b')
+        if filewritable('/dev/comport')
+            silent call writefile([astr], '/dev/comport', 'b')
         else
             " is the > /dev/comport required ?
-            exec("silent! !echo " . shellescape(astr) . " > /dev/comport")
+            silent exec("silent! !echo " . shellescape(astr) . " > /dev/comport")
             redraw!
         endif
     endif
@@ -3232,13 +3232,13 @@ function! TTYTermCopy()
         return
     endif
     if has("win32") && has("nvim")
-        call chansend(v:stderr, astr)
+        silent call chansend(v:stderr, astr)
     else
-        if filewritable('/dev/fd/2')
-            call writefile([astr], '/dev/fd/2', 'b')
+        if filewritable('/dev/comport')
+            silent call writefile([astr], '/dev/comport', 'b')
         else
             " is the > /dev/comport required ?
-            exec("silent! !echo " . shellescape(astr) . " > /dev/comport")
+            silent exec("silent! !echo " . shellescape(astr) . " > /dev/comport")
             redraw!
         endif
     endif
@@ -3259,13 +3259,13 @@ function! TTYTermCopyTMUX()
         return
     endif
     if has("win32") && has("nvim")
-        call chansend(v:stderr, astr)
+        silent call chansend(v:stderr, astr)
     else
-        if filewritable('/dev/fd/2')
-            call writefile([astr], '/dev/fd/2', 'b')
+        if filewritable('/dev/comport')
+            silent call writefile([astr], '/dev/comport', 'b')
         else
             " is the > /dev/comport required ?
-            exec("silent! !echo " . shellescape(astr) . " > /dev/comport")
+            silent exec("silent! !echo " . shellescape(astr) . " > /dev/comport")
             redraw!
         endif
     endif
@@ -5101,8 +5101,8 @@ function! PostPaste(code)
         echo " "
         return
     endif
-    silent! write!
     silent call setfperm(g:scratchpad, "rw-------")
+    silent! write!
     silent! close
     if !empty(s:cur_buf)
         silent! exe s:cur_buf."b"
@@ -5264,11 +5264,13 @@ function! s:CopyDefReg(arg)
         "let ttyjob = jobstart(["/bin/bash", "-c", "ttypaste"], {'pty':v:false, 'on_stdout':function('TTYPaste'), 'stdout_buffered':v:true })
 
         let astr = "\e]52;x;\x07"
+
         if has("win32") && has("nvim")
             silent call chansend(v:stderr, astr)
         else
-            if filewritable('/dev/fd/2')
-                silent call writefile([astr], '/dev/fd/2', 'b')
+            " NOTE: used to be /dev/fd/2 but had to change to /dev/comport for recent nvim ...
+            if filewritable('/dev/comport')
+                silent call writefile([astr], '/dev/comport', 'b')
             else
                 " is the > /dev/comport required ?
                 silent exec("silent! !echo " . shellescape(astr) . " > /dev/comport")
@@ -5405,8 +5407,8 @@ function! MyScratchPadCopy()
         echo " "
         return
     endif
-    silent! write!
     silent call setfperm(g:scratchpad, "rw-------")
+    silent! write!
     silent! close
     if !empty(s:cur_buf)
         silent! exe s:cur_buf."b"
@@ -7297,8 +7299,8 @@ if g:has_wsl > 0 && !has("nvim")
     nmap <silent> <Leader>wg viwtybb:set hlsearch<CR>/<C-r>"<CR>
     nmap <silent> <Leader>wG viwtyw:set hlsearch<CR>?<C-r>"<CR>
 else
-    nmap <silent> <Leader>wg viwtybb:set hlsearch<CR>/<C-r>*<CR>
-    nmap <silent> <Leader>wG viwtyw:set hlsearch<CR>?<C-r>*<CR>
+    nmap <silent> <Leader>wg viwtybb:set hlsearch<CR>/<C-r>"<CR>
+    nmap <silent> <Leader>wG viwtyw:set hlsearch<CR>?<C-r>"<CR>
 endif
 " -----------------------------------------------------
 
@@ -7314,8 +7316,8 @@ if g:has_wsl > 0 && !has("nvim")
     vmap <silent> <Leader>wg tybb<C-\><C-n>:set hlsearch<CR>/<C-r>"<CR>
     vmap <silent> <Leader>wG tyw<C-\><C-n>:set hlsearch<CR>?<C-r>"<CR>
 else
-    vmap <silent> <Leader>wg tybb<C-\><C-n>:set hlsearch<CR>/<C-r>*<CR>
-    vmap <silent> <Leader>wG tyw<C-\><C-n>:set hlsearch<CR>?<C-r>*<CR>
+    vmap <silent> <Leader>wg tybb<C-\><C-n>:set hlsearch<CR>/<C-r>"<CR>
+    vmap <silent> <Leader>wG tyw<C-\><C-n>:set hlsearch<CR>?<C-r>"<CR>
 endif
 
 " and the *, # (without copying selection to clipboard)
@@ -7369,11 +7371,11 @@ if g:has_wsl > 0 && !has("nvim")
         vmap <silent> <Leader>wx p
     endif
 else
-    nnoremap <silent> <Leader>wx "_ciw<C-r>*<Esc>
+    nnoremap <silent> <Leader>wx "_ciw<C-r>"<Esc>
     if has("nvimSKIP_MINIYANK") " miniyank
-        vmap <silent> <Leader>wx "_x"*<Plug>(miniyank-autoPut)
+        vmap <silent> <Leader>wx "_x""<Plug>(miniyank-autoPut)
     else
-        "vmap <silent> <Leader>wx "_x"*P
+        "vmap <silent> <Leader>wx "_x""P
         "vmap <silent> <Leader>wx :<C-u>call <SID>SwapReg2(0)<CR>gv"_x"oP:<C-u>call <SID>SwapReg2(0)<CR>
         vmap <silent> <Leader>wx p
     endif
@@ -7390,11 +7392,11 @@ if g:has_wsl > 0 && !has("nvim")
         vmap <silent> <Leader>wr p
     endif
 else
-    nnoremap <silent> <Leader>wr "_cw<C-r>*<Esc>
+    nnoremap <silent> <Leader>wr "_cw<C-r>"<Esc>
     if has("nvimSKIP_MINIYANK") " miniyank
-        vmap <silent> <Leader>wr "_x"*<Plug>(miniyank-autoPut)
+        vmap <silent> <Leader>wr "_x""<Plug>(miniyank-autoPut)
     else
-        "vmap <silent> <Leader>wr "_x"*P
+        "vmap <silent> <Leader>wr "_x""P
         "vmap <silent> <Leader>wr :<C-u>call <SID>SwapReg2(0)<CR>gv"_x"oP:<C-u>call <SID>SwapReg2(0)<CR>
         vmap <silent> <Leader>wr p
     endif
