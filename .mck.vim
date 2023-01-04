@@ -1034,19 +1034,21 @@ let g:findroot_not_for_subdir = 1
 " findroot ------------
 
 " fzf -----------------
-if 1 " use vim popup ...
+if 0 " use vim popup always ...
     " NOTE: cannot use ctrl-\ key as vim terminal uses <C-\><C-n> to go into normal mode
     "       (after <C-\> vim terminal always expects another key) ...
     let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.65, 'yoffset': 0.5, 'xoffset': 0.5 } }
 else
-" in nvim &term could be 'builtin_tmux' so dont use ^tmux but just tmux
-if &term =~ "^screen" || &term =~ "^tmux"
-    " use tmux popup ...
-    let g:fzf_layout = { 'tmux': '-p -x C -y 38% -w 80% -h 65%' }
-else
-    " use vim split ...
-    let g:fzf_layout = { 'down': '~45%' }
-endif
+    " in nvim &term could be 'builtin_tmux' so dont use ^tmux but just tmux
+    " BUG: if not using fzf-tmux, nvim_open_win() in fzf.vim from checkhealth window might throw E5555 exception ...
+    if exists('$TMUX_PANE')
+        let g:fzf_prefer_tmux = 1
+        " use tmux popup ...
+        let g:fzf_layout = { 'tmux': '-p -x C -y C -w 80% -h 65%' }
+    else
+        " use vim split ...
+        let g:fzf_layout = { 'down': '~45%' }
+    endif
 endif
 
 let g:fzf_preview_window = ['right:60%:hidden', 'ctrl-alt-p']
@@ -1221,21 +1223,21 @@ endfunction
 "\ })<CR>
 
 function s:Mylsfzf(arg) abort
-    if has("nvim") && bufname('') =~ "health://"
-        " otherwise nvim_open_win() in fzf.vim throws E5555 exception ...
-        let errmsg = 'Not supported from healthcheck window/buffer'
-        call s:warn(errmsg)
-        sleep 1251m
-        redraw!
-        echo " "
-        return
-    endif
+    " BUG: if not using fzf-tmux, nvim_open_win() in fzf.vim from checkhealth window might throw E5555 exception ...
     let l:bl = <SID>buflist(a:arg)
-    call fzf#run({
-\       'source' : reverse(l:bl),
-\       'sink'   : function('s:bufopen'),
-\       'window' : { 'width': 0.8, 'height': 0.4, 'yoffset': 0.5, 'xoffset': 0.5 }
-\   })
+    if exists('$TMUX_PANE')
+        call fzf#run({
+\           'source' : reverse(l:bl),
+\           'sink'   : function('s:bufopen'),
+\           'tmux'   : '-p -x C -y C -w 80% -h 40%'
+\       })
+    else
+        call fzf#run({
+\           'source' : reverse(l:bl),
+\           'sink'   : function('s:bufopen'),
+\           'window' : { 'width': 0.8, 'height': 0.4, 'yoffset': 0.5, 'xoffset': 0.5 }
+\       })
+    endif
 endfunction
 
 " TODO: why fzf#run() down: <val> and options: +m settings ?
@@ -3428,7 +3430,7 @@ if has("nvim")
   set guicursor=n-v-c-o:block,i-ci:ver25,r-cr:hor25,a:blinkon500-blinkoff300
 endif
 
-if !has("nvim") && (&term =~ "^screen" || &term =~ "^tmux")
+if !has("nvim") && (&term =~ "^screen" || &term =~ "tmux")
   " seems we need this for blinking cursor ...
   " vim uses vi, vs, VS, ve and may not get these from cnorm, civis, cvvis correctly
   "let &t_ve="\e[?12;25h"
@@ -3593,7 +3595,7 @@ if g:is_ttyterm > 0
 else
   set title titlestring=@v:%.12t
 endif
-if !has("nvim") && (&term =~ "^screen" || &term =~ "^tmux")
+if !has("nvim") && (&term =~ "^screen" || &term =~ "tmux")
   exec "set t_ts=\e]2; t_fs=\7"
 endif
 
@@ -3627,7 +3629,7 @@ function! s:MyUpdateTitle()
       set title titlestring=@v:%.12t
     endif
   endif
-  if !has("nvim") && (&term =~ "^screen" || &term =~ "^tmux")
+  if !has("nvim") && (&term =~ "^screen" || &term =~ "tmux")
     exec "set t_ts=\e]2; t_fs=\7"
   endif
   " if want to force insert mode upon entering
@@ -12410,7 +12412,7 @@ endif
 
 " NOTE: add ^xterm || ^rxvt || ^urxvt here ?
 " enable bracketed paste in terminal mode
-if !has("nvim") && (&term =~ "^screen" || &term =~ "^tmux" || &term =~ "^alacritty" || &term =~ "^xterm" || &term =~ "^wezterm" || &term =~ "^foot" || &term =~ "^kitty")
+if !has("nvim") && (&term =~ "^screen" || &term =~ "tmux" || &term =~ "^alacritty" || &term =~ "^xterm" || &term =~ "^wezterm" || &term =~ "^foot" || &term =~ "^kitty")
   let &t_BE="\<Esc>[?2004h"
   let &t_BD="\<Esc>[?2004l"
   let &t_PS="\<Esc>[200~"
@@ -12425,7 +12427,7 @@ if !has("nvim") && (&term =~ "^screen" || &term =~ "^tmux" || &term =~ "^alacrit
 endif
 
 " nvim BUG: we add this for vim because we forced Home -> \e[H and End -> \e[F in tmux
-if !has("nvim") && (&term =~ "^tmux" || exists('$TMUX_PANE'))
+if !has("nvim") && (&term =~ "tmux" || exists('$TMUX_PANE'))
   exec "set <Home>=\e[H"
   exec "set <End>=\e[F"
 endif
