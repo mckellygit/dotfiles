@@ -3113,18 +3113,18 @@ vmap <silent> <expr> y     (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v
 vmap <silent> <expr> Y     (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'omvVtY`v' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("tY", 0)<CR>'
 
 "vmap <silent> <expr> <Leader>yy (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
-vmap <silent> <expr> <Leader>yy (&buftype ==# 'terminal') ? (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedRed()<CR>i' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>i' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+vmap <silent> <expr> <Leader>yy (&buftype ==# 'terminal') ? (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>i' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>i' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
 
 "vmap <silent> <expr> <Leader>yY (mode() =~ "\<C-v>") ? 'omvVtY`v:call ForceLoadNammedRef()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("tY", 1)<CR>'
 vmap <silent> <expr> <Leader>yY (&buftype ==# 'terminal') ? (mode() =~ "\<C-v>") ? 'omvVtY`v:call ForceLoadNammedRef()<CR>i' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("tY", 1)<CR>i' : (mode() =~ "\<C-v>") ? 'omvVtY`v:call ForceLoadNammedRef()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("tY", 1)<CR>'
 
 " <C-y> like y ...
 "vmap <silent> <expr> <C-y> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
-vmap <silent> <expr> <C-y> (&buftype ==# 'terminal') ? (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedRed()<CR>i' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>i' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+vmap <silent> <expr> <C-y> (&buftype ==# 'terminal') ? (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>i' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>i' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
 
 " and <Leader>z<Space> (see below for others) ...
 "vmap <silent> <expr> <Leader>z<Space> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
-vmap <silent> <expr> <Leader>z<Space> (&buftype ==# 'terminal') ? (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedRed()<CR>i' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>i' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+vmap <silent> <expr> <Leader>z<Space> (&buftype ==# 'terminal') ? (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>i' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>i' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
 
 " === OSC52 ==================================
 
@@ -6054,9 +6054,9 @@ endif
 "  <F34> is paste [replace in vis mode] (mapped below) (S-Insert) see also <M-*>
 "  <F37> is cut (mapped below) (S-Del) see also <S-F37> and <M-(>
 "vmap <silent> <expr> <F33>      (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
-vmap <silent> <expr> <F33>      (&buftype ==# 'terminal') ? (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedRed()<CR>i' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>i' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+vmap <silent> <expr> <F33>      (&buftype ==# 'terminal') ? (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>i' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>i' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
 "vmap <silent> <expr> <C-Insert> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
-vmap <silent> <expr> <C-Insert> (&buftype ==# 'terminal') ? (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedRed()<CR>i' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>i' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+vmap <silent> <expr> <C-Insert> (&buftype ==# 'terminal') ? (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>i' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>i' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
 
 vmap <silent> <expr> <F37>      (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNammedReg()<CR>'
 vmap <silent> <expr> <S-Del>    (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNammedReg()<CR>'
