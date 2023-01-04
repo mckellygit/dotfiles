@@ -489,10 +489,11 @@ bindkey -M menuselect '^[[Z' reverse-menu-complete
 bindkey '^I' expand-or-complete-prefix
 
 # Home
-#bindkey -M viins '^a' beginning-of-line
-#bindkey -M vicmd '^a' beginning-of-line
-bindkey -M vicmd '^a' vi-first-non-blank
-bindkey -M viins '^a' vi-first-non-blank
+bindkey -M viins '^a' beginning-of-line
+bindkey -M vicmd '^a' beginning-of-line
+# if multi-line from bracketed-paste then first-non-blank does not keep going to previous line ...
+#bindkey -M vicmd '^a' vi-first-non-blank
+#bindkey -M viins '^a' vi-first-non-blank
 bindkey -M viins "\e[H" beginning-of-line
 bindkey -M vicmd "\e[H" beginning-of-line
 bindkey -M viins "\e[1~" beginning-of-line
@@ -504,13 +505,6 @@ bindkey -M viins "\e[F" end-of-line
 bindkey -M vicmd "\e[F" end-of-line
 bindkey -M viins "\e[4~" end-of-line
 bindkey -M vicmd "\e[4~" end-of-line
-
-# Ctrl-Home
-bindkey -M viins "\e[1;5H" beginning-of-line
-bindkey -M vicmd "\e[1;5H" beginning-of-line
-# Ctrl-End
-bindkey -M viins "\e[1;5F" end-of-line
-bindkey -M vicmd "\e[1;5F" end-of-line
 
 # Ctrl-Left
 bindkey -M viins "\e[1;5D" backward-word
@@ -573,10 +567,77 @@ bindkey -M viins "^w"  backward-kill-word
 bindkey -M vicmd "^w"  backward-kill-word
 #bindkey '^P' backward-kill-word
 
+# -------
+
+function kill-all-backwards()
+{
+    zle set-mark-command
+    CURSOR=0
+    zle exchange-point-and-mark
+    zle kill-region
+}
+zle -N kill-all-backwards
+
 # backward-kill-line or vi-kill-line or kill-whole-line ?
 # without binding then after a viins mode it wont go backwards past where it left viins mode
 bindkey -M vicmd "^u" backward-kill-line
 bindkey -M viins "^u" backward-kill-line
+
+# Alt-Shift-DEL - delete everything backwards
+bindkey -M vicmd "\e[3;4~" kill-all-backwards
+bindkey -M viins "\e[3;4~" kill-all-backwards
+
+# and some keys for going to abs beginning of multi-line and abs end ...
+# sort of like ctrl-home / ctrl-end ?
+# or perhaps alt-, / alt-. ?
+
+bindkey -s "\e," ","
+bindkey -s "\e." "."
+
+function abs-beg-of-line()
+{
+    CURSOR=0
+}
+zle -N abs-beg-of-line
+
+function abs-end-of-line()
+{
+    len1=$#BUFFER
+    if [[ $len1 -gt 0 ]] ; then
+        ((len1-1))
+    fi
+    CURSOR=$len1
+}
+zle -N abs-end-of-line
+
+# Ctrl-Home
+bindkey -M viins "\e[1;5H" abs-beg-of-line
+bindkey -M vicmd "\e[1;5H" abs-beg-of-line
+# Ctrl-End
+bindkey -M viins "\e[1;5F" abs-end-of-line
+bindkey -M vicmd "\e[1;5F" abs-end-of-line
+
+# some func to kill entire multi-line no matter where (already Ctrl-c) ?
+
+function kill-multi-line()
+{
+    zle abs-end-of-line
+    zle set-mark-command
+    CURSOR=0
+    zle exchange-point-and-mark
+    zle kill-region
+}
+zle -N kill-multi-line
+
+# Alt-Shift-k to kill-whole-line even when multi-line
+bindkey -M viins "\eK" kill-multi-line
+bindkey -M vicmd "\eK" kill-multi-line
+
+# -------
+
+# paste back kill buffer
+bindkey -M vicmd '^y' yank
+bindkey -M viins '^y' yank
 
 # -------
 
@@ -650,6 +711,23 @@ zle -N my-delete-char
 # DEL - delete current char, but also if at end then del backward char
 bindkey -M viins "\e[3~" my-delete-char
 bindkey -M vicmd "\e[3~" my-delete-char
+
+# -------
+
+function kill-path-word()
+{
+    local words word spaces
+    zle set-mark-command                 # save current cursor position ("mark")
+    while [[ $LBUFFER[-1] == "/" ]] {
+        (( CURSOR -= 1 ))                # consume all trailing slashes
+    }
+    words=("${(s:/:)LBUFFER/\~/_}")      # split command line at "/" after "~" is replaced by "_" to prevent FILENAME EXPANSION messing things up
+    word=$words[-1]                      # this is the portion from cursor back to previous "/"
+    (( CURSOR -= $#word ))               # then, jump to the previous "/"
+    zle exchange-point-and-mark          # swap "mark" and "cursor"
+    zle kill-region                      # delete marked region
+}
+zle -N kill-path-word
 
 # --------------------
 
@@ -1651,8 +1729,6 @@ function copy-cmdline() {
 }
 zle -N copy-cmdline
 bindkey "\e=" copy-cmdline
-
-bindkey -s "\e," ","
 
 # \e, \E escape
 # \NNN   character code in octal
