@@ -6,10 +6,10 @@
 
 if [[ -n "$TMUX" ]] ; then
     if [[ -z "$VISUAL" ]] ; then
-        unset TMUX
+        #unset TMUX
         exec nvim "$@"
     elif [[ "$VISUAL" != "vim" ]] ; then
-        unset TMUX
+        #unset TMUX
         exec nvim "$@"
     else
         exec vim "$@"
