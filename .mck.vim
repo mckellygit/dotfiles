@@ -5120,17 +5120,30 @@ function! PostPaste(code)
         silent! exe s:cur_buf."b"
     endif
 
-    silent call lightline#enable()
-    redraw!
+    " hack to get window to refresh completely and be current and correct ...
 
-    silent exec "tabnew " . g:scratchpad2
-    " append 60+ long, blank lines here ?
-    redraw!
+    if 0
 
-    silent tabclose
-    redraw!
+        silent call lightline#enable()
+        redraw!
+        silent exec "tabnew " . g:scratchpad2
+        " append 60+ long, blank lines here ?
+        redraw!
+        silent tabclose
+        redraw!
+        silent! exec "silent! bwipe! " . g:scratchpad2
 
-    silent! exec "silent! bwipe! " . g:scratchpad2
+    else
+
+        silent exec "normal! ggzfG"
+        redraw!
+        silent call lightline#enable()
+        silent exec "normal! zo"
+        redraw!
+
+    endif
+
+    " -------------
 
     if empty(expand(glob(g:scratchpad)))
         let etxt = "Error: remote (tty) clipboard copy failed: " . "no tmp file"
