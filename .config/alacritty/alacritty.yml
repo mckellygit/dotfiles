@@ -145,10 +145,13 @@ key_bindings:
   - { key: Insert,    mods: Control,         chars: "\x1b[2;5~"       }
   - { key: Insert,    mods: Shift,           chars: "\x1b[2;2~"       }
   - { key: Insert,    mods: Control|Shift,   chars: "\x1b[2;6~"       }
+
     # - { key: Insert,    mods: Alt,             chars: "\x1b[2;3~"       }
+    # \x1b[2;3~ in tmux would also copyq toggle ...
   - { key: Insert,    mods: Alt,             command: { program: "copyq", args: ["toggle"] } }
   - { key: Insert,    mods: Super,           command: { program: "copyq", args: ["toggle"] } }
   - { key: V,         mods: Super,           command: { program: "copyq", args: ["toggle"] } }
+
   - { key: Insert,    mods: Alt|Shift,       chars: "\x1b[2;4~"       }
   - { key: Insert,    mods: Alt|Control,     chars: "\x1b[2;7~"       }
 
