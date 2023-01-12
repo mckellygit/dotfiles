@@ -99,6 +99,8 @@ let @l="0"
 let @i="0"
 let @j="0"
 
+let g:oscroll = &scroll
+
 " ====================================================
 " --- vundle -----------------------------------------
 " ====================================================
@@ -4498,6 +4500,9 @@ endif
 
 " NOTE: there is also <Leader>tn, tp, etc. for changing tabs ...
 
+" NOTE: there are also <M-<lt> and <M->> for changing tabs ...
+"       mapped via tmux to <C-^><lt> and <C-^>> etc.
+
 " dont do this, it messes up viw ...
 "vnoremap i <Nop>
 
@@ -4759,28 +4764,6 @@ if has("nvim")
     inoremap <F17> <M-x>
     tnoremap <F17> <M-x>
 endif
-
-" ------------------------------
-
-" resize windows
-" NOTE: do not use w<Up> mapping, as then all
-" 'w' cmds (including dw) take timeoutlen ...
-
-" Up/Down/Left/Right confusing as its really larger/smaller not directional
-" use +/-/,/.
-map <Leader>w+   <C-w>5+
-" also map = same, as its easier than +
-map <Leader>w=   <C-w>5+
-
-map <Leader>w-   <C-w>5-
-
-map <Leader>w,   <C-w>5<
-" also map < same
-map <Leader>w<   <C-w>5<
-
-map <Leader>w.   <C-w>5>
-" also map > same
-map <Leader>w>   <C-w>5>
 
 " ------------------------------
 
@@ -7807,7 +7790,8 @@ inoremap <silent> <M-l>      <C-\><C-o>l
 inoremap <silent> <M-,>      <C-\><C-o>10zh<C-\><C-o>10h
 inoremap <silent> <M-.>      <C-\><C-o>10zl<C-\><C-o>10l
 
-" NOTE: tmux may send <C-^> + char for these ...
+" NOTE: tmux may send <C-^> + char for these (instead of Alt + char) ...
+" so <M-,> is <C-^>, etc
 nnoremap <silent> <C-^>h     h
 nnoremap <silent> <C-^>l     l
 vnoremap <silent> <C-^>h     h
@@ -7837,21 +7821,28 @@ noremap <silent> <C-^>L     10zl10l
 noremap <silent> <M-H>      10zh10h
 noremap <silent> <M-L>      10zl10l
 
-noremap <silent> <C-^><lt>  <Cmd>:tabprevious<CR>
-noremap <silent> <C-^>>     <Cmd>:tabnext<CR>
-noremap <silent> <M-<lt>>   <Cmd>:tabprevious<CR>
-noremap <silent> <M->>      <Cmd>:tabnext<CR>
+" in tmux <M-<lt>> is <C-^><lt>
+" in tmux <M->> is <C-^>>
+noremap <silent> <C-^><lt>  <Cmd>tabprevious<CR>
+noremap <silent> <C-^>>     <Cmd>tabnext<CR>
+noremap <silent> <M-<lt>>   <Cmd>tabprevious<CR>
+noremap <silent> <M->>      <Cmd>tabnext<CR>
 
-tnoremap <silent> <C-^><lt>  <Cmd>:tabprevious<CR>
-tnoremap <silent> <C-^>>     <Cmd>:tabnext<CR>
-tnoremap <silent> <M-<lt>>   <Cmd>:tabprevious<CR>
-tnoremap <silent> <M->>      <Cmd>:tabnext<CR>
+tnoremap <silent> <C-^><lt>  <Cmd>tabprevious<CR>
+tnoremap <silent> <C-^>>     <Cmd>tabnext<CR>
+
+" these seem to add a delay for regular < char ...
+"tnoremap <silent> <M-<lt>>   <Cmd>tabprevious<CR>
+"tnoremap <silent> <M->>      <Cmd>tabnext<CR>
+
+" NOTE: there are also LOTS of <C-t><Tab>, <C-t><BS> mappings for changing tabs ...
 
 " not sure why we need these, but good to override ???
 " the <C-^> part is really from an alt- press, must be from tmux ?
 
 tnoremap <C-^>,    ,
 tnoremap <C-^>.    .
+
 tnoremap <C-^>h    h
 tnoremap <C-^>l    l
 tnoremap <C-^>p    p
@@ -7861,6 +7852,13 @@ tnoremap <C-^>H    H
 tnoremap <C-^>L    L
 tnoremap <C-^>P    P
 tnoremap <C-^>N    N
+
+" so we are like vim and dont get strange/unicode chars ...
+" NOTE: windows terminal uses <C-,> for config ...
+if has("nvim")
+    tnoremap <C-,> <Nop>
+    tnoremap <C-.> <Nop>
+endif
 
 " ---------
 
@@ -8081,15 +8079,24 @@ endfunction
 
 " ---------
 
-" could also remap these ...
-"nnoremap <silent> <expr> <C-D> (line('.') == line('w0')) ? g:hdn : '<C-D>'
-"vnoremap <silent> <expr> <C-D> (line('.') == line('w0')) ? g:hdn : '<C-D><C-l>'
-"nnoremap <silent> <expr> <C-U> (line('.') == line('w$')) ? g:hup : '<C-U>'
-"vnoremap <silent> <expr> <C-U> (line('.') == line('w$')) ? g:hup : '<C-U><C-l>'
+" could also remap these to prevent a 1<C-d> from changing &scroll value ...
+if !has("nvim")
+    nnoremap <silent> <expr> <C-D> (line('.') == line('w0')) ? "M" : &scroll . "<C-D>"
+    vnoremap <silent> <expr> <C-D> (line('.') == line('w0')) ? "M" : &scroll . "<C-D><C-l>"
+    nnoremap <silent> <expr> <C-U> (line('.') == line('w$')) ? "M" : &scroll . "<C-U>"
+    vnoremap <silent> <expr> <C-U> (line('.') == line('w$')) ? "M" : &scroll . "<C-U><C-l>"
+else
+    nnoremap <silent> <expr> <C-D> (line('.') == line('w0')) ? "M" : &scroll . "<C-D>"
+    vnoremap <silent> <expr> <C-D> (line('.') == line('w0')) ? "M" : &scroll . "<C-D>"
+    nnoremap <silent> <expr> <C-U> (line('.') == line('w$')) ? "M" : &scroll . "<C-U>"
+    vnoremap <silent> <expr> <C-U> (line('.') == line('w$')) ? "M" : &scroll . "<C-U>"
+endif
 
 " to get back orig if needed
 "noremap <Leader><C-D> <C-D>
 "noremap <Leader><C-U> <C-U>
+
+" or provide a key binding/cmd to reset scroll value (s:MapScrollKeys) ...
 
 " ---------
 
@@ -8852,6 +8859,9 @@ function! s:MapScrollKeys()
 
   " 47 / 2 = 23 but if we are at 24 then 23 up is 1 and 23 down is 47 - ok
   " 46 / 2 = 23 but if we are at 23 then 23 up is 0 and 23 down is 46 - not ok, need to make up one less ...
+
+  let g:oscroll = &scroll
+  let &scroll = g:half
 
   let g:hal1 = g:half
 
@@ -11948,7 +11958,7 @@ vnoremap <silent> <Leader>tT <C-\><C-n>:tabprevious<CR>
 nnoremap <silent> <Leader><<           :tabprevious<CR>
 vnoremap <silent> <Leader><< <C-\><C-n>:tabprevious<CR>
 
-" NOTE: there is also <M-Tab> for changing tabs ...
+" NOTE: <M-Tab> is application spreader/picker in Windows (and possibly gnome)
 
 " ----------------------
 
@@ -12041,12 +12051,43 @@ endfunction
 " DO NOT do this, it causes problems with popup shells ...
 "tnoremap <silent> <C-d> <C-w>:call <SID>TermQuit()<CR>
 
+" ------------------------------
+
+" resize splits / windows
+" NOTE: do not use w<Up> mapping, as then all
+" 'w' cmds (including dw) take timeoutlen ...
+
+" Up/Down/Left/Right confusing as its really larger/smaller not directional
+" use +/-/,/.
+map <Leader>w+   <C-w>5+
+" also map = same, as its easier than +
+map <Leader>w=   <C-w>5+
+
+map <Leader>w-   <C-w>5-
+
+map <Leader>w,   <C-w>5<
+" also map < same
+map <Leader>w<   <C-w>5<
+
+map <Leader>w.   <C-w>5>
+" also map > same
+map <Leader>w>   <C-w>5>
+
 " just because hyphen requires no shift, so = is like + w/o shift ...
- noremap <silent> <C-w>=       <C-w>+
+map <silent> <C-w>=       <C-w>+
 
 " we are using <C-w><,> below for tab nav, so change window horiz resize here
- noremap <silent> <C-w>,       <C-w><
- noremap <silent> <C-w>.       <C-w>>
+map <silent> <C-w>,       <C-w>5<
+map <silent> <C-w>.       <C-w>5>
+
+" <C-,> and <C-.> only work in nvim ...
+" NOTE: windows terminal uses <C-,> for config ...
+if has("nvim")
+    map <C-w><C-,>   <C-w>5<
+    map <C-w><C-.>   <C-w>5>
+endif
+
+" ------------------------------
 
 " NOTE: many other mappings for tab nav -
 "       <C-w><S-Left>, <S-Right>
