@@ -1577,14 +1577,32 @@ if [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTY" ]] ; then
     fi
 fi
 
+# --------------------
+
+# Sometimes a grep of a large file is much faster if:
+#   you know its ASCII and you set LC_ALL=C or LC_CTYPE=C (instead of UTF-8)
+# Also fgrep (grep -F for fixed strings (not regex)) can be faster ...
+
 export LC_ALL=en_US.UTF-8
 #export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
 
+# does it make sense to set LC_COLLATE to something other than LC_ALL/LANG/LANGUAGE ?
 export LC_COLLATE=C
 setopt COMBINING_CHARS
 
-if [[ -z "$GRUVBOX" ]] && [[ -n "$TMUX" ]] && [[ -f ~/.gruvbox_256palette.sh ]] ; then
+# --------------------
+
+# seems to really help reduce stat() syscall when calling localtime() ...
+if [[ -z "$TZ" ]] ; then
+    export TZ=:/etc/localtime
+    # or could use this string, dir/file is found in /usr/share/zoneinfo/
+    #export TZ="America/New_York"
+fi
+
+# --------------------
+
+if [[ -z "$GRUVBOX" ]] && [[ -n "$TMUX_PANE" ]] && [[ -f ~/.gruvbox_256palette.sh ]] ; then
     export GRUVBOX=1
     source ~/.gruvbox_256palette.sh
 fi
