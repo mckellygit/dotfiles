@@ -33,6 +33,8 @@ const Meta = imports.gi.Meta;
 
 var BreakException = {};
 
+var quick = 0;
+
 try {
 
 // 
@@ -86,6 +88,77 @@ global.get_window_actors().forEach(function (w) {
     }
 
 });
+
+// ------------------
+
+global.get_window_actors().forEach(function (w) {
+    var once = 1;
+    var mw = w.meta_window;
+    var wclass = mw.get_wm_class();
+
+    if (once) {
+        if (wclass != '' && wclass != 'Nautilus' && wclass != 'Gnome-shell' && (!wclass.toLowerCase().includes('copyq'))) {
+            if ( !( mw.get_title().toLowerCase().includes('tmux:') ||
+                 wclass.toLowerCase() == 'st' ||
+                 wclass.toLowerCase() == 'xterm' ||
+                 wclass.toLowerCase() == 'urxvt' ||
+                 wclass.toLowerCase() == 'kitty' ||
+                 wclass.toLowerCase() == 'alacritty' ||
+                 wclass.toLowerCase() == 'foot' ||
+                 wclass.toLowerCase().includes('.wezterm') ) ) {
+
+                GLib.timeout_add(GLib.PRIORITY_LOW, 500, function() { mw.raise(); });
+
+                quick = 1;
+                once = 0;
+            }
+        }
+    }
+
+});
+
+if (quick) {
+
+// if other windows present then only need to raise other window and move/resize terms to work ...
+
+global.get_window_actors().forEach(function (w) {
+    var once = 1;
+    var mw = w.meta_window;
+
+    if ( mw.get_title().toLowerCase().includes('tmux:') ||
+         mw.get_wm_class().toLowerCase() == 'st' ||
+         mw.get_wm_class().toLowerCase() == 'xterm' ||
+         mw.get_wm_class().toLowerCase() == 'urxvt' ||
+         mw.get_wm_class().toLowerCase() == 'kitty' ||
+         mw.get_wm_class().toLowerCase() == 'alacritty' ||
+         mw.get_wm_class().toLowerCase() == 'foot' ||
+         mw.get_wm_class().toLowerCase().includes('.wezterm') ) {
+
+        if ( ( (mw.get_title().toLowerCase().includes('tmux:xterm')) && !(mw.get_title().toLowerCase().includes('kitty')) ) ||
+             mw.get_wm_class().toLowerCase().includes('.wezterm') ) {
+            GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, function() { mw.move_resize_frame(1, 690, 678, 2540, 1362); });
+        } else {
+            GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, function() { mw.move_resize_frame(1, 690, 678, 2530, 1380); });
+        }
+
+        GLib.usleep(100000);
+
+        GLib.timeout_add(GLib.PRIORITY_LOW, 1000, function() { mw.raise(); });
+
+        const x1 = 690 + 2530 / 2;
+        const y1 = 678 + 1380 / 2;
+        const seat = Clutter.get_default_backend().get_default_seat();
+        seat.warp_pointer(x1, y1);
+    }
+
+});
+
+    throw BreakException;
+}
+
+// ------------------
+
+// no other windows present so need to do some extra crap to make sure with wayland wind actually picks up changes and moves/resizes ...
 
 global.get_window_actors().forEach(function (w) {
     var once = 1;
