@@ -569,6 +569,9 @@ bindkey -M vicmd "^w"  backward-kill-word
 
 # -------
 
+#zle_highlight=(region:fg=#c5c5c5,bg=#14292e)
+zle_highlight=(region:bg=#14292e)
+
 function kill-all-backwards()
 {
     zle set-mark-command
@@ -580,19 +583,32 @@ zle -N kill-all-backwards
 
 # backward-kill-line or vi-kill-line or kill-whole-line ?
 # without binding then after a viins mode it wont go backwards past where it left viins mode
-bindkey -M vicmd "^u" backward-kill-line
-bindkey -M viins "^u" backward-kill-line
+bindkey -M vicmd "^u" kill-all-backwards
+bindkey -M viins "^u" kill-all-backwards
 
 # Alt-Shift-DEL - delete everything backwards
-bindkey -M vicmd "\e[3;4~" kill-all-backwards
-bindkey -M viins "\e[3;4~" kill-all-backwards
+bindkey -M vicmd "\e[3;4~" backward-kill-line
+bindkey -M viins "\e[3;4~" backward-kill-line
 
 # and some keys for going to abs beginning of multi-line and abs end ...
 # sort of like ctrl-home / ctrl-end ?
 # or perhaps alt-, / alt-. ?
 
-bindkey -s "\e," ","
-bindkey -s "\e." "."
+# some func to kill entire multi-line no matter where (already Ctrl-c) ?
+
+function kill-multi-line()
+{
+    zle abs-end-of-line
+    zle set-mark-command
+    CURSOR=0
+    zle exchange-point-and-mark
+    zle kill-region
+}
+zle -N kill-multi-line
+
+# Alt-Shift-k to kill-whole-line even when multi-line
+bindkey -M viins "\eK" kill-multi-line
+bindkey -M vicmd "\eK" kill-multi-line
 
 function abs-beg-of-line()
 {
@@ -617,27 +633,25 @@ bindkey -M vicmd "\e[1;5H" abs-beg-of-line
 bindkey -M viins "\e[1;5F" abs-end-of-line
 bindkey -M vicmd "\e[1;5F" abs-end-of-line
 
-# some func to kill entire multi-line no matter where (already Ctrl-c) ?
+# -------
 
-function kill-multi-line()
+function yank-fix()
 {
-    zle abs-end-of-line
-    zle set-mark-command
-    CURSOR=0
-    zle exchange-point-and-mark
-    zle kill-region
+    zle yank-pop
+    zle yank
+    ((CURSOR--))
+    ((CURSOR++))
 }
-zle -N kill-multi-line
+zle -N yank-fix
 
-# Alt-Shift-k to kill-whole-line even when multi-line
-bindkey -M viins "\eK" kill-multi-line
-bindkey -M vicmd "\eK" kill-multi-line
+# paste back kill buffer
+bindkey -M vicmd '^y' yank-fix
+bindkey -M viins '^y' yank-fix
 
 # -------
 
-# paste back kill buffer
-bindkey -M vicmd '^y' yank
-bindkey -M viins '^y' yank
+bindkey -s "\e," ","
+bindkey -s "\e." "."
 
 # -------
 
