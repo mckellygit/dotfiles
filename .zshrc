@@ -838,9 +838,12 @@ alias dmesg='dmesg -kuxT'
 # skip -X arg to less to get alternate screen so tmux mouse can scroll ...
 # and dont use -F without -X ...
 # use -S to not wrap long lines ...
-alias more='less'
+#alias more='less'
 # there is also moar
 #alias more='moar'
+
+alias more='BAT_PAGER=ov bat --plain --tabs 4'
+
 #alias less-pyg='less-pyg'
 alias lessc='less-pyg'
 #alias less='less -K -iR -x4'
