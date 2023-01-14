@@ -29,6 +29,7 @@ bind generic   G            move-last-line
 bind main      G            move-last-line
 #bind generic   <Esc>g       move-first-line
 #bind generic   <Esc>G       move-last-line
+bind generic   1G           move-first-line
 
 # override page content view
 bind generic   p            none
