@@ -312,6 +312,8 @@ return {
     -- { key="x",              mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1b\x78"} },
 
     { key="phys:Backspace", mods="CTRL|ALT",      action=wezterm.action{SendString="\x1b\x40"} },
+
+    -- are these really needed ?
     -- { key="=",              mods="CTRL|ALT",      action=wezterm.action{SendString="\x1b\x23"} },
     { key="phys:Equal",     mods="CTRL|ALT",      action=wezterm.action{SendString="\x1b\x23"} },
     { key="phys:Space",     mods="CTRL|ALT",      action=wezterm.action{SendString="\x1b\x23"} },
@@ -332,8 +334,8 @@ return {
     -- { key="phys:Return",    mods="CTRL",          action=wezterm.action{SendString="\x1b[13;5u"} },
     -- (where 2 is 2-7 based on the usual modifiers)
 
-    -- same as prefix + Return for tmux enter copy-mode ?
-    -- { key="phys:Return",    mods="SUPER",         action=wezterm.action{SendString="\x13\x0d"} },
+    -- send ctrl-s + ] (\x13\x5d) tmux copy-mode
+    { key="phys:Return",    mods="SUPER",         action=wezterm.action{SendString="\x13\x5d"} },
 
     -- NOTE: if want shift then used shifted key and |SHIFT
 
