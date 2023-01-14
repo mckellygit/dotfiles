@@ -421,7 +421,8 @@ return {
     copy_mode = {
       { key="q",          mods="CTRL",        action="Nop" },
       { key="Q",          mods="NONE",        action=wezterm.action{CopyMode="Close"} },
-      { key="\\",         mods="CTRL|ALT",    action=wezterm.action{CopyMode="Close"} },
+      -- since its not used above to enter CopyMode, dont map it to leave copy mode ...
+      -- { key="\\",         mods="CTRL|ALT",    action=wezterm.action{CopyMode="Close"} },
       { key="Escape",     mods="NONE",        action=wezterm.action{CopyMode="Close"} },
       { key="c",          mods="CTRL",        action=wezterm.action{CopyMode="Close"} },
 
