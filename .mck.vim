@@ -5273,6 +5273,8 @@ function! s:CopyDefReg(arg)
         ColorClear
 
         setlocal nomodeline
+        "setlocal winfixheight
+        "setlocal winfixwidth
 
         setlocal complete=
 
@@ -8571,6 +8573,7 @@ else
     tnoremap <F31> <Esc>j
 endif
 
+" C-M-k / M-C-k / C-A-k / A-C-k ...
 call <SID>MapFastKeycode('<F28>',  "\e\<C-k>", 28)
 noremap <silent> <expr> <F28>    (line('.') == line('w$')) ? '5k' : '5<C-y>5k'
 noremap <silent> <expr> <M-C-K>  (line('.') == line('w$')) ? '5k' : '5<C-y>5k'
@@ -8588,7 +8591,7 @@ endif
  noremap <C-_>K 10gk
 inoremap <C-_>K <C-\><C-o>10gk
 
-" SPECIAL: some terminals might map A-C-j to M-C-o ...
+" SPECIAL: some terminals might map C-A-j / A-C-j to C-M-o / M-C-o ...
 " use ^O instead of ^J (or ^M or \n or \r)
 call <SID>MapFastKeycode('<F29>',  "\e\<C-o>", 29)
 noremap <silent> <expr> <F29>    (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '5<C-e>5j'
