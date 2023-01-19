@@ -59,6 +59,8 @@ return {
   enable_tab_bar = false,
   hide_tab_bar_if_only_one_tab = true,
 
+  hide_mouse_cursor_when_typing = false,
+
   scrollback_lines = 0,
   enable_scroll_bar = false,
 
@@ -390,6 +392,18 @@ return {
 
     -- { key="x",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x58"} },
     -- old idea was to send M-( \x1b\x28, could also consider <C-_><C-x> \x1f\x18
+
+    { key="e",          mods="CTRL|ALT",      action=wezterm.action{QuickSelectArgs={
+                                                  patterns={
+                                                     "http?://\\S+",
+                                                     "https?://\\S+"
+                                                  },
+                                                  action = wezterm.action_callback(function(window, pane)
+                                                     local url = window:get_selection_text_for_pane(pane)
+                                                     wezterm.open_with(url)
+                                                  end)
+                                                } }
+    },
 
     { key="Insert",     mods="CTRL",          action=wezterm.action{SendString="\x1b[2;5~"} },
     { key="Insert",     mods="SHIFT",         action=wezterm.action{SendString="\x1b[2;2~"} },
