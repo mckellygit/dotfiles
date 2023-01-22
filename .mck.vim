@@ -5684,14 +5684,22 @@ function UpdateClipCmd(cmd)
     set nopaste
 endfunction
 
+" in cmd-line <C-M-u> would exit cmd mode and then <C-u> page up ...
+cnoremap <M-C-U> <C-u>
+" in vim we would have to first map \e<C-u> to an unused func key ...
+call <SID>MapFastKeycode('<F16>',  "\e\<C-u>", 16)
+" then we can used that to map to <C-u> ...
+cnoremap <F16> <C-u>
+
 " <F34> paste after
 nnoremap <silent> <expr> <F34>          (&buftype == 'terminal') ? '' : '<Cmd>call UpdateClipCmd("p")<CR>'
 nnoremap <silent> <expr> <S-Insert>     (&buftype == 'terminal') ? '' : '<Cmd>call UpdateClipCmd("p")<CR>'
 " NOTE: <F34>/<S-Insert> vmapped below ...
 inoremap <silent> <F34>                 <C-\><C-o>:call UpdateClipCmd('')<CR><C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
 inoremap <silent> <S-Insert>            <C-\><C-o>:call UpdateClipCmd('')<CR><C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
-cnoremap <silent> <F34>                 <Cmd>call UpdateClipCmd('')<CR><C-r>"
-cnoremap <silent> <S-Insert>            <Cmd>call UpdateClipCmd('')<CR><C-r>"
+" for some weird reason BUG! I need to call feedkeys to get pasted text to display ...
+cnoremap <silent> <F34>                 <Cmd>call UpdateClipCmd('')<CR><C-r>"<Cmd>call feedkeys(" <Char-0x08>", 'nt')<CR>
+cnoremap <silent> <S-Insert>            <Cmd>call UpdateClipCmd('')<CR><C-r>"<Cmd>call feedkeys(" <Char-0x08>", 'nt')<CR>
 if !has("nvim")
     tnoremap <silent> <F34>             <C-w>:call UpdateClipCmd('')<CR><C-w>""
     tnoremap <silent> <S-Insert>        <C-w>:call UpdateClipCmd('')<CR><C-w>""
@@ -5707,8 +5715,9 @@ nnoremap <silent> <expr> <M-!>          (&buftype == 'terminal') ? '' : '<Cmd>ca
 " NOTE: <S-F34>/<M-!> vmapped below ...
 inoremap <silent> <S-F34>               <C-\><C-o>:call UpdateClipCmd('')<CR><C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
 inoremap <silent> <M-!>                 <C-\><C-o>:call UpdateClipCmd('')<CR><C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
-cnoremap <silent> <S-F34>               <Cmd>call UpdateClipCmd('')<CR><C-r>"
-cnoremap <silent> <M-!>                 <Cmd>call UpdateClipCmd('')<CR><C-r>"
+" for some weird reason BUG! I need to call feedkeys to get pasted text to display ...
+cnoremap <silent> <S-F34>               <Cmd>call UpdateClipCmd('')<CR><C-r>"<Cmd>call feedkeys(" <Char-0x08>", 'nt')<CR>
+cnoremap <silent> <M-!>                 <Cmd>call UpdateClipCmd('')<CR><C-r>"<Cmd>call feedkeys(" <Char-0x08>", 'nt')<CR>
 if !has("nvim")
     tnoremap <silent> <S-F34>           <C-w>:call UpdateClipCmd('')<CR><C-w>""
     tnoremap <silent> <M-!>             <C-w>:call UpdateClipCmd('')<CR><C-w>""
@@ -5723,8 +5732,9 @@ nnoremap <silent> <expr> <C-S-Insert>   (&buftype == 'terminal') ? '' : '<Cmd>ca
 " NOTE: <F35>/<C-S-Insert> vmapped below ...
 inoremap <silent> <F35>                 <C-\><C-o>:call UpdateClipCmd('')<CR><C-\><C-o>:set paste<CR><C-\><C-o>mp<C-r>"<C-\><C-o>:set nopaste<CR><C-\><C-o>`p
 inoremap <silent> <C-S-Insert>          <C-\><C-o>:call UpdateClipCmd('')<CR><C-\><C-o>:set paste<CR><C-\><C-o>mp<C-r>"<C-\><C-o>:set nopaste<CR><C-\><C-o>`p
-cnoremap <silent> <F35>                 <Cmd>call UpdateClipCmd('')<CR><C-r>"
-cnoremap <silent> <C-S-Insert>          <Cmd>call UpdateClipCmd('')<CR><C-r>"
+" for some weird reason BUG! I need to call feedkeys to get pasted text to display ...
+cnoremap <silent> <F35>                 <Cmd>call UpdateClipCmd('')<CR><C-r>"<Cmd>call feedkeys(" <Char-0x08>", 'nt')<CR>
+cnoremap <silent> <C-S-Insert>          <Cmd>call UpdateClipCmd('')<CR><C-r>"<Cmd>call feedkeys(" <Char-0x08>", 'nt')<CR>
 if !has("nvim")
     tnoremap <silent> <F35>             <C-w>:call UpdateClipCmd('')<CR><C-w>""
     tnoremap <silent> <C-S-Insert>      <C-w>:call UpdateClipCmd('')<CR><C-w>""
@@ -5740,8 +5750,9 @@ nnoremap <silent> <expr> <M-*>          (&buftype == 'terminal') ? '' : '<Cmd>ca
 " NOTE: <S-F35>/<M-*> vmapped below ...
 inoremap <silent> <S-F35>               <C-\><C-o>:call UpdateClipCmd('')<CR><C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
 inoremap <silent> <M-*>                 <C-\><C-o>:call UpdateClipCmd('')<CR><C-\><C-o>:set paste<CR><C-r>"<C-\><C-o>:set nopaste<CR>
-cnoremap <silent> <S-F35>               <Cmd>call UpdateClipCmd('')<CR><C-r>"
-cnoremap <silent> <M-*>                 <Cmd>call UpdateClipCmd('')<CR><C-r>"
+" for some weird reason BUG! I need to call feedkeys to get pasted text to display ...
+cnoremap <silent> <S-F35>               <Cmd>call UpdateClipCmd('')<CR><C-r>"<Cmd>call feedkeys(" <Char-0x08>", 'nt')<CR>
+cnoremap <silent> <M-*>                 <Cmd>call UpdateClipCmd('')<CR><C-r>"<Cmd>call feedkeys(" <Char-0x08>", 'nt')<CR>
 if !has("nvim")
     tnoremap <silent> <S-F35>           <C-w>:call UpdateClipCmd('')<CR><C-w>""
     tnoremap <silent> <M-*>             <C-w>:call UpdateClipCmd('')<CR><C-w>""
@@ -6130,10 +6141,10 @@ if 0 " NOT NEEDED ANYMORE =========================
 
   " to fix the key mapping starting with <Esc> casuing delay exiting insert mode issue ...
   " NOTE: see above about OptionSet for paste also changing foldexpr ...
-  if !has("nvim")
-    call <SID>MapFastKeycode('<F16>', "\e[200~", 16)
-    inoremap <special> <expr> <F16> XTermPasteBegin()
-  endif
+  "if !has("nvim")
+  "  call <SID>MapFastKeycode('<F16>', "\e[200~", 16)
+  "  inoremap <special> <expr> <F16> XTermPasteBegin()
+  "endif
   " but no answer for nvim to do this on OS paste ?
 endif " NOT NEEDED ANYMORE =========================
 
