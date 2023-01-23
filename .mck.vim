@@ -5150,10 +5150,10 @@ function! PostPaste(code)
 
     else
 
-        silent exec "normal! ggzfG"
+        silent exec "normal! mpggzfG"
         redraw!
         silent call lightline#enable()
-        silent exec "normal! zo"
+        silent exec "normal! zo`p"
         redraw!
 
     endif
