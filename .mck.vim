@@ -3625,6 +3625,7 @@ let g:netrw_dirhistmax = 0
 set titleold=
 if g:is_ttyterm > 0
   " remote clipboard - so that C-S-v and S-Insert paste from tmux instead of sending to vi ...
+  " only issue is that tmux paste might have trailing space ...
   set title titlestring=@v:t:%.10t
 else
   set title titlestring=@v:%.12t
@@ -3658,6 +3659,7 @@ function! s:MyUpdateTitle()
   else
     if g:is_ttyterm > 0
       " remote clipboard - so that C-S-v and S-Insert paste from tmux instead of sending to vi ...
+      " only issue is that tmux paste might have trailing space ...
       set title titlestring=@v:t:%.10t
     else
       set title titlestring=@v:%.12t
