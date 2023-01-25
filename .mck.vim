@@ -20,7 +20,7 @@ function! s:CleanUpScratchPad()
         silent call delete(g:scratchpad)
     endif
 endfunction
-"autocmd VimEnter * silent call <SID>CleanUpScratchPad()
+autocmd VimLeave * silent call <SID>CleanUpScratchPad()
 
 " one of these is needed in vim on windows to avoid starting in replace mode
 let g:has_wsl=0
