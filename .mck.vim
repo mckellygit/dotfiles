@@ -1052,7 +1052,11 @@ au BufAdd * let &tabline = &tabline
 " lightline ----------
 
 " calendar -----------
-map tt <Plug>(calendar_today)
+autocmd FileType calendar nmap <buffer> tt      <Plug>(calendar_today)
+autocmd FileType calendar nmap <buffer> h       <Plug>(calendar_prev)
+autocmd FileType calendar nmap <buffer> l       <Plug>(calendar_next)
+autocmd FileType calendar nmap <buffer> <Left>  <Plug>(calendar_prev)
+autocmd FileType calendar nmap <buffer> <Right> <Plug>(calendar_next)
 " calendar -----------
 
 " rooter -------------
