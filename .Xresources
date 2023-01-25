@@ -523,14 +523,59 @@ URxvt.clipboard.pastecmd: myclip --o --rmlastnl --sc 0
 
 !! Zutty options
 
-Zutty.altScroll:       false
-Zutty.fontsize:        15
-Zutty.saveLines:       0
+Zutty.quiet:        true
+
+Zutty.altScroll:    false
+Zutty.saveLines:    0
+
+Zutty.geometry:     194x54
+Zutty.boldColors:   false
+Zutty.font:         LiberationMono-Regular
+Zutty.boldFont:     LiberationMono-Regular
+Zutty.fontsize:     20
+Zutty.fontpath:     /usr/share/fonts
+
+Zutty.fg:           #c5c5c5
+Zutty.bg:           #14292e
+
+Zutty.cr:           #d78700
 
 !! see: https://tomscii.sig7.se/zutty/doc/KEYS.html
 Zutty.altSendsEscape:  true
 !! 0, 1, 2
 Zutty.modifyOtherKeys: 1
+
+!! black
+Zutty.color0: #000000
+Zutty.color8: #767676
+
+!! red
+Zutty.color1: #cc0403
+Zutty.color9: #f2201f
+
+!! green
+Zutty.color2:  #29cb00
+Zutty.color10: #23fd00
+
+!! yellow
+Zutty.color3:  #cecb00
+Zutty.color11: #ffd700
+
+!! blue
+Zutty.color4:  #5f87ff
+Zutty.color12: #0066ff
+
+!! magenta
+Zutty.color5:  #ba55d3
+Zutty.color13: #875faf
+
+!! cyan
+Zutty.color6:  #009999
+Zutty.color14: #00ffff
+
+!! white
+Zutty.color7:  #dddddd
+Zutty.color15: #ffffff
 
 !! ==========================================
 

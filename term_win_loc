@@ -105,6 +105,7 @@ global.get_window_actors().forEach(function (w) {
                  wclass.toLowerCase() == 'kitty' ||
                  wclass.toLowerCase() == 'alacritty' ||
                  wclass.toLowerCase() == 'foot' ||
+                 wclass.toLowerCase() == 'zutty' ||
                  wclass.toLowerCase().includes('.wezterm') ) ) {
 
                 GLib.timeout_add(GLib.PRIORITY_LOW, 500, function() { mw.raise(); });
@@ -132,6 +133,7 @@ global.get_window_actors().forEach(function (w) {
          mw.get_wm_class().toLowerCase() == 'kitty' ||
          mw.get_wm_class().toLowerCase() == 'alacritty' ||
          mw.get_wm_class().toLowerCase() == 'foot' ||
+         mw.get_wm_class().toLowerCase() == 'zutty' ||
          mw.get_wm_class().toLowerCase().includes('.wezterm') ) {
 
         if ( ( (mw.get_title().toLowerCase().includes('tmux:xterm')) && !(mw.get_title().toLowerCase().includes('kitty')) ) ||
@@ -183,6 +185,7 @@ global.get_window_actors().forEach(function (w) {
          mw.get_wm_class().toLowerCase() == 'kitty' ||
          mw.get_wm_class().toLowerCase() == 'alacritty' ||
          mw.get_wm_class().toLowerCase() == 'foot' ||
+         mw.get_wm_class().toLowerCase() == 'zutty' ||
          mw.get_wm_class().toLowerCase().includes('.wezterm') ) {
 
         GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, function() { mw.maximize(1); });
@@ -208,6 +211,7 @@ global.get_window_actors().forEach(function (w) {
              mw.get_wm_class().toLowerCase() == 'kitty' ||
              mw.get_wm_class().toLowerCase() == 'alacritty' ||
              mw.get_wm_class().toLowerCase() == 'foot' ||
+             mw.get_wm_class().toLowerCase() == 'zutty' ||
              mw.get_wm_class().toLowerCase().includes('.wezterm') ) {
 
             GLib.usleep(100000);

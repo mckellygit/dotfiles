@@ -425,6 +425,9 @@ bindkey '^h' zle-backward-delete-char-fix
 bindkey '^^^?' zle-backward-delete-char-fix
 bindkey '^^^h' zle-backward-delete-char-fix
 
+# Alt-BS is discarded in many terminals and tmux ...
+# should we make it BS ???
+
 # --------------------
 
 # echo -ne '\e[1 q'                # Use block shape cursor on startup.
@@ -1674,8 +1677,21 @@ ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS=(forward-word up-line-or-beginning-search
 bindkey '^_]' up-line-or-beginning-search
 # terminals may have mapped C-S-[ to ^_[
 bindkey '^_[' down-line-or-beginning-search
+
 # terminals may have mapped C-S-\ to ^_\
-bindkey '^_\'  forward-word
+bindkey '^_\'  vi-forward-blank-word-end
+# zutty - cannot distinguish C-S-\ with C-\ with modifyOtherKeys<2
+
+# C-\ - not a good key to use because in a terminal shell from vim
+#       this key is not sent - <C-\><C-n> is mapped to normal mode
+#       C-@ (C-Space) also does not work here ...
+
+#bindkey '^\'   autosuggest-accept
+#bindkey '^\'   vi-forward-blank-word-end
+bindkey '^]'   vi-forward-blank-word-end
+
+# -------
+
 # also C-S-End ...
 bindkey "\e[1;6F" forward-word
 # and C-S-Home to beg line
@@ -1699,12 +1715,6 @@ function ctrl-c-cmdline() {
 zle -N ctrl-c-cmdline
 bindkey '^_/' ctrl-c-cmdline
 
-# terminals may have mapped C-S-<Space> to ^_<Space>
-bindkey '^_ ' autosuggest-accept
-
-# M-U to clear current autosuggest text
-bindkey "\eU" autosuggest-clear
-
 # terminals may have mapped S-<Space> to ^^<Space>
 bindkey -s '^^ ' ' '
 
@@ -1723,14 +1733,16 @@ bindkey -s '^^^M' '^M'
 
 # these all seem benign in vim ...
 
-# C-\ - not a good key to use because in a terminal shell from vim
-#       this key is not sent - <C-\><C-n> is mapped to normal mode
-#       C-@ (C-Space) also does not work here ...
-#bindkey '^\'   autosuggest-accept
-bindkey '^\'   noop
+# terminals may have mapped C-S-<Space> to ^_<Space>
+bindkey '^_ ' autosuggest-accept
+# zutty - cannot distinguish C-S-<Space> with C-<Space> with modifyOtherKeys<2
+bindkey '^ '  autosuggest-accept
+
+# M-U to clear current autosuggest text
+bindkey "\eU" autosuggest-clear
+
 #bindkey "\e "  autosuggest-accept
 #bindkey '^@^@' autosuggest-accept
-bindkey '^]'   autosuggest-accept
 
 bindkey '^K' noop
 
@@ -1773,6 +1785,11 @@ bindkey "\e=" copy-cmdline
 # \M[-]X character with meta bit set
 # \C[-]X control character
 # ^X     control character
+
+# modifyOtherKeys == 2 ctrl-d code -
+bindkey -s "\e[27;5;100~" "\x04"
+# underbar
+bindkey -s "\e[27;2;95~" "_"
 
 # SPECIAL: some terminals may map <C-S-BS> to <C-_><BS> ...
 bindkey -s "^_\x7f" "\x7f"
