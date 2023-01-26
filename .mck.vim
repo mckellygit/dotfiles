@@ -5697,6 +5697,8 @@ call <SID>MapFastKeycode('<F16>',  "\e\<C-u>", 16)
 " then we can used that to map to <C-u> ...
 cnoremap <F16> <C-u>
 
+" NOTE: using <C-r>" will not strip trailing newline (if present) from text in clipboard ...
+
 " <F34> paste after
 nnoremap <silent> <expr> <F34>          (&buftype == 'terminal') ? '' : '<Cmd>call UpdateClipCmd("p")<CR>'
 nnoremap <silent> <expr> <S-Insert>     (&buftype == 'terminal') ? '' : '<Cmd>call UpdateClipCmd("p")<CR>'

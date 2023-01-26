@@ -413,6 +413,7 @@ return {
     -- { key="v",          mods="CTRL|SUPER",    action="Paste" },
     { key="c",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1b[2;5~"} },
     { key="C",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1b[2;5~"} },
+    -- make C-S-v same as std S-Insert esc code as C-S-<letter> cannot usually discern the Shift ...
     { key="v",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1b[2;2~"} },
     { key="V",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1b[2;2~"} },
     { key="c",          mods="CTRL|ALT",      action=wezterm.action.CopyTo "Clipboard" },

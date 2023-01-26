@@ -86,6 +86,8 @@ key_bindings:
   - { key: B,         mods: Control|Shift,   chars: "\x02"        }
 
   # same esc-seq as S-Insert (really cannot be RecieveChar)
+  # make C-S-v same as std S-Insert esc code as C-S-<letter> cannot usually discern the Shift ...
+
   - { key: V,         mods: Control|Shift,   chars: "\x1b[2;2~"       }
   # same esc-seq as C-Insert (really cannot be RecieveChar)
   - { key: C,         mods: Control|Shift,   chars: "\x1b[2;5~"       }
