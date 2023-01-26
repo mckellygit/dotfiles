@@ -8,16 +8,16 @@ extras=""
 do_vim_bundles=""
 if [[ $# -gt 0 ]] ; then
     if [[ "$1" == "-a" || "$1" == "-all" || "$1" == "--a" || "$1" == "--all" ]] ; then
-        extras=" bat neovim delta fzf-git.sh fzf-tab-completion libxkbcommon foot"
+        extras=" bat neovim vim delta fzf-git.sh fzf-tab-completion libxkbcommon foot"
         if [[ $# -gt 1 ]] ; then
             if [[ "$2" == "-a" || "$2" == "-all" || "$2" == "--a" || "$2" == "--all" ]] ; then
-                extras=" $extras alacritty wezterm kitty vim"
+                extras=" $extras cgdb gdb-dashboard gef alacritty wezterm kitty zutty"
             elif [[ "$2" == "-v" ]] ; then
                 do_vim_bundles="yes"
             fi
             if [[ $# -gt 2 ]] ; then
                 if [[ "$3" == "-a" || "$3" == "-all" || "$3" == "--a" || "$3" == "--all" ]] ; then
-                    extras=" $extras alacritty wezterm kitty vim"
+                    extras=" $extras cgdb gdb-dashboard gef alacritty wezterm kitty zutty"
                 elif [[ "$3" == "-v" ]] ; then
                     do_vim_bundles="yes"
                 fi
@@ -27,11 +27,11 @@ if [[ $# -gt 0 ]] ; then
         do_vim_bundles="yes"
         if [[ $# -gt 1 ]] ; then
             if [[ "$2" == "-a" || "$2" == "-all" || "$2" == "--a" || "$2" == "--all" ]] ; then
-                extras=" bat neovim delta fzf-git.sh fzf-tab-completion libxkbcommon foot"
+                extras=" bat neovim vim delta fzf-git.sh fzf-tab-completion libxkbcommon foot"
             fi
             if [[ $# -gt 2 ]] ; then
                 if [[ "$3" == "-a" || "$3" == "-all" || "$3" == "--a" || "$3" == "--all" ]] ; then
-                    extras=" $extras alacritty wezterm kitty vim"
+                    extras=" $extras cgdb gdb-dashboard gef alacritty wezterm kitty zutty"
                 fi
             fi
         fi
@@ -39,7 +39,7 @@ if [[ $# -gt 0 ]] ; then
 fi
 
 cd ~/Downloads
-for d in fd the_silver_searcher ripgrep tmux vifm rtags ccache cgdb tig zsh-autosuggestions zsh-syntax-highlighting $extras
+for d in fd the_silver_searcher ripgrep tmux vifm rtags ccache tig zsh-autosuggestions zsh-syntax-highlighting $extras
 do
     echo "checking $d ..."
     cd $d
@@ -396,6 +396,12 @@ echo ""
 #   git clone https://github.com/iovisor/bcc.git
 
 # ---------------------
+
+# gdb-dashboard:
+#   git clone git@github.com-mckelly:cyrus-and/gdb-dashboard.git
+
+# gef:
+#   git clone https://github.com/hugsy/gef.git
 
 # zsh:
 #   https://github.com/zsh-users/zsh.git
