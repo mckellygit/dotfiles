@@ -11868,6 +11868,12 @@ nnoremap <silent> <expr> <C-w><C-]>  (&buftype == 'terminal') ? 'i' : ''
 " use green to match other vundle update comments
 hi! link Ignore deusGreen
 
+" Zutty BUG with color142
+if exists('$ZUTTY_VERSION')
+    hi! DeusGreenBold ctermfg=2
+    hi! DiffAdd       ctermfg=2
+endif
+
 " seems a little more visible than white against reverse red bg ...
 hi! ErrorMsg ctermfg=black
 hi! WarningMsg ctermfg=black
