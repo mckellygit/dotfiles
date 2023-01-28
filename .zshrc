@@ -862,6 +862,9 @@ alias less='smartless'
 export LESSOPEN="|lessfilter %s"
 export LESS='-iR -K -x4 -c -~'
 
+#export LESSHISTFILE='-'
+export LESSHISTSIZE=20
+
 # number of lines to directly display before entering the pager
 export SMARTLESS_NUM_LINES=$((LINES-6))
 # the pager to be used
