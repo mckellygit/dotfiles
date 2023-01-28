@@ -7,6 +7,8 @@ if [[ -z "${zuttypid}" ]] ; then
     exit 1
 fi
 
+sleep 1.5
+
 winid=$(wmctrl -lp | grep "${zuttypid}" | awk '{print $1}')
 
 if [[ -z "${winid}" ]] ; then
@@ -16,7 +18,7 @@ fi
 
 #echo "wmctrl id = ${winid}" >> /tmp/zutty.log
 
-wmctrl -i -r ${winid} -e 0,690,676,2530,1354
+wmctrl -i -r ${winid} -e 0,690,678,2530,1350
 
 exec $SHELL
 

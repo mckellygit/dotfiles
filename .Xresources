@@ -528,7 +528,7 @@ Zutty.quiet:        true
 Zutty.altScroll:    false
 Zutty.saveLines:    0
 
-Zutty.geometry:     194x54
+Zutty.geometry:     194x53
 Zutty.boldColors:   false
 !!Zutty.font:         LiberationMono-Regular
 !!Zutty.boldFont:     LiberationMono-Regular

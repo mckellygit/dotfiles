@@ -136,7 +136,7 @@ global.get_window_actors().forEach(function (w) {
          mw.get_wm_class().toLowerCase() == 'zutty' ||
          mw.get_wm_class().toLowerCase().includes('.wezterm') ) {
 
-        if ( ( (mw.get_title().toLowerCase().includes('tmux:xterm')) && !(mw.get_title().toLowerCase().includes('kitty')) ) ||
+        if ( ( (mw.get_title().toLowerCase().includes('SKIPtmux:xterm')) && !(mw.get_title().toLowerCase().includes('kitty')) ) ||
              mw.get_wm_class().toLowerCase().includes('.wezterm') ) {
             GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, function() { mw.move_resize_frame(1, 690, 678, 2540, 1362); });
         } else {
@@ -220,7 +220,7 @@ global.get_window_actors().forEach(function (w) {
 
             GLib.usleep(100000);
 
-            if ( ( (mw.get_title().toLowerCase().includes('tmux:xterm')) && !(mw.get_title().toLowerCase().includes('kitty')) ) ||
+            if ( ( (mw.get_title().toLowerCase().includes('SKIPtmux:xterm')) && !(mw.get_title().toLowerCase().includes('kitty')) ) ||
                  mw.get_wm_class().toLowerCase().includes('.wezterm') ) {
                 // mw.move_resize_frame(0, $X, $Y, 2540, 1362);
                 GLib.timeout_add(GLib.PRIORITY_DEFAULT, 1500, function() { mw.move_resize_frame(1, 690, 678, 2540, 1362); });
