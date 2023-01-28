@@ -530,10 +530,14 @@ Zutty.saveLines:    0
 
 Zutty.geometry:     194x54
 Zutty.boldColors:   false
-Zutty.font:         LiberationMono-Regular
-Zutty.boldFont:     LiberationMono-Regular
-Zutty.fontsize:     20
-Zutty.fontpath:     /usr/share/fonts
+!!Zutty.font:         LiberationMono-Regular
+!!Zutty.boldFont:     LiberationMono-Regular
+Zutty.font:         lucidatypewriterregular
+Zutty.boldFont:     lucidatypewriterregular
+!!Zutty.font:         JetBrainsMono-Regular
+!!Zutty.boldFont:     JetBrainsMono-Regular
+Zutty.fontsize:     21
+Zutty.fontpath:     /home/kellma02/.local/share/fonts:/usr/share/fonts
 
 Zutty.fg:           #c5c5c5
 Zutty.bg:           #14292e

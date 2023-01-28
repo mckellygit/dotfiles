@@ -1,0 +1,22 @@
+#!/bin/bash
+
+zuttypid=$(pgrep zutty)
+
+if [[ -z "${zuttypid}" ]] ; then
+    echo "no zutty pid" >> /tmp/zutty.log
+    exit 1
+fi
+
+winid=$(wmctrl -lp | grep "${zuttypid}" | awk '{print $1}')
+
+if [[ -z "${winid}" ]] ; then
+    echo "no zutty wmctrl id" >> /tmp/zutty.log
+    exit 1
+fi
+
+#echo "wmctrl id = ${winid}" >> /tmp/zutty.log
+
+wmctrl -i -r ${winid} -e 0,690,676,2530,1354
+
+exec $SHELL
+
