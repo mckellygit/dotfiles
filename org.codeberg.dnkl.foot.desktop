@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Exec=foot term_win_loc start
+Icon=/usr/local/share/icons/hicolor/scalable/apps/foot.svg
+Terminal=false
+Categories=System;TerminalEmulator;
+Keywords=shell;prompt;command;commandline;
+
+Name=Foot term_win_loc start
+GenericName=Terminal
+Comment=A wayland native terminal emulator

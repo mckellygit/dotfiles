@@ -2,7 +2,7 @@
 Type=Application
 TryExec=wezterm
 Exec=wezterm start -- term_win_loc start
-Icon=/usr/share/icons/hicolor/scalable/apps/wezterm.svg
+Icon=/usr/local/share/icons/hicolor/scalable/apps/wezterm.svg
 Terminal=false
 Categories=System;TerminalEmulator;
 

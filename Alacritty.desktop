@@ -16,4 +16,4 @@ X-Desktop-File-Install-Version=0.23
 
 [Desktop Action New]
 Name=New Terminal
-Exec=alacritty
+Exec=alacritty -e term_win_loc start
