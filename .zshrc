@@ -1192,12 +1192,17 @@ cx() {
     if [[ $# -ge 1 ]] ; then
         cd $1 2> /dev/null
         shift
-        local result=$(tere -d -f -S --autocd-timeout off --history-file '' "$@")
+        local result=$(command tere -f -d -S --autocd-timeout 400 --history-file '' -m ctrl-x:Exit -m ctrl-q:Exit -m alt-Enter:Exit "$@")
         [ -n "$result" ] && cd -- "$result"
     else
-        local result=$(tere -d -f -S --autocd-timeout off --history-file '' "$@")
+        local result=$(command tere -f -d -S --autocd-timeout 400 --history-file '' -m ctrl-x:Exit -m ctrl-q:Exit -m alt-Enter:Exit "$@")
         [ -n "$result" ] && cd -- "$result"
     fi
+}
+
+tere() {
+    local result=$(command tere -f -d -S --autocd-timeout 400 --history-file '' -m ctrl-x:Exit -m ctrl-q:Exit -m alt-Enter:Exit "$@")
+    [ -n "$result" ] && cd -- "$result"
 }
 
 # -----------------------
