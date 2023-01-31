@@ -1799,6 +1799,9 @@ bindkey -s "\e[27;5;100~" "\x04"
 # underbar
 bindkey -s "\e[27;2;95~" "_"
 
+# ctrl-z
+bindkey "^z" noop
+
 # SPECIAL: some terminals may map <C-S-BS> to <C-_><BS> ...
 bindkey -s "^_\x7f" "\x7f"
 # SPECIAL: some terminals may map <C-BS> to <C-^><BS> ...
