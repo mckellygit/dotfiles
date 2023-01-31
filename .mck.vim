@@ -3514,11 +3514,12 @@ endif
 " vim terminfo adjustments (from kitty).
 " NOTE: set all these BEFORE setting colorscheme and AFTER setting term
 
-" Zutty BUG with bold and reverse attributes ...
-if exists('$ZUTTY_VERSION')
-    let g:deus_bold=0
-    let g:deus_inverse=0
-endif
+" Zutty if true color support is on (Tc or RGB) BUG with bold and reverse attributes ...
+" set before loading colorscheme ...
+"if exists('$ZUTTY_VERSION')
+"    let g:deus_bold=0
+"    let g:deus_inverse=0
+"endif
 
 " check for specific term ? (alacritty, wezterm, kitty, foot ?)
 if !has("nvim")
@@ -3599,11 +3600,12 @@ colorscheme deus
 "colorscheme gruvbox
 "colorscheme srcery
 
-" Zutty BUG with bold and reverse attributes ...
-if exists('$ZUTTY_VERSION')
-    hi! DeusGreenBold cterm=none ctermfg=142 ctermbg=235
-    hi! DiffAdd       cterm=none ctermfg=235 ctermbg=142
-endif
+" Zutty if true color support is on (Tc or RGB) BUG with bold and reverse attributes ...
+" set after loading colorscheme ...
+"if exists('$ZUTTY_VERSION')
+"    hi! DeusGreenBold cterm=none ctermfg=142 ctermbg=235
+"    hi! DiffAdd       cterm=none ctermfg=235 ctermbg=142
+"endif
 
 " do not use delete/wipe with qf/ll ...
 set nohidden
