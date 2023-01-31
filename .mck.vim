@@ -3479,13 +3479,13 @@ if !has("nvim") && (&term =~ "^screen" || &term =~ "tmux")
 endif
 
 "if exists('$ST_VERSION')
-  " NOTE: this DISABLES modifyOtherKeys
+"  " NOTE: this DISABLES modifyOtherKeys
 "  let &t_TI=""
 "  let &t_TE=""
 "endif
 
 "if exists('$ZUTTY_VERSION')
-  " NOTE: this ENABLES modifyOtherKeys=2
+"  " NOTE: this ENABLES modifyOtherKeys=2
 "  let &t_TI = "\<Esc>[>4;2m"
 "  let &t_TE = "\<Esc>[>4;m"
 "endif
@@ -3513,6 +3513,12 @@ endif
 
 " vim terminfo adjustments (from kitty).
 " NOTE: set all these BEFORE setting colorscheme and AFTER setting term
+
+" Zutty BUG with bold and reverse attributes ...
+if exists('$ZUTTY_VERSION')
+    let g:deus_bold=0
+    let g:deus_inverse=0
+endif
 
 " check for specific term ? (alacritty, wezterm, kitty, foot ?)
 if !has("nvim")
@@ -3593,6 +3599,12 @@ colorscheme deus
 "colorscheme gruvbox
 "colorscheme srcery
 
+" Zutty BUG with bold and reverse attributes ...
+if exists('$ZUTTY_VERSION')
+    hi! DeusGreenBold cterm=none ctermfg=142 ctermbg=235
+    hi! DiffAdd       cterm=none ctermfg=235 ctermbg=142
+endif
+
 " do not use delete/wipe with qf/ll ...
 set nohidden
 set bufhidden=hide
@@ -3608,6 +3620,10 @@ set redrawtime=10000
 set confirm
 
 set noshowmode
+
+if has("nvim")
+  set termpastefilter="BS,HT,ESC,DEL,C0,C1"
+endif
 
 " remove prev visual mark
 delmarks v
@@ -11867,12 +11883,6 @@ nnoremap <silent> <expr> <C-w><C-]>  (&buftype == 'terminal') ? 'i' : ''
 "hi! link Ignore deusPurple
 " use green to match other vundle update comments
 hi! link Ignore deusGreen
-
-" Zutty BUG with color142
-if exists('$ZUTTY_VERSION')
-    hi! DeusGreenBold ctermfg=2
-    hi! DiffAdd       ctermfg=2
-endif
 
 " seems a little more visible than white against reverse red bg ...
 hi! ErrorMsg ctermfg=black
