@@ -266,6 +266,8 @@ window:
   # (foreground color csd titlebar can be distracting)
   decorations: full
 
+  decorations_theme_variant: Dark
+
   startup_mode: Windowed
 
   title: Alacritty
