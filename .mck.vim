@@ -8151,6 +8151,7 @@ endfunction
 " ---------
 
 " could also remap these to prevent a 1<C-d> from changing &scroll value ...
+" could also have these be the same as CtrlF(1) / CtrlB(1) ...
 if !has("nvim")
     nnoremap <silent> <expr> <C-D> (line('.') == line('w0')) ? "M" : &scroll . "<C-D>"
     vnoremap <silent> <expr> <C-D> (line('.') == line('w0')) ? "M" : &scroll . "<C-D><C-l>"
@@ -8826,6 +8827,11 @@ endfunction
 
 " ---------
 
+if has("nvim")
+    let g:alt_J2 = nvim_replace_termcodes("<M-J><M-J>", v:true, v:false, v:true)
+    let g:alt_K2 = nvim_replace_termcodes("<M-K><M-K>", v:true, v:false, v:true)
+endif
+
 function s:CtrlF(multi) abort
     let l:ol = line('.')
     let l:owl = winline()
@@ -8838,22 +8844,26 @@ function s:CtrlF(multi) abort
         execute "keepjumps normal 5gj"
         return
     endif
+    " this makes nvim not flash sign column ...
+    " but so does using 10 below ...
+    "if (a:multi == 1 && has("nvim"))
+    "    "call feedkeys("\<M-J>\<M-J>", "t")
+    "    call nvim_feedkeys(g:alt_J2, 't', v:false)
+    "    return
+    "endif
     let prevsj=&scrolljump
     let &scrolljump=1
     let &scrolloff=10
     let save_scroll = &scroll
     if (a:multi == 2)
         " want normal! here
-        execute "keepjumps normal! " . g:half . "\<C-d>\<C-d>"
-    elseif (a:multi == 3)
-        " want normal! here
-        execute "keepjumps normal! " . g:half . "\<C-d>\<C-d>\<C-d>"
+        execute "keepjumps normal! " . g:full . "\<C-d>"
     elseif (a:multi == 4)
         " want normal! here
-        execute "keepjumps normal! " . g:half . "\<C-d>\<C-d>\<C-d>\<C-d>"
+        execute "keepjumps normal! " . g:full . "\<C-d>\<C-d>"
     else
         " want normal! here
-        execute "keepjumps normal! " . g:half . "\<C-d>"
+        execute "keepjumps normal! " . 10 . "\<C-d>"
     endif
     let &scroll = save_scroll
     let l:hgt = winheight(0)
@@ -8885,22 +8895,26 @@ function s:CtrlB(multi) abort
         execute "keepjumps normal 5gk"
         return
     endif
+    " this makes nvim not flash sign column ...
+    " but so does using 10 below ...
+    "if (a:multi == 1 && has("2nvim"))
+    "    "call feedkeys("\<M-K>\<M-K>", "t")
+    "    call nvim_feedkeys(g:alt_K2, 't', v:false)
+    "    return
+    "endif
     let prevsj=&scrolljump
     let &scrolljump=1
     let &scrolloff=10
     let save_scroll = &scroll
     if (a:multi == 2)
         " want normal! here
-        execute "keepjumps normal! " . g:hal1 . "\<C-u>\<C-u>"
-    elseif (a:multi == 3)
-        " want normal! here
-        execute "keepjumps normal! " . g:hal1 . "\<C-u>\<C-u>\<C-u>"
+        execute "keepjumps normal! " . g:full . "\<C-u>"
     elseif (a:multi == 4)
         " want normal! here
-        execute "keepjumps normal! " . g:hal1 . "\<C-u>\<C-u>\<C-u>\<C-u>"
+        execute "keepjumps normal! " . g:full . "\<C-u>\<C-u>"
     else
         " want normal! here
-        execute "keepjumps normal! " . g:hal1 . "\<C-u>"
+        execute "keepjumps normal! " . 10 . "\<C-u>"
     endif
     let &scroll = save_scroll
     let l:nwl = winline()
@@ -9015,12 +9029,16 @@ function! s:MapScrollKeys()
 
   "noremap            <expr> <C-f> (line('.') == line('w0')) ? g:hdn : '<C-D>'
   nnoremap <silent> <C-f> :call <SID>CtrlF(1)<CR>
+  "nnoremap <silent> <expr> <C-f>  (line('.') == line('w0')) ? 'M' : ((line('$') - line('w$')) < 5) ? 'mfG`f10j' : '10<C-e>10j'
+
   "vnoremap <silent> <expr> <C-f> (line('v') < line('.')) ? g:half . 'gjzz6gj' : g:half . 'gjzz6gk'
   execute 'vnoremap <silent> <expr> <C-f> ' . g:hdn
   inoremap  <silent> <expr> <C-f> pumvisible() ? '<C-f>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
 
   "noremap            <expr> <C-b> (line('.') == line('w$')) ? g:hup : '<C-U>'
   nnoremap <silent> <C-b> :call <SID>CtrlB(1)<CR>
+  "nnoremap <silent> <expr> <C-b>  (line('.') == line('w$')) ? 'M' : '10<C-y>10k'
+
   "vnoremap <silent> <expr> <C-b> (line('v') > line('.')) ? g:hal1 . 'gkzz6gk' : g:hal1 . 'gkzz6gj'
   execute 'vnoremap <silent> <expr> <C-b> ' . g:hup
   inoremap  <silent> <expr> <C-b> pumvisible() ? '<C-b>' : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
