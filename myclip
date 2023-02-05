@@ -216,6 +216,8 @@ if [[ $have_args -eq 0 || $have_dash -eq 1 ]] ; then
         printf "\ePtmux;\e\e]52;c;%s\a\e\\" "$inputtext" > $out_tty
     else
         if [[ $have_rmnl -eq 1 && $have_dash -eq 1 ]] ; then
+#           TODO: strip all trailing newlines ?
+#           sed -e :a -e '/^\n*$/{$d;N;ba' -e '}' | sed -z '$s/\n$//' | copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input()); text=input(); if (text.length>0) { addUnique(input()) }"
             sed -z '$s/\n$//' | copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input()); text=input(); if (text.length>0) { addUnique(input()) }"
         else
             copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input()); text=input(); if (text.length>0) { addUnique(input()) }"
