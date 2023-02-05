@@ -3367,8 +3367,8 @@ if has("nvim")
         let g:clipboard = {
             \   'name': 'myclip',
             \   'copy': {
-            \      '+': 'myclip -',
-            \      '*': 'myclip -',
+            \      '+': 'myclip --rmlastnl -',
+            \      '*': 'myclip --rmlastnl -',
             \    },
             \   'paste': {
             \      '+': 'myclip --o',
@@ -4298,7 +4298,7 @@ function! s:PreserveClipboard() abort
             " NOTE: dont seem to need this if block - but why ?
             let regtype = getregtype('*')
             if ! (regtype =~ "")
-                silent call system("myclip -", getreg('*'))
+                silent call system("myclip --rmlastnl -", getreg('*'))
             endif
         endif
         " -------------------------------------
@@ -5021,7 +5021,7 @@ function! ForceLoadNammedReg() abort
                 echohl DiffText | echo "copying @\" to remote clipboard ..." | echohl None
             endif
             " NOTE: if g:is_ttyterm then myclip will use osc52 to send to remote clipboard ...
-            call system("myclip -", getreg('"'))
+            call system("myclip --rmlastnl -", getreg('"'))
             if g:is_ttyterm > 1 && clen > 10000
                 redraw!
             endif
