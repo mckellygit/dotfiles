@@ -12,8 +12,12 @@ sleep 1.5
 winid=$(wmctrl -lp | grep "${zuttypid}" | awk '{print $1}')
 
 if [[ -z "${winid}" ]] ; then
-    echo "no zutty wmctrl id" >> /tmp/zutty.log
-    exit 1
+    sleep 1.5
+    winid=$(wmctrl -lp | grep "${zuttypid}" | awk '{print $1}')
+    if [[ -z "${winid}" ]] ; then
+        echo "no zutty wmctrl id" >> /tmp/zutty.log
+        exit 1
+    fi
 fi
 
 #echo "wmctrl id = ${winid}" >> /tmp/zutty.log
