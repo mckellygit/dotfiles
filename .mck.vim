@@ -8153,14 +8153,18 @@ endfunction
 " could also remap these to prevent a 1<C-d> from changing &scroll value ...
 " could also have these be the same as CtrlF(1) / CtrlB(1) ...
 if !has("nvim")
-    nnoremap <silent> <expr> <C-D> (line('.') == line('w0')) ? "M" : &scroll . "<C-D>"
+    "nnoremap <silent> <expr> <C-D> (line('.') == line('w0')) ? "M" : &scroll . "<C-D>"
+    nnoremap <silent> <C-D> <Cmd>call <SID>CtrlF(2)<CR>
     vnoremap <silent> <expr> <C-D> (line('.') == line('w0')) ? "M" : &scroll . "<C-D><C-l>"
-    nnoremap <silent> <expr> <C-U> (line('.') == line('w$')) ? "M" : &scroll . "<C-U>"
+    "nnoremap <silent> <expr> <C-U> (line('.') == line('w$')) ? "M" : &scroll . "<C-U>"
+    nnoremap <silent> <C-U> <Cmd>call <SID>CtrlB(2)<CR>
     vnoremap <silent> <expr> <C-U> (line('.') == line('w$')) ? "M" : &scroll . "<C-U><C-l>"
 else
-    nnoremap <silent> <expr> <C-D> (line('.') == line('w0')) ? "M" : &scroll . "<C-D>"
+    "nnoremap <silent> <expr> <C-D> (line('.') == line('w0')) ? "M" : &scroll . "<C-D>"
+    nnoremap <silent> <C-D> <Cmd>call <SID>CtrlF(2)<CR>
     vnoremap <silent> <expr> <C-D> (line('.') == line('w0')) ? "M" : &scroll . "<C-D>"
-    nnoremap <silent> <expr> <C-U> (line('.') == line('w$')) ? "M" : &scroll . "<C-U>"
+    "nnoremap <silent> <expr> <C-U> (line('.') == line('w$')) ? "M" : &scroll . "<C-U>"
+    nnoremap <silent> <C-U> <Cmd>call <SID>CtrlB(2)<CR>
     vnoremap <silent> <expr> <C-U> (line('.') == line('w$')) ? "M" : &scroll . "<C-U>"
 endif
 
