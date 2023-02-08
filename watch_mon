@@ -1,0 +1,35 @@
+#!/bin/bash
+
+xrandr -q 2>/dev/null | grep -q '3840x2160'
+rc=$?
+if [[ $rc -eq 0 ]] ; then
+    prev=0
+    curr=0
+else
+    prev=1
+    curr=1
+fi
+
+while true
+do
+    xrandr -q 2>/dev/null | grep -q '3840x2160'
+    rc=$?
+    if [[ $rc -eq 0 ]] ; then
+        curr=0
+        if [[ $curr -ne $prev ]] ; then
+            echo "term_win_loc ..."
+            prev=0
+            sleep 2
+            term_win_loc
+        fi
+    else
+        curr=1
+        if [[ $curr -ne $prev ]] ; then
+            echo "smaller monitor ..."
+            prev=1
+        fi
+    fi
+
+    sleep 1
+done
+
