@@ -8838,14 +8838,25 @@ endif
 
 function s:CtrlF(multi) abort
     let l:ol = line('.')
+    let l:owc = wincol()
     let l:owl = winline()
-    if (line('.') == line("w0"))
+    if (l:ol == line("w0"))
         execute "keepjumps normal " . g:half . "gj"
+        let l:nwc = wincol()
+        if l:nwc > 25
+            let l:cdiff = l:nwc - 25
+            execute "keepjumps normal " . l:cdiff . "h"
+        endif
         return
     endif
-    let l:dff = line('$') - line('.')
+    let l:dff = line('$') - l:ol
     if (l:dff <= 10)
         execute "keepjumps normal 5gj"
+        let l:nwc = wincol()
+        if l:nwc > 25
+            let l:cdiff = l:nwc - 25
+            execute "keepjumps normal " . l:cdiff . "h"
+        endif
         return
     endif
     " this makes nvim not flash sign column ...
@@ -8870,9 +8881,9 @@ function s:CtrlF(multi) abort
         execute "keepjumps normal! " . 10 . "\<C-d>"
     endif
     let &scroll = save_scroll
-    let l:hgt = winheight(0)
+"   let l:hgt = winheight(0)
     let l:nwl = winline()
-    let l:dff = l:hgt - l:nwl
+"   let l:dff = l:hgt - l:nwl
 "   to prevent flip-flopping ...
 "   if (l:dff < 10)
 "       let l:nxt = 10 - l:dff
@@ -8882,6 +8893,34 @@ function s:CtrlF(multi) abort
     let l:nl = line('.')
     if (l:owl == l:nwl && l:ol == l:nl)
         execute "keepjumps normal 5gj"
+        let l:nwc = wincol()
+        if l:nwc > 25
+            let l:cdiff = l:nwc - 25
+            execute "keepjumps normal " . l:cdiff . "h"
+        endif
+    else
+        " if not already at bot ...
+        if (line('w$') == line('$'))
+            execute "keepjumps normal 5gj"
+            let l:nwc = wincol()
+            if l:nwc > 25
+                let l:cdiff = l:nwc - 25
+                execute "keepjumps normal " . l:cdiff . "h"
+            endif
+        else
+            if l:nwl > l:owl
+                let l:diff = l:nwl - l:owl
+                execute "keepjumps normal " . l:diff . "gk"
+            elseif l:owl > l:nwl
+                let l:diff = l:owl - l:nwl
+                execute "keepjumps normal " . l:diff . "gj"
+            endif
+            let l:nwc = wincol()
+            if l:nwc > 25
+                let l:cdiff = l:nwc - 25
+                execute "keepjumps normal " . l:cdiff . "h"
+            endif
+        endif
     endif
     let &scrolloff=0
     let &scrolljump=prevsj
@@ -8889,14 +8928,25 @@ endfunction
 
 function s:CtrlB(multi) abort
     let l:ol = line('.')
+    let l:owc = wincol()
     let l:owl = winline()
-    if (line('.') == line("w$"))
+    if (l:ol == line("w$"))
         execute "keepjumps normal " . g:hal1 . "gk"
+        let l:nwc = wincol()
+        if l:nwc > 25
+            let l:cdiff = l:nwc - 25
+            execute "keepjumps normal " . l:cdiff . "h"
+        endif
         return
     endif
-    let l:dff = line('.')
+    let l:dff = l:ol
     if (l:dff <= 10)
         execute "keepjumps normal 5gk"
+        let l:nwc = wincol()
+        if l:nwc > 25
+            let l:cdiff = l:nwc - 25
+            execute "keepjumps normal " . l:cdiff . "h"
+        endif
         return
     endif
     " this makes nvim not flash sign column ...
@@ -8922,7 +8972,7 @@ function s:CtrlB(multi) abort
     endif
     let &scroll = save_scroll
     let l:nwl = winline()
-    let l:dff = l:nwl
+"   let l:dff = l:nwl
 "   to prevent flip-flopping ...
 "   if (l:dff < 10)
 "       let l:nxt = 10 - l:dff
@@ -8932,6 +8982,34 @@ function s:CtrlB(multi) abort
     let l:nl = line('.')
     if (l:owl == l:nwl && l:ol == l:nl)
         execute "keepjumps normal 5gk"
+        let l:nwc = wincol()
+        if l:nwc > 25
+            let l:cdiff = l:nwc - 25
+            execute "keepjumps normal " . l:cdiff . "h"
+        endif
+    else
+        " if not already at top ...
+        if (line('w0') == 1)
+            execute "keepjumps normal 5gk"
+            let l:nwc = wincol()
+            if l:nwc > 25
+                let l:cdiff = l:nwc - 25
+                execute "keepjumps normal " . l:cdiff . "h"
+            endif
+        else
+            if l:nwl > l:owl
+                let l:diff = l:nwl - l:owl
+                execute "keepjumps normal " . l:diff . "gk"
+            elseif l:owl > l:nwl
+                let l:diff = l:owl - l:nwl
+                execute "keepjumps normal " . l:diff . "gj"
+            endif
+            let l:nwc = wincol()
+            if l:nwc > 25
+                let l:cdiff = l:nwc - 25
+                execute "keepjumps normal " . l:cdiff . "h"
+            endif
+        endif
     endif
     let &scrolloff=0
     let &scrolljump=prevsj
