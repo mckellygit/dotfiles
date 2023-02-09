@@ -390,10 +390,15 @@ echo ""
 
 # FlameGraph
 #   git clone https://github.com/brendangregg/FlameGraph.git
+
 # perf-tools
 #   git clone https://github.com/brendangregg/perf-tools.git
+
 # bcc
 #   git clone https://github.com/iovisor/bcc.git
+
+# flamegraph (cargo):
+#   git clone https://github.com/flamegraph-rs/flamegraph.git
 
 # ---------------------
 
