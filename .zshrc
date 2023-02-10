@@ -1156,7 +1156,7 @@ vdiff()
         else
             nvimdiff $@
         fi
-    elif [[ "$VDIFF" == "vdiff" ]] ; then
+    elif [[ "$VDIFF" == "vimdiff" ]] ; then
         vimdiff $@
     else
         nvimdiff $@
