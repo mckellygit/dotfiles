@@ -20,4 +20,7 @@ log running xhost command
 # when using sudo vim (gvim) ...
 xhost +local: > /dev/null 2>&1
 
+term_win_loc
+log running term_win_loc command
+
 log xmodmap completed

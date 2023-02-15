@@ -110,6 +110,13 @@ global.get_window_actors().forEach(function (w) {
 
                 GLib.timeout_add(GLib.PRIORITY_LOW, 500, function() { mw.raise(); });
 
+                const x1 = 5;
+                const y1 = 10;
+                const seat = Clutter.get_default_backend().get_default_seat();
+                seat.warp_pointer(x1, y1);
+
+                GLib.usleep(100000);
+
                 quick = 1;
                 once = 0;
             }
