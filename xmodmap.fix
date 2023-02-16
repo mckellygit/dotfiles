@@ -6,7 +6,12 @@ log() {
     echo $(date +%Y-%m-%d\ %X) -- $USER -- "$@" >> ${logfile}
 }
 
-sleep 5
+sleep 1
+
+term_win_loc
+log running term_win_loc command
+
+sleep 4
 
 log running xrdb command
 
@@ -19,8 +24,5 @@ log running xhost command
 # to try and eliminate msg: Invalid MIT-MAGIC-COOKIE-1 key ...
 # when using sudo vim (gvim) ...
 xhost +local: > /dev/null 2>&1
-
-term_win_loc
-log running term_win_loc command
 
 log xmodmap completed
