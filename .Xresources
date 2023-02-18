@@ -548,7 +548,7 @@ Zutty.cr:           #d78700
 
 !! see: https://tomscii.sig7.se/zutty/doc/KEYS.html
 Zutty.altSendsEscape:  true
-!! 0, 1, 2
+!! 0, 1, 2 - 2 works in nvim but not in shell for even basic keys like Shift+<letter>
 Zutty.modifyOtherKeys: 1
 
 !! black
