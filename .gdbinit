@@ -1,5 +1,9 @@
 set pagination off
 set auto-load safe-path /
+set history filename ~/.gdb_history
+set history size 50
+set history remove-duplicates 1000
+set history save on
 source ~/.cgdb/ShellPipeCommand.py
 set confirm off
 set print object on
