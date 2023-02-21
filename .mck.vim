@@ -102,239 +102,233 @@ let @j="0"
 let g:oscroll = &scroll
 
 " ====================================================
-" --- vundle -----------------------------------------
+" *MUST* have this to find plugins in ~/.vim/* dirs ...
+set rtp+=~/.vim
 " ====================================================
-filetype off              " required
-"" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-"
+
 " fzf from git install in ~/.fzf
 set rtp+=~/.fzf
-"
-" this files mappings for help, ~/.vim/doc/mck.txt ...
-set rtp+=~/.vim
-"
-call vundle#begin()
-"" alternatively, pass a path where Vundle should install plugins
-""call vundle#begin('~/some/path/here')
-"" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
-"" Add Plugins here ...
-"
+
+" ====================================================
+" --- vim-plug ---------------------------------------
+" ====================================================
+
+call plug#begin('~/.vim/bundle')
+Plug 'junegunn/vim-plug'
 " required utils for EnhancedJumps plugin
 " NOTE: use stable branch
-Plugin 'inkarkat/vim-ingo-library'
+Plug 'inkarkat/vim-ingo-library'
 " Awesome paste options
-Plugin 'inkarkat/vim-UnconditionalPaste'
+Plug 'inkarkat/vim-UnconditionalPaste'
 " . (dot) repeat in visual-mode
-Plugin 'inkarkat/vim-visualrepeat'
+Plug 'inkarkat/vim-visualrepeat'
 "
 " many useful vim lib routines
-"Plugin 'LucHermitte/lh-vim-lib'
+"Plug 'LucHermitte/lh-vim-lib'
 "
 " bracketed paste mode ?
-"Plugin 'ConradIrwin/vim-bracketed-paste'
+"Plug 'ConradIrwin/vim-bracketed-paste'
 "
 " mother of auto-completion
-"Plugin 'Valloric/YouCompleteMe'
+"Plug 'Valloric/YouCompleteMe'
 "
 " vim-clang auto-completion
-"Plugin 'justmao945/vim-clang'
-Plugin 'mckellygit/vim-clang'
+"Plug 'justmao945/vim-clang'
+Plug 'mckellygit/vim-clang'
 "
 " rooter for :Files and FileBeagle (<Leader>fb)
-"Plugin 'airblade/vim-rooter'
+"Plug 'airblade/vim-rooter'
 " slightly different method
-Plugin 'mattn/vim-findroot'
+Plug 'mattn/vim-findroot'
 "
 " rtags for code navigation (**modified++)
-"Plugin 'lyuts/vim-rtags'
-Plugin 'mckellygit/vim-rtags'
+"Plug 'lyuts/vim-rtags'
+Plug 'mckellygit/vim-rtags'
 "
 " ---------------------
 "
 if g:has_wsl == 0 && has("nvim")
-    Plugin 'neovim/nvim-lspconfig'
-    Plugin 'nvim-treesitter/nvim-treesitter'
+    Plug 'neovim/nvim-lspconfig'
+    Plug 'nvim-treesitter/nvim-treesitter'
     "https://github.com/tree-sitter/tree-sitter.git
-    Plugin 'hrsh7th/nvim-compe'
+    Plug 'hrsh7th/nvim-compe'
 
-    "Plugin 'hrsh7th/nvim-cmp'
-    "Plugin 'nvim-telescope/telescope.nvim'
-    "Plugin 'kabouzeid/nvim-lspinstall'
+    "Plug 'hrsh7th/nvim-cmp'
+    "Plug 'nvim-telescope/telescope.nvim'
+    "Plug 'kabouzeid/nvim-lspinstall'
 
     " LSP Support
-    "Plugin 'neovim/nvim-lspconfig'
-    "Plugin 'williamboman/mason.nvim'
-    "Plugin 'williamboman/mason-lspconfig.nvim'
+    "Plug 'neovim/nvim-lspconfig'
+    "Plug 'williamboman/mason.nvim'
+    "Plug 'williamboman/mason-lspconfig.nvim'
 
     " Autocompletion
-    "Plugin 'hrsh7th/nvim-cmp'
-    "Plugin 'hrsh7th/cmp-buffer'
-    "Plugin 'hrsh7th/cmp-path'
-    "Plugin 'saadparwaiz1/cmp_luasnip'
-    "Plugin 'hrsh7th/cmp-nvim-lsp'
-    "Plugin 'hrsh7th/cmp-nvim-lua'
+    "Plug 'hrsh7th/nvim-cmp'
+    "Plug 'hrsh7th/cmp-buffer'
+    "Plug 'hrsh7th/cmp-path'
+    "Plug 'saadparwaiz1/cmp_luasnip'
+    "Plug 'hrsh7th/cmp-nvim-lsp'
+    "Plug 'hrsh7th/cmp-nvim-lua'
 
     " Snippets
-    "Plugin 'L3MON4D3/LuaSnip'
-    "Plugin 'rafamadriz/friendly-snippets'
+    "Plug 'L3MON4D3/LuaSnip'
+    "Plug 'rafamadriz/friendly-snippets'
 
-    "Plugin 'VonHeikemen/lsp-zero.nvim'
+    "Plug 'VonHeikemen/lsp-zero.nvim'
 endif
 "
-"Plugin 'natebosch/vim-lsc'
+"Plug 'natebosch/vim-lsc'
 "
-"Plugin 'prabirshrestha/vim-lsp'
-"Plugin 'mattn/vim-lsp-settings'
-"Plugin 'prabirshrestha/asyncomplete.vim'
-"Plugin 'prabirshrestha/asyncomplete-lsp.vim'
+"Plug 'prabirshrestha/vim-lsp'
+"Plug 'mattn/vim-lsp-settings'
+"Plug 'prabirshrestha/asyncomplete.vim'
+"Plug 'prabirshrestha/asyncomplete-lsp.vim'
 "
 " ---------------------
 "
 " echodoc function completion
-"Plugin 'Shougo/echodoc.vim'
+"Plug 'Shougo/echodoc.vim'
 "
 " qf/loclist window in all windows/tabs
-Plugin 'yssl/QFEnter'
+Plug 'yssl/QFEnter'
 " only diff is if new tab from qf then orig tab focus
 " restores to before entering qf
-"Plugin 'mckellygit/QFEnter'
+"Plug 'mckellygit/QFEnter'
 "
 " qf grep / filter
-Plugin 'sk1418/QFGrep'
-"Plugin 'tommcdo/vim-lister'
+Plug 'sk1418/QFGrep'
+"Plug 'tommcdo/vim-lister'
 " NOTE: built-in C/LFilter can also do this
 "
 " qf edit
-"Plugin 'itchyny/vim-qfedit'
+"Plug 'itchyny/vim-qfedit'
 "
 " find and replace
-"Plugin 'brooth/far.vim'
+"Plug 'brooth/far.vim'
 "
 " qf preview popup
 " NOTE: qf-preview is not compatible with nvim
-"Plugin 'mckellygit/vim-qf-preview'
-"Plugin 'bfrg/vim-qf-preview'
-Plugin 'mckellygit/quickr-preview.vim'
-"Plugin 'ronakg/quickr-preview.vim'
-"Plugin 'skywind3000/vim-quickui'
+"Plug 'mckellygit/vim-qf-preview'
+"Plug 'bfrg/vim-qf-preview'
+Plug 'mckellygit/quickr-preview.vim'
+"Plug 'ronakg/quickr-preview.vim'
+"Plug 'skywind3000/vim-quickui'
 "
 " other qf plugin
-"Plugin 'romainl/vim-qf'
+"Plug 'romainl/vim-qf'
 "
 " other bufutils
-"Plugin 'smitajit/bufutils.vim'
+"Plug 'smitajit/bufutils.vim'
 "
 " for managing and moving windows/tabs
-"Plugin 'yssl/TWcmd.vim'
+"Plug 'yssl/TWcmd.vim'
 " Alias q TWcmd wcm q
 " nmap <Leader>qq :TWcmd wcm q<CR>
 "
 " fswitch to switch between .cpp/.h{pp} (**modified++)
-"Plugin 'derekwyatt/vim-fswitch'
-Plugin 'mckellygit/vim-fswitch'
+"Plug 'derekwyatt/vim-fswitch'
+Plug 'mckellygit/vim-fswitch'
 "
 " FileBeagle for dir/file browsing (**modified++)
-"Plugin 'jeetsukumaran/vim-filebeagle'
-Plugin 'mckellygit/vim-filebeagle'
+"Plug 'jeetsukumaran/vim-filebeagle'
+Plug 'mckellygit/vim-filebeagle'
 "
-"Plugin 'tpope/vim-vinegar'
-"Plugin 'scrooloose/nerdtree'
-"Plugin 'jistr/vim-nerdtree-tabs'
+"Plug 'tpope/vim-vinegar'
+"Plug 'scrooloose/nerdtree'
+"Plug 'jistr/vim-nerdtree-tabs'
 "
 " fugitive for more git utils
-Plugin 'tpope/vim-fugitive'
+Plug 'tpope/vim-fugitive'
 " for :Gbrowse to open GitHub urls (via xdg-open)
-"Plugin 'tpope/vim-rhubarb'
+"Plug 'tpope/vim-rhubarb'
 "
 " --------------------------
 "
 " vimagit ...
-"Plugin 'jreybert/vimagit.git'
-Plugin 'mckellygit/vimagit.git'
+"Plug 'jreybert/vimagit'
+Plug 'mckellygit/vimagit'
 "
 " twiggy ...
-"Plugin 'sodapopcan/vim-twiggy'
-Plugin 'mckellygit/vim-twiggy'
+"Plug 'sodapopcan/vim-twiggy'
+Plug 'mckellygit/vim-twiggy'
 "
 " some other neovim magit-like alternatives -
-"Plugin 'Odie/gitabra'
-"Plugin 'plenary.nvim'
-"Plugin 'TimUntersberger/neogit'
-"Plugin 'idanarye/vim-merginal'
-Plugin 'stsewd/fzf-checkout.vim'
+"Plug 'Odie/gitabra'
+"Plug 'plenary.nvim'
+"Plug 'TimUntersberger/neogit'
+"Plug 'idanarye/vim-merginal'
+Plug 'stsewd/fzf-checkout.vim'
 " neovim dependency for tig-explorer -
-"Plugin 'rbgrouleff/bclose.vim'
-"Plugin 'iberianpig/tig-explorer.vim'
+"Plug 'rbgrouleff/bclose.vim'
+"Plug 'iberianpig/tig-explorer.vim'
 "
 " telescope - fuzzy finder over lists for vim
-"Plugin 'nvim-telescope/telescope.nvim'
+"Plug 'nvim-telescope/telescope.nvim'
 "
 " vgit
-"Plugin 'tanvirtin/vgit.nvim'
+"Plug 'tanvirtin/vgit.nvim'
 "
 " get git branch name
-"Plugin 'itchyny/vim-gitbranch'
+"Plug 'itchyny/vim-gitbranch'
 "
 " git mergetool
-"Plugin 'whiteinge/diffconflicts'
+"Plug 'whiteinge/diffconflicts'
 "
 " dispatch make/etc utils
-Plugin 'tpope/vim-dispatch'
+Plug 'tpope/vim-dispatch'
 "
 " neo-tree - nerd-like viewer
-"Plugin 'nvim-neo-tree/neo-tree.nvim.git'
+"Plug 'nvim-neo-tree/neo-tree.nvim.git'
 "
 " git w/NERDtree
-"Plugin 'Xuyuanp/nerdtree-git-plugin'
+"Plug 'Xuyuanp/nerdtree-git-plugin'
 "
 " --------------------------
 "
 " added to get around an issue with FixCursorHold plugin/logic
 let $VIM_GITGUTTER_TEST=1
 " gitgutter
-Plugin 'airblade/vim-gitgutter'
+Plug 'airblade/vim-gitgutter'
 " there is also -
-"Plugin 'mhinz/vim-signify'
+"Plug 'mhinz/vim-signify'
 "
 " gitk like repo viewer
-"Plugin 'gregsexton/gitv'
-Plugin 'junegunn/gv.vim'
-"Plugin 'mckellygit/gv.vim'
+"Plug 'gregsexton/gitv'
+Plug 'junegunn/gv.vim'
+"Plug 'mckellygit/gv.vim'
 "
 " vim-flog - newer git viewer
-"Plugin 'rbong/vim-flog'
+"Plug 'rbong/vim-flog'
 "
 " fzf for fuzzy listing/searching
-"Plugin 'junegunn/fzf' " (not needed because its in ~/.fzf already)
-Plugin 'junegunn/fzf.vim'
-" Plugin 'mattn/vim-fz'
-" Plugin 'liuchengxu/vim-clap'
-" Plugin 'Yggdroot/LeaderF'
+"Plug 'junegunn/fzf' " (not needed because its in ~/.fzf already)
+Plug 'junegunn/fzf.vim'
+" Plug 'mattn/vim-fz'
+" Plug 'liuchengxu/vim-clap'
+" Plug 'Yggdroot/LeaderF'
 "
 " ack (with ag (silver-searcher))
-"Plugin 'mileszs/ack.vim'
+"Plug 'mileszs/ack.vim'
 " search/replace across multiple files
 " (also can use :Ack + :cdo ...)
-"Plugin 'dkprice/vim-easygrep'
+"Plug 'dkprice/vim-easygrep'
 " together with regex patterns ...
-" Plugin 'othree/eregex.vim'
+" Plug 'othree/eregex.vim'
 " Quickfix multi-file search/replace (**modified++)
-Plugin 'wincent/ferret'
-"Plugin 'mckellygit/ferret'
+Plug 'wincent/ferret'
+"Plug 'mckellygit/ferret'
 "
 " colorscheme
-Plugin 'ajmwagar/vim-deus'
-Plugin 'morhetz/gruvbox'
-"Plugin 'altercation/vim-colors-solarized'
-"Plugin 'rafi/awesome-vim-colorschemes'
+Plug 'ajmwagar/vim-deus'
+Plug 'morhetz/gruvbox'
+"Plug 'altercation/vim-colors-solarized'
+"Plug 'rafi/awesome-vim-colorschemes'
 " one for all colors
-"Plugin 'flazz/vim-colorschemes'
-"Plugin 'srcery-colors/srcery-vim'
+"Plug 'flazz/vim-colorschemes'
+"Plug 'srcery-colors/srcery-vim'
 "
 " localvimrc
-Plugin 'embear/vim-localvimrc'
+Plug 'embear/vim-localvimrc'
 "
 " polygot syntax highlighting for many file types
 " NOTE: add disabled items BEFORE loading plugin
@@ -349,83 +343,83 @@ Plugin 'embear/vim-localvimrc'
 " HEAD detached at c312d302
 " ------------------------------------------
 let g:polyglot_disabled = ['csv', 'tmux', 'c/c++', 'ruby']
-Plugin 'sheerun/vim-polyglot'
+Plug 'sheerun/vim-polyglot'
 " enhanced c++ syntax
-"Plugin 'octol/vim-cpp-enhanced-highlight'
-Plugin 'bfrg/vim-cpp-modern'
+"Plug 'octol/vim-cpp-enhanced-highlight'
+Plug 'bfrg/vim-cpp-modern'
 "
 " statusline
-Plugin 'itchyny/lightline.vim'
-"Plugin 'vim-airline/vim-airline'
-"Plugin 'vim-airline/vim-airline-themes'
+Plug 'itchyny/lightline.vim'
+"Plug 'vim-airline/vim-airline'
+"Plug 'vim-airline/vim-airline-themes'
 "
 " calendar
-Plugin 'itchyny/calendar.vim'
+Plug 'itchyny/calendar.vim'
 "
 " start at prev cursor position, except for git etc.
 " (make sure to disable code below that also does this)
 " lastplace to start at prev cursor pos (**modified++)
 " see note below about doing this after uncompress
-"Plugin 'farmergreg/vim-lastplace'
-Plugin 'mckellygit/vim-lastplace'
+"Plug 'farmergreg/vim-lastplace'
+Plug 'mckellygit/vim-lastplace'
 "
 " any-jump (with rg/ag)
-"Plugin 'pechorin/any-jump.vim'
-Plugin 'mckellygit/any-jump.vim'
+"Plug 'pechorin/any-jump.vim'
+Plug 'mckellygit/any-jump.vim'
 "
 " conque-gdb plugin
-"Plugin 'Conque-GDB'
+"Plug 'Conque-GDB'
 " nvim gdb (also works with gdb-dashboard)
-"Plugin 'sakhnik/nvim-gdb'
+"Plug 'sakhnik/nvim-gdb'
 " vimnspector
-"Plugin 'puremourning/vimspector'
+"Plug 'puremourning/vimspector'
 "
 " process utility
-"Plugin 'Shougo/vimproc.vim'
+"Plug 'Shougo/vimproc.vim'
 "
 " run cmd in background and output to quickfix ...
 " :AsyncRun gcc % -c %< for example
-Plugin 'skywind3000/asyncrun.vim'
-"Plugin 'skywind3000/asynctasks.vim'
+Plug 'skywind3000/asyncrun.vim'
+"Plug 'skywind3000/asynctasks.vim'
 "
 " cmd alias
-"Plugin 'cmdalias.vim'
-Plugin 'Konfekt/vim-alias'
+"Plug 'cmdalias.vim'
+Plug 'Konfekt/vim-alias'
 "
 " grayout #ifdefs
-"Plugin 'mphe/grayout.vim'
+"Plug 'mphe/grayout.vim'
 " older plugin
-"Plugin 'vim-scripts/ifdef-highlighting'
+"Plug 'vim-scripts/ifdef-highlighting'
 "
 " tab/buffer
-"Plugin 'ap/vim-buftabline'
+"Plug 'ap/vim-buftabline'
 " bufexplorer
-"Plugin 'jlanzarotta/bufexplorer'
+"Plug 'jlanzarotta/bufexplorer'
 " buffergator
-"Plugin 'jeetsukumaran/vim-buffergator'
+"Plug 'jeetsukumaran/vim-buffergator'
 " lightline buffer ...
-"Plugin 'mengelbrecht/lightline-bufferline'
+"Plug 'mengelbrecht/lightline-bufferline'
 "
 " start screen
 if g:has_wsl == 0
-    Plugin 'mhinz/vim-startify'
+    Plug 'mhinz/vim-startify'
 endif
 "
 " search + highlight
-Plugin 'PeterRincker/vim-searchlight'
+Plug 'PeterRincker/vim-searchlight'
 " also look into: qxxxb/vim-searchhi
 " also look into: wincent/loupe
 " TODO: also look into:
-"Plugin 'inkarkat/vim-SearchHighlighting'
+"Plug 'inkarkat/vim-SearchHighlighting'
 "
 " fade inactive buffers
 " NOTE: recently works ok but many flashing redraws on pum up/down ...
 "       may need au! CompleteChanged code to help ...
 if g:has_wsl == 0
-    Plugin 'TaDaa/vimade'
+    Plug 'TaDaa/vimade'
 endif
 " alternative ...
-"Plugin 'blueyed/vim-diminactive'
+"Plug 'blueyed/vim-diminactive'
 "
 " tmux focus
 " plugin says its obsolete with neovim and vim 8.2.2345+ but its still useful
@@ -436,15 +430,15 @@ if g:has_wsl == 0
     elseif exists('$VIM_TERMINAL')
         let g:loaded_tmux_focus_events = 1
     endif
-    Plugin 'mckellygit/vim-tmux-focus-events'
+    Plug 'mckellygit/vim-tmux-focus-events'
 endif
 "
 " ansi esc sequences
-"Plugin 'powerman/vim-plugin-AnsiEsc'
-Plugin 'chrisbra/Colorizer'
+"Plug 'powerman/vim-plugin-AnsiEsc'
+Plug 'chrisbra/Colorizer'
 "
 " csv
-"Plugin 'chrisbra/csv.vim'
+"Plug 'chrisbra/csv.vim'
 "
 " man pages
 if has("nvim")
@@ -452,30 +446,30 @@ if has("nvim")
     " from vim-man plugin (Vman vim-man command is untouched ...)
     let g:loaded_man = 1
 endif
-Plugin 'vim-utils/vim-man'
+Plug 'vim-utils/vim-man'
 "
 " system copy clipboard (**modified++)
-"Plugin 'christoomey/vim-system-copy'
+"Plug 'christoomey/vim-system-copy'
 "
 " choosewin
-"Plugin 't9md/vim-choosewin'
-Plugin 'mckellygit/vim-choosewin'
+"Plug 't9md/vim-choosewin'
+Plug 'mckellygit/vim-choosewin'
 "
 " floaterm
-Plugin 'voldikss/vim-floaterm'
+Plug 'voldikss/vim-floaterm'
 " :Floaterms fzf list of floaterms
-Plugin 'voldikss/fzf-floaterm'
+Plug 'voldikss/fzf-floaterm'
 " :Leaderf floaterm
-"Plugin 'voldikss/leaderf-floaterm'
+"Plug 'voldikss/leaderf-floaterm'
 " and asynctasks support ...
 "
 " vifm plugin
-"Plugin 'vifm/vifm.vim'
+"Plug 'vifm/vifm.vim'
 "
 " lf plugin
 " neovim dependency -
-"Plugin 'rbgrouleff/bclose.vim'
-"Plugin 'ptzz/lf.vim'
+"Plug 'rbgrouleff/bclose.vim'
+"Plug 'ptzz/lf.vim'
 "
 " nvim completeopt does not have popup ...
 " this plugin provides the same behavior, but it does not stop preview split
@@ -483,73 +477,57 @@ Plugin 'voldikss/fzf-floaterm'
 if !has("nvim")
   let g:float_preview#loaded = 1
 endif
-Plugin 'ncm2/float-preview.nvim'
+Plug 'ncm2/float-preview.nvim'
 "
 " CMake utils
-"Plugin 'vhdirk/vim-cmake'
+"Plug 'vhdirk/vim-cmake'
 "
 " diffchar
-"Plugin 'rickhowe/diffchar.vim'
+"Plug 'rickhowe/diffchar.vim'
 "
 " nvim plugin for supporting block paste (C-v) with unnamed[plus]
 if !has("nvimSKIP_MINIYANK")
   let g:loaded_miniyank = 1
 endif
-"Plugin 'bfredl/nvim-miniyank'
+"Plug 'bfredl/nvim-miniyank'
 " ----------
 " NOTE: not needed anymore since nvim v0.5.0+
-"Plugin 'mckellygit/nvim-miniyank'
+"Plug 'mckellygit/nvim-miniyank'
 " ----------
 " there is also -
-"Plugin 'Rasukarusan/nvim-block-paste'
+"Plug 'Rasukarusan/nvim-block-paste'
 "
 " OSC 52 clipboard copy -
-"Plugin 'ojroques/vim-oscyank'
+"Plug 'ojroques/vim-oscyank'
 "
 " vim-better-whitespace
-"Plugin 'ntpeters/vim-better-whitespace'
+"Plug 'ntpeters/vim-better-whitespace'
 "
 " fix nvim CursorHold issues ...
 " (adds a timer after each CursorMoved event)
 "if !has("nvim")
 "  let g:loaded_fix_cursorhold_nvim = 1
 "endif
-"Plugin 'antoinemadec/FixCursorHold.nvim'
+"Plug 'antoinemadec/FixCursorHold.nvim'
 "
 " register menu
 "if has("nvim")
-"    Plugin 'tversteeg/registers.nvim'
+"    Plug 'tversteeg/registers.nvim'
 "endif
 "
 " -----------------------------------------
 "
 " quick left-right line movement
-Plugin 'unblevable/quick-scope'
+Plug 'unblevable/quick-scope'
 "
 " there is also -
-"Plugin 'justinmk/vim-sneak'
-"Plugin 'ggandor/leap.nvim'
+"Plug 'justinmk/vim-sneak'
+"Plug 'ggandor/leap.nvim'
 "
-" -----------------------------------------
-"
-"" All of your Plugins must be added before the following line
-call vundle#end()         " required
-filetype plugin indent on " required
-"
-"" To ignore plugin indent changes, instead use:
-"""filetype plugin on
-""
-"" Brief help
-"" :PluginList       - lists configured plugins
-"" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-"" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-"" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-""
-"" see :h vundle for more details or wiki for FAQ
-"" Put your non-Plugin stuff after this line
-"
+call plug#end()
+
 " ====================================================
-" --- vundle -----------------------------------------
+" --- vim-plug ---------------------------------------
 " ====================================================
 
 " ================== tree-sitter =====================
@@ -736,8 +714,8 @@ endif
 " example: (cdo/cfdo ldo/lfdo [!])
 " :Ack foo
 " :cdo s/foo/bar/g | update
-" There is also Plugin 'dkprice/vim-easygrep'
-" together with Plugin 'othree/eregex.vim'
+" There is also Plug 'dkprice/vim-easygrep'
+" together with Plug 'othree/eregex.vim'
 let g:ackhighlight = 1
 let g:ack_use_dispatch = 1
 "set grepprg=ack\ -k
@@ -9618,7 +9596,7 @@ vmap <silent> <buffer> <C-Return> gj
 
 " move lines or selected text up/down
 
-" NOTE: see also Plugin 'matze/vim-move'
+" NOTE: see also Plug 'matze/vim-move'
 
 " NOTE: these mappings start with <Esc> and keys pressed quickly
 "       enough could be incorrectly interpreted as a mapping
@@ -11630,9 +11608,9 @@ else
     au VimEnter * :Alias qui!  call\ MyQuit("q!")
     au VimEnter * :Alias quit! call\ MyQuit("q!")
     if has("nvim")
-        au VimEnter * :Alias PU    TSUpdateSync<bar>sleep\ 1400m<bar>PluginUpdate
+        au VimEnter * :Alias PU    TSUpdateSync<bar>sleep\ 1400m<bar>PlugUpdate
     else
-        au VimEnter * :Alias PU    PluginUpdate
+        au VimEnter * :Alias PU    PlugUpdate
     endif
   aug END
 
