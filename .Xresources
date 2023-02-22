@@ -214,6 +214,10 @@
 
 Xcursor.size: 32
 
+!! 0, 1, 2 - 2 works in nvim but not in shell for even basic keys like Shift+<letter>
+XTerm*modifyOtherKeys: 1
+!!XTerm*formatOtherKeys: 1
+
 !! ==========================================
 !! ==========================================
 
