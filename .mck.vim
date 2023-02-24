@@ -533,6 +533,9 @@ call plug#end()
 " ================== tree-sitter =====================
 " treesitter can cause slowness/laggyness with large files ...
 " try a 'dd' then hold down '.' (dot) for repeat and check update speed and laggyness ...
+" especially with vim syntax, so always disable for vim
+" and when switching source files with <C-o>, <C-i> sometimes a file no longer has highlighting ...
+" so always disable for now
 let g:use_treesitter = 0
 if has("nvim") && g:use_treesitter > 0
     "Part of PU Alias ...
@@ -545,8 +548,9 @@ if has("nvim") && g:use_treesitter > 0
     autocmd FileType cpp    TSBufEnable incremental_selection
     autocmd FileType lua    TSBufEnable highlight
     autocmd FileType lua    TSBufEnable incremental_selection
-    autocmd FileType vim    TSBufEnable highlight
-    autocmd FileType vim    TSBufEnable incremental_selection
+    " deleting lines in vim files is extremely slow ...
+    "autocmd FileType vim    TSBufEnable highlight
+    "autocmd FileType vim    TSBufEnable incremental_selection
     autocmd FileType bash   TSBufEnable highlight
     autocmd FileType bash   TSBufEnable incremental_selection
     autocmd FileType html   TSBufEnable highlight
