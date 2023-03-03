@@ -1,7 +1,21 @@
 #!/bin/bash
 
+cpwd=$(pwd)
+cdir=$(basename ${cpwd})
+usr=$(whoami)
+
 read -r -p "really ? [(y)/n] " response
 response=${response,,} # tolower
 if [[ $response =~ ^(yes|y| ) ]] || [[ -z $response ]]; then
+
+    # fix up neovim build dir ownership which sometimes becomes root ...
+    if [[ "$cdir" == "neovim" ]] ; then
+        if [[ "$usr" != "root" ]] ; then
+            sudo chown ${usr}:${usr} .deps/.ninja_log .deps/.ninja_deps .deps/build.ninja
+            make
+        fi
+    fi
+
     sudo make install
 fi
+
