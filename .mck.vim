@@ -8820,14 +8820,22 @@ endif
 
 function s:CtrlF(multi) abort
     let l:ol = line('.')
-    let l:owc = wincol()
+    "let l:owc = wincol()
+    "if g:prevcol > g:prevcol2
+    "    let l:owc = g:prevcol
+    "else
+        let l:owc = g:prevcol2
+    "endif
     let l:owl = winline()
     if (l:ol == line("w0"))
         execute "keepjumps normal " . g:half . "gj"
         let l:nwc = wincol()
-        if l:nwc > 25
-            let l:cdiff = l:nwc - 25
+        if l:nwc > l:owc
+            let l:cdiff = l:nwc - l:owc
             execute "keepjumps normal " . l:cdiff . "h"
+        elseif l:owc > l:nwc
+            let l:cdiff = l:owc - l:nwc
+            execute "keepjumps normal " . l:cdiff . "l"
         endif
         return
     endif
@@ -8835,9 +8843,12 @@ function s:CtrlF(multi) abort
     if (l:dff <= 10)
         execute "keepjumps normal 5gj"
         let l:nwc = wincol()
-        if l:nwc > 25
-            let l:cdiff = l:nwc - 25
+        if l:nwc > l:owc
+            let l:cdiff = l:nwc - l:owc
             execute "keepjumps normal " . l:cdiff . "h"
+        elseif l:owc > l:nwc
+            let l:cdiff = l:owc - l:nwc
+            execute "keepjumps normal " . l:cdiff . "l"
         endif
         return
     endif
@@ -8876,18 +8887,24 @@ function s:CtrlF(multi) abort
     if (l:owl == l:nwl && l:ol == l:nl)
         execute "keepjumps normal 5gj"
         let l:nwc = wincol()
-        if l:nwc > 25
-            let l:cdiff = l:nwc - 25
+        if l:nwc > l:owc
+            let l:cdiff = l:nwc - l:owc
             execute "keepjumps normal " . l:cdiff . "h"
+        elseif l:owc > l:nwc
+            let l:cdiff = l:owc - l:nwc
+            execute "keepjumps normal " . l:cdiff . "l"
         endif
     else
         " if not already at bot ...
         if (line('w$') == line('$'))
             execute "keepjumps normal 5gj"
             let l:nwc = wincol()
-            if l:nwc > 25
-                let l:cdiff = l:nwc - 25
+            if l:nwc > l:owc
+                let l:cdiff = l:nwc - l:owc
                 execute "keepjumps normal " . l:cdiff . "h"
+            elseif l:owc > l:nwc
+                let l:cdiff = l:owc - l:nwc
+                execute "keepjumps normal " . l:cdiff . "l"
             endif
         else
             if l:nwl > l:owl
@@ -8898,26 +8915,38 @@ function s:CtrlF(multi) abort
                 execute "keepjumps normal " . l:diff . "gj"
             endif
             let l:nwc = wincol()
-            if l:nwc > 25
-                let l:cdiff = l:nwc - 25
+            if l:nwc > l:owc
+                let l:cdiff = l:nwc - l:owc
                 execute "keepjumps normal " . l:cdiff . "h"
+            elseif l:owc > l:nwc
+                let l:cdiff = l:owc - l:nwc
+                execute "keepjumps normal " . l:cdiff . "l"
             endif
         endif
     endif
     let &scrolloff=0
     let &scrolljump=prevsj
+    "echo "g:curcol = " . g:curcol . " g:prevcol = " . g:prevcol . " g:prevcol2 = " . g:prevcol2
 endfunction
 
 function s:CtrlB(multi) abort
     let l:ol = line('.')
-    let l:owc = wincol()
+    "let l:owc = wincol()
+    "if g:prevcol > g:prevcol2
+    "    let l:owc = g:prevcol
+    "else
+        let l:owc = g:prevcol2
+    "endif
     let l:owl = winline()
     if (l:ol == line("w$"))
         execute "keepjumps normal " . g:hal1 . "gk"
         let l:nwc = wincol()
-        if l:nwc > 25
-            let l:cdiff = l:nwc - 25
+        if l:nwc > l:owc
+            let l:cdiff = l:nwc - l:owc
             execute "keepjumps normal " . l:cdiff . "h"
+        elseif l:owc > l:nwc
+            let l:cdiff = l:owc - l:nwc
+            execute "keepjumps normal " . l:cdiff . "l"
         endif
         return
     endif
@@ -8925,9 +8954,12 @@ function s:CtrlB(multi) abort
     if (l:dff <= 10)
         execute "keepjumps normal 5gk"
         let l:nwc = wincol()
-        if l:nwc > 25
-            let l:cdiff = l:nwc - 25
+        if l:nwc > l:owc
+            let l:cdiff = l:nwc - l:owc
             execute "keepjumps normal " . l:cdiff . "h"
+        elseif l:owc > l:nwc
+            let l:cdiff = l:owc - l:nwc
+            execute "keepjumps normal " . l:cdiff . "l"
         endif
         return
     endif
@@ -8965,18 +8997,24 @@ function s:CtrlB(multi) abort
     if (l:owl == l:nwl && l:ol == l:nl)
         execute "keepjumps normal 5gk"
         let l:nwc = wincol()
-        if l:nwc > 25
-            let l:cdiff = l:nwc - 25
+        if l:nwc > l:owc
+            let l:cdiff = l:nwc - l:owc
             execute "keepjumps normal " . l:cdiff . "h"
+        elseif l:owc > l:nwc
+            let l:cdiff = l:owc - l:nwc
+            execute "keepjumps normal " . l:cdiff . "l"
         endif
     else
         " if not already at top ...
         if (line('w0') == 1)
             execute "keepjumps normal 5gk"
             let l:nwc = wincol()
-            if l:nwc > 25
-                let l:cdiff = l:nwc - 25
+            if l:nwc > l:owc
+                let l:cdiff = l:nwc - l:owc
                 execute "keepjumps normal " . l:cdiff . "h"
+            elseif l:owc > l:nwc
+                let l:cdiff = l:owc - l:nwc
+                execute "keepjumps normal " . l:cdiff . "l"
             endif
         else
             if l:nwl > l:owl
@@ -8987,14 +9025,18 @@ function s:CtrlB(multi) abort
                 execute "keepjumps normal " . l:diff . "gj"
             endif
             let l:nwc = wincol()
-            if l:nwc > 25
-                let l:cdiff = l:nwc - 25
+            if l:nwc > l:owc
+                let l:cdiff = l:nwc - l:owc
                 execute "keepjumps normal " . l:cdiff . "h"
+            elseif l:owc > l:nwc
+                let l:cdiff = l:owc - l:nwc
+                execute "keepjumps normal " . l:cdiff . "l"
             endif
         endif
     endif
     let &scrolloff=0
     let &scrolljump=prevsj
+    "echo "g:curcol = " . g:curcol . " g:prevcol = " . g:prevcol . " g:prevcol2 = " . g:prevcol2
 endfunction
 
 " ---------
@@ -9310,6 +9352,7 @@ endfunction
 
 let g:my_cursorhold_nvim_timer = -1
 function My_Nvim_CursorHold_Fix() abort
+    let g:prevcol2 = g:prevcol
     if !has("nvim")
         return
     endif
@@ -9352,9 +9395,26 @@ function My_StartIdleTimer_Cb(timer_id) abort
     endif
 endfunction
 
+let g:curcol = wincol()
+let g:prevcol = g:curcol
+let g:prevcol2 = g:prevcol
+
 function My_StartIdleTimer() abort
     call timer_stop(g:my_insertidle_nvim_timer)
     let g:my_insertidle_nvim_timer = timer_start(g:my_cursorhold_updatetime, 'My_StartIdleTimer_Cb')
+    "if g:prevcol > g:prevcol2
+        let g:prevcol2 = g:prevcol
+    "endif
+    let l:cc = wincol()
+    if l:cc > 3
+        if g:prevcol < l:cc
+            let g:prevcol = (l:cc + g:prevcol) / 2
+            if g:prevcol > 25
+                let g:prevcol = 25
+            endif
+        endif
+    endif
+    let g:curcol = l:cc
 endfunction
 
 autocmd CmdlineLeave * call My_StartIdleTimer()
