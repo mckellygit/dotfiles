@@ -332,9 +332,12 @@ return {
 
     { key="phys:Return",    mods="CTRL|ALT",      action=wezterm.action{SendString="\x1e\x0d"} },
 
-    -- { key="phys:Return",    mods="SHIFT",         action=wezterm.action{SendString="\x1b[13;2u"} },
-    -- { key="phys:Return",    mods="CTRL",          action=wezterm.action{SendString="\x1b[13;5u"} },
+    -- { key="phys:Return",    mods="SHIFT",         action=wezterm.action{SendString="\x1b[27;2;13~"} },
+    -- { key="phys:Return",    mods="CTRL",          action=wezterm.action{SendString="\x1b[27;5;13~"} },
+    -- { key="phys:Return",    mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1b[27;6;13~"} },
     -- (where 2 is 2-7 based on the usual modifiers)
+    -- csi 27;2;13~ ==> [13;2u
+    -- csi 27;5;13~ ==> [13;5u
 
     -- send ctrl-s + ] (\x13\x5d) tmux copy-mode
     { key="phys:Return",    mods="SUPER",         action=wezterm.action{SendString="\x13\x5d"} },
