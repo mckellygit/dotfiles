@@ -11,13 +11,13 @@ if [[ $# -gt 0 ]] ; then
         extras=" bat neovim vim gef delta libxkbcommon foot alacritty"
         if [[ $# -gt 1 ]] ; then
             if [[ "$2" == "-a" || "$2" == "-all" || "$2" == "--a" || "$2" == "--all" ]] ; then
-                extras=" $extras cgdb ccache gdb-dashboard vifm fzf-git.sh fzf-tab-completion wezterm kitty zutty"
+                extras=" $extras cgdb ccache gdb-dashboard vifm fzf-git.sh fzf-tab-completion tree-sitter lazygit difftastic zutty"
             elif [[ "$2" == "-v" ]] ; then
                 do_vim_bundles="yes"
             fi
             if [[ $# -gt 2 ]] ; then
                 if [[ "$3" == "-a" || "$3" == "-all" || "$3" == "--a" || "$3" == "--all" ]] ; then
-                    extras=" $extras cgdb ccache gdb-dashboard vifm fzf-git.sh fzf-tab-completion wezterm kitty zutty"
+                    extras=" $extras cgdb ccache gdb-dashboard vifm fzf-git.sh fzf-tab-completion tree-sitter lazygit difftastic zutty"
                 elif [[ "$3" == "-v" ]] ; then
                     do_vim_bundles="yes"
                 fi
@@ -31,7 +31,7 @@ if [[ $# -gt 0 ]] ; then
             fi
             if [[ $# -gt 2 ]] ; then
                 if [[ "$3" == "-a" || "$3" == "-all" || "$3" == "--a" || "$3" == "--all" ]] ; then
-                    extras=" $extras cgdb ccache gdb-dashboard vifm fzf-git.sh fzf-tab-completion wezterm kitty zutty"
+                    extras=" $extras cgdb ccache gdb-dashboard vifm fzf-git.sh fzf-tab-completion tree-sitter lazygit difftastic zutty"
                 fi
             fi
         fi
@@ -399,6 +399,9 @@ echo ""
 
 # flamegraph (cargo):
 #   git clone https://github.com/flamegraph-rs/flamegraph.git
+
+# sniffnet
+#   git clone https://github.com/GyulyVGC/sniffnet.git
 
 # ---------------------
 
