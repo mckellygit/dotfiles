@@ -536,37 +536,39 @@ call plug#end()
 " especially with vim syntax, so always disable for vim
 " and when switching source files with <C-o>, <C-i> sometimes a file no longer has highlighting ...
 " so always disable for now
-let g:use_treesitter = 0
+let g:use_treesitter = 1
 if has("nvim") && g:use_treesitter > 0
     "Part of PU Alias ...
     "autocmd VimEnter *      TSUpdate
-    autocmd FileType c      TSBufEnable highlight
-    autocmd FileType c      TSBufEnable incremental_selection
-    autocmd FileType go     TSBufEnable highlight
-    autocmd FileType go     TSBufEnable incremental_selection
-    autocmd FileType cpp    TSBufEnable highlight
-    autocmd FileType cpp    TSBufEnable incremental_selection
-    autocmd FileType lua    TSBufEnable highlight
-    autocmd FileType lua    TSBufEnable incremental_selection
+    autocmd FileType c      TSEnable highlight             c
+    autocmd FileType c      TSEnable incremental_selection c
+    autocmd FileType go     TSEnable highlight             go
+    autocmd FileType go     TSEnable incremental_selection go
+    autocmd FileType cpp    TSEnable highlight             cpp
+    autocmd FileType cpp    TSEnable incremental_selection cpp
+    autocmd FileType lua    TSEnable highlight             lua
+    autocmd FileType lua    TSEnable incremental_selection lua
+    autocmd FileType log    TSEnable highlight             log
+    autocmd FileType log    TSEnable incremental_selection log
     " deleting lines in vim files is extremely slow ...
-    "autocmd FileType vim    TSBufEnable highlight
-    "autocmd FileType vim    TSBufEnable incremental_selection
-    autocmd FileType bash   TSBufEnable highlight
-    autocmd FileType bash   TSBufEnable incremental_selection
-    autocmd FileType html   TSBufEnable highlight
-    autocmd FileType html   TSBufEnable incremental_selection
-    autocmd FileType http   TSBufEnable highlight
-    autocmd FileType http   TSBufEnable incremental_selection
-    autocmd FileType help   TSBufEnable highlight
-    autocmd FileType help   TSBufEnable incremental_selection
-    autocmd FileType java   TSBufEnable highlight
-    autocmd FileType java   TSBufEnable incremental_selection
-    autocmd FileType json   TSBufEnable highlight
-    autocmd FileType json   TSBufEnable incremental_selection
-    autocmd FileType yaml   TSBufEnable highlight
-    autocmd FileType yaml   TSBufEnable incremental_selection
-    autocmd FileType python TSBufEnable highlight
-    autocmd FileType python TSBufEnable incremental_selection
+    "autocmd FileType vim    TSEnable highlight             vim
+    "autocmd FileType vim    TSEnable incremental_selection vim
+    autocmd FileType bash   TSEnable highlight             bash
+    autocmd FileType bash   TSEnable incremental_selection bash
+    autocmd FileType html   TSEnable highlight             html
+    autocmd FileType html   TSEnable incremental_selection html
+    autocmd FileType http   TSEnable highlight             http
+    autocmd FileType http   TSEnable incremental_selection http
+    autocmd FileType help   TSEnable highlight             help
+    autocmd FileType help   TSEnable incremental_selection help
+    autocmd FileType java   TSEnable highlight             java
+    autocmd FileType java   TSEnable incremental_selection java
+    autocmd FileType json   TSEnable highlight             json
+    autocmd FileType json   TSEnable incremental_selection json
+    autocmd FileType yaml   TSEnable highlight             yaml
+    autocmd FileType yaml   TSEnable incremental_selection yaml
+    autocmd FileType python TSEnable highlight             python
+    autocmd FileType python TSEnable incremental_selection python
 endif
 " ================== tree-sitter =====================
 
