@@ -117,7 +117,7 @@ call plug#begin('~/.vim/bundle')
 Plug 'junegunn/vim-plug'
 " required utils for EnhancedJumps plugin
 " NOTE: use stable branch
-Plug 'inkarkat/vim-ingo-library'
+Plug 'inkarkat/vim-ingo-library', { 'branch': 'stable' }
 " Awesome paste options
 Plug 'inkarkat/vim-UnconditionalPaste'
 " . (dot) repeat in visual-mode
