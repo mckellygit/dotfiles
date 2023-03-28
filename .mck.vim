@@ -11449,6 +11449,9 @@ if &diff
   nmap  <silent> <Leader>qq           :call Xdiff(0)<CR>
   vmap  <silent> <Leader>qq <C-\><C-n>:<C-u>call Xdiff(0)<CR>
 
+  nmap <silent> <f10><f10>           :call Xdiff(0)<CR>
+  vmap <silent> <f10><f10> <C-\><C-n>:<C-u>call Xdiff(0)<CR>
+
   "cnoreabbrev <silent> <expr> q! (getcmdtype() == ':' && getcmdline() =~ '\s*q!\s*') ? 'qa!' : 'q!'
   "cnoreabbrev <silent> <expr> q  (getcmdtype() == ':' && getcmdline() =~ '\s*q\s*')  ? 'qa' : 'q'
   "cnoreabbrev <silent> <expr> n  (getcmdtype() == ':' && getcmdline() =~ '\s*n\s*')  ? 'qa' : 'n'
