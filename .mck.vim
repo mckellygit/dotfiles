@@ -3468,10 +3468,14 @@ endif
 "  let &t_TE=""
 "endif
 
+" should happen automatically with vim 8.1.2134+ and TERM=xterm*
+" (but then will not work inside tmux)
 "if exists('$ZUTTY_VERSION')
-"  " NOTE: this ENABLES modifyOtherKeys=2
-"  let &t_TI = "\<Esc>[>4;2m"
-"  let &t_TE = "\<Esc>[>4;m"
+"  if !has("nvim")
+"    " NOTE: this ENABLES modifyOtherKeys=2
+"    let &t_TI = "\e[>4;2m"
+"    let &t_TE = "\e[>4;1m"
+"  endif
 "endif
 
 " can prevent some strange chars in terminator ...
