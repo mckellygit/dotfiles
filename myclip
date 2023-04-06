@@ -337,6 +337,21 @@ fi
 # Wait for paste to stop: you’ll see \e[201~ on STDIN.
 # Disable bracketed paste: printf "\e[?2004l"
 
+# -------------
+
+# if have_tty or have_ssh do we try to grab originating machine's
+# clipboard and echo it here ?
+
+if [[ $have_tty -gt 0 ]]; then
+    echo "remote (tty) clipboard not supported"
+    exit
+elif [[ $have_ssh -gt 0 ]]; then
+    echo "remote (ssh) clipboard not supported"
+    exit
+fi
+
+# -------------
+
 tmpclip=/dev/shm/myclip.$$
 
 trap "rm -f $tmpclip" EXIT

@@ -1583,28 +1583,35 @@ stty brkint ignpar > /dev/null 2>&1
 #    fi
 #fi
 
+# hack of setting LC_MONETARY to something to use on remote side
+# because LC_MONOETRY is not really used but is carried through by ssh ...
+
+# use it now for knowing if there is a reverse tunnel set up
+# if its set to sshterm:<port> then assume we can connect to <port>
+# for clipboard contents ...
+
 # get TERM from source ...
-if [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTY" ]] ; then
-    if [[ -n "$LC_MONETARY" ]] ; then
-        rstring=$LC_MONETARY
-        # strip leading whitespace
-        rstring="${rstring#"${rstring%%[![:space:]]*}"}"
-        # strip trailing whitespace
-        rstring="${rstring%"${rstring##*[![:space:]]}"}"
-        # first token
-        tstring=${rstring% *}
-        # rest of string
-        rstring=${rstring##* }
-        if [[ -n "$tstring" ]] && [[ "$TERM" == "linux" ]] ; then
-            export TERM=$tstring
-        fi
-        if [[ -n "$rstring" ]] ; then
-            export LC_MONETARY=$rstring
-        else
-            unset LC_MONETARY
-        fi
-    fi
-fi
+#if [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTY" ]] ; then
+#    if [[ -n "$LC_MONETARY" ]] ; then
+#        rstring=$LC_MONETARY
+#        # strip leading whitespace
+#        rstring="${rstring#"${rstring%%[![:space:]]*}"}"
+#        # strip trailing whitespace
+#        rstring="${rstring%"${rstring##*[![:space:]]}"}"
+#        # first token
+#        tstring=${rstring% *}
+#        # rest of string
+#        rstring=${rstring##* }
+#        if [[ -n "$tstring" ]] && [[ "$TERM" == "linux" ]] ; then
+#            export TERM=$tstring
+#        fi
+#        if [[ -n "$rstring" ]] ; then
+#            export LC_MONETARY=$rstring
+#        else
+#            unset LC_MONETARY
+#        fi
+#    fi
+#fi
 
 # --------------------
 
