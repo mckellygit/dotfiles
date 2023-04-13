@@ -4195,6 +4195,11 @@ set ruler
 " display parts of long lines when wrap is on
 set display+=lastline
 
+" these used to be from behave xterm, but neovim does
+" not support behave cmd anymore, set these options directly ...
+set selectmode=
+set mousemodel=popup_setpos
+set keymodel=
 set selection=inclusive
 
 function s:CrossHairs() abort
@@ -5340,6 +5345,8 @@ function! s:CopyDefReg(arg)
         return
 
     elseif g:is_ttyterm == 1
+
+        " TODO - if sshterm then we can use myclip / ssl_client ...
 
         echohl WarningMsg | echo "ssh remote clipboard -> @\" reg copy not supported yet" | echohl None
         sleep 1251m
