@@ -536,7 +536,7 @@ call plug#end()
 " especially with vim syntax, so always disable for vim
 " and when switching source files with <C-o>, <C-i> sometimes a file no longer has highlighting ...
 " so always disable for now
-let g:use_treesitter = 1
+let g:use_treesitter = 0
 if has("nvim") && g:use_treesitter > 0
     "Part of PU Alias ...
     "autocmd VimEnter *      TSUpdate
@@ -5011,7 +5011,7 @@ function! ForceLoadNammedReg() abort
     else
         if g:has_clipper > 0
             if g:is_ttyterm > 1 && clen > 10000
-                echohl DiffText | echo "copying @\" to remote clipboard ..." | echohl None
+                echohl DiffText | echo "copying @\" to tty remote clipboard ..." | echohl None
             endif
             " NOTE: if g:is_ttyterm then myclip will use osc52 to send to remote clipboard ...
             call system("myclip --rmlastnl -", getreg('"'))
@@ -5118,7 +5118,7 @@ function! PostPaste(code)
     " make sure we are in scratch-pad buffer ...
     if bufname('') !=# g:scratchpad
         silent call lightline#enable()
-        let etxt = "Error: remote (tty) clipboard copy failed: " . "not in tty tab buffer"
+        let etxt = "Error: tty remote clipboard copy failed: " . "not in tty tab buffer"
         echohl WarningMsg | echo etxt | echohl None
         sleep 1251m
         redraw!
@@ -5135,9 +5135,9 @@ function! PostPaste(code)
         silent! call delete(g:scratchpad)
         call delete(g:scratchpad)
         if a:code == 3
-            let etxt = "Error: remote (tty) clipboard copy failed: " . "too large"
+            let etxt = "Error: tty remote clipboard copy failed: " . "too large"
         else
-            let etxt = "Error: remote (tty) clipboard copy failed: " . a:code
+            let etxt = "Error: tty remote clipboard copy failed: " . a:code
         endif
         echohl WarningMsg | echo etxt | echohl None
         sleep 1251m
@@ -5178,7 +5178,7 @@ function! PostPaste(code)
     " -------------
 
     if empty(expand(glob(g:scratchpad)))
-        let etxt = "Error: remote (tty) clipboard copy failed: " . "no tmp file"
+        let etxt = "Error: tty remote clipboard copy failed: " . "no tmp file"
         echohl WarningMsg | echo etxt | echohl None
         sleep 1251m
         redraw!
@@ -5192,7 +5192,7 @@ function! PostPaste(code)
         let @"=@p
         call setreg('p', [])
         redraw!
-        echohl DiffAdd | echo "remote (tty) clipboard -> @\" reg copy" | echohl None
+        echohl DiffAdd | echo "tty remote clipboard -> @\" reg copy" | echohl None
         sleep 1251m
         redraw!
         echo " "
@@ -5346,12 +5346,34 @@ function! s:CopyDefReg(arg)
 
     elseif g:is_ttyterm == 1
 
-        " TODO - if sshterm then we can use myclip / ssl_client ...
+        " if here via sshterm then we can use myclip / sshclip ...
 
-        echohl WarningMsg | echo "ssh remote clipboard -> @\" reg copy not supported yet" | echohl None
-        sleep 1251m
-        redraw!
-        echo " "
+        "echohl WarningMsg | echo "ssh remote clipboard -> @\" reg copy not supported yet" | echohl None
+        "sleep 1251m
+        "redraw!
+        "echo " "
+        "return
+
+        let @p = system('myclip --o')
+
+        if empty(@p) || len(@p) == 0
+            if a:arg == 1
+                echohl DiffText | echo "ssh remote clipboard empty" | echohl None
+                sleep 851m
+                redraw!
+                echo " "
+            endif
+        else
+            let @"=@p
+            call setreg('p', [])
+            if a:arg == 1
+                echohl DiffAdd | echo "ssh remote clipboard -> @\" reg copy" | echohl None
+                sleep 851m
+                redraw!
+                echo " "
+            endif
+        endif
+
         return
 
     endif
@@ -5463,7 +5485,7 @@ function! MyScratchPadCopy()
     augroup end
     " make sure we are in scratch-pad buffer ...
     if bufname('') !=# g:scratchpad
-        let etxt = "Error: remote (tty) clipboard copy failed: " . "not in tty tab buffer"
+        let etxt = "Error: tty remote clipboard copy failed: " . "not in tty tab buffer"
         echohl WarningMsg | echo etxt | echohl None
         sleep 1251m
         redraw!
@@ -5480,7 +5502,7 @@ function! MyScratchPadCopy()
     redraw!
 
     if empty(expand(glob(g:scratchpad)))
-        let etxt = "Error: remote (tty) clipboard copy failed: " . "no tmp file"
+        let etxt = "Error: tty remote clipboard copy failed: " . "no tmp file"
         echohl WarningMsg | echo etxt | echohl None
         sleep 1251m
         redraw!
@@ -5673,11 +5695,13 @@ function RemoteClip(ch, befor)
 endfunction
 
 function UpdateClipCmd(cmd)
-    if g:is_ttyterm > 0
-        echohl WarningMsg | echo "remote clipboard copy not supported yet" | echohl None
+    if g:is_ttyterm > 1
+        echohl WarningMsg | echo "tty remote clipboard copy not supported yet" | echohl None
         return
     endif
-    if g:has_wsl > 0 && !has("nvim")
+    if g:is_ttyterm == 1
+        let @p = system('myclip --o')
+    elseif g:has_wsl > 0 && !has("nvim")
         let @p = system('win32yank.exe -o --lf')
     else
         let @p = system('myclip --o')
