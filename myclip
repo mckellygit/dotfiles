@@ -343,11 +343,12 @@ fi
 # clipboard and echo it here ?
 
 if [[ $have_tty -gt 0 ]]; then
+    # TODO: write custom screen sequence "\e]52;z;\x07" to $out_tty
+    #       capture back base64 text, decode and print here ...
     echo "remote (tty) clipboard not supported"
     exit
 elif [[ $have_ssh -gt 0 ]]; then
-    echo "remote (ssh) clipboard not supported"
-    exit
+    exec sshclip
 fi
 
 # -------------

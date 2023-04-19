@@ -1,0 +1,53 @@
+#!/bin/bash
+
+noargs=0
+if [[ $# -eq 1 ]] ; then
+    noargs=1
+    host=$1
+elif [[ $# -gt 1 ]] ; then
+    host=${@: -1}
+else
+    noargs=1
+    host="10.0.0.114"
+fi
+
+sshclipserver -c
+rc=$?
+if [[ $rc -ne 0 ]] ; then
+    setsid -f sshclipserver 2>/dev/null
+fi
+
+sameip=1
+hnraw=$(host ${host})
+hn=$(echo ${hnraw} | grep 'has address' | head -n 1 | awk '{print $NF}')
+if [[ -n "${hn}" ]] ; then
+    # if localhost == host then skip LC_MONETARY env set and -R remote port forwarding ...
+    $(ip addr show | grep 'inet ' | awk '{print $2}' | awk -F/ '{print $1}' | grep -q ${hn})
+    sameip=$?
+    if [[ $sameip -eq 1 ]] ; then
+        sameip=$(echo ${hn} | grep -q '127\.')
+    fi
+else
+    hn=$(echo ${hnraw} | head -n 1 | grep 'not found' | awk '{print $NF}')
+    if [[ -z "${hn}" ]] ; then
+        sameip=0
+    fi
+fi
+if [[ $sameip -eq 0 ]] ; then
+    if [[ $noargs -eq 1 ]] ; then
+        exec ssh ${host}
+    else
+        exec ssh ${@:1:$#-1} ${host}
+    fi
+fi
+
+# LC_MONETARY gets carried through to remote host by ssh, so use
+# this to know on remote host if we are able to use sshclip ...
+export LC_MONETARY=sshterm:22221:22222
+
+if [[ $noargs -eq 1 ]] ; then
+    exec ssh -R22221:localhost:22222 ${host}
+else
+    exec ssh ${@:1:$#-1} -R22221:localhost:22222 ${host}
+fi
+
