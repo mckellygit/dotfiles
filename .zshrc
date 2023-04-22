@@ -955,10 +955,12 @@ alias stop_rdm='rc -q'
 # and ag git wont find anything, you need ag 'git' ...
 
 # use ~/.agignore for ignore patterns ...
+# do we add a --depth 3 or so to help save huge traversals ?
 
 ag() { command ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" "$@"; }
 
 # could put all these rg cmdline options in this file ...
+# do we add a --max-depth 3 or so to help save huge traversals ?
 export RIPGREP_CONFIG_PATH=~/.rgrc
 
 rg() { command rg --color=always --smart-case --one-file-system --hidden --iglob !".git" --iglob !".cache" --iglob !".ccache" --iglob !".debug" --iglob !".vscode" --iglob !".pcloud" --iglob !".rustup" --iglob !".cargo" "$@"; }
