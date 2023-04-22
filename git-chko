@@ -7,7 +7,8 @@ export FZF_DEFAULT_OPTS='--ansi --bind="alt-g:first,alt-G:last" --bind="ctrl-f:h
 
 # git branch -a --sort=-committerdate | fzf-tmux -r | xargs git checkout
 # git branch -a --sort=-committerdate | \fzf --height=30% | xargs -r git checkout
-br=$(git branch -a --sort=-committerdate | fzf-tmux -d 22)
+# br=$(git branch -a --sort=-committerdate | fzf-tmux -d 22)
+br=$(git branch -a --sort=-committerdate | fzf-tmux -r)
 if [[ -z "$br" ]] ; then
     exit
 fi
@@ -15,6 +16,8 @@ selbr=${br:2}
 if [[ -z "$selbr" ]] ; then
     exit
 fi
+
+# just echo cmdline, so that user can think about it before pressing enter or ctrl-c out ...
 
 if [[ -z "$TMUX_PANE" ]] ; then
     echo "git checkout $selbr"
