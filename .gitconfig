@@ -67,7 +67,7 @@
 #   del-loc-br = "!f() { git branch -D "$@"; }; f"
     del-loc-br = "!f() { git branch -D "$(git branch -a --sort=-committerdate | grep -v 'remotes/' | fzf-tmux -r | awk '{print $NF}')"; }; f"
 #   del-rem-br = "!f() { git push origin --delete "$@"; }; f"
-    del-rem-br = "!f() { git push origin --delete "$(git branch -a --sort=-committerdate | grep 'remotes/origin/' | fzf-tmux -r | awk '{print $NF}')"; }; f"
+    del-rem-br = "!f() { git push origin --delete "$(git branch -a --sort=-committerdate | grep 'remotes/origin/' | fzf-tmux -r | awk '{print $NF}' | awk -F/ '{print $NF}')"; }; f"
     del-all-br = "!f() { git push origin --delete "$@"; git branch -D "$@"; }; f"
     prune-rem-org = "!git remote prune origin"
     alias = "!git config --get-regexp ^alias. | sed 's/^alias.//'"
