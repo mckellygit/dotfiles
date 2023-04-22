@@ -4397,8 +4397,11 @@ autocmd VimEnter * call <SID>InitializeClipboard()
 set timeout timeoutlen=1500
 " if ttimeoutlen >=50 then sometimes an Esc to exit insert mode followed very quickly
 " by another key could be interpreted as some Esc seq and not separate keys/events ...
+" in nvim over ssh sometimes an <Esc> followed very quickly by another key (such as <Up>)
+" does not leave insert mode.  Seems better config is to just set nottimeout ...
 if g:is_ttyterm < 2
-    set ttimeout ttimeoutlen=5
+    set nottimeout
+    "set ttimeout ttimeoutlen=5
 else
     set ttimeout ttimeoutlen=50
 endif
