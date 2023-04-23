@@ -8867,7 +8867,8 @@ function s:CtrlF(multi) abort
         let l:owc = g:prevcol2
     "endif
     let l:owl = winline()
-    if (l:ol == line("w0"))
+    let l:xol = line("w0")
+    if (l:ol == l:xol)
         execute "keepjumps normal " . g:half . "gj"
         let l:nwc = wincol()
         if l:nwc > l:owc
@@ -8947,13 +8948,21 @@ function s:CtrlF(multi) abort
                 execute "keepjumps normal " . l:cdiff . "l"
             endif
         else
-            if l:nwl > l:owl
-                let l:diff = l:nwl - l:owl
-                execute "keepjumps normal " . l:diff . "gk"
-            elseif l:owl > l:nwl
+
+            if l:owl > l:nwl
                 let l:diff = l:owl - l:nwl
                 execute "keepjumps normal " . l:diff . "gj"
+            elseif l:nwl > l:owl && l:xol != line("w0")
+                " but dont if top line didn't change ...
+                let l:diff = l:nwl - l:owl
+                execute "keepjumps normal " . l:diff . "gk"
+                " if going wrong way, go back ...
+                let l:nl2 = line('.')
+                if l:nl2 <= l:ol
+                    execute "keepjumps normal " . l:diff . "gj"
+                endif
             endif
+
             let l:nwc = wincol()
             if l:nwc > l:owc
                 let l:cdiff = l:nwc - l:owc
@@ -8978,7 +8987,8 @@ function s:CtrlB(multi) abort
         let l:owc = g:prevcol2
     "endif
     let l:owl = winline()
-    if (l:ol == line("w$"))
+    let l:xol = line("w$")
+    if (l:ol == l:xol)
         execute "keepjumps normal " . g:hal1 . "gk"
         let l:nwc = wincol()
         if l:nwc > l:owc
@@ -9057,13 +9067,22 @@ function s:CtrlB(multi) abort
                 execute "keepjumps normal " . l:cdiff . "l"
             endif
         else
+
             if l:nwl > l:owl
                 let l:diff = l:nwl - l:owl
                 execute "keepjumps normal " . l:diff . "gk"
-            elseif l:owl > l:nwl
+            elseif l:owl > l:nwl && l:xol != line("w$")
+                " but dont if bot line didn't change ...
                 let l:diff = l:owl - l:nwl
                 execute "keepjumps normal " . l:diff . "gj"
+                " if going wrong way, go back ...
+                let l:nl2 = line('.')
+                if l:nl2 >= l:ol
+                    execute "keepjumps normal " . l:diff . "gk"
+                endif
+
             endif
+
             let l:nwc = wincol()
             if l:nwc > l:owc
                 let l:cdiff = l:nwc - l:owc
