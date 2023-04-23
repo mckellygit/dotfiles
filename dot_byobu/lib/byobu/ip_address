@@ -83,9 +83,13 @@ __ip_address() {
 		;;
 	esac
 	if [ -n "$WSL_DISTRO_NAME" ] || [ -n "$WSLENV" ]; then
-		ipaddr=$(route.exe PRINT -4 2>/dev/null | grep '0.0.0.0          0.0.0.0' | tail -n 1 | awk '{print $4}' | tr -d '\r\n')
-		if [ -z "$ipaddr" ]; then
-			ipaddr=$(/mnt/c/Windows/system32/ipconfig.exe 2>/dev/null | grep IPv4 | head -n 1 | awk '{print $NF}' | tr -d '\r\n')
+		if [ -n "$WSL2_GUI_APPS_ENABLED" ]; then
+			ipaddr=$(ip -4 addr list | grep inet | grep global | awk '{print $2}' | awk -F/ '{print $1}')
+		else
+			ipaddr=$(route.exe PRINT -4 2>/dev/null | grep '0.0.0.0          0.0.0.0' | tail -n 1 | awk '{print $4}' | tr -d '\r\n')
+			if [ -z "$ipaddr" ]; then
+				ipaddr=$(/mnt/c/Windows/system32/ipconfig.exe 2>/dev/null | grep IPv4 | head -n 1 | awk '{print $NF}' | tr -d '\r\n')
+			fi
 		fi
 	else
 		if [ -z "$ipaddr" ]; then
