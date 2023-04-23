@@ -7,29 +7,12 @@ export FZF_DEFAULT_OPTS='--ansi --bind="alt-g:first,alt-G:last" --bind="ctrl-f:h
 
 # if supplied arg then use it ...
 if [[ $# -ge 1 ]] ; then
-    git checkout $@
+    git push origin --delete $@
     exit
 fi
 
-# git branch -a --sort=-committerdate | fzf-tmux -r | xargs git checkout
-# git branch -a --sort=-committerdate | \fzf --height=30% | xargs -r git checkout
-# br=$(git branch -a --sort=-committerdate | fzf-tmux -d 22)
-br=$(git branch -a --sort=-committerdate | fzf-tmux -r)
-if [[ -z "$br" ]] ; then
-    exit
-fi
-selbr=${br:2}
-if [[ -z "$selbr" ]] ; then
-    exit
+branch="$(git branch -a --sort=-committerdate | grep 'remotes/origin/' | fzf-tmux -r | awk '{print $NF}' | awk -F/ '{print $NF}')"
+if [[ -n "${branch}" ]] ; then
+    git push origin --delete ${branch}
 fi
 
-# just echo cmdline, so that user can think about it before pressing enter or ctrl-c out ...
-
-if [[ -z "$TMUX_PANE" ]] ; then
-    echo "git checkout $selbr"
-    exit
-fi
-
-stty -echo
-tmux send-keys "git checkout $selbr"
-stty echo
