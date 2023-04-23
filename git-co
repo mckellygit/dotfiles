@@ -1,0 +1,29 @@
+#!/bin/bash
+
+unset BASH_ENV
+shopt -u expand_aliases
+
+export FZF_DEFAULT_OPTS='--ansi --bind="alt-g:first,alt-G:last" --bind="ctrl-f:half-page-down" --bind="ctrl-b:half-page-up" --bind="ctrl-k:up,ctrl-j:down" --bind="ctrl-d:delete-char" --bind="alt-bs:half-page-up,alt-space:half-page-down" --bind="alt-k:up,alt-j:down" --bind="alt-K:half-page-up,alt-J:half-page-down" --bind="ctrl-alt-k:half-page-up,ctrl-alt-j:half-page-down" --bind="ctrl-alt-o:half-page-down" --bind="page-up:page-up" --bind="page-down:page-down" --bind="alt-d:kill-word,alt-u:unix-line-discard" --bind="alt-b:page-up" --bind="alt-f:page-down" --color fg:242,bg:236,hl:65,fg+:15,bg+:239,hl+:108 --color info:108,prompt:109,spinner:108,pointer:168,marker:168'
+
+# git branch -a --sort=-committerdate | fzf-tmux -r | xargs git checkout
+# git branch -a --sort=-committerdate | \fzf --height=30% | xargs -r git checkout
+# br=$(git branch -a --sort=-committerdate | fzf-tmux -d 22)
+br=$(git branch -a --sort=-committerdate | fzf-tmux -r)
+if [[ -z "$br" ]] ; then
+    exit
+fi
+selbr=${br:2}
+if [[ -z "$selbr" ]] ; then
+    exit
+fi
+
+# just echo cmdline, so that user can think about it before pressing enter or ctrl-c out ...
+
+if [[ -z "$TMUX_PANE" ]] ; then
+    echo "git checkout $selbr"
+    exit
+fi
+
+stty -echo
+tmux send-keys "git checkout $selbr"
+stty echo
