@@ -10713,7 +10713,7 @@ function! RipgrepFzf(aquery, ufzf, fullscreen)
   else
     let query = a:aquery
   endif
-  let command_fmt = '\rg --column --line-number --no-heading --color=always --smart-case --one-file-system --hidden --iglob \!".git" --iglob \!".cache" --iglob \!".ccache" --iglob \!".debug" --iglob \!".vscode" --iglob \!".pcloud" --iglob \!".rustup" --iglob \!".cargo" -- %s || true'
+  let command_fmt = '\rg --column --line-number --no-heading --color=always --text --smart-case --one-file-system --hidden --iglob \!".git" --iglob \!".cache" --iglob \!".ccache" --iglob \!".debug" --iglob \!".vscode" --iglob \!".pcloud" --iglob \!".rustup" --iglob \!".cargo" -- %s || true'
   let initial_command = printf(command_fmt, shellescape(query))
   let reload_command = printf(command_fmt, '{q}')
   if a:ufzf
@@ -10733,7 +10733,7 @@ function! RipgrepFileFzf(aquery, ufzf, fullscreen)
   else
     let query = a:aquery
   endif
-  let command_fmt = '\rg --vimgrep --color=always --smart-case --one-file-system --hidden --iglob \!".git" --iglob \!".cache" --iglob \!".ccache" --iglob \!".debug" --iglob \!".vscode" --iglob \!".pcloud" --iglob \!".rustup" --iglob \!".cargo" -- %s %s || true'
+  let command_fmt = '\rg --vimgrep --color=always --text --smart-case --one-file-system --hidden --iglob \!".git" --iglob \!".cache" --iglob \!".ccache" --iglob \!".debug" --iglob \!".vscode" --iglob \!".pcloud" --iglob \!".rustup" --iglob \!".cargo" -- %s %s || true'
   let initial_command = printf(command_fmt, shellescape(query), expand('%'))
   let reload_command = printf(command_fmt, '{q}', expand('%'))
   if a:ufzf
@@ -10753,7 +10753,7 @@ function! RipgrepGitFzf(aquery, ufzf, fullscreen)
   else
     let query = a:aquery
   endif
-  let command_fmt = '\rg --column --line-number --no-heading --color=always --smart-case --one-file-system --hidden --iglob \!".git" --iglob \!".cache" --iglob \!".ccache" --iglob \!".debug" --iglob \!".vscode" --iglob \!".pcloud" --iglob \!".rustup" --iglob \!".cargo" -- %s ' . s:find_git_root() . ' || true'
+  let command_fmt = '\rg --column --line-number --no-heading --color=always --text --smart-case --one-file-system --hidden --iglob \!".git" --iglob \!".cache" --iglob \!".ccache" --iglob \!".debug" --iglob \!".vscode" --iglob \!".pcloud" --iglob \!".rustup" --iglob \!".cargo" -- %s ' . s:find_git_root() . ' || true'
   let initial_command = printf(command_fmt, shellescape(query))
   let reload_command = printf(command_fmt, '{q}')
   if a:ufzf

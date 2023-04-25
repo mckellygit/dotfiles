@@ -899,6 +899,8 @@ ifconfig()
 
 alias ztop='zenith'
 
+alias view='vi -R'
+
 # gv.vim uses noremap so need to override q, x here, look into using :Alias ?
 # could also nnoremap qq qa!<CR> here
 #alias vigv="vim -R -c \"GV2 \$1\" -c \":nnoremap <silent> <buffer> q <Nop>\" -c \":cnoreabbrev <silent> <buffer> q Tabcloserightquit\" -c \":cnoreabbrev <silent> <buffer> q! Tabcloserightquit\" -c \":nnoremap <silent> <buffer> x <Nop>\" -c \":cnoreabbrev <silent> <buffer> x Tabcloserightquit\" -c \":se bt=nowrite|:tabn|:hide|:redraw!\""
@@ -965,7 +967,7 @@ ag() { command ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --i
 # do we add a --max-depth 3 or so to help save huge traversals ?
 export RIPGREP_CONFIG_PATH=~/.rgrc
 
-rg() { command rg --color=always --smart-case --one-file-system --hidden --iglob !".git" --iglob !".cache" --iglob !".ccache" --iglob !".debug" --iglob !".vscode" --iglob !".pcloud" --iglob !".rustup" --iglob !".cargo" "$@"; }
+rg() { command rg --color=always --text --smart-case --one-file-system --hidden --iglob !".git" --iglob !".cache" --iglob !".ccache" --iglob !".debug" --iglob !".vscode" --iglob !".pcloud" --iglob !".rustup" --iglob !".cargo" "$@"; }
 
 # cannot override builtin git diff with git cmds/aliases so do it this way ...
 # also add git log
