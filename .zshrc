@@ -150,16 +150,6 @@ fi
 #fpath+=${ZDOTDIR:-~}/.zsh_functions
 fpath=( ~/.zsh_functions "${fpath[@]}" )
 
-if [[ -z "$SUDO_USER" && -z "$SUDO_UID" ]] ; then
-    autoload -Uz compinit && compinit
-fi
-
-zmodload -i zsh/complist
-
-LS_COLORS=$(echo $LS_COLORS | sed 's/ow=[0-9]*;[0-9]*/ow=30;46/')
-export LS_COLORS
-#eval "$(dircolors)"
-
 zstyle ':completion:*' menu select
 zstyle ':completion:*' show-completer true
 zstyle ':completion:*' verbose false
@@ -171,6 +161,18 @@ zstyle ':completion:*:*:git:*' script /usr/share/bash-completion/completions/git
 # costs, but refreshes cmd cache automatically
 # zstyle ":completion:*:commands" rehash 1
 # or could just run hash -rf ...
+
+if [[ -z "$SUDO_USER" && -z "$SUDO_UID" ]] ; then
+    autoload -Uz compinit && compinit
+fi
+
+zmodload -i zsh/complist
+
+# --------------
+
+LS_COLORS=$(echo $LS_COLORS | sed 's/ow=[0-9]*;[0-9]*/ow=30;46/')
+export LS_COLORS
+#eval "$(dircolors)"
 
 if [ "$TERM" = "xterm-kitty" ] ; then
 # Completion for kitty - needs to be after compinit ...
