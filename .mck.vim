@@ -416,7 +416,8 @@ Plug 'PeterRincker/vim-searchlight'
 " NOTE: recently works ok but many flashing redraws on pum up/down ...
 "       may need au! CompleteChanged code to help ...
 if g:has_wsl == 0
-    Plug 'TaDaa/vimade'
+    "Plug 'TaDaa/vimade'
+    Plug 'mckellygit/vimade', { 'branch': 'mck_updates' }
 endif
 " alternative ...
 "Plug 'blueyed/vim-diminactive'
@@ -1068,8 +1069,13 @@ else
         " use tmux popup ...
         let g:fzf_layout = { 'tmux': '-p -x C -y C -w 80% -h 65%' }
     else
-        " use vim split ...
-        let g:fzf_layout = { 'down': '~45%' }
+        if g:is_ttyterm < 2
+            " use vim popup ...
+            let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.65, 'yoffset': 0.5, 'xoffset': 0.5 } }
+        else
+            " use vim split ...
+            let g:fzf_layout = { 'down': '~45%' }
+        endif
     endif
 endif
 
@@ -1133,7 +1139,7 @@ endfunction
 
 command! -bang -nargs=? -complete=dir Files
     \ call fzf#vim#files(<q-args>,
-    \ {'options': ['--preview', '~/bin/fzf_preview250.sh {}', '--bind=alt-d:kill-word']},
+    \ {'options': ['--preview', '~/bin/fzf_preview250.sh {}', '--bind=alt-d:kill-word', '--bind=esc:ignore']},
     \ <bang>0)
 
 command! FZFProjectFiles execute 'Files' s:find_git_root()
@@ -1251,13 +1257,24 @@ function s:Mylsfzf(arg) abort
         call fzf#run({
 \           'source' : reverse(l:bl),
 \           'sink'   : function('s:bufopen'),
+\           'options': '--bind=esc:ignore',
 \           'tmux'   : '-p -x C -y C -w 80% -h 40%'
 \       })
-    else
+    elseif g:is_ttyterm < 2
+        " use vim popup ...
         call fzf#run({
 \           'source' : reverse(l:bl),
 \           'sink'   : function('s:bufopen'),
+\           'options': '--bind=esc:ignore',
 \           'window' : { 'width': 0.8, 'height': 0.4, 'yoffset': 0.5, 'xoffset': 0.5 }
+\       })
+    else
+        " use vim split ...
+        call fzf#run({
+\           'source' : reverse(l:bl),
+\           'sink'   : function('s:bufopen'),
+\           'options': '--bind=esc:ignore',
+\           'down'   : '~45%'
 \       })
     endif
 endfunction
@@ -10475,9 +10492,9 @@ function s:MySearch(meth) abort
     "execute 'AsyncRun! -strip -cwd ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) ' 2>/dev/null'
     execute 'AsyncRun! -strip \ag --vimgrep -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" -- ' shellescape(string, 1) ' 2>/dev/null'
   elseif (a:meth == 3)
-    call fzf#vim#grep('\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root(), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']}, 0)
+    call fzf#vim#grep('\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root(), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--bind=esc:ignore']}, 0)
   elseif (a:meth == 4)
-    call fzf#vim#grep('\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --nogroup --column --color -- '.shellescape(string, 1), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']}, 0)
+    call fzf#vim#grep('\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --nogroup --column --color -- '.shellescape(string, 1), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--bind=esc:ignore']}, 0)
   endif
   let @/=string
   set hlsearch
@@ -10517,9 +10534,9 @@ function s:MyVisSearch(meth) abort
     "execute 'AsyncRun! -strip -cwd ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) ' 2>/dev/null'
     execute 'AsyncRun! -strip \ag --vimgrep -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" -- ' shellescape(string, 1) ' 2>/dev/null'
   elseif (a:meth == 3)
-    call fzf#vim#grep('\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root(), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']}, 0)
+    call fzf#vim#grep('\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root(), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word'], '--bind=esc:ignore'}, 0)
   elseif (a:meth == 4)
-    call fzf#vim#grep('\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --nogroup --column --color -- '.shellescape(string, 1), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']}, 0)
+    call fzf#vim#grep('\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --nogroup --column --color -- '.shellescape(string, 1), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word'], '--bind=esc:ignore'}, 0)
   endif
   let @/=string
   set hlsearch
@@ -10628,9 +10645,9 @@ function! AgFzf(aquery, ufzf)
   let reload_command = printf(command_fmt, '{q}')
   "let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--disabled']}
   if a:ufzf
-    let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--disabled', '--query', query, '--bind', 'change:reload:'.reload_command]}
+    let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--bind=esc:ignore', '--disabled', '--query', query, '--bind', 'change:reload:'.reload_command]}
   else
-    let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--prompt', printf('Ag'.'%s > ', empty(query) ? '' : (' ('.query.')'))]}
+    let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--bind=esc:ignore', '--prompt', printf('Ag'.'%s > ', empty(query) ? '' : (' ('.query.')'))]}
   endif
   let @/=query
   set hlsearch
@@ -10648,9 +10665,9 @@ function! AgFileFzf(aquery, ufzf)
   let reload_command = printf(command_fmt, '{q}', expand('%'))
   "let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--disabled']}
   if a:ufzf
-    let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--disabled', '--query', query, '--bind', 'change:reload:'.reload_command]}
+    let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--bind=esc:ignore', '--disabled', '--query', query, '--bind', 'change:reload:'.reload_command]}
   else
-    let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--prompt', printf('Ag'.'%s > ', empty(query) ? '' : (' ('.query.')'))]}
+    let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--bind=esc:ignore', '--prompt', printf('Ag'.'%s > ', empty(query) ? '' : (' ('.query.')'))]}
   endif
   let @/=query
   set hlsearch
@@ -10668,9 +10685,9 @@ function! AgitFzf(aquery, ufzf)
   let reload_command = printf(command_fmt, '{q}')
   "let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--disabled']}
   if a:ufzf
-    let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--disabled', '--query', query, '--bind', 'change:reload:'.reload_command]}
+    let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--bind=esc:ignore', '--disabled', '--query', query, '--bind', 'change:reload:'.reload_command]}
   else
-    let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--prompt', printf('Agit'.'%s > ', empty(query) ? '' : (' ('.query.')'))]}
+    let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--bind=esc:ignore', '--prompt', printf('Agit'.'%s > ', empty(query) ? '' : (' ('.query.')'))]}
   endif
   let @/=query
   set hlsearch
@@ -10680,7 +10697,7 @@ endfunction
 command! -bang -nargs=* AgitOLD
   \ call fzf#vim#grep('\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --nogroup --column --color -- '.shellescape(<q-args>).' '.s:find_git_root(),
   \ 1,
-  \ {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word']},
+  \ {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--bind=esc:ignore']},
   \ <bang>0)
 
 command! -nargs=* -bang Ag   call AgFzf(<q-args>, 0)
@@ -10717,9 +10734,9 @@ function! RipgrepFzf(aquery, ufzf, fullscreen)
   let initial_command = printf(command_fmt, shellescape(query))
   let reload_command = printf(command_fmt, '{q}')
   if a:ufzf
-    let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--disabled', '--query', query, '--bind', 'change:reload:'.reload_command]}
+    let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--bind=esc:ignore', '--disabled', '--query', query, '--bind', 'change:reload:'.reload_command]}
   else
-    let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--prompt', printf('Rg'.'%s > ', empty(query) ? '' : (' ('.query.')'))]}
+    let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--bind=esc:ignore', '--prompt', printf('Rg'.'%s > ', empty(query) ? '' : (' ('.query.')'))]}
   endif
   let @/=query
   set hlsearch
@@ -10737,9 +10754,9 @@ function! RipgrepFileFzf(aquery, ufzf, fullscreen)
   let initial_command = printf(command_fmt, shellescape(query), expand('%'))
   let reload_command = printf(command_fmt, '{q}', expand('%'))
   if a:ufzf
-    let spec = {'options': ['--tac', '--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--disabled', '--query', query, '--bind', 'change:reload:'.reload_command]}
+    let spec = {'options': ['--tac', '--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--bind=esc:ignore', '--disabled', '--query', query, '--bind', 'change:reload:'.reload_command]}
   else
-    let spec = {'options': ['--tac', '--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--prompt', printf('Rg'.'%s > ', empty(query) ? '' : (' ('.query.')'))]}
+    let spec = {'options': ['--tac', '--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--bind=esc:ignore', '--prompt', printf('Rg'.'%s > ', empty(query) ? '' : (' ('.query.')'))]}
   endif
   let @/=query
   set hlsearch
@@ -10757,9 +10774,9 @@ function! RipgrepGitFzf(aquery, ufzf, fullscreen)
   let initial_command = printf(command_fmt, shellescape(query))
   let reload_command = printf(command_fmt, '{q}')
   if a:ufzf
-    let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--disabled', '--query', query, '--bind', 'change:reload:'.reload_command]}
+    let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--bind=esc:ignore', '--disabled', '--query', query, '--bind', 'change:reload:'.reload_command]}
   else
-    let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--prompt', printf('Rgit'.'%s > ', empty(query) ? '' : (' ('.query.')'))]}
+    let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--bind=esc:ignore', '--prompt', printf('Rgit'.'%s > ', empty(query) ? '' : (' ('.query.')'))]}
   endif
   let @/=query
   set hlsearch
