@@ -3,7 +3,7 @@
 unset BASH_ENV
 shopt -u expand_aliases
 
-export FZF_DEFAULT_OPTS='--ansi --bind="alt-g:first,alt-G:last" --bind="ctrl-f:half-page-down" --bind="ctrl-b:half-page-up" --bind="ctrl-k:up,ctrl-j:down" --bind="ctrl-d:delete-char" --bind="alt-bs:half-page-up,alt-space:half-page-down" --bind="alt-k:up,alt-j:down" --bind="alt-K:half-page-up,alt-J:half-page-down" --bind="ctrl-alt-k:half-page-up,ctrl-alt-j:half-page-down" --bind="ctrl-alt-o:half-page-down" --bind="page-up:page-up" --bind="page-down:page-down" --bind="alt-d:kill-word,alt-u:unix-line-discard" --bind="alt-b:page-up" --bind="alt-f:page-down" --color fg:242,bg:236,hl:65,fg+:15,bg+:239,hl+:108 --color info:108,prompt:109,spinner:108,pointer:168,marker:168'
+export FZF_DEFAULT_OPTS='--ansi --bind="alt-g:first,alt-G:last" --bind="ctrl-f:half-page-down" --bind="ctrl-b:half-page-up" --bind="ctrl-k:up,ctrl-j:down" --bind="ctrl-d:backward-delete-char" --bind="alt-bs:half-page-up,alt-space:half-page-down" --bind="alt-k:up,alt-j:down" --bind="alt-K:half-page-up,alt-J:half-page-down" --bind="ctrl-alt-k:half-page-up,ctrl-alt-j:half-page-down" --bind="ctrl-alt-o:half-page-down" --bind="page-up:page-up" --bind="page-down:page-down" --bind="alt-d:kill-word,alt-u:unix-line-discard" --bind="alt-b:page-up" --bind="alt-f:page-down" --color fg:242,bg:236,hl:65,fg+:15,bg+:239,hl+:108 --color info:108,prompt:109,spinner:108,pointer:168,marker:168'
 
 # if supplied arg then use it ...
 if [[ $# -ge 1 ]] ; then
