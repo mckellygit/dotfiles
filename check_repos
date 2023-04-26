@@ -11,13 +11,13 @@ if [[ $# -gt 0 ]] ; then
         extras=" bat neovim vim gef delta libxkbcommon foot alacritty"
         if [[ $# -gt 1 ]] ; then
             if [[ "$2" == "-a" || "$2" == "-all" || "$2" == "--a" || "$2" == "--all" ]] ; then
-                extras=" $extras cgdb ccache gdb-dashboard vifm fzf-git.sh fzf-tab-completion tree-sitter lazygit difftastic zutty"
+                extras=" $extras cgdb ccache gdb-dashboard vifm fzf-tab-completion tree-sitter lazygit difftastic zutty"
             elif [[ "$2" == "-v" ]] ; then
                 do_vim_bundles="yes"
             fi
             if [[ $# -gt 2 ]] ; then
                 if [[ "$3" == "-a" || "$3" == "-all" || "$3" == "--a" || "$3" == "--all" ]] ; then
-                    extras=" $extras cgdb ccache gdb-dashboard vifm fzf-git.sh fzf-tab-completion tree-sitter lazygit difftastic zutty"
+                    extras=" $extras cgdb ccache gdb-dashboard vifm fzf-tab-completion tree-sitter lazygit difftastic zutty"
                 elif [[ "$3" == "-v" ]] ; then
                     do_vim_bundles="yes"
                 fi
@@ -31,7 +31,7 @@ if [[ $# -gt 0 ]] ; then
             fi
             if [[ $# -gt 2 ]] ; then
                 if [[ "$3" == "-a" || "$3" == "-all" || "$3" == "--a" || "$3" == "--all" ]] ; then
-                    extras=" $extras cgdb ccache gdb-dashboard vifm fzf-git.sh fzf-tab-completion tree-sitter lazygit difftastic zutty"
+                    extras=" $extras cgdb ccache gdb-dashboard vifm fzf-tab-completion tree-sitter lazygit difftastic zutty"
                 fi
             fi
         fi
@@ -177,11 +177,11 @@ echo ""
 #   git clone https://github.com/junegunn/fzf.git ~/.fzf
 #   ~/.fzf/install
 
-# fzf-git.sh
-#   https://github.com/junegunn/fzf-git.sh.git
+# fzf-git.sh:
+#   git clone https://github.com/junegunn/fzf-git.sh.git
 
 # fzf-tab-completion:
-#   https://github.com/lincheney/fzf-tab-completion
+#   git clone https://github.com/lincheney/fzf-tab-completion
 
 # gnome sound output extension:
 #   sound-output-device-chooser@kgshank.net
