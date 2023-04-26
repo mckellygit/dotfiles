@@ -183,6 +183,11 @@ LS_COLORS=$(echo $LS_COLORS | sed 's/ow=[0-9]*;[0-9]*/ow=30;46/')
 export LS_COLORS
 #eval "$(dircolors)"
 
+if [[ -z "$ZUTTY_VERSION" ]] ; then
+    # some apps use this to know
+    export COLORTERM="truecolor"
+fi
+
 if [ "$TERM" = "xterm-kitty" ] ; then
 # Completion for kitty - needs to be after compinit ...
   kitty + complete setup zsh | source /dev/stdin
