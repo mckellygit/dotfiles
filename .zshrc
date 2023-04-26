@@ -158,6 +158,15 @@ zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 # yes this points to bash - but its correct ...
 zstyle ':completion:*:*:git:*' script /usr/share/bash-completion/completions/git
 
+# --------
+
+# fzf for zsh tab completion of many/most cmds ...
+# ok, but then some things do not work, like vi f<tab> ...
+#source ~/Downloads/fzf-tab-completion/zsh/fzf-zsh-completion.sh
+#zstyle ':completion:*' fzf-search-display true
+
+# --------
+
 # costs, but refreshes cmd cache automatically
 # zstyle ":completion:*:commands" rehash 1
 # or could just run hash -rf ...
@@ -1216,6 +1225,8 @@ tere() {
 # fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 # export FZF_DEFAULT_OPTS="--extended --cycle --reverse"
+
+export FZF_TMUX_OPTS="-p -x C -y -C -w 80% -h 65%"
 
 # --preview="head -n 200 {}" --preview-window=right:hidden --bind=ctrl-\\:toggle-preview
 
