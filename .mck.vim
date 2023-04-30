@@ -10152,7 +10152,7 @@ else
   let g:rtagsAutoLaunchRdm=0
 endif
 nnoremap <silent> <C-]> :call rtags#JumpTo(g:SAME_WINDOW)<CR>
-" we are using <C-w>] now to toggle termina/normal mode ...
+" we are using <C-w>] now to toggle terminal/normal mode ...
 "nnoremap <silent> <expr> <C-]> (&buftype == 'terminal') ? 'i' : ':call rtags#JumpTo(g:SAME_WINDOW)<CR>'
 autocmd BufReadPost quickfix nnoremap <silent> <buffer> <C-]> <Return>
 " C-o to go back
@@ -12367,18 +12367,32 @@ map <Leader>w.   <C-w>5>
 map <Leader>w>   <C-w>5>
 
 " just because hyphen requires no shift, so = is like + w/o shift ...
-map <silent> <C-w>=       <C-w>+
+"map <silent> <C-w>=       <C-w>+
 
 " we are using <C-w><,> below for tab nav, so change window horiz resize here
-map <silent> <C-w>,       <C-w>5<
-map <silent> <C-w>.       <C-w>5>
+"map <silent> <C-w>,       <C-w>5<
+"map <silent> <C-w>.       <C-w>5>
+"map <silent> <C-w>;       <C-w>5-
+"map <silent> <C-w>'       <C-w>5+
 
 " <C-,> and <C-.> only work in nvim ...
 " NOTE: windows terminal uses <C-,> for config ...
-if has("nvim")
-    map <C-w><C-,>   <C-w>5<
-    map <C-w><C-.>   <C-w>5>
-endif
+"if has("nvim")
+"    map <C-w><C-,>   <C-w>5<
+"    map <C-w><C-.>   <C-w>5>
+"    map <C-w><C-;>   <C-w>5-
+"    map <C-w><C-'>   <C-w>5+
+"endif
+
+" these are like tmux prefix <M-Up/Down/Left/Right> ...
+map <C-w><M-Up>      <C-w>5+
+map <C-w><M-Down>    <C-w>5-
+map <C-w><M-Left>    <C-w>5<
+map <C-w><M-Right>   <C-w>5>
+map <C-w><C-M-Up>      <C-w>5+
+map <C-w><C-M-Down>    <C-w>5-
+map <C-w><C-M-Left>    <C-w>5<
+map <C-w><C-M-Right>   <C-w>5>
 
 " ------------------------------
 
