@@ -7838,9 +7838,16 @@ set nostartofline
 set scrolloff=0
 
 " vim smoothscroll when lines wrap ...
-"if !has("nvim") && has('patch-9.0.1121')
-"    set smoothscroll
-"endif
+if !has("nvim") && has('patch-9.0.1121')
+    set smoothscroll
+endif
+" NOTE: this appeared in nvim v0.10.0-dev-247+, but how to know nvim version ?
+if has("nvim")
+    try
+        set smoothscroll
+    catch
+    endtry
+endif
 
 " ---------
 
@@ -10103,6 +10110,9 @@ let loaded_gtags_cscope=1
 "noremap <silent> <Leader>cc :ccl<bar>lcl<bar>:echo<CR>
 "noremap <silent> <Leader>cc :windo lcl<bar>ccl<bar>:echo<CR>
 " cscope -----------
+
+" tags ...
+map <C-w>} <Nop>
 
 " rtags -----------------
 " download/build/install rtags
