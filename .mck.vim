@@ -12266,6 +12266,9 @@ vnoremap <silent> <Leader>wk <C-\><C-n>:only<CR>
 "       <Leader>s<S-Left>, <S-Right>
 "       <Leader>s<, >
 
+nnoremap <silent> <Leader>\<Tab>       :tabnext<CR>
+vnoremap <silent> <Leader>\<Tab>       :tabnext<CR>
+
 " next tab
 nnoremap <silent> <Leader>tn           :tabnext<CR>
 vnoremap <silent> <Leader>tn <C-\><C-n>:tabnext<CR>
