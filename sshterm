@@ -35,9 +35,9 @@ else
 fi
 if [[ $sameip -eq 0 ]] ; then
     if [[ $noargs -eq 1 ]] ; then
-        exec ssh ${host}
+        exec ssh -t ${host}
     else
-        exec ssh ${@:1:$#-1} ${host}
+        exec ssh -t ${@:1:$#-1} ${host}
     fi
 fi
 
@@ -46,8 +46,8 @@ fi
 export LC_MONETARY=sshterm:22221:22222
 
 if [[ $noargs -eq 1 ]] ; then
-    exec ssh -R22221:localhost:22222 ${host}
+    exec ssh -t -R22221:localhost:22222 ${host}
 else
-    exec ssh ${@:1:$#-1} -R22221:localhost:22222 ${host}
+    exec ssh -t ${@:1:$#-1} -R22221:localhost:22222 ${host}
 fi
 

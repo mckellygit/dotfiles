@@ -63,7 +63,8 @@ while [[ $# -ge 1 ]] ; do
             sc_val=$1
             shift
         else
-            echo "Error, -sc arg requires value [-1,0,1] or file"
+            # should we echo to stderr ?
+            echo "Error, -sc arg requires value [-1,0,1] or file" >&2
             exit 1
         fi
     elif [[ $1 == '-d' || $1 == '--d' ]] ; then
@@ -318,7 +319,8 @@ if [[ $have_sc -eq 1 ]] ; then
                 add=$(cat $sc_val | tr -d '\n')
             fi
         else
-            echo "Error, -sc arg requires value [-1,0,1] or file"
+            # should we echo to stderr ?
+            echo "Error, -sc arg requires value [-1,0,1] or file" >&2
             exit 1
         fi
     fi
@@ -345,10 +347,14 @@ fi
 if [[ $have_tty -gt 0 ]]; then
     # TODO: write custom screen sequence "\e]52;z;\x07" to $out_tty
     #       capture back base64 text, decode and print here ...
-    echo "remote (tty) clipboard not supported"
-    exit
+    # should we echo to stderr ?
+    echo "remote (tty) clipboard not supported" >&2
+    exit 98
 elif [[ $have_ssh -gt 0 ]]; then
-    exec sshclip
+    # should we echo to stderr ?
+    # NOTE: ssh tunnel might echo error to stderr ?
+    exec sshclip 2>/dev/null
+    exit 97
 fi
 
 # -------------

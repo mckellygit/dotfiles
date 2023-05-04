@@ -4353,7 +4353,7 @@ function s:InitializeClipboard()
             if !exists('$VIM_SKIP_PRESERVE_CLIPBOARD')
                 "let clipdata = system("copyq clipboard")
                 let clipdata = system("myclip --o")
-                if empty(clipdata)
+                if empty(clipdata) || v:shell_error != 0
                     "echom "clearing out + and * registers"
                     call setreg('+', [])
                     call setreg('*', [])
@@ -5002,9 +5002,6 @@ function! ForceLoadNammedReg() abort
         let clen = len(@")
         if clen > g:max_osc52_len
             echohl WarningMsg | echo "Error: @\" reg exceeds max osc52 length" | echohl None
-            sleep 1251m
-            redraw!
-            echo " "
             return
         endif
     endif
@@ -5016,17 +5013,14 @@ function! ForceLoadNammedReg() abort
                 sleep 851m
                 redraw!
                 echo " "
-            elseif v:shell_error == 99
-                echohl WarningMsg | echo "Error: @\" reg exceeds max osc52 length" | echohl None
-                sleep 1251m
-                redraw!
-                echo " "
                 return
             else
                 echohl WarningMsg | echo "Error: @\" reg copy error: " . v:shell_error | echohl None
+                return
             endif
         else
             echohl WarningMsg | echo "win32yank.exe not found, cannot get data from clipboard" | echohl None
+            return
         endif
     else
         if g:has_clipper > 0
@@ -5043,17 +5037,17 @@ function! ForceLoadNammedReg() abort
                 sleep 851m
                 redraw!
                 echo " "
+                return
             elseif v:shell_error == 99
                 echohl WarningMsg | echo "Error: @\" reg exceeds max osc52 length" | echohl None
-                sleep 1251m
-                redraw!
-                echo " "
                 return
             else
                 echohl WarningMsg | echo "Error: @\" reg copy error: " . v:shell_error | echohl None
+                return
             endif
         else
             echohl WarningMsg | echo "myclip not found, cannot get data from clipboard" | echohl None
+            return
         endif
     endif
 endfunction
@@ -5376,12 +5370,19 @@ function! s:CopyDefReg(arg)
 
         let @p = system('myclip --o')
 
+        " TODO: break stderr out from cmd and echo that in error below ...
+        if v:shell_error != 0
+            echohl WarningMsg | echo "ssh remote clipboard paste error: " . v:shell_error | echohl None
+            return
+        endif
+
         if empty(@p) || len(@p) == 0
             if a:arg == 1
                 echohl DiffText | echo "ssh remote clipboard empty" | echohl None
                 sleep 851m
                 redraw!
                 echo " "
+                return
             endif
         else
             let @"=@p
@@ -5391,6 +5392,7 @@ function! s:CopyDefReg(arg)
                 sleep 851m
                 redraw!
                 echo " "
+                return
             endif
         endif
 
@@ -5408,12 +5410,20 @@ function! s:CopyDefReg(arg)
         "call setreg('"', getreg('*'), getregtype('*'))
         let @p = system('myclip --o')
     endif
+
+    " TODO: break stderr out from cmd and echo that in error below ...
+    if v:shell_error != 0
+        echohl WarningMsg | echo "clipboard paste error" . v:shell_error | echohl None
+        return
+    endif
+
     if empty(@p) || len(@p) == 0
         if a:arg == 1
             echohl DiffText | echo "clipboard empty" | echohl None
             sleep 851m
             redraw!
             echo " "
+            return
         endif
     else
         let @"=@p
@@ -5423,6 +5433,7 @@ function! s:CopyDefReg(arg)
             sleep 851m
             redraw!
             echo " "
+            return
         endif
     endif
 endfunction
@@ -5726,6 +5737,13 @@ function UpdateClipCmd(cmd)
     else
         let @p = system('myclip --o')
     endif
+
+    " TODO: break stderr out from cmd and echo that in error below ...
+    if v:shell_error != 0
+        echohl WarningMsg | echo "clipboard paste error" . v:shell_error | echohl None
+        return
+    endif
+
     if empty(@p) || len(@p) == 0
         echohl DiffText | echo "clipboard empty" | echohl None
         sleep 851m
