@@ -7837,6 +7837,8 @@ set virtualedit=block
 set nostartofline
 set scrolloff=0
 
+" NOTE: one weird thing with smoothscroll is when you go to
+"       the bottom of the file it moves that to mid-screen
 " vim smoothscroll when lines wrap ...
 if !has("nvim") && has('patch-9.0.1121')
     set smoothscroll
