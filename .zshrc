@@ -1900,6 +1900,54 @@ bindkey "\e[24;5~"  noop
 # A-S-f1-f12
 # C-A-S-f1-f12
 
+# ctrl ; ' , . = and their S,A,S+A keys ...
+
+bindkey "\e[59;5u"  noop
+bindkey "\e[39;5u"  noop
+bindkey "\e[44;5u"  noop
+bindkey "\e[46;5u"  noop
+
+bindkey "\e[58;6u"  noop
+bindkey "\e[34;6u"  noop
+bindkey "\e[60;6u"  noop
+bindkey "\e[62;6u"  noop
+
+bindkey "\e[59;7u"  noop
+bindkey "\e[39;7u"  noop
+bindkey "\e[44;7u"  noop
+bindkey "\e[46;7u"  noop
+
+bindkey "\e[58;8u"  noop
+bindkey "\e[34;8u"  noop
+bindkey "\e[60;8u"  noop
+bindkey "\e[62;8u"  noop
+
+bindkey "\e[43;8u"  noop
+bindkey "\e[61;7u"  noop
+
+bindkey "\e[27;5;59~"  noop
+bindkey "\e[27;5;39~"  noop
+bindkey "\e[27;5;44~"  noop
+bindkey "\e[27;5;46~"  noop
+
+bindkey "\e[27;6;58~"  noop
+bindkey "\e[27;6;34~"  noop
+bindkey "\e[27;6;60~"  noop
+bindkey "\e[27;6;62~"  noop
+
+bindkey "\e[27;7;59~"  noop
+bindkey "\e[27;7;39~"  noop
+bindkey "\e[27;7;44~"  noop
+bindkey "\e[27;7;46~"  noop
+
+bindkey "\e[27;8;58~"  noop
+bindkey "\e[27;8;34~"  noop
+bindkey "\e[27;8;60~"  noop
+bindkey "\e[27;8;62~"  noop
+
+bindkey "\e[27;8;43~"  noop
+bindkey "\e[27;7;61~"  noop
+
 # Ctrl-Enter to execute suggestion
 #bindkey '^\n' autosuggest-execute
 # make it a no-op for safety
