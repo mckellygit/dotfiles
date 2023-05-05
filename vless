@@ -1,5 +1,7 @@
 #!/bin/bash
 
+re='^vim'
+
 if [[ -z "$VLESS" ]] ; then
     if [[ -z "$VISUAL" ]] ; then
         exec nvimless $@
@@ -9,6 +11,8 @@ if [[ -z "$VLESS" ]] ; then
         exec nvimless $@
     fi
 elif [[ "$VLESS" == "vless" ]] ; then
+    exec vimless $@
+elif [[ $VLESS =~ $re ]] ; then
     exec vimless $@
 else
     exec nvimless $@
