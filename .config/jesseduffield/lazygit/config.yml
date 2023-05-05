@@ -4,7 +4,7 @@ keybinding:
     files:
         openStatusFilter: '<f1>'
     universal:
-        quit: '<f10>'
+        quit: '<f12>'
         return: '<esc>'
         redo: '<c-6>'
         undo: '<c-8>'
