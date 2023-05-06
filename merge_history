@@ -40,7 +40,8 @@ then
         flock 200
         touch ~/.mrghist
         chmod 600 ~/.mrghist
-        cat $HISTFILE ~/.histfile | awk -v date="WILL_NOT_APPEAR$(date +"%s%N")" '{if (sub(/\\$/,date)) printf "%s", $0; else print $0}' | LC_ALL=C sort -u | awk -v date="WILL_NOT_APPEAR$(date +"%s%N")" '{gsub('date',"\\\n"); print $0}' | grep --text -v WILL_NOT_APPEAR | tail -n 5000 >> ~/.mrghist
+        xvar=$(date +"%s%N")
+        cat $HISTFILE ~/.histfile | awk -v date="WILL_NOT_APPEAR$xvar" '{if (sub(/\\$/,date)) printf "%s", $0; else print $0}' | LC_ALL=C sort -u | awk -v date="WILL_NOT_APPEAR$xvar" '{gsub('date',"\\\n"); print $0}' | tail -n 10000 >> ~/.mrghist
         mv ~/.mrghist ~/.histfile
     ) 200>~/.histfile-lock
 fi

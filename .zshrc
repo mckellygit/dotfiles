@@ -6,9 +6,9 @@ if [[ -z "$SUDO_USER" && -z "$SUDO_UID" ]] ; then
 else
     cp -p ~/.histfile $ZSH_HIST
 fi
-HISTFILE=$ZSH_HIST
 HISTSIZE=1000
 SAVEHIST=1000
+HISTFILE=$ZSH_HIST
 
 # skip SHARE_HISTORY as then up-arrow goes thru other shells' history, not just our own, and that can be confusing ...
 # instead, update .histfile by merging session history periodically and at session exit and if update_zhist is run manually
