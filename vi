@@ -4,6 +4,17 @@
 #    floaterm "$@"
 #fi
 
+re1='/vim/'
+re2='/nvim/'
+
+if [[ -n $VIMRUNTIME ]] ; then
+    if [[ $VIMRUNTIME =~ $re1 ]] ; then
+        exec vim $@
+    elif [[ $VIMRUNTIME =~ $re2 ]] ; then
+        exec nvim $@
+    fi
+fi
+
 if [[ -n "$TMUX" ]] ; then
     if [[ -z "$VISUAL" ]] ; then
         #unset TMUX

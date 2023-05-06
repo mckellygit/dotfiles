@@ -1,6 +1,17 @@
 #!/bin/bash
 
-re='^vim'
+re1='/vim/'
+re2='/nvim/'
+
+if [[ -n $VIMRUNTIME ]] ; then
+    if [[ $VIMRUNTIME =~ $re1 ]] ; then
+        exec vimless $@
+    elif [[ $VIMRUNTIME =~ $re2 ]] ; then
+        exec nvimless $@
+    fi
+fi
+
+re3='^vim'
 
 if [[ -z "$VLESS" ]] ; then
     if [[ -z "$VISUAL" ]] ; then
@@ -12,7 +23,7 @@ if [[ -z "$VLESS" ]] ; then
     fi
 elif [[ "$VLESS" == "vless" ]] ; then
     exec vimless $@
-elif [[ $VLESS =~ $re ]] ; then
+elif [[ $VLESS =~ $re3 ]] ; then
     exec vimless $@
 else
     exec nvimless $@
