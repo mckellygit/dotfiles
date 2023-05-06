@@ -4790,35 +4790,46 @@ endif
 "nnoremap G  G0
 "vnoremap 1G 1G0
 vnoremap gg 1G0
-vnoremap G  G$
 
-call <SID>MapFastKeycode('<F18>',  "\eg", 18)
-nnoremap <F18> gg
-vnoremap <F18> 1G0
-cnoremap <F18> <C-v><Esc>g
-inoremap <F18> <C-v><Esc>g
-tnoremap <F18> <Esc>g
-if has("nvim")
-    nnoremap <M-g> gg
-    vnoremap <M-g> 1G0
-    cnoremap <F18> <M-g>
-    inoremap <F18> <M-g>
-    tnoremap <F18> <M-g>
-endif
+" if you do a :9999999 and smoothscroll is enabled, it will
+" put you at the bottom, but winline() at then center of the window ...
+function! s:GotoEnd()
+    silent execute 'normal! Gz-'
+endfunction
 
-call <SID>MapFastKeycode('<F19>',  "\eG", 19)
-nnoremap <F19> G
-vnoremap <F19> G$
-cnoremap <F19> <C-v><Esc>G
-inoremap <F19> <C-v><Esc>G
-tnoremap <F19> <Esc>G
-if has("nvim")
-    nnoremap <M-G> G
-    vnoremap <M-G> G$
-    cnoremap <F19> <M-G>
-    inoremap <F19> <M-G>
-    tnoremap <F19> <M-G>
-endif
+nnoremap G <Cmd>call <SID>GotoEnd()<CR>
+"vnoremap G  G$
+vnoremap G <Cmd>call <SID>GotoEnd()<CR>$
+
+" NOTE: skip M-g and M-G for top/bottom to get back 2 more func keys ...
+
+"call <SID>MapFastKeycode('<F18>',  "\eg", 18)
+"nnoremap <F18> gg
+"vnoremap <F18> 1G0
+"cnoremap <F18> <C-v><Esc>g
+"inoremap <F18> <C-v><Esc>g
+"tnoremap <F18> <Esc>g
+"if has("nvim")
+"    nnoremap <M-g> gg
+"    vnoremap <M-g> 1G0
+"    cnoremap <F18> <M-g>
+"    inoremap <F18> <M-g>
+"    tnoremap <F18> <M-g>
+"endif
+"
+"call <SID>MapFastKeycode('<F19>',  "\eG", 19)
+"nnoremap <F19> G
+"vnoremap <F19> G$
+"cnoremap <F19> <C-v><Esc>G
+"inoremap <F19> <C-v><Esc>G
+"tnoremap <F19> <Esc>G
+"if has("nvim")
+"    nnoremap <M-G> G
+"    vnoremap <M-G> G$
+"    cnoremap <F19> <M-G>
+"    inoremap <F19> <M-G>
+"    tnoremap <F19> <M-G>
+"endif
 
 " ------------------------------
 
@@ -4867,8 +4878,10 @@ nnoremap <silent> <C-Home> gg
 vnoremap <silent> <C-Home> 1G0
 " terminator <C-End> mapped to <Esc>6 (M-6)
 "noremap <silent> <Esc>6 G
-nnoremap <silent> <C-End> G
-vnoremap <silent> <C-End> G$
+"nnoremap <silent> <C-End> G
+nnoremap <silent> <C-End> <Cmd>call <SID>GotoEnd()<CR>
+"vnoremap <silent> <C-End> G$
+vnoremap <silent> <C-End> <Cmd>call <SID>GotoEnd()<CR>$
 
 " NOTE: <F34> is mapped to paste below
 "   and <F33> is vmapped to copy selection below
