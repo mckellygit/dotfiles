@@ -672,8 +672,8 @@ nnoremap <Esc>[1;4A    <C-w>w40k<C-w>w
 nnoremap <Esc>[1;7B    <C-w>w20j<C-w>w
 nnoremap <Esc>[1;7A    <C-w>w20k<C-w>w
 
-nnoremap \`            <C-w>w<C-u>w
-nnoremap \1            <C-w>w<C-d>w
+nnoremap \`            <C-w>w<C-u><C-w>w
+nnoremap \1            <C-w>w<C-d><C-w>w
 
 " <A-BS>
 nnoremap <M-BS>        <C-w>w10k<C-w>w
@@ -701,6 +701,8 @@ nnoremap qq            :q<cr>
 nnoremap \qq           :q<cr>
 nnoremap \xc           :q<cr>
 
+nnoremap <f12><f12>    :q<cr>
+
 nnoremap <C-_>\        :q<cr>
 qnoremap <C-_>\        <C-w>w
 
@@ -720,9 +722,23 @@ qnoremap QQ            <C-w>w:quit<cr>
 qnoremap <C-q><C-q>    <C-w>w:quit<cr>
 qnoremap \xc           <C-w>w:quit<cr>
 
+qnoremap <f12><f12>    <C-w>w:quit<cr>
+
 " for switching to/from preview window (NOTE: <S-Tab> also works)
 nmap <C-w>w            <C-w>.w
 nmap <C-w><C-w>        <C-w>.w
+
+nmap <C-w><Tab>        <C-w><C-w>
+qmap <C-w><Tab>        <C-w><C-w>
+nmap <C-w><Left>       <C-w><C-w>
+qmap <C-w><Left>       <C-w><C-w>
+nmap <C-w><Right>      <C-w><C-w>
+qmap <C-w><Right>      <C-w><C-w>
+qmap <C-w><Right>      <C-w><C-w>
+nmap \\<Tab>           <C-w><C-w>
+nmap \<Tab><Tab>       <C-w><C-w>
+qmap \\<Tab>           <C-w><C-w>
+qmap \<Tab><Tab>       <C-w><C-w>
 
 nnoremap <Tab>         <Nop>
 qnoremap <Tab>         <Nop>
@@ -827,7 +843,7 @@ qnoremap <C-j>         10j
 qnoremap <C-k>         10k
 
 qnoremap g             <nop>
-qnoremap gg            1G0
+qnoremap gg            1G
 
 " ----
 
@@ -892,15 +908,21 @@ qnoremap <Esc>[1;7A    20k
 
 " ------
 
+nnoremap <C-Home>      <C-w>w1G<C-w>w
+nnoremap <Esc>[1;5H    <C-w>w1G<C-w>w
+
+nnoremap <C-End>       <C-w>wG<C-w>w
+nnoremap <Esc>[1;5F    <C-w>wG<C-w>w
+
 qnoremap <Home>        <nop>
-qnoremap <C-Home>      1G0
-qnoremap <Esc>[1;5H    1G0
-qnoremap [1;5H       1G0
+qnoremap <C-Home>      1G
+qnoremap <Esc>[1;5H    1G
+qnoremap [1;5H       1G
 
 qnoremap <End>         <nop>
-qnoremap <C-End>       G0
-qnoremap <Esc>[1;5F    G0
-qnoremap [1;5F       G0
+qnoremap <C-End>       G
+qnoremap <Esc>[1;5F    G
+qnoremap [1;5F       G
 
 " --------------
 
