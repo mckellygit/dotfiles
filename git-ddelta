@@ -13,6 +13,6 @@ then
     echo "fatal: not a git repository (or any of the parent directories): .git"
     exit 1
 fi
-export GIT_PAGER="delta -s --navigate"
+export GIT_PAGER="delta -s --navigate --tabs 4"
 git diff $@
 
