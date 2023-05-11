@@ -2,5 +2,5 @@
 
 git() { $HOME/bin/git "$@"; }
 
-git --no-pager diff --color=always --no-index -- $1 $2 | tail -n +5
+git --no-pager diff --color=always --no-index -- $1 $2 |& sed 's/\t/    /g' |& tail -n +5
 

@@ -1,6 +1,8 @@
 [core]
 	autocrlf = input
-	whitespace = trailing-space,tab-in-indent
+	whitespace = trailing-space,tab-in-indent,tabwidth=4
+#	tab-in-indent makes leading tabs bright red ...
+#	whitespace = trailing-space,tabwidth=4
 	editor = vim
 	excludesfile = ~/.gitignore
     preloadindex = true
@@ -31,7 +33,7 @@
     hunk = magenta
     context = 249
 [pager]
-    diff = less -R -x4
+    diff = less -iR -x4 -c
 [alias]
     undo = "!f() { git reset --hard $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
     dt = difftool

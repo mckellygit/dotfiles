@@ -16,7 +16,8 @@ fi
 
 # if stdout is not a terminal its probably been redirected, so skip pager ...
 if [ ! -t 1 ] ; then
-    git --no-pager diff $@
+    #git --no-pager diff $@ |& sed 's/\t/    /g'
+    git --no-pager diff $@ |& t2s -g
     exit
 fi
 
@@ -24,5 +25,6 @@ fi
 # use -c~ instead ...
 # git --no-pager diff --color=always $1 $2 $3 $4 |& less -iR -K -x4 -c~
 export FROM_GIT_LESS=1
-git --no-pager diff --color=always $@ |& smartless
+#git --no-pager diff --color=always $@ |& sed 's/\t/    /g' |& smartless
+git --no-pager diff --color=always $@ |& t2s -g |& smartless
 

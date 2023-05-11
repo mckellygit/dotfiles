@@ -13,5 +13,6 @@ then
     echo "fatal: not a git repository (or any of the parent directories): .git"
     exit 1
 fi
-git --no-pager diff $@ |& vless
+#git --no-pager diff $@ |& sed 's/\t/    /g' |& vless
+git --no-pager diff $@ |& t2s -g |& vless
 
