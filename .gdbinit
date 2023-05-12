@@ -23,5 +23,6 @@ dir .
 dir ~/lnrs/wip/build/generated
 dir ~/lnrs/wip/HPCC-Platform
 dir ~/lnrs/wip/LN
+tui disable
 #source ~/Downloads/gdb-dashboard/.gdbinit
 source ~/Downloads/gef/gef.py
