@@ -1,6 +1,11 @@
 #!/bin/bash
 
-git() { $HOME/bin/git "$@"; }
+if [[ $# -lt 2 ]] ; then
+    echo "$(basename $0) : Error, need <file1> <file2> args ..."
+    exit 1
+fi
 
-git --no-pager diff --color=always --no-index -- $1 $2 |& sed 's/\t/    /g' |& tail -n +5
+#command git diff --no-index $@
 
+export FROM_GIT_LESS=1
+git --no-pager diff --color=always $@ |& t2s -g |& smartless
