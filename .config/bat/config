@@ -18,7 +18,7 @@
 # is this still the case with current version of less ?
 
 #--pager="less -iR -K -x4 -c -~"
---pager="smartless"
+--pager="less"
 
 # Use C++ syntax (instead of C) for .h header files
 --map-syntax h:cpp

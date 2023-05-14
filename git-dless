@@ -26,5 +26,5 @@ fi
 # git --no-pager diff --color=always $1 $2 $3 $4 |& less -iR -K -x4 -c~
 export FROM_GIT_LESS=1
 #git --no-pager diff --color=always $@ |& sed 's/\t/    /g' |& smartless
-git --no-pager diff --color=always $@ |& t2s -g |& smartless
+git --no-pager diff --color=always $@ |& t2s -g |& less
 
