@@ -81,7 +81,7 @@ KeyBind:
     follow_mode:
         - "F"
     follow_all:
-        - "ctrl+a"
+        - "A"
     follow_section:
         - "F2"
     help:
