@@ -37,22 +37,20 @@
 [alias]
     undo = "!f() { git reset --hard $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
     dt = difftool
+    dv = difftool
     dd = ddelta
     delta = ddelta
-    dv = difftool --tool=nvimgitdiff
-    gvdiff = difftool
-    nvdiff = difftool --tool=nvimgitdiff
+    vdiff = difftool
+    nvdiff = difftool
+    vvdiff = difftool --tool=vimgitdiff
     dtastic = difft
     difff = dless
     olddiff = diff
     oldiff = diff
     dif = dless
     dles = dless
-    vless = dvim
 #	git diff does not use alternate screen, no matter what PAGER, GIT_PAGER, etc. are
 #	dless is a git-dless cmd
-#	dvim is a git-dvim cmd
-#	dbat is a git-dbat cmd
 	last = log -l HEAD
 	unstage = reset HEAD --
 	visual = !gitk

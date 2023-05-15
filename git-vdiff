@@ -17,4 +17,4 @@ fi
 # why did we think we needed to cd to top-level git dir ?
 #cd $gdir || exit
 
-git --no-pager gvdiff $@
+git --no-pager difftool $@
