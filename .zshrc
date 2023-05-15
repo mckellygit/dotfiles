@@ -881,7 +881,7 @@ alias lessc='less-pyg'
 # uses $BATNAME underneath to get $BATNAME syntax color but less driver with multiple files, etc.
 export LESSOPEN="|lessfilter %s"
 # the default arguments to the pager, note -c means clear screen and start at top
-export LESS='-F -iR -K -x4 -~'
+export LESS='-M -F -iR -K -x4 -~'
 
 #export LESSHISTFILE='-'
 export LESSHISTSIZE=20
@@ -893,7 +893,7 @@ export SMARTLESS_NUM_LINES=$((LINES-6))
 # the pager to be used
 export SMARTLESS_PAGER='less'
 # the default arguments to the pager, note -c means clear screen and start at top
-export SMARTLESS_PAGER_ARGUMENTS='-iR -K -x4 -c -~'
+export SMARTLESS_PAGER_ARGUMENTS='-M -iR -K -x4 -c -~'
 
 #export PAGER='less -RX'
 #export PAGER='$BATNAME -p'
