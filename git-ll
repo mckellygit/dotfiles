@@ -14,5 +14,5 @@ then
     exit 1
 fi
 #git --no-pager log -p --color=always $@ |& sed 's/\t/    /g' |& less -R +k -x4
-git --no-pager log -p --color=always $@ |& t2s -g |& less -R +k -x4
+git --no-pager log -p --color=always $@ |& t2s -g |& less
 
