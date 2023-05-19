@@ -4791,15 +4791,16 @@ endif
 "vnoremap 1G 1G0
 vnoremap gg 1G0
 
-" if you do a :9999999 and smoothscroll is enabled, it will
-" put you at the bottom, but winline() at then center of the window ...
+" if you do a :9999999 and smoothscroll is enabled, it used to
+" put you at the bottom, but winline() at the center of the window ...
+" Think this is fixed now ...
 function! s:GotoEnd()
     silent execute 'normal! Gz-'
 endfunction
 
-nnoremap G <Cmd>call <SID>GotoEnd()<CR>
-"vnoremap G  G$
-vnoremap G <Cmd>call <SID>GotoEnd()<CR>$
+"nnoremap G <Cmd>call <SID>GotoEnd()<CR>
+vnoremap G  G$
+"vnoremap G <Cmd>call <SID>GotoEnd()<CR>$
 
 " NOTE: skip M-g and M-G for top/bottom to get back 2 more func keys ...
 
@@ -4878,10 +4879,12 @@ nnoremap <silent> <C-Home> gg
 vnoremap <silent> <C-Home> 1G0
 " terminator <C-End> mapped to <Esc>6 (M-6)
 "noremap <silent> <Esc>6 G
-"nnoremap <silent> <C-End> G
-nnoremap <silent> <C-End> <Cmd>call <SID>GotoEnd()<CR>
-"vnoremap <silent> <C-End> G$
-vnoremap <silent> <C-End> <Cmd>call <SID>GotoEnd()<CR>$
+
+" Think the smoothscroll GotoEnd but still not at screen bottom issue is resolved now
+nnoremap <silent> <C-End> G
+"nnoremap <silent> <C-End> <Cmd>call <SID>GotoEnd()<CR>
+vnoremap <silent> <C-End> G$
+"vnoremap <silent> <C-End> <Cmd>call <SID>GotoEnd()<CR>$
 
 " NOTE: <F34> is mapped to paste below
 "   and <F33> is vmapped to copy selection below
@@ -12114,16 +12117,18 @@ endif
 " ctrl-x-] like tmux enter copy-mode-vi (ctrl-s-])
 " MCK: use something else besides <C-x> here ...
 " TODO: perhaps map <Esc>] to some Func key ?  But maybe ok as its not the first char ...
-tnoremap <silent> <F17>]      <C-\><C-n>
-tnoremap <silent> <F17><Esc>] <C-\><C-n>
-tnoremap <silent> <M-x>]      <C-\><C-n>
-tnoremap <silent> <M-x><Esc>] <C-\><C-n>
+" Add and h so we can go straight up without jumping to beg of line ...
+" (only needed for nvim but ok for both)
+tnoremap <silent> <F17>]      <C-\><C-n>h
+tnoremap <silent> <F17><Esc>] <C-\><C-n>h
+tnoremap <silent> <M-x>]      <C-\><C-n>h
+tnoremap <silent> <M-x><Esc>] <C-\><C-n>h
 
 "tnoremap <silent> <M-]> <C-\><C-n>
 "tnoremap <silent> <C-]> <C-\><C-n>
 
-tnoremap <silent> <C-w>]     <C-\><C-n>
-tnoremap <silent> <C-w><C-]> <C-\><C-n>
+tnoremap <silent> <C-w>]     <C-\><C-n>h
+tnoremap <silent> <C-w><C-]> <C-\><C-n>h
 
 " mck <M-C-]> here ? or <C-]> (jump to symbol n/a here)
 
