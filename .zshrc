@@ -842,6 +842,8 @@ start_tmux()
     fi
 }
 
+alias sudovi='sudo -E vi'
+
 alias st='command st -g 194x51+690+678'
 
 alias bye='echo "dont leave :-("'
