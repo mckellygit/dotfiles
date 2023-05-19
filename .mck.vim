@@ -3612,6 +3612,14 @@ colorscheme deus
 "    hi! DiffAdd       cterm=none ctermfg=235 ctermbg=142
 "endif
 
+if has("nvim")
+    " terminal cursor color highlight (after setting colorscheme) terminal cursor bg is 172
+    hi! TermCursor   cterm=none ctermfg=235 ctermbg=40
+    hi! TermCursorNC cterm=none ctermfg=40  ctermbg=none
+    " NOTE: in nvim terminal cursor does not blink
+    "       in both floaterm cursor does not blink
+endif
+
 " do not use delete/wipe with qf/ll ...
 set nohidden
 set bufhidden=hide
