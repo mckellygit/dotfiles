@@ -842,6 +842,23 @@ start_tmux()
     fi
 }
 
+clear()
+{
+    if [[ $# -ge 1 ]] ; then
+        if [[ "$1" == "-x" ]] ; then
+            command clear -x
+        elif [[ "$1" == "-a" ]] ; then
+            command clear
+        fi
+    else
+        command clear -x
+    fi
+}
+
+alias clr='command clear -x'
+alias cls='command clear -x'
+alias clearall='command clear'
+
 alias sudovi='sudo -E vi'
 
 alias st='command st -g 194x51+690+678'
