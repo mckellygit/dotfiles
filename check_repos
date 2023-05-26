@@ -183,6 +183,9 @@ echo ""
 # fzf-tab-completion:
 #   git clone https://github.com/lincheney/fzf-tab-completion
 
+# fzf-tab:
+#   git clone https://github.com/Aloxaf/fzf-tab
+
 # gnome sound output extension:
 #   sound-output-device-chooser@kgshank.net
 #   ~/.local/share/gnome-shell/extensions
@@ -254,6 +257,16 @@ echo ""
 #   cd lazygit
 #   go install
 
+# lazydocker:
+#   git clone https://github.com/jesseduffield/lazydocker.git
+#   cd lazydocker
+#   go install
+
+# dry: (similar to lazydocker for container mgmt via tui)
+#   git clone https://github.com/moncho/dry.git
+#   curl -sSf https://moncho.github.io/dry/dryup.sh | sudo sh
+#   sudo chmod 755 /usr/local/bin/dry
+
 # delta:
 #   git clone https://github.com/dandavison/delta.git
 #   cd delta
@@ -313,6 +326,9 @@ echo ""
 #   http://guichaz.free.fr/iotop/
 #   also -
 #   git clone https://github.com/Tomas-M/iotop.git
+
+# iperf3: (not compatible with iperf2)
+#    git clone https://github.com/esnet/iperf.git
 
 # ---------------------
 
