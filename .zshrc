@@ -160,13 +160,6 @@ zstyle ':completion:*:*:git:*' script /usr/share/bash-completion/completions/git
 
 # --------
 
-# fzf for zsh tab completion of many/most cmds ...
-# ok, but then some things do not work, like vi f<tab> ...
-#source ~/Downloads/fzf-tab-completion/zsh/fzf-zsh-completion.sh
-#zstyle ':completion:*' fzf-search-display true
-
-# --------
-
 # costs, but refreshes cmd cache automatically
 # zstyle ":completion:*:commands" rehash 1
 # or could just run hash -rf ...
@@ -176,6 +169,19 @@ if [[ -z "$SUDO_USER" && -z "$SUDO_UID" ]] ; then
 fi
 
 zmodload -i zsh/complist
+
+# --------------
+
+# fzf for zsh tab completion of many/most cmds ...
+# ok, but then some things do not work, like vi f<tab> ...
+#source ~/Downloads/fzf-tab-completion/zsh/fzf-zsh-completion.sh
+#zstyle ':completion:*' fzf-search-display true
+
+# --------
+
+# after complinit but before zsh-autosuggestions and zsh-syntax-highlighting
+#source ~/Downloads/fzf-tab/fzf-tab.plugin.zsh
+#enable-fzf-tab
 
 # --------------
 
@@ -810,6 +816,7 @@ else
   export BATNAME="bat"
 fi
 
+# NOTE: could add --threads=1 to get a consistent order (at a perf cost) ...
 if command -v fdfind > /dev/null; then
   export FDNAME="fdfind"
   alias fd='fdfind'
@@ -1050,9 +1057,10 @@ alias kc='kubectl'
 
 # ------------------
 
-# lazygit
+# lazygit, lazydocker
 
 alias lg='lazygit'
+alias lzd='lazydocker'
 
 # ------------------
 
@@ -1234,17 +1242,17 @@ alias nvdif='nvimdiff'
 #    cd "$(llama "$@")"
 #}
 
-cx() {
-    if [[ $# -ge 1 ]] ; then
-        cd $1 2> /dev/null
-        shift
-        local result=$(command tere -f -d -S --autocd-timeout 400 --history-file '' -m ctrl-x:Exit -m ctrl-q:Exit -m alt-Enter:Exit "$@")
-        [ -n "$result" ] && cd -- "$result"
-    else
-        local result=$(command tere -f -d -S --autocd-timeout 400 --history-file '' -m ctrl-x:Exit -m ctrl-q:Exit -m alt-Enter:Exit "$@")
-        [ -n "$result" ] && cd -- "$result"
-    fi
-}
+#cx() {
+#    if [[ $# -ge 1 ]] ; then
+#        cd $1 2> /dev/null
+#        shift
+#        local result=$(command tere -f -d -S --autocd-timeout 400 --history-file '' -m ctrl-x:Exit -m ctrl-q:Exit -m alt-Enter:Exit "$@")
+#        [ -n "$result" ] && cd -- "$result"
+#    else
+#        local result=$(command tere -f -d -S --autocd-timeout 400 --history-file '' -m ctrl-x:Exit -m ctrl-q:Exit -m alt-Enter:Exit "$@")
+#        [ -n "$result" ] && cd -- "$result"
+#    fi
+#}
 
 tere() {
     local result=$(command tere -f -d -S --autocd-timeout 400 --history-file '' -m ctrl-x:Exit -m ctrl-q:Exit -m alt-Enter:Exit "$@")
@@ -1289,12 +1297,28 @@ export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND -t d"
 # NOTE: alt-shift-up/down used by tmux to resize panes ...
 # NOTE: alt-space used for window menu
 
-export FZF_DEFAULT_OPTS='--height 40% --ansi --preview "$BATNAME --style=numbers --color=always --line-range :250 {}" --bind="ctrl-alt-p:toggle-preview" --bind="home:preview-top" --bind="end:preview-bottom" --bind="alt-g:preview-top,alt-G:preview-bottom" --bind="ctrl-f:half-page-down" --bind="ctrl-b:half-page-up" --bind="ctrl-k:up,ctrl-j:down" --bind="ctrl-d:backward-delete-char" --bind="alt-shift-up:preview-half-page-up" --bind="alt-shift-down:preview-half-page-down" --bind="shift-up:preview-half-page-up" --bind="shift-down:preview-half-page-down" --bind="alt-k:up,alt-j:down" --bind="alt-K:preview-half-page-up,alt-J:preview-half-page-down" --bind="ctrl-alt-k:preview-half-page-up,ctrl-alt-j:preview-half-page-down" --bind="ctrl-alt-o:preview-half-page-down" --bind="page-up:preview-page-up" --bind="page-down:preview-page-down" --bind="alt-d:kill-word,alt-u:unix-line-discard" --bind="alt-b:page-up" --bind="alt-f:page-down" --preview-window=right:hidden --color fg:242,bg:236,hl:65,fg+:15,bg+:239,hl+:108 --color info:108,prompt:109,spinner:108,pointer:168,marker:168'
+export FZF_DEFAULT_OPTS='--height 40% --ansi --preview "$BATNAME --style=numbers --color=always --line-range :250 {}" --bind="ctrl-alt-p:toggle-preview" --bind="home:preview-top" --bind="end:preview-bottom" --bind="alt-g:preview-top,alt-G:preview-bottom" --bind="ctrl-f:half-page-down" --bind="ctrl-b:half-page-up" --bind="ctrl-k:up,ctrl-j:down" --bind="ctrl-d:backward-delete-char" --bind="alt-shift-up:preview-half-page-up" --bind="alt-shift-down:preview-half-page-down" --bind="shift-up:preview-half-page-up" --bind="shift-down:preview-half-page-down" --bind="alt-k:up,alt-j:down" --bind="alt-K:preview-half-page-up,alt-J:preview-half-page-down" --bind="ctrl-alt-k:preview-half-page-up,ctrl-alt-j:preview-half-page-down" --bind="ctrl-alt-o:preview-half-page-down" --bind="page-up:preview-page-up" --bind="page-down:preview-page-down" --bind="alt-d:kill-word,alt-u:unix-line-discard,shift-delete:kill-line,ctrl-delete:clear-query" --bind="alt-b:page-up" --bind="alt-f:page-down" --preview-window=right:hidden --color fg:242,bg:236,hl:65,fg+:15,bg+:239,hl+:108 --color info:108,prompt:109,spinner:108,pointer:168,marker:168'
 
 # dont want to disable color with +c and dont want to add -x for extended-search as that is already enabled by default ...
 #export FZF_COMPLETION_OPTS='+c -x'
 
 export FZF_COMPLETION_TRIGGER="\`\`"
+
+# -------------
+
+# NOTE: --threads=1 is ok here because its also -d 1 and wont take long ...
+
+cx() {
+    if [[ $# -ge 1 ]] ; then
+        local result=$(fd --threads=1 --color=always --one-file-system -t d -d 1 . "$@" | command fzf --bind="page-up:page-up,page-down:page-down" --bind="backward-eof:reload(fd --threads=1 --color=always --one-file-system -t d -d 1 \"$@\")" --bind="ctrl-delete:reload(fd --threads=1 --color=always --one-file-system -t d -d 1 \"$@\")+clear-query" --bind="alt-bspace:reload(fd --threads=1 --color=always --one-file-system -t d -d 1 \"$@\")+clear-query" --bind="ctrl-u:reload(fd --threads=1 --color=always --one-file-system -t d -d 1 \"$@\")+clear-query" --bind="alt-enter:become(echo {q})" --bind="tab:transform-query(echo {})+reload(fd --threads=1 --color=always --one-file-system -t d -d 1 . {q})")
+        [ -n "$result" ] && cd -- "$result"
+    else
+        local result=$(fd --threads=1 --color=always --one-file-system -t d -d 1 . | command fzf --bind="page-up:page-up,page-down:page-down" --bind="backward-eof:reload(fd --threads=1 --color=always --one-file-system -t d -d 1 .)" --bind="ctrl-delete:reload(fd --threads=1 --color=always --one-file-system -t d -d 1 .)+clear-query" --bind="alt-bspace:reload(fd --threads=1 --color=always --one-file-system -t d -d 1 .)+clear-query" --bind="ctrl-u:reload(fd --threads=1 --color=always --one-file-system -t d -d 1 .)+clear-query" --bind="alt-enter:become(echo {q})" --bind="tab:transform-query(echo {})+reload(fd --threads=1 --color=always --one-file-system -t d -d 1 . {q})")
+        [ -n "$result" ] && cd -- "$result"
+    fi
+}
+
+# -------------
 
 # use ag instead of the default find ...
 # _fzf_compgen_path() {
@@ -1312,7 +1336,7 @@ export FZF_COMPLETION_TRIGGER="\`\`"
 # NOTE: after selecting from fzf the parent fd does not terminate, so it can take _a while_ ...
 # TODO: can we stop parent fd if fzf returns ?
 #       if we use process substitution with input redirection then YES -
-#       fzf < <(fd -t d --color always .)
+#       fzf < <(fd -t d --color=always .)
 #       this will stop the long running fd if we have made a selection in fzf and fzf ends ...
 
 function paths_breadth_first() {
