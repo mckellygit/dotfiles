@@ -1288,8 +1288,9 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND -t d"
 # add --ansi because $FDNAME above uses --color=always ...
 
-#export FZF_ALT_C_OPTS="--bind='page-down:page-down' --bind='page-up:page-up'"
-#export FZF_CTRL_R_OPTS="--bind='page-down:page-down' --bind='page-up:page-up'"
+# change preview bindings to non-preview for dirs and history ...
+export FZF_ALT_C_OPTS="--bind='shift-up:half-page-up' --bind='shift-down:half-page-down' --bind='alt-K:half-page-up,alt-J:half-page-down' --bind='ctrl-alt-k:half-page-up,ctrl-alt-j:half-page-down' --bind='ctrl-alt-o:half-page-down' --bind='pgup:page-up' --bind='pgdn:page-down'"
+export FZF_CTRL_R_OPTS="--bind='shift-up:half-page-up' --bind='shift-down:half-page-down' --bind='alt-K:half-page-up,alt-J:half-page-down' --bind='ctrl-alt-k:half-page-up,ctrl-alt-j:half-page-down' --bind='ctrl-alt-o:half-page-down' --bind='pgup:page-up' --bind='pgdn:page-down'"
 
 # fzf from cmdline uses FZF_DEFAULT_OPTS and has a 250 line preview limit
 # fzf from vim plugin does not have the 250 line max
@@ -1297,7 +1298,7 @@ export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND -t d"
 # NOTE: alt-shift-up/down used by tmux to resize panes ...
 # NOTE: alt-space used for window menu
 
-export FZF_DEFAULT_OPTS='--height 40% --ansi --preview "$BATNAME --style=numbers --color=always --line-range :250 {}" --bind="ctrl-alt-p:toggle-preview" --bind="home:preview-top" --bind="end:preview-bottom" --bind="alt-g:preview-top,alt-G:preview-bottom" --bind="ctrl-f:half-page-down" --bind="ctrl-b:half-page-up" --bind="ctrl-k:up,ctrl-j:down" --bind="ctrl-d:backward-delete-char" --bind="alt-shift-up:preview-half-page-up" --bind="alt-shift-down:preview-half-page-down" --bind="shift-up:preview-half-page-up" --bind="shift-down:preview-half-page-down" --bind="alt-k:up,alt-j:down" --bind="alt-K:preview-half-page-up,alt-J:preview-half-page-down" --bind="ctrl-alt-k:preview-half-page-up,ctrl-alt-j:preview-half-page-down" --bind="ctrl-alt-o:preview-half-page-down" --bind="page-up:preview-page-up" --bind="page-down:preview-page-down" --bind="alt-d:kill-word,alt-u:unix-line-discard,shift-delete:kill-line,ctrl-delete:clear-query" --bind="alt-b:page-up" --bind="alt-f:page-down" --preview-window=right:hidden --color fg:242,bg:236,hl:65,fg+:15,bg+:239,hl+:108 --color info:108,prompt:109,spinner:108,pointer:168,marker:168'
+export FZF_DEFAULT_OPTS='--height 40% --ansi --preview "$BATNAME --style=numbers --color=always --line-range :250 {}" --bind="ctrl-alt-p:toggle-preview" --bind="home:preview-top" --bind="end:preview-bottom" --bind="alt-g:preview-top,alt-G:preview-bottom" --bind="ctrl-f:half-page-down" --bind="ctrl-b:half-page-up" --bind="ctrl-k:up,ctrl-j:down" --bind="ctrl-d:backward-delete-char" --bind="shift-up:preview-half-page-up" --bind="shift-down:preview-half-page-down" --bind="alt-k:up,alt-j:down" --bind="alt-K:preview-half-page-up,alt-J:preview-half-page-down" --bind="ctrl-alt-k:preview-half-page-up,ctrl-alt-j:preview-half-page-down" --bind="ctrl-alt-o:preview-half-page-down" --bind="pgup:preview-page-up" --bind="pgdn:preview-page-down" --bind="alt-d:kill-word,alt-u:unix-line-discard,shift-delete:kill-line,ctrl-delete:clear-query" --bind="alt-b:page-up" --bind="alt-f:page-down" --preview-window=right:hidden --color fg:242,bg:236,hl:65,fg+:15,bg+:239,hl+:108 --color info:108,prompt:109,spinner:108,pointer:168,marker:168'
 
 # dont want to disable color with +c and dont want to add -x for extended-search as that is already enabled by default ...
 #export FZF_COMPLETION_OPTS='+c -x'
@@ -1310,11 +1311,19 @@ export FZF_COMPLETION_TRIGGER="\`\`"
 
 cx() {
     if [[ $# -ge 1 ]] ; then
-        local result=$(fd --threads=1 --color=always --one-file-system -t d -d 1 . "$@" | command fzf --bind="page-up:page-up,page-down:page-down" --bind="backward-eof:reload(fd --threads=1 --color=always --one-file-system -t d -d 1 \"$@\")" --bind="ctrl-delete:reload(fd --threads=1 --color=always --one-file-system -t d -d 1 \"$@\")+clear-query" --bind="alt-bspace:reload(fd --threads=1 --color=always --one-file-system -t d -d 1 \"$@\")+clear-query" --bind="ctrl-u:reload(fd --threads=1 --color=always --one-file-system -t d -d 1 \"$@\")+clear-query" --bind="alt-enter:become(echo {q})" --bind="tab:transform-query(echo {})+reload(fd --threads=1 --color=always --one-file-system -t d -d 1 . {q})")
-        [ -n "$result" ] && cd -- "$result"
+        local result=$(fd --threads=1 --color=always --one-file-system -t d -d 1 . "$@" | command fzf --bind="shift-up:half-page-up" --bind="shift-down:half-page-down" --bind="alt-K:half-page-up,alt-J:half-page-down" --bind="ctrl-alt-k:half-page-up,ctrl-alt-j:half-page-down" --bind="ctrl-alt-o:half-page-down" --bind="pgup:page-up" --bind="pgdn:page-down" --bind="backward-eof:reload(fd --threads=1 --color=always --one-file-system -t d -d 1 . \"$@\")" --bind="ctrl-delete:reload(fd --threads=1 --color=always --one-file-system -t d -d 1 . \"$@\")+clear-query" --bind="alt-bspace:reload(fd --threads=1 --color=always --one-file-system -t d -d 1 . \"$@\")+clear-query" --bind="ctrl-u:reload(fd --threads=1 --color=always --one-file-system -t d -d 1 . \"$@\")+clear-query" --bind="alt-enter:become(echo {q})" --bind="tab:transform-query(echo {})+reload(fd --threads=1 --color=always --one-file-system -t d -d 1 . {q})" --bind="ctrl-space:reload(if [[ \"''\" == \"{q}\" ]] ; then fd --threads=1 --color=always --one-file-system -t d -d 1 . \"$@\" ; else fd --threads=1 --color=always --one-file-system -t d -d 1 . {q} ; exit 0 ; fi)")
+        if [[ -n "$result" ]] ; then
+            print "cd $result"
+            print -s "cd $result"
+            builtin cd -- "$result"
+        fi
     else
-        local result=$(fd --threads=1 --color=always --one-file-system -t d -d 1 . | command fzf --bind="page-up:page-up,page-down:page-down" --bind="backward-eof:reload(fd --threads=1 --color=always --one-file-system -t d -d 1 .)" --bind="ctrl-delete:reload(fd --threads=1 --color=always --one-file-system -t d -d 1 .)+clear-query" --bind="alt-bspace:reload(fd --threads=1 --color=always --one-file-system -t d -d 1 .)+clear-query" --bind="ctrl-u:reload(fd --threads=1 --color=always --one-file-system -t d -d 1 .)+clear-query" --bind="alt-enter:become(echo {q})" --bind="tab:transform-query(echo {})+reload(fd --threads=1 --color=always --one-file-system -t d -d 1 . {q})")
-        [ -n "$result" ] && cd -- "$result"
+        local result=$(fd --threads=1 --color=always --one-file-system -t d -d 1 . | command fzf --bind="shift-up:half-page-up" --bind="shift-down:half-page-down" --bind="alt-K:half-page-up,alt-J:half-page-down" --bind="ctrl-alt-k:half-page-up,ctrl-alt-j:half-page-down" --bind="ctrl-alt-o:half-page-down" --bind="pgup:page-up" --bind="pgdn:page-down" --bind="backward-eof:reload(fd --threads=1 --color=always --one-file-system -t d -d 1 .)" --bind="ctrl-delete:reload(fd --threads=1 --color=always --one-file-system -t d -d 1 .)+clear-query" --bind="alt-bspace:reload(fd --threads=1 --color=always --one-file-system -t d -d 1 .)+clear-query" --bind="ctrl-u:reload(fd --threads=1 --color=always --one-file-system -t d -d 1 .)+clear-query" --bind="alt-enter:become(echo {q})" --bind="tab:transform-query(echo {})+reload(fd --threads=1 --color=always --one-file-system -t d -d 1 . {q})" --bind="ctrl-space:reload(if [[ \"''\" == \"{q}\" ]] ; then fd --threads=1 --color=always --one-file-system -t d -d 1 . ; else fd --threads=1 --color=always --one-file-system -t d -d 1 . {q} ; exit 0 ; fi)")
+        if [[ -n "$result" ]] ; then
+            print "cd $result"
+            print -s "cd $result"
+            builtin cd -- "$result"
+        fi
     fi
 }
 
@@ -1514,6 +1523,13 @@ fzf-cd-widget() {
     return 0
   fi
   zle push-line # Clear buffer. Auto-restored on next prompt.
+
+  # if you dont want to echo the builtin -- cd <dir> line, but then its not in history ...
+  #builtin cd -- ${(q)dir}
+  #unset dir # ensure this doesn't end up appearing in prompt expansion
+  #zle reset-prompt
+  #return 0
+
   BUFFER="builtin cd -- ${(q)dir}"
   zle accept-line
   local ret=$?
@@ -1600,7 +1616,7 @@ bindkey "\e_" my-fzf-files-widget
 #export MANPAGER="less"
 #alias manls="man -k . | fzf --prompt='Man> ' | awk '{print \$1}' | xargs -r man -P 'less'"
 export MANPAGER="sh -c 'col -bx | $BATNAME -l man -pp | less'"
-alias manls="man -k . | fzf --bind=\"ctrl-f:half-page-down\" --bind=\"ctrl-b:half-page-up\" --bind=\"ctrl-k:up,ctrl-j:down\" --bind=\"ctrl-d:backward-delete-char\" --bind=\"alt-k:up,alt-j:down\" --bind=\"ctrl-alt-k:half-page-up,ctrl-alt-j:half-page-down\" --bind=\"ctrl-alt-o:half-page-down\" --bind=\"page-up:page-up\" --bind=\"page-down:page-down\" --bind=\"alt-d:kill-word,alt-u:unix-line-discard\" --bind=\"alt-b:page-up\" --bind=\"alt-f:page-down\" --prompt='Man> ' | awk '{print \$1}' | xargs -r man -P 'sh -c \"col -bx | $BATNAME -l man -pp | less\"'"
+alias manls="man -k . | fzf --bind=\"ctrl-f:half-page-down\" --bind=\"ctrl-b:half-page-up\" --bind=\"ctrl-k:up,ctrl-j:down\" --bind=\"ctrl-d:backward-delete-char\" --bind=\"alt-k:up,alt-j:down\" --bind=\"ctrl-alt-k:half-page-up,ctrl-alt-j:half-page-down\" --bind=\"ctrl-alt-o:half-page-down\" --bind=\"pgup:page-up\" --bind=\"pgdn:page-down\" --bind=\"alt-d:kill-word,alt-u:unix-line-discard\" --bind=\"alt-b:page-up\" --bind=\"alt-f:page-down\" --prompt='Man> ' | awk '{print \$1}' | xargs -r man -P 'sh -c \"col -bx | $BATNAME -l man -pp | less\"'"
 
 if [[ -z "$WSL_DISTRO_NAME" && -z "$WSLENV" ]] ; then
     alias byobu='start_tmux'
