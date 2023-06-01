@@ -3961,165 +3961,209 @@ vnoremap <expr> N 'nN'[v:searchforward]
 nnoremap <buffer> <silent> n :call <SID>Searchn()<CR>
 nnoremap <buffer> <silent> N :call <SID>SearchN()<CR>
 function s:Searchn() abort
-  let l:stext=@/
-  if (len(l:stext) == 0)
-    return
-  endif
-  try
-    nunmap <buffer> n
-  catch /E31:/
-  endtry
-  set nows
-  try
-    "exe "normal n"
-    exe "silent normal /\<CR>"
-    "redraw!
-  catch /E384:/
-"   echohl WarningMsg
-"   echo "E384: search hit TOP without match for: " . l:stext
-"   echohl None
-    set ws
+    let l:stext=@/
+    if (len(l:stext) == 0)
+        return
+    endif
     try
-      "exe "normal n"
-      exe "normal /\<CR>"
-      sleep 200m
-      " eat typeahead ...
-      while getchar(0)
-          sleep 1m
-      endwhile
-      redraw!
-      if has("nvim")
-          echo "\r"
-      endif
-    catch /E486:/
-      echo " "
-      redraw
-      echohl WarningMsg
-      echo "E486: Pattern not found: " . l:stext
-      echohl None
-      sleep 200m
-      " eat typeahead ...
-      while getchar(0)
-          sleep 1m
-      endwhile
-      redraw!
-      echo "\r"
+        nunmap <buffer> n
+    catch /E31:/
     endtry
-  catch /E385:/
-"   echohl WarningMsg
-"   echo "E385: search hit BOTTOM without match for: " . l:stext
-"   echohl None
-    set ws
+    set nows
     try
-      "exe "normal n"
-      exe "normal /\<CR>"
-      sleep 200m
-      " eat typeahead ...
-      while getchar(0)
-          sleep 1m
-      endwhile
-      redraw!
-      if has("nvim")
-          echo "\r"
-      endif
-    catch /E486:/
-      echo " "
-      redraw
-      echohl WarningMsg
-      echo "E486: Pattern not found: " . l:stext
-      echohl None
-      sleep 200m
-      " eat typeahead ...
-      while getchar(0)
-          sleep 1m
-      endwhile
-      redraw!
-      echo "\r"
+        "exe "normal n"
+        exe "silent normal /\<CR>"
+        "redraw!
+    catch /E384:/
+        if has("nvim")
+            redraw!
+            echo "\r"
+            echohl WarningMsg
+"           echo "E384: search hit TOP without match for: " . l:stext
+            echo "E384: search hit TOP, continuing at BOTTOM"
+            echohl None
+            sleep 200m
+        endif
+        set ws
+        try
+            "exe "normal n"
+            exe "normal /\<CR>"
+            if !has("nvim")
+                sleep 200m
+            endif
+            " eat typeahead ...
+            while getchar(0)
+                sleep 1m
+            endwhile
+            redraw!
+            if has("nvim")
+                echo "\r"
+            endif
+        catch /E486:/
+            echo " "
+            redraw
+            echohl WarningMsg
+            echo "E486: Pattern not found: " . l:stext
+            echohl None
+            sleep 200m
+            " eat typeahead ...
+            while getchar(0)
+                sleep 1m
+            endwhile
+            redraw!
+            echo "\r"
+        endtry
+        if has("nvim")
+            sleep 1m
+        endif
+    catch /E385:/
+        if has("nvim")
+            redraw!
+            echo "\r"
+            echohl WarningMsg
+"           echo "E385: search hit BOTTOM without match for: " . l:stext
+            echo "E385: search hit BOTTOM, continuing at TOP"
+            echohl None
+            sleep 200m
+        endif
+        set ws
+        try
+            "exe "normal n"
+            exe "normal /\<CR>"
+            if !has("nvim")
+                sleep 200m
+            endif
+            " eat typeahead ...
+            while getchar(0)
+                sleep 1m
+            endwhile
+            redraw!
+            if has("nvim")
+                echo "\r"
+            endif
+        catch /E486:/
+            echo " "
+            redraw
+            echohl WarningMsg
+            echo "E486: Pattern not found: " . l:stext
+            echohl None
+            sleep 200m
+            " eat typeahead ...
+            while getchar(0)
+                sleep 1m
+            endwhile
+            redraw!
+            echo "\r"
+        endtry
+        if has("nvim")
+            sleep 1m
+        endif
     endtry
-  endtry
-  nnoremap <buffer> <silent> n :call <SID>Searchn()<CR>
-  set ws
+    nnoremap <buffer> <silent> n :call <SID>Searchn()<CR>
+    set ws
 endfunction
 
 function s:SearchN() abort
-  let l:stext=@/
-  if (len(l:stext) == 0)
-    return
-  endif
-  try
-    nunmap <buffer> N
-  catch /E31:/
-  endtry
-  set nows
-  try
-    "exe "normal N"
-    exe "silent normal ?\<CR>"
-    "redraw!
-  catch /E384:/
-"   echohl WarningMsg
-"   echo "E384: search hit TOP without match for: " . l:stext
-"   echohl None
-    set ws
+    let l:stext=@/
+    if (len(l:stext) == 0)
+        return
+    endif
     try
-      "exe "normal N"
-      exe "normal ?\<CR>"
-      sleep 200m
-      " eat typeahead ...
-      while getchar(0)
-          sleep 1m
-      endwhile
-      redraw!
-      if has("nvim")
-          echo "\r"
-      endif
-    catch /E486:/
-      echo " "
-      redraw
-      echohl WarningMsg
-      echo "E486: Pattern not found: " . l:stext
-      echohl None
-      sleep 200m
-      " eat typeahead ...
-      while getchar(0)
-          sleep 1m
-      endwhile
-      redraw!
-      echo "\r"
+        nunmap <buffer> N
+    catch /E31:/
     endtry
-  catch /E385:/
-"   echohl WarningMsg
-"   echo "E385: search hit BOTTOM without match for: " . l:stext
-"   echohl None
-    set ws
+    set nows
     try
-      "exe "normal N"
-      exe "normal ?\<CR>"
-      sleep 200m
-      " eat typeahead ...
-      while getchar(0)
-          sleep 1m
-      endwhile
-      redraw!
-      if has("nvim")
-          echo "\r"
-      endif
-    catch /E486:/
-      echo " "
-      redraw
-      echohl WarningMsg
-      echo "E486: Pattern not found: " . l:stext
-      echohl None
-      sleep 200m
-      " eat typeahead ...
-      while getchar(0)
-          sleep 1m
-      endwhile
-      redraw!
-      echo "\r"
+        "exe "normal N"
+        exe "silent normal ?\<CR>"
+        "redraw!
+    catch /E384:/
+        if has("nvim")
+            redraw!
+            echo "\r"
+            echohl WarningMsg
+"           echo "E384: search hit TOP without match for: " . l:stext
+            echo "E384: search hit TOP, continuing at BOTTOM"
+            echohl None
+            sleep 200m
+        endif
+        set ws
+        try
+            "exe "normal N"
+            exe "normal ?\<CR>"
+            if !has("nvim")
+                sleep 200m
+            endif
+            " eat typeahead ...
+            while getchar(0)
+                sleep 1m
+            endwhile
+            redraw!
+            if has("nvim")
+                echo "\r"
+            endif
+        catch /E486:/
+            echo " "
+            redraw
+            echohl WarningMsg
+            echo "E486: Pattern not found: " . l:stext
+            echohl None
+            sleep 200m
+            " eat typeahead ...
+            while getchar(0)
+                sleep 1m
+            endwhile
+            redraw!
+            echo "\r"
+        endtry
+        if has("nvim")
+            sleep 1m
+        endif
+    catch /E385:/
+        if has("nvim")
+            redraw!
+            echo "\r"
+            echohl WarningMsg
+"           echo "E385: search hit BOTTOM without match for: " . l:stext
+            echo "E385: search hit BOTTOM, continuing at TOP"
+            echohl None
+            sleep 200m
+        endif
+        set ws
+        try
+            "exe "normal N"
+            exe "normal ?\<CR>"
+            if !has("nvim")
+                sleep 200m
+            endif
+            " eat typeahead ...
+            while getchar(0)
+                sleep 1m
+            endwhile
+            redraw!
+            if has("nvim")
+                echo "\r"
+            endif
+        catch /E486:/
+            echo " "
+            redraw
+            echohl WarningMsg
+            echo "E486: Pattern not found: " . l:stext
+            echohl None
+            sleep 200m
+            " eat typeahead ...
+            while getchar(0)
+                sleep 1m
+            endwhile
+            redraw!
+            echo "\r"
+        endtry
+        if has("nvim")
+            sleep 1m
+        endif
     endtry
-  endtry
-  nnoremap <buffer> <silent> N :call <SID>SearchN()<CR>
-  set ws
+    nnoremap <buffer> <silent> N :call <SID>SearchN()<CR>
+    set ws
 endfunction
 
 " turn off all nnn lines yanked ... messages
