@@ -2680,7 +2680,8 @@ let g:asyncrun_silent = 0
 let g:asyncrun_string = ''
 let g:asyncrun_copen = 1
 let g:asyncrun_term_wipe = 1
-autocmd User AsyncRunPre let g:asyncrun_code = 2 | redraw! | echohl DiffAdd | echo "\rAsyncRun started ..." | echohl None
+autocmd User AsyncRunInit let g:asyncrun_code = 2 | let g:asyncrun_string = '' | let g:asyncrun_copen = 1
+autocmd User AsyncRunPre  let g:asyncrun_code = 2 | redraw! | echohl DiffAdd | echo "\rAsyncRun started ..." | echohl None
 autocmd User AsyncRunStop if g:asyncrun_code != 0 | echohl DiffText | echo 'AsyncRun complete: [ ' . g:asyncrun_code . ' ]' | echohl None |
             \ else | echohl DiffAdd | echo 'AsyncRun complete: [ OK ]' | echohl None | if g:asyncrun_copen != 0 | copen | set nowrap | set cursorline | clearjumps | endif | endif | if !pumvisible() | call lightline#update() | endif | let g:asyncrun_string = '' | let g:asyncrun_copen = 1
 autocmd User AsyncRunInterrupt echohl DiffText | echo 'AsyncRun complete: [TERM]' | echohl None | let g:asyncrun_code = 2 | let g:asyncrun_string = '' | let g:asyncrun_copen = 1
@@ -7550,6 +7551,7 @@ nnoremap sc "fx"fph
 nnoremap sC "fX"fp
 
 " do we want the same for delete-word ?  Probably not ...
+" NOTE: dw, cw mapped below ...
 "noremap dw "_dw
 "noremap db "_db
 "noremap dW "_dW
@@ -7608,31 +7610,63 @@ else
     endif
 endif
 
+function s:delword(hole, word)
+    if a:hole > 0
+        if (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ')
+            execute 'silent normal! "_dw'
+        else
+            execute 'silent normal! "_di' . a:word
+        endif
+    else
+        if (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ')
+            execute 'silent normal! dw'
+        else
+            execute 'silent normal! di' . a:word
+        endif
+    endif
+endfunction
+
 " zap (delete) whole word under cursor but w/o saving deleted word to clipboard
-"nnoremap <silent> <Leader>wz lb"_dw
-"nnoremap <silent> <Leader>wz lb"_dW
-nnoremap <silent> <Leader>wz "_diw
-vnoremap <silent> <Leader>wz <C-\><C-n>"_diw
+nnoremap <silent> <Leader>wz <Cmd>call <SID>delword(1, 'w')<CR>
+"nnoremap <silent> <Leader>wz "_diw
+vnoremap <silent> <Leader>wz "_d
 
 " zap whole word w/ saving deleted word to clipboard
-nnoremap <silent> <Leader>wZ "_diw
-vnoremap <silent> <Leader>wZ <C-\><C-n>"_diw
+nnoremap <silent> <Leader>wZ <Cmd>call <SID>delword(1, 'W')<CR>
+"nnoremap <silent> <Leader>wZ "_diW
+vnoremap <silent> <Leader>wZ "_d
 
 " change word starting at cursor, like vi
-nnoremap <silent> <Leader>we ce
-vnoremap <silent> <Leader>we <C-\><C-n>ce
+nnoremap <silent> <Leader>we ciw
+vnoremap <silent> <Leader>we c
+
+nnoremap <silent> <Leader>wE ciW
+vnoremap <silent> <Leader>wE c
 
 " delete word at cursor pos, like vi, but w/o saving deleted word to clipboard
-nnoremap <silent> <Leader>wd "_dw
-vnoremap <silent> <Leader>wd <C-\><C-n>"_dw
+nnoremap <silent> <Leader>wd <Cmd>call <SID>delword(1, 'w')<CR>
+"nnoremap <silent> <Leader>wd "_diw
+vnoremap <silent> <Leader>wd "_d
 
-" delete word at cursor pos, but w/ saving deleted word to clipboard
-nnoremap <silent> <Leader>wD "_dw
-vnoremap <silent> <Leader>wD <C-\><C-n>"_dw
+nnoremap <silent> <Leader>wD <Cmd>call <SID>delword(1, 'W')<CR>
+"nnoremap <silent> <Leader>wD "_diW
+vnoremap <silent> <Leader>wD "_d
+
+" NOTE: see above for prior dw mapping thoughts ...
+nnoremap <silent> dw <Cmd>call <SID>delword(0, 'w')<CR>
+nnoremap <silent> dW <Cmd>call <SID>delword(0, 'W')<CR>
+"nnoremap <silent> dw diw
+"nnoremap <silent> dW diW
+
+nnoremap <silent> cw ciw
+nnoremap <silent> cW ciW
 
 " new whole word (from beg) [cannot use wc]
 nnoremap <silent> <Leader>wn ciw
-vnoremap <silent> <Leader>wn <C-\><C-n>ciw
+vnoremap <silent> <Leader>wn c
+
+nnoremap <silent> <Leader>wN ciW
+vnoremap <silent> <Leader>wN c
 
 " like D (del from cursor pos to end of line) but w/o saving what was deleted to clipboard
 nnoremap <silent> <Leader>D "_D
@@ -7675,11 +7709,11 @@ if has("nvim")
     tnoremap <S-F31> <M-Return>
 endif
 
-noremap <silent> <expr> <M-BS> AtBot(0) ? '<C-y>' : '<C-y>k'
-noremap <silent> <expr> <M-X>  AtBot(0) ? '<C-y>' : '<C-y>k'
+noremap <silent> <expr> <M-BS> AtBot(0) ? '<C-y>' : 'gk<C-y>'
+noremap <silent> <expr> <M-X>  AtBot(0) ? '<C-y>' : 'gk<C-y>'
 " SPECIAL: <A-BS> is mapped to \eX in tmux - scroll up one line ...
 call <SID>MapFastKeycode('<S-F30>',  "\eX", 130)
-noremap <silent> <expr> <S-F30> AtBot(0) ? '<C-y>' : '<C-y>k'
+noremap <silent> <expr> <S-F30> AtBot(0) ? '<C-y>' : 'gk<C-y>'
 " but unmap it in terminal so fzf can use it as alt-bs ...
 cnoremap <S-F30> <C-v><Esc><BS>
 inoremap <S-F30> <C-v><Esc><BS>
@@ -7691,11 +7725,11 @@ if has("nvim")
 endif
 
 " NOTE: M-Space is usually mapped by gnome/winmgr for window menu (move, resize etc)
-noremap <silent> <expr> <M-Space> ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>j'
+noremap <silent> <expr> <M-Space> ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : 'gj<C-e>'
 " SPECIAL: <A-Space> is mapped to \eY in tmux - scroll down one line ...
 call <SID>MapFastKeycode('<S-F29>',  "\eY", 129)
-noremap <silent> <expr> <M-Y>     ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>j'
-noremap <silent> <expr> <S-F29> ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>j'
+noremap <silent> <expr> <M-Y>     ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : 'gj<C-e>'
+noremap <silent> <expr> <S-F29> ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : 'gj<C-e>'
 " but unmap it in terminal so fzf can use it as alt-space ...
 cnoremap <S-F29> <C-v><Esc><Space>
 inoremap <S-F29> <C-v><Esc><Space>
@@ -8421,8 +8455,8 @@ endfunction
 "noremap <silent> <expr> <C-j>      ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<Cmd>call MyScrollDown()<CR>'
 "noremap <silent> <C-j>             <Cmd>call MyScrollDown()<CR>
 " TODO: this is not really right if smoothscroll is enabled ...
-noremap <silent> <expr> <C-Down>   ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>gj'
-noremap <silent> <expr> <C-j>      ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>gj'
+noremap <silent> <expr> <C-Down>   ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : 'gj<C-e>'
+noremap <silent> <expr> <C-j>      ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : 'gj<C-e>'
 
 noremap <C-S-Space>   gj
 noremap <C-_><Space>  gj
@@ -8453,8 +8487,8 @@ inoremap <silent> <expr> <C-j>      pumvisible() ? '<C-j>'    : '<C-\><C-o>:call
 "noremap <silent> <expr> <C-k>      AtBot(0) ? '<C-y>' : '<Cmd>call MyScrollUp()<CR>'
 "noremap <silent> <C-k>             <Cmd>call MyScrollUp()<CR>
 " TODO: this is not really right if smoothscroll is enabled ...
-noremap <silent> <expr> <C-Up>     AtBot(0) ? (line('w0') == 1) ? 'gk' : '<C-y>' : '<C-y>gk'
-noremap <silent> <expr> <C-k>      AtBot(0) ? (line('w0') == 1) ? 'gk' : '<C-y>' : '<C-y>gk'
+noremap <silent> <expr> <C-Up>     AtBot(0) ? (line('w0') == 1) ? 'gk' : '<C-y>' : 'gk<C-y>'
+noremap <silent> <expr> <C-k>      AtBot(0) ? (line('w0') == 1) ? 'gk' : '<C-y>' : 'gk<C-y>'
 
 noremap <C-S-BS>   gk
 noremap <C-_><BS>  gk
@@ -9359,14 +9393,14 @@ function! s:MapScrollKeys()
 
   "nnoremap <silent> <S-BS>   :<C-u>call <SID>CtrlB(1)<CR>
   "execute 'vnoremap <silent> <expr> <S-BS> '   . g:hup
-  noremap <silent> <expr> <S-BS>       AtBot(0) ? '<C-y>' : '<C-y>k'
+  noremap <silent> <expr> <S-BS>       AtBot(0) ? '<C-y>' : 'gk<C-y>'
   inoremap <S-BS> <BS>
   cnoremap <S-BS> <BS>
   tnoremap <S-BS> <BS>
   " SPECIAL: S-BS in some terminals (via tmux) may be mapped to <C-^><C-h> in vim ...
   "nnoremap <silent> <C-^><C-h>   :<C-u>call <SID>CtrlB(1)<CR>
   "execute 'vnoremap <silent> <expr> <C-^><C-h> '   . g:hup
-  noremap <silent> <expr> <C-^><C-h>   AtBot(0) ? '<C-y>' : '<C-y>k'
+  noremap <silent> <expr> <C-^><C-h>   AtBot(0) ? '<C-y>' : 'gk<C-y>'
   inoremap <C-^><C-h> <BS>
   cnoremap <C-^><C-h> <BS>
   tnoremap <C-^><C-h> <BS>
@@ -9375,14 +9409,14 @@ function! s:MapScrollKeys()
 
   "nnoremap <silent> <S-Space> :<C-u>call <SID>CtrlF(1)<CR>
   "execute 'vnoremap <silent> <expr> <S-Space> ' . g:hdn
-  noremap <silent> <expr> <S-Space>    ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>j'
+  noremap <silent> <expr> <S-Space>    ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : 'gj<C-e>'
   inoremap <S-Space> <Space>
   cnoremap <S-Space> <Space>
   tnoremap <S-Space> <Space>
   " SPECIAL: S-Space in some terminals (via tmux) may be mapped to <C-^><Space> in vim ...
   "nnoremap <silent> <C-^><Space> :<C-u>call <SID>CtrlF(1)<CR>
   "execute 'vnoremap <silent> <expr> <C-^><Space> ' . g:hdn
-  noremap <silent> <expr> <C-^><Space> ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<C-e>j'
+  noremap <silent> <expr> <C-^><Space> ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : 'gj<C-e>'
   inoremap <C-^><Space> <Space>
   cnoremap <C-^><Space> <Space>
   tnoremap <C-^><Space> <Space>
