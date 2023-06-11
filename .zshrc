@@ -1308,6 +1308,7 @@ export FZF_COMPLETION_TRIGGER="\`\`"
 # -------------
 
 # NOTE: --threads=1 is ok here because its also -d 1 and wont take long ...
+# STILL need to figure out things for hitting tab on zero matches or after backspacing a dir etc.
 
 cx() {
     if [[ $# -ge 1 ]] ; then
@@ -1325,7 +1326,12 @@ cx() {
             builtin cd -- "$result"
         fi
     fi
+    #zle && zle reset-prompt
+    return 0
 }
+#zle -N cx
+#bindkey -M vicmd '\ev' cx
+#bindkey -M viins '\ev' cx
 
 # -------------
 
