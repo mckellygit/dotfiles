@@ -519,10 +519,10 @@ endif
 " -----------------------------------------
 "
 " quick left-right line movement
-Plug 'unblevable/quick-scope'
+"Plug 'unblevable/quick-scope'
 "
 " there is also -
-"Plug 'justinmk/vim-sneak'
+Plug 'justinmk/vim-sneak'
 "Plug 'ggandor/leap.nvim'
 "
 call plug#end()
@@ -3005,6 +3005,14 @@ let g:qs_filetype_blacklist = ['dashboard', 'startify']
 let g:qs_lazy_highlight = 1
 " quick-scope ------
 
+" vim-sneak --------
+let g:sneak#label = 0
+map f <Plug>Sneak_f
+map F <Plug>Sneak_F
+map s <Plug>Sneak_s
+map S <Plug>Sneak_S
+" vim-sneak --------
+
 " ====================================================
 " --- plugin configurations --------------------------
 " ====================================================
@@ -4539,10 +4547,11 @@ endif
 nnoremap a <Nop>
 
 " s/S is confusing, use cl/cc instead
-nnoremap s <Nop>
-vnoremap s <Nop>
-nnoremap S <Nop>
-vnoremap S <Nop>
+" NOTE: s/S now used for vim-sneak
+"nnoremap s <Nop>
+"vnoremap s <Nop>
+"nnoremap S <Nop>
+"vnoremap S <Nop>
 
 " dont exit this way ...
 noremap ZZ <Nop>
@@ -11365,14 +11374,14 @@ vnoremap <Leader>: :
 noremap <C-a> ^
 " ctrl-e was scroll down one line so we lose that
 " (but its been remapped to <C-j>)
-noremap <C-e> $
+noremap <C-e> g_
 
 " easier to type than ^
 noremap <Leader>l1 g^
 noremap <Leader>la ^
 " to match same <Leader>l1 key pattern ...
 noremap <Leader>l2 g$
-noremap <Leader>le $
+noremap <Leader>le g_
 " for consistency ...
 noremap <Leader>l0 0
 
