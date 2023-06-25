@@ -1,13 +1,13 @@
 " An example for a vimrc file.
 "
-" Maintainer:	Bram Moolenaar <Bram@vim.org>
-" Last change:	2000 Mar 29
+" Maintainer:   Bram Moolenaar <Bram@vim.org>
+" Last change:  2000 Mar 29
 "
 " To use it, copy it to
-"     for Unix and OS/2:  ~/.vimrc
-"	      for Amiga:  s:.vimrc
+"  for Unix and OS/2:  ~/.vimrc
+"  for Amiga:  s:.vimrc
 "  for MS-DOS and Win32:  $VIM\_vimrc
-"	    for OpenVMS:  sys$login:.vimrc
+"  for OpenVMS:  sys$login:.vimrc
 "
 " Use Vim settings, rather then Vi settings (much better!).
 " This must be first, because it changes other options as a side effect.
@@ -4253,8 +4253,8 @@ highlight PmenuSel ctermbg=136
 set fileformat=unix
 
 set ch=1        " set cmdheight to 1
-set bs=2		" allow backspacing over everything in ins mode
-set noai		" always set autoindenting off
+set bs=2        " allow backspacing over everything in ins mode
+set noai        " always set autoindenting off
 set nobackup    " do not keep a backup file
 " read/write .viminfo file, don't save/restore registers -
 " NOTE: do not want to overwrite existing */+ registers
@@ -4368,7 +4368,7 @@ function! s:PreserveClipboard() abort
         if 0 " --- DISABLED ---
             " NOTE: dont seem to need this if block - but why ?
             let regtype = getregtype('*')
-            if ! (regtype =~ "")
+            if ! (regtype =~ "\<C-v>")
                 silent call system("myclip --rmlastnl -", getreg('*'))
             endif
         endif
@@ -4984,10 +4984,10 @@ imap <silent> <A-S-Insert>  <Esc>l
 " <S-F17> => <S-PageUp>
 " <S-F18> => <S-PageDown>
 
- noremap <silent> <expr> <S-F17>        (line('.') == line('w$')) ? '5k' : '5<C-y>5k'
- noremap <silent> <expr> <S-PageUp>     (line('.') == line('w$')) ? '5k' : '5<C-y>5k'
- noremap <silent> <expr> <S-F18>        (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '5<C-e>5j'
- noremap <silent> <expr> <S-PageDown>   (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '5<C-e>5j'
+ noremap <silent> <expr> <S-F17>        (line('.') == line('w$')) ? '5k' : '<Cmd>call MyScrollUpX(5)<CR>'
+ noremap <silent> <expr> <S-PageUp>     (line('.') == line('w$')) ? '5k' : '<Cmd>call MyScrollUpX(5)<CR>'
+ noremap <silent> <expr> <S-F18>        (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '<Cmd>call MyScrollDownX(5)<CR>'
+ noremap <silent> <expr> <S-PageDown>   (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '<Cmd>call MyScrollDownX(5)<CR>'
 
 inoremap <silent> <expr> <S-F17>        pumvisible() ? '<Up>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
 inoremap <silent> <expr> <S-PageUp>     pumvisible() ? '<Up>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
@@ -4997,10 +4997,10 @@ inoremap <silent> <expr> <S-PageDown>   pumvisible() ? '<Down>' : '<C-\><C-o>:ca
 " <S-F19> => <A-S-PageUp>
 " <S-F20> => <A-S-PageDown>
 
- noremap <silent> <expr> <S-F19>        (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
- noremap <silent> <expr> <A-S-PageUp>   (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
- noremap <silent> <expr> <S-F20>        (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
- noremap <silent> <expr> <A-S-PageDown> (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
+ noremap <silent> <expr> <S-F19>        (line('.') == line('w$')) ? '10k' : '<Cmd>call MyScrollUpX(10)<CR>'
+ noremap <silent> <expr> <A-S-PageUp>   (line('.') == line('w$')) ? '10k' : '<Cmd>call MyScrollUpX(10)<CR>'
+ noremap <silent> <expr> <S-F20>        (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '<Cmd>call MyScrollDownX(10)<CR>'
+ noremap <silent> <expr> <A-S-PageDown> (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '<Cmd>call MyScrollDownX(10)<CR>'
 
 inoremap <silent> <expr> <S-F19>        pumvisible() ? '<Up>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
 inoremap <silent> <expr> <A-S-PageUp>   pumvisible() ? '<Up>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
@@ -5702,7 +5702,7 @@ function! s:YankIt(cmd, arg) abort
     endif
     let oldz = 0
     let @z = visualmode()
-    if "" !=# @z
+    if "\<C-v>" !=# @z
         let @m = substitute(@+, "\\n\\+$", "", "")
         if @m!=#@+ " if not identical then had trailing nl ...
             let @z="V"
@@ -7718,11 +7718,11 @@ if has("nvim")
     tnoremap <S-F31> <M-Return>
 endif
 
-noremap <silent> <expr> <M-BS> AtBot(0) ? '<C-y>' : 'gk<C-y>'
-noremap <silent> <expr> <M-X>  AtBot(0) ? '<C-y>' : 'gk<C-y>'
+noremap <silent> <expr> <M-BS> AtBot(0) ? '<C-y>' : '<Cmd>call MyScrollUp()<CR>'
+noremap <silent> <expr> <M-X>  AtBot(0) ? '<C-y>' : '<Cmd>call MyScrollUp()<CR>'
 " SPECIAL: <A-BS> is mapped to \eX in tmux - scroll up one line ...
 call <SID>MapFastKeycode('<S-F30>',  "\eX", 130)
-noremap <silent> <expr> <S-F30> AtBot(0) ? '<C-y>' : 'gk<C-y>'
+noremap <silent> <expr> <S-F30> AtBot(0) ? '<C-y>' : '<Cmd>call MyScrollUp()<CR>'
 " but unmap it in terminal so fzf can use it as alt-bs ...
 cnoremap <S-F30> <C-v><Esc><BS>
 inoremap <S-F30> <C-v><Esc><BS>
@@ -7734,11 +7734,11 @@ if has("nvim")
 endif
 
 " NOTE: M-Space is usually mapped by gnome/winmgr for window menu (move, resize etc)
-noremap <silent> <expr> <M-Space> ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : 'gj<C-e>'
+noremap <silent> <expr> <M-Space> ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<Cmd>call MyScrollDown()<CR>'
 " SPECIAL: <A-Space> is mapped to \eY in tmux - scroll down one line ...
 call <SID>MapFastKeycode('<S-F29>',  "\eY", 129)
-noremap <silent> <expr> <M-Y>     ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : 'gj<C-e>'
-noremap <silent> <expr> <S-F29> ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : 'gj<C-e>'
+noremap <silent> <expr> <M-Y>     ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<Cmd>call MyScrollDown()<CR>'
+noremap <silent> <expr> <S-F29> ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<Cmd>call MyScrollDown()<CR>'
 " but unmap it in terminal so fzf can use it as alt-space ...
 cnoremap <S-F29> <C-v><Esc><Space>
 inoremap <S-F29> <C-v><Esc><Space>
@@ -7966,6 +7966,7 @@ set virtualedit=block
 set nostartofline
 set scrolloff=0
 
+if 0 " disable smoothscroll / sms b/c of signcolumn artifacts sometimes ...
 " NOTE: one weird thing with smoothscroll is when you go to
 "       the bottom of the file it moves that to mid-screen
 " vim smoothscroll when lines wrap ...
@@ -7978,6 +7979,7 @@ if has("nvim")
         set smoothscroll
     catch
     endtry
+endif
 endif
 
 " ---------
@@ -8416,44 +8418,60 @@ endfunction
 
 function MyScrollDown()
     if !has("nvim") && &smoothscroll
-        let cmdstr = 'keepjumps normal! gj'
+        let cmdstr = "keepjumps normal! gj\<C-e>"
         silent execute cmdstr
         return
     endif
     " ---------------------
     if ((line('$') - line('w$')) < 1)
-        silent execute 'keepjumps normal! gj'
+        silent execute "keepjumps normal! gj"
     elseif AtTop2(0)
-        silent execute 'keepjumps normal! '
+        silent execute "keepjumps normal! \<C-e>"
     else
         let size = (strwidth(getline('w0')) / winwidth(0) ) + 1
-        let cmdstr = 'keepjumps normal! ' . size . 'gj'
+        let cmdstr = "keepjumps normal! \<C-e>" . size . "gj"
         silent execute cmdstr
     endif
+endfunction
+
+function MyScrollDownX(cnt)
+    let iter = 1
+    while iter <= a:cnt
+        call MyScrollDown()
+        let iter += 1
+    endwhile
 endfunction
 
 function MyScrollUp()
     if !has("nvim") && &smoothscroll
         if (winline() == 1)
-            let cmdstr = 'keepjumps normal! gk'
+            let cmdstr = "keepjumps normal! \<C-y>gk"
             silent execute cmdstr
         else
-            let cmdstr = 'keepjumps normal! gk'
+            let cmdstr = "keepjumps normal! gk\<C-y>"
             silent execute cmdstr
         endif
         return
     endif
     " ---------------------
     if (line('w0') == 1)
-        silent execute 'keepjumps normal! gk'
+        silent execute "keepjumps normal! gk"
     elseif AtBot2(0)
-        silent execute 'keepjumps normal! '
+        silent execute "keepjumps normal! \<C-y>"
     else
-        silent execute 'keepjumps normal! '
+        silent execute "keepjumps normal! \<C-y>"
         let size = (strwidth(getline('w0')) / winwidth(0) ) + 1
-        let cmdstr = 'keepjumps normal! ' . size . 'gk'
+        let cmdstr = "keepjumps normal! " . size . "gk"
         silent execute cmdstr
     endif
+endfunction
+
+function MyScrollUpX(cnt)
+    let iter = 1
+    while iter <= a:cnt
+        call MyScrollUp()
+        let iter += 1
+    endwhile
 endfunction
 
 " TODO: if smoothscroll on then use gj instead of j ...
@@ -8464,8 +8482,8 @@ endfunction
 "noremap <silent> <expr> <C-j>      ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<Cmd>call MyScrollDown()<CR>'
 "noremap <silent> <C-j>             <Cmd>call MyScrollDown()<CR>
 " TODO: this is not really right if smoothscroll is enabled ...
-noremap <silent> <expr> <C-Down>   ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : 'gj<C-e>'
-noremap <silent> <expr> <C-j>      ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : 'gj<C-e>'
+noremap <silent> <expr> <C-Down>   ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<Cmd>call MyScrollDown()<CR>'
+noremap <silent> <expr> <C-j>      ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<Cmd>call MyScrollDown()<CR>'
 
 noremap <C-S-Space>   gj
 noremap <C-_><Space>  gj
@@ -8496,8 +8514,8 @@ inoremap <silent> <expr> <C-j>      pumvisible() ? '<C-j>'    : '<C-\><C-o>:call
 "noremap <silent> <expr> <C-k>      AtBot(0) ? '<C-y>' : '<Cmd>call MyScrollUp()<CR>'
 "noremap <silent> <C-k>             <Cmd>call MyScrollUp()<CR>
 " TODO: this is not really right if smoothscroll is enabled ...
-noremap <silent> <expr> <C-Up>     AtBot(0) ? (line('w0') == 1) ? 'gk' : '<C-y>' : 'gk<C-y>'
-noremap <silent> <expr> <C-k>      AtBot(0) ? (line('w0') == 1) ? 'gk' : '<C-y>' : 'gk<C-y>'
+noremap <silent> <expr> <C-Up>     AtBot(0) ? (line('w0') == 1) ? 'gk' : '<C-y>' : '<Cmd>call MyScrollUp()<CR>'
+noremap <silent> <expr> <C-k>      AtBot(0) ? (line('w0') == 1) ? 'gk' : '<C-y>' : '<Cmd>call MyScrollUp()<CR>'
 
 noremap <C-S-BS>   gk
 noremap <C-_><BS>  gk
@@ -8519,6 +8537,8 @@ inoremap <silent> <expr> <C-k>      pumvisible() ? '<C-k>'  : '<C-\><C-o>:call <
 " use wheel to scroll, extending selection ...
 " C- already used to adjust font size ...
 " A- to speed up scrolling ...
+
+" TODO: use MyScrollDownX/UpX here ...
 
 nnoremap <silent> <expr> <ScrollWheelDown>       (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
 nnoremap <silent> <expr> <2-ScrollWheelDown>     (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
@@ -8794,8 +8814,8 @@ endif
 
 " C-M-k / M-C-k / C-A-k / A-C-k ...
 call <SID>MapFastKeycode('<F28>',  "\e\<C-k>", 28)
-noremap <silent> <expr> <F28>    (line('.') == line('w$')) ? '5k' : '5<C-y>5k'
-noremap <silent> <expr> <M-C-K>  (line('.') == line('w$')) ? '5k' : '5<C-y>5k'
+noremap <silent> <expr> <F28>    (line('.') == line('w$')) ? '5k' : '<Cmd>call MyScrollUpX(5)<CR>'
+noremap <silent> <expr> <M-C-K>  (line('.') == line('w$')) ? '5k' : '<Cmd>call MyScrollUpX(5)<CR>'
 inoremap <silent> <expr> <F28>   (line('.') == line('w$')) ? '<C-\><C-o>5k' : '<C-\><C-o>5<C-y><C-\><C-o>5k'
 inoremap <silent> <expr> <M-C-K> (line('.') == line('w$')) ? '<C-\><C-o>5k' : '<C-\><C-o>5<C-y><C-\><C-o>5k'
 if !has("nvim")
@@ -8813,9 +8833,9 @@ inoremap <C-_>K <C-\><C-o>10gk
 " SPECIAL: some terminals might map C-A-j / A-C-j to C-M-o / M-C-o ...
 " use ^O instead of ^J (or ^M or \n or \r)
 call <SID>MapFastKeycode('<F29>',  "\e\<C-o>", 29)
-noremap <silent> <expr> <F29>    (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '5<C-e>5j'
-noremap <silent> <expr> <M-C-O>  (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '5<C-e>5j'
-noremap <silent> <expr> <M-C-J>  (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '5<C-e>5j'
+noremap <silent> <expr> <F29>    (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '<Cmd>call MyScrollDownX(5)<CR>'
+noremap <silent> <expr> <M-C-O>  (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '<Cmd>call MyScrollDownX(5)<CR>'
+noremap <silent> <expr> <M-C-J>  (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '<Cmd>call MyScrollDownX(5)<CR>'
 inoremap <silent> <expr> <F29>   (line('.') == line('w0')) ? '<C-\><C-o>5j' : ((line('$') - line('w$')) < 5) ? '<C-\><C-o>mf<C-\><C-o>G<C-\><C-o>`f<C-\><C-o>5j' : '<C-\><C-o>5<C-e><C-\><C-o>5j'
 inoremap <silent> <expr> <M-C-O> (line('.') == line('w0')) ? '<C-\><C-o>5j' : ((line('$') - line('w$')) < 5) ? '<C-\><C-o>mf<C-\><C-o>G<C-\><C-o>`f<C-\><C-o>5j' : '<C-\><C-o>5<C-e><C-\><C-o>5j'
 inoremap <silent> <expr> <M-C-J> (line('.') == line('w0')) ? '<C-\><C-o>5j' : ((line('$') - line('w$')) < 5) ? '<C-\><C-o>mf<C-\><C-o>G<C-\><C-o>`f<C-\><C-o>5j' : '<C-\><C-o>5<C-e><C-\><C-o>5j'
@@ -8847,8 +8867,8 @@ noremap <M-C-L> 10l
 " NOTE: \eH and \eL are NOT mapped for vim ...
 
 call <SID>MapFastKeycode('<F26>',  "\eK", 26)
-noremap <silent> <expr> <F26>    (line('.') == line('w$')) ? '5k' : '5<C-y>5k'
-noremap <silent> <expr> <M-K>    (line('.') == line('w$')) ? '5k' : '5<C-y>5k'
+noremap <silent> <expr> <F26>    (line('.') == line('w$')) ? '5k' : '<Cmd>call MyScrollUpX(5)<CR>'
+noremap <silent> <expr> <M-K>    (line('.') == line('w$')) ? '5k' : '<Cmd>call MyScrollUpX(5)<CR>'
 inoremap <silent> <expr> <F26>   (line('.') == line('w$')) ? '<C-\><C-o>5k' : '<C-\><C-o>5<C-y><C-\><C-o>5k'
 inoremap <silent> <expr> <M-K>   (line('.') == line('w$')) ? '<C-\><C-o>5k' : '<C-\><C-o>5<C-y><C-\><C-o>5k'
 if !has("nvim")
@@ -8860,8 +8880,8 @@ else
 endif
 
 call <SID>MapFastKeycode('<F23>',  "\eJ", 23)
-noremap <silent> <expr> <F23>    (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '5<C-e>5j'
-noremap <silent> <expr> <M-J>    (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '5<C-e>5j'
+noremap <silent> <expr> <F23>    (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '<Cmd>call MyScrollDownX(5)<CR>'
+noremap <silent> <expr> <M-J>    (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '<Cmd>call MyScrollDownX(5)<CR>'
 inoremap <silent> <expr> <F23>   (line('.') == line('w0')) ? '<C-\><C-o>5j' : ((line('$') - line('w$')) < 5) ? '<C-\><C-o>mf<C-\><C-o>G<C-\><C-o>`f<C-\><C-o>5j' : '<C-\><C-o>5<C-e><C-\><C-o>5j'
 inoremap <silent> <expr> <M-J>   (line('.') == line('w0')) ? '<C-\><C-o>5j' : ((line('$') - line('w$')) < 5) ? '<C-\><C-o>mf<C-\><C-o>G<C-\><C-o>`f<C-\><C-o>5j' : '<C-\><C-o>5<C-e><C-\><C-o>5j'
 if !has("nvim")
@@ -9131,6 +9151,7 @@ function s:CtrlF(multi) abort
     let &scrolloff=0
     let &scrolljump=prevsj
     "echo "g:curcol = " . g:curcol . " g:prevcol = " . g:prevcol . " g:prevcol2 = " . g:prevcol2
+    return
 endfunction
 
 function s:CtrlB(multi) abort
@@ -9251,6 +9272,7 @@ function s:CtrlB(multi) abort
     let &scrolloff=0
     let &scrolljump=prevsj
     "echo "g:curcol = " . g:curcol . " g:prevcol = " . g:prevcol . " g:prevcol2 = " . g:prevcol2
+    return
 endfunction
 
 " ---------
@@ -9349,7 +9371,7 @@ function! s:MapScrollKeys()
 
   "noremap            <expr> <C-f> (line('.') == line('w0')) ? g:hdn : '<C-D>'
   nnoremap <silent> <C-f> :call <SID>CtrlF(1)<CR>
-  "nnoremap <silent> <expr> <C-f>  (line('.') == line('w0')) ? 'M' : ((line('$') - line('w$')) < 5) ? 'mfG`f10j' : '10<C-e>10j'
+  "nnoremap <silent> <expr> <C-f>  (line('.') == line('w0')) ? 'M' : ((line('$') - line('w$')) < 5) ? 'mfG`f10j' : '<Cmd>call MyScrollDownX(10)<CR>'
 
   "vnoremap <silent> <expr> <C-f> (line('v') < line('.')) ? g:half . 'gjzz6gj' : g:half . 'gjzz6gk'
   execute 'vnoremap <silent> <expr> <C-f> ' . g:hdn
@@ -9357,7 +9379,7 @@ function! s:MapScrollKeys()
 
   "noremap            <expr> <C-b> (line('.') == line('w$')) ? g:hup : '<C-U>'
   nnoremap <silent> <C-b> :call <SID>CtrlB(1)<CR>
-  "nnoremap <silent> <expr> <C-b>  (line('.') == line('w$')) ? 'M' : '10<C-y>10k'
+  "nnoremap <silent> <expr> <C-b>  (line('.') == line('w$')) ? 'M' : '<Cmd>call MyScrollUpX(10)<CR>'
 
   "vnoremap <silent> <expr> <C-b> (line('v') > line('.')) ? g:hal1 . 'gkzz6gk' : g:hal1 . 'gkzz6gj'
   execute 'vnoremap <silent> <expr> <C-b> ' . g:hup
@@ -9402,14 +9424,14 @@ function! s:MapScrollKeys()
 
   "nnoremap <silent> <S-BS>   :<C-u>call <SID>CtrlB(1)<CR>
   "execute 'vnoremap <silent> <expr> <S-BS> '   . g:hup
-  noremap <silent> <expr> <S-BS>       AtBot(0) ? '<C-y>' : 'gk<C-y>'
+  noremap <silent> <expr> <S-BS>       AtBot(0) ? '<C-y>' : '<Cmd>call MyScrollUp()<CR>'
   inoremap <S-BS> <BS>
   cnoremap <S-BS> <BS>
   tnoremap <S-BS> <BS>
   " SPECIAL: S-BS in some terminals (via tmux) may be mapped to <C-^><C-h> in vim ...
   "nnoremap <silent> <C-^><C-h>   :<C-u>call <SID>CtrlB(1)<CR>
   "execute 'vnoremap <silent> <expr> <C-^><C-h> '   . g:hup
-  noremap <silent> <expr> <C-^><C-h>   AtBot(0) ? '<C-y>' : 'gk<C-y>'
+  noremap <silent> <expr> <C-^><C-h>   AtBot(0) ? '<C-y>' : '<Cmd>call MyScrollUp()<CR>'
   inoremap <C-^><C-h> <BS>
   cnoremap <C-^><C-h> <BS>
   tnoremap <C-^><C-h> <BS>
@@ -9418,14 +9440,14 @@ function! s:MapScrollKeys()
 
   "nnoremap <silent> <S-Space> :<C-u>call <SID>CtrlF(1)<CR>
   "execute 'vnoremap <silent> <expr> <S-Space> ' . g:hdn
-  noremap <silent> <expr> <S-Space>    ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : 'gj<C-e>'
+  noremap <silent> <expr> <S-Space>    ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<Cmd>call MyScrollDown()<CR>'
   inoremap <S-Space> <Space>
   cnoremap <S-Space> <Space>
   tnoremap <S-Space> <Space>
   " SPECIAL: S-Space in some terminals (via tmux) may be mapped to <C-^><Space> in vim ...
   "nnoremap <silent> <C-^><Space> :<C-u>call <SID>CtrlF(1)<CR>
   "execute 'vnoremap <silent> <expr> <C-^><Space> ' . g:hdn
-  noremap <silent> <expr> <C-^><Space> ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : 'gj<C-e>'
+  noremap <silent> <expr> <C-^><Space> ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<Cmd>call MyScrollDown()<CR>'
   inoremap <C-^><Space> <Space>
   cnoremap <C-^><Space> <Space>
   tnoremap <C-^><Space> <Space>
@@ -9466,12 +9488,12 @@ function! s:MapScrollKeys()
   " NOTE: tmux could send Up/Down cmds instead of this key ...
   " TODO: wish <C-e>/<C-y> would scroll virtual lines ...
   " save <S-F22> for tmux to use for C-triple-click
-  "noremap   <silent> <expr> <S-F25>        (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
-  noremap   <silent> <expr> <C-S-PageDown> (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '10<C-e>10j'
+  "noremap   <silent> <expr> <S-F25>        (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '<Cmd>call MyScrollDownX(10)<CR>'
+  noremap   <silent> <expr> <C-S-PageDown> (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '<Cmd>call MyScrollDownX(10)<CR>'
   "inoremap  <silent> <expr> <S-F25>        pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
   inoremap  <silent> <expr> <C-S-PageDown> pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
-  "noremap   <silent> <expr> <S-F22>        (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
-  noremap   <silent> <expr> <C-S-PageUp>   (line('.') == line('w$')) ? '10k' : '10<C-y>10k'
+  "noremap   <silent> <expr> <S-F22>        (line('.') == line('w$')) ? '10k' : '<Cmd>call MyScrollUpX(10)<CR>'
+  noremap   <silent> <expr> <C-S-PageUp>   (line('.') == line('w$')) ? '10k' : '<Cmd>call MyScrollUpX(10)<CR>'
   "inoremap  <silent> <expr> <S-F22>        pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
   inoremap  <silent> <expr> <C-S-PageUp>   pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
 
@@ -10091,8 +10113,8 @@ inoremap <silent> <C-^><Tab> <C-i>
 "endfunction
 
 "inoremap <silent> <expr> <Tab>
-"	\ pumvisible() ? "\<C-n>" :
-"	\ <SID>check_back_space() ? "\<Tab>" :
+"   \ pumvisible() ? "\<C-n>" :
+"   \ <SID>check_back_space() ? "\<Tab>" :
 
 " NOTE: vim needs -python/3 support for YouCompleteMe and rtags
 " +python/dyn +python3/dyn
@@ -10251,29 +10273,29 @@ map <C-w>} <Nop>
 " run rc -J /path/to/compile_commands.json
 "
 " -------------------------------------
-"\ri	Symbol info
-"\rj	Follow location (jump to)
-"\rJ	Follow declaration location
-"\rH	Follow location (open in horizontal split)
-"\rV	Follow location (open in vertical split)
-"\rT	Follow location (open in new tab)
-"\rt	Follow location (if not in same file then open in new tab)
-"\rp	Jump to parent
-"\rc	Find subclasses
-"\rC	Find superclasses
-"\rf	Find references
-"\rF	Call tree (o - open node, Enter - jump)
-"\rn	Find references by name
-"\rs	Find symbols by name
-"\rr	Reindex current file
-"\rl	List all available projects
-"\rw	Rename symbol under cursor
-"\rv	Find virtuals
-"\rd	Diagnose file for warnings and errors
-"\rb	Jump to prev location
-"\r,	Jump to prev location (<)
-"\r.	Jump to next location (>)
-"\r:	Toggle use colon in keyword (<cword>)
+"\ri    Symbol info
+"\rj    Follow location (jump to)
+"\rJ    Follow declaration location
+"\rH    Follow location (open in horizontal split)
+"\rV    Follow location (open in vertical split)
+"\rT    Follow location (open in new tab)
+"\rt    Follow location (if not in same file then open in new tab)
+"\rp    Jump to parent
+"\rc    Find subclasses
+"\rC    Find superclasses
+"\rf    Find references
+"\rF    Call tree (o - open node, Enter - jump)
+"\rn    Find references by name
+"\rs    Find symbols by name
+"\rr    Reindex current file
+"\rl    List all available projects
+"\rw    Rename symbol under cursor
+"\rv    Find virtuals
+"\rd    Diagnose file for warnings and errors
+"\rb    Jump to prev location
+"\r,    Jump to prev location (<)
+"\r.    Jump to next location (>)
+"\r:    Toggle use colon in keyword (<cword>)
 " -------------------------------------
 "
 function s:CloseClangWin() abort
@@ -12319,7 +12341,7 @@ vnoremap <silent> <C-i> <C-\><C-n><C-i>
 " **careful** as 'xc' is for quit all ...
 nnoremap <Leader>cx           :echo<CR>
 vnoremap <Leader>cx <C-\><C-n>:echo<CR>
-" maybe also execute "keepjumps normal" ""
+" maybe also execute keepjumps normal \<C-l>
 " or :redraw!
 
 " tab open
