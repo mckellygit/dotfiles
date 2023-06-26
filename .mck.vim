@@ -4243,6 +4243,12 @@ set showtabline=2
 " 136, 144 reasonable (there also Pmenu)
 highlight PmenuSel ctermbg=136
 
+" disable python syntax trailing space highlight ...
+" from this in python.vim ...
+"syn match   pythonSpaceError    display excludenl "\s\+$"
+let python_highlight_all = 1
+let python_highlight_space_errors = 0
+
 " -----------------------------
 
 " if yaml syntax too slow ...
