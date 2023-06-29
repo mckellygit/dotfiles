@@ -192,8 +192,8 @@ mouse_bindings:
       #- { mouse: Right,  mods: Alt|Shift, action: None }
 
 mouse:
-  double_click: { threshold: 250 }
-  triple_click: { threshold: 500 }
+  # double_click: { threshold: 250 }
+  # triple_click: { threshold: 500 }
   hide_when_typing: false
 
   hints:

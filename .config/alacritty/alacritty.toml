@@ -560,11 +560,11 @@ action = "None"
 mods = "Alt|Shift"
 mouse = "Middle"
 
-[mouse.double_click]
-threshold = 250
+#[mouse.double_click]
+#threshold = 250
 
-[mouse.triple_click]
-threshold = 500
+#[mouse.triple_click]
+#threshold = 500
 
 [scrolling]
 history = 0
