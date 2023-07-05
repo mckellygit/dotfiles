@@ -6787,6 +6787,18 @@ tnoremap <A-4-RightMouse> <Nop>
 "nnoremap <silent> <A-LeftMouse> <LeftMouse>
 "vnoremap <silent> <A-LeftMouse> <LeftMouse>
 
+if has("nvim")
+    " NOTE: Add these for nvim b/c w/o it extends selection ...
+    nnoremap <silent> <A-LeftMouse> <LeftMouse>
+    vnoremap <silent> <A-LeftMouse> <LeftMouse>
+
+    " NOTE: Add these for nvim b/c w/o it calls tag search ...
+    nnoremap <A-C-LeftRelease> <Nop>
+    vnoremap <A-C-LeftRelease> <Nop>
+endif
+
+" ----------------------
+
 nnoremap <A-C-LeftDrag> <LeftDrag>
 vnoremap <A-C-LeftDrag> <LeftDrag>
 inoremap <A-C-LeftDrag> <LeftDrag>
@@ -10272,6 +10284,7 @@ let loaded_gtags_cscope=1
 
 " tags ...
 map <C-w>} <Nop>
+"set notagstack
 
 " rtags -----------------
 " download/build/install rtags
