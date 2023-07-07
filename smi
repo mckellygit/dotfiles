@@ -8,14 +8,14 @@ read -r -p "really ? [(y)/n] " response
 response=${response,,} # tolower
 if [[ $response =~ ^(yes|y| ) ]] || [[ -z $response ]]; then
 
+    sudo make install
+
     # fix up neovim build dir ownership which sometimes becomes root ...
     if [[ "$cdir" == "neovim" ]] ; then
         if [[ "$usr" != "root" ]] ; then
-            sudo chown ${usr}:${usr} .deps/.ninja_log .deps/.ninja_deps .deps/build.ninja
-            make
+            sudo chown ${usr}:${usr} .deps/.ninja_log .deps/.ninja_deps .deps/build.ninja build/.ninja_log
         fi
     fi
 
-    sudo make install
 fi
 
