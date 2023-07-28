@@ -7642,13 +7642,15 @@ function s:delword(hole, word)
         if (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ')
             execute 'silent normal! "_dw'
         else
-            execute 'silent normal! "_di' . a:word
+            "execute 'silent normal! "_di' . a:word
+            execute 'silent normal! "_da' . a:word
         endif
     else
         if (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ')
             execute 'silent normal! dw'
         else
-            execute 'silent normal! di' . a:word
+            "execute 'silent normal! di' . a:word
+            execute 'silent normal! da' . a:word
         endif
     endif
 endfunction
