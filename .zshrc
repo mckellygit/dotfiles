@@ -986,10 +986,10 @@ alias pause-indx='rc -X all'
 alias pause_indx='rc -X all'
 alias resume-indx='rc -X clear'
 alias resume_indx='rc -X clear'
-alias clear-indx='rc -C'
-alias clear_indx='rc -C'
-alias start-indx='rc -J .'
-alias start_indx='rc -J .'
+alias clear-indx='rc -C ; rc -X clear'
+alias clear_indx='rc -C ; rc -X clear'
+alias start-indx='rc -X clear ; rc -J .'
+alias start_indx='rc -X clear ; rc -J .'
 
 alias start-rdm="rdm --tempdir /tmp/rdm-${LOGNAME} --log-file /tmp/rdm-${LOGNAME}.log --daemon"
 alias start_rdm="rdm --tempdir /tmp/rdm-${LOGNAME} --log-file /tmp/rdm-${LOGNAME}.log --daemon"
