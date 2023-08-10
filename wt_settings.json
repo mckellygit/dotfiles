@@ -65,10 +65,6 @@
         },
         {
             "command": "unbound",
-            "keys": "ctrl+shift+c"
-        },
-        {
-            "command": "unbound",
             "keys": "ctrl+numpad0"
         },
         {
@@ -142,6 +138,14 @@
                 "input": "\r"
             },
             "keys": "ctrl+enter"
+        },
+        {
+            "command": 
+            {
+                "action": "sendInput",
+                "input": "\u001b[2;5~"
+            },
+            "keys": "ctrl+shift+c"
         },
         {
             "command": 
@@ -333,8 +337,8 @@
     "copyOnSelect": false,
     "defaultProfile": "{21b1f5b2-67fa-49ea-aa12-27710aabc4ed}",
     "disableAnimations": true,
-    "experimental.rendering.forceFullRepaint": false,
-    "experimental.rendering.software": false,
+    "experimental.rendering.forceFullRepaint": true,
+    "experimental.rendering.software": true,
     "initialCols": 240,
     "initialPosition": "260,560",
     "initialRows": 52,
@@ -364,7 +368,7 @@
             "opacity": 92,
             "scrollbarState": "hidden",
             "useAcrylic": true,
-            "useAtlasEngine": true
+            "useAtlasEngine": false
         },
         "list": 
         [
@@ -382,7 +386,7 @@
                 "commandline": "C:\\WINDOWS\\system32\\wsl.exe -d Ubuntu",
                 "font": 
                 {
-                    "size": 10.0
+                    "size": 9.0
                 },
                 "guid": "{21b1f5b2-67fa-49ea-aa12-27710aabc4ed}",
                 "hidden": false,
@@ -392,6 +396,10 @@
                 "startingDirectory": "~"
             },
             {
+                "font": 
+                {
+                    "size": 9.0
+                },
                 "guid": "{2c4de342-38b7-51cf-b940-2309a097f518}",
                 "hidden": true,
                 "name": "Ubuntu",
