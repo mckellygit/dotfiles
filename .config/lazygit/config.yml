@@ -1,5 +1,7 @@
 reporting: "off"
 startuppopupversion: 1
+os:
+    editPreset: 'nvim'
 keybinding:
     files:
         openStatusFilter: '<f1>'
