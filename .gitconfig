@@ -3,7 +3,7 @@
 	whitespace = trailing-space,tab-in-indent,tabwidth=4
 #	tab-in-indent makes leading tabs bright red ...
 #	whitespace = trailing-space,tabwidth=4
-	editor = vim
+	editor = nvim
 	excludesfile = ~/.gitignore
     preloadindex = true
 [apply]
