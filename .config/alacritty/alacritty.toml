@@ -245,7 +245,7 @@ key = "V"
 mods = "Alt|Control"
 
 [[keyboard.bindings]]
-action = "Copy"
+chars = "\u001B[2;5~"
 key = "C"
 mods = "Alt|Control"
 

@@ -33,10 +33,6 @@
         },
         {
             "command": "unbound",
-            "keys": "ctrl+insert"
-        },
-        {
-            "command": "unbound",
             "keys": "shift+insert"
         },
         {
@@ -140,12 +136,24 @@
             "keys": "ctrl+enter"
         },
         {
+            "command": "unbound",
+            "keys": "ctrl+insert"
+        },
+        {
             "command": 
             {
                 "action": "sendInput",
                 "input": "\u001b[2;5~"
             },
             "keys": "ctrl+shift+c"
+        },
+        {
+            "command": 
+            {
+                "action": "sendInput",
+                "input": "\u001b[2;5~"
+            },
+            "keys": "ctrl+alt+c"
         },
         {
             "command": 
@@ -158,14 +166,6 @@
         {
             "command": "paste",
             "keys": "ctrl+alt+v"
-        },
-        {
-            "command": 
-            {
-                "action": "copy",
-                "singleLine": false
-            },
-            "keys": "ctrl+alt+c"
         },
         {
             "command": 
@@ -340,7 +340,7 @@
     "experimental.rendering.forceFullRepaint": true,
     "experimental.rendering.software": true,
     "initialCols": 240,
-    "initialPosition": "260,560",
+    "initialPosition": "340,576",
     "initialRows": 52,
     "largePasteWarning": false,
     "launchMode": "default",

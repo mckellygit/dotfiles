@@ -419,7 +419,8 @@ return {
     -- make C-S-v same as std S-Insert esc code as C-S-<letter> cannot usually discern the Shift ...
     { key="v",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1b[2;2~"} },
     { key="V",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1b[2;2~"} },
-    { key="c",          mods="CTRL|ALT",      action=wezterm.action.CopyTo "Clipboard" },
+    -- { key="c",          mods="CTRL|ALT",      action=wezterm.action.CopyTo "Clipboard" },
+    { key="c",          mods="CTRL|ALT",      action=wezterm.action{SendString="\x1b[2;5~"} },
     { key="v",          mods="CTRL|ALT",      action=wezterm.action.PasteFrom "Clipboard" },
 
     { key="phys:Minus", mods="CTRL",          action=wezterm.action{SendString="\x1e\x2d"} },
