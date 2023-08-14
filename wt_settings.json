@@ -52,7 +52,11 @@
             "keys": "alt+space"
         },
         {
-            "command": "unbound",
+            "command": 
+            {
+                "action": "sendInput",
+                "input": "\u001e-"
+            },
             "keys": "ctrl+minus"
         },
         {
