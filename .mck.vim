@@ -7682,13 +7682,13 @@ nnoremap <silent> <Leader>wD <Cmd>call <SID>delword(1, 'W')<CR>
 vnoremap <silent> <Leader>wD "_d
 
 " NOTE: see above for prior dw mapping thoughts ...
-nnoremap <silent> dw <Cmd>call <SID>delword(0, 'w')<CR>
-nnoremap <silent> dW <Cmd>call <SID>delword(0, 'W')<CR>
+"nnoremap <silent> dw <Cmd>call <SID>delword(0, 'w')<CR>
+"nnoremap <silent> dW <Cmd>call <SID>delword(0, 'W')<CR>
 "nnoremap <silent> dw diw
 "nnoremap <silent> dW diW
 
-nnoremap <silent> cw ciw
-nnoremap <silent> cW ciW
+"nnoremap <silent> cw ciw
+"nnoremap <silent> cW ciW
 
 " new whole word (from beg) [cannot use wc]
 nnoremap <silent> <Leader>wn ciw
