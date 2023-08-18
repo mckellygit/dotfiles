@@ -8,16 +8,16 @@ extras=""
 do_vim_bundles=""
 if [[ $# -gt 0 ]] ; then
     if [[ "$1" == "-a" || "$1" == "-all" || "$1" == "--a" || "$1" == "--all" ]] ; then
-        extras=" bat neovim vim gef delta libxkbcommon foot alacritty lazygit"
+        extras=" bat neovim vim gef delta libxkbcommon foot lazygit"
         if [[ $# -gt 1 ]] ; then
             if [[ "$2" == "-a" || "$2" == "-all" || "$2" == "--a" || "$2" == "--all" ]] ; then
-                extras=" $extras ccache gdb-dashboard fzf-tab-completion tree-sitter difftastic cgdb vifm"
+                extras=" $extras ccache fzf-tab-completion tree-sitter difftastic cgdb vifm"
             elif [[ "$2" == "-v" ]] ; then
                 do_vim_bundles="yes"
             fi
             if [[ $# -gt 2 ]] ; then
                 if [[ "$3" == "-a" || "$3" == "-all" || "$3" == "--a" || "$3" == "--all" ]] ; then
-                    extras=" $extras ccache gdb-dashboard fzf-tab-completion tree-sitter difftastic cgdb vifm"
+                    extras=" $extras ccache fzf-tab-completion tree-sitter difftastic cgdb vifm"
                 elif [[ "$3" == "-v" ]] ; then
                     do_vim_bundles="yes"
                 fi
@@ -27,11 +27,11 @@ if [[ $# -gt 0 ]] ; then
         do_vim_bundles="yes"
         if [[ $# -gt 1 ]] ; then
             if [[ "$2" == "-a" || "$2" == "-all" || "$2" == "--a" || "$2" == "--all" ]] ; then
-                extras=" bat neovim vim gef delta libxkbcommon foot alacritty lazygit"
+                extras=" bat neovim vim gef delta libxkbcommon foot lazygit"
             fi
             if [[ $# -gt 2 ]] ; then
                 if [[ "$3" == "-a" || "$3" == "-all" || "$3" == "--a" || "$3" == "--all" ]] ; then
-                    extras=" $extras ccache gdb-dashboard fzf-tab-completion tree-sitter difftastic cgdb vifm"
+                    extras=" $extras ccache fzf-tab-completion tree-sitter difftastic cgdb vifm"
                 fi
             fi
         fi
@@ -445,6 +445,9 @@ echo ""
 
 # kakoune:
 #   git clone https://github.com/mawww/kakoune.git
+
+# helix
+#   git clone https://github.com/helix-editor/helix
 
 # xsel:
 #   git clone https://github.com/kfish/xsel.git
