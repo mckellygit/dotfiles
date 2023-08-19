@@ -19,6 +19,8 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#DEBUG . ./shutil
+
 __ip_address_detail() {
 	if [ -x /sbin/ip ]; then
 		/sbin/ip -4 addr list
@@ -84,12 +86,16 @@ __ip_address() {
 	esac
 	if [ -n "$WSL_DISTRO_NAME" ] || [ -n "$WSLENV" ]; then
 		if [ -n "$WSL2_GUI_APPS_ENABLED" ]; then
-			ipaddr=$(ip -4 addr list | grep inet | grep global | awk '{print $2}' | awk -F/ '{print $1}')
-		else
-			ipaddr=$(route.exe PRINT -4 2>/dev/null | grep '0.0.0.0          0.0.0.0' | tail -n 1 | awk '{print $4}' | tr -d '\r\n')
+			ipaddr=$(/mnt/c/Windows/system32/route.exe PRINT -4 2>/dev/null | grep '0.0.0.0          0.0.0.0' | tail -n 1 | awk '{print $4}' | tr -d '\r\n')
 			if [ -z "$ipaddr" ]; then
-				ipaddr=$(/mnt/c/Windows/system32/ipconfig.exe 2>/dev/null | grep IPv4 | head -n 1 | awk '{print $NF}' | tr -d '\r\n')
+				ipaddr=$(/mnt/c/Windows/system32/ipconfig.exe /all | grep -A 10 comcast | grep IPv4 | awk '{print $(NF-1)}' | awk -F\( '{print $1}')
 			fi
+			if [ -z "$ipaddr" ]; then
+				ipaddr=$(ip -4 addr list | grep inet | grep global | awk '{print $2}' | awk -F/ '{print $1}')
+			fi
+		else
+			ipaddr=$(/mnt/c/Windows/system32/route.exe PRINT -4 2>/dev/null | grep '0.0.0.0          0.0.0.0' | tail -n 1 | awk '{print $4}' | tr -d '\r\n')
+			ipaddr="foobar"
 		fi
 	else
 		if [ -z "$ipaddr" ]; then
@@ -107,5 +113,7 @@ __ip_address() {
 		fi
 	fi
 }
+
+#DEBUG __ip_address
 
 # vi: syntax=sh ts=4 noexpandtab
