@@ -20,6 +20,15 @@ setopt HIST_IGNORE_SPACE
 # save cmds to history that start with leading space(s)
 # unsetopt HIST_IGNORE_SPACE
 
+# strip trailing blanks from history lines ...
+# BUT doing this means HIST_IGNORE_SPACE is no longer honored ...
+function zshaddhistorySKIP()
+{
+    setopt local_options extended_glob
+    print -Sr -- ${1%%[[:space:]]##}
+    return 1  # suppress default behavior
+}
+
 purge_old_zhfiles()
 {
     zhfiles=$(ls -1 ~/.zsh_hist.* | awk -F. '{print $NF}' 2>/dev/null)
