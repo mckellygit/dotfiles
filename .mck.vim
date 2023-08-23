@@ -361,7 +361,7 @@ Plug 'itchyny/calendar.vim'
 " lastplace to start at prev cursor pos (**modified++)
 " see note below about doing this after uncompress
 "Plug 'farmergreg/vim-lastplace'
-Plug 'mckellygit/vim-lastplace'
+Plug 'mckellygit/vim-lastplace', { 'branch': 'mck_mods' }
 "
 " any-jump (with rg/ag)
 "Plug 'pechorin/any-jump.vim'
