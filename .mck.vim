@@ -1115,6 +1115,7 @@ augroup END
 noremap <silent> <Leader>fz <C-\><C-n>:FZFProjectFiles<CR>
 noremap <silent> <Leader>fg <C-\><C-n>:FZFProjectFiles<CR>
 noremap <silent> <Leader>f/ <C-\><C-n>:FZFProjectFiles<CR>
+
 function! s:find_git_root()
     let gdir = ''
     if executable("git")
@@ -1137,7 +1138,16 @@ endfunction
 "     1). add a limit of 250 lines for the general fzf cmd
 "     2), remove file/mime check
 
+" add -t f -t l to :Files command to only list files (and not directories ...)
+let fzf_cmd=$FZF_DEFAULT_COMMAND
+if !empty(fzf_cmd)
+    let g:fzf_def_cmd=fzf_cmd . ' -t f -t l'
+else
+    let g:fzf_cmd='fd -t f -t l'
+endif
+
 command! -bang -nargs=? -complete=dir Files
+    \ call setenv("FZF_DEFAULT_COMMAND", g:fzf_def_cmd) |
     \ call fzf#vim#files(<q-args>,
     \ {'options': ['--preview', '~/bin/fzf_preview250.sh {}', '--bind=alt-d:kill-word', '--bind=esc:ignore']},
     \ <bang>0)

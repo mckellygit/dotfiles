@@ -1292,7 +1292,7 @@ export FZF_DEFAULT_COMMAND="$FDNAME --color=always --strip-cwd-prefix --full-pat
 
 #for testing - export FZF_DEFAULT_COMMAND="$FDNAME --color=always --strip-cwd-prefix --full-path -u --hidden --follow --exclude '.git' --exclude '.cache' --exclude '.npm' --exclude '.mozilla' --exclude '.fingerprint' --exclude '.git_keep' --exclude '.cargo' "
 
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND -t f -t l"
 # could make alt-c for dirs only (add -t d) - then it automatically chdir to there ...
 export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND -t d"
 # add --ansi because $FDNAME above uses --color=always ...
