@@ -17,6 +17,11 @@ set refresh-interval   = 5
 
 # =================================================
 
+# see https://github.com/jonas/tig/assets/300342/a3864f3c-b8c9-46ad-8277-cb6cb3a2ecd2
+bind generic    <Esc>[I :none  # Ignore xterm focus events
+bind generic    <Esc>[O :none
+# ---------------------------
+
 bind generic   <C-L>        refresh # instead of redraw-screen
 
 bind generic   <Down>       move-down
