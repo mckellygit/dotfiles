@@ -1,0 +1,8 @@
+theme = "gruvbox"
+[keys.normal]
+    "\\".q.q = ":q"
+
+[editor.soft-wrap]
+enable = true
+wrap-indicator = ""  # set wrap-indicator to "" to hide it
+
