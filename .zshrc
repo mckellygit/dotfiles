@@ -1119,6 +1119,8 @@ path+=(~/go/bin)
 path+=(~/.cargo/bin)
 path+=(/usr/local/go/bin)
 path+=(/usr/share/bcc/tools)
+# krew kubectl plugin ...
+path+=(~/.krew/bin)
 export PATH
 
 #export GOPATH=$HOME
