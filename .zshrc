@@ -1301,7 +1301,7 @@ export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND -t d"
 
 # change preview bindings to non-preview for dirs and history ...
 export FZF_ALT_C_OPTS="--bind='shift-up:half-page-up' --bind='shift-down:half-page-down' --bind='alt-K:half-page-up,alt-J:half-page-down' --bind='ctrl-alt-k:half-page-up,ctrl-alt-j:half-page-down' --bind='ctrl-alt-o:half-page-down' --bind='pgup:page-up' --bind='pgdn:page-down'"
-export FZF_CTRL_R_OPTS="--bind='shift-up:half-page-up' --bind='shift-down:half-page-down' --bind='alt-K:half-page-up,alt-J:half-page-down' --bind='ctrl-alt-k:half-page-up,ctrl-alt-j:half-page-down' --bind='ctrl-alt-o:half-page-down' --bind='pgup:page-up' --bind='pgdn:page-down'"
+export FZF_CTRL_R_OPTS="--bind='shift-up:half-page-up' --bind='shift-down:half-page-down' --bind='alt-K:half-page-up,alt-J:half-page-down' --bind='ctrl-alt-k:half-page-up,ctrl-alt-j:half-page-down' --bind='ctrl-alt-o:half-page-down' --bind='pgup:page-up' --bind='pgdn:page-down' --no-sort --tac"
 
 # fzf from cmdline uses FZF_DEFAULT_OPTS and has a 250 line preview limit
 # fzf from vim plugin does not have the 250 line max
@@ -1558,7 +1558,7 @@ fzf-cd-widget() {
 fzf-history-widget() {
   local selected num
   setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2> /dev/null
-  selected=( $(fc -rl 1 | awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, "", cmd); if (!seen[cmd]++) print $0 }' |
+  selected=( $(fc -l 1 | awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, "", cmd); if (!seen[cmd]++) print $0 }' |
     FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index --bind=ctrl-r:toggle-sort,ctrl-z:ignore $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} +m" $(_fzfcmd)) )
   local ret=$?
   if [ -n "$selected" ]; then
@@ -1584,7 +1584,7 @@ my-fzfcmd() {
 my-fzf-history-widget() {
   local selected num
   setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2> /dev/null
-  selected=( $(fc -rl 1 | awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, "", cmd); if (!seen[cmd]++) print $0 }' |
+  selected=( $(fc -l 1 | awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, "", cmd); if (!seen[cmd]++) print $0 }' |
     FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index --bind=ctrl-r:toggle-sort,ctrl-z:ignore $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} +m" $(my-fzfcmd)) )
   local ret=$?
   if [ -n "$selected" ]; then
