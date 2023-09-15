@@ -290,7 +290,7 @@ echo ""
 #   orig:
 #   git clone https://github.com/cgdb/cgdb.git
 #   ./autogen.sh
-#   ./configure CXXFLAGS="-g -O2" --with-readline=/usr/local --with-ncurses=/usr/local
+#   ./configure CXXFLAGS="-g -O2" --with-readline=/usr/local --with-ncurses=...
 
 # radssh:
 #   git clone https://github.com/mckellyln/radssh.git
@@ -383,6 +383,14 @@ echo ""
 #   sudo apt-get install rxvt-unicode
 #   -or-
 #   git clone https://github.com/exg/rxvt-unicode.git
+
+# ncurses:
+#   https://invisible-island.net/ncurses
+#   ./configure --with-shared --with-normal --without-debug --enable-widec --enable-overwrite
+
+# readline:
+#   https://tiswww.case.edu/php/chet/readline/rltop.html
+#   https://ftp.gnu.org/gnu/readline
 
 # ---------------------
 
