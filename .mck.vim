@@ -2760,9 +2760,9 @@ function! s:my_vimenter()
   autocmd! startify VimEnter
 endfunction
 
-if has("nvim")
-  autocmd VimEnter * nested call s:my_vimenter()
-endif
+"if has("nvim")
+"  autocmd VimEnter * nested call s:my_vimenter()
+"endif
 " startify -----------
 
 " searchlight --------
