@@ -5174,7 +5174,7 @@ endfunction
 "nnoremap <silent> <Leader>lr :call ForceLoadNammedReg()<CR>
 "vnoremap <silent> <Leader>lr :<C-u>call ForceLoadNammedReg()<CR>
 nnoremap <silent> <Leader>z<Space> :call ForceLoadNammedReg()<CR>
-" vmap of this is above with the <Leader>yy and <C-c> mappings ...
+" NOTE: vmap of this is above with the <Leader>yy and <C-c> mappings ...
 
 " ----------------------
 
@@ -5671,11 +5671,15 @@ function! MyScratchPadCopy()
     endif
 endfunction
 
-nnoremap <silent> <Leader>z<BS>  :call MyScratchPadPaste()<CR>
-nnoremap <silent> <Leader>z<Del> :call MyScratchPadCopy()<CR>
+"nnoremap <silent> <Leader>z<BS>  :call MyScratchPadPaste()<CR>
+"nnoremap <silent> <Leader>z<Del> :call MyScratchPadCopy()<CR>
+nnoremap <silent> <Leader>z<BS>  <Nop>
+nnoremap <silent> <Leader>z<Del> <Nop>
 
 " too close to . (dot)
-nnoremap <silent> <Leader>z. <Nop>
+"nnoremap <silent> <Leader>z. <Nop>
+nnoremap <silent> <Leader>z. :noautocmd call <SID>CopyDefReg(1)<CR>
+
 vnoremap <silent> <Leader>z. <Nop>
 
 " ------------------------------------------------------
