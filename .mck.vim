@@ -10520,6 +10520,10 @@ nmap <Leader>pB <Plug>UnconditionalPasteBlockBefore
 "nmap <Leader>P> <Plug>UnconditionalPasteShiftedBefore
 "nmap <Leader>p> <Plug>UnconditionalPasteShiftedAfter
 
+nmap gh <Nop>
+"autocmd BufEnter * nmap ghp <Nop>
+"autocmd BufEnter * nmap ghP <Nop>
+
 " ------------------------------------
 
 " paste indented line, like <Leader>px/Px, but with more indent logic
