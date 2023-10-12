@@ -113,6 +113,9 @@ set rtp+=~/.fzf
 " --- vim-plug ---------------------------------------
 " ====================================================
 
+let g:plug_threads=8
+let g:plug_retries=16
+
 call plug#begin('~/.vim/bundle')
 Plug 'junegunn/vim-plug'
 " required utils for EnhancedJumps plugin
@@ -401,7 +404,7 @@ Plug 'Konfekt/vim-alias'
 "Plug 'mengelbrecht/lightline-bufferline'
 "
 " start screen
-if g:has_wsl == 0
+if g:has_wsl >= 0
     Plug 'mhinz/vim-startify'
 endif
 "
@@ -3445,10 +3448,10 @@ else
             let g:yank_debounce_timer_id = timer_start(g:yank_debounce_time_ms, 'WSLYank')
         endfunction
 
-        autocmd TextYankPost * call WSLYankDebounced()
-
-        " NOTE: see also WinUpdateClip() for S-Insert paste etc.
         if 0 " old way
+            autocmd TextYankPost * call WSLYankDebounced()
+
+            " NOTE: see also WinUpdateClip() for S-Insert paste etc.
             function! WSLPaste(mode) abort
                 let @" = system('win32yank.exe -o --lf')
                 return a:mode
