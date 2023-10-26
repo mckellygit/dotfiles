@@ -270,7 +270,7 @@ window:
 
   startup_mode: Windowed
 
-  resize_increments: true
+  resize_increments: false
 
   title: Alacritty
 
