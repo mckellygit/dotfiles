@@ -1,3 +1,5 @@
+custom_cursor_colors = true
+
 [bell]
 duration = 0
 
@@ -17,6 +19,10 @@ yellow = "#ffd700"
 [colors.cursor]
 cursor = "#d78700"
 text = "#111111"
+
+[colors.footer.bar]
+background = "#000000"
+foreground = "#000000"
 
 [colors.normal]
 black = "#000000"
@@ -46,6 +52,10 @@ log_level = "Info"
 persistent_logging = false
 render_timer = false
 
+[dpi]
+x = 120.0
+y = 120.0
+
 [env]
 TERM = "alacritty"
 
@@ -63,6 +73,19 @@ style = "normal"
 [font.offset]
 x = 0
 y = 0
+
+[[hints.enabled]]
+command = "xdg-open"
+post_processing = true
+regex = "(ipfs:|ipns:|magnet:|mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:)[^\u0000-\u001F\u007F-<>\"\\s{-}\\^⟨⟩`]+"
+
+[hints.enabled.binding]
+key = "E"
+mods = "Control|Alt"
+
+[hints.enabled.mouse]
+enabled = true
+mods = "Shift"
 
 [[keyboard.bindings]]
 chars = "\u001E\b"
@@ -245,7 +268,7 @@ key = "V"
 mods = "Alt|Control"
 
 [[keyboard.bindings]]
-chars = "\u001B[2;5~"
+action = "Copy"
 key = "C"
 mods = "Alt|Control"
 
@@ -560,11 +583,9 @@ action = "None"
 mods = "Alt|Shift"
 mouse = "Middle"
 
-#[mouse.double_click]
-#threshold = 250
-
-#[mouse.triple_click]
-#threshold = 500
+[mouse.hints]
+launcher = "xdg-open"
+modifiers = "Shift"
 
 [scrolling]
 history = 0

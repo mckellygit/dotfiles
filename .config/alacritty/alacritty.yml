@@ -191,6 +191,19 @@ mouse_bindings:
       #- { mouse: Left,   mods: Alt|Shift, action: None }
       #- { mouse: Right,  mods: Alt|Shift, action: None }
 
+hints:
+  enabled:
+   - regex: "(ipfs:|ipns:|magnet:|mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:)\
+             [^\u0000-\u001F\u007F-\u009F<>\"\\s{-}\\^⟨⟩`]+"
+     command: xdg-open
+     post_processing: true
+     mouse:
+       enabled: true
+       mods: Shift
+     binding:
+       key: E
+       mods: Control|Alt
+
 mouse:
   # double_click: { threshold: 250 }
   # triple_click: { threshold: 500 }
