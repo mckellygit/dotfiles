@@ -4519,6 +4519,7 @@ set timeout timeoutlen=1500
 " by another key could be interpreted as some Esc seq and not separate keys/events ...
 " in nvim over ssh sometimes an <Esc> followed very quickly by another key (such as <Up>)
 " does not leave insert mode.  Seems better config is to just set nottimeout ...
+" NOTE: tmux may have set escape-time 50 and this might be better at 5 or 10 ...
 if g:is_ttyterm < 2
     set nottimeout
     "set ttimeout ttimeoutlen=5
@@ -8026,7 +8027,7 @@ set virtualedit=block
 set nostartofline
 set scrolloff=0
 
-if 0 " disable smoothscroll / sms b/c of signcolumn artifacts sometimes ...
+if 1 " disable smoothscroll / sms b/c of signcolumn artifacts sometimes ...
 " NOTE: one weird thing with smoothscroll is when you go to
 "       the bottom of the file it moves that to mid-screen
 " vim smoothscroll when lines wrap ...
@@ -8477,8 +8478,8 @@ function AtBot2(strict)
 endfunction
 
 function MyScrollDown()
-    if !has("nvim") && &smoothscroll
-        let cmdstr = "keepjumps normal! gj\<C-e>"
+    if &smoothscroll
+        let cmdstr = "keepjumps normal! \<C-e>gj"
         silent execute cmdstr
         return
     endif
@@ -8488,8 +8489,8 @@ function MyScrollDown()
     elseif AtTop2(0)
         silent execute "keepjumps normal! \<C-e>"
     else
-        let size = (strwidth(getline('w0')) / winwidth(0) ) + 1
-        let cmdstr = "keepjumps normal! \<C-e>" . size . "gj"
+        let l:size = (strwidth(getline('w0')) / winwidth(0) ) + 1
+        let cmdstr = "keepjumps normal! \<C-e>" . l:size . "gj"
         silent execute cmdstr
     endif
 endfunction
@@ -8503,12 +8504,13 @@ function MyScrollDownX(cnt)
 endfunction
 
 function MyScrollUp()
-    if !has("nvim") && &smoothscroll
+    if &smoothscroll
         if (winline() == 1)
             let cmdstr = "keepjumps normal! \<C-y>gk"
             silent execute cmdstr
         else
-            let cmdstr = "keepjumps normal! gk\<C-y>"
+            "let cmdstr = "keepjumps normal! gk\<C-y>"
+            let cmdstr = "keepjumps normal! \<C-y>gk"
             silent execute cmdstr
         endif
         return
@@ -8520,8 +8522,8 @@ function MyScrollUp()
         silent execute "keepjumps normal! \<C-y>"
     else
         silent execute "keepjumps normal! \<C-y>"
-        let size = (strwidth(getline('w0')) / winwidth(0) ) + 1
-        let cmdstr = "keepjumps normal! " . size . "gk"
+        let l:size = (strwidth(getline('w0')) / winwidth(0) ) + 1
+        let cmdstr = "keepjumps normal! " . l:size . "gk"
         silent execute cmdstr
     endif
 endfunction
@@ -9003,91 +9005,6 @@ nnoremap <silent> <expr> gL winheight(0) - winline() - &scrolloff > 0
 
 " ---------
 
-function s:CtrlF_Experiment(multi) abort
-    let l:ol = line('.')
-    let l:owl = winline()
-    if (line('.') == line("w0"))
-        execute "keepjumps normal! M"
-        let l:nl = line('.')
-        let l:nwl = winline()
-        if (l:owl == l:nwl && l:ol == l:nl)
-            execute 'keepjumps normal! ' . g:half . 'gj'
-        endif
-        return
-    endif
-    let l:amt = a:multi * g:half + 1
-    let l:hgt = winheight(0)
-    let l:owl = winline()
-    let l:dff = l:hgt - l:owl
-    let prevsj=&scrolljump
-    let &scrolljump=1
-    let prevso=&scrolloff
-    let &scrolloff=l:dff
-    "if (l:dff < 10)
-    "    let l:nxt = 10 - l:dff
-    "    let l:owl = l:owl - l:nxt
-    "endif
-    execute 'keepjumps normal! ' . l:amt . 'gj'
-    "let l:nwl = winline()
-    "if (l:nwl < l:owl)
-    "    let l:dwl = l:owl - l:nwl
-    "    execute 'keepjumps normal! ' . l:dwl . 'gj'
-    "    let &scrolljump=prevsj
-    "    let &scrolloff=prevso
-    "    return
-    "endif
-    "let l:dff = l:hgt - l:nwl
-    "if (l:dff < 10)
-    "    let l:nxt = 10 - l:dff
-    "    execute 'keepjumps normal! ' . l:nxt . 'gk'
-    "endif
-    let &scrolljump=prevsj
-    let &scrolloff=prevso
-endfunction
-
-function s:CtrlB_Experiment(multi) abort
-    let l:ol = line('.')
-    let l:owl = winline()
-    if (line('.') == line("w$"))
-        execute "keepjumps normal! M"
-        let l:nl = line('.')
-        let l:nwl = winline()
-        if (l:owl == l:nwl && l:ol == l:nl)
-            execute 'keepjumps normal! ' . g:hal1 . 'gk'
-        endif
-        return
-    endif
-    let l:amt = a:multi * g:hal1
-    let l:owl = winline()
-    let l:dff = l:owl
-    let prevsj=&scrolljump
-    let &scrolljump=1
-    let prevso=&scrolloff
-    let &scrolloff=l:dff
-    "if (l:dff < 10)
-    "    let l:nxt = 10 - l:dff
-    "    let l:owl = l:owl + l:nxt
-    "endif
-    execute 'keepjumps normal! ' . l:amt . 'gk'
-    "let l:nwl = winline()
-    "if (l:nwl > l:owl)
-    "    let l:dwl = l:nwl - l:owl
-    "    execute 'keepjumps normal! ' . l:dwl . 'gk'
-    "    let &scrolljump=prevsj
-    "    let &scrolloff=prevso
-    "    return
-    "endif
-    "let l:dff = l:nwl
-    "if (l:dff < 10)
-    "    let l:nxt = 10 - l:dff
-    "    execute 'keepjumps normal! ' . l:nxt . 'gj'
-    "endif
-    let &scrolljump=prevsj
-    let &scrolloff=prevso
-endfunction
-
-" ---------
-
 if has("nvim")
     let g:alt_J2 = nvim_replace_termcodes("<M-J><M-J>", v:true, v:false, v:true)
     let g:alt_K2 = nvim_replace_termcodes("<M-K><M-K>", v:true, v:false, v:true)
@@ -9139,16 +9056,31 @@ function s:CtrlF(multi) abort
     let &scrolljump=1
     let &scrolloff=10
     let save_scroll = &scroll
-    if (a:multi == 2)
-        " want normal! here
-        execute "keepjumps normal! " . g:full . "\<C-d>"
-    elseif (a:multi == 4)
-        " want normal! here
-        execute "keepjumps normal! " . g:full . "\<C-d>\<C-d>"
+
+    if &smoothscroll
+        if (a:multi == 2)
+            " want normal! here
+            execute "keepjumps normal! " . g:full . "\<C-e>" . g:full . "gj"
+        elseif (a:multi == 4)
+            " want normal! here
+            execute "keepjumps normal! " . g:full2x . "\<C-e>" . g:full2x . "gj"
+        else
+            " want normal! here
+            execute "keepjumps normal! " . 10 . "\<C-e>" . 10 . "gj"
+        endif
     else
-        " want normal! here
-        execute "keepjumps normal! " . 10 . "\<C-d>"
+        if (a:multi == 2)
+            " want normal! here
+            execute "keepjumps normal! " . g:full . "\<C-d>"
+        elseif (a:multi == 4)
+            " want normal! here
+            execute "keepjumps normal! " . g:full . "\<C-d>\<C-d>"
+        else
+            " want normal! here
+            execute "keepjumps normal! " . 10 . "\<C-d>"
+        endif
     endif
+
     let &scroll = save_scroll
 "   let l:hgt = winheight(0)
     let l:nwl = winline()
@@ -9260,16 +9192,31 @@ function s:CtrlB(multi) abort
     let &scrolljump=1
     let &scrolloff=10
     let save_scroll = &scroll
-    if (a:multi == 2)
-        " want normal! here
-        execute "keepjumps normal! " . g:full . "\<C-u>"
-    elseif (a:multi == 4)
-        " want normal! here
-        execute "keepjumps normal! " . g:full . "\<C-u>\<C-u>"
+
+    if &smoothscroll
+        if (a:multi == 2)
+            " want normal! here
+            execute "keepjumps normal! " . g:full . "\<C-y>" . g:full . "gk"
+        elseif (a:multi == 4)
+            " want normal! here
+            execute "keepjumps normal! " . g:full2x . "\<C-y>" . g:full2x . "gk"
+        else
+            " want normal! here
+            execute "keepjumps normal! " . 10 . "\<C-y>" . 10 . "gk"
+        endif
     else
-        " want normal! here
-        execute "keepjumps normal! " . 10 . "\<C-u>"
+        if (a:multi == 2)
+            " want normal! here
+            execute "keepjumps normal! " . g:full . "\<C-u>"
+        elseif (a:multi == 4)
+            " want normal! here
+            execute "keepjumps normal! " . g:full . "\<C-u>\<C-u>"
+        else
+            " want normal! here
+            execute "keepjumps normal! " . 10 . "\<C-u>"
+        endif
     endif
+
     let &scroll = save_scroll
     let l:nwl = winline()
 "   let l:dff = l:nwl
@@ -9702,11 +9649,12 @@ function My_StartIdleTimer() abort
         let g:prevcol2 = g:prevcol
     "endif
     let l:cc = wincol()
+    let l:ww = winwidth(0) - 1
     if l:cc > 3
         if g:prevcol < l:cc
             let g:prevcol = (l:cc + g:prevcol) / 2
-            if g:prevcol > 25
-                let g:prevcol = 25
+            if g:prevcol > l:ww
+                let g:prevcol = l:ww
             endif
         endif
     endif
