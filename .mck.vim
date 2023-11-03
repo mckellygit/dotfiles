@@ -4520,6 +4520,7 @@ set timeout timeoutlen=1500
 " in nvim over ssh sometimes an <Esc> followed very quickly by another key (such as <Up>)
 " does not leave insert mode.  Seems better config is to just set nottimeout ...
 " NOTE: tmux may have set escape-time 50 and this might be better at 5 or 10 ...
+" see tmux mappings for <M-h,j,k,l> inside vim to help with this ...
 if g:is_ttyterm < 2
     set nottimeout
     "set ttimeout ttimeoutlen=5
@@ -8094,8 +8095,14 @@ vnoremap <silent> <M-,>      10zh10h
 vnoremap <silent> <M-.>      10zl10l
 
 " to be consistent, <M-h>/<M-l> to move like h/l
-inoremap <silent> <M-h>      <C-\><C-o>h
-inoremap <silent> <M-l>      <C-\><C-o>l
+" in vim over ssh (slow) an <Esc> followed quickly by a h,l etc can remain in insert mode ...
+if g:is_ttyterm < 1
+    inoremap <silent> <M-h>      <C-\><C-o>h
+    inoremap <silent> <M-l>      <C-\><C-o>l
+else
+    inoremap <silent> <M-h>      <Esc><Esc>
+    inoremap <silent> <M-l>      <Esc><Esc>
+endif
 "inoremap <silent> <M-h>      <C-\><C-o>10zh<C-\><C-o>10h
 "inoremap <silent> <M-l>      <C-\><C-o>10zl<C-\><C-o>10l
 inoremap <silent> <M-,>      <C-\><C-o>10zh<C-\><C-o>10h
@@ -8841,8 +8848,18 @@ inoremap <C-S-Right> <C-\><C-o>10gl
 call <SID>MapFastKeycode('<F30>',  "\ek", 30)
 noremap <F30> 1gk
 noremap <M-k> 1gk
-inoremap <F30> <C-\><C-o>1gk
-inoremap <M-k> <C-\><C-o>1gk
+" -------------------
+" in vim over ssh (slow) an <Esc> followed quickly by a j,k etc can remain in insert mode ...
+if g:is_ttyterm < 1
+    inoremap <F30> <C-\><C-o>1gk
+    inoremap <M-k> <C-\><C-o>1gk
+else
+    inoremap <F30> <Esc><Esc>
+    inoremap <M-k> <Esc><Esc>
+endif
+" tmux may map <M-k> to <C-^>k when in vim to help with with ...
+inoremap <silent> <C-^>k  <C-\><C-o>k
+" -------------------
 "noremap <F30> 1gk
 "noremap <M-k> 1gk
 "inoremap <F30> <C-\><C-o>1gk
@@ -8860,8 +8877,18 @@ endif
 call <SID>MapFastKeycode('<F31>',  "\ej", 31)
 noremap <F31> 1gj
 noremap <M-j> 1gj
-inoremap <F31> <C-\><C-o>1gj
-inoremap <M-j> <C-\><C-o>1gj
+" -------------------
+" in vim over ssh (slow) an <Esc> followed quickly by a j,k etc can remain in insert mode ...
+if g:is_ttyterm < 1
+    inoremap <F31> <C-\><C-o>1gj
+    inoremap <M-j> <C-\><C-o>1gj
+else
+    inoremap <F31> <Esc><Esc>
+    inoremap <M-j> <Esc><Esc>
+endif
+" tmux may map <M-j> to <C-^>j when in vim to help with with ...
+inoremap <silent> <C-^>j  <C-\><C-o>j
+" -------------------
 "noremap <F31> 1gj
 "noremap <M-j> 1gj
 "inoremap <F31> <C-\><C-o>1gj
