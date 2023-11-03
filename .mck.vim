@@ -9912,6 +9912,9 @@ vnoremap <C-w><C-w>  <C-w>w
 inoremap <C-w>w      <C-\><C-o><C-w>w
 inoremap <C-w><C-w>  <C-\><C-o><C-w>w
 
+inoremap <C-q>       <Esc><Esc>
+inoremap <C-w>       <Nop>
+
 " ------------------
 
 " <Return> was nmapped above to gj also if not terminal ...
