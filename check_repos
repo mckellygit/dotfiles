@@ -41,34 +41,40 @@ fi
 cd ~/Downloads
 for d in fd the_silver_searcher ripgrep tmux rtags tig zsh-autosuggestions zsh-syntax-highlighting $extras
 do
-    echo "checking $d ..."
-    cd $d
+    if [[ -d $d ]] ; then
+        echo "checking $d ..."
+        cd $d
+        rc=$?
+        if [[ $rc -eq 0 ]] ; then
+            git remote -v
+            git pull
+            git smu
+            cd ..
+            echo " --- "
+            echo ""
+        fi
+    fi
+done
+
+if [[ -d ~/.fzf ]] ; then
+    echo "checking ~/.fzf ..."
+    cd ~/.fzf
     rc=$?
     if [[ $rc -eq 0 ]] ; then
         git remote -v
         git pull
         git smu
-        cd ..
         echo " --- "
         echo ""
     fi
-done
-
-echo "checking ~/.fzf ..."
-cd ~/.fzf
-rc=$?
-if [[ $rc -eq 0 ]] ; then
-    git remote -v
-    git pull
-    git smu
-    echo " --- "
-    echo ""
 fi
 
 if [[ -n "$do_vim_bundles" ]] ; then
-    cd ~/Downloads/vim_bundles
-    ./update.sh
-    echo ""
+    if [[ -d ~/Downloads/vim_bundles ]] ; then
+        cd ~/Downloads/vim_bundles
+        ./update.sh
+        echo ""
+    fi
 else
     echo "Also check vim bundles ..."
 fi
