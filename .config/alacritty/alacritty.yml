@@ -381,5 +381,5 @@ debug:
   #   - Info
   #   - Debug
   #   - Trace
-  log_level: Info
+  log_level: Warn
 
