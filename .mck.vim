@@ -7780,6 +7780,7 @@ if has("nvim")
     tnoremap <S-F31> <M-Return>
 endif
 
+" NOTE: some terminals may unmap M-BS, M-S-BS, etc - so this is not detected ...
 noremap <silent> <expr> <M-BS> AtBot(0) ? '<C-y>' : '<Cmd>call MyScrollUp()<CR>'
 noremap <silent> <expr> <M-X>  AtBot(0) ? '<C-y>' : '<Cmd>call MyScrollUp()<CR>'
 " SPECIAL: <A-BS> is mapped to \eX in tmux - scroll up one line ...
@@ -7795,7 +7796,7 @@ if has("nvim")
     tnoremap <S-F30> <M-BS>
 endif
 
-" NOTE: M-Space is usually mapped by gnome/winmgr for window menu (move, resize etc)
+" NOTE: M-Space is usually mapped by gnome/winmgr for window menu (move, resize etc) - so this is not detected ...
 noremap <silent> <expr> <M-Space> ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<Cmd>call MyScrollDown()<CR>'
 " SPECIAL: <A-Space> is mapped to \eY in tmux - scroll down one line ...
 call <SID>MapFastKeycode('<S-F29>',  "\eY", 129)
@@ -8857,8 +8858,9 @@ else
     inoremap <F30> <Esc><Esc>
     inoremap <M-k> <Esc><Esc>
 endif
-" tmux may map <M-k> to <C-^>k when in vim to help with with ...
-inoremap <silent> <C-^>k  <C-\><C-o>k
+" tmux may map <M-k> to <C-^>k when in vim to help with slow (ssh) editting ...
+noremap  <C-^>k 1gk
+inoremap <C-^>k <C-\><C-o>k
 " -------------------
 "noremap <F30> 1gk
 "noremap <M-k> 1gk
@@ -8886,8 +8888,9 @@ else
     inoremap <F31> <Esc><Esc>
     inoremap <M-j> <Esc><Esc>
 endif
-" tmux may map <M-j> to <C-^>j when in vim to help with with ...
-inoremap <silent> <C-^>j  <C-\><C-o>j
+" tmux may map <M-j> to <C-^>j when in vim to help with slow (ssh) editting ...
+noremap  <C-^>j 1gj
+inoremap <C-^>j <C-\><C-o>j
 " -------------------
 "noremap <F31> 1gj
 "noremap <M-j> 1gj
@@ -8967,6 +8970,9 @@ else
     cnoremap <F26> <M-K>
     tnoremap <F26> <M-K>
 endif
+" tmux may map <M-K> to <C-^>K when in vim to help with slow (ssh) editting ...
+noremap  <silent> <expr> <C-^>K  (line('.') == line('w$')) ? '5k' : '<Cmd>call MyScrollUpX(5)<CR>'
+inoremap <silent> <expr> <C-^>K  (line('.') == line('w$')) ? '<C-\><C-o>5k' : '<C-\><C-o>5<C-y><C-\><C-o>5k'
 
 call <SID>MapFastKeycode('<F23>',  "\eJ", 23)
 noremap <silent> <expr> <F23>    (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '<Cmd>call MyScrollDownX(5)<CR>'
@@ -8980,6 +8986,9 @@ else
     cnoremap <F23> <M-J>
     tnoremap <F23> <M-J>
 endif
+" tmux may map <M-J> to <C-^>J when in vim to help with slow (ssh) editting ...
+noremap  <silent> <expr> <C-^>J  (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '<Cmd>call MyScrollDownX(5)<CR>'
+inoremap <silent> <expr> <C-^>J  (line('.') == line('w0')) ? '<C-\><C-o>5j' : ((line('$') - line('w$')) < 5) ? '<C-\><C-o>mf<C-\><C-o>G<C-\><C-o>`f<C-\><C-o>5j' : '<C-\><C-o>5<C-e><C-\><C-o>5j'
 
 " -------------------------------
 
