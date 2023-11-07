@@ -3131,11 +3131,11 @@ else "standard vim/nvim
 endif
 endif " old way
 
-vmap     <silent> x     tx
-vmap     <silent> d     tx
-vmap     <silent> X     tX
+vmap     <silent> <expr> x  (&buftype == 'terminal') ? '' : 'tx'
+vmap     <silent> <expr> d  (&buftype == 'terminal') ? '' : 'tx'
+vmap     <silent> <expr> X  (&buftype == 'terminal') ? '' : 'tX'
 " delete entire selected line(s) - different than normal D (del to end-of-line)
-vmap     <silent> D     tX
+vmap     <silent> <expr> D  (&buftype == 'terminal') ? '' : 'tX'
 
 " ----------------------
 
@@ -6696,6 +6696,9 @@ vnoremap <A-4-MiddleMouse> <Nop>
 inoremap <A-4-MiddleMouse> <Nop>
 tnoremap <A-4-MiddleMouse> <Nop>
 
+tnoremap <MiddleDrag>       <Nop>
+tnoremap <MiddleRelease>    <Nop>
+
 " could add `[ to go back to orig col ...
 
 " ---- if want vim menu ----
@@ -6920,7 +6923,7 @@ let g:fterm = 0
 " TODO: vim can we get into visual mode for C- and A-C- mouse drag ?
 if !has("nvim")
 
-    " vim popup terminal special things to disable mouse drag selection etc
+    " VIM BUG popup terminal special things to disable mouse drag selection etc
     function s:VimTermPopup()
         if &buftype !=# 'terminal' && win_gettype(win_getid()) !=# 'popup'
             return
@@ -6944,6 +6947,9 @@ if !has("nvim")
         tnoremap <4-LeftMouse>      <Nop>
         tnoremap <4-LeftDrag>       <Nop>
         tnoremap <4-LeftRelease>    <Nop>
+
+        tnoremap <MiddleDrag>       <Nop>
+        tnoremap <MiddleRelease>    <Nop>
 
         tnoremap <buffer> <C-LeftMouse>      <Nop>
         tnoremap <buffer> <C-LeftDrag>       <Nop>
@@ -7016,7 +7022,10 @@ if !has("nvim")
     " VIM BUG
     au TerminalWinOpen * silent call <SID>VimTermInit()
 
-    tnoremap <LeftMouse>        <Cmd>let @t="0"<CR><C-w>N<LeftMouse>
+    " TODO: should a double-click enter normal mode or should this be a C-/M- click or only keys (<M-x>x,]) ...
+    "tnoremap <LeftMouse>        <Cmd>let @t="0"<CR><C-w>N<LeftMouse>
+    tnoremap <LeftMouse>        <Nop>
+
     tnoremap <LeftDrag>         <Nop>
     tnoremap <LeftRelease>      <Nop>
 
@@ -7031,6 +7040,9 @@ if !has("nvim")
     tnoremap <4-LeftMouse>      <Nop>
     tnoremap <4-LeftDrag>       <Nop>
     tnoremap <4-LeftRelease>    <Nop>
+
+    tnoremap <MiddleDrag>       <Nop>
+    tnoremap <MiddleRelease>    <Nop>
 
     tnoremap <C-LeftMouse>      <Cmd>let @t="1"<CR><C-w>N<LeftMouse>
     tnoremap <C-LeftDrag>       <Nop>
@@ -7116,6 +7128,29 @@ if !has("nvim")
     " enter normal mode
     "tnoremap <silent> <ScrollWheelUp> <c-w>:call EnterTerminalNormalMode()<CR>
     "nnoremap <silent> <ScrollWheelDown> <ScrollWheelDown>:call ExitTerminalNormalModeIfBottom()
+
+else
+
+    " TODO: should a double-click enter normal mode or should this be a C-/M- click or only keys (<M-x>x,]) ...
+    tnoremap <LeftMouse>       <Nop>
+    "tnoremap <2-LeftMouse>     <C-\><C-n>
+    tnoremap <2-LeftMouse>     <Nop>
+    tnoremap <3-LeftMouse>     <Nop>
+    tnoremap <4-LeftMouse>     <Nop>
+
+    tnoremap <LeftRelease>     <Nop>
+    tnoremap <2-LeftRelease>   <Nop>
+    tnoremap <3-LeftRelease>   <Nop>
+    tnoremap <4-LeftRelease>   <Nop>
+
+    tnoremap <LeftDrag>        <Nop>
+    tnoremap <2-LeftDrag>      <Nop>
+    tnoremap <3-LeftDrag>      <Nop>
+    tnoremap <4-LeftDrag>      <Nop>
+
+    tnoremap <MiddleDrag>      <Nop>
+    tnoremap <MiddleRelease>   <Nop>
+
 endif
 
 " change C-LeftMouse searching tags file for symbol under cursor
@@ -12272,6 +12307,20 @@ else
     tnoremap <silent> <M-x><Tab> <C-w>:$tabnew<CR>:let g:fterm=1<CR>:terminal ++close ++norestore ++kill=term ++curwin<CR><C-w>:se scl=no<CR>
     tnoremap <silent> <M-x>v <C-w>:$tabnew<CR>
 endif
+
+" <M-x><Tab> like <M-x>] to do things from terminal but also like <C-w>w to switch tabs ...
+nnoremap <silent> <M-x><Tab>             :tabnext<CR>
+nnoremap <silent> <F17><Tab>             :tabnext<CR>
+vnoremap <silent> <M-x><Tab>   <C-\><C-n>:tabnext<CR>
+vnoremap <silent> <F17><Tab>   <C-\><C-n>:tabnext<CR>
+if !has("nvim")
+    tnoremap <silent> <M-x><Tab>        <C-w>:tabnext<CR>
+    tnoremap <silent> <F17><Tab>        <C-w>:tabnext<CR>
+else
+    tnoremap <silent> <M-x><Tab>   <C-\><C-n>:tabnext<CR>
+    tnoremap <silent> <F17><Tab>   <C-\><C-n>:tabnext<CR>
+endif
+
 " window in new tab when already in a terminal
 " <C-w><N> or <C-\><C-n> to get into normal mode
 " a or i get back into terminal mode
@@ -12293,6 +12342,11 @@ tnoremap <silent> <F17><Esc>] <C-\><C-n>h
 tnoremap <silent> <M-x>]      <C-\><C-n>h
 tnoremap <silent> <M-x><Esc>] <C-\><C-n>h
 
+tnoremap <silent> <F17>x      <C-\><C-n>h
+tnoremap <silent> <F17><F17>  <C-\><C-n>h
+tnoremap <silent> <M-x>x      <C-\><C-n>h
+tnoremap <silent> <M-x><M-x>  <C-\><C-n>h
+
 "tnoremap <silent> <M-]> <C-\><C-n>
 "tnoremap <silent> <C-]> <C-\><C-n>
 
@@ -12306,6 +12360,16 @@ nnoremap <silent> <expr> <F17>]      (&buftype == 'terminal') ? 'i' : ''
 nnoremap <silent> <expr> <F17><Esc>] (&buftype == 'terminal') ? 'i' : ''
 nnoremap <silent> <expr> <M-x>]      (&buftype == 'terminal') ? 'i' : ''
 nnoremap <silent> <expr> <M-x><Esc>] (&buftype == 'terminal') ? 'i' : ''
+
+nnoremap <silent> <expr> <F17>x      (&buftype == 'terminal') ? 'i' : ''
+nnoremap <silent> <expr> <F17><F17>  (&buftype == 'terminal') ? 'i' : ''
+nnoremap <silent> <expr> <M-x>x      (&buftype == 'terminal') ? 'i' : ''
+nnoremap <silent> <expr> <M-x><M-x>  (&buftype == 'terminal') ? 'i' : ''
+
+vnoremap <silent> <F17>x      <Nop>
+vnoremap <silent> <F17><F17>  <Nop>
+vnoremap <silent> <M-x>x      <Nop>
+vnoremap <silent> <M-x><M-x>  <Nop>
 
 vnoremap <silent> <expr> <C-w>]      (&buftype == 'terminal') ? '<Esc>i' : '<Esc>'
 vnoremap <silent> <expr> <C-w><C-]>  (&buftype == 'terminal') ? '<Esc>i' : '<Esc>'
