@@ -3193,8 +3193,11 @@ endfunction
 
 vnoremap <silent> <C-c> <Esc>
 
-vmap <silent> <expr> y     (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty'       : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 0)<CR>'
-vmap <silent> <expr> Y     (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'omvVtY`v' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("tY", 0)<CR>'
+"vmap <silent> <expr> y     (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty'       : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 0)<CR>'
+"vmap <silent> <expr> Y     (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'omvVtY`v' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("tY", 0)<CR>'
+" make terminal (y)ank copy to external clipboard ...
+vmap <silent> <expr> y     (&buftype ==# 'terminal') ? '\yy' : (mode() =~ "\<C-v>") ? 'ty'       : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 0)<CR>'
+vmap <silent> <expr> Y     (&buftype ==# 'terminal') ? '\yy' : (mode() =~ "\<C-v>") ? 'omvVtY`v' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("tY", 0)<CR>'
 
 "vmap <silent> <expr> <Leader>yy (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
 vmap <silent> <expr> <Leader>yy (&buftype ==# 'terminal') ? (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>i' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>i' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
@@ -3209,6 +3212,12 @@ vmap <silent> <expr> <C-y> (&buftype ==# 'terminal') ? (mode() =~ "\<C-v>") ? 't
 " and <Leader>z<Space> (see below for others) ...
 "vmap <silent> <expr> <Leader>z<Space> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
 vmap <silent> <expr> <Leader>z<Space> (&buftype ==# 'terminal') ? (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>i' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>i' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+
+" copy @* (clipboard) to @" for direct vim pasting (via UnconditionalPaste etc.) ...
+nnoremap <silent> <Leader>z/ :noautocmd call <SID>CopyDefReg(1)<CR>
+
+" should this be the same as above <Leader>z<Space> ?
+vnoremap <silent> <Leader>z/ <Nop>
 
 " === OSC52 ==================================
 
@@ -5560,10 +5569,6 @@ function! s:CopyDefReg(arg)
     endif
 endfunction
 
-" copy @* (clipboard) to @" ...
-nnoremap <silent> <Leader>z/ :noautocmd call <SID>CopyDefReg(1)<CR>
-vnoremap <silent> <Leader>z/ <Nop>
-
 function! MyScratchPadPaste()
     "echom "MyScratchPadPaste"
     let s:cur_buf = bufnr("")
@@ -5893,10 +5898,14 @@ endfunction
 
 " in cmd-line <C-M-u> would exit cmd mode and then <C-u> page up ...
 cnoremap <M-C-U> <C-u>
+" for vim - same issue with terminal ...
+tnoremap <M-C-U> <C-u>
 " in vim we would have to first map \e<C-u> to an unused func key ...
 call <SID>MapFastKeycode('<F16>',  "\e\<C-u>", 16)
 " then we can used that to map to <C-u> ...
 cnoremap <F16> <C-u>
+" for vim - same issue with terminal ...
+tnoremap <F16> <C-u>
 
 " NOTE: using <C-r>" will not strip trailing newline (if present) from text in clipboard ...
 
