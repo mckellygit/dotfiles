@@ -1112,6 +1112,22 @@ augroup myautochdir
     autocmd BufWinEnter * call s:autochdir()
 augroup END
 
+" NVIM BUG - if smoothscroll and top line is past first part of long line (<<<) then an autoreload can mess up display ...
+set autoread
+function! s:MYreloadupdate()
+    if &smoothscroll
+        set nosms
+        redraw!
+        echo "file reloaded"
+        set sms
+    else
+        redraw!
+        echo "file reloaded"
+        return
+    endif
+endfunction
+autocmd FileChangedShellPost * call s:MYreloadupdate()
+
 " ------------
 
 " add \fz mapping also ?
