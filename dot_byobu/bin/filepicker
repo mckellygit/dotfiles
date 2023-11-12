@@ -1,0 +1,80 @@
+#!/bin/bash
+
+# if we are in a subdir of a git repo and do a git status then:
+# files shown with modified: are based on the git-root base path
+# and therefore not seen via current dir.
+# for any entry that is not a regular file - could also try:
+# <git-root>/<entry>
+
+gdir=""
+gdir=$(git rev-parse --show-superproject-working-tree 2> /dev/null)
+if [[ -z "${gdir}" ]]; then
+    gdir=$(git rev-parse --show-toplevel 2> /dev/null)
+fi
+
+varx=$$
+tmpfile=/dev/shm/tmpfzf-$varx
+tmpfile2=/dev/shm/tmp2fzf-$varx
+tmpfile3=/dev/shm/tmp3fzf-$varx
+tmpfile4=/dev/shm/tmp4fzf-$varx
+
+tmux capture-pane -J -p > $tmpfile
+
+if [[ -s $tmpfile ]] ; then
+
+    set -o noglob nodotglob
+
+    awk '{for(i=1;i<=NF;i++) {print $i}}' $tmpfile | sort -u > $tmpfile3
+
+    rm -f $tmpfile2 $tmpfile4
+
+    while read word
+    do
+        if [[ ! "$word" =~ "*" && "$word" != "-" && "$word" != "." ]] ; then
+            ftype=$(stat --printf "%F\n" $word 2> /dev/null)
+            rc=$?
+            if [[ $rc -eq 0 ]] ; then
+                if [[ "$ftype" =~ "regular file" ]] ; then
+                    echo "$word" >> $tmpfile2
+                fi
+            elif [[ -n "$gdir" ]] ; then
+                echo "$word" >> $tmpfile4
+            fi
+        fi
+    done<"$tmpfile3"
+
+    rm -f $tmpfile3
+
+    if [[ -s "$tmpfile4" && -n "$gdir" ]] ; then
+        while read word
+        do
+            word1=${gdir}/${word}
+            ftype=$(stat --printf "%F\n" $word1 2> /dev/null)
+            rc=$?
+            if [[ $rc -eq 0 ]] ; then
+                if [[ "$ftype" =~ "regular file" ]] ; then
+                    echo "$word1" >> $tmpfile2
+                fi
+            fi
+        done<"$tmpfile4"
+    fi
+
+    rm -f $tmpfile4
+
+    if [[ -s "$tmpfile2" ]] ; then
+        efile=$(cat $tmpfile2 | fzf-tmux --tac --multi -d 20 | awk '{ORS = /"$/ ? RS : " "}1')
+        rm -f $tmpfile2
+        if [[ -n "$efile" ]] ; then
+            echo -n "vi $efile" | tmux load-buffer -b tmpfzfX -
+            tmux paste-buffer -dp -b tmpfzfX
+        fi
+    else
+        tmux display-message -d 800 "no file(s) found"
+    fi
+else
+    tmux display-message -d 800 "no file(s) found"
+fi
+
+rm -f $tmpfile
+
+exit 0
