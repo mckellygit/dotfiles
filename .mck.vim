@@ -9748,7 +9748,9 @@ function My_StartIdleTimer() abort
     let l:ww = winwidth(0) - 1
     if l:cc > 3
         if g:prevcol < l:cc
-            let g:prevcol = (l:cc + g:prevcol) / 2
+            " TODO: mck - why avg here ?
+            "let g:prevcol = (l:cc + g:prevcol) / 2
+            let g:prevcol = l:cc
             if g:prevcol > l:ww
                 let g:prevcol = l:ww
             endif
