@@ -3805,16 +3805,17 @@ if has("nvim")
     "    \ endif
 
     " close terminal shell automatically if it exited ...
-    autocmd TermClose term://* if (expand('<afile>') =~ ":/usr/bin/zsh") | call nvim_input('<CR>') | endif
-    autocmd BufDelete term://* if (expand('<afile>') =~ ":/usr/bin/zsh") | call <SID>QuitIfOnlyHidden(bufnr('%')) | endif
+    "autocmd TermClose term://* if (expand('<afile>') =~ ":/usr/bin/zsh") | call nvim_input('<CR>') | endif
+    autocmd TermClose term://* if (expand('<afile>') =~ ":/usr/bin/zsh") | call <SID>QuitIfOnlyHidden(expand('<afile>')) | endif
+    "autocmd BufDelete term://* if (expand('<afile>') =~ ":/usr/bin/zsh") | call <SID>QuitIfOnlyHidden(expand('<afile>')) | endif
 
     autocmd TermOpen  term://* if (expand('<afile>') =~ ":tig") | se scl=no | call nvim_input('i') | endif
-    autocmd TermClose term://* if (expand('<afile>') =~ ":tig") | call nvim_input('<CR>') | endif
-    autocmd BufDelete term://* if (expand('<afile>') =~ ":tig") | call <SID>QuitIfOnlyHidden(bufnr('%')) | endif
+    "autocmd TermClose term://* if (expand('<afile>') =~ ":tig") | call nvim_input('<CR>') | endif
+    autocmd TermClose term://* if (expand('<afile>') =~ ":tig") | call <SID>QuitIfOnlyHidden(expand('<afile>')) | endif
 
     autocmd TermOpen  term://* if (expand('<afile>') =~ ":lazygit") | se scl=no | call nvim_input('i') | endif
-    autocmd TermClose term://* if (expand('<afile>') =~ ":lazygit") | call nvim_input('<CR>') | endif
-    autocmd BufDelete term://* if (expand('<afile>') =~ ":lazygit") | call <SID>QuitIfOnlyHidden(bufnr('%')) | endif
+    "autocmd TermClose term://* if (expand('<afile>') =~ ":lazygit") | call nvim_input('<CR>') | endif
+    autocmd TermClose term://* if (expand('<afile>') =~ ":lazygit") | call <SID>QuitIfOnlyHidden(expand('<afile>')) | endif
 
     " a click in terminal automatically puts it in normal mode ...
     " which allows for double-click etc to select words
@@ -12206,8 +12207,9 @@ function s:ConfNextOrQuit() abort
         endif
     endfor
 
-    if &modified && &confirm == 0
-        echo "Buffer " . bufname('') . " modified, save now? (y/N): "
+    if &modified
+        "echo "Buffer " . bufname('') . " modified, save now? (y/N/c): "
+        echohl MoreMsg | echo "\nSave changes to \"" . bufname('') . "\"?\n[Y]es, (N)o, (C)ancel: " | echohl None
         call inputsave()
         let c = getchar()
         while type(c) != 0
@@ -12217,6 +12219,10 @@ function s:ConfNextOrQuit() abort
         let ans=nr2char(c)
         if ans ==# 'y' || ans ==# 'Y'
             update
+        elseif ans !=# 'c' && ans !=# 'C'
+            let &modified = 0
+        else
+            return
         endif
     else
         " just to clear the cmdline of this function ...
@@ -12236,6 +12242,7 @@ function s:ConfNextOrQuit() abort
             execute "silent! bwipe! " . bn
         else
             silent! FloatermKill!
+            set nobuflisted
             conf q
         endif
     catch /E165:/
@@ -12246,31 +12253,31 @@ function s:ConfNextOrQuit() abort
     endtry
 endfunction
 
-function s:QuitIfOnlyHidden(bnum) abort
+function s:QuitIfOnlyHidden(bname) abort
+    "echom "QuitIfOnlyHidden"
+    "sleep 5
     " just to clear the cmdline of this function ...
     redraw!
     echo "\r"
     "echom "a:bnum = " . a:bnum
     let l:doquit = 1
     for b in getbufinfo()
-        "echom "bufnr = " . b.bufnr
-        "echom "bname = " . bufname(b.bufnr)
-        "echom "hidden = " . b.hidden
-        "echom "listed = " . b.listed
-        "echom "changd = " . b.changed
-        if b.bufnr == a:bnum
+        "echom "a:bname = " . a:bname . " bufnr = " . b.bufnr . " bname = " . bufname(b.bufnr) . " hidden = " . b.hidden . " listed = " . b.listed . " changd = " . b.changed
+        "sleep 5
+        if bufname(b.bufnr) == a:bname
             continue
-        elseif empty(bufname(b.bufnr)) && !b.listed
-            continue
-        elseif bufname(b.bufnr) ==# g:scratchpad
-            continue
-        elseif !b.hidden
-            let l:doquit = 0
-            break
         elseif b.changed
             let l:doquit = 0
             break
         elseif getbufvar(b.bufnr, '&modified')
+            let l:doquit = 0
+            break
+        "elseif empty(bufname(b.bufnr)) && !b.listed
+        elseif empty(bufname(b.bufnr))
+            continue
+        elseif bufname(b.bufnr) ==# g:scratchpad
+            continue
+        elseif !b.hidden
             let l:doquit = 0
             break
         elseif getbufvar(b.bufnr, '&buftype') ==# 'terminal'
@@ -12282,6 +12289,9 @@ function s:QuitIfOnlyHidden(bnum) abort
     if l:doquit == 1
         " TODO: is it ok to quit like this ?
         cquit
+    endif
+    if getbufvar(bufnr('%'), '&buftype') ==# 'terminal'
+        call nvim_input('i')
     endif
 endfunction
 
