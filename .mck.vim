@@ -10773,9 +10773,13 @@ function s:MySearch(meth) abort
     "execute 'AsyncRun! -strip -cwd ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) ' 2>/dev/null'
     execute 'AsyncRun! -strip \ag --vimgrep -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" -- ' shellescape(string, 1) ' 2>/dev/null'
   elseif (a:meth == 3)
-    call fzf#vim#grep('\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root(), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--bind=esc:ignore']}, 0)
+    let icmd = '\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root()
+    let ispec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--bind=esc:ignore']}
+    call fzf#vim#grep(icmd, 1, fzf#vim#with_preview(ispec), 0)
   elseif (a:meth == 4)
-    call fzf#vim#grep('\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --nogroup --column --color -- '.shellescape(string, 1), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--bind=esc:ignore']}, 0)
+    let icmd = '\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --nogroup --column --color -- '.shellescape(string, 1)
+    let ispec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--bind=esc:ignore']}
+    call fzf#vim#grep(icmd, 1, fzf#vim#with_preview(ispec), 0)
   endif
   let @/=string
   set hlsearch
@@ -10815,9 +10819,13 @@ function s:MyVisSearch(meth) abort
     "execute 'AsyncRun! -strip -cwd ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) ' 2>/dev/null'
     execute 'AsyncRun! -strip \ag --vimgrep -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" -- ' shellescape(string, 1) ' 2>/dev/null'
   elseif (a:meth == 3)
-    call fzf#vim#grep('\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root(), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word'], '--bind=esc:ignore'}, 0)
+    let icmd = '\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root()
+    let ispec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--bind=esc:ignore']}
+    call fzf#vim#grep(icmd, 1, fzf#vim#with_preview(ispec), 0)
   elseif (a:meth == 4)
-    call fzf#vim#grep('\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --nogroup --column --color -- '.shellescape(string, 1), 1, {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word'], '--bind=esc:ignore'}, 0)
+    let icmd = '\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --nogroup --column --color -- '.shellescape(string, 1)
+    let ispec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--bind=esc:ignore']}
+    call fzf#vim#grep(icmd, 1, fzf#vim#with_preview(ispec), 0)
   endif
   let @/=string
   set hlsearch
@@ -10836,6 +10844,10 @@ vnoremap <Leader>sn "sy<Esc>:let @/=""<bar>:set hlsearch<CR>/<C-r>"
 nnoremap <Leader>sN :let @/=""<bar>:set hlsearch<CR>?
 vnoremap <Leader>sN "sy<Esc>:let @/=""<bar>:set hlsearch<CR>?<C-r>"
 
+" -------------------------------------------------------------------------
+" NOTE: also see the Ag/Agit Rg/Rgit and <leader>sr/sR search cmds/mappings
+" -------------------------------------------------------------------------
+
 " search all currently open files with results in qf list - NOTE: make sure to save buffers to disk before searching!
 nnoremap <silent> <Leader>sf :let @s = expand('<cword>')<CR>:call <SID>MyVisSearch(0)<CR>
 vnoremap <silent> <Leader>sf "sy<Esc>:call <SID>MyVisSearch(0)<CR>
@@ -10851,6 +10863,10 @@ nnoremap <silent> <Leader>sg :let @s = expand('<cword>')<CR>:call <SID>MyVisSear
 vnoremap <silent> <Leader>sg "sy<Esc>:call <SID>MyVisSearch(1)<CR>
 nnoremap <silent> <Leader>sG :call <SID>MySearch(1)<CR>
 vnoremap <silent> <Leader>sG <Esc>:call <SID>MySearch(1)<CR>
+
+" -------------------------------------------------------------------------
+" NOTE: also see the Ag/Agit Rg/Rgit and <leader>sr/sR search cmds/mappings
+" -------------------------------------------------------------------------
 
 "aug ack_alias
 "  au!
@@ -10872,6 +10888,10 @@ endfunction
 command! -nargs=* -bang Gack   call <SID>MyGAck(<q-args>)
 command! -nargs=* -bang GAck   call <SID>MyGAck(<q-args>)
 
+" -------------------------------------------------------------------------
+" NOTE: also see the Ag/Agit Rg/Rgit and <leader>sr/sR search cmds/mappings
+" -------------------------------------------------------------------------
+
 " search dir (root/project/git dir) with results in fzf/Ag list
 " same as :Ag ...
 nnoremap <silent> <Leader>s. :let @s = expand('<cword>')<CR>:call <SID>MyVisSearch(4)<CR>
@@ -10886,7 +10906,9 @@ vnoremap <silent> <Leader>s/ "sy<Esc>:call <SID>MyVisSearch(3)<CR>
 nnoremap <silent> <Leader>s? :call <SID>MySearch(3)<CR>
 vnoremap <silent> <Leader>s? <Esc>:call <SID>MySearch(3)<CR>
 
-" -------------------------------------------------------------
+" -------------------------------------------------------------------------
+" NOTE: also see the Ag/Agit Rg/Rgit and <leader>sr/sR search cmds/mappings
+" -------------------------------------------------------------------------
 
 " "Raw" version of ag; arguments directly passed to ag
 " e.g.
@@ -11064,6 +11086,10 @@ function! RipgrepGitFzf(aquery, ufzf, fullscreen)
   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
 endfunction
 
+" ----------------------------------------------------------------------------
+" NOTE: these are like the <Leader>sg/sd and <Leader>s. and s/ search commands
+" ----------------------------------------------------------------------------
+
 command! -nargs=* -bang Rg   call RipgrepFzf(<q-args>, 0, <bang>0)
 command! -nargs=* -bang Rgit call RipgrepGitFzf(<q-args>, 0, <bang>0)
 
@@ -11081,7 +11107,9 @@ command! -nargs=* -bang RGit call RipgrepGitFzf(<q-args>, 1, <bang>0)
 nnoremap <silent> <Leader>sR         :call RipgrepGitFzf('', 0, 0)<CR>
 vnoremap <silent> <Leader>sR "sy<Esc>:call RipgrepGitFzf(@s, 0, 0)<CR>
 
-"================================================================
+" ----------------------------------------------------------------------------
+" NOTE: these are like the <Leader>sg/sd and <Leader>s. and s/ search commands
+" ----------------------------------------------------------------------------
 
 let g:orig_pos = getcurpos()
 let g:click_start = reltime()
