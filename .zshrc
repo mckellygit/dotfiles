@@ -356,6 +356,10 @@ bindkey  -M vicmd "\e[2;5~" noop
 bindkey  -M viins "\e[2;3~" noop
 bindkey  -M vicmd "\e[2;3~" noop
 
+# C-Tab no-op ...
+bindkey  -M viins "\e[9;5u" noop
+bindkey  -M vicmd "\e[9;5u" noop
+
 # --------------------
 
 function viinsplus() {
