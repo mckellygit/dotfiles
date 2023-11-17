@@ -1142,7 +1142,8 @@ autoload -U colors && colors
 #PS1='%n@%m:%12<..<%~%<<%% '
 #PS1="%{$fg[green]%}%n@%m%f:%{$fg[yellow]%}%12<..<%~%<<%f%% "
  PS1='%F{100}%n@%m%f:%F{150}%12<..<%~%<<%f%% '
-if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] ; then
+# skip SSH_TTY because that is also set in nested tmux ...
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTYXXX" ] ; then
 #   PS1="%{$fg[red]%}ssh%f-%{$fg[green]%}%n@%m%f:%{$fg[yellow]%}%12<..<%~%<<%f%% "
     PS1='%F{007}ssh%f-%F{100}%n@%m%f:%F{150}%12<..<%~%<<%f%% '
 fi
@@ -1648,7 +1649,8 @@ fi
 #if [ -f ~/.git-prompt.sh ] ; then
 #  export GIT_PS1_SHOWDIRTYSTATE=1
 #  source ~/.git-prompt.sh
-#  if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] ; then
+#  skip SSH_TTY because that is also set in nested tmux ...
+#  if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTYXXX" ] ; then
 #    precmd () { __git_ps1 "ssh-%n@%m" ":%~%% " "|%s" } 
 #  else
 #    precmd () { __git_ps1 "%n@%m" ":%~%% " "|%s" } 
@@ -1656,7 +1658,8 @@ fi
 #fi
 #if [ -f ~/.git-repo.sh ] ; then
 #  source ~/.git-repo.sh
-#  if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] ; then
+#  skip SSH_TTY because that is also set in nested tmux ...
+#  if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTYXXX" ] ; then
 #    precmd () { __git_ps1 "ssh-%n@%m" ":%~%% " "|%s" }
 #  else
 #    precmd () { __git_ps1 "%n@%m" ":%~%% " "|%s" }
@@ -1689,7 +1692,8 @@ stty brkint ignpar > /dev/null 2>&1
 ## set TERM on remote hosts ...
 #alias ssh='TERM=xterm-256color ssh'
 ## but not for me here ...
-#if [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTY" ]] ; then
+#skip SSH_TTY because that is also set in nested tmux ...
+#if [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTYXXX" ]] ; then
 #    if [[ "$TERM" == "xterm-256color" ]] ; then
 #        export TERM=screen-256color
 #    fi
@@ -1703,7 +1707,8 @@ stty brkint ignpar > /dev/null 2>&1
 # for clipboard contents ...
 
 # get TERM from source ...
-#if [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTY" ]] ; then
+#skip SSH_TTY because that is also set in nested tmux ...
+#if [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTYXXX" ]] ; then
 #    if [[ -n "$LC_MONETARY" ]] ; then
 #        rstring=$LC_MONETARY
 #        # strip leading whitespace

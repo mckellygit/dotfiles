@@ -53,7 +53,7 @@ endif
 let g:is_ttyterm=0
 let g:is_ssh_client=0
 if g:has_wsl == 0
-    if exists('$SSH_CLIENT')
+    if exists('$SSH_CLIENT') " not SSH_TTY as that is special for myclip
         let ssh_client=$SSH_CLIENT
         if ssh_client ==# 'ttyterm'
             let g:is_ttyterm=2
@@ -3168,6 +3168,11 @@ vmap     <silent> <Del> <Nop>
 
 " use i, R instead ...
 map      <silent> <Insert> <Nop>
+
+" like dd but dont save to register ...
+nnoremap dx         "_dd
+" cant add this to v/x map because that has a single 'd' map and we dont want a delay ...
+ noremap <Leader>dx "_dd
 
 " ----------------------
 

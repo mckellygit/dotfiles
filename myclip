@@ -114,6 +114,10 @@ elif [[ -n "$SSH_CLIENT" ]] ; then
         # TODO: reliable way to get tty
         out_tty=/dev/tty
     fi
+elif [[ -n "$SSH_TTY" ]] ; then
+    # only nested tmux would have SSH_TTY set but not SSL_CLIENT ...
+    have_ssh=1
+    out_tty=$SSH_TTY
 fi
 
 # ===================================
@@ -139,7 +143,7 @@ screen_dcs_ttyterm() {
   # We can probably switch to the 768 limit in 2022.
   local limit=256
   # We go 4 bytes under the limit because we're going to insert two bytes
-  # before (\eP) and 2 bytes after (\e\) each string.
+  # before (\033P) and 2 bytes after (\033\) each string.
   #echo "$1" | \
   #  sed -E "s:.{$(( limit - 4 ))}:&\n:g" | \
   #  sed -E -e 's:^:\x1bP:' -e 's:$:\x1b\\:' | \
@@ -178,11 +182,11 @@ if [[ $have_args -eq 0 || $have_dash -eq 1 ]] ; then
         if [[ ${ilen} -gt ${max_osc52_len} ]] ; then
             #errstr="Error: clipboard input length exceeds limit (${ilen} > ${max_osc52_len})"
             #inputtext=$(echo $errstr | base64 | tr -d '\n')
-            #printf "\e]52;c;%s\a" "$inputtext" > $out_tty
+            #printf "\033]52;c;%s\007" "$inputtext" > $out_tty
             #echo $errstr
             exit 99
         fi
-        screen_dcs_ttyterm "$(printf '\033]52;c;%s\a' "${inputtext}")"
+        screen_dcs_ttyterm "$(printf '\033]52;c;%s\007' "${inputtext}")"
     elif [[ $have_tty -gt 0 ]]; then
         # osc 52 ...
         if [[ $have_rmnl -eq 1 && $have_dash -eq 1 ]] ; then
@@ -194,11 +198,11 @@ if [[ $have_args -eq 0 || $have_dash -eq 1 ]] ; then
         if [[ ${ilen} -gt ${max_osc52_len} ]] ; then
             #errstr="Error: clipboard input length exceeds limit (${ilen} > ${max_osc52_len})"
             #inputtext=$(echo $errstr | base64 | tr -d '\n')
-            #printf "\e]52;c;%s\a" "$inputtext" > $out_tty
+            #printf "\033]52;c;%s\007" "$inputtext" > $out_tty
             #echo $errstr
             exit 99
         fi
-        printf "\e]52;c;%s\a" "$inputtext" > $out_tty
+        printf "\033]52;c;%s\007" "$inputtext" > $out_tty
     elif [[ $have_ssh -gt 0 ]]; then
         # osc 52 ...
         if [[ $have_rmnl -eq 1 && $have_dash -eq 1 ]] ; then
@@ -210,11 +214,11 @@ if [[ $have_args -eq 0 || $have_dash -eq 1 ]] ; then
         if [[ ${ilen} -gt ${max_osc52_len} ]] ; then
             #errstr="Error: clipboard input length exceeds limit (${ilen} > ${max_osc52_len})"
             #inputtext=$(echo $errstr | base64 | tr -d '\n')
-            #printf "\e]52;c;%s\a" "$inputtext" > $out_tty
+            #printf "\033]52;c;%s\007" "$inputtext" > $out_tty
             #echo $errstr
             exit 99
         fi
-        printf "\ePtmux;\e\e]52;c;%s\a\e\\" "$inputtext" > $out_tty
+        printf "\033Ptmux;\033\033]52;c;%s\007\033\\" "$inputtext" > $out_tty
     else
         if [[ $have_rmnl -eq 1 && $have_dash -eq 1 ]] ; then
 #           TODO: strip all trailing newlines ?
@@ -250,11 +254,11 @@ elif [[ $have_text -eq 1 ]] ; then
         if [[ ${ilen} -gt ${max_osc52_len} ]] ; then
             #errstr="Error: clipboard input length exceeds limit (${ilen} > ${max_osc52_len})"
             #inputtext=$(echo $errstr | base64 | tr -d '\n')
-            #printf "\e]52;c;%s\a" "$inputtext" > $out_tty
+            #printf "\033]52;c;%s\007" "$inputtext" > $out_tty
             #echo $errstr
             exit 99
         fi
-        screen_dcs_ttyterm "$(printf '\033]52;c;%s\a' "${inputtext}")"
+        screen_dcs_ttyterm "$(printf '\033]52;c;%s\007' "${inputtext}")"
     elif [[ $have_tty -gt 0 ]]; then
         # osc 52 ...
         if [[ $have_rmnl -eq 1 ]] ; then
@@ -266,11 +270,11 @@ elif [[ $have_text -eq 1 ]] ; then
         if [[ ${ilen} -gt ${max_osc52_len} ]] ; then
             #errstr="Error: clipboard input length exceeds limit (${ilen} > ${max_osc52_len})"
             #inputtext=$(echo $errstr | base64 | tr -d '\n')
-            #printf "\e]52;c;%s\a" "$inputtext" > $out_tty
+            #printf "\033]52;c;%s\007" "$inputtext" > $out_tty
             #echo $errstr
             exit 99
         fi
-        printf "\e]52;c;%s\a" "$inputtext" > $out_tty
+        printf "\033]52;c;%s\007" "$inputtext" > $out_tty
     elif [[ $have_ssh -gt 0 ]]; then
         # osc 52 ...
         if [[ $have_rmnl -eq 1 ]] ; then
@@ -282,11 +286,11 @@ elif [[ $have_text -eq 1 ]] ; then
         if [[ ${ilen} -gt ${max_osc52_len} ]] ; then
             #errstr="Error: clipboard input length exceeds limit (${ilen} > ${max_osc52_len})"
             #inputtext=$(echo $errstr | base64 | tr -d '\n')
-            #printf "\e]52;c;%s\a" "$inputtext" > $out_tty
+            #printf "\033]52;c;%s\007" "$inputtext" > $out_tty
             #echo $errstr
             exit 99
         fi
-        printf "\ePtmux;\e\e]52;c;%s\a\e\\" "$inputtext" > $out_tty
+        printf "\033Ptmux;\033\033]52;c;%s\007\033\\" "$inputtext" > $out_tty
     else
         if [[ $have_rmnl -eq 1 ]] ; then
             echo -n "$escapedtext" | copyq >/dev/null 2>/dev/null "copy(input()); copySelection(input()); text=input(); if (text.length>0) { addUnique(input()) }"
@@ -334,10 +338,10 @@ elif [[ ${add} -eq 1 ]] ; then
     pos=" "
 fi
 
-# Enable bracketed paste: printf "\e[?2004h"
-# Wait for paste to start: you’ll see \e[200~ on STDIN.
-# Wait for paste to stop: you’ll see \e[201~ on STDIN.
-# Disable bracketed paste: printf "\e[?2004l"
+# Enable bracketed paste: printf "\033[?2004h"
+# Wait for paste to start: you’ll see \033[200~ on STDIN.
+# Wait for paste to stop: you’ll see \033[201~ on STDIN.
+# Disable bracketed paste: printf "\033[?2004l"
 
 # -------------
 
@@ -345,7 +349,7 @@ fi
 # clipboard and echo it here ?
 
 if [[ $have_tty -gt 0 ]]; then
-    # TODO: write custom screen sequence "\e]52;z;\x07" to $out_tty
+    # TODO: write custom screen sequence "\033]52;z;\007" to $out_tty
     #       capture back base64 text, decode and print here ...
     # should we echo to stderr ?
     echo "remote (tty) clipboard not supported" >&2
@@ -378,11 +382,11 @@ else
 fi
 
 if [[ -s $tmpclip ]] ; then
-#   printf "\e[200~"
+#   printf "\033[200~"
     echo -n "$pre"
     cat $tmpclip
     echo -n "$pos"
-#   printf "\e[201~"
+#   printf "\033[201~"
 fi
 
 exit 0
