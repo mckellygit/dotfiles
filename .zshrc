@@ -200,7 +200,13 @@ export LS_COLORS
 
 if [[ -z "$ZUTTY_VERSION" ]] ; then
     # some apps use this to know
-    export COLORTERM="truecolor"
+    # but nvim terminal and COLORTERM=truecolor makes less -R colors not work ...
+    # is there a less fix for this ?
+    if [[ "$COLORTERM" != "nvim" ]] ; then
+        export COLORTERM="truecolor"
+    else
+        unset COLORTERM
+    fi
 fi
 
 if [ "$TERM" = "xterm-kitty" ] ; then
@@ -378,9 +384,9 @@ zle -N vicmdplus
 bindkey -rM viins '^['
 # map <Esc> to something so there is no wait for addl chars ...
 bindkey  -M viins '^['    noop
-# <Insert> toggle
+# <Insert> toggle vi cmd mode
 bindkey  -M viins "\e[2~" vicmdplus
-# <C-x> toggle
+# <C-x> toggle vi cmd mode
 bindkey -rM viins '^X'
 bindkey  -M viins '^X'    vicmdplus
 # <Esc>
@@ -390,6 +396,29 @@ bindkey -sM vicmd '^['    'i'
 bindkey -sM vicmd '^X'    'i'
 # <Insert> toggle
 bindkey -sM vicmd "\e[2~" 'i'
+
+# --------------------
+
+# shell code -
+
+# wincmd_next () {
+#     echo -ne 'e]51;["call","Tapi_wincmd",["w"]]a'
+#     echo -ne '\030'
+# }
+
+# bind -m vi -x '"C-i": wincmd_next'
+
+# vim code -
+
+# function! Tapi_wincmd(bufnum, arglist)
+#     execute 'wincmd' a:arglist[0]
+# endfunction
+
+# then in shell -
+
+#  1). go to vi mode (C-x)
+#  2). hit <Tab> (<C-i>) and it should run the wincmd_next() func
+#  3). This gets picked up by vim and runs the Tapi_wincmd() func
 
 # --------------------
 
@@ -1858,6 +1887,8 @@ bindkey -s '^^^J' '^J'
 
 bindkey -s '^^\r' '\r'
 bindkey -s '^^^M' '^M'
+
+bindkey -s "\e^O" "\n"
 
 # if we can get away with this ... just to keep cmdline quiet
 #bindkey '^_' noop

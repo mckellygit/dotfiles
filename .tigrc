@@ -105,6 +105,11 @@ bind generic   <Ctrl-_>J    move-half-page-down
 # SPECIAL: some terminals might map C-S-k to <C-_>K ...
 bind generic   <Ctrl-_>K    move-half-page-up
 #
+bind generic   <Ctrl-^>j    move-down
+bind generic   <Ctrl-^>k    move-up
+bind generic   <Ctrl-^>J    scroll-line-down
+bind generic   <Ctrl-^>K    scroll-line-up
+#
 bind generic   <Esc>j       move-down
 bind generic   <Esc>k       move-up
 bind generic   <Esc>J       scroll-half-page-down
@@ -126,7 +131,7 @@ bind generic   <Ctrl-^><C-H>   scroll-half-page-up
 bind generic   <Esc><Esc>        view-close-no-quit
 #
 bind generic   <Esc><Space>      scroll-line-down
-bind generic   <Esc><BackSpace>  scroll-line-up
+bind generic   <Esc><Backspace>  scroll-line-up
 #
 bind generic   <Ctrl-w>w          view-next
 bind generic   <Ctrl-w><Ctrl-w>   view-next
@@ -139,6 +144,8 @@ bind generic   <Esc>-               move-down
 bind main      <Backspace>          previous
 bind generic   <Backspace>          scroll-half-page-up
 bind generic   <Ctrl-^><Backspace>  move-up
+# vim terminal ...
+bind generic   <Esc>[127;5u         move-up
 #
 bind generic   <Tab>        next
 bind generic   <ShiftTab>   previous

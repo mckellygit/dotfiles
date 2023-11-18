@@ -22,6 +22,13 @@ function! s:CleanUpScratchPad()
 endfunction
 autocmd VimLeave * silent call <SID>CleanUpScratchPad()
 
+function! s:VimInVimTerminalWarn()
+    echohl Statement | echo "WARNING: vim inside a vim-terminal does not work properly" | echohl None
+endfunction
+if !has("nvim") && exists('$VIM_TERMINAL')
+    au VimEnter * call <SID>VimInVimTerminalWarn()
+endif
+
 " one of these is needed in vim on windows to avoid starting in replace mode
 let g:has_wsl=0
 if exists('$WSL_DISTRO_NAME') || exists('$WSLENV')
@@ -87,6 +94,14 @@ let loaded_gtags_cscope=1
 "if empty(maparg('lhs', 'old-rhs')) | nnoremap lhs new-rhs | endif
 
 if has("nvim") || exists('$NVIM_LOG_FILE')
+    " nvim terminal and COLORTERM=truecolor makes less -R colors not work ...
+    " is there a less fix for this ?
+    if exists('$COLORTERM')
+        let cterm=$COLORTERM
+        if cterm == 'truecolor'
+            call setenv("COLORTERM", "nvim")
+        endif
+    endif
     call setenv("VISUAL", "nvim")
     call setenv("EDITOR", "nvim")
     call setenv("TIG_EDITOR", "nvim")
@@ -8629,11 +8644,11 @@ noremap <C-_><Space>  gj
 
 inoremap <C-S-Space> <Space>
 cnoremap <C-S-Space> <Space>
-" handled in shell
-"tnoremap <C-S-Space> <Space>
 inoremap <C-_><Space> <Space>
 cnoremap <C-_><Space> <Space>
-" handled in shell
+" handled in shell - zsh autosuggest accept ...
+" use just C-Space now, C-S-Space and C-_ Space just become Space unless in vi
+"tnoremap <C-S-Space>  <Space>
 "tnoremap <C-_><Space> <Space>
 
 "vnoremap <silent> <expr> <C-Down> ((line('$') - line('w$')) < 1) ? 'j' : '<C-e>j'
@@ -8661,6 +8676,8 @@ noremap <C-_><Del> gk
 "noremap <silent> <expr> <C-_><BS> AtBot(0) ? ((line("w0") - 1 - line("0")) >= 10 ? '10<C-y>' : (line("w0") - 1 - line("0")) >= 9 ? '9<C-y>' : (line("w0") - 1 - line("0")) >= 8 ? '8<C-y>' : (line("w0") - 1 - line("0")) >= 7 ? '7<C-y>' : (line("w0") - 1 - line("0")) >= 6 ? '6<C-y>' : (line("w0") - 1 - line("0")) >= 5 ? '5<C-y>' : (line("w0") - 1 - line("0")) >= 4 ? '4<C-y>' : (line("w0") - 1 - line("0")) >= 3 ? '3<C-y>' : (line("w0") - 1 - line("0")) >= 2 ? '2<C-y>' : (line("w0") - 1 - line("0")) >= 1 ? '1<C-y>' : '') : ((line("w0") - 1 - line("0")) >= 10 ? '10<C-y>10k' : (line("w0") - 1 - line("0")) >= 9 ? '9<C-y>9k' : (line("w0") - 1 - line("0")) >= 8 ? '8<C-y>8k' : (line("w0") - 1 - line("0")) >= 7 ? '7<C-y>7k' : (line("w0") - 1 - line("0")) >= 6 ? '6<C-y>6k' : (line("w0") - 1 - line("0")) >= 5 ? '5<C-y>5k' : (line("w0") - 1 - line("0")) >= 4 ? '4<C-y>4k' : (line("w0") - 1 - line("0")) >= 3 ? '3<C-y>3k' : (line("w0") - 1 - line("0")) >= 2 ? '2<C-y>2k' : (line("w0") - 1 - line("0")) >= 1 ? '1<C-y>1k' : '')
 
 " TODO: what about <C-_><C-h> ?
+
+"tnoremap <C-_><BS>  <C-BS>
 
 "vnoremap <silent>       <C-Up> <C-y>k
 "vnoremap <silent>       <C-k>  <C-y>k
@@ -9004,8 +9021,8 @@ else
     cnoremap <F29> <M-C-J>
     cnoremap <M-C-O> <M-C-J>
     " TODO: send M-C-O or M-C-J here ?
-    tnoremap <F29> <M-C-J>
-    tnoremap <M-C-O> <M-C-J>
+    tnoremap <F29> <M-C-O>
+    "tnoremap <M-C-O> <M-C-J>
 endif
 
 " SPECIAL: some terminals might map C-S-j to <C-_>J ...
@@ -9917,6 +9934,8 @@ noremap <silent> <expr> <C-BS>     AtBot(0) ? ((line("w0") - 1 - line("0")) >= 1
 " SPECIAL: NOTE: some terminals map <C-BS> to <C-^><Del>
 noremap <silent> <expr> <C-^><BS>  AtBot(0) ? ((line("w0") - 1 - line("0")) >= 10 ? '10<C-y>' : (line("w0") - 1 - line("0")) >= 9 ? '9<C-y>' : (line("w0") - 1 - line("0")) >= 8 ? '8<C-y>' : (line("w0") - 1 - line("0")) >= 7 ? '7<C-y>' : (line("w0") - 1 - line("0")) >= 6 ? '6<C-y>' : (line("w0") - 1 - line("0")) >= 5 ? '5<C-y>' : (line("w0") - 1 - line("0")) >= 4 ? '4<C-y>' : (line("w0") - 1 - line("0")) >= 3 ? '3<C-y>' : (line("w0") - 1 - line("0")) >= 2 ? '2<C-y>' : (line("w0") - 1 - line("0")) >= 1 ? '1<C-y>' : '') : ((line("w0") - 1 - line("0")) >= 10 ? '10<C-y>10k' : (line("w0") - 1 - line("0")) >= 9 ? '9<C-y>9k' : (line("w0") - 1 - line("0")) >= 8 ? '8<C-y>8k' : (line("w0") - 1 - line("0")) >= 7 ? '7<C-y>7k' : (line("w0") - 1 - line("0")) >= 6 ? '6<C-y>6k' : (line("w0") - 1 - line("0")) >= 5 ? '5<C-y>5k' : (line("w0") - 1 - line("0")) >= 4 ? '4<C-y>4k' : (line("w0") - 1 - line("0")) >= 3 ? '3<C-y>3k' : (line("w0") - 1 - line("0")) >= 2 ? '2<C-y>2k' : (line("w0") - 1 - line("0")) >= 1 ? '1<C-y>1k' : '')
 noremap <silent> <expr> <C-^><Del> AtBot(0) ? ((line("w0") - 1 - line("0")) >= 10 ? '10<C-y>' : (line("w0") - 1 - line("0")) >= 9 ? '9<C-y>' : (line("w0") - 1 - line("0")) >= 8 ? '8<C-y>' : (line("w0") - 1 - line("0")) >= 7 ? '7<C-y>' : (line("w0") - 1 - line("0")) >= 6 ? '6<C-y>' : (line("w0") - 1 - line("0")) >= 5 ? '5<C-y>' : (line("w0") - 1 - line("0")) >= 4 ? '4<C-y>' : (line("w0") - 1 - line("0")) >= 3 ? '3<C-y>' : (line("w0") - 1 - line("0")) >= 2 ? '2<C-y>' : (line("w0") - 1 - line("0")) >= 1 ? '1<C-y>' : '') : ((line("w0") - 1 - line("0")) >= 10 ? '10<C-y>10k' : (line("w0") - 1 - line("0")) >= 9 ? '9<C-y>9k' : (line("w0") - 1 - line("0")) >= 8 ? '8<C-y>8k' : (line("w0") - 1 - line("0")) >= 7 ? '7<C-y>7k' : (line("w0") - 1 - line("0")) >= 6 ? '6<C-y>6k' : (line("w0") - 1 - line("0")) >= 5 ? '5<C-y>5k' : (line("w0") - 1 - line("0")) >= 4 ? '4<C-y>4k' : (line("w0") - 1 - line("0")) >= 3 ? '3<C-y>3k' : (line("w0") - 1 - line("0")) >= 2 ? '2<C-y>2k' : (line("w0") - 1 - line("0")) >= 1 ? '1<C-y>1k' : '')
+
+tnoremap <C-^><BS> <C-BS>
 
 " TODO: what are the leading spaces when inserting a \ with .vim files ... ?
 "inoremap <silent> <expr> \ (&filetype ==# 'vim') ? '<C-v>\' : '\'
