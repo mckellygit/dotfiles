@@ -1300,7 +1300,7 @@ alias nvdif='nvimdiff'
 #}
 
 tere() {
-    local result=$(command tere -f -d -S --autocd-timeout 400 --history-file '' -m ctrl-x:Exit -m ctrl-q:Exit -m alt-Enter:Exit "$@")
+    local result=$(command tere -f --files hide -S --autocd-timeout 400 --history-file '' -m ctrl-x:Exit -m ctrl-q:Exit -m alt-Enter:Exit "$@")
     [ -n "$result" ] && cd -- "$result"
 }
 
