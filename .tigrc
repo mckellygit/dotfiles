@@ -55,7 +55,10 @@ bind generic   u            none
 #
 #bind generic   \d           scroll-page-down
 #bind generic   \u           scroll-page-up
-#
+
+bind generic   <Ctrl-E>      :none
+bind generic   <Ctrl-Y>      :none
+
 # match vim fugitive git mappings ...
 bind diff      <Ctrl-N>     :/^diff --git|^@@
 bind diff      <Ctrl-P>     :?^diff --git|^@@
