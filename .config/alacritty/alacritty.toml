@@ -198,7 +198,7 @@ key = "Key0"
 mods = "Control"
 
 [[keyboard.bindings]]
-chars = "="
+chars = "\u001E="
 key = "Equals"
 mods = "Control"
 

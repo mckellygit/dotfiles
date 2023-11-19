@@ -65,7 +65,7 @@ key_bindings:
   - { key: 53,        mods: Control|Shift,   chars: "\x1f\x2f"        }
 
   - { key: Key0,      mods: Control,         chars: "\x30"            }
-  - { key: Equals,    mods: Control,         chars: "\x3d"            }
+  - { key: Equals,    mods: Control,         chars: "\x1e\x3d"        }
   - { key: Minus,     mods: Control,         chars: "\x1e\x2d"        }
   - { key: Minus,     mods: Alt|Control,     action: None             }
 
