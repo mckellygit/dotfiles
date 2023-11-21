@@ -201,6 +201,7 @@ export LS_COLORS
 if [[ -z "$ZUTTY_VERSION" ]] ; then
     # some apps use this to know
     # but nvim terminal and COLORTERM=truecolor makes less -R colors not work ...
+    # unless termguicolors is set ...
     # is there a less fix for this ?
     if [[ "$COLORTERM" != "nvim" ]] ; then
         export COLORTERM="truecolor"
