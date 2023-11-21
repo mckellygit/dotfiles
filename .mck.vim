@@ -94,14 +94,6 @@ let loaded_gtags_cscope=1
 "if empty(maparg('lhs', 'old-rhs')) | nnoremap lhs new-rhs | endif
 
 if has("nvim") || exists('$NVIM_LOG_FILE')
-    " nvim terminal and COLORTERM=truecolor makes less -R colors not work ...
-    " is there a less fix for this ?
-    if exists('$COLORTERM')
-        let cterm=$COLORTERM
-        if cterm == 'truecolor'
-            call setenv("COLORTERM", "nvim")
-        endif
-    endif
     call setenv("VISUAL", "nvim")
     call setenv("EDITOR", "nvim")
     call setenv("TIG_EDITOR", "nvim")
@@ -442,6 +434,7 @@ endif
 "
 " tmux focus
 " plugin says its obsolete with neovim and vim 8.2.2345+ but its still useful
+" vim BUG: if tmux popup shell present, focus events echo <Esc>[I,O chars in background window ...
 if g:has_wsl == 0
     if has("nvim")
         " not needed in nvim ...
@@ -646,7 +639,8 @@ function LaunchTtig() abort
         echo " "
         return
     endif
-    let tigcmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w90% -h73% -E \"tmux new -s popup_tig \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; tig\\\"\""
+    "let tigcmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w90% -h73% -E \"tmux new -s popup_tig\$\$ \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; tig\\\"\""
+    let tigcmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w90% -h73% -E \"" . &shell . " -c \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; tig\\\"\""
     call system(tigcmd)
     call magit#update_buffer()
 endfunction
@@ -669,7 +663,8 @@ function LaunchTlg() abort
         echo " "
         return
     endif
-    let lgcmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w90% -h73% -E \"tmux new -s popup_lg \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; lazygit\\\"\""
+    "let lgcmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w90% -h73% -E \"tmux new -s popup_lg\$\$ \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; lazygit\\\"\""
+    let lgcmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w90% -h73% -E \"" . &shell . " -c \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; lazygit\\\"\""
     call system(lgcmd)
     call magit#update_buffer()
 endfunction
@@ -2930,6 +2925,18 @@ let g:floaterm_width = 0.72
 let g:floaterm_height = 0.65
 let g:floaterm_autoclose = 2
 let g:floaterm_autoinsert = v:true
+
+function s:TmuxPopupShell() abort
+    let scmd = "tmux popup -d '#{pane_current_path}' -xC -yC -s bg=colour236 -w70% -h63% -E "
+    let bgcolour = system("tmux show-options status-style 2>/dev/null | grep bg=colour23")
+    if empty(bgcolour)
+        let syscmd = scmd . "\"tmux new -s popup_vim0\$\$\""
+    else
+        let syscmd = scmd . "\"tmux new -s popup_vim1\$\$\""
+    endif
+    call system(syscmd)
+endfunction
+
 " NOTE: there is also <Leader>zs and <Leader>zt for terminals mapped above ...
 if !exists("g:vlessSKIP")
     if exists('$TMUX_PANE')
@@ -2941,9 +2948,13 @@ if !exists("g:vlessSKIP")
         "let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w70% -h63% -E \"tmux new -s popup_vim \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; " . &shell . "\\\"\""
         "let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -s bg=colour236 -w70% -h63% -E \"tmux new -s popup_vim \\\" " . &shell . "\\\"\""
         " dont use -s <name> as that sometimes might already exist and then it wont work, probably dont need to specify shell either ...
-        let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -s bg=colour236 -w70% -h63% -E \"tmux new\""
-        nnoremap <silent> <Leader>zf :call system(syscmd)<CR>
-        command! Tterm call system(syscmd)
+        "let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -s bg=colour236 -w70% -h63% -E \"tmux new -s popup_vim\$\$\""
+        "nnoremap <silent> <Leader>zf :call system(syscmd)<CR>
+
+        nnoremap <silent> <Leader>zf :call <SID>TmuxPopupShell()<CR>
+
+        "command! Tterm call system(syscmd)
+        command! Tterm call <SID>TmuxPopupShell()
         command! TTerm Tterm
 
         command! Ttig call LaunchTtig()
@@ -2975,7 +2986,7 @@ if !exists("g:vlessSKIP")
     tnoremap <silent> <expr> <M-x>d (&filetype ==# 'floaterm') ? '<C-\><C-n><C-w>:FloatermHide<CR>' : ''
 else
     if exists('$TMUX_PANE')
-        let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -s bg=colour236 -w70% -h63% -E \"tmux new\""
+        let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -s bg=colour236 -w70% -h63% -E \"tmux new -s popup_vim\$\$\""
         nnoremap <silent> <Leader>zf :call system(syscmd)<CR>
         command! Tterm call system(syscmd)
         command! TTerm Tterm
@@ -4310,6 +4321,21 @@ endif
 " to prevent flashing bright green status line sometimes ...
 hi StatusLine   ctermbg=238 ctermfg=238
 hi StatusLineNC ctermbg=238 ctermfg=238
+
+" if we want RGB/truecolor instead of cterm.  But really then have to change all cterm* to gui* ...
+"set termguicolors
+hi Normal guibg=#303030
+if (has("nvim") || exists('$NVIM_LOG_FILE')) && (&termguicolors == 0)
+    " nvim terminal and COLORTERM=truecolor makes less -R colors not work ...
+    " is there a less fix for this ?
+    if exists('$COLORTERM')
+        let cterm=$COLORTERM
+        if cterm == 'truecolor'
+            call setenv("COLORTERM", "nvim")
+        endif
+    endif
+endif
+" ----------------------------
 
 " NOTE: if want terminal default background (opacity etc.) ...
 let g:opaqbg=0
