@@ -435,15 +435,16 @@ endif
 " tmux focus
 " plugin says its obsolete with neovim and vim 8.2.2345+ but its still useful
 " vim BUG: if tmux popup shell present, focus events echo <Esc>[I,O chars in background window ...
-if g:has_wsl == 0
-    if has("nvim")
-        " not needed in nvim ...
-        let g:loaded_tmux_focus_events = 1
-    elseif exists('$VIM_TERMINAL')
-        let g:loaded_tmux_focus_events = 1
-    endif
-    Plug 'mckellygit/vim-tmux-focus-events'
-endif
+" skip for now
+"if g:has_wsl == 0
+"    if has("nvim")
+"        " not needed in nvim ...
+"        let g:loaded_tmux_focus_events = 1
+"    elseif exists('$VIM_TERMINAL')
+"        let g:loaded_tmux_focus_events = 1
+"    endif
+"    Plug 'mckellygit/vim-tmux-focus-events'
+"endif
 "
 " ansi esc sequences
 "Plug 'powerman/vim-plugin-AnsiEsc'
@@ -640,7 +641,7 @@ function LaunchTtig() abort
         return
     endif
     "let tigcmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w90% -h73% -E \"tmux new -s popup_tig\$\$ \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; tig\\\"\""
-    let tigcmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w90% -h73% -E \"" . &shell . " -c \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; tig\\\"\""
+    let tigcmd = "setsid -f tmux popup -d '#{pane_current_path}' -xC -yC -w90% -h73% -E \"" . &shell . " -c \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; tig\\\"\""
     call system(tigcmd)
     call magit#update_buffer()
 endfunction
@@ -664,7 +665,7 @@ function LaunchTlg() abort
         return
     endif
     "let lgcmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w90% -h73% -E \"tmux new -s popup_lg\$\$ \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; lazygit\\\"\""
-    let lgcmd = "tmux popup -d '#{pane_current_path}' -xC -yC -w90% -h73% -E \"" . &shell . " -c \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; lazygit\\\"\""
+    let lgcmd = "setsid -f tmux popup -d '#{pane_current_path}' -xC -yC -w90% -h73% -E \"" . &shell . " -c \\\"printf '\\\\\\033]11;rgb:30/30/30\\\\\\007' ; lazygit\\\"\""
     call system(lgcmd)
     call magit#update_buffer()
 endfunction
@@ -2929,7 +2930,7 @@ let g:floaterm_autoclose = 2
 let g:floaterm_autoinsert = v:true
 
 function s:TmuxPopupShell() abort
-    let scmd = "tmux popup -d '#{pane_current_path}' -xC -yC -s bg=colour236 -w70% -h63% -E "
+    let scmd = "setsid -f tmux popup -d '#{pane_current_path}' -xC -yC -s bg=colour236 -w70% -h63% -E "
     let bgcolour = system("tmux show-options status-style 2>/dev/null | grep bg=colour23")
     if empty(bgcolour)
         let syscmd = scmd . "\"tmux new -s popup_vim0\$\$\""
@@ -2988,7 +2989,7 @@ if !exists("g:vlessSKIP")
     tnoremap <silent> <expr> <M-x>d (&filetype ==# 'floaterm') ? '<C-\><C-n><C-w>:FloatermHide<CR>' : ''
 else
     if exists('$TMUX_PANE')
-        let syscmd = "tmux popup -d '#{pane_current_path}' -xC -yC -s bg=colour236 -w70% -h63% -E \"tmux new -s popup_vim\$\$\""
+        let syscmd = "setsid -f tmux popup -d '#{pane_current_path}' -xC -yC -s bg=colour236 -w70% -h63% -E \"tmux new -s popup_vim\$\$\""
         nnoremap <silent> <Leader>zf :call system(syscmd)<CR>
         command! Tterm call system(syscmd)
         command! TTerm Tterm
@@ -3679,6 +3680,8 @@ if !has("nvim")
     execute "set <FocusGained>=\<Esc>[I"
     execute "set <FocusLost>=\<Esc>[O"
     " do we still need plugin ?
+    "autocmd FocusGained * :echom "focus gained"
+    "autocmd FocusLost   * :echom "focus lost"
 
     " Window title
     let &t_ST = "\e[22;2t"
@@ -3687,6 +3690,7 @@ if !has("nvim")
     " set above - background color erase (bce) - needed for xterm-kitty/kitty
     "let &t_ut=''
 endif
+
 
 " -------------------------
 
@@ -3722,6 +3726,11 @@ if has("nvim")
     " NOTE: in nvim terminal cursor does not blink
     "       in both floaterm cursor does not blink
 endif
+
+" some adjustments for termguicolors (gui) to look more like cterm ...
+hi! String     ctermfg=142 guifg=#98c379
+hi! Function   cterm=bold ctermfg=142 gui=bold guifg=#98c379
+hi! SignColumn ctermbg=239 guibg=#242a32
 
 " do not use delete/wipe with qf/ll ...
 set nohidden
