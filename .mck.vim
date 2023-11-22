@@ -4974,6 +4974,10 @@ if has("nvim")
 endif
 " NOTE: see other <M-N>, <C-_>N and <C-S-N> mappgings ...
 
+" for nested tmux ...
+map <C-s>] <Nop>
+map <C-s><C-]> <Nop>
+
 " ------------------------------
 
 " to get all of top/bottom lines ...

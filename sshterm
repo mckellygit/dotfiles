@@ -11,12 +11,6 @@ else
     host="10.0.0.114"
 fi
 
-sshclipserver -c
-rc=$?
-if [[ $rc -ne 0 ]] ; then
-    setsid -f sshclipserver 2>/dev/null
-fi
-
 sameip=1
 hnraw=$(host ${host})
 hn=$(echo ${hnraw} | grep 'has address' | head -n 1 | awk '{print $NF}')
@@ -44,6 +38,12 @@ fi
 # LC_MONETARY gets carried through to remote host by ssh, so use
 # this to know on remote host if we are able to use sshclip ...
 export LC_MONETARY=sshterm:22221:22222
+
+sshclipserver -c
+rc=$?
+if [[ $rc -ne 0 ]] ; then
+    setsid -f sshclipserver 2>/dev/null
+fi
 
 if [[ $noargs -eq 1 ]] ; then
     exec ssh -t -R22221:localhost:22222 ${host}
