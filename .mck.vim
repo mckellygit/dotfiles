@@ -1609,6 +1609,7 @@ autocmd FileType GV nmap <buffer> <Return> O
 autocmd FileType GV nmap <buffer> o O
 autocmd FileType GV nmap <buffer> <Space> <Down>
 autocmd FileType GV nmap <buffer> <Tab> <Down>
+autocmd FileType GV nmap <buffer> <C-^><Tab> <Down>
 autocmd FileType GV nmap <buffer> <BS> <Up>
 autocmd FileType GV nmap <buffer> <S-Tab> <Up>
 autocmd FileType GV nmap <buffer> u <Up>
@@ -1624,6 +1625,7 @@ autocmd FileType GV xmap <buffer> <Return> O
 autocmd FileType GV xmap <buffer> o O
 autocmd FileType GV xmap <buffer> <Space> <Down>
 autocmd FileType GV xmap <buffer> <Tab> <Down>
+autocmd FileType GV xmap <buffer> <C-^><Tab> <Down>
 autocmd FileType GV xmap <buffer> <BS> <Up>
 autocmd FileType GV xmap <buffer> <S-Tab> <Up>
 autocmd FileType GV xmap <buffer> u <Up>
@@ -4640,13 +4642,16 @@ endfunction
 nnoremap <C-^><Tab> <C-i>
 vnoremap <C-^><Tab> <C-i>
 cnoremap <C-^><Tab> <C-i>
-if exists('$ST_VERSION_MCK') || exists('$WEZTERM_PANE') || exists('$ALACRITTY_WINDOW_ID') || exists('$KITTY_WINDOW_ID')
+" if we tnoremap <C-^><Tab> <C-i> here then vim inside a vim terminal <C-i> will not work ...
+
+"if exists('$ST_VERSION_MCK') || exists('$WEZTERM_PANE') || exists('$ALACRITTY_WINDOW_ID') || exists('$KITTY_WINDOW_ID')
+if exists('$TMUX_PANE')
     " but for some weird reason <Tab> ends visual mode ...
     "vnoremap <buffer> <Tab> <Nop>
     nmap <Tab>   <Cmd>call MyMoveFourRight()<CR>
     vmap <Tab>   <Cmd>call MyMoveFourRight()<CR>
     " <S-Tab> as an undo or as a cursor move ?
-    nmap <S-Tab> <Cmd>call MyMoveFourLeft()<CR>
+    "nmap <S-Tab> <Cmd>call MyMoveFourLeft()<CR>
     vmap <S-Tab> <Cmd>call MyMoveFourLeft()<CR>
 endif
 
@@ -8674,8 +8679,8 @@ inoremap <C-_><Space> <Space>
 cnoremap <C-_><Space> <Space>
 " handled in shell - zsh autosuggest accept ...
 " use just C-Space now, C-S-Space and C-_ Space just become Space unless in vi
-"tnoremap <C-S-Space>  <Space>
-"tnoremap <C-_><Space> <Space>
+tnoremap <C-S-Space>  <C-Space>
+tnoremap <C-_><Space> <C-Space>
 
 "vnoremap <silent> <expr> <C-Down> ((line('$') - line('w$')) < 1) ? 'j' : '<C-e>j'
 "vnoremap <silent> <expr> <C-j>    ((line('$') - line('w$')) < 1) ? 'j' : '<C-e>j'
@@ -8704,6 +8709,10 @@ noremap <C-_><Del> gk
 " TODO: what about <C-_><C-h> ?
 
 "tnoremap <C-_><BS>  <C-BS>
+tnoremap <C-S-BS>   <C-BS>
+tnoremap <C-_><BS>  <C-BS>
+tnoremap <C-_><Del> <C-BS>
+tnoremap <C-_><C-h> <C-BS>
 
 "vnoremap <silent>       <C-Up> <C-y>k
 "vnoremap <silent>       <C-k>  <C-y>k
@@ -12566,6 +12575,8 @@ nnoremap <silent> <expr> q (&filetype == 'GV') ? 'q' : (&hlsearch) ? ':silent se
 " to match normal mode
 vnoremap <silent> <C-o> <C-\><C-n><C-o>
 vnoremap <silent> <C-i> <C-\><C-n><C-i>
+
+inoremap <silent> <C-o> <Nop>
 
 " clear cmd window (or just <C-l> to redraw)
 " 'cc' already used for quickfix close

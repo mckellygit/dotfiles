@@ -278,6 +278,11 @@ key = "I"
 mods = "Control"
 
 [[keyboard.bindings]]
+chars = "\u001B[Z"
+key = "I"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
 action = "ResetFontSize"
 key = 11
 mods = "Control|Shift"

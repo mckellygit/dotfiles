@@ -22,7 +22,7 @@ bind generic    <Esc>[I :none  # Ignore xterm focus events
 bind generic    <Esc>[O :none
 # ---------------------------
 
-bind generic   <C-L>        refresh # instead of redraw-screen
+bind generic   <Ctrl-L>     refresh # instead of redraw-screen
 
 bind generic   <Down>       move-down
 bind generic   <Up>         move-up
@@ -37,9 +37,10 @@ bind main      G            move-last-line
 bind generic   1G           move-first-line
 
 # override page content view
-bind generic   p            none
+bind generic   p            :none
+bind generic   P            :none
 
-bind generic   u            none
+bind generic   u            :none
 #
 # Leader mappings ...
 # use 2-key mapping as single \f,F and c,C cause input delays in vim ...
@@ -60,6 +61,9 @@ bind generic   <Ctrl-E>      :none
 bind generic   <Ctrl-Y>      :none
 
 # match vim fugitive git mappings ...
+bind main      <Ctrl-N>     :none
+bind main      <Ctrl-P>     :none
+
 bind diff      <Ctrl-N>     :/^diff --git|^@@
 bind diff      <Ctrl-P>     :?^diff --git|^@@
 bind stage     <Ctrl-N>     :/^diff --git|^@@
@@ -67,10 +71,10 @@ bind stage     <Ctrl-P>     :?^diff --git|^@@
 # match vim gitgutter C-S-n/p for next/prev hunk
 # SPECIAL: some terminals may map <C-S-n> to <C-_>N ...
 # SPECIAL: some terminals may map <C-S-p> to <C-_>P ...
-bind diff      <Ctrl-_>N    :/^\+|^-
-bind diff      <Ctrl-_>P    :?^\+|^-
-bind stage     <Ctrl-_>N    :/^\+|^-
-bind stage     <Ctrl-_>P    :?^\+|^-
+#bind diff      <Ctrl-_>N    :/^\+|^-
+#bind diff      <Ctrl-_>P    :?^\+|^-
+#bind stage     <Ctrl-_>N    :/^\+|^-
+#bind stage     <Ctrl-_>P    :?^\+|^-
 #
 bind generic   <Ctrl-_><Space>      move-down
 bind generic   <Ctrl-_><Backspace>  move-up
@@ -139,19 +143,33 @@ bind generic   <Esc><Backspace>  scroll-line-up
 bind generic   <Ctrl-w>w          view-next
 bind generic   <Ctrl-w><Ctrl-w>   view-next
 #
-bind main      <Space>              next
-bind generic   <Space>              scroll-half-page-down
-bind generic   <Ctrl-@>             move-down
+bind generic   <Space>              scroll-line-down
+bind main      <Space>              move-down
+bind diff      <Space>              scroll-half-page-down
+
+bind generic   <Ctrl-@>             scroll-half-page-down
+bind main      <Ctrl-@>             scroll-half-page-down
+bind diff      <Ctrl-@>             scroll-line-down
+
 # vim terminal BUG - send M-- instead of C-@ (C-Space) - may be fixed now with tnoremap
-bind generic   <Esc>-               move-down
-bind main      <Backspace>          previous
-bind generic   <Backspace>          scroll-half-page-up
-bind generic   <Ctrl-^><Backspace>  move-up
+bind generic   <Esc>-               scroll-half-page-down
+
+bind generic   <Backspace>          scroll-line-up
+bind main      <Backspace>          move-up
+bind diff      <Backspace>          scroll-half-page-up
+
+bind generic   <Ctrl-^><Backspace>  scroll-half-page-up
+bind main      <Ctrl-^><Backspace>  scroll-half-page-up
+bind diff      <Ctrl-^><Backspace>  scroll-line-up
 # vim terminal ...
-bind generic   <Esc>[127;5u         move-up
+bind generic   <Esc>[127;5u         scroll-half-page-up
+bind main      <Esc>[127;5u         scroll-half-page-up
+bind diff      <Esc>[127;5u         scroll-line-up
 #
 bind generic   <Tab>        next
 bind generic   <ShiftTab>   previous
+
+bind generic   <Ctrl-^><Tab>        next
 #
 # alt-n/p
 #bind generic   <Esc>n       scroll-half-page-down
