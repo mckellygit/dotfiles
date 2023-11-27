@@ -3727,11 +3727,6 @@ if has("nvim")
     "       in both floaterm cursor does not blink
 endif
 
-" some adjustments for termguicolors (gui) to look more like cterm ...
-hi! String     ctermfg=142 guifg=#98c379
-hi! Function   cterm=bold ctermfg=142 gui=bold guifg=#98c379
-hi! SignColumn ctermbg=239 guibg=#242a32
-
 " do not use delete/wipe with qf/ll ...
 set nohidden
 set bufhidden=hide
@@ -4335,7 +4330,7 @@ hi StatusLineNC ctermbg=238 ctermfg=238
 
 " if we want RGB/truecolor instead of cterm.  But really then have to change all cterm* to gui* ...
 "set termguicolors
-hi Normal guibg=#303030
+hi Normal guibg=#282828
 if (has("nvim") || exists('$NVIM_LOG_FILE')) && (&termguicolors == 0)
     " nvim terminal and COLORTERM=truecolor makes less -R colors not work ...
     " is there a less fix for this ?
@@ -4346,6 +4341,17 @@ if (has("nvim") || exists('$NVIM_LOG_FILE')) && (&termguicolors == 0)
         endif
     endif
 endif
+
+" some adjustments for termguicolors (gui) to look more like cterm ...
+"hi! String     ctermfg=142 guifg=#98c379
+hi! String     ctermfg=142 guifg=#afaf00
+
+"hi! Function   cterm=bold ctermfg=142 gui=bold guifg=#98c379
+hi! Function   cterm=bold ctermfg=142 gui=bold guifg=#88cc00
+
+"hi! SignColumn ctermbg=239 guibg=#242a32
+hi! SignColumn ctermbg=239 guibg=#4e4e4e
+
 " ----------------------------
 
 " NOTE: if want terminal default background (opacity etc.) ...
