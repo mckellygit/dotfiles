@@ -4352,6 +4352,22 @@ hi! Function   cterm=bold ctermfg=142 gui=bold guifg=#88cc00
 "hi! SignColumn ctermbg=239 guibg=#242a32
 hi! SignColumn ctermbg=239 guibg=#4e4e4e
 
+" prints out highlight group
+function! SynGroup()
+    let l:s = synID(line('.'), col('.'), 1)
+    echo synIDattr(l:s, 'name') . ' -> ' . synIDattr(synIDtrans(l:s), 'name')
+endfunction
+
+function! SynStack ()
+    for i1 in synstack(line("."), col("."))
+        let i2 = synIDtrans(i1)
+        let n1 = synIDattr(i1, "name")
+        let n2 = synIDattr(i2, "name")
+        echo n1 "->" n2
+    endfor
+endfunction
+map <Leader>hg :call SynGroup()<CR>
+
 " ----------------------------
 
 " NOTE: if want terminal default background (opacity etc.) ...
