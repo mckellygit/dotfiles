@@ -3708,8 +3708,8 @@ augroup END
 
 "let g:solarized_termcolors=256
 "colorscheme solarized
-colorscheme deus
-"colorscheme gruvbox
+"colorscheme deus
+colorscheme gruvbox
 "colorscheme srcery
 
 " Zutty if true color support is on (Tc or RGB) BUG with bold and reverse attributes ...
@@ -4329,7 +4329,7 @@ hi StatusLine   ctermbg=238 ctermfg=238
 hi StatusLineNC ctermbg=238 ctermfg=238
 
 " if we want RGB/truecolor instead of cterm.  But really then have to change all cterm* to gui* ...
-"set termguicolors
+set termguicolors
 hi Normal guibg=#282828
 if (has("nvim") || exists('$NVIM_LOG_FILE')) && (&termguicolors == 0)
     " nvim terminal and COLORTERM=truecolor makes less -R colors not work ...
@@ -4342,18 +4342,27 @@ if (has("nvim") || exists('$NVIM_LOG_FILE')) && (&termguicolors == 0)
     endif
 endif
 
-" some adjustments for termguicolors (gui) to look more like cterm ...
-"hi! String     ctermfg=142 guifg=#98c379
-hi! String     ctermfg=142 guifg=#afaf00
+let current_scheme = get(g:, 'colors_name', 'default')
+if current_scheme == "deus"
+    " some adjustments for termguicolors (gui) to look more like cterm ...
+    "hi! String     ctermfg=142 guifg=#98c379
+    hi! String     ctermfg=142 guifg=#afaf00
 
-"hi! Function   cterm=bold ctermfg=142 gui=bold guifg=#98c379
-hi! Function   cterm=bold ctermfg=142 gui=bold guifg=#88cc00
+    "hi! Function   cterm=bold ctermfg=142 gui=bold guifg=#98c379
+    hi! Function   cterm=bold ctermfg=142 gui=bold guifg=#88cc00
 
-"hi! SignColumn ctermbg=239 guibg=#242a32
-hi! SignColumn ctermbg=239 guibg=#4e4e4e
+    "hi! SignColumn ctermbg=239 guibg=#242a32
+    "hi! SignColumn ctermbg=239 guibg=#4e4e4e
+    hi! SignColumn ctermbg=237 guibg=#3c3836
 
-"hi! DiffAdd    cterm=reverse ctermfg=142 ctermbg=235 gui=reverse guifg=#98c379 guibg=#2c323b
-hi! DiffAdd    cterm=reverse ctermfg=142 ctermbg=235 gui=reverse guifg=#afaf00 guibg=#2c323b
+    "hi! DiffAdd    cterm=reverse ctermfg=142 ctermbg=235 gui=reverse guifg=#98c379 guibg=#2c323b
+    hi! DiffAdd    cterm=reverse ctermfg=142 ctermbg=235 gui=reverse guifg=#afaf00 guibg=#2c323b
+
+    "hi! deusPurple ctermfg=175 guifg=#c678dd
+    hi! deusPurple ctermfg=175 guifg=#cb84e1
+endif
+
+hi! SignColumn ctermbg=237 guibg=#3c3836
 
 " prints out highlight group
 function! SynGroup()
