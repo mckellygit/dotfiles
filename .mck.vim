@@ -4352,6 +4352,9 @@ hi! Function   cterm=bold ctermfg=142 gui=bold guifg=#88cc00
 "hi! SignColumn ctermbg=239 guibg=#242a32
 hi! SignColumn ctermbg=239 guibg=#4e4e4e
 
+"hi! DiffAdd    cterm=reverse ctermfg=142 ctermbg=235 gui=reverse guifg=#98c379 guibg=#2c323b
+hi! DiffAdd    cterm=reverse ctermfg=142 ctermbg=235 gui=reverse guifg=#afaf00 guibg=#2c323b
+
 " prints out highlight group
 function! SynGroup()
     let l:s = synID(line('.'), col('.'), 1)
