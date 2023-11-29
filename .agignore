@@ -6,3 +6,5 @@
 .pcloud
 .rustup
 .cargo
+.kube
+.minikube
