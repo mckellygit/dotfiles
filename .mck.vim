@@ -1130,11 +1130,11 @@ function! s:MYreloadupdate()
     if &smoothscroll
         set nosms
         redraw!
-        echo "file reloaded"
+        echo "file updated"
         set sms
     else
         redraw!
-        echo "file reloaded"
+        echo "file updated"
         return
     endif
 endfunction
@@ -4326,11 +4326,11 @@ if &t_Co > 2 || has("gui_running")
 endif
 
 " to prevent flashing bright green status line sometimes ...
-hi StatusLine   ctermbg=238 ctermfg=238
-hi StatusLineNC ctermbg=238 ctermfg=238
+hi StatusLine   ctermfg=238 ctermbg=2 guifg=#444444 guibg=#00d700
+hi StatusLineNC ctermfg=238 ctermbg=2 guifg=#444444 guibg=#00d700
 
 " if we want RGB/truecolor instead of cterm.  But really then have to change all cterm* to gui* ...
-set termguicolors
+set notermguicolors
 hi Normal guibg=#282828
 if (has("nvim") || exists('$NVIM_LOG_FILE')) && (&termguicolors == 0)
     " nvim terminal and COLORTERM=truecolor makes less -R colors not work ...
@@ -4361,6 +4361,8 @@ if current_scheme == "deus"
 
     "hi! deusPurple ctermfg=175 guifg=#c678dd
     hi! deusPurple ctermfg=175 guifg=#cb84e1
+else
+    hi! Function   cterm=bold ctermfg=112 gui=bold guifg=#88cc00
 endif
 
 hi! SignColumn ctermbg=237 guibg=#3c3836
@@ -8257,12 +8259,12 @@ vnoremap <silent> <M-.>      10zl10l
 
 " to be consistent, <M-h>/<M-l> to move like h/l
 " in vim over ssh (slow) an <Esc> followed quickly by a h,l etc can remain in insert mode ...
-if g:is_ttyterm < 1
+if g:is_ttyterm < 0
     inoremap <silent> <M-h>      <C-\><C-o>h
     inoremap <silent> <M-l>      <C-\><C-o>l
 else
-    inoremap <silent> <M-h>      <Esc><Esc>
-    inoremap <silent> <M-l>      <Esc><Esc>
+    inoremap <silent> <M-h>      <Esc><Esc>h
+    inoremap <silent> <M-l>      <Esc><Esc>l
 endif
 "inoremap <silent> <M-h>      <C-\><C-o>10zh<C-\><C-o>10h
 "inoremap <silent> <M-l>      <C-\><C-o>10zl<C-\><C-o>10l
@@ -8284,8 +8286,8 @@ nnoremap <silent> <C-^>.     10zl10l
 vnoremap <silent> <C-^>,     10zh10h
 vnoremap <silent> <C-^>.     10zl10l
 
-inoremap <silent> <C-^>h     <C-\><C-o>h
-inoremap <silent> <C-^>l     <C-\><C-o>l
+inoremap <silent> <C-^>h     <Esc><Esc>h
+inoremap <silent> <C-^>l     <Esc><Esc>l
 "inoremap <silent> <C-^>h     <C-\><C-o>10zh<C-\><C-o>10h
 "inoremap <silent> <C-^>l     <C-\><C-o>10zl<C-\><C-o>10l
 inoremap <silent> <C-^>,     <C-\><C-o>10zh<C-\><C-o>10h
@@ -8297,8 +8299,14 @@ inoremap <silent> <C-^>.     <C-\><C-o>10zl<C-\><C-o>10l
 noremap <silent> <C-^>H     10zh10h
 noremap <silent> <C-^>L     10zl10l
 
+inoremap <silent> <C-^>H    <Esc><Esc>h
+inoremap <silent> <C-^>L    <Esc><Esc>l
+
 noremap <silent> <M-H>      10zh10h
 noremap <silent> <M-L>      10zl10l
+
+inoremap <silent> <M-H>     <Esc><Esc>h
+inoremap <silent> <M-L>     <Esc><Esc>l
 
 " in tmux <M-<lt>> is <C-^><lt>
 " in tmux <M->> is <C-^>>
@@ -9017,16 +9025,16 @@ noremap <F30> 1gk
 noremap <M-k> 1gk
 " -------------------
 " in vim over ssh (slow) an <Esc> followed quickly by a j,k etc can remain in insert mode ...
-if g:is_ttyterm < 1
+if g:is_ttyterm < 0
     inoremap <F30> <C-\><C-o>1gk
     inoremap <M-k> <C-\><C-o>1gk
 else
-    inoremap <F30> <Esc><Esc>
-    inoremap <M-k> <Esc><Esc>
+    inoremap <F30> <Esc><Esc>1gk
+    inoremap <M-k> <Esc><Esc>1gk
 endif
 " tmux may map <M-k> to <C-^>k when in vim to help with slow (ssh) editting ...
 noremap  <C-^>k 1gk
-inoremap <C-^>k <C-\><C-o>k
+inoremap <C-^>k <Esc><Esc>1gk
 " -------------------
 "noremap <F30> 1gk
 "noremap <M-k> 1gk
@@ -9047,16 +9055,16 @@ noremap <F31> 1gj
 noremap <M-j> 1gj
 " -------------------
 " in vim over ssh (slow) an <Esc> followed quickly by a j,k etc can remain in insert mode ...
-if g:is_ttyterm < 1
+if g:is_ttyterm < 0
     inoremap <F31> <C-\><C-o>1gj
     inoremap <M-j> <C-\><C-o>1gj
 else
-    inoremap <F31> <Esc><Esc>
-    inoremap <M-j> <Esc><Esc>
+    inoremap <F31> <Esc><Esc>1gj
+    inoremap <M-j> <Esc><Esc>1gj
 endif
 " tmux may map <M-j> to <C-^>j when in vim to help with slow (ssh) editting ...
 noremap  <C-^>j 1gj
-inoremap <C-^>j <C-\><C-o>j
+inoremap <C-^>j <Esc><Esc>1gj
 " -------------------
 "noremap <F31> 1gj
 "noremap <M-j> 1gj
@@ -9138,7 +9146,8 @@ else
 endif
 " tmux may map <M-K> to <C-^>K when in vim to help with slow (ssh) editting ...
 noremap  <silent> <expr> <C-^>K  (line('.') == line('w$')) ? '5k' : '<Cmd>call MyScrollUpX(5)<CR>'
-inoremap <silent> <expr> <C-^>K  (line('.') == line('w$')) ? '<C-\><C-o>5k' : '<C-\><C-o>5<C-y><C-\><C-o>5k'
+"inoremap <silent> <expr> <C-^>K  (line('.') == line('w$')) ? '<C-\><C-o>5k' : '<C-\><C-o>5<C-y><C-\><C-o>5k'
+inoremap <silent> <expr> <C-^>K  (line('.') == line('w$')) ? '<Esc><Esc>5k' : '<Esc><Esc><Cmd>call MyScrollUpX(5)<CR>'
 
 call <SID>MapFastKeycode('<F23>',  "\eJ", 23)
 noremap <silent> <expr> <F23>    (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '<Cmd>call MyScrollDownX(5)<CR>'
@@ -9154,7 +9163,8 @@ else
 endif
 " tmux may map <M-J> to <C-^>J when in vim to help with slow (ssh) editting ...
 noremap  <silent> <expr> <C-^>J  (line('.') == line('w0')) ? '5j' : ((line('$') - line('w$')) < 5) ? 'mfG`f5j' : '<Cmd>call MyScrollDownX(5)<CR>'
-inoremap <silent> <expr> <C-^>J  (line('.') == line('w0')) ? '<C-\><C-o>5j' : ((line('$') - line('w$')) < 5) ? '<C-\><C-o>mf<C-\><C-o>G<C-\><C-o>`f<C-\><C-o>5j' : '<C-\><C-o>5<C-e><C-\><C-o>5j'
+"inoremap <silent> <expr> <C-^>J  (line('.') == line('w0')) ? '<C-\><C-o>5j' : ((line('$') - line('w$')) < 5) ? '<C-\><C-o>mf<C-\><C-o>G<C-\><C-o>`f<C-\><C-o>5j' : '<C-\><C-o>5<C-e><C-\><C-o>5j'
+inoremap <silent> <expr> <C-^>J  (line('.') == line('w0')) ? '<Esc><Esc>5j' : ((line('$') - line('w$')) < 5) ? '<Esc><Esc>mfG`f5j' : '<Esc><Esc><Cmd>call MyScrollDownX(5)<CR>'
 
 " -------------------------------
 
@@ -10806,13 +10816,13 @@ function LessInitFunc() abort
   set noshowmatch
 " set laststatus=1
   set statusline=%f\%=[\ %L\ ][\ %3.3p%%\ ]
-  hi StatusLine ctermbg=237 ctermfg=2
-  hi StatusLineNC ctermbg=237 ctermfg=2
+  hi! StatusLine   ctermfg=237 ctermbg=2 guifg=#3a3a3a guibg=#00d700
+  hi! StatusLineNC ctermfg=237 ctermbg=2 guifg=#3a3a3a guibg=#00d700
   "hi VertSplit ctermfg=238 ctermbg=238
   "hi WinSeparator ctermfg=238 ctermbg=238
   if !has("nvim")
-      hi StatusLineTerm ctermbg=237 ctermfg=2
-      hi StatusLineTermNC ctermbg=237 ctermfg=2
+      hi! StatusLineTerm   ctermfg=237 ctermbg=2 guifg=#3a3a3a guibg=#00d700
+      hi! StatusLineTermNC ctermfg=237 ctermbg=2 guifg=#3a3a3a guibg=#00d700
   endif
   " NOTE: if want terminal default background (opacity etc.) ...
   let g:opaqbg=1
@@ -12124,10 +12134,10 @@ if &diff
   "hi DiffChange             ctermbg=white                    guibg=#ececec gui=none cterm=none
   "hi DiffText   ctermfg=233 ctermbg=yellow     guifg=#000033 guibg=#DDDDFF gui=none cterm=none
 
-  highlight DiffAdd    cterm=bold ctermfg=10 ctermbg=238 gui=none guifg=bg guibg=Red
-  highlight DiffDelete cterm=bold ctermfg=10 ctermbg=238 gui=none guifg=bg guibg=Red
-  highlight DiffChange cterm=bold ctermfg=10 ctermbg=238 gui=none guifg=bg guibg=Red
-  highlight DiffText   cterm=bold ctermfg=10 ctermbg=90  gui=none guifg=bg guibg=Red
+  highlight DiffAdd    cterm=bold ctermfg=10 ctermbg=238 gui=bold guifg=#00ff00 guibg=#444444
+  highlight DiffDelete cterm=bold ctermfg=10 ctermbg=238 gui=bold guifg=#00ff00 guibg=#444444
+  highlight DiffChange cterm=bold ctermfg=10 ctermbg=238 gui=bold guifg=#00ff00 guibg=#444444
+  highlight DiffText   cterm=bold ctermfg=10 ctermbg=90  gui=bold guifg=#00ff00 guibg=#870087
 
   " vimdiff default has wrap off (as screen width is cut in half)
   " set sidescroll=1 to help navigate smoothly when wrap is off
