@@ -155,6 +155,8 @@ Plug 'mattn/vim-findroot'
 "Plug 'lyuts/vim-rtags'
 Plug 'mckellygit/vim-rtags'
 "
+Plug 'tweekmonster/exception.vim'
+"
 " ---------------------
 "
 if g:has_wsl == 0 && has("nvim")
@@ -6967,6 +6969,12 @@ if has("nvim")
     " NOTE: Add these for nvim b/c w/o it calls tag search ...
     nnoremap <A-C-LeftRelease> <Nop>
     vnoremap <A-C-LeftRelease> <Nop>
+    nnoremap <A-C-2-LeftRelease> <Nop>
+    vnoremap <A-C-2-LeftRelease> <Nop>
+    nnoremap <A-C-3-LeftRelease> <Nop>
+    vnoremap <A-C-3-LeftRelease> <Nop>
+    nnoremap <A-C-4-LeftRelease> <Nop>
+    vnoremap <A-C-4-LeftRelease> <Nop>
 endif
 
 " ----------------------
@@ -7314,6 +7322,27 @@ inoremap <C-LeftDrag> <LeftDrag>
 vnoremap <C-LeftMouse> <LeftMouse>
 "inoremap <C-LeftMouse> <LeftMouse>
 
+" NOTE: Add these for nvim b/c w/o it calls tag search ...
+map g<LeftMouse> <Nop>
+map g<2-LeftMouse> <Nop>
+map g<3-LeftMouse> <Nop>
+map g<4-LeftMouse> <Nop>
+
+map g<C-LeftMouse> <Nop>
+map g<C-2-LeftMouse> <Nop>
+map g<C-3-LeftMouse> <Nop>
+map g<C-4-LeftMouse> <Nop>
+
+map g<A-LeftMouse> <Nop>
+map g<A-2-LeftMouse> <Nop>
+map g<A-3-LeftMouse> <Nop>
+map g<A-4-LeftMouse> <Nop>
+
+map g<A-C-LeftMouse> <Nop>
+map g<A-C-2-LeftMouse> <Nop>
+map g<A-C-3-LeftMouse> <Nop>
+map g<A-C-4-LeftMouse> <Nop>
+
 " --------------------------
 " --------------------------
 
@@ -7500,38 +7529,46 @@ function! s:Delay(arg) abort
     "    "redraw
     "endif
     "DEBUG echom "Delay " . a:arg
-    if (exists("g:use_system_copy") && g:use_system_copy > 0) || (!exists("g:use_system_copy"))
-        let clipcmd = ''
-        let clipstr = &clipboard
-        let cliplst = split(clipstr, ",")
-        if index(cliplst, 'unnamed') != -1
-            let clipcmd .= 'unamed'
-        endif
-        if index(cliplst, 'unnamedplus') != -1
-            if !empty(clipcmd)
-                let clipcmd .= ','
+    if 0
+        if (exists("g:use_system_copy") && g:use_system_copy > 0) || (!exists("g:use_system_copy"))
+            let clipcmd = ''
+            let clipstr = &clipboard
+            let cliplst = split(clipstr, ",")
+            if index(cliplst, 'unnamed') != -1
+                let clipcmd .= 'unamed'
             endif
-            let clipcmd .= 'unamedplus'
+            if index(cliplst, 'unnamedplus') != -1
+                if !empty(clipcmd)
+                    let clipcmd .= ','
+                endif
+                let clipcmd .= 'unamedplus'
+            endif
         endif
-    endif
-    if exists("g:use_system_copy") && g:use_system_copy > 0
-        let c2 = g:system_copy#copy_command
-        if !empty(clipcmd)
-            let c2 .= ' (' . clipcmd . ')'
+        if exists("g:use_system_copy") && g:use_system_copy > 0
+            let c2 = g:system_copy#copy_command
+            if !empty(clipcmd)
+                let c2 .= ' (' . clipcmd . ')'
+            endif
+            let clipcmd = c2
+            echohl String | echon 'Copied to clipboard using: ' . clipcmd | echohl None
+        else
+            let c2 = 'internal'
+            if !empty(clipcmd)
+                let c2 .= ' (' . clipcmd . ')'
+            endif
+            let clipcmd = c2
+            echohl String | echon 'Copied to clipboard using: ' . clipcmd | echohl None
         endif
-        let clipcmd = c2
-        echohl String | echon 'Copied to clipboard using: ' . clipcmd | echohl None
-    else
-        let c2 = 'internal'
-        if !empty(clipcmd)
-            let c2 .= ' (' . clipcmd . ')'
-        endif
-        let clipcmd = c2
-        echohl String | echon 'Copied to clipboard using: ' . clipcmd | echohl None
     endif
     let w:vp=w:vc
     let w:vc='u'
-    sleep 551m
+    if a:arg != 0
+        sleep 551m
+        " eat typeahead ...
+        while getchar(0)
+            sleep 1m
+        endwhile
+    endif
     redraw!
     echo " "
 endfunction
@@ -10542,6 +10579,8 @@ if $USER != 'root'
 else
   let g:rtagsAutoLaunchRdm=0
 endif
+" NOTE: to prevent tag search ...
+vnoremap <C-]> <Nop>
 nnoremap <silent> <C-]> :call rtags#JumpTo(g:SAME_WINDOW)<CR>
 " we are using <C-w>] now to toggle terminal/normal mode ...
 "nnoremap <silent> <expr> <C-]> (&buftype == 'terminal') ? 'i' : ':call rtags#JumpTo(g:SAME_WINDOW)<CR>'
