@@ -354,11 +354,34 @@ if [[ $have_tty -gt 0 ]]; then
     # should we echo to stderr ?
     echo "remote (tty) clipboard not supported" >&2
     exit 98
-elif [[ $have_ssh -gt 0 ]]; then
+fi
+
+# -------------
+
+tmpclip=/dev/shm/myclip.$$
+tmpclip2=/dev/shm/myclip2.$$
+
+trap "rm -f $tmpclip $tmpclip2" EXIT
+
+if [[ $have_ssh -gt 0 ]]; then
     # should we echo to stderr ?
     # NOTE: ssh tunnel might echo error to stderr ?
-    sshclip 2>/dev/null
+    sshclip > $tmpclip 2>/dev/null
     rc=$?
+    if [[ $rc -eq 0 ]] ; then
+        if [[ $have_rmnl -ne 0 ]] ; then
+            sed -z '$s/\n$//' $tmpclip > $tmpclip2 2>/dev/null
+            mv $tmpclip2 $tmpclip
+        fi
+        if [[ -s $tmpclip ]] ; then
+        #   printf "\033[200~"
+            echo -n "$pre"
+            cat $tmpclip
+            echo -n "$pos"
+        #   printf "\033[201~"
+        fi
+        exit 0
+    fi
     # exit code 88 means sshclip could not connect to sshclipserver ...
     if [[ $rc -ne 88 ]] ; then
         exit 97
@@ -380,10 +403,6 @@ elif [[ $have_ssh -gt 0 ]]; then
 fi
 
 # -------------
-
-tmpclip=/dev/shm/myclip.$$
-
-trap "rm -f $tmpclip" EXIT
 
 if [[ $has_wsl -gt 0 ]]; then
     if [[ $have_rmnl -eq 0 ]] ; then
