@@ -14,7 +14,7 @@ check_delay() {
     fi
     wtime=$(echo "$delay - $dtime" | bc -l)
     if (( $(echo "$wtime > 0.000" | bc -l) )) ; then
-        echo "sleep ..."
+        #echo "sleep ..."
         sleep $wtime
     fi
 }
@@ -357,8 +357,26 @@ if [[ $have_tty -gt 0 ]]; then
 elif [[ $have_ssh -gt 0 ]]; then
     # should we echo to stderr ?
     # NOTE: ssh tunnel might echo error to stderr ?
-    exec sshclip 2>/dev/null
-    exit 97
+    sshclip 2>/dev/null
+    rc=$?
+    # exit code 88 means sshclip could not connect to sshclipserver ...
+    if [[ $rc -ne 88 ]] ; then
+        exit 97
+    fi
+    # if SSH_CONNECTION and server address is same as mine then continue on ...
+    if [[ -z "$SSH_CONNECTION" ]] ; then
+        exit 97
+    fi
+    sameip=1
+    server=$(echo $SSH_CONNECTION | awk '{print $3}')
+    $(ip addr show | grep 'inet ' | awk '{print $2}' | awk -F/ '{print $1}' | grep -q ${server})
+    sameip=$?
+    if [[ $sameip -eq 1 ]] ; then
+        sameip=$(echo ${server} | grep -q '127\.')
+    fi
+    if [[ $sameip -ne 0 ]] ; then
+        exit 97
+    fi
 fi
 
 # -------------
