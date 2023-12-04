@@ -53,6 +53,9 @@ return {
   exit_behavior = "Close",
   window_close_confirmation = "NeverPrompt",
 
+  -- could remove TITLE so that its not dynamic but then harder to move/resize window ...
+  window_decorations = "INTEGRATED_BUTTONS | TITLE | RESIZE",
+
   swallow_mouse_click_on_pane_focus = true,
   swallow_mouse_click_on_window_focus = true,
 
@@ -319,6 +322,10 @@ return {
     -- { key="=",              mods="CTRL|ALT",      action=wezterm.action{SendString="\x1b\x23"} },
     { key="phys:Equal",     mods="CTRL|ALT",      action=wezterm.action{SendString="\x1b\x23"} },
     { key="phys:Space",     mods="CTRL|ALT",      action=wezterm.action{SendString="\x1b\x23"} },
+
+    { key="phys:Equal",     mods="CTRL",          action=wezterm.action{SendString="\x1e\x3d"} },
+    { key="phys:Minus",     mods="CTRL",          action=wezterm.action{SendString="\x1e\x2d"} },
+
     -- { key="\\",             mods="CTRL|ALT",      action="Nop"},
     -- { key="\\",             mods="CTRL|ALT",      action="ActivateCopyMode" },
     -- send ctrl-s + ] (\x13\x5d) tmux copy-mode
@@ -384,6 +391,9 @@ return {
     -- CSI (Control Sequence Introducer) is \x1b[ or \x9b ...
     -- tmux can send this to vi and Tab to everything else
     { key="i",          mods="CTRL",          action=wezterm.action{SendString="\x1e\x09"} },
+    { key="i",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1b\x5b\x5a"} },
+    { key="I",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1b\x5b\x5a"} },
+    { key="i",          mods="CTRL|ALT",      action=wezterm.action{SendString="\x09"} },
 
     -- if we could, launch copyq toggle ...
     { key="Insert",     mods="ALT",           action=wezterm.action{SendString="\x1b[2;3~"} },
@@ -422,8 +432,6 @@ return {
     -- { key="c",          mods="CTRL|ALT",      action=wezterm.action.CopyTo "Clipboard" },
     { key="c",          mods="CTRL|ALT",      action=wezterm.action{SendString="\x1b[2;5~"} },
     { key="v",          mods="CTRL|ALT",      action=wezterm.action.PasteFrom "Clipboard" },
-
-    { key="phys:Minus", mods="CTRL",          action=wezterm.action{SendString="\x1e\x2d"} },
 
     -- { key="+",          mods="CTRL",          action="IncreaseFontSize" },
     -- { key="+",          mods="CTRL|SHIFT",    action="IncreaseFontSize" },
