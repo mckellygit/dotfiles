@@ -4352,7 +4352,8 @@ if current_scheme == "deus"
     hi! String     ctermfg=142 guifg=#afaf00
 
     "hi! Function   cterm=bold ctermfg=142 gui=bold guifg=#98c379
-    hi! Function   cterm=bold ctermfg=142 gui=bold guifg=#88cc00
+    "hi! Function   cterm=bold ctermfg=142 gui=bold guifg=#88cc00
+    hi! Function   cterm=bold ctermfg=106 gui=bold guifg=#96c932
 
     "hi! SignColumn ctermbg=239 guibg=#242a32
     "hi! SignColumn ctermbg=239 guibg=#4e4e4e
@@ -4364,7 +4365,8 @@ if current_scheme == "deus"
     "hi! deusPurple ctermfg=175 guifg=#c678dd
     hi! deusPurple ctermfg=175 guifg=#cb84e1
 else
-    hi! Function   cterm=bold ctermfg=112 gui=bold guifg=#88cc00
+    "hi! Function   cterm=bold ctermfg=112 gui=bold guifg=#88cc00
+    hi! Function   cterm=bold ctermfg=106 gui=bold guifg=#96c932
 endif
 
 hi! SignColumn ctermbg=237 guibg=#3c3836
