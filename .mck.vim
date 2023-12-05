@@ -9996,8 +9996,8 @@ noremap  <S-Up>    <Up>
 noremap  <S-Down>  <Down>
 inoremap <S-Up>    <Up>
 inoremap <S-Down>  <Down>
-tnoremap <S-Up>    <Up>
-tnoremap <S-Down>  <Down>
+tnoremap <S-Up>    <S-Up>
+tnoremap <S-Down>  <S-Down>
 cnoremap <S-Up>    <Up>
 cnoremap <S-Down>  <Down>
 
@@ -10005,8 +10005,8 @@ noremap  <M-Up>    <Up>
 noremap  <M-Down>  <Down>
 inoremap <M-Up>    <Up>
 inoremap <M-Down>  <Down>
-tnoremap <M-Up>    <Up>
-tnoremap <M-Down>  <Down>
+tnoremap <M-Up>    <M-Up>
+tnoremap <M-Down>  <M-Down>
 cnoremap <M-Up>    <Up>
 cnoremap <M-Down>  <Down>
 
