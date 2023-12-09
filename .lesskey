@@ -1,6 +1,8 @@
 # command
    forw-scroll
    back-scroll
+   noaction
+   noaction
 \    forw-scroll
    back-scroll
 \  forw-line

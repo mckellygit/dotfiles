@@ -198,17 +198,18 @@ LS_COLORS=$(echo $LS_COLORS | sed 's/ow=[0-9]*;[0-9]*/ow=30;46/')
 export LS_COLORS
 #eval "$(dircolors)"
 
-if [[ -z "$ZUTTY_VERSION" ]] ; then
-    # some apps use this to know
-    # but nvim terminal and COLORTERM=truecolor makes less -R colors not work ...
-    # unless termguicolors is set ...
-    # is there a less fix for this ?
-    if [[ "$COLORTERM" != "nvim" ]] ; then
-        export COLORTERM="truecolor"
-    else
-        unset COLORTERM
-    fi
-fi
+# setting COLORTERM is ok but does affect ls colors inside vim-terminal when termguicolors is set ...
+#if [[ -z "$ZUTTY_VERSION" ]] ; then
+#    # some apps use this to know
+#    # but nvim terminal and COLORTERM=truecolor makes less -R colors not work ...
+#    # unless termguicolors is set ...
+#    # is there a less fix for this ?
+#    if [[ "$COLORTERM" != "xvim" ]] ; then
+#        export COLORTERM="truecolor"
+#    else
+#        unset COLORTERM
+#    fi
+#fi
 
 if [ "$TERM" = "xterm-kitty" ] ; then
 # Completion for kitty - needs to be after compinit ...

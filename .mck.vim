@@ -4334,6 +4334,7 @@ hi StatusLineNC ctermfg=238 ctermbg=2 guifg=#444444 guibg=#00d700
 " if we want RGB/truecolor instead of cterm.  But really then have to change all cterm* to gui* ...
 set notermguicolors
 hi Normal guibg=#282828
+if 0 " skip now that nvim no longer sets COLORTERM for terminal ...
 if (has("nvim") || exists('$NVIM_LOG_FILE')) && (&termguicolors == 0)
     " nvim terminal and COLORTERM=truecolor makes less -R colors not work ...
     " is there a less fix for this ?
@@ -4343,6 +4344,7 @@ if (has("nvim") || exists('$NVIM_LOG_FILE')) && (&termguicolors == 0)
             call setenv("COLORTERM", "nvim")
         endif
     endif
+endif
 endif
 
 let current_scheme = get(g:, 'colors_name', 'default')
@@ -8607,6 +8609,7 @@ endfunction
 
 " could also remap these to prevent a 1<C-d> from changing &scroll value ...
 " could also have these be the same as CtrlF(1) / CtrlB(1) ...
+if 0
 if !has("nvim")
     "nnoremap <silent> <expr> <C-D> (line('.') == line('w0')) ? "M" : &scroll . "<C-D>"
     nnoremap <silent> <C-D> <Cmd>call <SID>CtrlF(2)<CR>
@@ -8622,6 +8625,10 @@ else
     nnoremap <silent> <C-U> <Cmd>call <SID>CtrlB(2)<CR>
     vnoremap <silent> <expr> <C-U> (line('.') == line('w$')) ? "M" : &scroll . "<C-U>"
 endif
+endif
+
+noremap <C-d> <Nop>
+noremap <C-u> <Nop>
 
 " to get back orig if needed
 "noremap <Leader><C-D> <C-D>
@@ -10814,8 +10821,18 @@ nmap <silent> <Leader>Pi <C-\><C-n>:<C-u>call <SID>MyUPIndentBefore()<CR>
 "nmap <silent> <Leader>Pi g]P
 
 " unconditional-paste may map <C-u> to something ...
-inoremap <silent> <C-u> <C-\><C-o><C-b>
-inoremap <silent> <C-d> <C-\><C-o><C-f>
+"inoremap <silent> <C-u> <C-\><C-o><C-b>
+"inoremap <silent> <C-d> <C-\><C-o><C-f>
+inoremap <silent> <C-u> <Nop>
+inoremap <silent> <C-d> <Nop>
+
+inoremap <silent> <M-u> <Nop>
+inoremap <silent> <C-M-U> <Nop>
+inoremap <silent> <F16> <Nop>
+" NOTE: vim does not have fast mapping for '\eU' so <M-U> will leave insert mode and then undo ...
+" if wanted nvim to be the same ...
+"inoremap <silent> <M-U> <Esc>u
+inoremap <silent> <M-U> <Nop>
 " unconditional-paste ---
 
 " ansiesc ----------
@@ -12038,10 +12055,15 @@ if &diff
 
   " -------------
 
+  " Could also add <C-u> or <C-M-u> or <M-U> or ... but maybe that is too optimisitic ...
+  au WinEnter * nnoremap <silent> <buffer> <M-C-U> u
+  au WinEnter * nnoremap <silent> <buffer> <F16> u
   au WinEnter * nnoremap <silent> <buffer> uu u
   au WinEnter * nnoremap <silent> <buffer> U  u
   au WinEnter * nmap     <silent> <buffer> u <Nop>
 
+  au WinEnter * vnoremap <silent> <buffer> <M-C-U> u
+  au WinEnter * vnoremap <silent> <buffer> <F16> u
   au WinEnter * vnoremap <silent> <buffer> uu u
   au WinEnter * vnoremap <silent> <buffer> U  u
   au WinEnter * vmap     <silent> <buffer> u <Nop>
@@ -12642,10 +12664,15 @@ nnoremap <Leader>uu           :call UndoAll()<CR>
 vnoremap <Leader>uu <C-\><C-n>:call UndoAll()<CR>
 
 " TODO: u is close to i so remap t to uu and/or U ?
+" Could also add <C-u> or <C-M-u> or <M-U> or ... but maybe that is too optimisitic ...
+nnoremap <silent> <buffer> <M-C-U> u
+nnoremap <silent> <buffer> <F16> u
 nnoremap <silent> <buffer> uu u
 nnoremap <silent> <buffer> U  u
 nmap     <silent> <buffer> u <Nop>
 
+vnoremap <silent> <buffer> <M-C-U> u
+vnoremap <silent> <buffer> <F16> u
 vnoremap <silent> <buffer> uu u
 vnoremap <silent> <buffer> U  u
 vmap     <silent> <buffer> u <Nop>
