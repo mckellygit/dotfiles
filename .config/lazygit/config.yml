@@ -5,6 +5,9 @@ os:
 keybinding:
     files:
         openStatusFilter: '<f1>'
+    commits:
+        moveDownCommit: '<c-5>'
+        moveUpCommit: '<c-4>'
     universal:
         quit: '<f12>'
         return: '<esc>'
