@@ -148,8 +148,8 @@ global.get_window_actors().forEach(function (w) {
             mw.move_resize_frame(0, 690, 678, 2540, 1362);
             GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, function() { mw.move_resize_frame(1, 690, 678, 2540, 1362); });
         } else if ( mw.get_wm_class().toLowerCase().includes('alacritty') ) {
-            mw.move_resize_frame(0, 690, 678, 2530, 1368);
-            GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, function() { mw.move_resize_frame(1, 690, 678, 2530, 1368); });
+            mw.move_resize_frame(0, 690, 678, 2530, 1370);
+            GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, function() { mw.move_resize_frame(1, 690, 678, 2530, 1370); });
         } else {
             mw.move_resize_frame(0, 690, 678, 2530, 1380);
             GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, function() { mw.move_resize_frame(1, 690, 678, 2530, 1380); });
@@ -242,8 +242,8 @@ global.get_window_actors().forEach(function (w) {
                 mw.move_resize_frame(0, 690, 678, 2540, 1362);
                 GLib.timeout_add(GLib.PRIORITY_DEFAULT, 1500, function() { mw.move_resize_frame(1, 690, 678, 2540, 1362); });
             } else if ( mw.get_wm_class().toLowerCase().includes('alacritty') ) {
-                mw.move_resize_frame(0, 690, 678, 2530, 1368);
-                GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, function() { mw.move_resize_frame(1, 690, 678, 2530, 1368); });
+                mw.move_resize_frame(0, 690, 678, 2530, 1370);
+                GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, function() { mw.move_resize_frame(1, 690, 678, 2530, 1370); });
             } else {
                 // mw.move_resize_frame(0, $X, $Y, $W, $H);
                 mw.move_resize_frame(0, 690, 678, 2530, 1380);

@@ -238,7 +238,7 @@ selection:
 
 font:
   normal:
-    family: Liberation Mono
+    family: Lucida Sans Typewriter
 
     style: normal
 
@@ -251,7 +251,7 @@ font:
     y: 0
 
   bold:
-    family: Liberation Mono
+    family: Lucida Sans Typewriter
 
     style: normal
 
