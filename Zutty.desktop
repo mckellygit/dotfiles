@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 TryExec=zutty
-Exec=zutty -e zsh -c term_win_old
+Exec=zutty -title zutty -e zsh -c term_win_old
 Icon=terminal
 Terminal=false
 Categories=System;TerminalEmulator;
@@ -16,4 +16,4 @@ X-Desktop-File-Install-Version=0.23
 
 [Desktop Action New]
 Name=New Terminal
-Exec=zutty -e zsh -c term_win_old
+Exec=zutty -title zutty -e zsh -c term_win_old
