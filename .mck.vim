@@ -9692,13 +9692,18 @@ function! s:MapScrollKeys()
   noremap <silent> <expr> <S-BS>       AtBot(0) ? '<C-y>' : '<Cmd>call MyScrollUp()<CR>'
   inoremap <S-BS> <BS>
   cnoremap <S-BS> <BS>
+  " SPECIAL: NOTE: if we do this ok, but then apps in vim-terminal dont see special ...
+  " make it match regular terminal/tmux
   tnoremap <S-BS> <BS>
+
   " SPECIAL: S-BS in some terminals (via tmux) may be mapped to <C-^><C-h> in vim ...
   "nnoremap <silent> <C-^><C-h>   :<C-u>call <SID>CtrlB(1)<CR>
   "execute 'vnoremap <silent> <expr> <C-^><C-h> '   . g:hup
   noremap <silent> <expr> <C-^><C-h>   AtBot(0) ? '<C-y>' : '<Cmd>call MyScrollUp()<CR>'
   inoremap <C-^><C-h> <BS>
   cnoremap <C-^><C-h> <BS>
+  " SPECIAL: NOTE: if we do this ok, but then apps in vim-terminal dont see special ...
+  " make it match regular terminal/tmux
   tnoremap <C-^><C-h> <BS>
 
   " TODO: what about <C-^><BS> and <C-^><Del> ?
@@ -9708,6 +9713,8 @@ function! s:MapScrollKeys()
   noremap <silent> <expr> <S-Space>    ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<Cmd>call MyScrollDown()<CR>'
   inoremap <S-Space> <Space>
   cnoremap <S-Space> <Space>
+  " SPECIAL: NOTE: if we do this ok, but then apps in vim-terminal dont see special ...
+  " make it match regular terminal/tmux
   tnoremap <S-Space> <Space>
   " SPECIAL: S-Space in some terminals (via tmux) may be mapped to <C-^><Space> in vim ...
   "nnoremap <silent> <C-^><Space> :<C-u>call <SID>CtrlF(1)<CR>
@@ -9715,6 +9722,8 @@ function! s:MapScrollKeys()
   noremap <silent> <expr> <C-^><Space> ((line('$') - line('w$')) < 1) ? 'gj' : AtTop(0) ? '<C-e>' : '<Cmd>call MyScrollDown()<CR>'
   inoremap <C-^><Space> <Space>
   cnoremap <C-^><Space> <Space>
+  " SPECIAL: NOTE: if we do this ok, but then apps in vim-terminal dont see special ...
+  " make it match regular terminal/tmux
   tnoremap <C-^><Space> <Space>
 
   " -------------------
@@ -10074,6 +10083,8 @@ noremap <silent> <expr> <C-BS>     AtBot(0) ? ((line("w0") - 1 - line("0")) >= 1
 noremap <silent> <expr> <C-^><BS>  AtBot(0) ? ((line("w0") - 1 - line("0")) >= 10 ? '10<C-y>' : (line("w0") - 1 - line("0")) >= 9 ? '9<C-y>' : (line("w0") - 1 - line("0")) >= 8 ? '8<C-y>' : (line("w0") - 1 - line("0")) >= 7 ? '7<C-y>' : (line("w0") - 1 - line("0")) >= 6 ? '6<C-y>' : (line("w0") - 1 - line("0")) >= 5 ? '5<C-y>' : (line("w0") - 1 - line("0")) >= 4 ? '4<C-y>' : (line("w0") - 1 - line("0")) >= 3 ? '3<C-y>' : (line("w0") - 1 - line("0")) >= 2 ? '2<C-y>' : (line("w0") - 1 - line("0")) >= 1 ? '1<C-y>' : '') : ((line("w0") - 1 - line("0")) >= 10 ? '10<C-y>10k' : (line("w0") - 1 - line("0")) >= 9 ? '9<C-y>9k' : (line("w0") - 1 - line("0")) >= 8 ? '8<C-y>8k' : (line("w0") - 1 - line("0")) >= 7 ? '7<C-y>7k' : (line("w0") - 1 - line("0")) >= 6 ? '6<C-y>6k' : (line("w0") - 1 - line("0")) >= 5 ? '5<C-y>5k' : (line("w0") - 1 - line("0")) >= 4 ? '4<C-y>4k' : (line("w0") - 1 - line("0")) >= 3 ? '3<C-y>3k' : (line("w0") - 1 - line("0")) >= 2 ? '2<C-y>2k' : (line("w0") - 1 - line("0")) >= 1 ? '1<C-y>1k' : '')
 noremap <silent> <expr> <C-^><Del> AtBot(0) ? ((line("w0") - 1 - line("0")) >= 10 ? '10<C-y>' : (line("w0") - 1 - line("0")) >= 9 ? '9<C-y>' : (line("w0") - 1 - line("0")) >= 8 ? '8<C-y>' : (line("w0") - 1 - line("0")) >= 7 ? '7<C-y>' : (line("w0") - 1 - line("0")) >= 6 ? '6<C-y>' : (line("w0") - 1 - line("0")) >= 5 ? '5<C-y>' : (line("w0") - 1 - line("0")) >= 4 ? '4<C-y>' : (line("w0") - 1 - line("0")) >= 3 ? '3<C-y>' : (line("w0") - 1 - line("0")) >= 2 ? '2<C-y>' : (line("w0") - 1 - line("0")) >= 1 ? '1<C-y>' : '') : ((line("w0") - 1 - line("0")) >= 10 ? '10<C-y>10k' : (line("w0") - 1 - line("0")) >= 9 ? '9<C-y>9k' : (line("w0") - 1 - line("0")) >= 8 ? '8<C-y>8k' : (line("w0") - 1 - line("0")) >= 7 ? '7<C-y>7k' : (line("w0") - 1 - line("0")) >= 6 ? '6<C-y>6k' : (line("w0") - 1 - line("0")) >= 5 ? '5<C-y>5k' : (line("w0") - 1 - line("0")) >= 4 ? '4<C-y>4k' : (line("w0") - 1 - line("0")) >= 3 ? '3<C-y>3k' : (line("w0") - 1 - line("0")) >= 2 ? '2<C-y>2k' : (line("w0") - 1 - line("0")) >= 1 ? '1<C-y>1k' : '')
 
+" SPECIAL: NOTE: if we do this ok, but then apps in vim-terminal dont see special ...
+" make it match regular terminal/tmux
 tnoremap <C-^><BS> <C-BS>
 
 " TODO: what are the leading spaces when inserting a \ with .vim files ... ?
