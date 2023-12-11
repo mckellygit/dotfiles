@@ -92,7 +92,7 @@ bind generic   qq           view-close
 bind generic   \qq          view-close
 bind generic   <Ctrl-_>\    view-close
 bind generic   QQ           quit
-bind generic   <C-q><C-q>   quit
+bind generic   <Ctrl-q><Ctrl-q>   quit
 bind generic   \xc          quit
 #
 #bind generic   <Ctrl-D>     scroll-page-down
@@ -135,7 +135,8 @@ bind generic   <Esc><Enter>    scroll-line-up
 bind generic   <Ctrl-^><Enter> scroll-line-up
 #
 bind generic   <Ctrl-^><Space> scroll-half-page-down
-bind generic   <Ctrl-^><C-H>   scroll-half-page-up
+bind main      <Ctrl-^><Space> scroll-half-page-down
+bind diff      <Ctrl-^><Space> scroll-line-down
 
 bind generic   <Esc><Esc>        view-close-no-quit
 #
@@ -163,6 +164,11 @@ bind diff      <Backspace>          scroll-half-page-up
 bind generic   <Ctrl-^><Backspace>  scroll-half-page-up
 bind main      <Ctrl-^><Backspace>  scroll-half-page-up
 bind diff      <Ctrl-^><Backspace>  scroll-line-up
+
+bind generic   <Ctrl-^><Ctrl-H>     scroll-half-page-up
+bind main      <Ctrl-^><Ctrl-H>     scroll-half-page-up
+bind diff      <Ctrl-^><Ctrl-H>     scroll-line-up
+
 # vim terminal ...
 bind generic   <Esc>[127;5u         scroll-half-page-up
 bind main      <Esc>[127;5u         scroll-half-page-up
