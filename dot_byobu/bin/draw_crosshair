@@ -1,0 +1,76 @@
+#!/bin/bash
+
+tmux run "echo #{copy_cursor_x} > /tmp/.ex"
+ox=$(cat /tmp/.ex)
+tmux run "echo #{copy_cursor_y} > /tmp/.ey"
+oy=$(cat /tmp/.ey)
+rm -f /tmp/.ex /tmp/.ey
+
+tmux send -X end-of-line
+tmux run "echo #{copy_cursor_x} > /tmp/.ex"
+ex=$(cat /tmp/.ex)
+rm -f /tmp/.ex
+
+xx=$((ex-ox))
+tmux send -XN $xx cursor-left
+
+#echo "ox, oy, xx : $ox $oy $xx" >> /tmp/dbg
+
+tmux run "echo #{pane_height} > /tmp/.ey"
+ey=$(cat /tmp/.ey)
+rm -f /tmp/.ey
+
+if [[ $ox -gt 10 ]] ; then
+    lx=10
+else
+    lx=$ox
+fi
+
+if [[ $xx -gt 10 ]] ; then
+    rx1=10
+    rx=$((10+lx))
+else
+    rx1=$xx
+    rx=$((xx+lx))
+fi
+
+#echo "ex, ey : $ex $ey" >> /tmp/dbg
+#echo "lx, rx, rx1 : $lx $rx $rx1" >> /tmp/dbg
+
+tmux send -XN $lx cursor-left
+tmux send C-v
+tmux send -XN $rx cursor-right
+sleep 0.55
+tmux send q
+tmux send -XN $rx1 cursor-left
+
+if [[ $oy -gt 5 ]] ; then
+    uy=5
+else
+    uy=$oy
+fi
+
+xy=$((ey-oy))
+if [[ $xy -gt 5 ]] ; then
+    dy1=5
+    dy=$((5+uy))
+else
+    dy1=$xy
+    dy=$((dy+uy))
+fi
+
+#echo "$uy $dy $dy1" >> /tmp/dbg
+
+tmux send C-v
+tmux send -XN $uy cursor-up
+tmux send -X stop-selection
+tmux send -X begin-selection
+tmux send -XN $dy cursor-down
+sleep 0.55
+tmux send -X stop-selection
+tmux send -X begin-selection
+tmux send -XN $dy1 cursor-up
+tmux send -X stop-selection
+tmux send -X clear-selection
+
+exit 0
