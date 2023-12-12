@@ -41,7 +41,9 @@ tmux send -XN $lx cursor-left
 tmux send C-v
 tmux send -XN $rx cursor-right
 sleep 0.55
-tmux send q
+tmux send -X stop-selection
+tmux send -X clear-selection
+tmux send -X rectangle-off
 tmux send -XN $rx1 cursor-left
 
 if [[ $oy -gt 5 ]] ; then
@@ -72,5 +74,6 @@ tmux send -X begin-selection
 tmux send -XN $dy1 cursor-up
 tmux send -X stop-selection
 tmux send -X clear-selection
+tmux send -X rectangle-off
 
 exit 0
