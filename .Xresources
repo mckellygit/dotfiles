@@ -545,7 +545,7 @@ zutty.boldFont:     lucidatypewriterregular
 Zutty.fontsize:     22
 Zutty.fontpath:     /home/kellma02/.local/share/fonts:/usr/share/fonts
 
-Zutty.fg:           #c5c5c5
+Zutty.fg:           #f9e0c0
 Zutty.bg:           #14292e
 
 Zutty.cr:           #d78700
