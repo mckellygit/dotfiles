@@ -3730,6 +3730,12 @@ if has("nvim")
     "       in both floaterm cursor does not blink
 endif
 
+" NVIM floatterm/popup (any-jump etc) terminal fg/bg colors ...
+hi Floaterm         ctermfg=223 ctermbg=236 guifg=#f9e0c0 guibg=#303030
+"hi FloatermNC
+hi FloatermBorder   ctermfg=64  guifg=#5f8700
+hi NormalFloat      ctermfg=188 ctermbg=236 guifg=#5f8700 guibg=#303030
+
 " do not use delete/wipe with qf/ll ...
 set nohidden
 set bufhidden=hide
@@ -4781,6 +4787,7 @@ vnoremap <silent> <C-t><C-@>     <C-\><C-n>:<C-u>tabprevious<CR>
 " And <C-^><Tab> may be used by alacritty for <C-i> ...
 
 " NOTE: nvim <C-M-i> (or really <M-C-i>) is the same as <M-Tab>
+" NOTE: vim cannot seem to MapFastKeycode() \\e\<C-i> or \\e\<Tab>
 
 nnoremap <silent> <M-Tab>        :tabnext<CR>
 nnoremap <silent> <M-S-Tab>      :tabprevious<CR>
