@@ -4780,6 +4780,8 @@ vnoremap <silent> <C-t><C-@>     <C-\><C-n>:<C-u>tabprevious<CR>
 " NOTE: <M-Tab> is application spreader/picker in Windows (and possibly gnome)
 " And <C-^><Tab> may be used by alacritty for <C-i> ...
 
+" NOTE: nvim <C-M-i> (or really <M-C-i>) is the same as <M-Tab>
+
 nnoremap <silent> <M-Tab>        :tabnext<CR>
 nnoremap <silent> <M-S-Tab>      :tabprevious<CR>
 "nnoremap <silent> <C-^><Tab>     :tabnext<CR>
