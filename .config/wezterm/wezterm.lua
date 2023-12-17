@@ -393,7 +393,7 @@ return {
     { key="i",          mods="CTRL",          action=wezterm.action{SendString="\x1e\x09"} },
     { key="i",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1b\x5b\x5a"} },
     { key="I",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1b\x5b\x5a"} },
-    { key="i",          mods="CTRL|ALT",      action=wezterm.action{SendString="\x09"} },
+    { key="i",          mods="CTRL|ALT",      action=wezterm.action{SendString="\x1b\x09"} },
 
     -- if we could, launch copyq toggle ...
     { key="Insert",     mods="ALT",           action=wezterm.action{SendString="\x1b[2;3~"} },
