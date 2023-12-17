@@ -1079,6 +1079,8 @@ rg() { command rg --color=always --text --smart-case --one-file-system --hidden 
 # do we need this ?  Since its already an alias ??
 alias git='~/bin/git'
 
+alias gpo='git push origin '
+
 # ------------------
 
 # -x S -y R are not supported values
