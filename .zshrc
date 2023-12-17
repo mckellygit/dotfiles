@@ -156,6 +156,12 @@ fi
 
 # --------------
 
+LS_COLORS=$(echo $LS_COLORS | sed 's/ow=[0-9]*;[0-9]*/ow=30;46/')
+export LS_COLORS
+#eval "$(dircolors)"
+
+# --------------
+
 #fpath+=${ZDOTDIR:-~}/.zsh_functions
 fpath=( ~/.zsh_functions "${fpath[@]}" )
 
@@ -193,10 +199,6 @@ zmodload -i zsh/complist
 #enable-fzf-tab
 
 # --------------
-
-LS_COLORS=$(echo $LS_COLORS | sed 's/ow=[0-9]*;[0-9]*/ow=30;46/')
-export LS_COLORS
-#eval "$(dircolors)"
 
 # setting COLORTERM is ok but does affect ls colors inside vim-terminal when termguicolors is set ...
 #if [[ -z "$ZUTTY_VERSION" ]] ; then
