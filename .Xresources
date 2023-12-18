@@ -214,10 +214,6 @@
 
 Xcursor.size: 32
 
-!! 0, 1, 2 - 2 works in nvim but not in shell for even basic keys like Shift+<letter>
-XTerm*modifyOtherKeys: 1
-!!XTerm*formatOtherKeys: 1
-
 !! ==========================================
 !! ==========================================
 
@@ -509,12 +505,73 @@ URxvt.clipboard.pastecmd: myclip --o --rmlastnl --sc 0
 !!    ~Shift ~Ctrl ~Alt<Btn1Up>:               extend-end()\n\
 !!    ~Shift ~Ctrl ~Alt<Btn3Down>:             stuff()\n\
 
+XTerm*.foreground:   #c5c5c5
+XTerm*.background:   #14292e
+
+!! 0, 1, 2 - 2 works in nvim but not in shell for even basic keys like Shift+<letter>
+XTerm*modifyOtherKeys: 1
+!!XTerm*formatOtherKeys: 1
+
+XTerm*faceName: Monospace
+XTerm*faceSize:12.6
+XTerm*Geometry: 194x53+690+678
+!!XTerm*allowBoldFonts: false
+XTerm*colorBDMode: true
+
 !! these do NOT seem to work in urxvt-unicode ...
-*VT100.translations:    #override \
-    Shift ~Ctrl ~Alt<Btn1Down>:         \n\
-    Shift ~Ctrl ~Alt<Btn1Motion>:       \n\
+XTerm*VT100.translations:    #override \
+    Shift ~Ctrl ~Alt<Btn1Down>: \n\
+    Shift ~Ctrl ~Alt<Btn1Motion>: \n\
     Shift ~Ctrl ~Alt Button1<PtrMoved>: \n\
-    Shift ~Ctrl ~Alt<Btn1Up>:           \n
+    Shift ~Ctrl ~Alt<Btn1Up>: \n\
+    Ctrl Shift ~Alt   <Key> space: string("0x1f") string("0x20") \n\
+    Shift Alt ~Ctrl   <Key> space: \n\
+    Shift ~Alt ~Ctrl  <Key> space: string("0x1e") string("0x20") \n\
+    Alt ~Shift ~Ctrl  <Key> space: \n\
+    Ctrl Alt ~Shift   <Key> space: string("0x1b") string("0x23") \n\
+    ~Ctrl ~Shift ~Alt <Key> BackSpace: string("0x7f") \n\
+    Ctrl Shift ~Alt   <Key> BackSpace: string("0x1f") string("0x7f") \n\
+    Ctrl Alt ~Shift   <Key> BackSpace: string("0x1b") string("0x40") \n\
+    Shift Alt ~Ctrl   <Key> BackSpace: \n\
+    Ctrl ~Shift ~Alt  <Key> BackSpace: string("0x1e") string("0x7f") \n\
+    Alt ~Shift ~Ctrl  <Key> BackSpace: \n\
+    Shift ~Alt ~Ctrl  <Key> BackSpace: string("0x1e") string("0x08") \n\
+    ~Ctrl Shift Alt   <Key> equal: \n\
+    Ctrl Shift ~Alt   <Key> equal: \n\
+    ~Ctrl ~Shift Alt  <Key> equal: string("0x3d") \n\
+    Ctrl ~Shift Alt   <Key> equal: string("0x1b") string("0x23") \n\
+    Ctrl ~Shift ~Alt  <Key> equal: string("0x1e") string("0x3d") \n\
+    Ctrl ~Shift ~Alt  <Key> minus: string("0x1e") string("0x2d") \n\
+    Ctrl ~Shift Alt   <Key> minus: \n\
+    ~Ctrl Shift Alt   <Key> minus: string("\033_") \n\
+    Ctrl Shift ~Alt   <Key> [: string("0x1f") string("0x5b") \n\
+    Ctrl ~Shift Alt   <Key> [: \n\
+    Ctrl Shift ~Alt   <Key> ]: string("0x1f") string("0x5d") \n\
+    Ctrl Shift ~Alt   <Key> /: string("0x1f") string("0x2f") \n\
+    Ctrl ~Shift ~Alt  <Key> Return: string("0x1e") string("0x0d") \n\
+    ~Ctrl ~Shift Alt  <Key> Delete: string("\033[3;3~") \n\
+    ~Ctrl Shift Alt   <Key> Delete: string("\033[3;6~") \n\
+    Ctrl Shift ~Alt   <Key> f: string("0x06") \n\
+    Ctrl Shift ~Alt   <Key> b: string("0x02") \n\
+    Ctrl Shift ~Alt   <Key> j: string("0x1f") string("0x4a") \n\
+    Ctrl Shift ~Alt   <Key> k: string("0x1f") string("0x4b") \n\
+    ~Ctrl Shift Alt   <Key> j: string("0x1e") string("0x4a") \n\
+    ~Ctrl Shift Alt   <Key> k: string("0x1e") string("0x4b") \n\
+    Ctrl Shift ~Alt   <Key> n: string("0x1f") string("0x4e") \n\
+    Ctrl Shift ~Alt   <Key> p: string("0x1f") string("0x50") \n\
+    ~Ctrl Shift Alt   <Key> n: string("0x1e") string("0x4e") \n\
+    ~Ctrl Shift Alt   <Key> p: string("0x1e") string("0x50") \n\
+    Ctrl Shift ~Alt   <Key> g: string("0x1f") string("0x47") \n\
+    Ctrl ~Shift ~Alt  <Key> i: string("0x1e") string("0x09") \n\
+    Ctrl Shift ~Alt   <Key> i: string("0x1b") string("0x5b") string("0x5a") \n\
+    Ctrl ~Shift Alt   <Key> i: string("0x1b") string("0x09") \n\
+    Ctrl ~Shift ~Alt  <Key> Tab: string("\033[27;5;9~") \n\
+    Ctrl Alt ~Shift   <Key> backslash: string("0x1b") string("0x1c") \n\
+    Ctrl ~Shift Alt   <Key> u: string("0x1b") string("0x15") \n\
+    Ctrl ~Alt Shift   <Key> v: string("0x1b") string("0x5b") string("0x32") string("0x3b") string("0x32") string("0x7e") \n\
+    Ctrl Alt ~Shift   <Key> v: string("0x1b") string("0x5b") string("0x32") string("0x3b") string("0x32") string("0x7e") \n\
+    Ctrl ~Alt Shift   <Key> c: string("0x1b") string("0x5b") string("0x32") string("0x3b") string("0x35") string("0x7e") \n\
+    Ctrl Alt ~Shift   <Key> c: string("0x1b") string("0x5b") string("0x32") string("0x3b") string("0x35") string("0x7e")
 
 !! ==========================================
 
@@ -590,7 +647,7 @@ Zutty.color15: #ffffff
 !! ==========================================
 
 st.font:  Liberation Mono:pixelsize=22:antialias=true:autohint=true;
-st.alpha: 0.96
+st.alpha: 0.97
 
 st.foreground: #c5c5c5
 !! st.foreground: #ffd1b7
