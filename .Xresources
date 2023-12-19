@@ -512,6 +512,8 @@ XTerm*.background:   #14292e
 XTerm*modifyOtherKeys: 1
 !!XTerm*formatOtherKeys: 1
 
+XTerm*allowTitleOps: false
+
 XTerm*faceName: Monospace
 XTerm*faceSize:12.6
 XTerm*Geometry: 194x53+690+678
