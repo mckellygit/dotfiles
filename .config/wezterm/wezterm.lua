@@ -9,6 +9,8 @@ return {
   -- },
   term = "wezterm",
 
+  mux_output_parser_buffer_size = 2000000,
+
   enable_wayland = false,
 
   audible_bell = "Disabled",
