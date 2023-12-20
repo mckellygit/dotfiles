@@ -1,4 +1,12 @@
 local wezterm = require 'wezterm';
+
+-- locked window title
+wezterm.on('format-window-title', function(tab, pane, tabs, panes, config)
+  local title = ''
+  title = string.format('wezterm')
+  return title
+end)
+
 return {
 
   -- NOTE: if not set, default is term=xterm-256color,
@@ -11,7 +19,7 @@ return {
 
   mux_output_parser_buffer_size = 2000000,
 
-  enable_wayland = false,
+  enable_wayland = true,
 
   audible_bell = "Disabled",
 
@@ -32,8 +40,8 @@ return {
   },
 
   -- if x11 then 12.6, if wayland then 16.0 ...
-  font_size = 12.6,
-  -- font_size = 16.0,
+  -- font_size = 12.6,
+  font_size = 16.0,
 
   warn_about_missing_glyphs = false,
 
