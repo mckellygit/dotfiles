@@ -9335,6 +9335,20 @@ function s:CtrlF(multi) abort
             " want normal! here
             execute "keepjumps normal! " . 10 . "\<C-e>" . 10 . "gj"
         endif
+
+        " adjust up some if past end as we want last line near bottom of window ...
+        let l:ll2 = winheight(0) / 2
+        let l:l11 = line('$') - line('.')
+        if l:l11 <= l:ll2
+            let l:nwl = winline()
+            if l:nwl < l:ll2
+                let l:diff = (l:ll2 + 1) - l:nwl
+                execute "keepjumps normal! " . l:diff . "gk"
+                execute "keepjumps normal! " . l:diff . "gj"
+            endif
+        endif
+        " ---------------------
+
     else
         if (a:multi == 2)
             " want normal! here
