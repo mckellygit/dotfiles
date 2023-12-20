@@ -1,6 +1,8 @@
 #!/bin/bash
 
-xrandr -q 2>/dev/null | grep -q '3840x2160'
+#xrandr -q 2>/dev/null | grep -q '3840x2160'
+gnome-randr 2>/dev/null | grep '\*+' | awk '{print $2}' | grep -q '3840x2160'
+
 rc=$?
 if [[ $rc -eq 0 ]] ; then
     prev=0
@@ -12,7 +14,9 @@ fi
 
 while true
 do
-    xrandr -q 2>/dev/null | grep -q '3840x2160'
+    #xrandr -q 2>/dev/null | grep -q '3840x2160'
+    gnome-randr 2>/dev/null | grep '\*+' | awk '{print $2}' | grep -q '3840x2160'
+
     rc=$?
     if [[ $rc -eq 0 ]] ; then
         curr=0
