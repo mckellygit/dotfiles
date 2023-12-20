@@ -144,7 +144,7 @@ Plug 'inkarkat/vim-visualrepeat'
 "
 " vim-clang auto-completion
 "Plug 'justmao945/vim-clang'
-Plug 'mckellygit/vim-clang'
+Plug 'mckellygit/vim-clang', { 'branch': 'mck_mods' }
 "
 " rooter for :Files and FileBeagle (<Leader>fb)
 "Plug 'airblade/vim-rooter'
