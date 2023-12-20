@@ -1,24 +1,17 @@
 #!/bin/bash
 
-tmux run "echo #{copy_cursor_x} > /tmp/.ex"
-ox=$(cat /tmp/.ex)
-tmux run "echo #{copy_cursor_y} > /tmp/.ey"
-oy=$(cat /tmp/.ey)
-rm -f /tmp/.ex /tmp/.ey
+ox=$(tmux 2>/dev/null display -p '#{copy_cursor_x}')
+oy=$(tmux 2>/dev/null display -p '#{copy_cursor_y}')
 
 tmux send -X end-of-line
-tmux run "echo #{copy_cursor_x} > /tmp/.ex"
-ex=$(cat /tmp/.ex)
-rm -f /tmp/.ex
+ex=$(tmux 2>/dev/null display -p '#{copy_cursor_x}')
 
 xx=$((ex-ox))
 tmux send -XN $xx cursor-left
 
-#echo "ox, oy, xx : $ox $oy $xx" >> /tmp/dbg
+ey=$(tmux 2>/dev/null display -p '#{pane_height}')
 
-tmux run "echo #{pane_height} > /tmp/.ey"
-ey=$(cat /tmp/.ey)
-rm -f /tmp/.ey
+#echo "ox, oy, xx : $ox $oy $xx" >> /tmp/dbg
 
 if [[ $ox -gt 10 ]] ; then
     lx=10

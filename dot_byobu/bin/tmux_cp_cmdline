@@ -24,22 +24,17 @@ tmux send-keys C-a
 sleep 0.05
 tmux send-keys C-e
 sleep 0.05
-tmux run "echo #{cursor_x} > /tmp/.ex"
-ex=$(cat /tmp/.ex)
-rm -f /tmp/.ex
-tmux run "echo #{cursor_y} > /tmp/.ey"
-ey=$(cat /tmp/.ey)
-rm -f /tmp/.ey
+
+ex=$(tmux 2>/dev/null display -p '#{cursor_x}')
 ex=$((ex-1))
+
+ey=$(tmux 2>/dev/null display -p '#{cursor_y}')
 
 tmux send-keys C-a
 sleep 0.05
-tmux run "echo #{cursor_x} > /tmp/.ex"
-bx=$(cat /tmp/.ex)
-rm -f /tmp/.ex
-tmux run "echo #{cursor_y} > /tmp/.ey"
-by=$(cat /tmp/.ey)
-rm -f /tmp/.ey
+
+bx=$(tmux 2>/dev/null display -p '#{cursor_x}')
+by=$(tmux 2>/dev/null display -p '#{cursor_y}')
 
 num_lines=$((ey-by))
 
@@ -139,19 +134,11 @@ do
 
         exit 0
     else
-        tmux run "echo #{copy_cursor_x} > /tmp/.ex"
-        px=$(cat /tmp/.ex)
-        rm -f /tmp/.ex
-        tmux run "echo #{copy_cursor_y} > /tmp/.ey"
-        py=$(cat /tmp/.ey)
-        rm -f /tmp/.ey
-
+        px=$(tmux 2>/dev/null display -p '#{copy_cursor_x}')
+        py=$(tmux 2>/dev/null display -p '#{copy_cursor_y}')
         tmux send-keys -X end-of-line
         sleep 0.05
-
-        tmux run "echo #{copy_cursor_x} > /tmp/.ex"
-        mx=$(cat /tmp/.ex)
-        rm -f /tmp/.ex
+        mx=$(tmux 2>/dev/null display -p '#{copy_cursor_x}')
         dx=$((mx-px))
         tx=$((tx+mx))
         tmux send-keys -X cursor-down
