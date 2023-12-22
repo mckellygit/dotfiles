@@ -59,6 +59,7 @@ y = 120.0
 [env]
 TERM = "alacritty"
 
+# use size 16.2 for wayland and 12.6 for x11 (WAYLAND_DISPLAY= alacritty -e term_win_loc start)
 [font]
 size = 16.2
 

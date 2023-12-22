@@ -242,9 +242,9 @@ font:
 
     style: normal
 
-  # use size 16.5 for wayland and 13.0 for x11 (WAYLAND_DISPLAY= alacritty -e term_win_loc start)
+  # use size 16.2 for wayland and 12.6 for x11 (WAYLAND_DISPLAY= alacritty -e term_win_loc start)
   size: 16.2
-    # size: 13.0
+    # size: 12.6
 
   offset:
     x: 0
