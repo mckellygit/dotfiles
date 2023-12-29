@@ -165,19 +165,31 @@ endfun
 
 " ---------
 
-" Used after each command: put cursor at end and display position
-" skip :file<CR> to display position - this is already in statusline
-" add M to always move cursor back to middle
-if &wrap
-  "noremap <silent> <SID>L L0:redraw<CR>:file<CR>
-" nnoremap <silent> <expr> <SID>L (line('.') == line('$')) ? 'M0:set so=9999<CR>:redraw<CR>:set so=0<CR>M' : '0'
-" vnoremap <silent> <expr> <SID>L (line('.') == line('$')) ? 'M:set so=9999<CR>:redraw<CR>:set so=0<CR>M' : ''
-  au VimEnter * silent! normal! ggM0
+if exists('$VLESS_AT_END')
+  " start at bottom ...
+  au VimEnter * silent! normal! G$0
 else
-  "noremap <silent> <SID>L Lg0:redraw<CR>:file<CR>
-" nnoremap <silent> <expr> <SID>L (line('.') == line('$')) ? 'Mg0:set so=9999<CR>:redraw<CR>:set so=0<CR>M' : 'g0'
-" vnoremap <silent> <expr> <SID>L (line('.') == line('$')) ? 'Mg:set so=9999<CR>:redraw<CR>:set so=0<CR>M' : 'g'
-  au VimEnter * silent! normal! ggMg0
+  if exists("g:vless")
+    if g:vless == 1
+      " Used after each command: put cursor at end and display position
+      " skip :file<CR> to display position - this is already in statusline
+      " add M to always move cursor back to middle
+      if &wrap
+         "noremap <silent> <SID>L L0:redraw<CR>:file<CR>
+         " nnoremap <silent> <expr> <SID>L (line('.') == line('$')) ? 'M0:set so=9999<CR>:redraw<CR>:set so=0<CR>M' : '0'
+         " vnoremap <silent> <expr> <SID>L (line('.') == line('$')) ? 'M:set so=9999<CR>:redraw<CR>:set so=0<CR>M' : ''
+        au VimEnter * silent! normal! ggM0
+      else
+        "noremap <silent> <SID>L Lg0:redraw<CR>:file<CR>
+        " nnoremap <silent> <expr> <SID>L (line('.') == line('$')) ? 'Mg0:set so=9999<CR>:redraw<CR>:set so=0<CR>M' : 'g0'
+        " vnoremap <silent> <expr> <SID>L (line('.') == line('$')) ? 'Mg:set so=9999<CR>:redraw<CR>:set so=0<CR>M' : 'g'
+        au VimEnter * silent! normal! ggMg0
+      endif
+    else
+      " if vless > 1 then start at bottom ...
+      au VimEnter * silent! normal! G$0
+    endif
+  endif
 endif
 
 " When reading from stdin don't consider the file modified.
