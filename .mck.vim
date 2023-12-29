@@ -3606,6 +3606,11 @@ endif
 "set t_TI=
 "set t_TE=
 
+" terminal smooth scrolling ???
+" what about rectfill DECRFA and margins DECSTBM, DECSLRM [SMGLR, SMGLP, SMGRP] ?
+"let &t_TI = "\e[4?h"
+"let &t_TE = "\e[4?l"
+
 " do not reset terminal at exit ...
 "set t_ti=
 "set t_te=
