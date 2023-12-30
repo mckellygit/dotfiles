@@ -3909,6 +3909,12 @@ endif
 " visual/audio bell (terminator light bulb) off ...
 set belloff=error,backspace,esc
 
+" disable visual bell
+set novb
+if !has("nvim")
+    set t_vb=
+endif
+
 set backspace=indent,start,eol
 
 " issue with mouse in vim when beyond 220 cols ...
