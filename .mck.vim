@@ -13472,6 +13472,17 @@ endif
 " ========================================================
 " ========================================================
 
+if has("nvim")
+
+lua << NVIM_LUA_EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = { "c", "lua", "vim", "vimdoc", "query" },
+  -- ... any other configuration params here ...
+}
+NVIM_LUA_EOF
+
+endif
+
 if has("nvim-SKIP")
 
 " NOTE: must do this first if using packer below ...
