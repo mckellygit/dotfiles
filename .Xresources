@@ -520,6 +520,8 @@ XTerm*Geometry: 194x53+690+678
 !!XTerm*allowBoldFonts: false
 XTerm*colorBDMode: true
 
+XTerm*metaSendsEscape: true
+
 !! these do NOT seem to work in urxvt-unicode ...
 XTerm*VT100.translations:    #override \
     Shift ~Ctrl ~Alt<Btn1Down>: \n\
