@@ -390,6 +390,12 @@ echo ""
 #   -or-
 #   git clone https://github.com/exg/rxvt-unicode.git
 
+# mlterm:
+#   git clone https://github.com/arakiken/mlterm.git
+
+# xterm:
+#   git clone https://github.com/ThomasDickey/xterm-snapshots.git
+
 # ncurses:
 #   https://invisible-island.net/ncurses
 #   ./configure --with-shared --with-normal --without-debug --enable-widec --enable-overwrite
