@@ -3213,8 +3213,8 @@ nnoremap <silent> tY    <Nop>
 nnoremap <silent> tx    <Nop>
 nnoremap <silent> tX    <Nop>
 
-vmap <silent> <expr> <Leader>dd (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNammedReg()<CR>'
-vmap <silent> <expr> <Leader>xx (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNammedReg()<CR>'
+vmap <silent> <expr> <Leader>dd (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNamedReg()<CR>'
+vmap <silent> <expr> <Leader>xx (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNamedReg()<CR>'
 
 " sometimes press C instead of D on selection, make it CC ...
 vnoremap <silent> CC C
@@ -3235,12 +3235,12 @@ function! s:YankAndRestoreWinPos(cmd, mx)
     silent execute 'silent normal gv' . a:cmd
     call winrestview(l:w1)
     if (a:mx > 0)
-        call ForceLoadNammedReg()
+        call ForceLoadNamedReg()
     endif
 endfunction
 
 "vmap <silent> <expr> <C-c> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty' : 'mvty`v'
-"vmap <silent> <expr> <C-c> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+"vmap <silent> <expr> <C-c> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNamedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
 " NOTE: since in vim <C-x>, <C-v> do not cut, paste, make <C-c> also not copy.  Use <C-S-x>, <C-S-v> and <C-S-c> for cut, paste, copy ...
 " See also <C-Insert> and <F33> below
 
@@ -3252,19 +3252,19 @@ vnoremap <silent> <C-c> <Esc>
 vmap <silent> <expr> y     (&buftype ==# 'terminal') ? '\yy' : (mode() =~ "\<C-v>") ? 'ty'       : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 0)<CR>'
 vmap <silent> <expr> Y     (&buftype ==# 'terminal') ? '\yy' : (mode() =~ "\<C-v>") ? 'omvVtY`v' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("tY", 0)<CR>'
 
-"vmap <silent> <expr> <Leader>yy (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
-vmap <silent> <expr> <Leader>yy (&buftype ==# 'terminal') ? (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>i' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>i' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+"vmap <silent> <expr> <Leader>yy (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNamedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+vmap <silent> <expr> <Leader>yy (&buftype ==# 'terminal') ? (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNamedReg()<CR>i' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>i' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNamedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
 
 "vmap <silent> <expr> <Leader>yY (mode() =~ "\<C-v>") ? 'omvVtY`v:call ForceLoadNammedRef()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("tY", 1)<CR>'
 vmap <silent> <expr> <Leader>yY (&buftype ==# 'terminal') ? (mode() =~ "\<C-v>") ? 'omvVtY`v:call ForceLoadNammedRef()<CR>i' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("tY", 1)<CR>i' : (mode() =~ "\<C-v>") ? 'omvVtY`v:call ForceLoadNammedRef()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("tY", 1)<CR>'
 
 " <C-y> like y, but if in terminal-normal mode, dont leave terminal-normal mode ...
-"vmap <silent> <expr> <C-y> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
-vmap <silent> <expr> <C-y> (&buftype ==# 'terminal') ? (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+"vmap <silent> <expr> <C-y> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNamedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+vmap <silent> <expr> <C-y> (&buftype ==# 'terminal') ? (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNamedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNamedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
 
 " and <Leader>z<Space> (see below for others) ...
-"vmap <silent> <expr> <Leader>z<Space> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
-vmap <silent> <expr> <Leader>z<Space> (&buftype ==# 'terminal') ? (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>i' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>i' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+"vmap <silent> <expr> <Leader>z<Space> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNamedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+vmap <silent> <expr> <Leader>z<Space> (&buftype ==# 'terminal') ? (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNamedReg()<CR>i' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>i' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNamedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
 
 " copy @* (clipboard) to @" for direct vim pasting (via UnconditionalPaste etc.) ...
 nnoremap <silent> <Leader>z/ :noautocmd call <SID>CopyDefReg(1)<CR>
@@ -5263,7 +5263,7 @@ aug END
 " ----------- yank / cut / paste -----------
 
 " explicit force load @* to clipboard ...
-function! ForceLoadNammedReg() abort
+function! ForceLoadNamedReg() abort
     if empty(@") || len(@") == 0
         echohl DiffText | echo "@\" reg empty" | echohl None
         sleep 851m
@@ -5329,9 +5329,9 @@ endfunction
 
 " copy @" (or selected text) to @* (clipboard)
 " <Leader>lr is now list registers ....
-"nnoremap <silent> <Leader>lr :call ForceLoadNammedReg()<CR>
-"vnoremap <silent> <Leader>lr :<C-u>call ForceLoadNammedReg()<CR>
-nnoremap <silent> <Leader>z<Space> :call ForceLoadNammedReg()<CR>
+"nnoremap <silent> <Leader>lr :call ForceLoadNamedReg()<CR>
+"vnoremap <silent> <Leader>lr :<C-u>call ForceLoadNamedReg()<CR>
+nnoremap <silent> <Leader>z<Space> :call ForceLoadNamedReg()<CR>
 " NOTE: vmap of this is above with the <Leader>yy and <C-c> mappings ...
 
 " ----------------------
@@ -5916,7 +5916,7 @@ function! s:YankIt(cmd, arg) abort
         if a:arg == 1
             echo "copied to clipboard"
             sleep 651m
-            call ForceLoadNammedReg()
+            call ForceLoadNamedReg()
             redraw!
             echo " "
         endif
@@ -6135,14 +6135,14 @@ endif
 call <SID>MapFastKeycode('<S-F36>',  "\e&", 136)
 nnoremap <S-F36> <Nop>
 "vmap <expr> <S-F36> (mode() =~ "\<C-v>") ? 'ty' : 'mvty`v'
-vmap <silent> <expr> <S-F36>   (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+vmap <silent> <expr> <S-F36>   (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNamedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
 cnoremap <S-F36> <C-v><Esc>&
 inoremap <S-F36> <C-v><Esc>&
 tnoremap <S-F36> <Esc>&
 if has("nvim")
     nnoremap <M-&> <Nop>
     "vmap <expr> <M-&> (mode() =~ "\<C-v>") ? 'ty' : 'mvty`v'
-    vmap <silent> <expr> <M-&> (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+    vmap <silent> <expr> <M-&> (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNamedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
     cnoremap <S-F36> <M-&>
     inoremap <S-F36> <M-&>
     tnoremap <S-F36> <M-&>
@@ -6163,14 +6163,14 @@ endif
 call <SID>MapFastKeycode('<S-F37>',  "\e(", 137)
 nnoremap <S-F37> <Nop>
 "vmap <expr> <S-F37> (&buftype == 'terminal') ? '' : 'tx'
-vmap <silent> <expr> <S-F37>   (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNammedReg()<CR>'
+vmap <silent> <expr> <S-F37>   (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNamedReg()<CR>'
 cnoremap <S-F37> <C-v><Esc>(
 inoremap <S-F37> <C-v><Esc>(
 tnoremap <S-F37> <Esc>(
 if has("nvim")
     nnoremap <M-(> <Nop>
     "vmap <expr> <M-(> (&buftype == 'terminal') ? '' : 'tx'
-    vmap <silent> <expr> <M-(> (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNammedReg()<CR>'
+    vmap <silent> <expr> <M-(> (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNamedReg()<CR>'
     cnoremap <S-F37> <M-(>
     inoremap <S-F37> <M-(>
     tnoremap <S-F37> <M-(>
@@ -6456,13 +6456,13 @@ endif
 "  <F33> is copy (C-Insert) see also <M-&>
 "  <F34> is paste [replace in vis mode] (mapped below) (S-Insert) see also <M-*>
 "  <F37> is cut (mapped below) (S-Del) see also <S-F37> and <M-(>
-"vmap <silent> <expr> <F33>      (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
-vmap <silent> <expr> <F33>      (&buftype ==# 'terminal') ? (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>i' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>i' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
-"vmap <silent> <expr> <C-Insert> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
-vmap <silent> <expr> <C-Insert> (&buftype ==# 'terminal') ? (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>i' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>i' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNammedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+"vmap <silent> <expr> <F33>      (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNamedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+vmap <silent> <expr> <F33>      (&buftype ==# 'terminal') ? (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNamedReg()<CR>i' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>i' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNamedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+"vmap <silent> <expr> <C-Insert> (&buftype ==# 'terminal') ? 'tyi' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNamedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
+vmap <silent> <expr> <C-Insert> (&buftype ==# 'terminal') ? (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNamedReg()<CR>i' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>i' : (mode() =~ "\<C-v>") ? 'ty:call ForceLoadNamedReg()<CR>' : '<C-\><C-n>:<C-u>call <SID>YankAndRestoreWinPos("ty", 1)<CR>'
 
-vmap <silent> <expr> <F37>      (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNammedReg()<CR>'
-vmap <silent> <expr> <S-Del>    (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNammedReg()<CR>'
+vmap <silent> <expr> <F37>      (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNamedReg()<CR>'
+vmap <silent> <expr> <S-Del>    (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNamedReg()<CR>'
 
 " ---------------------------------------------------------------------------------
 " NOTE: TMUX C-Insert in terminal does not use bracketed-paste, but <C-S-v> is ok
@@ -7009,7 +7009,7 @@ inoremap <A-C-LeftDrag> <LeftDrag>
 
 " NOTE: below we used nmap for the <C-LeftMouse> <LeftMouse>
 nnoremap <A-C-LeftMouse> <LeftMouse>
-vnoremap <A-C-LeftMouse> <LeftMouse>
+vmap <A-C-LeftMouse> <LeftMouse>
 "inoremap <A-C-LeftMouse> <LeftMouse>
 
 " go into rectangular visual mode here ...
@@ -7030,7 +7030,7 @@ function s:EnterVisualBlockMode()
 endfunction
 
 nnoremap <A-S-LeftMouse> <LeftMouse>
-vnoremap <A-S-LeftMouse> <LeftMouse>
+vmap <A-S-LeftMouse> <LeftMouse>
 "inoremap <A-S-LeftMouse> <LeftMouse>
 
 " TODO: should we map these to same as A-C or A-S or C-S ?
@@ -7343,7 +7343,7 @@ inoremap <C-LeftDrag> <LeftDrag>
 "else
     nnoremap <C-LeftMouse> <LeftMouse>
 "endif
-vnoremap <C-LeftMouse> <LeftMouse>
+vmap <C-LeftMouse> <LeftMouse>
 "inoremap <C-LeftMouse> <LeftMouse>
 
 " NOTE: Add these for nvim b/c w/o it calls tag search ...
@@ -7680,7 +7680,7 @@ endif
 
 " mck - TODO: can/should we paste selection here ?
 " it seems nvim_input() or feedkeys() works but w/o bracketed-paste ...
-vmap <silent> <expr> <A-C-LeftRelease> (@t=="1") ? 'tygv:<C-u>call <SID>Delay(0)<CR>:let @t="0"<CR><Esc>i' : 'tygv:<C-u>call <SID>Delay(0)<CR><Esc>'
+vmap <silent> <expr> <A-C-LeftRelease> (@t=="1") ? 'ty:<C-u>call ForceLoadNamedReg()<CR>gv:<C-u>call <SID>Delay(0)<CR>:let @t="0"<CR><Esc>i' : 'ty:<C-u>call ForceLoadNamedReg()<CR>gv:<C-u>call <SID>Delay(0)<CR><Esc>'
 imap <silent> <A-C-LeftMouse> <C-\><C-o>:let @i="2"<CR><LeftMouse>
 
 " NOTE: use this if we want A-S-LeftDrag to end visual mode ...
@@ -8143,8 +8143,8 @@ nnoremap <silent> <expr> <C-Del> (col('.') == 1 && col('$') == 1) ? '"_dW' : (co
 " NOTE: *-Del in v-mode does not make much sense, Del deletes entire selection etc ...
 "vmap <silent>        <F36>   tx
 "vmap <silent>        <C-Del> tx
-vmap <silent> <expr> <F36>   (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNammedReg()<CR>'
-vmap <silent> <expr> <C-Del> (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNammedReg()<CR>'
+vmap <silent> <expr> <F36>   (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNamedReg()<CR>'
+vmap <silent> <expr> <C-Del> (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNamedReg()<CR>'
 " ---------------
 
 inoremap <silent> <expr> <F36>   (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<C-o>"_de' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
@@ -8161,8 +8161,8 @@ nnoremap <silent> <expr> <C-S-Del> (col('.') == 1 && col('$') == 1) ? '"_dW' : (
 " NOTE: *-Del in v-mode does not make much sense, Del deletes entire selection etc ...
 "vmap <silent>        <S-F15>   tx
 "vmap <silent>        <C-S-Del> tx
-vmap <silent> <expr> <S-F15>   (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNammedReg()<CR>'
-vmap <silent> <expr> <C-S-Del> (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNammedReg()<CR>'
+vmap <silent> <expr> <S-F15>   (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNamedReg()<CR>'
+vmap <silent> <expr> <C-S-Del> (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNamedReg()<CR>'
 " ---------------
 
 inoremap <silent> <expr> <S-F15>   (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<Esc>llb"_dWi' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
@@ -8180,8 +8180,8 @@ nnoremap <silent> <expr> <A-Del> (col('.') == 1 && col('$') == 1) ? '"_dW' : (co
 " NOTE: *-Del in v-mode does not make much sense, Del deletes entire selection etc ...
 "vmap <silent>        <S-F16> tx
 "vmap <silent>        <A-Del> tx
-vmap <silent> <expr> <S-F16> (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNammedReg()<CR>'
-vmap <silent> <expr> <A-Del> (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNammedReg()<CR>'
+vmap <silent> <expr> <S-F16> (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNamedReg()<CR>'
+vmap <silent> <expr> <A-Del> (&buftype ==# 'terminal') ? '<Nop>' : 'tx:redraw!<CR>:call ForceLoadNamedReg()<CR>'
 " ---------------
 
 inoremap <silent> <expr> <S-F16> (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' : (col('.') != col('$')) ? '<Esc>llb"_dWi' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '<C-o>"_dvb' : '<C-o>"_diw'
@@ -11358,7 +11358,7 @@ function s:GetWord(arg) abort
     "echo "copied to clipboard"
     sleep 351m
     execute 'normal ty`v'
-    call ForceLoadNammedReg()
+    call ForceLoadNamedReg()
     "redraw!
     if &buftype == "terminal"
       " NOTE: should we go back to live terminal mode ?
@@ -11410,7 +11410,7 @@ function s:GetPath(arg,ws) abort
     "echo "copied to clipboard"
     sleep 351m
     execute 'normal ty`v'
-    call ForceLoadNammedReg()
+    call ForceLoadNamedReg()
     redraw
     if &buftype == "terminal"
       " NOTE: should we go back to live terminal mode ?
@@ -11455,7 +11455,7 @@ function s:GetWord2(arg) abort
     "echo "copied to clipboard"
     sleep 351m
     execute 'normal ty`v'
-    call ForceLoadNammedReg()
+    call ForceLoadNamedReg()
     redraw
     if &buftype == "terminal"
       " NOTE: should we go back to live terminal mode ?
@@ -11496,7 +11496,7 @@ function s:GetLine(arg) abort
     "echo "copied to clipboard"
     sleep 651m
     execute 'normal ty`v'
-    call ForceLoadNammedReg()
+    call ForceLoadNamedReg()
     redraw
     if &buftype == "terminal"
       " NOTE: should we go back to live terminal mode ?
