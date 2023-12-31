@@ -209,6 +209,7 @@
 !!*.cursorColor:           #a49b88
 *.cursorColor:           #d78700
 
+!! dont set cursorBlink as if that is set and the esc seq is used then cursor will NOT blink ...
 *.cursorOffTime: 300
 *.cursorOnTime:  700
 
@@ -512,15 +513,20 @@ XTerm*.background:   #14292e
 XTerm*modifyOtherKeys: 1
 !!XTerm*formatOtherKeys: 1
 
-XTerm*allowTitleOps: false
-
+!!XTerm*faceName: DejaVu Sans Mono Book
 XTerm*faceName: Monospace
 XTerm*faceSize:12.6
+
 XTerm*Geometry: 194x53+690+678
+
 !!XTerm*allowBoldFonts: false
 XTerm*colorBDMode: true
 
 XTerm*metaSendsEscape: true
+
+!   ~       means that that modifier must not be asserted.
+!   !       means that the listed modifiers must be in the correct state and
+!               no other modifiers can be asserted.
 
 !! these do NOT seem to work in urxvt-unicode ...
 XTerm*VT100.translations:    #override \
@@ -541,7 +547,6 @@ XTerm*VT100.translations:    #override \
     Alt ~Shift ~Ctrl  <Key> BackSpace: \n\
     Shift ~Alt ~Ctrl  <Key> BackSpace: string("0x1e") string("0x08") \n\
     ~Ctrl Shift Alt   <Key> equal: \n\
-    Ctrl Shift ~Alt   <Key> equal: \n\
     ~Ctrl ~Shift Alt  <Key> equal: string("0x3d") \n\
     Ctrl ~Shift Alt   <Key> equal: string("0x1b") string("0x23") \n\
     Ctrl ~Shift ~Alt  <Key> equal: string("0x1e") string("0x3d") \n\
@@ -575,7 +580,29 @@ XTerm*VT100.translations:    #override \
     Ctrl ~Alt Shift   <Key> v: string("0x1b") string("0x5b") string("0x32") string("0x3b") string("0x32") string("0x7e") \n\
     Ctrl Alt ~Shift   <Key> v: string("0x1b") string("0x5b") string("0x32") string("0x3b") string("0x32") string("0x7e") \n\
     Ctrl ~Alt Shift   <Key> c: string("0x1b") string("0x5b") string("0x32") string("0x3b") string("0x35") string("0x7e") \n\
-    Ctrl Alt ~Shift   <Key> c: string("0x1b") string("0x5b") string("0x32") string("0x3b") string("0x35") string("0x7e")
+    Ctrl Alt ~Shift   <Key> c: string("0x1b") string("0x5b") string("0x32") string("0x3b") string("0x35") string("0x7e") \n\
+    Ctrl Shift ~Alt <Key> minus: smaller-vt-font() \n\
+    Ctrl Shift ~Alt <Key> equal: larger-vt-font() \n\
+    Ctrl Shift ~Alt <Key> 0: set-vt-font(d) \n\
+    ! Alt <Btn1Down>: popup-menu(mainMenu) \n\
+    ! Alt <Btn2Down>: popup-menu(vtMenu) \n\
+    ! Alt <Btn3Down>: popup-menu(fontMenu) \n\
+    ! Ctrl <Btn1Down>: ignore() \n\
+    ! Ctrl <Btn2Down>: ignore() \n\
+    ! Ctrl <Btn3Down>: ignore() \n\
+    ! Shift <Btn3Down>: ignore() \n\
+    Ctrl Shift ~Alt <Btn1Down>: select-start(CLIPBOARD) \n\
+    Ctrl Shift ~Alt <Btn1Motion>: select-extend(CLIPBOARD) \n\
+    Ctrl Shift ~Alt <Btn1Up>: select-end(CLIPBOARD) \n\
+    Ctrl Shift ~Alt <Btn3Down>: start-extend(CLIPBOARD) \n\
+    Ctrl Shift ~Alt <Btn3Motion>: select-extend(CLIPBOARD) \n\
+    Ctrl Shift ~Alt <Btn3Up>: select-end(CLIPBOARD)
+
+!! NOTE: MUST set this to get mouse selections to work inside tmux ...
+XTerm*shiftEscape: 3
+
+!! or could disable all pop-up menus ...
+!!*omitTranslation: popup-menu
 
 !! ==========================================
 
@@ -583,6 +610,19 @@ XTerm*VT100.translations:    #override \
 !! something to do with zsh vi line-editing  mode and ^G
 
 *allowFontOps: false
+
+XTerm*allowTitleOps: false
+!!XTerm*allowFontOps: false
+XTerm*allowWindowOps: false
+
+XTerm*savelines: 0
+
+! double-click to select whole URLs :D
+!!XTerm*charClass: 33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
+
+!!XTerm*on2Clicks: word
+!!XTerm*on3Clicks: regex [^ \n]+
+!!XTerm*on4Clicks: line
 
 !! ==========================================
 
