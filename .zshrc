@@ -1344,7 +1344,7 @@ export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND -t d"
 
 # change preview bindings to non-preview for dirs and history ...
 export FZF_ALT_C_OPTS="--bind='shift-up:half-page-up' --bind='shift-down:half-page-down' --bind='alt-K:half-page-up,alt-J:half-page-down' --bind='ctrl-alt-k:half-page-up,ctrl-alt-j:half-page-down' --bind='ctrl-alt-o:half-page-down' --bind='pgup:page-up' --bind='pgdn:page-down'"
-export FZF_CTRL_R_OPTS="--bind='shift-up:half-page-up' --bind='shift-down:half-page-down' --bind='alt-K:half-page-up,alt-J:half-page-down' --bind='ctrl-alt-k:half-page-up,ctrl-alt-j:half-page-down' --bind='ctrl-alt-o:half-page-down' --bind='pgup:page-up' --bind='pgdn:page-down' --no-sort --tac"
+export FZF_CTRL_R_OPTS="--bind='shift-up:half-page-up' --bind='shift-down:half-page-down' --bind='alt-K:half-page-up,alt-J:half-page-down' --bind='ctrl-alt-k:half-page-up,ctrl-alt-j:half-page-down' --bind='ctrl-alt-o:half-page-down' --bind='pgup:page-up' --bind='pgdn:page-down' --tac"
 
 # fzf from cmdline uses FZF_DEFAULT_OPTS and has a 250 line preview limit
 # fzf from vim plugin does not have the 250 line max
