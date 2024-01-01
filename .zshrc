@@ -910,6 +910,9 @@ clear()
     fi
 }
 
+# hn reader, there is also circumflex ...
+alias hn='RUST_LOG=Error hn-tui'
+
 alias clr='command clear -x'
 alias cls='command clear -x'
 alias clearall='command clear'
