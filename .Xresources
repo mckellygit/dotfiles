@@ -513,6 +513,12 @@ XTerm*.background:   #14292e
 XTerm*modifyOtherKeys: 1
 !!XTerm*formatOtherKeys: 1
 
+!! if locale specifies utf8:
+!!XTerm.VT100.locale: true
+!! or force utf8:
+XTerm.VT100.locale: false
+XTerm.VT100.utf8: true
+
 !!XTerm*faceName: DejaVu Sans Mono Book
 XTerm*faceName: Monospace
 XTerm*faceSize:12.6
