@@ -568,6 +568,14 @@ XTerm*VT100.translations:    #override \
     Ctrl Shift Alt    <Key> Return: ignore() \n\
     ~Ctrl ~Shift Alt  <Key> Delete: string("\033[3;3~") \n\
     ~Ctrl Shift Alt   <Key> Delete: string("\033[3;6~") \n\
+    Ctrl ~Shift Alt   <Key> Insert: string("\033[2;7~") \n\
+    Ctrl ~Shift Alt   <Key> Delete: string("\033[3;7~") \n\
+    Ctrl ~Shift Alt   <Key> Home: string("\033[1;7H") \n\
+    Ctrl ~Shift Alt   <Key> End: string("\033[1;7F") \n\
+    Ctrl ~Shift Alt   <Key> Prior: string("\033[5;7~") \n\
+    Ctrl ~Shift Alt   <Key> Next: string("\033[6;7~") \n\
+    ~Ctrl Shift Alt   <Key> Home: string("\033[1;4H") \n\
+    ~Ctrl Shift Alt   <Key> End: string("\033[1;4F") \n\
     Ctrl Shift ~Alt   <Key> f: string("0x06") \n\
     Ctrl Shift ~Alt   <Key> b: string("0x02") \n\
     Ctrl Shift ~Alt   <Key> j: string("0x1f") string("0x4a") \n\
