@@ -536,34 +536,36 @@ XTerm*metaSendsEscape: true
 
 !! these do NOT seem to work in urxvt-unicode ...
 XTerm*VT100.translations:    #override \
-    Shift ~Ctrl ~Alt<Btn1Down>: \n\
-    Shift ~Ctrl ~Alt<Btn1Motion>: \n\
-    Shift ~Ctrl ~Alt Button1<PtrMoved>: \n\
-    Shift ~Ctrl ~Alt<Btn1Up>: \n\
     Ctrl Shift ~Alt   <Key> space: string("0x1f") string("0x20") \n\
-    Shift Alt ~Ctrl   <Key> space: \n\
+    Shift Alt ~Ctrl   <Key> space: ignore() \n\
     Shift ~Alt ~Ctrl  <Key> space: string("0x1e") string("0x20") \n\
-    Alt ~Shift ~Ctrl  <Key> space: \n\
+    Alt ~Shift ~Ctrl  <Key> space: ignore() \n\
     Ctrl Alt ~Shift   <Key> space: string("0x1b") string("0x23") \n\
     ~Ctrl ~Shift ~Alt <Key> BackSpace: string("0x7f") \n\
     Ctrl Shift ~Alt   <Key> BackSpace: string("0x1f") string("0x7f") \n\
     Ctrl Alt ~Shift   <Key> BackSpace: string("0x1b") string("0x40") \n\
-    Shift Alt ~Ctrl   <Key> BackSpace: \n\
+    Shift Alt ~Ctrl   <Key> BackSpace: ignore() \n\
     Ctrl ~Shift ~Alt  <Key> BackSpace: string("0x1e") string("0x7f") \n\
-    Alt ~Shift ~Ctrl  <Key> BackSpace: \n\
+    Alt ~Shift ~Ctrl  <Key> BackSpace: ignore() \n\
     Shift ~Alt ~Ctrl  <Key> BackSpace: string("0x1e") string("0x08") \n\
-    ~Ctrl Shift Alt   <Key> equal: \n\
+    ~Ctrl Shift Alt   <Key> equal: ignore() \n\
     ~Ctrl ~Shift Alt  <Key> equal: string("0x3d") \n\
     Ctrl ~Shift Alt   <Key> equal: string("0x1b") string("0x23") \n\
     Ctrl ~Shift ~Alt  <Key> equal: string("0x1e") string("0x3d") \n\
     Ctrl ~Shift ~Alt  <Key> minus: string("0x1e") string("0x2d") \n\
-    Ctrl ~Shift Alt   <Key> minus: \n\
+    Ctrl ~Shift Alt   <Key> minus: ignore() \n\
     ~Ctrl Shift Alt   <Key> minus: string("\033_") \n\
     Ctrl Shift ~Alt   <Key> [: string("0x1f") string("0x5b") \n\
-    Ctrl ~Shift Alt   <Key> [: \n\
+    Ctrl ~Shift Alt   <Key> [: ignore() \n\
     Ctrl Shift ~Alt   <Key> ]: string("0x1f") string("0x5d") \n\
     Ctrl Shift ~Alt   <Key> /: string("0x1f") string("0x2f") \n\
-    Ctrl ~Shift ~Alt  <Key> Return: string("0x1e") string("0x0d") \n\
+    Ctrl ~Shift ~Alt  <Key> Return: string("0x0d") \n\
+    ~Ctrl Shift ~Alt  <Key> Return: string("0x0d") \n\
+    ~Ctrl ~Shift Alt  <Key> Return: string("0x1b") string("0x0d") \n\
+    Ctrl ~Shift Alt   <Key> Return: string("0x1e") string("0x0d") \n\
+    ~Ctrl Shift Alt   <Key> Return: string("0x1b") string("0x0d") \n\
+    Ctrl Shift ~Alt   <Key> Return: ignore() \n\
+    Ctrl Shift Alt    <Key> Return: ignore() \n\
     ~Ctrl ~Shift Alt  <Key> Delete: string("\033[3;3~") \n\
     ~Ctrl Shift Alt   <Key> Delete: string("\033[3;6~") \n\
     Ctrl Shift ~Alt   <Key> f: string("0x06") \n\
@@ -596,6 +598,10 @@ XTerm*VT100.translations:    #override \
     ! Ctrl <Btn1Down>: ignore() \n\
     ! Ctrl <Btn2Down>: ignore() \n\
     ! Ctrl <Btn3Down>: ignore() \n\
+    ! Shift <Btn1Down>: ignore() \n\
+    ! Shift <Btn1Motion>: ignore() \n\
+    ! Shift Button1<PtrMoved>: ignore() \n\
+    ! Shift <Btn1Up>: ignore() \n\
     ! Shift <Btn3Down>: ignore() \n\
     Ctrl Shift ~Alt <Btn1Down>: select-start(CLIPBOARD) \n\
     Ctrl Shift ~Alt <Btn1Motion>: select-extend(CLIPBOARD) \n\
@@ -609,6 +615,9 @@ XTerm*shiftEscape: 3
 
 !! or could disable all pop-up menus ...
 !!*omitTranslation: popup-menu
+
+XTerm*fullscreen: never
+XTerm.omitTranslation: fullscreen
 
 !! ==========================================
 
