@@ -6,6 +6,7 @@ git() { $HOME/bin/git "$@"; }
 
 extras=""
 do_vim_bundles=""
+only_vim_bundles=""
 if [[ $# -gt 0 ]] ; then
     if [[ "$1" == "-a" || "$1" == "-all" || "$1" == "--a" || "$1" == "--all" ]] ; then
         extras=" bat neovim vim gef delta libxkbcommon foot lazygit"
@@ -34,54 +35,63 @@ if [[ $# -gt 0 ]] ; then
                     extras=" $extras zutty alacritty ccache tree-sitter difftastic"
                 fi
             fi
+        else
+            only_vim_bundles="yes"
         fi
     fi
 fi
 
-cd ~/Downloads
-for d in fd the_silver_searcher ripgrep tmux rtags tig zsh-autosuggestions zsh-syntax-highlighting $extras
-do
-    if [[ -d $d ]] ; then
-        echo "checking $d ..."
-        cd $d
+if [[ -z "$only_vim_bundles" ]] ; then
+    cd ~/Downloads
+    for d in fd the_silver_searcher ripgrep tmux rtags tig zsh-autosuggestions zsh-syntax-highlighting $extras
+    do
+        if [[ -d $d ]] ; then
+            echo "checking $d ..."
+            cd $d
+            rc=$?
+            if [[ $rc -eq 0 ]] ; then
+                git remote -v
+                git pull
+                git smu
+                cd ..
+                echo " --- "
+                echo ""
+            fi
+        fi
+    done
+
+    if [[ -d ~/.fzf ]] ; then
+        echo "checking ~/.fzf ..."
+        cd ~/.fzf
         rc=$?
         if [[ $rc -eq 0 ]] ; then
             git remote -v
             git pull
             git smu
-            cd ..
             echo " --- "
             echo ""
         fi
-    fi
-done
-
-if [[ -d ~/.fzf ]] ; then
-    echo "checking ~/.fzf ..."
-    cd ~/.fzf
-    rc=$?
-    if [[ $rc -eq 0 ]] ; then
-        git remote -v
-        git pull
-        git smu
-        echo " --- "
-        echo ""
     fi
 fi
 
 if [[ -n "$do_vim_bundles" ]] ; then
     if [[ -d ~/Downloads/vim_bundles ]] ; then
+        if [[ -n "$only_vim_bundles" ]] ; then
+            echo "checking vim bundles ..."
+        fi
         cd ~/Downloads/vim_bundles
         ./update.sh
         echo ""
     fi
 else
-    echo "Also check vim bundles ..."
+    echo "also check vim bundles ..."
 fi
 
-echo "Also check git:     zsh, CMake ..."
-echo "Also check non-git: gcc/g++, gdb, readline, ncurses ..."
-echo ""
+if [[ -z "$only_vim_bundles" ]] ; then
+    echo "also check git:     zsh, CMake ..."
+    echo "also check non-git: gcc/g++, gdb, readline, ncurses ..."
+    echo ""
+fi
 
 # ---------------------
 
