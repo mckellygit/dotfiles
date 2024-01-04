@@ -15,5 +15,6 @@ fg_color = #c5c5c5
 blink_cursor = true
 cursor_fg_color = #111111
 cursor_bg_color = #d78700
+mod_meta_key = alt
 mod_meta_mode = esc
 bel_mode = none
