@@ -11,6 +11,10 @@ Control+BackSpace="\x1e\x7f"
 Mod1+BackSpace=""
 Shift+BackSpace="\x1e\x08"
 Shift+Mod1+equal=""
+
+# so far no font resize ...
+Control+Shift+plus=""
+
 Mod1+equal="="
 Control+Mod1+equal="\x1b#"
 Control+equal="\x1e="
