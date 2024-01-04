@@ -1,0 +1,19 @@
+
+black = #000000
+red = #cc0403
+green = #29cb00
+yellow = #cecb00
+blue = #0066ff
+magenta = #ba55d3
+cyan = #009999
+white = #dddddd
+
+hl_black = #767676
+hl_red = #f2201f
+hl_green = #23fd00
+hl_yellow = #ffd700
+hl_blue = #5787ff
+hl_magenta = #875faf
+hl_cyan = #00ffff
+hl_white = #ffffff
+

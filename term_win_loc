@@ -101,7 +101,7 @@ global.get_window_actors().forEach(function (w) {
             if ( !( mw.get_title().toLowerCase().includes('tmux:') ||
                  wclass.toLowerCase() == 'st' ||
                  wclass.toLowerCase() == 'xterm' ||
-                 wclass.toLowerCase() == 'urxvt' ||
+                 wclass.toLowerCase() == 'mlterm' ||
                  wclass.toLowerCase() == 'kitty' ||
                  wclass.toLowerCase() == 'alacritty' ||
                  wclass.toLowerCase() == 'foot' ||
@@ -136,7 +136,7 @@ global.get_window_actors().forEach(function (w) {
     if ( mw.get_title().toLowerCase().includes('tmux:') ||
          mw.get_wm_class().toLowerCase() == 'st' ||
          mw.get_wm_class().toLowerCase() == 'xterm' ||
-         mw.get_wm_class().toLowerCase() == 'urxvt' ||
+         mw.get_wm_class().toLowerCase() == 'mlterm' ||
          mw.get_wm_class().toLowerCase() == 'kitty' ||
          mw.get_wm_class().toLowerCase() == 'alacritty' ||
          mw.get_wm_class().toLowerCase() == 'foot' ||
@@ -193,7 +193,7 @@ global.get_window_actors().forEach(function (w) {
     if ( mw.get_title().toLowerCase().includes('tmux:') ||
          mw.get_wm_class().toLowerCase() == 'st' ||
          mw.get_wm_class().toLowerCase() == 'xterm' ||
-         mw.get_wm_class().toLowerCase() == 'urxvt' ||
+         mw.get_wm_class().toLowerCase() == 'mlterm' ||
          mw.get_wm_class().toLowerCase() == 'kitty' ||
          mw.get_wm_class().toLowerCase() == 'alacritty' ||
          mw.get_wm_class().toLowerCase() == 'foot' ||
@@ -221,7 +221,7 @@ global.get_window_actors().forEach(function (w) {
         if ( mw.get_title().toLowerCase().includes('tmux:') ||
              mw.get_wm_class().toLowerCase() == 'st' ||
              mw.get_wm_class().toLowerCase() == 'xterm' ||
-             mw.get_wm_class().toLowerCase() == 'urxvt' ||
+             mw.get_wm_class().toLowerCase() == 'mlterm' ||
              mw.get_wm_class().toLowerCase() == 'kitty' ||
              mw.get_wm_class().toLowerCase() == 'alacritty' ||
              mw.get_wm_class().toLowerCase() == 'foot' ||
