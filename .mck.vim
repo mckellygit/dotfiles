@@ -7533,7 +7533,7 @@ endif
 "endif
 " --------------------------------------------------------------------
 
-vmap <silent> <expr> <C-LeftRelease> (@t=="1") ? 'tygv:<C-u>call <SID>Delay(0)<CR>:let @t="0"<CR><Esc>i' : 'tygv:<C-u>call <SID>Delay(0)<CR><Esc>'
+vmap <silent> <expr> <C-LeftRelease> (@t=="1" \|\| &buftype=='terminal') ? 'ty:<C-u>call ForceLoadNamedReg()<CR>gv:<C-u>call <SID>Delay(0)<CR>:let @t="0"<CR><Esc>i' : 'tygv:<C-u>call <SID>Delay(0)<CR><Esc>'
 imap <silent> <C-LeftMouse> <C-\><C-o>:let @i="2"<CR><LeftMouse>
 
 " ------------------------------
@@ -7680,7 +7680,7 @@ endif
 
 " mck - TODO: can/should we paste selection here ?
 " it seems nvim_input() or feedkeys() works but w/o bracketed-paste ...
-vmap <silent> <expr> <A-C-LeftRelease> (@t=="1") ? 'ty:<C-u>call ForceLoadNamedReg()<CR>gv:<C-u>call <SID>Delay(0)<CR>:let @t="0"<CR><Esc>i' : 'ty:<C-u>call ForceLoadNamedReg()<CR>gv:<C-u>call <SID>Delay(0)<CR><Esc>'
+vmap <silent> <expr> <A-C-LeftRelease> (@t=="1" \|\| &buftype=='terminal') ? 'ty:<C-u>call ForceLoadNamedReg()<CR>gv:<C-u>call <SID>Delay(0)<CR>:let @t="0"<CR><Esc>i' : 'ty:<C-u>call ForceLoadNamedReg()<CR>gv:<C-u>call <SID>Delay(0)<CR><Esc>'
 imap <silent> <A-C-LeftMouse> <C-\><C-o>:let @i="2"<CR><LeftMouse>
 
 " NOTE: use this if we want A-S-LeftDrag to end visual mode ...
