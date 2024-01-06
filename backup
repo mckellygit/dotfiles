@@ -2,12 +2,18 @@
 
 bfolder="pCloudDrive/hal9009"
 
+ismounted=$(df -t fuse 2>/dev/null | grep pCloud)
+if [[ -z "${ismounted}" ]] ; then
+    echo "pCloudDrive not mounted, cannot continue ..."
+    exit 1
+fi
+
 cd ~
 for d in \
-bin dotfiles savesrcs addr_cleaner pargdb
+bin dotfiles ecl enet rload cgroup gnome tls_exam rust
 do
   echo "d = $d"
-  rsync -v -a --max-size=50M ~/$d ~/${bfolder} --delete
+  rsync -v -a --max-size=50M --exclude 'scapps' --exclude 'Melissa_data' ~/$d ~/${bfolder} --delete
 done
 
 list_repo_info
@@ -22,19 +28,31 @@ apt list --installed > ~/misc/apt.list
 # dont use -a for misc - keep older stuff around
 rsync -v -u -r --max-size=50M ~/misc ~/${bfolder}
 
-rsync -v -a --max-size=50M --exclude 'google-chrome' --exclude 'vivaldi' --exclude 'Standard Notes' --exclude 'Code' --exclude 'Microsoft' --exclude 'teams-insiders' --exclude 'libreoffice' ~/.config ~/${bfolder}/home --delete
+rsync -v -a --max-size=50M --exclude 'google-chrome' --exclude 'vivaldi' --exclude 'Standard Notes' --exclude 'Code' --exclude 'Microsoft' --exclude 'teams-insiders' --exclude 'libreoffice' --exclude 'joplin-desktop' ~/.config ~/${bfolder}/home --delete
+
+# dont back up joplin DB automatically, do it manually once in a while ...
+# rsync -v -a ~/.config/joplin-desktop --exclude 'cache' ~/${bfolder}/home/.config --delete
 
 rsync -v -a ~/radssh --exclude 'sessions' ~/${bfolder}/home --delete
-rsync -v -a ~/.byobu   ~/${bfolder}/home --delete
-rsync -v -a ~/.vim     ~/${bfolder}/home --delete
-rsync -v -a ~/.nixnote ~/${bfolder}/home --delete
+rsync -v -a ~/.byobu                      ~/${bfolder}/home --delete
+rsync -v -a ~/.cgdb                       ~/${bfolder}/home --delete
+rsync -v -a ~/.vim   --exclude '*.swp'    ~/${bfolder}/home --delete
+rsync -v -a ~/io_tests --max-size=2M     ~/${bfolder}/home --delete
 
-rsync -v -a ~/.local   ~/${bfolder}/home --exclude '.local/share/parcellite/*' --exclude '.local/share/zeitgeist/*' --exclude '.local/share/keyrings/*' --exclude '.local/share/applications/chrome-*.desktop' --exclude '.local/lib/*' --delete
+# ----------------------
+# skip nixnote dir for now ...
+#rsync -v -a ~/.nixnote ~/${bfolder}/home --delete
+# ----------------------
+
+rsync -v -a ~/.local   ~/${bfolder}/home --exclude '.local/share/parcellite/*' --exclude '.local/share/zeitgeist/*' --exclude '.local/share/keyrings/*' --exclude '.local/share/applications/chrome-*.desktop' --exclude '.local/lib/*' --exclude '.local/state/nvim/*' --delete
 #sync -v -a ~/.fzf   ~/${bfolder}/home --delete
 
-rsync -v -u ~/.[a-z]* --exclude '.histfile' --exclude '.viminfo' --exclude '.localvimrc_persistent' --exclude '.zcompdump' --exclude '.zsh_history' --exclude '.bash_history' --exclude '.gksu.lock' --exclude '.radssh_history' --exclude '.python_history' --exclude '.sudo_as_admin_successful' --exclude '.lesshst' --exclude '.xsession-errors*' --exclude '.pcloud' ~/${bfolder}/home
+rsync -v -u ~/.[a-z]* --exclude '.histfile' --exclude '.histfile-lock' --exclude '.zsh_hist.*' --exclude '.viminfo' --exclude '.localvimrc_persistent' --exclude '.zcompdump' --exclude '.zsh_history' --exclude '.bash_history' --exclude '.gksu.lock' --exclude '.radssh_history' --exclude '.python_history' --exclude '.sudo_as_admin_successful' --exclude '.lesshst' --exclude '.xsession-errors*' --exclude '.pcloud' ~/${bfolder}/home
 
 rsync -v -a ~/Downloads/vim_bundles      ~/${bfolder}/Downloads --delete
+
+rsync -v -a ~/hpcc-cloud ~/${bfolder} --delete
+#rsync -v -a ~/hpcc-user-conf ~/${bfolder} --delete
 
 rsync -v -u ~/Downloads/repo_info.lst ~/${bfolder}/Downloads
 ls -ltr ~/Downloads > ~/${bfolder}/Downloads/ls-list.txt
