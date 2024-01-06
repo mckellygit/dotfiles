@@ -1,8 +1,9 @@
-fontsize = 20
 logsize = 0
-geometry = 194x50
+geometry = 194x53
+use_point_size = false
 scrollbar_mode = none
 use_ansi_colors = true
+use_anti_alias = true
 use_bold_font = false
 use_urgent_bell = false
 use_alt_buffer = false
