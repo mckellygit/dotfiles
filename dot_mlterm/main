@@ -1,4 +1,5 @@
 logsize = 0
+mod_keys_to_stop_mouse_report = shift
 geometry = 194x53
 use_point_size = false
 scrollbar_mode = none
