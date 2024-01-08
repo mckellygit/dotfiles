@@ -479,6 +479,9 @@ fi
 # helix
 #   git clone https://github.com/helix-editor/helix
 
+# edge
+#   git clone https://github.com/alefore/edge.git
+
 # xsel:
 #   git clone https://github.com/kfish/xsel.git
 
@@ -494,6 +497,11 @@ fi
 
 # gnome-randr (xrandr for wayland gnome/mutter)
 #   https://github.com/maxwellainatchi/gnome-randr-rust.git
+
+# visidata
+#   https://github.com/saulpw/visidata
+#   pip3 install visidata
+#   pip3 install git+https://github.com/saulpw/visidata.git@develop
 
 # ---------------------
 
