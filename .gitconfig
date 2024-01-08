@@ -80,6 +80,8 @@
     alias = "!git config --get-regexp ^alias. | sed 's/^alias.//'"
     stat = !git status
     st = !git status
+    stx = !git status -u no
+    stnu = !git status -u no
     smu = !git submodule update --init --recursive
 #   parent = "!f() { c=$(git log --first-parent | grep commit | head -n 2 | tail -n 1 | awk '{print $2}'); git branch --contains $c; }; f"
     parent = !git log --first-parent --graph
@@ -94,6 +96,8 @@
 #   cout = "!f() { br="$(git branch -a --sort=-committerdate | fzf-tmux -d 22 | awk '{print $NF}')"; if [ -z \"$br\" ] ; then exit ; fi ; stty -echo ; tmux send "git\\ checkout\\ $br" ; stty echo ; }; f"
 #   chko = "!f() { br="$(git branch -a --sort=-committerdate | fzf-tmux -d 22 | awk '{print $NF}')"; if [ -z \"$br\" ] ; then exit ; fi ; stty -echo ; tmux send "git\\ checkout\\ $br" ; stty echo ; }; f"
 [diff]
+	colormoved = "default"
+	colormovedws = "allow-indentation-change"
 	algorithm = histogram
 #	compactionHeuristic = true
     tool = nvimgitdiff
