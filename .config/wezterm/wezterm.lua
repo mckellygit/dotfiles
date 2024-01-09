@@ -55,7 +55,7 @@ return {
 
   check_for_updates = false,
 
-  window_background_opacity = 0.97,
+  window_background_opacity = 0.98,
 
   -- if bracketed-paste is not enabled/active, then -
   -- canonicalize_pasted_newlines = "CarriageReturnAndLineFeed",
