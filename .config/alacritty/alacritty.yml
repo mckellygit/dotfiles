@@ -298,7 +298,7 @@ window:
   # Allow terminal applications to change Alacritty's window title.
   dynamic_title: false
 
-  opacity: 0.97
+  opacity: 0.98
 
 scrolling: 
   history: 0
