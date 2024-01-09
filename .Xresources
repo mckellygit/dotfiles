@@ -722,7 +722,7 @@ Zutty.color15: #ffffff
 !! ==========================================
 
 st.font:  Liberation Mono:pixelsize=22:antialias=true:autohint=true;
-st.alpha: 0.97
+st.alpha: 0.98
 
 st.foreground: #c5c5c5
 !! st.foreground: #ffd1b7
