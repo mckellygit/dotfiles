@@ -2708,6 +2708,11 @@ nnoremap <leader>ab :AnyJumpBack<CR>
 " Normal mode: open last closed search window again
 nnoremap <leader>al :AnyJumpLastResults<CR>
 au FileType any-jump nnoremap <silent> <buffer> <M-C-P> :call g:AnyJumpHandlePreview()<CR>
+if has("nvim")
+    "for similar cursorline color as with vim ...
+    au BufEnter any-jump* highlight Cursorline ctermbg=172 ctermfg=234 term=none
+    au BufLeave any-jump* highlight Cursorline ctermbg=241 guibg=#3c3836 ctermfg=none term=none
+endif
 
 " like <Leader>r: but use 'a' for AnyJump ...
 nnoremap <Leader>a: :call rtags#ToggleColonKeyword()<CR>
@@ -3736,6 +3741,7 @@ if has("nvim")
 endif
 
 " NVIM floatterm/popup (any-jump etc) terminal fg/bg colors ...
+" See also highlight group Pmenu, PmenuSel ...
 hi Floaterm         ctermfg=223 ctermbg=236 guifg=#f9e0c0 guibg=#303030
 "hi FloatermNC
 hi FloatermBorder   ctermfg=64  guifg=#5f8700
@@ -4419,7 +4425,9 @@ hi invisiblefg ctermfg=235 guifg=#2c323b
 set showtabline=2
 
 " change popup menu colors (after enabling syntax) ...
-" 136, 144 reasonable (there also Pmenu)
+" 136, 144 reasonable (there also Pmenu, PmenuSel)
+" See also highlight group Floaterm, FloatermNC, NormalFloat
+highlight Pmenu    ctermbg=236
 highlight PmenuSel ctermbg=136
 
 " disable python syntax trailing space highlight ...
