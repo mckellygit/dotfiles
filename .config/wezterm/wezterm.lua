@@ -21,6 +21,20 @@ return {
 
   enable_wayland = true,
 
+  window_frame = {
+    border_left_width = '0.0cell',
+    border_right_width = '0.0cell',
+    border_bottom_height = '0.0cell',
+    border_top_height = '0.0cell',
+  },
+
+  window_padding = {
+    left = '0.35cell',
+    right = '0.2cell',
+    top = '0.25cell',
+    bottom = '0.0cell',
+  },
+
   audible_bell = "Disabled",
 
   visual_bell = {
@@ -31,7 +45,7 @@ return {
 
   bold_brightens_ansi_colors = true,
 
-  font = wezterm.font("JetBrains Mono Regular"),
+  font = wezterm.font("JetBrains Mono Light"),
   font_rules = {
     {
         intensity = "Bold",
