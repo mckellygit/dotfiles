@@ -1,5 +1,6 @@
 #ISO10646_UCS4_1 = JetBrains Mono Light 21
 #ISO10646_UCS4_1 = Iosevka 21:120
 #ISO10646_UCS4_1 = Lucida Sans Typewriter 21
-ISO10646_UCS4_1 = Liberation Mono 21
+#ISO10646_UCS4_1 = Liberation Mono 21
 #ISO10646_UCS4_1 = DejaVu Sans Mono 21
+ISO10646_UCS4_1 = Fira Code 21
