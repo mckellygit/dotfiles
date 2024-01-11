@@ -200,6 +200,13 @@ zmodload -i zsh/complist
 
 # --------------
 
+# helix (hx) needs COLORTERM=truecolor in st and xterm for correct number column and statusline colors ...
+# seems to be the right thing also for zutty - but zutty and vim/nvim with RGB in tmux has some
+# problems with highlight groups for some parens (Operator??) ...
+if [[ -n "$ST_VERSION" || -n "$XTERM_VERSION" || -n "$ZUTTY_VERSION" ]] ; then
+    export COLORTERM="truecolor"
+fi
+
 # setting COLORTERM is ok but does affect ls colors inside vim-terminal when termguicolors is set ...
 #if [[ -z "$ZUTTY_VERSION" ]] ; then
 #    # some apps use this to know
