@@ -2112,6 +2112,8 @@ bindkey "\e[27;7;61~"  noop
 (( ${+ZSH_HIGHLIGHT_STYLES} )) || typeset -A ZSH_HIGHLIGHT_STYLES
 ZSH_HIGHLIGHT_STYLES[path]=none
 ZSH_HIGHLIGHT_STYLES[path_prefix]=none
+# turn off underline of precommands (like sudo) ...
+ZSH_HIGHLIGHT_STYLES[precommand]='fg=green'
 
 # disable paste being highlighted/reverse ...
 zle_highlight+=(paste:none)
