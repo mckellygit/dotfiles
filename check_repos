@@ -51,8 +51,8 @@ if [[ -z "$only_vim_bundles" ]] ; then
             rc=$?
             if [[ $rc -eq 0 ]] ; then
                 git remote -v
-                git pull
-                git smu
+                timeout --kill-after=5 30 git pull
+                timeout --kill-after=5 30 git smu
                 cd ..
                 echo " --- "
                 echo ""
@@ -66,8 +66,8 @@ if [[ -z "$only_vim_bundles" ]] ; then
         rc=$?
         if [[ $rc -eq 0 ]] ; then
             git remote -v
-            git pull
-            git smu
+            timeout --kill-after=5 30 git pull
+            timeout --kill-after=5 30 git smu
             echo " --- "
             echo ""
         fi

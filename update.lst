@@ -1,9 +1,8 @@
 any-jump.vim
-ferret
-gv.vim
 quickr-preview.vim
 unused
 update.sh
+vimade
 vimagit
 vim-choosewin
 vim-clang
@@ -11,5 +10,4 @@ vim-filebeagle
 vim-fswitch
 vim-lastplace
 vim-rtags
-vim-tmux-focus-events
 vim-twiggy

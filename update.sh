@@ -17,10 +17,10 @@ do
         if [[ $rc -eq 0 ]] ; then
             echo "... $item ..."
             #git remote -v
-            git fetch upstream
+            timeout --kill-after=5 30 git fetch upstream
             gitinfo
             if [[ $do_pull -eq 1 ]] ; then
-                git pull
+                timeout --kill-after=5 30 git pull
             fi
             cd ..
         fi
