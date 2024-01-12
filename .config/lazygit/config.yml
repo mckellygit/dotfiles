@@ -4,7 +4,8 @@ os:
     editPreset: 'nvim'
 keybinding:
     files:
-        openStatusFilter: '<f1>'
+        openStatusFilter: '<f1>' # was <c-b>
+        findBaseCommitForFixup: '<f2>' # was <c-f>
     commits:
         moveDownCommit: '<c-5>'
         moveUpCommit: '<c-4>'
@@ -13,7 +14,7 @@ keybinding:
         return: '<esc>'
         redo: '<c-6>'
         undo: '<c-8>'
-        scrollUpMain-alt1: '<c-b>' # main panel scrool up
-        scrollDownMain-alt1: '<c-f>' # main panel scrool down
+        scrollUpMain-alt1: '<c-b>' # main panel scroll up
+        scrollDownMain-alt1: '<c-f>' # main panel scroll down
         scrollUpMain-alt2: '<c-k>'
         scrollDownMain-alt2: '<c-j>'
