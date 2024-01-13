@@ -3629,6 +3629,8 @@ if !has("nvim")
     "let &t_SI = "\e[4 q"
     " blinking underline
     "let &t_SI = "\e[3 q"
+    " replace mode, blinking underline
+    let &t_SR = "\e[3 q"
 endif
 
 " -------------------------
