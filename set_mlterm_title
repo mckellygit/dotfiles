@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [[ $# -ge 1 ]] ; then
+    title="$1"
+else
+    title="mlterm"
+fi
+
+# seems to only work inside tmux ...
+
+if [[ -n "$TMUX_PANE" ]] ; then
+    printf "\033Ptmux;\033\033]0;${title}\007\033\\"
+else
+    printf "\033]0;${title}\007"
+fi
+
