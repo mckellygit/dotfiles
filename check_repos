@@ -196,6 +196,9 @@ fi
 # fzf-git.sh:
 #   git clone https://github.com/junegunn/fzf-git.sh.git
 
+# forgit:
+#   https://github.com/wfxr/forgit.git
+
 # fzf-tab-completion:
 #   git clone https://github.com/lincheney/fzf-tab-completion
 
