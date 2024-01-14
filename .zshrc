@@ -1092,6 +1092,8 @@ rg() { command rg --color=always --text --smart-case --one-file-system --hidden 
 alias git='~/bin/git'
 
 alias gpo='git push origin '
+alias gco='git checkout '
+# NOTE: there is also git co<cr> to use fzf to select branch ...
 
 # ------------------
 
