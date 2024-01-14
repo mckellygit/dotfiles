@@ -1,5 +1,10 @@
 # Lines configured by zsh-newuser-install
 
+# for profiling, see zprof at the end of this file ...
+#zmodload zsh/zprof
+
+skip_global_compinit=1
+
 ZSH_HIST=~/.zsh_hist.$$
 if [[ -z "$SUDO_USER" && -z "$SUDO_UID" ]] ; then
     flock ~/.histfile-lock cp -p ~/.histfile $ZSH_HIST
@@ -181,6 +186,7 @@ zstyle ':completion:*:*:git:*' script /usr/share/bash-completion/completions/git
 
 if [[ -z "$SUDO_USER" && -z "$SUDO_UID" ]] ; then
     autoload -Uz compinit && compinit
+    # compinit and compdump can be SLOW ...
 fi
 
 zmodload -i zsh/complist
@@ -2132,4 +2138,15 @@ if [[ -n "$MLTERM" && -n "$TMUX_PANE" ]] ; then
         set_mlterm_title
     fi
 fi
+
+#{
+#  # Compile zcompdump, if modified, to increase startup speed, BUT ONLY helps if functions are autoloaded ...
+#  zcompdump="${ZDOTDIR:-$HOME}/.zcompdump"
+#  if [[ -s "$zcompdump" && (! -s "${zcompdump}.zwc" || "$zcompdump" -nt "${zcompdump}.zwc") ]]; then
+#    zcompile "$zcompdump"
+#  fi
+#} &!
+
+# for profiling, see zprof at the beginning of this file ...
+#zprof
 
