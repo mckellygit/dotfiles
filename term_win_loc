@@ -200,7 +200,10 @@ global.get_window_actors().forEach(function (w) {
          mw.get_wm_class().toLowerCase() == 'zutty' ||
          mw.get_wm_class().toLowerCase().includes('.wezterm') ) {
 
-        if (mw.get_wm_class().toLowerCase() != 'alacritty') {
+        if ( (mw.get_wm_class().toLowerCase() != 'st') &&
+             (mw.get_wm_class().toLowerCase() != 'mlterm') &&
+             (mw.get_wm_class().toLowerCase() != 'alacritty') &&
+             (mw.get_wm_class().toLowerCase() != 'zutty') ) {
             GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, function() { mw.maximize(1); });
         }
     }
@@ -230,7 +233,10 @@ global.get_window_actors().forEach(function (w) {
 
             GLib.usleep(100000);
 
-            if (mw.get_wm_class().toLowerCase() != 'alacritty') {
+            if ( (mw.get_wm_class().toLowerCase() != 'st') &&
+                 (mw.get_wm_class().toLowerCase() != 'mlterm') &&
+                 (mw.get_wm_class().toLowerCase() != 'alacritty') &&
+                 (mw.get_wm_class().toLowerCase() != 'zutty') ) {
                 GLib.timeout_add(GLib.PRIORITY_LOW, 1000, function() { mw.unmaximize(3); });
             }
 
