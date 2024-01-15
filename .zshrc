@@ -2135,7 +2135,10 @@ source ~/Downloads/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # hack until mlterm can lock title ...
 if [[ -n "$MLTERM" && -n "$TMUX_PANE" ]] ; then
     if [[ "$TMUX_PANE" == "%0" ]] ; then
-        set_mlterm_title
+        # but not for vim/nvim terminal ...
+        if [[ -z "$VIM_TERMINAL" && -z "$NVIM_LOG_FILE" ]] ; then
+            set_mlterm_title
+        fi
     fi
 fi
 

@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# skip if starting a vim/nvim terminal ...
+
+if [[ -n "$VIM_TERMINAL" || -n "$NVIM_LOG_FILE" ]] ; then
+    exit 0
+fi
+
 if [[ $# -ge 1 ]] ; then
     title="$1"
 else
