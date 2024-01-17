@@ -12729,6 +12729,35 @@ endfunction
 nnoremap <Leader>uu           :call UndoAll()<CR>
 vnoremap <Leader>uu <C-\><C-n>:call UndoAll()<CR>
 
+function! s:clear_undo_history(ask)
+    if (a:ask > 0)
+        echo 'Clear undo history? (y/N): '
+        call inputsave()
+        let ans=nr2char(getchar())
+        call inputrestore()
+    else
+        let ans = 'y'
+    endif
+    if ans ==# 'y' || ans ==# 'Y'
+        let mod = &modified
+        let old_undolevels = &l:undolevels
+        setlocal undolevels=-1
+        exe "normal! a \<BS>\<Esc>"
+        let &l:undolevels = old_undolevels
+        unlet old_undolevels
+        if !mod && &modified
+            let &modified = 0
+        endif
+        redraw!
+        echo 'undo history cleared'
+        sleep 900m
+    endif
+    redraw!
+    echo " "
+endfunction
+nnoremap <Leader>uC       :call <SID>clear_undo_history(1)<CR>
+command -nargs=0 Clearundo call <SID>clear_undo_history(0)
+
 " TODO: u is close to i so remap t to uu and/or U ?
 " Could also add <C-u> or <C-M-u> or <M-U> or ... but maybe that is too optimisitic ...
 nnoremap <silent> <buffer> <M-C-U> u
