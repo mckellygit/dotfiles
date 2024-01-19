@@ -363,6 +363,14 @@ export LSAN_OPTIONS="detect_leaks=0 exitcode=0 max_leaks=100"
 
 # --------------------
 
+# difft default ...
+export DFT_COLOR="always"
+export DFT_DISPLAY="side-by-side-show-both"
+
+# delta -s ...
+
+# --------------------
+
 # no-op utility zle function
 function noop() { }
 zle -N noop
