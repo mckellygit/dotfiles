@@ -13,6 +13,6 @@ then
     echo "fatal: not a git repository (or any of the parent directories): .git"
     exit 1
 fi
-export GIT_EXTERNAL_DIFF="difft --tab-width 4"
+export GIT_EXTERNAL_DIFF="difft --display side-by-side-show-both --tab-width 4"
 git diff $@
 
