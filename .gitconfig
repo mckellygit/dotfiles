@@ -80,8 +80,8 @@
     alias = "!git config --get-regexp ^alias. | sed 's/^alias.//'"
     stat = !git status
     st = !git status
-    stx = !git status -u no
-    stnu = !git status -u no
+    stx = !git status -uno
+    stnu = !git status -uno
     smu = !git submodule update --init --recursive
 #   parent = "!f() { c=$(git log --first-parent | grep commit | head -n 2 | tail -n 1 | awk '{print $2}'); git branch --contains $c; }; f"
     parent = !git log --first-parent --graph
