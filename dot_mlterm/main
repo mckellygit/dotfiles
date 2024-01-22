@@ -12,6 +12,7 @@ allow_osc52 = true
 title = mlterm
 # not supported in release yet ...
 use_locked_title = true
+allow_osc52 = true
 # NOTE: could use mlterm-256color, but that doesn't seem to support cstyle or cursor-color ...
 termtype = xterm-256color
 bg_color = #14292e
