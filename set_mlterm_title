@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# skip if not in mlterm ...
+
+if [[ -z "$MLTERM" ]] ; then
+    exit 0
+fi
+
 # skip if starting a vim/nvim terminal ...
 
 if [[ -n "$VIM_TERMINAL" || -n "$NVIM_LOG_FILE" ]] ; then
