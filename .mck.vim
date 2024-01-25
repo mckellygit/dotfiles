@@ -3616,10 +3616,6 @@ endif
 "let &t_TI = "\e[4?h"
 "let &t_TE = "\e[4?l"
 
-" do not reset terminal at exit ...
-"set t_ti=
-"set t_te=
-
 " check for specific term ? (alacritty, wezterm, kitty, foot ?)
 if !has("nvim")
     " change cursor shape to beam in Insert mode ...
@@ -3632,6 +3628,29 @@ if !has("nvim")
     " replace mode, blinking underline
     let &t_SR = "\e[3 q"
 endif
+
+" do not reset terminal at exit ...
+"set t_ti=
+"set t_te=
+
+" kitty way to set terminal vars ...
+"
+"    vim.api.nvim_create_autocmd({ "VimEnter" }, {
+"        group = vim.api.nvim_create_augroup("KittySetVarVimEnter", { clear = true }),
+"        callback = function()
+"            io.stdout:write("\x1b]1337;SetUserVar=in_editor=MQo\007")
+"        end,
+"    })
+"
+"    vim.api.nvim_create_autocmd({ "VimLeave" }, {
+"        group = vim.api.nvim_create_augroup("KittyUnsetVarVimLeave", { clear = true }),
+"        callback = function()
+"            io.stdout:write("\x1b]1337;SetUserVar=in_editor\007")
+"        end,
+"    })
+"
+"    let &t_ti = &t_ti . "\\033]1337;SetUserVar=in_editor=MQo\\007"
+"    let &t_te = &t_te . "\\033]1337;SetUserVar=in_editor\\007"
 
 " -------------------------
 
@@ -3705,7 +3724,6 @@ if !has("nvim")
     " set above - background color erase (bce) - needed for xterm-kitty/kitty
     "let &t_ut=''
 endif
-
 
 " -------------------------
 
