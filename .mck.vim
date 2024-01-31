@@ -5159,6 +5159,9 @@ map <C-w>z     :call ZoomToTab()<CR>
 
 " ------------------------------
 
+" DONT! this breaks <Leader>pE and who knows what else ...
+"imap <expr> <Esc> &signcolumn == 'yes' ? (wincol() > 3 ? '<Esc>l' : '<Esc>') : (wincol() > 1 ? '<Esc>l' : '<Esc>')
+
 " to match vless and tmux
 " terminator <C-Home> mapped to <Esc>5 (M-5)
 "noremap <silent> <Esc>5 gg
