@@ -396,7 +396,7 @@ fi
 #   git clone https://github.com/wez/wezterm.git
 
 # zutty:
-#   git clone https://github.com/tomszilagyi/zutty.git
+#   git clone https://git.hq.sig7.se/zutty.git
 
 # rxvt:
 #   sudo apt-get install rxvt-unicode
