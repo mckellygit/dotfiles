@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# NOTE: fixed in mlterm commit a92c5cd0 on Feb 4, 2024 :-)
+
 # skip if not in mlterm ...
 
 if [[ -z "$MLTERM" ]] ; then
