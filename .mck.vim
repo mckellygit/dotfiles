@@ -9115,6 +9115,11 @@ inoremap <C-S-Down>  <C-\><C-o>5gj
 inoremap <C-S-Left>  <C-\><C-o>10gh
 inoremap <C-S-Right> <C-\><C-o>10gl
 
+tnoremap <C-S-Up>    <Up>
+tnoremap <C-S-Down>  <Down>
+tnoremap <C-S-Left>  <Left>
+tnoremap <C-S-Right> <Right>
+
 " use <M-k> as gk so we can do
 " <M-k> for up and then <M-`> for repeat prev cmd
 call <SID>MapFastKeycode('<F30>',  "\ek", 30)
@@ -9612,7 +9617,8 @@ function! s:MapScrollKeys()
   if (g:half < 1)
     g:half = 1
   endif
-  let g:full = winheight(0)
+  "let g:full = winheight(0)
+  let g:full = 25
   let g:full2x = g:full + g:full
 
   " 47 / 2 = 23 but if we are at 24 then 23 up is 1 and 23 down is 47 - ok
