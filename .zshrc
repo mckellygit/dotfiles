@@ -2022,6 +2022,12 @@ bindkey "^_P" noop
 # SPECIAL: some terminals may map <C-i> to <C-^><Tab> ...
 bindkey -s "^^\x09" "\x09"
 
+# C-M-L or M-C-L is a noop, plain C-L is cls ...
+bindkey "\e\x0c" noop
+
+# C-M-J or M-C-J is a noop, plain C-J is Enter/Return ...
+bindkey "\e\x0a" noop
+
 # M-C-S-Ins/Del/Home/End/PgUp/PgDn
 bindkey "\e[2;8~" noop
 bindkey "\e[3;8~" noop

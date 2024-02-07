@@ -139,6 +139,11 @@ key = "Back"
 mods = "Alt|Control"
 
 [[keyboard.bindings]]
+chars = "\u001B@"
+key = "Back"
+mods = "Alt|Shift"
+
+[[keyboard.bindings]]
 chars = "\u001B#"
 key = "Equals"
 mods = "Alt|Control"
@@ -147,6 +152,11 @@ mods = "Alt|Control"
 chars = "\u001B#"
 key = "Space"
 mods = "Alt|Control"
+
+[[keyboard.bindings]]
+chars = "\u001B#"
+key = "Space"
+mods = "Alt|Shift"
 
 [[keyboard.bindings]]
 chars = "\u001B@"

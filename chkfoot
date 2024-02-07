@@ -1,0 +1,27 @@
+#!/bin/bash
+
+tty=$(tty)
+
+stty -echo
+
+if [[ -n "$TMUX_PANE" ]] ; then
+    printf "\ePtmux;\e\e[=0c\a\e\\" > $tty
+else
+    printf "\e[=0c" > $tty
+fi
+
+read -rs -t 0.5 -d "" < $tty
+
+echo ${REPLY#?} |& grep -q "464f4f54"
+rc=$?
+
+stty echo
+
+if [[ $rc -eq 0 ]] ; then
+    echo "foot terminal ..."
+    exit 0
+fi
+
+echo "NOT foot terminal"
+exit 1
+

@@ -1,31 +1,23 @@
 {
     "$help": "https://aka.ms/terminal-documentation",
-    "$schema": "https://aka.ms/terminal-profiles-schema",
+    "$schema": "https://aka.ms/terminal-profiles-schema-preview",
     "actions": 
     [
         {
             "command": 
             {
                 "action": "sendInput",
-                "input": "\u001e\r"
+                "input": "\r"
             },
-            "keys": "alt+enter"
+            "keys": "ctrl+enter"
         },
         {
             "command": 
             {
                 "action": "sendInput",
-                "input": "\u001e\r"
+                "input": "\u001e\b"
             },
-            "keys": "ctrl+alt+enter"
-        },
-        {
-            "command": 
-            {
-                "action": "sendInput",
-                "input": "\u001fN"
-            },
-            "keys": "ctrl+shift+n"
+            "keys": "shift+backspace"
         },
         {
             "command": "unbound",
@@ -37,31 +29,11 @@
         },
         {
             "command": "unbound",
-            "keys": "alt+shift+backspace"
-        },
-        {
-            "command": "unbound",
             "keys": "alt+backspace"
         },
         {
             "command": "unbound",
-            "keys": "alt+shift+space"
-        },
-        {
-            "command": "unbound",
             "keys": "alt+space"
-        },
-        {
-            "command": 
-            {
-                "action": "sendInput",
-                "input": "\u001e-"
-            },
-            "keys": "ctrl+minus"
-        },
-        {
-            "command": "unbound",
-            "keys": "ctrl+plus"
         },
         {
             "command": "unbound",
@@ -124,24 +96,104 @@
             "keys": "alt+down"
         },
         {
-            "command": 
-            {
-                "action": "sendInput",
-                "input": "\u001e\b"
-            },
-            "keys": "shift+backspace"
-        },
-        {
-            "command": 
-            {
-                "action": "sendInput",
-                "input": "\r"
-            },
-            "keys": "ctrl+enter"
+            "command": "unbound",
+            "keys": "ctrl+insert"
         },
         {
             "command": "unbound",
-            "keys": "ctrl+insert"
+            "keys": "alt+shift+minus"
+        },
+        {
+            "command": "unbound",
+            "keys": "alt+shift+plus"
+        },
+        {
+            "command": 
+            {
+                "action": "sendInput",
+                "input": "\u001fN"
+            },
+            "keys": "ctrl+shift+n"
+        },
+        {
+            "command": 
+            {
+                "action": "sendInput",
+                "input": "\u001e\r"
+            },
+            "keys": "alt+enter"
+        },
+        {
+            "command": 
+            {
+                "action": "sendInput",
+                "input": "\u001e\r"
+            },
+            "keys": "ctrl+alt+enter"
+        },
+        {
+            "command": 
+            {
+                "action": "sendInput",
+                "input": "\u001e-"
+            },
+            "keys": "ctrl+minus"
+        },
+        {
+            "command": 
+            {
+                "action": "sendInput",
+                "input": "\u001b@"
+            },
+            "keys": "alt+shift+backspace"
+        },
+        {
+            "command": 
+            {
+                "action": "sendInput",
+                "input": "\u001b@"
+            },
+            "keys": "ctrl+alt+backspace"
+        },
+        {
+            "command": 
+            {
+                "action": "sendInput",
+                "input": "\u001b#"
+            },
+            "keys": "alt+shift+space"
+        },
+        {
+            "command": 
+            {
+                "action": "sendInput",
+                "input": "\u001b#"
+            },
+            "keys": "ctrl+alt+plus"
+        },
+        {
+            "command": 
+            {
+                "action": "sendInput",
+                "input": "\u001b#"
+            },
+            "keys": "ctrl+alt+space"
+        },
+        {
+            "command": 
+            {
+                "action": "adjustFontSize",
+                "delta": 1.0
+            },
+            "keys": "ctrl+shift+plus"
+        },
+        {
+            "command": 
+            {
+                "action": "sendInput",
+                "input": "\u001e="
+            },
+            "keys": "ctrl+plus"
         },
         {
             "command": 
@@ -160,16 +212,16 @@
             "keys": "ctrl+alt+c"
         },
         {
+            "command": "paste",
+            "keys": "ctrl+alt+v"
+        },
+        {
             "command": 
             {
                 "action": "sendInput",
                 "input": "\u001f "
             },
             "keys": "ctrl+shift+space"
-        },
-        {
-            "command": "paste",
-            "keys": "ctrl+alt+v"
         },
         {
             "command": 
@@ -182,14 +234,6 @@
         {
             "command": 
             {
-                "action": "sendInput",
-                "input": "\u001f"
-            },
-            "keys": "ctrl+shift+backspace"
-        },
-        {
-            "command": 
-            {
                 "action": "moveFocus",
                 "direction": "previous"
             },
@@ -198,26 +242,42 @@
         {
             "command": 
             {
-                "action": "adjustFontSize",
-                "delta": 1.0
+                "action": "sendInput",
+                "input": "\u001b[27;5;9~"
             },
-            "keys": "ctrl+shift+plus"
+            "keys": "ctrl+tab"
         },
         {
             "command": 
             {
                 "action": "sendInput",
-                "input": "\u001b#"
+                "input": "\u001b\t"
             },
-            "keys": "ctrl+alt+plus"
+            "keys": "ctrl+alt+i"
         },
         {
             "command": 
             {
                 "action": "sendInput",
-                "input": "\u001b#"
+                "input": "\u001b\t"
             },
-            "keys": "ctrl+alt+space"
+            "keys": "alt+tab"
+        },
+        {
+            "command": 
+            {
+                "action": "sendInput",
+                "input": "\u001f"
+            },
+            "keys": "ctrl+shift+backspace"
+        },
+        {
+            "command": 
+            {
+                "action": "sendInput",
+                "input": "\u001b[Z"
+            },
+            "keys": "ctrl+shift+i"
         },
         {
             "command": 
@@ -283,14 +343,6 @@
             "command": 
             {
                 "action": "sendInput",
-                "input": "\u001b@"
-            },
-            "keys": "ctrl+alt+backspace"
-        },
-        {
-            "command": 
-            {
-                "action": "sendInput",
                 "input": "\u001fP"
             },
             "keys": "ctrl+shift+p"
@@ -348,7 +400,7 @@
     "initialRows": 52,
     "largePasteWarning": false,
     "launchMode": "default",
-    "multiLinePasteWarning": true,
+    "multiLinePasteWarning": false,
     "newTabMenu": 
     [
         {
