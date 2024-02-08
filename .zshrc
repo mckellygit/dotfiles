@@ -680,10 +680,6 @@ zle -N kill-all-backwards
 bindkey -M vicmd "^u" kill-all-backwards
 bindkey -M viins "^u" kill-all-backwards
 
-# Alt-Shift-DEL - delete everything backwards
-bindkey -M vicmd "\e[3;4~" backward-kill-line
-bindkey -M viins "\e[3;4~" backward-kill-line
-
 # and some keys for going to abs beginning of multi-line and abs end ...
 # sort of like ctrl-home / ctrl-end ?
 # or perhaps alt-, / alt-. ?
@@ -701,8 +697,16 @@ function kill-multi-line()
 zle -N kill-multi-line
 
 # Alt-Shift-k to kill-whole-line even when multi-line
-bindkey -M viins "\eK" kill-multi-line
-bindkey -M vicmd "\eK" kill-multi-line
+#bindkey -M viins "\eK" kill-multi-line
+#bindkey -M vicmd "\eK" kill-multi-line
+
+# Alt-Shift-DEL to kill-whole-line even when multi-line
+bindkey -M viins "\e[3;4~" kill-multi-line
+bindkey -M vicmd "\e[3;4~" kill-multi-line
+
+# Alt-Shift-DEL - delete everything backwards
+#bindkey -M vicmd "\e[3;4~" backward-kill-line
+#bindkey -M viins "\e[3;4~" backward-kill-line
 
 function abs-beg-of-line()
 {
