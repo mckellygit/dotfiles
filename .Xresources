@@ -567,7 +567,8 @@ XTerm*VT100.translations:    #override \
     Ctrl Shift ~Alt   <Key> Return: ignore() \n\
     Ctrl Shift Alt    <Key> Return: ignore() \n\
     ~Ctrl ~Shift Alt  <Key> Delete: string("\033[3;3~") \n\
-    ~Ctrl Shift Alt   <Key> Delete: string("\033[3;6~") \n\
+    Ctrl Shift ~Alt   <Key> Delete: string("\033[3;6~") \n\
+    ~Ctrl Shift Alt   <Key> Delete: string("\033[3;4~") \n\
     Ctrl ~Shift Alt   <Key> Insert: string("\033[2;7~") \n\
     Ctrl ~Shift Alt   <Key> Delete: string("\033[3;7~") \n\
     Ctrl ~Shift Alt   <Key> Home: string("\033[1;7H") \n\
