@@ -32,7 +32,7 @@ then
     fi
 fi
 
-trap "rm -f ~/.histfile-lock ; exit 0" EXIT SIGINT SIGTERM SIGQUIT
+trap "rm -f ~/.histfile-lock ~/.mrghist ~/.htmp1 ~/.htmp2 ; exit 0" EXIT SIGINT SIGTERM SIGQUIT
 
 # strip trailing blanks and empty entries from history lines ...
 
@@ -40,11 +40,25 @@ if [[ -s $HISTFILE ]]
 then
     (
         flock 200
-        touch ~/.mrghist
-        chmod 600 ~/.mrghist
+        rm -f ~/.mrghist ~/.htmp1 ~/.htmp2
+        touch ~/.mrghist ~/.htmp1 ~/.htmp2
+        chmod 600 ~/.mrghist ~/.htmp1 ~/.htmp2
+
         xvar=$(date +"%s%N")
-        cat $HISTFILE ~/.histfile | grep -a -v ':0;$' 2>/dev/null | sed 's/ *$//g' 2>/dev/null | awk -v date="WILL_NOT_APPEAR$xvar" '{if (sub(/\\$/,date)) printf "%s", $0; else print $0}' | LC_ALL=C sort -u | awk -v date="WILL_NOT_APPEAR$xvar" '{gsub('date',"\\\n"); print $0}' | tail -n 10000 >> ~/.mrghist
-        mv ~/.mrghist ~/.histfile
+
+        # combine multi-lines ending in \\ and remove any lines that dont start with :
+
+        sed ':x; /\\\\$/ { N; s/\\\n/\\ /; tx }' $HISTFILE   | grep -a '^:' >> ~/.htmp1
+        sed ':x; /\\\\$/ { N; s/\\\n/\\ /; tx }' ~/.histfile | grep -a '^:' >> ~/.htmp2
+
+        cat ~/.htmp1 ~/.htmp2 | grep -a -v ':0;$' 2>/dev/null | sed 's/ *$//g' 2>/dev/null | awk -v date="WILL_NOT_APPEAR$xvar" '{if (sub(/\\$/,date)) printf "%s", $0; else print $0}' | LC_ALL=C sort -u | awk -v date="WILL_NOT_APPEAR$xvar" '{gsub('date',"\\\n"); print $0}' | tail -n 10000 >> ~/.mrghist
+
+        rm -f ~/.htmp1 ~/.htmp2
+
+        # split lines with \\ to multi-lines ending in \\
+
+        sed 's/\\\\ /\\\\\n/g' ~/.mrghist > ~/.histfile
+
     ) 200>~/.histfile-lock
 fi
 
