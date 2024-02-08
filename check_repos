@@ -9,16 +9,16 @@ do_vim_bundles=""
 only_vim_bundles=""
 if [[ $# -gt 0 ]] ; then
     if [[ "$1" == "-a" || "$1" == "-all" || "$1" == "--a" || "$1" == "--all" ]] ; then
-        extras=" bat neovim vim gef delta libxkbcommon foot lazygit"
+        extras=" bat neovim vim gef mlterm lazygit tree-sitter delta difftastic"
         if [[ $# -gt 1 ]] ; then
             if [[ "$2" == "-a" || "$2" == "-all" || "$2" == "--a" || "$2" == "--all" ]] ; then
-                extras=" $extras alacritty ccache tree-sitter difftastic"
+                extras=" $extras libxkbcommon foot alacritty ccache"
             elif [[ "$2" == "-v" ]] ; then
                 do_vim_bundles="yes"
             fi
             if [[ $# -gt 2 ]] ; then
                 if [[ "$3" == "-a" || "$3" == "-all" || "$3" == "--a" || "$3" == "--all" ]] ; then
-                    extras=" $extras alacritty ccache tree-sitter difftastic"
+                    extras=" $extras libxkbcommon foot alacritty ccache"
                 elif [[ "$3" == "-v" ]] ; then
                     do_vim_bundles="yes"
                 fi
@@ -28,11 +28,11 @@ if [[ $# -gt 0 ]] ; then
         do_vim_bundles="yes"
         if [[ $# -gt 1 ]] ; then
             if [[ "$2" == "-a" || "$2" == "-all" || "$2" == "--a" || "$2" == "--all" ]] ; then
-                extras=" bat neovim vim gef delta libxkbcommon foot lazygit"
+                extras=" bat neovim vim gef mlterm lazygit tree-sitter delta difftastic"
             fi
             if [[ $# -gt 2 ]] ; then
                 if [[ "$3" == "-a" || "$3" == "-all" || "$3" == "--a" || "$3" == "--all" ]] ; then
-                    extras=" $extras alacritty ccache tree-sitter difftastic"
+                    extras=" $extras libxkbcommon foot alacritty ccache"
                 fi
             fi
         else
@@ -88,8 +88,8 @@ else
 fi
 
 if [[ -z "$only_vim_bundles" ]] ; then
-    echo "also check git:     zsh, CMake ..."
-    echo "also check non-git: gcc/g++, gdb, readline, ncurses ..."
+    echo "also check git:     zsh, CMake, zutty, xterm-snapshots ..."
+    echo "also check non-git: gcc/g++, gdb, readline, ncurses, go, rust ..."
     echo ""
 fi
 
@@ -354,6 +354,9 @@ fi
 
 # ---------------------
 
+# mlterm:
+#   git clone https://github.com/arakiken/mlterm.git
+
 # foot:
 #   git clone https://codeberg.org/dnkl/foot.git
 #   libxkbcommon:
@@ -387,6 +390,12 @@ fi
 #   cp extra/completions/alacritty.bash ~/.bash_completion/alacritty
 #   echo "source ~/.bash_completion/alacritty" >> ~/.bashrc
 
+# zutty:
+#   git clone https://git.hq.sig7.se/zutty.git
+
+# xterm:
+#   git clone https://github.com/ThomasDickey/xterm-snapshots.git
+
 # kitty:
 #   sudo -s
 #   curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin dest=/usr/local launch=n
@@ -395,19 +404,14 @@ fi
 # wezterm:
 #   git clone https://github.com/wez/wezterm.git
 
-# zutty:
-#   git clone https://git.hq.sig7.se/zutty.git
-
 # rxvt:
 #   sudo apt-get install rxvt-unicode
 #   -or-
 #   git clone https://github.com/exg/rxvt-unicode.git
 
-# mlterm:
-#   git clone https://github.com/arakiken/mlterm.git
+# terminator
 
-# xterm:
-#   git clone https://github.com/ThomasDickey/xterm-snapshots.git
+# ---------------------
 
 # ncurses:
 #   https://invisible-island.net/ncurses
