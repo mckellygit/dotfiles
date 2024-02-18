@@ -61,8 +61,8 @@ bind generic   <Ctrl-E>      :none
 bind generic   <Ctrl-Y>      :none
 
 # match vim fugitive git mappings ...
-bind main      <Ctrl-N>     :none
-bind main      <Ctrl-P>     :none
+bind main      <Ctrl-N>     next
+bind main      <Ctrl-P>     previous
 
 bind diff      <Ctrl-N>     :/^diff --git|^@@
 bind diff      <Ctrl-P>     :?^diff --git|^@@

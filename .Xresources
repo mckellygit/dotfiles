@@ -601,6 +601,7 @@ XTerm*VT100.translations:    #override \
     Ctrl ~Shift Alt   <Key> i: string("\033\011") \n\
     Ctrl ~Shift ~Alt  <Key> Tab: string("\033[27;5;9~") \n\
     Ctrl Alt ~Shift   <Key> backslash: string("\033\034") \n\
+    Ctrl ~Alt Shift   <Key> backslash: string("\037\134\134") \n\
     Ctrl ~Shift Alt   <Key> u: string("\033\025") \n\
     Ctrl ~Alt Shift   <Key> v: string("\033[2;2~") \n\
     Ctrl Alt ~Shift   <Key> v: string("\033[2;2~") \n\
