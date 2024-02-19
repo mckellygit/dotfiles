@@ -1758,6 +1758,8 @@ stty werase undef > /dev/null 2>&1
 stty brkint ignpar > /dev/null 2>&1
 #stty brkint ignpar -ixoff -imaxbel > /dev/null 2>&1
 
+stty quit undef > /dev/null 2>&1
+
 # not needed -
 # genesis /etc/profile.d/fix_term.sh forces TERM=linux
 # do get around that ssh host bash ...
