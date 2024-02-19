@@ -2741,8 +2741,8 @@ autocmd User AsyncRunInterrupt echohl DiffText | echo 'AsyncRun complete: [TERM]
 " use <Leader>sx to cancel AsyncRun job in flight ...
 if 0 " --- DISABLED ---
 " in vim, <C-\> _may_ stop system() cmds (if stty quit is ^\) [but not nvim] - but may generate core file
-" <C-S-\> (or <C-|>) might be mapped to <C-_>\ in some terminals ...
-noremap <silent> <expr> <C-_>\ (&buftype ==# 'terminal') ? 'i' : '<C-c>:AsyncStop!<CR>:sleep 500m<CR>:AsyncStop!<CR>'
+" <C-S-bslash> (does <C-|> exist ?) might be mapped to <C-_><bslash> in some terminals ...
+noremap <silent> <expr> <C-_><bslash> (&buftype ==# 'terminal') ? 'i' : '<C-c>:AsyncStop!<CR>:sleep 500m<CR>:AsyncStop!<CR>'
 " DONE: is there a way to map <C-c> to both send <C-c> AND also run :AsyncStop ?
 "       or can we change AsyncRun to know if <C-c> was pressed ?
 "       or change any-jump searches to use AsyncRun ?
@@ -2750,7 +2750,7 @@ noremap <silent> <expr> <C-_>\ (&buftype ==# 'terminal') ? 'i' : '<C-c>:AsyncSto
 " NOTE: fixed in nvim as of 04/29/22, PR #18310, commit 2ba539f449a95f38463a61b189e203a5fe306fc0
 if !has("nvim")
     if !exists('$TMUX_PANE')
-        " NOTE: tmux can map <C-c> to send <C-c> + sleep 500m + send <C-_>\ ...
+        " NOTE: tmux can map <C-c> to send <C-c> + sleep 500m + send <C-_><bslash> ...
         " separate out n and o mappings from noremap (nvo but vmap <C-c> is below ...) b/c quick-scope plugin expects only the n ...
         nnoremap <C-c> <Cmd>AsyncStop!<CR><Cmd>sleep 500m<CR><Cmd>AsyncStop!<CR><Cmd>call feedkeys("\<C-c>", "Lnt")<CR>
         onoremap <C-c> <Cmd>AsyncStop!<CR><Cmd>sleep 500m<CR><Cmd>AsyncStop!<CR><Cmd>call feedkeys("\<C-c>", "Lnt")<CR>
@@ -4999,6 +4999,16 @@ call <SID>MapFastKeycode('<S-F20>',   "\e[6;4~", 120) " A-S-PageDown
 
 " NOTE: addl mappings start at <S-F27> 127 ...
 "       so we have what is not used above ...
+
+" ------------------
+
+map <C-_>/         <Nop>
+map <C-S-?>        <Nop>
+
+map <C-_><bslash>  <Nop>
+map <C-S-bslash>   <Nop>
+
+" ------------------
 
 " This used to be <S-Tab> but <A-e> seems better.
 call <SID>MapFastKeycode('<F32>',  "\ee", 32)
