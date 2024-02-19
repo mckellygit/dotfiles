@@ -183,10 +183,10 @@ chars = "\u001F["
 key = 26
 mods = "Control|Shift"
 
-[[keyboard.bindings]]
-action = "None"
-key = 26
-mods = "Alt|Control"
+#[[keyboard.bindings]]
+#action = "None"
+#key = 26
+#mods = "Alt|Control"
 
 [[keyboard.bindings]]
 chars = "\u001F]"

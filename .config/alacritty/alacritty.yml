@@ -53,7 +53,7 @@ key_bindings:
 
     # key 26 is Bracketleft ...
   - { key: 26,        mods: Control|Shift,   chars: "\x1f\x5b"        }
-  - { key: 26,        mods: Alt|Control,     action: None             }
+    # - { key: 26,        mods: Alt|Control,     action: None             }
 
     # key 27 is Bracketright ...
     # - { key: 27,        mods: Alt|Control,     action: None             }

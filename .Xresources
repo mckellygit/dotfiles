@@ -556,7 +556,6 @@ XTerm*VT100.translations:    #override \
     Ctrl ~Shift Alt   <Key> minus: ignore() \n\
     ~Ctrl Shift Alt   <Key> minus: string("\033_") \n\
     Ctrl Shift ~Alt   <Key> [: string("\037[") \n\
-    Ctrl ~Shift Alt   <Key> [: ignore() \n\
     Ctrl Shift ~Alt   <Key> ]: string("\037]") \n\
     Ctrl Shift ~Alt   <Key> /: string("\037/") \n\
     Ctrl ~Shift ~Alt  <Key> Return: string("\015") \n\

@@ -381,7 +381,7 @@ return {
     { key="{",          mods="CTRL",          action=wezterm.action{SendString="\x1f\x5b"} },
     { key="{",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x5b"} },
 
-    { key="[",          mods="CTRL|ALT",      action="Nop"},
+    -- { key="[",          mods="CTRL|ALT",      action="Nop"},
 
     { key="]",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x5d"} },
     { key="}",          mods="CTRL",          action=wezterm.action{SendString="\x1f\x5d"} },
