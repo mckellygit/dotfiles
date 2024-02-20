@@ -97,6 +97,7 @@ if has("nvim") || exists('$NVIM_LOG_FILE')
     call setenv("VISUAL", "nvim")
     call setenv("EDITOR", "nvim")
     call setenv("TIG_EDITOR", "nvim")
+    let g:python3_host_prog = "/usr/bin/python3"
 endif
 
 let g:in_gv2 = 0
