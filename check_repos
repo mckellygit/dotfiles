@@ -395,6 +395,9 @@ fi
 
 # xterm:
 #   git clone https://github.com/ThomasDickey/xterm-snapshots.git
+#   after sudo make install also do -
+#   sudo make install-ti to update /usr/lib/terminfo/x/xterm*
+#   and then [maybe] copy /usr/lib/terminfo/x/xterm-256color to ~/.terminfo/x
 
 # kitty:
 #   sudo -s
