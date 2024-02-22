@@ -1984,7 +1984,9 @@ function copy-cmdline() {
     fi
 }
 zle -N copy-cmdline
-bindkey "\e=" copy-cmdline
+# skip for now ...
+#bindkey "\e=" copy-cmdline
+#bindkey -s "\e=" "="
 
 # \e, \E escape
 # \NNN   character code in octal
