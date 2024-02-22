@@ -170,10 +170,10 @@ if g:has_wsl == 0 && has("nvim")
     "Plug 'nvim-telescope/telescope.nvim'
     "Plug 'kabouzeid/nvim-lspinstall'
 
-    " LSP Support
-    "Plug 'neovim/nvim-lspconfig'
+    " LSP Support (setup in this order)
     "Plug 'williamboman/mason.nvim'
     "Plug 'williamboman/mason-lspconfig.nvim'
+    "Plug 'neovim/nvim-lspconfig'
 
     " Autocompletion
     "Plug 'hrsh7th/nvim-cmp'
@@ -10195,6 +10195,11 @@ inoremap         <C-^>- -
 cnoremap         <C-^>- -
 tnoremap         <C-^>- -
 
+noremap <silent> <C-^>= <Nop>
+inoremap         <C-^>= =
+cnoremap         <C-^>= =
+tnoremap         <C-^>= =
+
 map <silent> <buffer> <M-C-Return> gk
 imap         <buffer> <M-C-Return> <Nop>
 " SPECIAL: NOTE: terminals could map <A-C-Return> to <C-^><Return>
@@ -13577,7 +13582,7 @@ if has("nvim-SKIP")
 " git clone --depth 1 https://github.com/wbthomason/packer.nvim \
 "     ~/.local/share/nvim/site/pack/packer/start/packer.nvim
 
-lua << NVIM_LUA_EOF
+lua << NVIM_LUA_EOF1
 
 -- Setup packer
 --local use = require('packer').use
@@ -13663,7 +13668,7 @@ local lsp_flags = {
 --lsp.preset('recommended')
 --lsp.setup()
 
-NVIM_LUA_EOF
+NVIM_LUA_EOF1
 
 endif
 
