@@ -30,10 +30,11 @@ key_bindings:
   - { key: Space,     mods: Control|Shift,   chars: "\x1f\x20"        }
     # make these the same as C-S-Back/Space for now ...
   - { key: Back,      mods: Alt|Shift,       chars: "\x1b\x40"        }
-  - { key: Back,      mods: Alt,             action: None             }
+  - { key: Back,      mods: Alt,             chars: "\x1b\x7f"        }
+    # - { key: Back,      mods: Alt,             action: None             }
     # these can launch window menu, disable
   - { key: Space,     mods: Alt|Shift,       chars: "\x1b\x23"        }
-  - { key: Space,     mods: Alt,             action: None             }
+    # - { key: Space,     mods: Alt,             action: None             }
 
   - { key: Back,      mods: Alt|Control,     chars: "\x1b\x40"        }
     # are these really needed ?
@@ -66,6 +67,7 @@ key_bindings:
 
   - { key: Key0,      mods: Control,         chars: "\x30"            }
   - { key: Equals,    mods: Control,         chars: "\x1e\x3d"        }
+    # - { key: Equals,    mods: Alt,             chars: "\x3d"            }
   - { key: Minus,     mods: Control,         chars: "\x1e\x2d"        }
   - { key: Minus,     mods: Alt|Control,     action: None             }
 

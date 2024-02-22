@@ -94,6 +94,11 @@ key = "Back"
 mods = "Shift"
 
 [[keyboard.bindings]]
+chars = "\u001B\u007f"
+key = "Back"
+mods = "Alt"
+
+[[keyboard.bindings]]
 chars = "\u001E "
 key = "Space"
 mods = "Shift"
@@ -112,26 +117,6 @@ mods = "Control|Shift"
 chars = "\u001F "
 key = "Space"
 mods = "Control|Shift"
-
-[[keyboard.bindings]]
-action = "None"
-key = "Back"
-mods = "Alt|Shift"
-
-[[keyboard.bindings]]
-action = "None"
-key = "Back"
-mods = "Alt"
-
-[[keyboard.bindings]]
-action = "None"
-key = "Space"
-mods = "Alt|Shift"
-
-[[keyboard.bindings]]
-action = "None"
-key = "Space"
-mods = "Alt"
 
 [[keyboard.bindings]]
 chars = "\u001B@"
@@ -182,11 +167,6 @@ mods = "Super"
 chars = "\u001F["
 key = 26
 mods = "Control|Shift"
-
-#[[keyboard.bindings]]
-#action = "None"
-#key = 26
-#mods = "Alt|Control"
 
 [[keyboard.bindings]]
 chars = "\u001F]"

@@ -331,18 +331,20 @@ return {
 
     -- { key="phys:Backspace", mods="ALT|SHIFT",     action="Nop"},
     { key="phys:Backspace", mods="ALT|SHIFT",     action=wezterm.action{SendString="\x1b\x40"} },
-    { key="phys:Backspace", mods="ALT",           action="Nop"},
+    -- { key="phys:Backspace", mods="ALT",           action="Nop"},
     -- these can launch window menu, disable
     -- { key="phys:Space",     mods="ALT|SHIFT",     action="Nop"},
     { key="phys:Space",     mods="ALT|SHIFT",     action=wezterm.action{SendString="\x1b\x23"} },
-    { key="phys:Space",     mods="ALT",           action="Nop"},
+    -- { key="phys:Space",     mods="ALT",           action="Nop"},
 
-    { key="phys:Equal",     mods="ALT",           action=wezterm.action{SendString="\x3d"} },
-    { key="phys:Equal",     mods="ALT|SHIFT",     action="Nop" },
+    -- { key="phys:Equal",     mods="ALT",           action=wezterm.action{SendString="\x3d"} },
+    -- { key="phys:Equal",     mods="ALT|SHIFT",     action="Nop" },
 
     -- { key="x",              mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1b\x78"} },
 
     { key="phys:Backspace", mods="CTRL|ALT",      action=wezterm.action{SendString="\x1b\x40"} },
+
+    { key="phys:Backspace", mods="ALT",           action=wezterm.action{SendString="\x1b\x7f"} },
 
     -- are these really needed ?
     -- { key="=",              mods="CTRL|ALT",      action=wezterm.action{SendString="\x1b\x23"} },
@@ -351,6 +353,8 @@ return {
 
     { key="phys:Equal",     mods="CTRL",          action=wezterm.action{SendString="\x1e\x3d"} },
     { key="phys:Minus",     mods="CTRL",          action=wezterm.action{SendString="\x1e\x2d"} },
+
+    { key="phys:Minus",     mods="CTRL|ALT"       action="Nop" },
 
     -- { key="\\",             mods="CTRL|ALT",      action="Nop"},
     -- { key="\\",             mods="CTRL|ALT",      action="ActivateCopyMode" },
