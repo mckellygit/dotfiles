@@ -1652,7 +1652,7 @@ my-fzfcmd() {
   if [ -n "$TMUX_PANE" -a -z "$VIM_TERMINAL" ] ; then
     echo "fzf-tmux -p -x C -y C -w 80% -h 65% "
   else
-    echo "\\fzf --height 40% "
+    echo "command fzf --height 40% "
   fi
 }
 
