@@ -16,39 +16,35 @@ ox=$1
 oy=$2
 
 tmux copy-mode -H
-sleep 0.05
+sleep 0.15
 tmux copy-mode -q
-sleep 0.05
+sleep 0.15
 
 tmux send-keys C-a
-sleep 0.05
+sleep 0.15
 tmux send-keys C-e
-sleep 0.05
-tmux run "echo #{cursor_x} > /tmp/.ex"
-ex=$(cat /tmp/.ex)
-rm -f /tmp/.ex
-tmux run "echo #{cursor_y} > /tmp/.ey"
-ey=$(cat /tmp/.ey)
-rm -f /tmp/.ey
+sleep 0.15
+
+ex=$(tmux 2>/dev/null display -p '#{cursor_x}')
 ex=$((ex-1))
 
+ey=$(tmux 2>/dev/null display -p '#{cursor_y}')
+
 tmux send-keys C-a
-sleep 0.05
-tmux run "echo #{cursor_x} > /tmp/.ex"
-bx=$(cat /tmp/.ex)
-rm -f /tmp/.ex
-tmux run "echo #{cursor_y} > /tmp/.ey"
-by=$(cat /tmp/.ey)
-rm -f /tmp/.ey
+sleep 0.15
+
+bx=$(tmux 2>/dev/null display -p '#{cursor_x}')
+by=$(tmux 2>/dev/null display -p '#{cursor_y}')
 
 num_lines=$((ey-by))
 
+# DEBUG ========================
 #echo "ex = $ex" >> /tmp/foo
 #echo "ey = $ey" >> /tmp/foo
 #echo "bx = $bx" >> /tmp/foo
 #echo "by = $by" >> /tmp/foo
-
 #echo "num_lines = $num_lines" >> /tmp/foo
+# DEBUG ========================
 
 if [[ $num_lines -eq 0 ]]
 then
@@ -69,15 +65,15 @@ then
 fi
 
 tmux copy-mode -H
-sleep 0.05
+sleep 0.15
 tmux send-keys v
-sleep 0.05
+sleep 0.15
 
 if [[ $num_lines -eq 0 ]]
 then
     num_cols=$((ex-bx))
     tmux send-keys -XN $num_cols cursor-right
-    sleep 0.05
+    sleep 0.15
     tmux send-keys -X copy-pipe-and-cancel "tmux wait -S pipe"
     tmux wait pipe
     tmux set-buffer -n cmdx
@@ -95,7 +91,7 @@ then
     #num_cols=$((ox-bx))
     #tmux send-keys -N $num_cols Right
     tmux send-keys C-e
-    sleep 0.05
+    sleep 0.15
 
     tmux display-message "copied cmdlne to clipboard"
 
@@ -114,7 +110,7 @@ do
     then
         num_cols=$ex
         tmux send-keys -X end-of-line
-        sleep 0.05
+        sleep 0.15
         tmux send-keys -X copy-pipe-and-cancel "tmux wait -S pipe"
         tmux wait pipe
         tmux set-buffer -n cmdx
@@ -133,31 +129,23 @@ do
         #tmux send-keys -N $tx Right
         #echo "tx = $tx"
         tmux send-keys C-e
-        sleep 0.05
+        sleep 0.15
 
         tmux display-message "copied cmdlne to clipboard"
 
         exit 0
     else
-        tmux run "echo #{copy_cursor_x} > /tmp/.ex"
-        px=$(cat /tmp/.ex)
-        rm -f /tmp/.ex
-        tmux run "echo #{copy_cursor_y} > /tmp/.ey"
-        py=$(cat /tmp/.ey)
-        rm -f /tmp/.ey
-
+        px=$(tmux 2>/dev/null display -p '#{copy_cursor_x}')
+        py=$(tmux 2>/dev/null display -p '#{copy_cursor_y}')
         tmux send-keys -X end-of-line
-        sleep 0.05
-
-        tmux run "echo #{copy_cursor_x} > /tmp/.ex"
-        mx=$(cat /tmp/.ex)
-        rm -f /tmp/.ex
+        sleep 0.15
+        mx=$(tmux 2>/dev/null display -p '#{copy_cursor_x}')
         dx=$((mx-px))
         tx=$((tx+mx))
         tmux send-keys -X cursor-down
-        sleep 0.05
+        sleep 0.15
         tmux send-keys -X cursor-right
-        sleep 0.05
+        sleep 0.15
     fi
     l=$((l+1))
 done
