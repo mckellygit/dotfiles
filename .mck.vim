@@ -9845,6 +9845,8 @@ function! s:MapScrollKeys()
   inoremap  <silent> <expr> <S-F21>      pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
   inoremap  <silent> <expr> <C-PageUp>   pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
 
+  " see tnoremap <C-PageUp> and <S-F21> mapping to enter visual mode below ...
+
   " NOTE: tmux could send Up/Down cmds instead of this key ...
   " TODO: wish <C-e>/<C-y> would scroll virtual lines ...
   " save <S-F22> for tmux to use for C-triple-click
@@ -12695,21 +12697,24 @@ endif
 " TODO: perhaps map <Esc>] to some Func key ?  But maybe ok as its not the first char ...
 " Add and h so we can go straight up without jumping to beg of line ...
 " (only needed for nvim but ok for both)
-tnoremap <silent> <F17>]      <C-\><C-n>h
-tnoremap <silent> <F17><Esc>] <C-\><C-n>h
-tnoremap <silent> <M-x>]      <C-\><C-n>h
-tnoremap <silent> <M-x><Esc>] <C-\><C-n>h
+tnoremap <silent> <F17>]      <C-\><C-n>h:let g:prevcol=wincol()<CR>
+tnoremap <silent> <F17><Esc>] <C-\><C-n>h:let g:prevcol=wincol()<CR>
+tnoremap <silent> <M-x>]      <C-\><C-n>h:let g:prevcol=wincol()<CR>
+tnoremap <silent> <M-x><Esc>] <C-\><C-n>h:let g:prevcol=wincol()<CR>
 
-tnoremap <silent> <F17>x      <C-\><C-n>h
-tnoremap <silent> <F17><F17>  <C-\><C-n>h
-tnoremap <silent> <M-x>x      <C-\><C-n>h
-tnoremap <silent> <M-x><M-x>  <C-\><C-n>h
+tnoremap <silent> <F17>x      <C-\><C-n>h:let g:prevcol=wincol()<CR>
+tnoremap <silent> <F17><F17>  <C-\><C-n>h:let g:prevcol=wincol()<CR>
+tnoremap <silent> <M-x>x      <C-\><C-n>h:let g:prevcol=wincol()<CR>
+tnoremap <silent> <M-x><M-x>  <C-\><C-n>h:let g:prevcol=wincol()<CR>
+
+tnoremap <silent> <S-F21>     <C-\><C-n>hM:let g:prevcol=wincol()<CR>
+tnoremap <silent> <C-PageUp>  <C-\><C-n>hM:let g:prevcol=wincol()<CR>
 
 "tnoremap <silent> <M-]> <C-\><C-n>
 "tnoremap <silent> <C-]> <C-\><C-n>
 
-tnoremap <silent> <C-w>]     <C-\><C-n>h
-tnoremap <silent> <C-w><C-]> <C-\><C-n>h
+tnoremap <silent> <C-w>]     <C-\><C-n>h:let g:prevcol=wincol()<CR>
+tnoremap <silent> <C-w><C-]> <C-\><C-n>h:let g:prevcol=wincol()<CR>
 
 " mck <M-C-]> here ? or <C-]> (jump to symbol n/a here)
 
