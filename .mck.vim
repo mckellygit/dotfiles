@@ -5001,6 +5001,8 @@ call <SID>MapFastKeycode('<S-F18>',   "\e[6;2~", 118) " S-PageDown
 call <SID>MapFastKeycode('<S-F26>',   "\e[6;3~", 126) " A-PageDown
 call <SID>MapFastKeycode('<S-F20>',   "\e[6;4~", 120) " A-S-PageDown
 
+" dont seem to map C-A-PageUp/PageDown
+
 " NOTE: addl mappings start at <S-F27> 127 ...
 "       so we have what is not used above ...
 
@@ -9339,7 +9341,16 @@ if has("nvim")
     let g:alt_K2 = nvim_replace_termcodes("<M-K><M-K>", v:true, v:false, v:true)
 endif
 
+function s:CheckExitTerminalMode() abort
+    if (&buftype == 'terminal' && mode(1) == 'nt' && line('.') == line('$'))
+        " TODO: if (&buftype == 'terminal') and we are at line('$') then perhaps exit normal mode ?
+        call nvim_input('i')
+        return
+    endif
+endfunction
+
 function s:CtrlF(multi) abort
+    call <SID>CheckExitTerminalMode()
     let l:ol = line('.')
     "let l:owc = wincol()
     "if g:prevcol > g:prevcol2
@@ -9846,6 +9857,8 @@ function! s:MapScrollKeys()
   inoremap  <silent> <expr> <C-PageUp>   pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
 
   " see tnoremap <C-PageUp> and <S-F21> mapping to enter visual mode below ...
+  " see tnoremap <C-PageDown> and <S-F24> mapping to <Nop> below ...
+  " and some others ...
 
   " NOTE: tmux could send Up/Down cmds instead of this key ...
   " TODO: wish <C-e>/<C-y> would scroll virtual lines ...
@@ -12707,8 +12720,36 @@ tnoremap <silent> <F17><F17>  <C-\><C-n>h:let g:prevcol=wincol()<CR>
 tnoremap <silent> <M-x>x      <C-\><C-n>h:let g:prevcol=wincol()<CR>
 tnoremap <silent> <M-x><M-x>  <C-\><C-n>h:let g:prevcol=wincol()<CR>
 
+" tmux C-A-PageUp/Down is probably the same as C-PageUp/Down ...
+
 tnoremap <silent> <S-F21>     <C-\><C-n>hM:let g:prevcol=wincol()<CR>
 tnoremap <silent> <C-PageUp>  <C-\><C-n>hM:let g:prevcol=wincol()<CR>
+
+tnoremap <silent> <S-PageUp>     <Nop>
+tnoremap <silent> <A-PageUp>     <Nop>
+tnoremap <silent> <C-S-PageUp>   <Nop>
+tnoremap <silent> <A-S-PageUp>   <Nop>
+
+tnoremap <silent> <PageUp>       <Nop>
+tnoremap <silent> <PageDown>     <Nop>
+
+tnoremap <silent> <C-PageDown>   <Nop>
+tnoremap <silent> <S-PageDown>   <Nop>
+tnoremap <silent> <A-PageDown>   <Nop>
+tnoremap <silent> <C-S-PageDown> <Nop>
+tnoremap <silent> <A-S-PageDown> <Nop>
+
+tnoremap <silent> <S-F24>        <Nop>
+
+tnoremap <silent> <S-F17>        <Nop>
+tnoremap <silent> <S-F23>        <Nop>
+" C-S-PageUp mapping missing in vim ...
+tnoremap <silent> <S-F19>        <Nop>
+
+tnoremap <silent> <S-F18>        <Nop>
+tnoremap <silent> <S-F26>        <Nop>
+" C-S-PageDown mapping missing in vim ...
+tnoremap <silent> <S-F20>        <Nop>
 
 "tnoremap <silent> <M-]> <C-\><C-n>
 "tnoremap <silent> <C-]> <C-\><C-n>
