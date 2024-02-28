@@ -2742,7 +2742,7 @@ autocmd User AsyncRunInterrupt echohl DiffText | echo 'AsyncRun complete: [TERM]
 " use <Leader>sx to cancel AsyncRun job in flight ...
 if 0 " --- DISABLED ---
 " in vim, <C-\> _may_ stop system() cmds (if stty quit is ^\) [but not nvim] - but may generate core file
-" <C-S-bslash> (does <C-|> exist ?) might be mapped to <C-_><bslash> in some terminals ...
+" <C-S-bslash> (does <C-bar> exist ?) might be mapped to <C-_><bslash> in some terminals ...
 noremap <silent> <expr> <C-_><bslash> (&buftype ==# 'terminal') ? 'i' : '<C-c>:AsyncStop!<CR>:sleep 500m<CR>:AsyncStop!<CR>'
 " DONE: is there a way to map <C-c> to both send <C-c> AND also run :AsyncStop ?
 "       or can we change AsyncRun to know if <C-c> was pressed ?
@@ -4507,8 +4507,11 @@ function s:CrossHairs() abort
     set nocursorcolumn
 endfunction
 nmap <silent> + :call <SID>CrossHairs()<CR>
+
 if has("nvim")
-    nmap <silent> <M-+> <Nop>
+    nmap <silent> <M-+>   <Nop>
+    nmap <silent> <M-bar> <Nop>
+    nmap <silent> <M-?>   <Nop>
 endif
 
 " -------- mouse / cut - paste - clipboard --------
