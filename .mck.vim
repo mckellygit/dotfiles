@@ -1247,6 +1247,7 @@ function! s:bufopen(e)
                 call nvim_input('i')
             else
                 " TODO: can we get into insert mode here ?
+                call feedkeys("i", "x")
             endif
         endif
     endif
@@ -4870,7 +4871,7 @@ endif
 " NOTE: also look into fixtermkeys.vim from http://www.leonerd.org.uk/hacks/vim/fixtermkeys.html
 function! s:MapFastKeycode(key, keycode, indx)
     let lindx = a:indx
-    if lindx < 15
+    if lindx < 13
         echohl WarningMsg
         echomsg "Warning: key ".a:key." cannot be mapped, invalid indx:".lindx
         echohl None
@@ -4953,7 +4954,7 @@ call <SID>MapFastKeycode('<F22>',           "\e[2;7~", 22) " A-C-Insert
 "call <SID>MapFastKeycode('<A-S-Left>',     "\e[1;4D", xx)
 "call <SID>MapFastKeycode('<A-S-Right>',    "\e[1;4C", xx)
 
-" also have <A-C-arrow> ...
+" also have <C-A-arrow> ...
 
 " --------- x maps -----------
 
@@ -4988,6 +4989,7 @@ call <SID>MapFastKeycode('<S-F17>',   "\e[5;2~", 117) " S-PageUp
 
 " mck - save <S-F22> for tmux to use for C-triple-click
 "call <SID>MapFastKeycode('<S-F22>',   "\e[5;6~", 122) " C-S-PageUp
+call <SID>MapFastKeycode('<F13>',   "\e[5;6~", 13) " C-S-PageUp
 
 call <SID>MapFastKeycode('<S-F23>',   "\e[5;3~", 123) " A-PageUp
 call <SID>MapFastKeycode('<S-F19>',   "\e[5;4~", 119) " A-S-PageUp
@@ -4997,11 +4999,12 @@ call <SID>MapFastKeycode('<S-F18>',   "\e[6;2~", 118) " S-PageDown
 
 " mck - save <S-F25> for tmux to use for A-C-triple-click
 "call <SID>MapFastKeycode('<S-F25>',   "\e[6;6~", 125) " C-S-PageDown
+call <SID>MapFastKeycode('<F14>',   "\e[6;6~", 14) " C-S-PageDown
 
 call <SID>MapFastKeycode('<S-F26>',   "\e[6;3~", 126) " A-PageDown
 call <SID>MapFastKeycode('<S-F20>',   "\e[6;4~", 120) " A-S-PageDown
 
-" dont seem to map C-A-PageUp/PageDown
+" dont seem to map C-A-PageUp/PageDown, could steal <F4>, <F5> ?
 
 " NOTE: addl mappings start at <S-F27> 127 ...
 "       so we have what is not used above ...
@@ -9344,13 +9347,22 @@ endif
 function s:CheckExitTerminalMode() abort
     if (&buftype == 'terminal' && mode(1) == 'nt' && line('.') == line('$'))
         " TODO: if (&buftype == 'terminal') and we are at line('$') then perhaps exit normal mode ?
-        call nvim_input('i')
+        if has("nvim")
+            call nvim_input('i')
+        else
+            call feedkeys("i", "x")
+        endif
         return
     endif
 endfunction
 
-function s:CtrlF(multi) abort
-    call <SID>CheckExitTerminalMode()
+function s:CtrlF(multi1) abort
+    if a:multi1 < 0
+        call <SID>CheckExitTerminalMode()
+        let l:multi = -a:multi1
+    else
+        let l:multi = a:multi1
+    endif
     let l:ol = line('.')
     "let l:owc = wincol()
     "if g:prevcol > g:prevcol2
@@ -9370,6 +9382,9 @@ function s:CtrlF(multi) abort
             let l:cdiff = l:owc - l:nwc
             execute "keepjumps normal " . l:cdiff . "l"
         endif
+        if a:multi1 < 0
+            call <SID>CheckExitTerminalMode()
+        endif
         return
     endif
     let l:dff = line('$') - l:ol
@@ -9383,11 +9398,14 @@ function s:CtrlF(multi) abort
             let l:cdiff = l:owc - l:nwc
             execute "keepjumps normal " . l:cdiff . "l"
         endif
+        if a:multi1 < 0
+            call <SID>CheckExitTerminalMode()
+        endif
         return
     endif
     " this makes nvim not flash sign column ...
     " but so does using 10 below ...
-    "if (a:multi == 1 && has("nvim"))
+    "if (l:multi == 1 && has("nvim"))
     "    "call feedkeys("\<M-J>\<M-J>", "t")
     "    call nvim_feedkeys(g:alt_J2, 't', v:false)
     "    return
@@ -9398,10 +9416,10 @@ function s:CtrlF(multi) abort
     let save_scroll = &scroll
 
     if &smoothscroll
-        if (a:multi == 2)
+        if (l:multi == 2)
             " want normal! here
             execute "keepjumps normal! " . g:full . "\<C-e>" . g:full . "gj"
-        elseif (a:multi == 4)
+        elseif (l:multi == 4)
             " want normal! here
             execute "keepjumps normal! " . g:full2x . "\<C-e>" . g:full2x . "gj"
         else
@@ -9423,10 +9441,10 @@ function s:CtrlF(multi) abort
         " ---------------------
 
     else
-        if (a:multi == 2)
+        if (l:multi == 2)
             " want normal! here
             execute "keepjumps normal! " . g:full . "\<C-d>"
-        elseif (a:multi == 4)
+        elseif (l:multi == 4)
             " want normal! here
             execute "keepjumps normal! " . g:full . "\<C-d>\<C-d>"
         else
@@ -9497,6 +9515,9 @@ function s:CtrlF(multi) abort
     let &scrolloff=0
     let &scrolljump=prevsj
     "echo "g:curcol = " . g:curcol . " g:prevcol = " . g:prevcol . " g:prevcol2 = " . g:prevcol2
+    if a:multi1 < 0
+        call <SID>CheckExitTerminalMode()
+    endif
     return
 endfunction
 
@@ -9841,20 +9862,32 @@ function! s:MapScrollKeys()
   "noremap            <expr> <S-F24> (line('.') == line('w0')) ? g:hdn : '<C-D>'
   nnoremap <silent> <S-F24>      :call <SID>CtrlF(1)<CR>
   nnoremap <silent> <C-PageDown> :call <SID>CtrlF(1)<CR>
+  nnoremap <silent> <C-_><S-F24>      :call <SID>CtrlF(-1)<CR>
+  nnoremap <silent> <C-_><C-PageDown> :call <SID>CtrlF(-1)<CR>
   "execute 'vnoremap <silent> <expr> <S-F24> (line(".") != line("w0")) ? "<C-D><C-l>" : ' . g:hdn
   execute 'vnoremap <silent> <expr> <S-F24> '      . g:hdn
   execute 'vnoremap <silent> <expr> <C-PageDown> ' . g:hdn
+  execute 'vnoremap <silent> <expr> <C-_><S-F24> '      . g:hdn
+  execute 'vnoremap <silent> <expr> <C-_><C-PageDown> ' . g:hdn
   inoremap  <silent> <expr> <S-F24>      pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
   inoremap  <silent> <expr> <C-PageDown> pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
+  inoremap  <silent> <expr> <C-_><S-F24>      pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
+  inoremap  <silent> <expr> <C-_><C-PageDown> pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
 
   "noremap            <expr> <S-F21>   (line('.') == line('w$')) ? g:hup : '<C-U>'
   nnoremap <silent> <S-F21>    :call <SID>CtrlB(1)<CR>
   nnoremap <silent> <C-PageUp> :call <SID>CtrlB(1)<CR>
+  nnoremap <silent> <C-_><S-F21>    :call <SID>CtrlB(1)<CR>
+  nnoremap <silent> <C-_><C-PageUp> :call <SID>CtrlB(1)<CR>
   "execute 'vnoremap <silent> <expr> <S-F21> (line(".") != line("w$")) ? "<C-U><C-l>" : ' . g:hup
   execute 'vnoremap <silent> <expr> <S-F21> '    . g:hup
   execute 'vnoremap <silent> <expr> <C-PageUp> ' . g:hup
+  execute 'vnoremap <silent> <expr> <C-_><S-F21> '    . g:hup
+  execute 'vnoremap <silent> <expr> <C-_><C-PageUp> ' . g:hup
   inoremap  <silent> <expr> <S-F21>      pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
   inoremap  <silent> <expr> <C-PageUp>   pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
+  inoremap  <silent> <expr> <C-_><S-F21>      pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
+  inoremap  <silent> <expr> <C-_><C-PageUp>   pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
 
   " see tnoremap <C-PageUp> and <S-F21> mapping to enter visual mode below ...
   " see tnoremap <C-PageDown> and <S-F24> mapping to <Nop> below ...
@@ -9863,13 +9896,14 @@ function! s:MapScrollKeys()
   " NOTE: tmux could send Up/Down cmds instead of this key ...
   " TODO: wish <C-e>/<C-y> would scroll virtual lines ...
   " save <S-F22> for tmux to use for C-triple-click
-  "noremap   <silent> <expr> <S-F25>        (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '<Cmd>call MyScrollDownX(10)<CR>'
+  noremap   <silent> <expr> <F14>          (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '<Cmd>call MyScrollDownX(10)<CR>'
   noremap   <silent> <expr> <C-S-PageDown> (line('.') == line('w0')) ? '10j' : ((line('$') - line('w$')) < 10) ? 'mfG`f10j' : '<Cmd>call MyScrollDownX(10)<CR>'
-  "inoremap  <silent> <expr> <S-F25>        pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
+  inoremap  <silent> <expr> <F14>          pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
   inoremap  <silent> <expr> <C-S-PageDown> pumvisible() ? '<PageDown>' : '<C-\><C-o>:call <SID>Saving_scrollVDn1("<C-V><C-D>")<CR>'
-  "noremap   <silent> <expr> <S-F22>        (line('.') == line('w$')) ? '10k' : '<Cmd>call MyScrollUpX(10)<CR>'
+
+  noremap   <silent> <expr> <F13>          (line('.') == line('w$')) ? '10k' : '<Cmd>call MyScrollUpX(10)<CR>'
   noremap   <silent> <expr> <C-S-PageUp>   (line('.') == line('w$')) ? '10k' : '<Cmd>call MyScrollUpX(10)<CR>'
-  "inoremap  <silent> <expr> <S-F22>        pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
+  inoremap  <silent> <expr> <F13>          pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
   inoremap  <silent> <expr> <C-S-PageUp>   pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp1("<C-V><C-U>")<CR>'
 
   " NOTE: tmux could send Up/Down cmds instead of this key ...
@@ -12720,11 +12754,10 @@ tnoremap <silent> <F17><F17>  <C-\><C-n>h:let g:prevcol=wincol()<CR>
 tnoremap <silent> <M-x>x      <C-\><C-n>h:let g:prevcol=wincol()<CR>
 tnoremap <silent> <M-x><M-x>  <C-\><C-n>h:let g:prevcol=wincol()<CR>
 
-" tmux C-A-PageUp/Down is probably the same as C-PageUp/Down ...
+tnoremap <silent> <C-_><S-F21>     <C-\><C-n>hM:let g:prevcol=wincol()<CR>
+tnoremap <silent> <C-_><C-PageUp>  <C-\><C-n>hM:let g:prevcol=wincol()<CR>
 
-tnoremap <silent> <S-F21>     <C-\><C-n>hM:let g:prevcol=wincol()<CR>
-tnoremap <silent> <C-PageUp>  <C-\><C-n>hM:let g:prevcol=wincol()<CR>
-
+tnoremap <silent> <C-PageUp>     <Nop>
 tnoremap <silent> <S-PageUp>     <Nop>
 tnoremap <silent> <A-PageUp>     <Nop>
 tnoremap <silent> <C-S-PageUp>   <Nop>
@@ -12739,16 +12772,25 @@ tnoremap <silent> <A-PageDown>   <Nop>
 tnoremap <silent> <C-S-PageDown> <Nop>
 tnoremap <silent> <A-S-PageDown> <Nop>
 
+tnoremap <silent> <C-_><C-PageDown> <Nop>
+tnoremap <silent> <C-_><S-F24>   <Nop>
+
+" tmux C-A-PageUp/Down is probably the same as C-PageUp/Down or C-S-PageUp/Down ...
+
+tnoremap <silent> <S-F21>        <Nop>
+
 tnoremap <silent> <S-F24>        <Nop>
 
 tnoremap <silent> <S-F17>        <Nop>
 tnoremap <silent> <S-F23>        <Nop>
-" C-S-PageUp mapping missing in vim ...
+" C-S-PageUp mapping is F13 in vim ...
+tnoremap <silent> <F13>          <Nop>
 tnoremap <silent> <S-F19>        <Nop>
 
 tnoremap <silent> <S-F18>        <Nop>
 tnoremap <silent> <S-F26>        <Nop>
-" C-S-PageDown mapping missing in vim ...
+" C-S-PageDown mapping is F14 in vim ...
+tnoremap <silent> <F14>          <Nop>
 tnoremap <silent> <S-F20>        <Nop>
 
 "tnoremap <silent> <M-]> <C-\><C-n>
