@@ -13,6 +13,9 @@ fi
 
 branch="$(git branch -a --sort=-committerdate | grep 'remotes/origin/' | fzf-tmux -r | awk '{print $NF}' | awk -F/ '{print $NF}')"
 if [[ -n "${branch}" ]] ; then
-    git push origin --delete ${branch}
+    stty -echo
+    tmux send "git del-rem-br ${branch}"
+    stty echo
+    #git push origin --delete ${branch}
 fi
 
