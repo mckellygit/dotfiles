@@ -265,7 +265,11 @@ fi
 #     sudo cp ~/.local/bin/nvr /usr/local/bin
 # Node.js provider (optional)
 #   npm install -g neovim
-# inside nvim -
+# add fswatch utility:
+#   sudo apt-get install fswatch
+#   -or-
+#   git clone https://github.com/emcrisostomo/fswatch
+# once inside nvim:
 #   :checkhealth
 #
 # tree-sitter exe:
