@@ -6364,8 +6364,8 @@ function! s:MyVisV2()
 endfunction
 
 " <C-q> seems to start visual mode ...
-nmap <buffer> <C-q> <Nop>
-nmap <silent> <buffer> <expr> <C-q><C-q> (&buftype == 'terminal') ? 'i' : ''
+nmap <silent> <C-q> <Nop>
+"nmap <silent> <expr> <C-q><C-q> (&buftype == 'terminal') ? 'i' : ''
 " TODO: can we get <C-q> to leave normal mode of terminal ?
 "       or use <M-q> for that ?
 
