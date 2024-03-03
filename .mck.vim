@@ -6368,6 +6368,9 @@ nmap <silent> <C-q> <Nop>
 "nmap <silent> <expr> <C-q><C-q> (&buftype == 'terminal') ? 'i' : ''
 " TODO: can we get <C-q> to leave normal mode of terminal ?
 "       or use <M-q> for that ?
+" could also try prefix Escape to match tmux ...
+"nmap <silent> <expr> <C-s><Esc> (&buftype == 'terminal') ? 'i' : ''
+"tnoremap <C-s><Esc> <Nop>
 
 " q to exit visual-mode and clear previous w:v* states
 " if we just map q to <Esc> then q works well to go back to original mode,
