@@ -12405,9 +12405,9 @@ else
     au VimEnter * :Alias qui!  call\ MyQuit("q!")
     au VimEnter * :Alias quit! call\ MyQuit("q!")
     if has("nvim")
-        au VimEnter * :Alias PU    TSUpdateSync<bar>sleep\ 1400m<bar>PlugUpdate
+        au VimEnter * :Alias PU    TSUpdateSync<bar>sleep\ 1400m<bar>PlugUpgrade<bar>PlugUpdate
     else
-        au VimEnter * :Alias PU    PlugUpdate
+        au VimEnter * :Alias PU    PlugUpgrade<bar>PlugUpdate
     endif
   aug END
 
