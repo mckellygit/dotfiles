@@ -12,13 +12,13 @@ if [[ $# -gt 0 ]] ; then
         extras=" bat neovim vim gef mlterm lazygit tree-sitter delta difftastic"
         if [[ $# -gt 1 ]] ; then
             if [[ "$2" == "-a" || "$2" == "-all" || "$2" == "--a" || "$2" == "--all" ]] ; then
-                extras=" $extras libxkbcommon foot alacritty ccache"
+                extras=" $extras libxkbcommon foot alacritty "
             elif [[ "$2" == "-v" ]] ; then
                 do_vim_bundles="yes"
             fi
             if [[ $# -gt 2 ]] ; then
                 if [[ "$3" == "-a" || "$3" == "-all" || "$3" == "--a" || "$3" == "--all" ]] ; then
-                    extras=" $extras libxkbcommon foot alacritty ccache"
+                    extras=" $extras libxkbcommon foot alacritty "
                 elif [[ "$3" == "-v" ]] ; then
                     do_vim_bundles="yes"
                 fi
@@ -32,7 +32,7 @@ if [[ $# -gt 0 ]] ; then
             fi
             if [[ $# -gt 2 ]] ; then
                 if [[ "$3" == "-a" || "$3" == "-all" || "$3" == "--a" || "$3" == "--all" ]] ; then
-                    extras=" $extras libxkbcommon foot alacritty ccache"
+                    extras=" $extras libxkbcommon foot alacritty "
                 fi
             fi
         else
@@ -88,7 +88,7 @@ else
 fi
 
 if [[ -z "$only_vim_bundles" ]] ; then
-    echo "also check git:     zsh, CMake, zutty, xterm-snapshots ..."
+    echo "also check git:     zsh, CMake, zutty, xterm-snapshots, ccache, vifm, helix ..."
     echo "also check non-git: gcc/g++, gdb, readline, ncurses, go, rust ..."
     echo ""
 fi
