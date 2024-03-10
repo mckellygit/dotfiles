@@ -78,6 +78,9 @@ key_bindings:
   - { key: J,         mods: Control|Shift,   chars: "\x1f\x4a"        }
   - { key: K,         mods: Control|Shift,   chars: "\x1f\x4b"        }
 
+  - { key: H,         mods: Control|Shift,   chars: "\x1f\x48"        }
+  - { key: L,         mods: Control|Shift,   chars: "\x1f\x4c"        }
+
   - { key: G,         mods: Control|Shift,   chars: "\x1f\x47"        }
   - { key: N,         mods: Control|Shift,   chars: "\x1f\x4e"        }
   - { key: P,         mods: Control|Shift,   chars: "\x1f\x50"        }

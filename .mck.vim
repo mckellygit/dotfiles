@@ -8295,7 +8295,24 @@ noremap <silent> <Leader>Q q
 nmap <silent> q <Nop>
 " NOTE: q will be re-mapped later on ...
 " nvim fix for repeated <M-q> to sometimes start recording ...
-noremap <silent> <M-q> <Nop>
+"noremap <silent> <M-q> <Nop>
+
+" <M-q> to close any-jump popup and fzf popup and also cancel visual mode (and tmux copy-mode)
+call <SID>MapFastKeycode('<F18>',  "\eq", 18)
+nnoremap <silent> <F18> <Nop>
+vnoremap <silent> <F18> <Esc>
+cnoremap <silent> <F18> <C-v><Esc>q
+inoremap <silent> <F18> <C-v><Esc>q
+tnoremap <silent> <F18> <Esc>q
+if has("nvim")
+    nnoremap <silent> <M-q> <Nop>
+    vnoremap <silent> <M-q> <Esc>
+    cnoremap <silent> <F18> <M-q>
+    inoremap <silent> <F18> <M-q>
+    tnoremap <silent> <F18> <M-q>
+endif
+
+" TODO: <M-q>/<F18> to also end terminal normal mode ?
 
 " for block select beyond shorter line lengths
 set virtualedit=block
@@ -8358,6 +8375,7 @@ vnoremap <silent> Z<S-Right> 10zl10l
 " <M-l> for right and then <M-`> for repeat prev cmd
 " and same for <M-h>
 " NOTE: wish we could send CSI mappings for these ...
+" NOTE: \eh and \el are NOT mapped for vim ...
 nnoremap <silent> <M-h>      h
 nnoremap <silent> <M-l>      l
 vnoremap <silent> <M-h>      h
@@ -9243,6 +9261,14 @@ endif
 " SPECIAL: some terminals might map C-S-j to <C-_>J ...
  noremap <C-_>J 10gj
 inoremap <C-_>J <C-\><C-o>10gj
+
+" ---------
+
+ noremap <C-_>H 10h
+inoremap <C-_>H <C-\><C-o>10h
+
+ noremap <C-_>L 10l
+inoremap <C-_>L <C-\><C-o>10l
 
 " ---------
 

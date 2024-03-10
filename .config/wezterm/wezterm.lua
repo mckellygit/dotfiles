@@ -410,6 +410,10 @@ return {
     { key="J",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x4a"} },
     { key="k",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x4b"} },
     { key="K",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x4b"} },
+    { key="h",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x48"} },
+    { key="H",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x48"} },
+    { key="l",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x4c"} },
+    { key="L",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x4c"} },
 
     { key="g",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x47"} },
     { key="G",          mods="CTRL|SHIFT",    action=wezterm.action{SendString="\x1f\x47"} },

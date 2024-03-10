@@ -343,6 +343,22 @@
             "command": 
             {
                 "action": "sendInput",
+                "input": "\u001fH"
+            },
+            "keys": "ctrl+shift+h"
+        },
+        {
+            "command": 
+            {
+                "action": "sendInput",
+                "input": "\u001fL"
+            },
+            "keys": "ctrl+shift+l"
+        },
+        {
+            "command": 
+            {
+                "action": "sendInput",
                 "input": "\u001fP"
             },
             "keys": "ctrl+shift+p"

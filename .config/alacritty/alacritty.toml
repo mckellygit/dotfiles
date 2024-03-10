@@ -219,6 +219,16 @@ key = "K"
 mods = "Control|Shift"
 
 [[keyboard.bindings]]
+chars = "\u001FH"
+key = "H"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+chars = "\u001FL"
+key = "L"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
 chars = "\u001FG"
 key = "G"
 mods = "Control|Shift"

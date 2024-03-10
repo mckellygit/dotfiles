@@ -586,12 +586,10 @@ XTerm*VT100.translations:    #override \
      Ctrl  Shift ~Alt <Key> b: string("\002") \n\
      Ctrl  Shift ~Alt <Key> j: string("\037J") \n\
      Ctrl  Shift ~Alt <Key> k: string("\037K") \n\
-    ~Ctrl  Shift  Alt <Key> j: string("\036J") \n\
-    ~Ctrl  Shift  Alt <Key> k: string("\036K") \n\
+     Ctrl  Shift ~Alt <Key> h: string("\037H") \n\
+     Ctrl  Shift ~Alt <Key> l: string("\037L") \n\
      Ctrl  Shift ~Alt <Key> n: string("\037N") \n\
      Ctrl  Shift ~Alt <Key> p: string("\037P") \n\
-    ~Ctrl  Shift  Alt <Key> n: string("\036N") \n\
-    ~Ctrl  Shift  Alt <Key> p: string("\036P") \n\
      Ctrl  Shift ~Alt <Key> g: string("\037G") \n\
      Ctrl ~Shift ~Alt <Key> i: string("\036\011") \n\
      Ctrl  Shift ~Alt <Key> i: string("\033[Z") \n\

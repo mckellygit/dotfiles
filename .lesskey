@@ -56,8 +56,10 @@ gg   noaction <
 \e[1;2F noaction
 \e[1;3H noaction
 \e[1;3F noaction
-\e[5;4~ noaction
-\e[6;4~ noaction
+\e[5;4~ noaction 20^B
+\e[6;4~ noaction 20^F
+\e[5;2~ noaction 10^B
+\e[6;2~ noaction 10^F
 \e[1;2B forw-line
 \e[1;2A back-line
 \e[1;3B forw-line
@@ -66,6 +68,8 @@ gg   noaction <
 \e[5;5~ noaction 20^B
 \e[6;7~ noaction 20^F
 \e[5;7~ noaction 20^B
+\e[6;8~ noaction 20^F
+\e[5;8~ noaction 20^B
 \e[6;3~ noaction 80^F
 \e[5;3~ noaction 80^B
 \e[6;6~ noaction 10^F
