@@ -196,9 +196,6 @@ fi
 # fzf-git.sh:
 #   git clone https://github.com/junegunn/fzf-git.sh.git
 
-# forgit:
-#   https://github.com/wfxr/forgit.git
-
 # fzf-tab-completion:
 #   git clone https://github.com/lincheney/fzf-tab-completion
 
@@ -282,6 +279,18 @@ fi
 
 # git-fuzzy:
 #   git clone https://github.com/bigH/git-fuzzy
+
+# gex
+#   git clone https://github.com/Piturnah/gex
+
+# gitu
+#   git clone https://github.com/altsem/gitu
+
+# forgit
+#   git clone https://github.com/wfxr/forgit
+
+# gitui:
+#   git clone git@github.com-mckelly:extrawurst/gitui.git
 
 # lazydocker:
 #   git clone https://github.com/jesseduffield/lazydocker.git
@@ -483,9 +492,6 @@ fi
 
 # dog: (nslookup/dig alternative)
 #   git clone https://github.com/ogham/dog.git
-
-# gitui:
-#   git clone git@github.com-mckelly:extrawurst/gitui.git
 
 # kakoune:
 #   git clone https://github.com/mawww/kakoune.git
