@@ -268,7 +268,7 @@ Plug 'mckellygit/vim-twiggy'
 " some other neovim magit-like alternatives -
 "Plug 'Odie/gitabra'
 "Plug 'plenary.nvim'
-"Plug 'TimUntersberger/neogit'
+"Plug 'NeogitOrg/neogit'
 "Plug 'idanarye/vim-merginal'
 Plug 'stsewd/fzf-checkout.vim'
 " neovim dependency for tig-explorer -
