@@ -2757,6 +2757,10 @@ function QFModFiles(info) abort
         if !empty(git_dir)
             let git_dir1 = git_dir . '/'
             let fname = substitute(fname, git_dir1, '', '')
+        else
+            " TODO - if not in git dir could get cwd and remove that ...
+            let ldir = getcwd() . '/'
+            let fname = substitute(fname, ldir, '', '')
         endif
         "let ntext = substitute(e.text '/^\s*([^ ]+)\s*$/', '\1', '')
         let ntext = substitute(e.text, '^\s*', '', 'g')
@@ -2764,7 +2768,11 @@ function QFModFiles(info) abort
     endfor
     return l
 endfunction
-set quickfixtextfunc=QFModFiles
+" TODO using this makes AsyncRun ag/rg on a large dir VERY slow to post quickfix window after cmd completes ...
+" sed substitute works but then vim cant find files from paths ...
+"set quickfixtextfunc=QFModFiles
+
+"call setqflist([], ' ', {'quickfixtextfunc' : 'QFModFiles'})
 
 "set efm=''
 "au FileType qf setlocal modifiable
@@ -10045,6 +10053,9 @@ function! s:ClearCmdWindow()
     if pumvisible()
         return
     endif
+    if g:asyncrun_status == 'running'
+        return
+    endif
     "exe 'normal :'
     if has("nvim")
         redraw!
@@ -11179,6 +11190,12 @@ function s:MySearch(meth) abort
   elseif (a:meth == 1)
     "execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
     execute 'AsyncRun! -strip \ag --vimgrep -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --ignore ".kube" --ignore ".minikube" -- ' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
+    "NOTE: sed substitute works but then vim cant find files from paths ...
+    "let gdir1 = s:find_git_root() . '/'
+    "let gdir = substitute(gdir1, '/', '\\/', 'g')
+    "let icmd = 'AsyncRun! -strip \ag --vimgrep -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --ignore ".kube" --ignore ".minikube" -- '.shellescape(string, 1).' '.s:find_git_root().' | sed "s/'.gdir.'//" 2>/dev/null'
+    "echom "icmd = " . icmd
+    "execute icmd
   elseif (a:meth == 2)
     "execute 'AsyncRun! -strip -cwd ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) ' 2>/dev/null'
     execute 'AsyncRun! -strip \ag --vimgrep -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --ignore ".kube" --ignore ".minikube" -- ' shellescape(string, 1) ' 2>/dev/null'
@@ -11225,6 +11242,12 @@ function s:MyVisSearch(meth) abort
   elseif (a:meth == 1)
     "execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
     execute 'AsyncRun! -strip \ag --vimgrep -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --ignore ".kube" --ignore ".minikube" -- ' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
+    "NOTE: sed substitute works but then vim cant find files from paths ...
+    "let gdir1 = s:find_git_root() . '/'
+    "let gdir = substitute(gdir1, '/', '\\/', 'g')
+    "let icmd = 'AsyncRun! -strip \ag --vimgrep -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --ignore ".kube" --ignore ".minikube" -- '.shellescape(string, 1).' '.s:find_git_root().' | sed "s/'.gdir.'//" 2>/dev/null'
+    "echom "icmd = " . icmd
+    "execute icmd
   elseif (a:meth == 2)
     "execute 'AsyncRun! -strip -cwd ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) ' 2>/dev/null'
     execute 'AsyncRun! -strip \ag --vimgrep -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --ignore ".kube" --ignore ".minikube" -- ' shellescape(string, 1) ' 2>/dev/null'
