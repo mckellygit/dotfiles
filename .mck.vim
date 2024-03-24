@@ -2524,6 +2524,12 @@ endfunction
 "autocmd FileType qf noremap <buffer> <C-x> :call <SID>OpenQuickfix("split")<CR>
 " QFEnter -------------
 
+" QFGrep --------------
+nmap <Leader>qg <Plug>QFGrepG
+nmap <Leader>qv <Plug>QFGrepV
+nmap <Leader>qr <Plug>QFRestore
+" QFGrep --------------
+
 " vim-qf-preview ------
 "augroup qfpreview
 "    autocmd!
@@ -2732,6 +2738,39 @@ let g:asyncrun_silent = 0
 let g:asyncrun_string = ''
 let g:asyncrun_copen = 1
 let g:asyncrun_term_wipe = 1
+
+function QFModFiles(info) abort
+    "echom "QFModFiles"
+    if a:info.quickfix
+        let qfl = getqflist(#{id: a:info.id, items: 0}).items
+    else
+        let qfl = getloclist(a:info.winid, #{id: a:info.id, items: 0}).items
+    endif
+    let l = []
+    for idx in range(a:info.start_idx - 1, a:info.end_idx - 1)
+        let e = qfl[idx]
+        let git_dir = s:find_git_root()
+        "echom "git_dir = " . git_dir
+        "let fname = bufname(e.bufnr)
+        let fname = bufname(e.bufnr)->fnamemodify(':p')
+        "echom "fname = " . fname[0]
+        if !empty(git_dir)
+            let git_dir1 = git_dir . '/'
+            let fname = substitute(fname, git_dir1, '', '')
+        endif
+        "let ntext = substitute(e.text '/^\s*([^ ]+)\s*$/', '\1', '')
+        let ntext = substitute(e.text, '^\s*', '', 'g')
+        call add(l, fname . ' |' . e.lnum . '|' . e.col . '| ' . ntext)
+    endfor
+    return l
+endfunction
+set quickfixtextfunc=QFModFiles
+
+"set efm=''
+"au FileType qf setlocal modifiable
+"		\ | silent exe 'g/^/s/^\|\| //'
+"		\ | setlocal nomodifiable
+
 autocmd User AsyncRunInit let g:asyncrun_code = 2 | let g:asyncrun_string = '' | let g:asyncrun_copen = 1
 autocmd User AsyncRunPre  let g:asyncrun_code = 2 | redraw! | echohl DiffAdd | echo "\rAsyncRun started ..." | echohl None
 autocmd User AsyncRunStop if g:asyncrun_code != 0 | echohl DiffText | echo 'AsyncRun complete: [ ' . g:asyncrun_code . ' ]' | echohl None |
@@ -8299,20 +8338,25 @@ nmap <silent> q <Nop>
 
 " <M-q> to close any-jump popup and fzf popup and also cancel visual mode (and tmux copy-mode)
 call <SID>MapFastKeycode('<F18>',  "\eq", 18)
-nnoremap <silent> <F18> <Nop>
-vnoremap <silent> <F18> <Esc>
-cnoremap <silent> <F18> <C-v><Esc>q
-inoremap <silent> <F18> <C-v><Esc>q
-tnoremap <silent> <F18> <Esc>q
+nmap <silent> <F18> <Nop>
+vmap <silent> <F18> <Esc>
+cmap <silent> <F18> <C-v><Esc>q
+imap <silent> <F18> <C-v><Esc>q
+tmap <silent> <F18> <Esc>q
 if has("nvim")
-    nnoremap <silent> <M-q> <Nop>
-    vnoremap <silent> <M-q> <Esc>
-    cnoremap <silent> <F18> <M-q>
-    inoremap <silent> <F18> <M-q>
-    tnoremap <silent> <F18> <M-q>
+    nmap <silent> <M-q> <Nop>
+    vmap <silent> <M-q> <Esc>
+    cmap <silent> <F18> <M-q>
+    imap <silent> <F18> <M-q>
+    tmap <silent> <F18> <M-q>
 endif
 
 " TODO: <M-q>/<F18> to also end terminal normal mode ?
+
+autocmd FileType qf nmap <silent> <buffer> <M-q> :call <SID>CloseUtilWins()<CR>
+autocmd FileType qf nmap <silent> <buffer> <F18> :call <SID>CloseUtilWins()<CR>
+
+" --------------------
 
 " for block select beyond shorter line lengths
 set virtualedit=block
@@ -11148,7 +11192,7 @@ function s:MySearch(meth) abort
     call fzf#vim#grep(icmd, 1, fzf#vim#with_preview(ispec), 0)
   endif
   let @/=string
-  set hlsearch
+  "set hlsearch
 endfunction
 
 function s:MyVisSearch(meth) abort
@@ -11194,7 +11238,7 @@ function s:MyVisSearch(meth) abort
     call fzf#vim#grep(icmd, 1, fzf#vim#with_preview(ispec), 0)
   endif
   let @/=string
-  set hlsearch
+  "set hlsearch
 endfunction
 
 " use :let @/="" to clear out search pattern and stop any running search - wish we could use <C-c>
@@ -11319,7 +11363,7 @@ function! AgFzf(aquery, ufzf)
     let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--bind=esc:ignore', '--prompt', printf('Ag'.'%s > ', empty(query) ? '' : (' ('.query.')'))]}
   endif
   let @/=query
-  set hlsearch
+  "set hlsearch
   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), 0)
 endfunction
 
@@ -11339,7 +11383,7 @@ function! AgFileFzf(aquery, ufzf)
     let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--bind=esc:ignore', '--prompt', printf('Ag'.'%s > ', empty(query) ? '' : (' ('.query.')'))]}
   endif
   let @/=query
-  set hlsearch
+  "set hlsearch
   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), 0)
 endfunction
 
@@ -11359,7 +11403,7 @@ function! AgitFzf(aquery, ufzf)
     let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--bind=esc:ignore', '--prompt', printf('Agit'.'%s > ', empty(query) ? '' : (' ('.query.')'))]}
   endif
   let @/=query
-  set hlsearch
+  "set hlsearch
   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), 0)
 endfunction
 
@@ -11408,7 +11452,7 @@ function! RipgrepFzf(aquery, ufzf, fullscreen)
     let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--bind=esc:ignore', '--prompt', printf('Rg'.'%s > ', empty(query) ? '' : (' ('.query.')'))]}
   endif
   let @/=query
-  set hlsearch
+  "set hlsearch
   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
 endfunction
 
@@ -11428,7 +11472,7 @@ function! RipgrepFileFzf(aquery, ufzf, fullscreen)
     let spec = {'options': ['--tac', '--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--bind=esc:ignore', '--prompt', printf('Rg'.'%s > ', empty(query) ? '' : (' ('.query.')'))]}
   endif
   let @/=query
-  set hlsearch
+  "set hlsearch
   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
 endfunction
 
@@ -11448,7 +11492,7 @@ function! RipgrepGitFzf(aquery, ufzf, fullscreen)
     let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--bind=esc:ignore', '--prompt', printf('Rgit'.'%s > ', empty(query) ? '' : (' ('.query.')'))]}
   endif
   let @/=query
-  set hlsearch
+  "set hlsearch
   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
 endfunction
 
