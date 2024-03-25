@@ -2525,6 +2525,9 @@ endfunction
 " QFEnter -------------
 
 " QFGrep --------------
+nmap qg <Plug>QFGrepG
+nmap qv <Plug>QFGrepV
+nmap qr <Plug>QFRestore
 nmap <Leader>qg <Plug>QFGrepG
 nmap <Leader>qv <Plug>QFGrepV
 nmap <Leader>qr <Plug>QFRestore
@@ -13101,8 +13104,9 @@ vnoremap <silent> <Leader>wk <C-\><C-n>:only<CR>
 nnoremap <silent> <Leader>\<Tab>       :tabnext<CR>
 vnoremap <silent> <Leader>\<Tab>       :tabnext<CR>
 
-nnoremap <silent> <Leader><Tab><Tab>   :tabnext<CR>
-vnoremap <silent> <Leader><Tab><Tab>   :tabnext<CR>
+" <Leader><Tab> is already mapped so this causes a delay for just <Leader><Tab> ...
+"nnoremap <silent> <Leader><Tab><Tab>   :tabnext<CR>
+"vnoremap <silent> <Leader><Tab><Tab>   :tabnext<CR>
 
 " next tab
 nnoremap <silent> <Leader>tn           :tabnext<CR>
