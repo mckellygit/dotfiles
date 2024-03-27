@@ -166,6 +166,9 @@ if g:has_wsl == 0 && has("nvim")
     "https://github.com/tree-sitter/tree-sitter.git
     Plug 'hrsh7th/nvim-compe'
 
+    " better quickfix with fzf ...
+    "Plug 'kevinhwang91/nvim-bqf'
+
     "Plug 'hrsh7th/nvim-cmp'
     "Plug 'nvim-telescope/telescope.nvim'
     "Plug 'kabouzeid/nvim-lspinstall'
