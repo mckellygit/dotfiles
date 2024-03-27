@@ -19,11 +19,26 @@ timer-text='#start at 02:20 pm\n#stop at 15:00\n#stop after 1h 30min\nstop if si
 device-type-64=['alsa_input.pci-0000_00_1f.3.analog-stereo']
 saved-player-list=@as []
 
+[apps/audio-recorder/track]
+album-name=''
+artist-name=''
+last-file-name='/home/kellma02/Audio/2020-07-12-10:33:25.mp3'
+track-len=0
+track-name=''
+track-pos=0
+
+[apps/seahorse/listing]
+item-filter='any'
+
+[apps/seahorse/windows/key-manager]
+height=476
+width=600
+
 [apps/update-manager]
 check-new-release-ignore='jammy'
 first-run=false
-launch-count=78
-launch-time=int64 1661384102
+launch-count=115
+launch-time=int64 1710777303
 show-details=true
 window-height=711
 window-width=1774
@@ -36,10 +51,25 @@ window-is-maximized=false
 window-width=1866
 
 [com/ubuntu/update-notifier]
-release-check-time=uint32 1662668955
+release-check-time=uint32 1710645708
+
+[desktop/ibus/panel/emoji]
+favorites=['Յ', '噃', 'є', 'Ն', '呥', '㑖', '➇', '\t', 'ȴ', '䔲', 'ͅ', '噸', '\U00056733', '䕂', '⍅', '𒍅', '䕧', '\U00033444', '😂', '🙂', 'ф', '䕥', 'ሴ', '\U00045432', '🦄', '\U000ddddd']
+
+[net/launchpad/diodon/clipboard]
+add-images=false
+instant-paste=false
+keep-clipboard-content=false
+recent-items-size=uint32 1
+synchronize-clipboards=true
+use-clipboard=true
+use-primary=true
+
+[net/launchpad/diodon/plugins]
+active-plugins=['indicator']
 
 [org/gnome/Totem]
-active-plugins=['skipto', 'screensaver', 'media_player_keys', 'vimeo', 'apple-trailers', 'screenshot', 'autoload-subtitles', 'movie-properties', 'save-file', 'variable-rate', 'recent']
+active-plugins=['skipto', 'rotation', 'screensaver', 'media-player-keys', 'vimeo', 'apple-trailers', 'screenshot', 'autoload-subtitles', 'movie-properties', 'save-file', 'variable-rate', 'open-directory', 'recent']
 subtitle-encoding='UTF-8'
 
 [org/gnome/calendar]
@@ -58,6 +88,10 @@ video-y-resolution=480
 
 [org/gnome/control-center]
 last-panel='keyboard'
+
+[org/gnome/deja-dup]
+backend='local'
+prompt-check='disabled'
 
 [org/gnome/deja-dup/file]
 migrated=true
@@ -113,7 +147,7 @@ translate=true
 [org/gnome/desktop/background]
 color-shading-type='solid'
 picture-options='zoom'
-picture-uri='file:///home/kellma02/.local/share/backgrounds/2022-04-25-00-06-02-Night_Yosemite.jpg'
+picture-uri='file:///home/kellma02/.local/share/backgrounds/2024-03-26-10-25-35-Oceanview.jpg'
 primary-color='#000000000000'
 secondary-color='#000000000000'
 
@@ -138,7 +172,10 @@ monospace-font-name='Ubuntu Mono 13'
 text-scaling-factor=1.25
 
 [org/gnome/desktop/notifications]
-application-children=['org-gnome-software', 'google-chrome', 'kitty', 'apport-gtk', 'org-gnome-nautilus', 'nixnote2', 'org-remmina-remmina', 'update-manager', 'ca-desrt-dconf-editor', 'clipit', 'org-gnome-dejadup', 'firefox', 'gnome-network-panel', 'rhythmbox', 'vivaldi-stable', 'gvim', 'appimagekit-pcloud', 'org-wezfurlong-wezterm', 'org-gnome-extensions-desktop', 'gnome-power-panel', 'gnome-printers-panel', 'st', 'org-gnome-chromegnomeshell']
+application-children=['diodon', 'org-gnome-software', 'google-chrome', 'kitty', 'apport-gtk', 'org-gnome-nautilus', 'nixnote2', 'teams-insiders', 'org-remmina-remmina', 'update-manager', 'ca-desrt-dconf-editor', 'clipit', 'org-gnome-dejadup', 'firefox', 'gnome-network-panel', 'rhythmbox', 'vivaldi-stable', 'gvim', 'appimagekit-pcloud', 'org-wezfurlong-wezterm', 'org-gnome-extensions-desktop', 'gnome-power-panel', 'gnome-printers-panel', 'st', 'org-gnome-chromegnomeshell', 'org-gnome-gedit', 'alacritty', 'org-codeberg-dnkl-foot', 'mlterm']
+
+[org/gnome/desktop/notifications/application/alacritty]
+application-id='Alacritty.desktop'
 
 [org/gnome/desktop/notifications/application/appimagekit-pcloud]
 application-id='appimagekit-pcloud.desktop'
@@ -152,6 +189,9 @@ application-id='ca.desrt.dconf-editor.desktop'
 [org/gnome/desktop/notifications/application/clipit]
 application-id='clipit.desktop'
 
+[org/gnome/desktop/notifications/application/diodon]
+application-id='diodon.desktop'
+
 [org/gnome/desktop/notifications/application/firefox]
 application-id='firefox.desktop'
 
@@ -164,6 +204,9 @@ application-id='gnome-power-panel.desktop'
 [org/gnome/desktop/notifications/application/gnome-printers-panel]
 application-id='gnome-printers-panel.desktop'
 
+[org/gnome/desktop/notifications/application/google-chrome]
+application-id='google-chrome.desktop'
+
 [org/gnome/desktop/notifications/application/gvim]
 application-id='gvim.desktop'
 
@@ -173,14 +216,26 @@ application-id='io.github.Pithos.desktop'
 [org/gnome/desktop/notifications/application/kitty]
 application-id='kitty.desktop'
 
+[org/gnome/desktop/notifications/application/mlterm]
+application-id='Mlterm.desktop'
+
 [org/gnome/desktop/notifications/application/nixnote2]
 application-id='nixnote2.desktop'
+
+[org/gnome/desktop/notifications/application/org-codeberg-dnkl-foot]
+application-id='org.codeberg.dnkl.foot.desktop'
+
+[org/gnome/desktop/notifications/application/org-gnome-chromegnomeshell]
+application-id='org.gnome.ChromeGnomeShell.desktop'
 
 [org/gnome/desktop/notifications/application/org-gnome-dejadup]
 application-id='org.gnome.DejaDup.desktop'
 
 [org/gnome/desktop/notifications/application/org-gnome-extensions-desktop]
 application-id='org.gnome.Extensions.desktop.desktop'
+
+[org/gnome/desktop/notifications/application/org-gnome-gedit]
+application-id='org.gnome.gedit.desktop'
 
 [org/gnome/desktop/notifications/application/org-gnome-nautilus]
 application-id='org.gnome.Nautilus.desktop'
@@ -209,8 +264,11 @@ application-id='update-manager.desktop'
 [org/gnome/desktop/notifications/application/vivaldi-stable]
 application-id='vivaldi-stable.desktop'
 
+[org/gnome/desktop/peripherals/keyboard]
+repeat-interval=uint32 37
+
 [org/gnome/desktop/peripherals/mouse]
-speed=-0.79856115107913672
+speed=-0.86029411764705888
 
 [org/gnome/desktop/peripherals/touchpad]
 speed=0.044117647058823595
@@ -226,9 +284,9 @@ remove-old-trash-files=false
 
 [org/gnome/desktop/screensaver]
 color-shading-type='solid'
-lock-delay=uint32 0
+lock-delay=uint32 1800
 picture-options='zoom'
-picture-uri='file:///home/kellma02/.local/share/backgrounds/2022-04-25-00-06-02-Night_Yosemite.jpg'
+picture-uri='file:///home/kellma02/.local/share/backgrounds/2024-03-26-10-25-35-Oceanview.jpg'
 primary-color='#000000000000'
 secondary-color='#000000000000'
 
@@ -261,7 +319,7 @@ switch-windows=['<Alt>Tab']
 switch-windows-backward=['<Shift><Alt>Tab']
 
 [org/gnome/desktop/wm/preferences]
-action-double-click-titlebar='toggle-maximize-horizontally'
+action-double-click-titlebar='none'
 audible-bell=false
 auto-raise=false
 focus-mode='sloppy'
@@ -275,7 +333,7 @@ background-color='rgb(0,0,0)'
 use-background-color=true
 
 [org/gnome/evince/default]
-window-ratio=(3.0277777777777777, 1.25)
+window-ratio=(3.0273159144893111, 2.261744966442953)
 
 [org/gnome/evolution-data-server]
 migrated=true
@@ -299,7 +357,7 @@ active-plugins=['docinfo', 'filebrowser', 'time', 'spell', 'modelines']
 [org/gnome/gedit/plugins/filebrowser]
 root='file:///'
 tree-view=true
-virtual-root='file:///home/kellma02'
+virtual-root='file:///home/kellma02/dotfiles/.config/foot'
 
 [org/gnome/gedit/preferences/print]
 print-font-body-pango='Monospace 9'
@@ -317,7 +375,7 @@ show-tabs-mode='auto'
 bottom-panel-size=140
 side-panel-active-page='GeditWindowDocumentsPanel'
 side-panel-size=200
-size=(900, 700)
+size=(1943, 1441)
 state=87168
 
 [org/gnome/gnome-screenshot]
@@ -342,9 +400,13 @@ search-filter-time-type='last_modified'
 
 [org/gnome/nautilus/window-state]
 geometry='1920x1060+36+32'
-initial-size=(1841, 999)
+initial-size=(1848, 999)
 maximized=false
 sidebar-width=244
+
+[org/gnome/nm-applet/eap/21c221d8-17cd-4cd5-ab69-d9eceba81d78]
+ignore-ca-cert=false
+ignore-phase2-ca-cert=false
 
 [org/gnome/nm-applet/eap/2ccca922-4956-4b08-8d62-a237b849436e]
 ignore-ca-cert=false
@@ -385,7 +447,7 @@ volume=1.0
 
 [org/gnome/rhythmbox/plugins]
 active-plugins=['notification', 'mpris', 'audiocd', 'iradio', 'android', 'dbus-media-server', 'ipod', 'power-manager', 'daap', 'generic-player', 'mmkeys', 'rb', 'alternative-toolbar', 'artsearch', 'audioscrobbler', 'mtpdevice']
-seen-plugins=['notification', 'mpris', 'dbus-media-server', 'rblirc', 'ipod', 'grilo', 'pythonconsole', 'daap', 'rb', 'alternative-toolbar', 'artsearch', 'sendto', 'soundcloud', 'lyrics', 'magnatune', 'im-status', 'replaygain', 'audioscrobbler', 'webremote', 'fmradio', 'mtpdevice']
+seen-plugins=['notification', 'mpris', 'dbus-media-server', 'rblirc', 'ipod', 'grilo', 'pythonconsole', 'daap', 'rb', 'alternative-toolbar', 'artsearch', 'sendto', 'soundcloud', 'lyrics', 'magnatune', 'im-status', 'replaygain', 'audioscrobbler', 'webremote', 'fmradio', 'mtpdevice', 'listenbrainz']
 
 [org/gnome/rhythmbox/plugins/alternative_toolbar]
 display-type=1
@@ -444,7 +506,7 @@ command='cycle_wins'
 name='Window Cycler'
 
 [org/gnome/settings-daemon/plugins/power]
-sleep-inactive-ac-timeout=3600
+sleep-inactive-ac-timeout=4800
 sleep-inactive-ac-type='nothing'
 sleep-inactive-battery-timeout=900
 
@@ -453,12 +515,15 @@ hinting='slight'
 
 [org/gnome/shell]
 app-picker-view=uint32 1
-command-history=['gconf-editor', 'l2', '?', 'r', 'looking glass', 'lg']
+command-history=['gconf-editor', 'l2', '?', 'looking glass', 'r', 'l', 'g', 'gnome-session-properties', 'lg']
 disable-user-extensions=true
 disabled-extensions=@as []
 enabled-extensions=['sound-output-device-chooser@kgshank.net', 'clipboard-indicator@tudmotu.com', 'cascade-windows@lytol.com', 'arrangeWindows@sun.wxg@gmail.com', 'alt-tab-move-mouse@buzztaiki.github.com']
-favorite-apps=['org.gnome.Nautilus.desktop', 'rhythmbox.desktop', 'libreoffice-writer.desktop', 'update-manager.desktop', 'yelp.desktop', 'simple-scan.desktop', 'code.desktop', 'firefox.desktop', 'vivaldi-stable.desktop', 'st.desktop', 'org.wezfurlong.wezterm.desktop', 'Alacritty.desktop']
+favorite-apps=['org.gnome.Nautilus.desktop', 'rhythmbox.desktop', 'libreoffice-writer.desktop', 'update-manager.desktop', 'yelp.desktop', 'simple-scan.desktop', 'firefox.desktop', 'vivaldi-stable.desktop', 'st.desktop', 'Zutty.desktop', 'Alacritty.desktop', 'org.codeberg.dnkl.foot.desktop', 'Mlterm.desktop']
 looking-glass-history=['exit', 'quit']
+
+[org/gnome/shell/extensions/cascade-windows]
+fullscreen-enabled=true
 
 [org/gnome/shell/extensions/dash-to-dock]
 hot-keys=false
@@ -477,8 +542,17 @@ icon-theme='colored'
 [org/gnome/shell/keybindings]
 toggle-message-tray=['<Super>m']
 
+[org/gnome/simple-scan]
+document-type='text'
+page-side='front'
+paper-height=2794
+paper-width=2159
+photo-dpi=600
+save-directory='/home/kellma02'
+text-dpi=600
+
 [org/gnome/software]
-check-timestamp=int64 1643554035
+check-timestamp=int64 1705329321
 
 [org/gnome/terminal/legacy]
 schema-version=uint32 3
@@ -488,7 +562,7 @@ default-provider='local'
 view='grid'
 window-maximized=false
 window-position=[36, 32]
-window-size=[1887, 1066]
+window-size=[1887, 1064]
 
 [org/gtk/settings/color-chooser]
 custom-colors=[(0.84705882352941175, 0.37254901960784315, 0.0, 1.0), (0.74509803921568629, 0.80784313725490198, 0.8666666666666667, 1.0)]
@@ -501,12 +575,25 @@ show-hidden=false
 show-size-column=true
 show-type-column=true
 sidebar-width=247
-sort-column='name'
+sort-column='modified'
 sort-directories-first=true
-sort-order='ascending'
+sort-order='descending'
 type-format='category'
-window-position=(1979, 283)
+window-position=(26, 23)
 window-size=(1231, 902)
+
+[org/yorba/shotwell/crop-settings]
+last-crop-height=1
+last-crop-menu-choice=28
+last-crop-width=1
+
+[org/yorba/shotwell/preferences/export]
+constraint='HEIGHT'
+export-format-mode='CURRENT'
+export-metadata=true
+photo-file-format='JFIF'
+quality='HIGH'
+scale=800
 
 [org/yorba/shotwell/preferences/ui]
 display-basic-properties=true
