@@ -9,7 +9,7 @@ do_vim_bundles=""
 only_vim_bundles=""
 if [[ $# -gt 0 ]] ; then
     if [[ "$1" == "-a" || "$1" == "-all" || "$1" == "--a" || "$1" == "--all" ]] ; then
-        extras=" bat neovim vim gef mlterm lazygit tree-sitter delta difftastic"
+        extras=" bat vim neovim gef mlterm lazygit tree-sitter delta difftastic"
         if [[ $# -gt 1 ]] ; then
             if [[ "$2" == "-a" || "$2" == "-all" || "$2" == "--a" || "$2" == "--all" ]] ; then
                 extras=" $extras libxkbcommon foot alacritty "
@@ -28,7 +28,7 @@ if [[ $# -gt 0 ]] ; then
         do_vim_bundles="yes"
         if [[ $# -gt 1 ]] ; then
             if [[ "$2" == "-a" || "$2" == "-all" || "$2" == "--a" || "$2" == "--all" ]] ; then
-                extras=" bat neovim vim gef mlterm lazygit tree-sitter delta difftastic"
+                extras=" bat vim neovim gef mlterm lazygit tree-sitter delta difftastic"
             fi
             if [[ $# -gt 2 ]] ; then
                 if [[ "$3" == "-a" || "$3" == "-all" || "$3" == "--a" || "$3" == "--all" ]] ; then
