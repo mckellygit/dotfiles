@@ -475,6 +475,19 @@ fi
 # sniffnet:
 #   git clone https://github.com/GyulyVGC/sniffnet.git
 
+# ioping:
+#   git clone https://github.com/koct9i/ioping.git
+
+# fio
+#   git clone https://github.com/axboe/fio.git
+
+# iozone
+
+# bonnie
+
+# elfutils (eu-stack - fast stack capture of pids)
+#   git clone git://sourceware.org/git/elfutils.git
+
 # ---------------------
 
 # gdb-dashboard:
