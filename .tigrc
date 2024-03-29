@@ -182,13 +182,13 @@ bind generic   <Ctrl-^><Tab>        next
 # alt-n/p
 #bind generic   <Esc>n       scroll-half-page-down
 #bind generic   <Esc>p       scroll-half-page-up
-bind generic   <Esc>n       none
-bind generic   <Esc>p       none
+#bind generic   <Esc>n       none
+#bind generic   <Esc>p       none
 # alt-N/P
 #bind generic   <Esc>N       next
 #bind generic   <Esc>P       previous
-bind generic   <Esc>N       none
-bind generic   <Esc>P       none
+#bind generic   <Esc>N       none
+#bind generic   <Esc>P       none
 #
 bind generic   <Esc>[1;5B   scroll-line-down
 bind generic   <Esc>[1;5A   scroll-line-up
