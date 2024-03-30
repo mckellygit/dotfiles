@@ -1620,7 +1620,10 @@ fzf-cd-widget() {
   #zle reset-prompt
   #return 0
 
-  BUFFER="builtin cd -- ${(q)dir}"
+  # old way
+  #BUFFER="builtin cd -- ${(q)dir}"
+  BUFFER="builtin cd -- ${(q)dir:a}"
+
   zle accept-line
   local ret=$?
   unset dir # ensure this doesn't end up appearing in prompt expansion
