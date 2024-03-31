@@ -2,13 +2,22 @@
 
 git() { $HOME/bin/git "$@"; }
 
+dest="origin"
+if [[ $# -ge 1 ]] ; then
+    dest=$1
+fi
+if [[ "$dest" != "origin" && "$dest" != "upstream" ]] ; then
+    echo "Error, dest needs to be either \"origin\" or \"upstream\""
+    exit 1
+fi
+
 branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
 if [[ -z "$branch" ]] ; then
     echo "no git branch info found ..."
     exit 1
 fi
 
-git branch --set-upstream-to=origin/${branch} ${branch}
+git branch --set-upstream-to=${dest}/${branch} ${branch}
 
 # to unset:
 #   git branch --unset-upstream [<branchname>]
