@@ -1117,7 +1117,7 @@ alias gco='git checkout '
 
 # -x S -y R are not supported values
 if [ -n "$TMUX_PANE" -a -z "$VIM_TERMINAL" ] ; then
-    alias fzf='fzf-tmux -p -x C -y 38 -w 80% -h 65%'
+    alias fzf='fzf-tmux -p -x C -y 38 -w 80% -h 65% --bind=esc:ignore'
 fi
 
 # to use tmux window instead of popup, add -d arg
@@ -1653,7 +1653,7 @@ fzf-history-widget() {
 
 my-fzfcmd() {
   if [ -n "$TMUX_PANE" -a -z "$VIM_TERMINAL" ] ; then
-    echo "fzf-tmux -p -x C -y C -w 80% -h 65% "
+    echo "fzf-tmux -p -x C -y C -w 80% -h 65% --bind=esc:ignore"
   else
     echo "command fzf --height 40% "
   fi

@@ -18,6 +18,13 @@ tmpfile2=/dev/shm/tmp2fzf-$varx
 tmpfile3=/dev/shm/tmp3fzf-$varx
 tmpfile4=/dev/shm/tmp4fzf-$varx
 
+tmux_args="-d 20"
+if [[ $# -ge 1 ]] ; then
+    if [[ "$1" == "-p" ]] ; then
+        tmux_args="-p -x C -y C -w 80% -h 65% --bind=esc:ignore"
+    fi
+fi
+
 tmux capture-pane -J -p > $tmpfile
 
 if [[ -s $tmpfile ]] ; then
@@ -62,7 +69,7 @@ if [[ -s $tmpfile ]] ; then
     rm -f $tmpfile4
 
     if [[ -s "$tmpfile2" ]] ; then
-        efile=$(cat $tmpfile2 | fzf-tmux --tac --multi -d 20 | awk '{ORS = /"$/ ? RS : " "}1')
+        efile=$(cat $tmpfile2 | fzf-tmux --tac --multi $tmux_args | awk '{ORS = /"$/ ? RS : " "}1')
         rm -f $tmpfile2
         if [[ -n "$efile" ]] ; then
             echo -n "vi $efile" | tmux load-buffer -b tmpfzfX -

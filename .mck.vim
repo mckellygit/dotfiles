@@ -4132,6 +4132,7 @@ function s:Myregfzf() abort
     call fzf#run({
 \       'source' : <sid>reglist(),
 \       'sink'   : function('s:MyregfzfCB'),
+\       'options': '--bind=esc:ignore',
 \       'window' : { 'width': 0.8, 'height': 0.4, 'yoffset': 0.5, 'xoffset': 0.5 }
 \   })
 endfunction
