@@ -1117,7 +1117,8 @@ alias gco='git checkout '
 
 # -x S -y R are not supported values
 if [ -n "$TMUX_PANE" -a -z "$VIM_TERMINAL" ] ; then
-    alias fzf='fzf-tmux -p -x C -y 38 -w 80% -h 65% --bind=esc:ignore'
+    # was -y 38 - perhaps so we can see more of the cmdline below popup ?
+    alias fzf='fzf-tmux -p -x C -y C -w 80% -h 65% --bind=esc:ignore'
 fi
 
 # to use tmux window instead of popup, add -d arg
