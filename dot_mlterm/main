@@ -2,6 +2,11 @@ logsize = 0
 mod_keys_to_stop_mouse_report = shift
 geometry = 194x53
 use_point_size = false
+# NOTE: use type_engine xft with aafont file ...
+type_engine = xft
+use_variable_column_width = false
+# with DejaVu Sans Mono font use line_space of 2 ...
+line_space = 2
 scrollbar_mode = none
 use_ansi_colors = true
 use_anti_alias = true
@@ -14,6 +19,7 @@ use_locked_title = true
 allow_osc52 = true
 # NOTE: could use mlterm-256color, but that doesn't seem to support cstyle or cursor-color ...
 termtype = xterm-256color
+use_transbg = false
 bg_color = #14292e
 fg_color = #c5c5c5
 blink_cursor = true
