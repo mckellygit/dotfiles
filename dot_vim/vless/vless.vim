@@ -215,8 +215,15 @@ au VimEnter * set nomod
 "noremap <script> d <C-D><SID>LM
 "map <C-D> d
 "map d <Space>
-call NoremapNormalCmd("<expr> <Space>", 0, "(line('.') == line('w0')) ? 'M' : '<C-D>:set scroll=0\r'")
-call NoremapNormalCmd("<expr> d",       0, "(line('.') == line('w0')) ? 'M' : '<C-D>:set scroll=0\r'")
+"call NoremapNormalCmd("<expr> <Space>", 0, "(line('.') == line('w0')) ? 'M' : '<C-D>:set scroll=0\r'")
+"call NoremapNormalCmd("<expr> d",       0, "(line('.') == line('w0')) ? 'M' : '<C-D>:set scroll=0\r'")
+map <Space> <C-f>
+try
+  nunmap dx
+  vunmap dx
+catch /E31:/
+endtry
+map d <C-f>
 
 " ---------
 
@@ -251,7 +258,8 @@ map <C-N> <CR>
 " ---------
 
 " NOTE: could also map backspace to page up ...
-call NoremapNormalCmd("<expr> <BS>", 0, "(line('.') == line('w$')) ? 'M' : '<C-U>:set scroll=0\r'")
+"call NoremapNormalCmd("<expr> <BS>", 0, "(line('.') == line('w$')) ? 'M' : '<C-U>:set scroll=0\r'")
+map <BS> <C-b>
 
 " Scroll half a page backward
 "noremap <script> u <C-B><SID>L
@@ -264,7 +272,8 @@ try
   vunmap <buffer> uu
 catch /E31:/
 endtry
-call NoremapNormalCmd("<expr> u", 0, "(line('.') == line('w$')) ? 'M' : '<C-U>:set scroll=0\r'")
+"call NoremapNormalCmd("<expr> u", 0, "(line('.') == line('w$')) ? 'M' : '<C-U>:set scroll=0\r'")
+map <buffer> u <BS>
 
 " ---------
 
@@ -431,8 +440,15 @@ au VimEnter * :Alias! q! q!
 "cnoremap q! FXIT
 "cnoreabbrev <silent> <expr> FXIT (getcmdtype() == ':' && getcmdline() =~ '\s*\<FXIT\>\s*$') ? 'qa!' : 'q!'
 
-au VimEnter * :Alias! n call\ QuitVless()
-au VimEnter * :Alias! x call\ QuitVless()
+try
+  nunmap x
+  vunmap x
+catch /E31:/
+endtry
+map x <Nop>
+
+"au VimEnter * :Alias! n call\ QuitVless()
+"au VimEnter * :Alias! x call\ QuitVless()
 
 " <Leader>wc - if want screen to remain at exit ...
 " skip for now - messes up tmux alternate screen
