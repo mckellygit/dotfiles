@@ -480,6 +480,7 @@ fi
 
 # fio
 #   git clone https://github.com/axboe/fio.git
+#   ./configure --disable-lex
 
 # iozone
 
