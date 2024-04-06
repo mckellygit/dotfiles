@@ -2788,7 +2788,7 @@ endfunction
 autocmd User AsyncRunInit let g:asyncrun_code = 2 | let g:asyncrun_string = '' | let g:asyncrun_copen = 1
 autocmd User AsyncRunPre  let g:asyncrun_code = 2 | redraw! | echohl DiffAdd | echo "\rAsyncRun started ..." | echohl None
 autocmd User AsyncRunStop if g:asyncrun_code != 0 | echohl DiffText | echo 'AsyncRun complete: [ ' . g:asyncrun_code . ' ]' | echohl None |
-            \ else | echohl DiffAdd | echo 'AsyncRun complete: [ OK ]' | echohl None | if g:asyncrun_copen != 0 | copen | set nowrap | set cursorline | clearjumps | endif | endif | if !pumvisible() | call lightline#update() | endif | let g:asyncrun_string = '' | let g:asyncrun_copen = 1
+            \ else | echohl DiffAdd | echo 'AsyncRun complete: [ OK ]' | echohl None | if g:asyncrun_copen != 0 | lcl | copen | set nowrap | set cursorline | clearjumps | endif | endif | if !pumvisible() | call lightline#update() | endif | let g:asyncrun_string = '' | let g:asyncrun_copen = 1
 autocmd User AsyncRunInterrupt echohl DiffText | echo 'AsyncRun complete: [TERM]' | echohl None | let g:asyncrun_code = 2 | let g:asyncrun_string = '' | let g:asyncrun_copen = 1
 " NOTE: add '| wincmd p' to go back to orig window
 " NOTE: add '| set ma' after copen to make qf modifiable
