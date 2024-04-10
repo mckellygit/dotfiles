@@ -736,7 +736,8 @@ endfunction
 " NOTE: check for rg - but is this plugin still used ?
 if executable('ag')
   " NOTE: ag can miss some matches without -U --one-file-system --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --ignore ".kube" --ignore ".minikube" ...
-  let g:ackprg = '\ag --vimgrep -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --ignore ".kube" --ignore ".minikube" -- '
+  "let g:ackprg = '\ag --vimgrep --nocolor -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --ignore ".kube" --ignore ".minikube" -- '
+  let g:ackprg = '\rg --vimgrep --color=never --smart-case --one-file-system --hidden --iglob \!".git" --iglob \!".cache" --iglob \!".ccache" --iglob \!".debug" --iglob \!".vscode" --iglob \!".pcloud" --iglob \!".rustup" --iglob \!".cargo" --iglob \!".kube" --iglob \!".minikube" -- '
 endif
 " example: (cdo/cfdo ldo/lfdo [!])
 " :Ack foo
@@ -746,7 +747,7 @@ endif
 let g:ackhighlight = 1
 let g:ack_use_dispatch = 1
 "set grepprg=ack\ -k
-"set grepprg=ag\ --vimgrep\ -U\ --one-device --hidden\ --ignore\ ".git"\ --ignore\ ".cache"\ --ignore\ ".ccache"\ --ignore\ ".debug"\ --ignore\ ".vscode"\ --ignore\ ".pcloud"\ --ignore\ ".rustup"\ --ignore\ ".cargo"\ --ignore\ ".kube"\ --ignore\ ".minikube" --\ 
+"set grepprg=ag\ --vimgrep\ -U\ --nocolor\ --one-device --hidden\ --ignore\ ".git"\ --ignore\ ".cache"\ --ignore\ ".ccache"\ --ignore\ ".debug"\ --ignore\ ".vscode"\ --ignore\ ".pcloud"\ --ignore\ ".rustup"\ --ignore\ ".cargo"\ --ignore\ ".kube"\ --ignore\ ".minikube" --\ 
 "set grepformat=%f:%l:%c:%m
 " open :grep output in qf ...
 "autocmd QuickFixCmdPost ++nested *grep* cwindow
@@ -760,8 +761,8 @@ let g:FerretQFMap=1
 let g:FerretHlsearch=1
 let g:FerretExecutable='rg,ag,ack'
 let g:FerretExecutableArguments = {
-  \   '\rg': '--vimgrep --color=always --smart-case --one-file-system --hidden --iglob \!".git" --iglob \!".cache" --iglob \!".ccache" --iglob \!".debug" --iglob \!".vscode" --iglob \!".pcloud" --iglob \!".rustup" --iglob \!".cargo" --iglob \!".kube" --iglob \!".minikube" -- ',
-  \   '\ag': '--vimgrep -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --ignore ".kube" --ignore ".minikube" -- ',
+  \   '\rg': '--vimgrep --color=never --smart-case --one-file-system --hidden --iglob \!".git" --iglob \!".cache" --iglob \!".ccache" --iglob \!".debug" --iglob \!".vscode" --iglob \!".pcloud" --iglob \!".rustup" --iglob \!".cargo" --iglob \!".kube" --iglob \!".minikube" -- ',
+  \   '\ag': '--vimgrep --nocolor -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --ignore ".kube" --ignore ".minikube" -- ',
   \   '\ack': '-s -H --nopager --nocolor --nogroup --column --smart-case --follow --ignore-dir=.git --ignore-dir=.cache --ignore-dir=.ccache --ignore-dir=.debug --ignore-dir=.vscode --ignore-dir=.pcloud --ignore-dir=.rustup --ignore-dir=.cargo --ignore-dir=.kube --ignore-dir=.minikube'
   \ }
 
@@ -11192,26 +11193,31 @@ function s:MySearch(meth) abort
     if empty(files)
       redraw | echohl DiffText | echo "No files to search" | echohl None
     else
-      execute 'AsyncRun! -strip \ag --vimgrep -- ' shellescape(string, 1) join(files) ' 2>/dev/null'
+      "execute 'AsyncRun! -strip \ag --vimgrep --nocolor -- ' shellescape(string, 1) join(files) ' 2>/dev/null'
+      execute 'AsyncRun! -strip \rg --vimgrep --color=never -- ' shellescape(string, 1) join(files) ' 2>/dev/null'
     endif
   elseif (a:meth == 1)
     "execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
-    execute 'AsyncRun! -strip \ag --vimgrep -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --ignore ".kube" --ignore ".minikube" -- ' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
+    "execute 'AsyncRun! -strip \ag --vimgrep --nocolor -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --ignore ".kube" --ignore ".minikube" -- ' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
     "NOTE: sed substitute works but then vim cant find files from paths ...
     "let gdir1 = s:find_git_root() . '/'
     "let gdir = substitute(gdir1, '/', '\\/', 'g')
-    "let icmd = 'AsyncRun! -strip \ag --vimgrep -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --ignore ".kube" --ignore ".minikube" -- '.shellescape(string, 1).' '.s:find_git_root().' | sed "s/'.gdir.'//" 2>/dev/null'
+    "let icmd = 'AsyncRun! -strip \ag --vimgrep --nocolor -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --ignore ".kube" --ignore ".minikube" -- '.shellescape(string, 1).' '.s:find_git_root().' | sed "s/'.gdir.'//" 2>/dev/null'
     "echom "icmd = " . icmd
     "execute icmd
+    execute 'AsyncRun! -strip \rg --vimgrep --color=never --text --smart-case --one-file-system --hidden --iglob \!".git" --iglob \!".cache" --iglob \!".ccache" --iglob \!".debug" --iglob \!".vscode" --iglob \!".pcloud" --iglob \!".rustup" --iglob \!".cargo" --iglob \!".kube" --iglob \!".minikube" -- ' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
   elseif (a:meth == 2)
     "execute 'AsyncRun! -strip -cwd ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) ' 2>/dev/null'
-    execute 'AsyncRun! -strip \ag --vimgrep -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --ignore ".kube" --ignore ".minikube" -- ' shellescape(string, 1) ' 2>/dev/null'
+    "execute 'AsyncRun! -strip \ag --vimgrep --nocolor -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --ignore ".kube" --ignore ".minikube" -- ' shellescape(string, 1) ' 2>/dev/null'
+    execute 'AsyncRun! -strip \rg --vimgrep --color=never --text --smart-case --one-file-system --hidden --iglob \!".git" --iglob \!".cache" --iglob \!".ccache" --iglob \!".debug" --iglob \!".vscode" --iglob \!".pcloud" --iglob \!".rustup" --iglob \!".cargo" --iglob \!".kube" --iglob \!".minikube" -- ' shellescape(string, 1) ' 2>/dev/null'
   elseif (a:meth == 3)
-    let icmd = '\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --ignore ".kube" --ignore ".minikube" --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root()
+    "let icmd = '\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --ignore ".kube" --ignore ".minikube" --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root()
+    let icmd = '\rg --column --line-number --no-heading --color=always --text --smart-case --one-file-system --hidden --iglob \!".git" --iglob \!".cache" --iglob \!".ccache" --iglob \!".debug" --iglob \!".vscode" --iglob \!".pcloud" --iglob \!".rustup" --iglob \!".cargo" --iglob \!".kube" --iglob \!".minikube" -- '.shellescape(string, 1).' '.s:find_git_root()
     let ispec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--bind=esc:ignore']}
     call fzf#vim#grep(icmd, 1, fzf#vim#with_preview(ispec), 0)
   elseif (a:meth == 4)
-    let icmd = '\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --ignore ".kube" --ignore ".minikube" --nogroup --column --color -- '.shellescape(string, 1)
+    "let icmd = '\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --ignore ".kube" --ignore ".minikube" --nogroup --column --color -- '.shellescape(string, 1)
+    let icmd = '\rg --column --line-number --no-heading --color=always --text --smart-case --one-file-system --hidden --iglob \!".git" --iglob \!".cache" --iglob \!".ccache" --iglob \!".debug" --iglob \!".vscode" --iglob \!".pcloud" --iglob \!".rustup" --iglob \!".cargo" --iglob \!".kube" --iglob \!".minikube" -- '.shellescape(string, 1)
     let ispec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--bind=esc:ignore']}
     call fzf#vim#grep(icmd, 1, fzf#vim#with_preview(ispec), 0)
   endif
@@ -11244,26 +11250,31 @@ function s:MyVisSearch(meth) abort
     if empty(files)
       redraw | echohl DiffText | echo "No files to search" | echohl None
     else
-      execute 'AsyncRun! -strip \ag --vimgrep -- ' shellescape(string, 1) join(files) ' 2>/dev/null'
+      "execute 'AsyncRun! -strip \ag --vimgrep --nocolor -- ' shellescape(string, 1) join(files) ' 2>/dev/null'
+      execute 'AsyncRun! -strip \rg --vimgrep --color=never -- ' shellescape(string, 1) join(files) ' 2>/dev/null'
     endif
   elseif (a:meth == 1)
     "execute 'AsyncRun! -strip ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
-    execute 'AsyncRun! -strip \ag --vimgrep -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --ignore ".kube" --ignore ".minikube" -- ' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
+    "execute 'AsyncRun! -strip \ag --vimgrep --nocolor -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --ignore ".kube" --ignore ".minikube" -- ' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
     "NOTE: sed substitute works but then vim cant find files from paths ...
     "let gdir1 = s:find_git_root() . '/'
     "let gdir = substitute(gdir1, '/', '\\/', 'g')
-    "let icmd = 'AsyncRun! -strip \ag --vimgrep -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --ignore ".kube" --ignore ".minikube" -- '.shellescape(string, 1).' '.s:find_git_root().' | sed "s/'.gdir.'//" 2>/dev/null'
+    "let icmd = 'AsyncRun! -strip \ag --vimgrep --nocolor -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --ignore ".kube" --ignore ".minikube" -- '.shellescape(string, 1).' '.s:find_git_root().' | sed "s/'.gdir.'//" 2>/dev/null'
     "echom "icmd = " . icmd
     "execute icmd
+    execute 'AsyncRun! -strip \rg --vimgrep --color=never --text --smart-case --one-file-system --hidden --iglob \!".git" --iglob \!".cache" --iglob \!".ccache" --iglob \!".debug" --iglob \!".vscode" --iglob \!".pcloud" --iglob \!".rustup" --iglob \!".cargo" --iglob \!".kube" --iglob \!".minikube" -- ' shellescape(string, 1) s:find_git_root() ' 2>/dev/null'
   elseif (a:meth == 2)
     "execute 'AsyncRun! -strip -cwd ack -s -H --nopager --nocolor --nogroup --column --smart-case --follow' shellescape(string, 1) ' 2>/dev/null'
-    execute 'AsyncRun! -strip \ag --vimgrep -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --ignore ".kube" --ignore ".minikube" -- ' shellescape(string, 1) ' 2>/dev/null'
+    "execute 'AsyncRun! -strip \ag --vimgrep --nocolor -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --ignore ".kube" --ignore ".minikube" -- ' shellescape(string, 1) ' 2>/dev/null'
+    execute 'AsyncRun! -strip \rg --vimgrep --color=never --text --smart-case --one-file-system --hidden --iglob \!".git" --iglob \!".cache" --iglob \!".ccache" --iglob \!".debug" --iglob \!".vscode" --iglob \!".pcloud" --iglob \!".rustup" --iglob \!".cargo" --iglob \!".kube" --iglob \!".minikube" -- ' shellescape(string, 1) ' 2>/dev/null'
   elseif (a:meth == 3)
-    let icmd = '\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --ignore ".kube" --ignore ".minikube" --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root()
+    "let icmd = '\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --ignore ".kube" --ignore ".minikube" --nogroup --column --color -- '.shellescape(string, 1).' '.s:find_git_root()
+    let icmd = '\rg --column --line-number --no-heading --color=always --text --smart-case --one-file-system --hidden --iglob \!".git" --iglob \!".cache" --iglob \!".ccache" --iglob \!".debug" --iglob \!".vscode" --iglob \!".pcloud" --iglob \!".rustup" --iglob \!".cargo" --iglob \!".kube" --iglob \!".minikube" -- '.shellescape(string, 1).' '.s:find_git_root()
     let ispec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--bind=esc:ignore']}
     call fzf#vim#grep(icmd, 1, fzf#vim#with_preview(ispec), 0)
   elseif (a:meth == 4)
-    let icmd = '\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --ignore ".kube" --ignore ".minikube" --nogroup --column --color -- '.shellescape(string, 1)
+    "let icmd = '\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --ignore ".kube" --ignore ".minikube" --nogroup --column --color -- '.shellescape(string, 1)
+    let icmd = '\rg --column --line-number --no-heading --color=always --text --smart-case --one-file-system --hidden --iglob \!".git" --iglob \!".cache" --iglob \!".ccache" --iglob \!".debug" --iglob \!".vscode" --iglob \!".pcloud" --iglob \!".rustup" --iglob \!".cargo" --iglob \!".kube" --iglob \!".minikube" -- '.shellescape(string, 1)
     let ispec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--bind=esc:ignore']}
     call fzf#vim#grep(icmd, 1, fzf#vim#with_preview(ispec), 0)
   endif
@@ -11403,7 +11414,7 @@ function! AgFileFzf(aquery, ufzf)
   else
     let query = a:aquery
   endif
-  let command_fmt = '\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --ignore ".kube" --ignore ".minikube" --nogroup --column --vimgrep --color -- %s %s || true'
+  let command_fmt = '\ag -U --one-device --hidden --ignore ".git" --ignore ".cache" --ignore ".ccache" --ignore ".debug" --ignore ".vscode" --ignore ".pcloud" --ignore ".rustup" --ignore ".cargo" --ignore ".kube" --ignore ".minikube" --nogroup --column --color -- %s %s || true'
   let initial_command = printf(command_fmt, shellescape(query), expand('%'))
   let reload_command = printf(command_fmt, '{q}', expand('%'))
   "let spec = {'options': ['--preview', '~/bin/fzf_preview.sh {}', '--bind=alt-d:kill-word', '--disabled']}
@@ -11466,6 +11477,8 @@ command! -nargs=* -bang AGit call AgitFzf(<q-args>, 1)
 
 " -------------------------------------------------------------
 
+" NOTE: rg ags --column --line-number --no-heading is the same as --vimgrep ...
+
 function! RipgrepFzf(aquery, ufzf, fullscreen)
   " TODO: if something was visually selected then use that, else ...
   if empty(a:aquery)
@@ -11493,7 +11506,7 @@ function! RipgrepFileFzf(aquery, ufzf, fullscreen)
   else
     let query = a:aquery
   endif
-  let command_fmt = '\rg --vimgrep --color=always --text --smart-case --one-file-system --hidden --iglob \!".git" --iglob \!".cache" --iglob \!".ccache" --iglob \!".debug" --iglob \!".vscode" --iglob \!".pcloud" --iglob \!".rustup" --iglob \!".cargo" --iglob \!".kube" --iglob \!".minikube" -- %s %s || true'
+  let command_fmt = '\rg --column --line-number --no-heading --color=always --text --smart-case --one-file-system --hidden --iglob \!".git" --iglob \!".cache" --iglob \!".ccache" --iglob \!".debug" --iglob \!".vscode" --iglob \!".pcloud" --iglob \!".rustup" --iglob \!".cargo" --iglob \!".kube" --iglob \!".minikube" -- %s %s || true'
   let initial_command = printf(command_fmt, shellescape(query), expand('%'))
   let reload_command = printf(command_fmt, '{q}', expand('%'))
   if a:ufzf
