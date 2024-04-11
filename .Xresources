@@ -506,6 +506,10 @@ URxvt.clipboard.pastecmd: myclip --o --rmlastnl --sc 0
 !!    ~Shift ~Ctrl ~Alt<Btn1Up>:               extend-end()\n\
 !!    ~Shift ~Ctrl ~Alt<Btn3Down>:             stuff()\n\
 
+!! do we need this ? tmux notes say so ...
+XTerm*selectToClipboard: true
+XTerm*disallowedWindowOps: 20,21,SetXprop
+
 XTerm*.foreground:   #c5c5c5
 XTerm*.background:   #14292e
 
