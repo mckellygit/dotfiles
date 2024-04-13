@@ -8354,13 +8354,15 @@ nmap <silent> q <Nop>
 
 " <M-q> to close any-jump popup and fzf popup and also cancel visual mode (and tmux copy-mode)
 call <SID>MapFastKeycode('<F18>',  "\eq", 18)
-nmap <silent> <F18> <Nop>
+"nmap <silent> <F18> <Nop>
+nmap <silent> <expr> <F18> (&buftype == 'terminal') ? 'i' : ''
 vmap <silent> <F18> <Esc>
 cmap <silent> <F18> <C-v><Esc>q
 imap <silent> <F18> <C-v><Esc>q
 tmap <silent> <F18> <Esc>q
 if has("nvim")
-    nmap <silent> <M-q> <Nop>
+    "nmap <silent> <M-q> <Nop>
+    nmap <silent> <expr> <M-q> (&buftype == 'terminal') ? 'i' : ''
     vmap <silent> <M-q> <Esc>
     cmap <silent> <F18> <M-q>
     imap <silent> <F18> <M-q>
