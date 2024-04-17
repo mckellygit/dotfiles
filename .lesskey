@@ -3,26 +3,28 @@
    back-scroll
    noaction
    noaction
-\    forw-scroll
-   back-scroll
+\    noaction 30^F
+   noaction 30^B
+   noaction 30^B
+# \340 is C-@ (C-Space)
+\340 noaction 10^F
+# vim terminal BUG - send M-- instead of C-@ (C-Space) - may be fixed now with tnoremap
+#\e-  noaction 10^F
+\  noaction 10^F
+# \e[127;5u is C-BS
+\e[127;5u noaction 10^B
+ noaction 10^B
+ noaction 10^B
 \  forw-line
  back-line
  back-line
-\340 forw-scroll
-# vim terminal BUG - send M-- instead of C-@ (C-Space) - may be fixed now with tnoremap
-\e-  forw-scroll
- back-scroll
 \e\n back-line
 \e back-line
 \e\  forw-line
 \e\e quit
 \eq  quit
-\e[1;5B  forw-line
-\e[1;5A  back-line
-\e[1;5C  noaction 10\e)
-\e[1;5D  noaction 10\e(
-\\1  noaction 20^F
-\\`  noaction 20^B
+\\1  noaction 30^F
+\\`  noaction 30^B
 \ej  noaction j
 \ek  noaction k
 j  noaction 5^F
@@ -46,6 +48,10 @@
 gg   noaction <
 \eg  noaction <
 \eG  noaction G
+\e[1;5B forw-line
+\e[1;5A back-line
+\e[1;5C noaction 10\e)
+\e[1;5D noaction 10\e(
 \e[1;5H noaction <
 \e[1;7H noaction <
 \e[1;5F noaction G
@@ -56,26 +62,34 @@ gg   noaction <
 \e[1;2F noaction
 \e[1;3H noaction
 \e[1;3F noaction
-\e[5;4~ noaction 20^B
-\e[6;4~ noaction 20^F
-\e[5;2~ noaction 10^B
-\e[6;2~ noaction 10^F
 \e[1;2B forw-line
 \e[1;2A back-line
 \e[1;3B forw-line
 \e[1;3A back-line
-\e[6;5~ noaction 20^F
-\e[5;5~ noaction 20^B
-\e[6;7~ noaction 20^F
-\e[5;7~ noaction 20^B
-\e[6;8~ noaction 20^F
-\e[5;8~ noaction 20^B
+# PageUp/Down
+\e[5~ noaction 30^B
+\e[6~ noaction 30^F
+# S-PageUp/Down
+\e[5;2~ noaction 5^B
+\e[6;2~ noaction 5^F
+# A-PageUp/Down
 \e[6;3~ noaction 80^F
 \e[5;3~ noaction 80^B
+# A-S-PageUp/Down
+\e[5;4~ noaction 20^B
+\e[6;4~ noaction 20^F
+# C-PageUp/Down
+\e[6;5~ noaction 10^F
+\e[5;5~ noaction 10^B
+# C-A-PageUp/Down
+\e[6;7~ noaction 20^F
+\e[5;7~ noaction 20^B
+# C-S-PageUp/Down
 \e[6;6~ noaction 10^F
 \e[5;6~ noaction 10^B
-\  forw-line
- back-line
+# C-A-S-PageUp/Down
+\e[6;8~ noaction 20^F
+\e[5;8~ noaction 20^B
 qq   quit
 \\qq quit
    noaction

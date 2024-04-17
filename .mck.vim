@@ -1440,14 +1440,14 @@ aug gv_lqq
 aug END
 
 " TODO: MCK should we be like less here ?
-autocmd FileType git              nmap <silent> <buffer> <BS>    :call <SID>CtrlB(1)<CR>
-autocmd FileType git              nmap <silent> <buffer> <Space> :call <SID>CtrlF(1)<CR>
-autocmd FileType git              vmap <silent> <buffer> <BS>    <C-b>
-autocmd FileType git              vmap <silent> <buffer> <Space> <C-f>
-autocmd FileType git              nmap <silent> <buffer> u       <C-b>
-autocmd FileType git              nmap <silent> <buffer> d       <C-f>
-autocmd FileType git              vmap <silent> <buffer> u       <C-b>
-autocmd FileType git              vmap <silent> <buffer> d       <C-f>
+autocmd FileType git              nmap <silent> <buffer> <BS>    :call <SID>CtrlB(2)<CR>
+autocmd FileType git              nmap <silent> <buffer> <Space> :call <SID>CtrlF(2)<CR>
+autocmd FileType git              vmap <silent> <buffer> <BS>    <C-b><C-b>
+autocmd FileType git              vmap <silent> <buffer> <Space> <C-f><C-f>
+autocmd FileType git              nmap <silent> <buffer> u       <Nop>
+autocmd FileType git              nmap <silent> <buffer> d       <Nop>
+autocmd FileType git              vmap <silent> <buffer> u       <Nop>
+autocmd FileType git              vmap <silent> <buffer> d       <Nop>
 
 " NOTE: fugitive git <C-n>, <C-p> mappings already do these
 " git diff navigation like tig ...
@@ -8789,6 +8789,28 @@ noremap <C-u> <Nop>
 
 " or provide a key binding/cmd to reset scroll value (s:MapScrollKeys) ...
 
+nmap <silent> <BS>       :call <SID>CtrlB(2)<CR>
+nmap <silent> <Space>    :call <SID>CtrlF(2)<CR>
+
+nmap <silent> <C-BS>     :call <SID>CtrlB(1)<CR>
+" SPECIAL: NOTE: some terminals map <C-BS> to <C-^><Del>
+nmap <silent> <C-^><BS>  :call <SID>CtrlB(1)<CR>
+nmap <silent> <C-^><Del> :call <SID>CtrlB(1)<CR>
+
+nmap <silent> <C-Space>  :call <SID>CtrlF(1)<CR>
+nmap <silent> <C-@>      :call <SID>CtrlF(1)<CR>
+
+vmap <silent> <BS>       <C-b><C-b>
+vmap <silent> <Space>    <C-f><C-f>
+
+vmap <silent> <C-BS>     <C-b>
+" SPECIAL: NOTE: some terminals map <C-BS> to <C-^><Del>
+vmap <silent> <C-^><BS>  <C-b>
+vmap <silent> <C-^><Del> <C-b>
+
+vmap <silent> <C-Space>  <C-f>
+vmap <silent> <C-@>      <C-f>
+
 " ---------
 
 function! s:NoremapNormalCmd(key, preserve_omni, ...)
@@ -9464,14 +9486,17 @@ function s:CtrlF(multi1) abort
     let l:owl = winline()
     let l:xol = line("w0")
     if (l:ol == l:xol)
-        execute "keepjumps normal " . g:half . "gj"
+        execute "keepjumps normal! " . g:half . "gj"
+        "echom "adjust1 " g:half
         let l:nwc = wincol()
         if l:nwc > l:owc
             let l:cdiff = l:nwc - l:owc
-            execute "keepjumps normal " . l:cdiff . "h"
+            execute "keepjumps normal! " . l:cdiff . "h"
+            "echom "adjust2 " l:cdiff
         elseif l:owc > l:nwc
             let l:cdiff = l:owc - l:nwc
-            execute "keepjumps normal " . l:cdiff . "l"
+            execute "keepjumps normal! " . l:cdiff . "l"
+            "echom "adjust3 " l:cdiff
         endif
         if a:multi1 < 0
             call <SID>CheckExitTerminalMode()
@@ -9480,20 +9505,24 @@ function s:CtrlF(multi1) abort
     endif
     let l:dff = line('$') - l:ol
     if (l:dff <= 10)
-        execute "keepjumps normal 5gj"
+        execute "keepjumps normal! 5gj"
+        "echom "adjust4 5gj"
         let l:nwc = wincol()
         if l:nwc > l:owc
             let l:cdiff = l:nwc - l:owc
-            execute "keepjumps normal " . l:cdiff . "h"
+            execute "keepjumps normal! " . l:cdiff . "h"
+            "echom "adjust5 " l:cdiff
         elseif l:owc > l:nwc
             let l:cdiff = l:owc - l:nwc
-            execute "keepjumps normal " . l:cdiff . "l"
+            execute "keepjumps normal! " . l:cdiff . "l"
+            "echom "adjust6 " l:cdiff
         endif
         if a:multi1 < 0
             call <SID>CheckExitTerminalMode()
         endif
         return
     endif
+
     " this makes nvim not flash sign column ...
     " but so does using 10 below ...
     "if (l:multi == 1 && has("nvim"))
@@ -9501,37 +9530,14 @@ function s:CtrlF(multi1) abort
     "    call nvim_feedkeys(g:alt_J2, 't', v:false)
     "    return
     "endif
+
     let prevsj=&scrolljump
     let &scrolljump=1
     let &scrolloff=10
     let save_scroll = &scroll
 
     if &smoothscroll
-        if (l:multi == 2)
-            " want normal! here
-            execute "keepjumps normal! " . g:full . "\<C-e>" . g:full . "gj"
-        elseif (l:multi == 4)
-            " want normal! here
-            execute "keepjumps normal! " . g:full2x . "\<C-e>" . g:full2x . "gj"
-        else
-            " want normal! here
-            execute "keepjumps normal! " . 10 . "\<C-e>" . 10 . "gj"
-        endif
 
-        " adjust up some if past end as we want last line near bottom of window ...
-        let l:ll2 = winheight(0) / 2
-        let l:l11 = line('$') - line('.')
-        if l:l11 <= l:ll2
-            let l:nwl = winline()
-            if l:nwl < l:ll2
-                let l:diff = (l:ll2 + 1) - l:nwl
-                execute "keepjumps normal! " . l:diff . "gk"
-                execute "keepjumps normal! " . l:diff . "gj"
-            endif
-        endif
-        " ---------------------
-
-    else
         if (l:multi == 2)
             " want normal! here
             execute "keepjumps normal! " . g:full . "\<C-d>"
@@ -9542,6 +9548,45 @@ function s:CtrlF(multi1) abort
             " want normal! here
             execute "keepjumps normal! " . 10 . "\<C-d>"
         endif
+
+        let &scroll = save_scroll
+        let &scrolloff=0
+        let &scrolljump=prevsj
+        "echo "g:curcol = " . g:curcol . " g:prevcol = " . g:prevcol . " g:prevcol2 = " . g:prevcol2
+        if a:multi1 < 0
+            call <SID>CheckExitTerminalMode()
+        endif
+        return
+
+    else
+
+        if (l:multi == 2)
+            " want normal! here
+            execute "keepjumps normal! " . g:full . "\<C-e>" . g:full . "gj"
+        elseif (l:multi == 4)
+            " want normal! here
+            "echom "here " . g:full2x
+            execute "keepjumps normal! " . g:full2x . "\<C-e>" . g:full2x . "gj"
+        else
+            " want normal! here
+            execute "keepjumps normal! " . 10 . "\<C-e>" . 10 . "gj"
+        endif
+
+        " adjust up some if past end as we want last line near bottom of window ...
+        "let l:ll2 = winheight(0) / 2
+        let l:ll2 = g:half
+        let l:l11 = line('$') - line('.')
+        if l:l11 <= l:ll2
+            let l:nwl = winline()
+            if l:nwl < l:ll2
+                let l:diff = (l:ll2 + 1) - l:nwl
+                execute "keepjumps normal! " . l:diff . "gk"
+                execute "keepjumps normal! " . l:diff . "gj"
+                "echom "adjust7 " . l:diff
+            endif
+        endif
+        " ---------------------
+
     endif
 
     let &scroll = save_scroll
@@ -9556,50 +9601,65 @@ function s:CtrlF(multi1) abort
 "   endif
     let l:nl = line('.')
     if (l:owl == l:nwl && l:ol == l:nl)
-        execute "keepjumps normal 5gj"
+        "execute "keepjumps normal! 5gj"
+        execute "keepjumps normal! 5\<C-y>"
+        "echom "adjust8 5gj"
         let l:nwc = wincol()
         if l:nwc > l:owc
             let l:cdiff = l:nwc - l:owc
-            execute "keepjumps normal " . l:cdiff . "h"
+            execute "keepjumps normal! " . l:cdiff . "h"
+            "echom "adjust9 " l:cdiff
         elseif l:owc > l:nwc
             let l:cdiff = l:owc - l:nwc
-            execute "keepjumps normal " . l:cdiff . "l"
+            execute "keepjumps normal! " . l:cdiff . "l"
+            "echom "adjust10 " l:cdiff
         endif
     else
         " if not already at bot ...
         if (line('w$') == line('$'))
-            execute "keepjumps normal 5gj"
+            execute "keepjumps normal! 5gj"
+            "echom "adjust11 5gj"
             let l:nwc = wincol()
             if l:nwc > l:owc
                 let l:cdiff = l:nwc - l:owc
-                execute "keepjumps normal " . l:cdiff . "h"
+                execute "keepjumps normal! " . l:cdiff . "h"
+                "echom "adjust12 " l:cdiff
             elseif l:owc > l:nwc
                 let l:cdiff = l:owc - l:nwc
-                execute "keepjumps normal " . l:cdiff . "l"
+                execute "keepjumps normal! " . l:cdiff . "l"
+                "echom "adjust13 " l:cdiff
             endif
         else
 
             if l:owl > l:nwl
                 let l:diff = l:owl - l:nwl
-                execute "keepjumps normal " . l:diff . "gj"
+                "execute "keepjumps normal! " . l:diff . "gj"
+                execute "keepjumps normal! " . l:diff . "\<C-y>"
+                "echom "adjust14 " . g:full . " " . l:diff
             elseif l:nwl > l:owl && l:xol != line("w0")
                 " but dont if top line didn't change ...
                 let l:diff = l:nwl - l:owl
-                execute "keepjumps normal " . l:diff . "gk"
+                "execute "keepjumps normal! " . l:diff . "gk"
+                execute "keepjumps normal! " . l:diff . "\<C-e>"
+                "echom "adjust15 " . g:full . " " . l:diff
                 " if going wrong way, go back ...
                 let l:nl2 = line('.')
                 if l:nl2 <= l:ol
-                    execute "keepjumps normal " . l:diff . "gj"
+                    "execute "keepjumps normal! " . l:diff . "gj"
+                    execute "keepjumps normal! " . l:diff . "\<C-y>"
+                    "echom "adjust15a " l:diff
                 endif
             endif
 
             let l:nwc = wincol()
             if l:nwc > l:owc
                 let l:cdiff = l:nwc - l:owc
-                execute "keepjumps normal " . l:cdiff . "h"
+                execute "keepjumps normal! " . l:cdiff . "h"
+                "echom "adjust16 " . l:cdiff
             elseif l:owc > l:nwc
                 let l:cdiff = l:owc - l:nwc
-                execute "keepjumps normal " . l:cdiff . "l"
+                execute "keepjumps normal! " . l:cdiff . "l"
+                "echom "adjust17 " . l:cdiff
             endif
         endif
     endif
@@ -9623,30 +9683,31 @@ function s:CtrlB(multi) abort
     let l:owl = winline()
     let l:xol = line("w$")
     if (l:ol == l:xol)
-        execute "keepjumps normal " . g:hal1 . "gk"
+        execute "keepjumps normal! " . g:hal1 . "gk"
         let l:nwc = wincol()
         if l:nwc > l:owc
             let l:cdiff = l:nwc - l:owc
-            execute "keepjumps normal " . l:cdiff . "h"
+            execute "keepjumps normal! " . l:cdiff . "h"
         elseif l:owc > l:nwc
             let l:cdiff = l:owc - l:nwc
-            execute "keepjumps normal " . l:cdiff . "l"
+            execute "keepjumps normal! " . l:cdiff . "l"
         endif
         return
     endif
     let l:dff = l:ol
     if (l:dff <= 10)
-        execute "keepjumps normal 5gk"
+        execute "keepjumps normal! 5gk"
         let l:nwc = wincol()
         if l:nwc > l:owc
             let l:cdiff = l:nwc - l:owc
-            execute "keepjumps normal " . l:cdiff . "h"
+            execute "keepjumps normal! " . l:cdiff . "h"
         elseif l:owc > l:nwc
             let l:cdiff = l:owc - l:nwc
-            execute "keepjumps normal " . l:cdiff . "l"
+            execute "keepjumps normal! " . l:cdiff . "l"
         endif
         return
     endif
+
     " this makes nvim not flash sign column ...
     " but so does using 10 below ...
     "if (a:multi == 1 && has("2nvim"))
@@ -9654,23 +9715,14 @@ function s:CtrlB(multi) abort
     "    call nvim_feedkeys(g:alt_K2, 't', v:false)
     "    return
     "endif
+
     let prevsj=&scrolljump
     let &scrolljump=1
     let &scrolloff=10
     let save_scroll = &scroll
 
     if &smoothscroll
-        if (a:multi == 2)
-            " want normal! here
-            execute "keepjumps normal! " . g:full . "\<C-y>" . g:full . "gk"
-        elseif (a:multi == 4)
-            " want normal! here
-            execute "keepjumps normal! " . g:full2x . "\<C-y>" . g:full2x . "gk"
-        else
-            " want normal! here
-            execute "keepjumps normal! " . 10 . "\<C-y>" . 10 . "gk"
-        endif
-    else
+
         if (a:multi == 2)
             " want normal! here
             execute "keepjumps normal! " . g:full . "\<C-u>"
@@ -9681,6 +9733,27 @@ function s:CtrlB(multi) abort
             " want normal! here
             execute "keepjumps normal! " . 10 . "\<C-u>"
         endif
+
+        let &scroll = save_scroll
+        let &scrolloff=0
+        let &scrolljump=prevsj
+        "echo "g:curcol = " . g:curcol . " g:prevcol = " . g:prevcol . " g:prevcol2 = " . g:prevcol2
+        return
+
+     else
+
+        if (a:multi == 2)
+            " want normal! here
+            execute "keepjumps normal! " . g:full . "\<C-y>" . g:full . "gk"
+        elseif (a:multi == 4)
+            " want normal! here
+            "echom "here " . g:full2x
+            execute "keepjumps normal! " . g:full2x . "\<C-y>" . g:full2x . "gk"
+        else
+            " want normal! here
+            execute "keepjumps normal! " . 10 . "\<C-y>" . 10 . "gk"
+        endif
+
     endif
 
     let &scroll = save_scroll
@@ -9694,40 +9767,61 @@ function s:CtrlB(multi) abort
 "   endif
     let l:nl = line('.')
     if (l:owl == l:nwl && l:ol == l:nl)
-        execute "keepjumps normal 5gk"
+        "execute "keepjumps normal! 5gk"
+        execute "keepjumps normal! 5\<C-e>"
+        "echom "adjust1 5gk"
         let l:nwc = wincol()
         if l:nwc > l:owc
             let l:cdiff = l:nwc - l:owc
-            execute "keepjumps normal " . l:cdiff . "h"
+            execute "keepjumps normal! " . l:cdiff . "h"
+            "echom "adjust2 " . l:cdiff
         elseif l:owc > l:nwc
             let l:cdiff = l:owc - l:nwc
-            execute "keepjumps normal " . l:cdiff . "l"
+            execute "keepjumps normal! " . l:cdiff . "l"
+            "echom "adjust3 " . l:cdiff
         endif
     else
         " if not already at top ...
         if (line('w0') == 1)
-            execute "keepjumps normal 5gk"
+            execute "keepjumps normal! 5gk"
+            "echom "adjust4 5gk"
             let l:nwc = wincol()
             if l:nwc > l:owc
                 let l:cdiff = l:nwc - l:owc
-                execute "keepjumps normal " . l:cdiff . "h"
+                execute "keepjumps normal! " . l:cdiff . "h"
+                "echom "adjust5 " . l:cdiff
             elseif l:owc > l:nwc
                 let l:cdiff = l:owc - l:nwc
-                execute "keepjumps normal " . l:cdiff . "l"
+                execute "keepjumps normal! " . l:cdiff . "l"
+                "echom "adjust6 " . l:cdiff
             endif
         else
 
             if l:nwl > l:owl
                 let l:diff = l:nwl - l:owl
-                execute "keepjumps normal " . l:diff . "gk"
+                "execute "keepjumps normal! " . l:diff . "gk"
+                execute "keepjumps normal! " . l:diff . "\<C-e>"
+                "echom "adjust7 " . l:diff
             elseif l:owl > l:nwl && l:xol != line("w$")
                 " but dont if bot line didn't change ...
                 let l:diff = l:owl - l:nwl
-                execute "keepjumps normal " . l:diff . "gj"
+                "execute "keepjumps normal! " . l:diff . "gj"
+                " ==================================================
+                " TODO: BUG? - why do we have to go one more and then up one ???
+                " ==================================================
+                let l:diffx = l:diff + 1
+                execute "keepjumps normal! " . l:diffx . "\<C-y>"
+                "echom "adjust8 " . g:full . " " . l:diffx
+                execute "keepjumps normal! gk"
+                " ==================================================
+                " TODO: BUG? - why do we have to go one more and then up one ???
+                " ==================================================
                 " if going wrong way, go back ...
                 let l:nl2 = line('.')
                 if l:nl2 >= l:ol
-                    execute "keepjumps normal " . l:diff . "gk"
+                    "execute "keepjumps normal! " . l:diff . "gk"
+                    execute "keepjumps normal! " . l:diff . "\<C-e>"
+                    "echom "adjust9 " . l:diff
                 endif
 
             endif
@@ -9735,10 +9829,12 @@ function s:CtrlB(multi) abort
             let l:nwc = wincol()
             if l:nwc > l:owc
                 let l:cdiff = l:nwc - l:owc
-                execute "keepjumps normal " . l:cdiff . "h"
+                execute "keepjumps normal! " . l:cdiff . "h"
+                "echom "adjust10 " . l:cdiff
             elseif l:owc > l:nwc
                 let l:cdiff = l:owc - l:nwc
-                execute "keepjumps normal " . l:cdiff . "l"
+                execute "keepjumps normal! " . l:cdiff . "l"
+                "echom "adjust11 " . l:cdiff
             endif
         endif
     endif
@@ -9750,13 +9846,18 @@ endfunction
 
 " ---------
 
+let g:hal1 = 20
+let g:half = 20
+let g:full = 30
+let g:full2x = 60
+
 function! s:MapScrollKeys()
   let g:half = winheight(0) / 2
   if (g:half < 1)
     g:half = 1
   endif
   "let g:full = winheight(0)
-  let g:full = 25
+  let g:full = 30
   let g:full2x = g:full + g:full
 
   " 47 / 2 = 23 but if we are at 24 then 23 up is 1 and 23 down is 47 - ok
@@ -10017,11 +10118,6 @@ function! s:MapScrollKeys()
   inoremap  <silent> <expr> <S-F23>      pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp4("<C-V><C-U>")<CR>'
   inoremap  <silent> <expr> <A-PageUp>   pumvisible() ? '<PageUp>'   : '<C-\><C-o>:call <SID>Saving_scrollVUp4("<C-V><C-U>")<CR>'
 endfunction
-
-let g:hal1 = 24
-let g:half = 24
-let g:full = 48
-let g:full2x = 96
 
 autocmd VimEnter,VimResized * call <SID>MapScrollKeys()
 
@@ -10317,10 +10413,12 @@ noremap <silent> <Leader>cz zz
 " SPECIAL: NOTE: terminals could map <C-BS> to <C-^><BS>
 "noremap <silent> <C-^><BS>  gk
 "noremap <silent> <C-^><Del> gk
+if 0
 noremap <silent> <expr> <C-BS>     AtBot(0) ? ((line("w0") - 1 - line("0")) >= 10 ? '10<C-y>' : (line("w0") - 1 - line("0")) >= 9 ? '9<C-y>' : (line("w0") - 1 - line("0")) >= 8 ? '8<C-y>' : (line("w0") - 1 - line("0")) >= 7 ? '7<C-y>' : (line("w0") - 1 - line("0")) >= 6 ? '6<C-y>' : (line("w0") - 1 - line("0")) >= 5 ? '5<C-y>' : (line("w0") - 1 - line("0")) >= 4 ? '4<C-y>' : (line("w0") - 1 - line("0")) >= 3 ? '3<C-y>' : (line("w0") - 1 - line("0")) >= 2 ? '2<C-y>' : (line("w0") - 1 - line("0")) >= 1 ? '1<C-y>' : '') : ((line("w0") - 1 - line("0")) >= 10 ? '10<C-y>10k' : (line("w0") - 1 - line("0")) >= 9 ? '9<C-y>9k' : (line("w0") - 1 - line("0")) >= 8 ? '8<C-y>8k' : (line("w0") - 1 - line("0")) >= 7 ? '7<C-y>7k' : (line("w0") - 1 - line("0")) >= 6 ? '6<C-y>6k' : (line("w0") - 1 - line("0")) >= 5 ? '5<C-y>5k' : (line("w0") - 1 - line("0")) >= 4 ? '4<C-y>4k' : (line("w0") - 1 - line("0")) >= 3 ? '3<C-y>3k' : (line("w0") - 1 - line("0")) >= 2 ? '2<C-y>2k' : (line("w0") - 1 - line("0")) >= 1 ? '1<C-y>1k' : '')
 " SPECIAL: NOTE: some terminals map <C-BS> to <C-^><Del>
 noremap <silent> <expr> <C-^><BS>  AtBot(0) ? ((line("w0") - 1 - line("0")) >= 10 ? '10<C-y>' : (line("w0") - 1 - line("0")) >= 9 ? '9<C-y>' : (line("w0") - 1 - line("0")) >= 8 ? '8<C-y>' : (line("w0") - 1 - line("0")) >= 7 ? '7<C-y>' : (line("w0") - 1 - line("0")) >= 6 ? '6<C-y>' : (line("w0") - 1 - line("0")) >= 5 ? '5<C-y>' : (line("w0") - 1 - line("0")) >= 4 ? '4<C-y>' : (line("w0") - 1 - line("0")) >= 3 ? '3<C-y>' : (line("w0") - 1 - line("0")) >= 2 ? '2<C-y>' : (line("w0") - 1 - line("0")) >= 1 ? '1<C-y>' : '') : ((line("w0") - 1 - line("0")) >= 10 ? '10<C-y>10k' : (line("w0") - 1 - line("0")) >= 9 ? '9<C-y>9k' : (line("w0") - 1 - line("0")) >= 8 ? '8<C-y>8k' : (line("w0") - 1 - line("0")) >= 7 ? '7<C-y>7k' : (line("w0") - 1 - line("0")) >= 6 ? '6<C-y>6k' : (line("w0") - 1 - line("0")) >= 5 ? '5<C-y>5k' : (line("w0") - 1 - line("0")) >= 4 ? '4<C-y>4k' : (line("w0") - 1 - line("0")) >= 3 ? '3<C-y>3k' : (line("w0") - 1 - line("0")) >= 2 ? '2<C-y>2k' : (line("w0") - 1 - line("0")) >= 1 ? '1<C-y>1k' : '')
 noremap <silent> <expr> <C-^><Del> AtBot(0) ? ((line("w0") - 1 - line("0")) >= 10 ? '10<C-y>' : (line("w0") - 1 - line("0")) >= 9 ? '9<C-y>' : (line("w0") - 1 - line("0")) >= 8 ? '8<C-y>' : (line("w0") - 1 - line("0")) >= 7 ? '7<C-y>' : (line("w0") - 1 - line("0")) >= 6 ? '6<C-y>' : (line("w0") - 1 - line("0")) >= 5 ? '5<C-y>' : (line("w0") - 1 - line("0")) >= 4 ? '4<C-y>' : (line("w0") - 1 - line("0")) >= 3 ? '3<C-y>' : (line("w0") - 1 - line("0")) >= 2 ? '2<C-y>' : (line("w0") - 1 - line("0")) >= 1 ? '1<C-y>' : '') : ((line("w0") - 1 - line("0")) >= 10 ? '10<C-y>10k' : (line("w0") - 1 - line("0")) >= 9 ? '9<C-y>9k' : (line("w0") - 1 - line("0")) >= 8 ? '8<C-y>8k' : (line("w0") - 1 - line("0")) >= 7 ? '7<C-y>7k' : (line("w0") - 1 - line("0")) >= 6 ? '6<C-y>6k' : (line("w0") - 1 - line("0")) >= 5 ? '5<C-y>5k' : (line("w0") - 1 - line("0")) >= 4 ? '4<C-y>4k' : (line("w0") - 1 - line("0")) >= 3 ? '3<C-y>3k' : (line("w0") - 1 - line("0")) >= 2 ? '2<C-y>2k' : (line("w0") - 1 - line("0")) >= 1 ? '1<C-y>1k' : '')
+endif
 
 " SPECIAL: NOTE: if we do this ok, but then apps in vim-terminal dont see special ...
 " make it match regular terminal/tmux
@@ -10359,13 +10457,15 @@ imap         <buffer> <C-^><Return> <Nop>
 " SPECIAL: NOTE: C-Space in most terminals is C-@
 "noremap <silent> <C-@> gj
 "noremap <silent> <C-@> gj
+if 0
 noremap <silent> <expr> <C-Space> AtTop(0) ? ((line("$") - line("w$")) >= 10 ? '10<C-e>' : (line("$") - line("w$")) >= 9 ? '9<C-e>' : (line("$") - line("w$")) >= 8 ? '8<C-e>' : (line("$") - line("w$")) >= 7 ? '7<C-e>' : (line("$") - line("w$")) >= 6 ? '6<C-e>' : (line("$") - line("w$")) >= 5 ? '5<C-e>' : (line("$") - line("w$")) >= 4 ? '4<C-e>' : (line("$") - line("w$")) >= 3 ? '3<C-e>' : (line("$") - line("w$")) >= 2 ? '2<C-e>' :(line("$") - line("w$")) >= 1 ? '1<C-e>' : '') : ((line("$") - line("w$")) >= 10 ? '10<C-e>10j' : (line("$") - line("w$")) >= 9 ? '9<C-e>9j' : (line("$") - line("w$")) >= 8 ? '8<C-e>8j' : (line("$") - line("w$")) >= 7 ? '7<C-e>7j' : (line("$") - line("w$")) >= 6 ? '6<C-e>6j' : (line("$") - line("w$")) >= 5 ? '5<C-e>5j' : (line("$") - line("w$")) >= 4 ? '4<C-e>4j' : (line("$") - line("w$")) >= 3 ? '3<C-e>3j' : (line("$") - line("w$")) >= 2 ? '2<C-e>2j' :(line("$") - line("w$")) >= 1 ? '1<C-e>1j' : '')
 noremap <silent> <expr> <C-@>     AtTop(0) ? ((line("$") - line("w$")) >= 10 ? '10<C-e>' : (line("$") - line("w$")) >= 9 ? '9<C-e>' : (line("$") - line("w$")) >= 8 ? '8<C-e>' : (line("$") - line("w$")) >= 7 ? '7<C-e>' : (line("$") - line("w$")) >= 6 ? '6<C-e>' : (line("$") - line("w$")) >= 5 ? '5<C-e>' : (line("$") - line("w$")) >= 4 ? '4<C-e>' : (line("$") - line("w$")) >= 3 ? '3<C-e>' : (line("$") - line("w$")) >= 2 ? '2<C-e>' :(line("$") - line("w$")) >= 1 ? '1<C-e>' : '') : ((line("$") - line("w$")) >= 10 ? '10<C-e>10j' : (line("$") - line("w$")) >= 9 ? '9<C-e>9j' : (line("$") - line("w$")) >= 8 ? '8<C-e>8j' : (line("$") - line("w$")) >= 7 ? '7<C-e>7j' : (line("$") - line("w$")) >= 6 ? '6<C-e>6j' : (line("$") - line("w$")) >= 5 ? '5<C-e>5j' : (line("$") - line("w$")) >= 4 ? '4<C-e>4j' : (line("$") - line("w$")) >= 3 ? '3<C-e>3j' : (line("$") - line("w$")) >= 2 ? '2<C-e>2j' :(line("$") - line("w$")) >= 1 ? '1<C-e>1j' : '')
-
+endif
 
 " ------------------
 " BUG: vim terminal does not generate C-@ (C-Space) - may be fixed now with tnoremap (see below)
 "      tmux can send A-, in its place when in a terminal
+if 0 " no longer needed, save entry for some other alt-key combination ...
 call <SID>MapFastKeycode('<F27>',  "\e-", 27)
 noremap <F27> gj
 noremap <A--> gj
@@ -10376,6 +10476,7 @@ if has("nvim")
     cnoremap <F27> <M-->
     inoremap <F27> <M-->
     tnoremap <F27> <M-->
+endif
 endif
 
 " NOTE: this seems to produce the correct key code ...
@@ -13149,7 +13250,9 @@ vnoremap <silent> <Leader><< <C-\><C-n>:tabprevious<CR>
 " --- FOLDs ---
 
 " to stop <Space> from opening fold ...
-noremap <Space> <Space>
+" <Space> is mapped above ...
+"noremap <Space> <Space>
+
 " use <Leader>Space to toggle (also <Leader>ff)
 noremap <Leader><Space> za
 
