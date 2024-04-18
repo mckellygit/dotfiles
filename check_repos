@@ -375,6 +375,9 @@ fi
 #   libxkbcommon:
 #       git clone https://github.com/xkbcommon/libxkbcommon.git
 
+# ghostty
+#   git clone https://github.com/mitchellh/ghostty.git
+
 # st: (simple terminal)
 #   git clone git@github.com-mckelly:mckellygit/st.git
 #   upstream:
@@ -536,6 +539,9 @@ fi
 #   https://github.com/saulpw/visidata
 #   pip3 install visidata
 #   pip3 install git+https://github.com/saulpw/visidata.git@develop
+
+# taskwarrior
+#   git clone https://github.com/GothenburgBitFactory/taskwarrior.git
 
 # ---------------------
 
