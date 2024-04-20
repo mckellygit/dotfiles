@@ -534,7 +534,7 @@ endif
 "    Plug 'tversteeg/registers.nvim'
 "endif
 "
-" -----------------------------------------
+" --------------------------
 "
 " quick left-right line movement
 "Plug 'unblevable/quick-scope'
@@ -542,6 +542,14 @@ endif
 " there is also -
 Plug 'justinmk/vim-sneak'
 "Plug 'ggandor/leap.nvim'
+"
+" --------------------------
+"
+" multiple cursors ...
+"Plug 'terryma/vim-multiple-cursors' "NOTE: deprecated, use vim-visual-multi
+"Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+"
+" --------------------------
 "
 call plug#end()
 
