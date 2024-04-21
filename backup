@@ -37,7 +37,8 @@ rsync -v -a ~/radssh --exclude 'sessions' ~/${bfolder}/home --delete
 rsync -v -a ~/.byobu                      ~/${bfolder}/home --delete
 rsync -v -a ~/.cgdb                       ~/${bfolder}/home --delete
 rsync -v -a ~/.vim   --exclude '*.swp'    ~/${bfolder}/home --delete
-rsync -v -a ~/io_tests --max-size=2M     ~/${bfolder}/home --delete
+
+rsync -v -a ~/io_tests --max-size=2M      ~/${bfolder} --delete
 
 # ----------------------
 # skip nixnote dir for now ...
