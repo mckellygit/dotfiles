@@ -9551,7 +9551,7 @@ function s:CtrlF(multi1) abort
             execute "keepjumps normal! " . g:full . "\<C-d>"
         elseif (l:multi == 4)
             " want normal! here
-            execute "keepjumps normal! " . g:full . "\<C-d>\<C-d>"
+            execute "keepjumps normal! " . g:full2x . "\<C-d>\<C-d>"
         else
             " want normal! here
             execute "keepjumps normal! " . 10 . "\<C-d>"
@@ -9736,7 +9736,7 @@ function s:CtrlB(multi) abort
             execute "keepjumps normal! " . g:full . "\<C-u>"
         elseif (a:multi == 4)
             " want normal! here
-            execute "keepjumps normal! " . g:full . "\<C-u>\<C-u>"
+            execute "keepjumps normal! " . g:full2x . "\<C-u>\<C-u>"
         else
             " want normal! here
             execute "keepjumps normal! " . 10 . "\<C-u>"
