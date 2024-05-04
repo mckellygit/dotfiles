@@ -2733,8 +2733,14 @@ nnoremap <leader>al :AnyJumpLastResults<CR>
 au FileType any-jump nnoremap <silent> <buffer> <M-C-P> :call g:AnyJumpHandlePreview()<CR>
 if has("nvim")
     "for similar cursorline color as with vim ...
-    au BufEnter any-jump* highlight Cursorline ctermbg=172 ctermfg=234 term=none
-    au BufLeave any-jump* highlight Cursorline ctermbg=241 guibg=#3c3836 ctermfg=none term=none
+    au BufEnter any-jump* highlight CursorLine ctermbg=172 ctermfg=234 term=none
+    au BufLeave any-jump* highlight CursorLine ctermbg=241 guibg=#3c3836 ctermfg=none term=none
+endif
+
+" nvim seems to need this so that cursorline " highlights ! and .
+" and some other special Operator chars correctly ...
+if has("nvim")
+    au BufEnter * highlight! Operator cterm=none
 endif
 
 " like <Leader>r: but use 'a' for AnyJump ...
@@ -3721,8 +3727,9 @@ endif
 " vim terminfo adjustments (from kitty).
 " NOTE: set all these BEFORE setting colorscheme and AFTER setting term
 
-" Zutty if true color support is on (Tc or RGB) BUG with bold and reverse attributes ...
+" Zutty if true color support is on (Tc or RGB) BUG with bold and reverse attributes inside tmux ...
 " set before loading colorscheme ...
+" NOTE: seems to be fixed now with tmux terminal-overrides sgr0=\E(B\E[m'
 "if exists('$ZUTTY_VERSION')
 "    let g:deus_bold=0
 "    let g:deus_inverse=0
@@ -3809,8 +3816,9 @@ augroup END
 colorscheme gruvbox
 "colorscheme srcery
 
-" Zutty if true color support is on (Tc or RGB) BUG with bold and reverse attributes ...
+" Zutty if true color support is on (Tc or RGB) BUG with bold and reverse attributes inside tmux ...
 " set after loading colorscheme ...
+" NOTE: seems to be fixed now with tmux terminal-overrides sgr0=\E(B\E[m'
 "if exists('$ZUTTY_VERSION')
 "    hi! DeusGreenBold cterm=none ctermfg=142 ctermbg=235
 "    hi! DiffAdd       cterm=none ctermfg=235 ctermbg=142
@@ -4440,8 +4448,10 @@ hi StatusLine   ctermfg=238 ctermbg=2 guifg=#444444 guibg=#00d700
 hi StatusLineNC ctermfg=238 ctermbg=2 guifg=#444444 guibg=#00d700
 
 " if we want RGB/truecolor instead of cterm.  But really then have to change all cterm* to gui* ...
-set notermguicolors
-hi Normal guibg=#282828
+set termguicolors
+
+" Zutty, St, Xterm, etc. vim terminal colors can be wrong if termguicolors is set ...
+
 if 0 " skip now that nvim no longer sets COLORTERM for terminal ...
 if (has("nvim") || exists('$NVIM_LOG_FILE')) && (&termguicolors == 0)
     " nvim terminal and COLORTERM=truecolor makes less -R colors not work ...
@@ -4455,6 +4465,34 @@ if (has("nvim") || exists('$NVIM_LOG_FILE')) && (&termguicolors == 0)
 endif
 endif
 
+" in vim if termguicolors is set then re-define the 16 terminal colors to match outer/original terminal
+let g:terminal_ansi_colors = [
+    \ "#000000", "#cc0403", "#29cb00", "#cecb00",
+    \ "#5f87ff", "#ba55d3", "#009999", "#dddddd",
+    \ "#767676", "#f2201f", "#23fd00", "#ffd700",
+    \ "#0066ff", "#875faf", "#00ffff", "#ffffff"
+    \]
+
+" in nvim if termguicolors is set then re-define the 16 terminal colors to match outer/original terminal
+let g:terminal_color_0  = "#000000"
+let g:terminal_color_1  = "#cc0403"
+let g:terminal_color_2  = "#29cb00"
+let g:terminal_color_3  = "#cecb00"
+let g:terminal_color_4  = "#5f87ff"
+let g:terminal_color_5  = "#ba55d3"
+let g:terminal_color_6  = "#009999"
+let g:terminal_color_7  = "#dddddd"
+let g:terminal_color_8  = "#767676"
+let g:terminal_color_9  = "#f2201f"
+let g:terminal_color_10 = "#23fd00"
+let g:terminal_color_11 = "#ffd700"
+let g:terminal_color_12 = "#0066ff"
+let g:terminal_color_13 = "#875faf"
+let g:terminal_color_14 = "#00ffff"
+let g:terminal_color_15 = "#ffffff"
+
+hi Normal ctermfg=235 "NOTE: DO NOT add guifg=#282828 here, will break command color etc.
+
 let current_scheme = get(g:, 'colors_name', 'default')
 if current_scheme == "deus"
     " some adjustments for termguicolors (gui) to look more like cterm ...
@@ -4463,20 +4501,22 @@ if current_scheme == "deus"
 
     "hi! Function   cterm=bold ctermfg=142 gui=bold guifg=#98c379
     "hi! Function   cterm=bold ctermfg=142 gui=bold guifg=#88cc00
-    hi! Function   cterm=bold ctermfg=106 gui=bold guifg=#96c932
+    "hi! Function   cterm=bold ctermfg=106 gui=bold guifg=#96c932
+    hi! Function   cterm=bold ctermfg=106 gui=bold guifg=#7bb400
 
     "hi! SignColumn ctermbg=239 guibg=#242a32
     "hi! SignColumn ctermbg=239 guibg=#4e4e4e
     hi! SignColumn ctermbg=237 guibg=#3c3836
 
     "hi! DiffAdd    cterm=reverse ctermfg=142 ctermbg=235 gui=reverse guifg=#98c379 guibg=#2c323b
-    hi! DiffAdd    cterm=reverse ctermfg=142 ctermbg=235 gui=reverse guifg=#afaf00 guibg=#2c323b
+    hi! DiffAdd    cterm=reverse ctermfg=142 ctermbg=235 gui=reverse guifg=#afaf00 guibg=#282828
 
     "hi! deusPurple ctermfg=175 guifg=#c678dd
     hi! deusPurple ctermfg=175 guifg=#cb84e1
 else
     "hi! Function   cterm=bold ctermfg=112 gui=bold guifg=#88cc00
-    hi! Function   cterm=bold ctermfg=106 gui=bold guifg=#96c932
+    "hi! Function   cterm=bold ctermfg=106 gui=bold guifg=#96c932
+    hi! Function   cterm=bold ctermfg=106 gui=bold guifg=#7bb400
 endif
 
 hi! SignColumn ctermbg=237 guibg=#3c3836
@@ -4502,9 +4542,9 @@ map <Leader>hg :call SynGroup()<CR>
 " NOTE: if want terminal default background (opacity etc.) ...
 let g:opaqbg=0
 "hi Normal cterm=none ctermbg=none
-nnoremap <silent> <expr> <Leader>bg (g:opaqbg == 1) ? ':hi Normal cterm=none ctermbg=235<bar>let g:opaqbg=0<CR>' : ':hi Normal cterm=none ctermbg=none<bar>let g:opaqbg=1<CR>'
+nnoremap <silent> <expr> <Leader>bg (g:opaqbg == 1) ? ':hi Normal cterm=none guibg=#282828 ctermbg=235<bar>let g:opaqbg=0<CR>' : ':hi Normal cterm=none guibg=none ctermbg=none<bar>let g:opaqbg=1<CR>'
 
-hi invisiblefg ctermfg=235 guifg=#2c323b
+hi invisiblefg ctermfg=235 guifg=#282828
 
 " always show tabs
 set showtabline=2
@@ -4558,25 +4598,30 @@ set mousemodel=popup_setpos
 set keymodel=
 set selection=inclusive
 
-function s:CrossHairs() abort
+function s:CrossHairs(x) abort
     set cursorline
     set cursorcolumn
     redraw
     sleep 200m
-    " eat typeahead ...
-    while getchar(0)
-          sleep 1m
-    endwhile
+    if a:x > 0
+        " eat typeahead ...
+        while getchar(0)
+            sleep 1m
+        endwhile
+    endif
     set nocursorline
     set nocursorcolumn
 endfunction
-nmap <silent> + :call <SID>CrossHairs()<CR>
+nmap <silent> + :call <SID>CrossHairs(1)<CR>
 
 if has("nvim")
     nmap <silent> <M-+>   <Nop>
     nmap <silent> <M-bar> <Nop>
     nmap <silent> <M-?>   <Nop>
 endif
+
+" doesnt seem to highlight all chars correctly ...
+"autocmd FocusGained * call <SID>CrossHairs(0)
 
 " -------- mouse / cut - paste - clipboard --------
 
@@ -11249,8 +11294,8 @@ function LessInitFunc() abort
   endif
   " NOTE: if want terminal default background (opacity etc.) ...
   let g:opaqbg=1
-  hi Normal cterm=none ctermbg=none
-  nnoremap <silent> <expr> <Leader>bg (g:opaqbg == 1) ? ':hi Normal cterm=none ctermbg=235<bar>let g:opaqbg=0<CR>' : ':hi Normal cterm=none ctermbg=none<bar>let g:opaqbg=1<CR>'
+  hi Normal cterm=none guibg=none ctermbg=none
+  nnoremap <silent> <expr> <Leader>bg (g:opaqbg == 1) ? ':hi Normal cterm=none guibg=#282828 ctermbg=235<bar>let g:opaqbg=0<CR>' : ':hi Normal cterm=none guibg=none ctermbg=none<bar>let g:opaqbg=1<CR>'
   if empty(bufname(''))
       exec ":f vless:stdin"
   endif
