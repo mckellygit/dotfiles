@@ -27,7 +27,7 @@ GRTAGS
 GPATH
 GTAGS
 .browse.VC.db*
-.clang
+.clangd
 .clang_complete
 .lvimrc
 .vscode/

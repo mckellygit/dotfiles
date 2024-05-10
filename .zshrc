@@ -1350,7 +1350,8 @@ tere() {
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 # export FZF_DEFAULT_OPTS="--extended --cycle --reverse"
 
-export FZF_TMUX_OPTS="-p -x C -y -C -w 80% -h 65%"
+# dont think this is used anymore ...
+export FZF_TMUX_OPTS="-p -x C -y -C -w 80% -h 65% --bind=esc:ignore"
 
 # --preview="head -n 200 {}" --preview-window=right:hidden --bind=ctrl-\\:toggle-preview
 

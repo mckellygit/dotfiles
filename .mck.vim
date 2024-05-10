@@ -126,6 +126,7 @@ let g:plug_retries=16
 
 call plug#begin('~/.vim/bundle')
 Plug 'junegunn/vim-plug'
+"
 " required utils for EnhancedJumps plugin
 " NOTE: use stable branch
 Plug 'inkarkat/vim-ingo-library', { 'branch': 'stable' }
@@ -140,23 +141,29 @@ Plug 'inkarkat/vim-visualrepeat'
 " bracketed paste mode ?
 "Plug 'ConradIrwin/vim-bracketed-paste'
 "
-" mother of auto-completion
-"Plug 'Valloric/YouCompleteMe'
-"
-" vim-clang auto-completion
-"Plug 'justmao945/vim-clang'
-Plug 'mckellygit/vim-clang', { 'branch': 'mck_mods' }
-"
 " rooter for :Files and FileBeagle (<Leader>fb)
 "Plug 'airblade/vim-rooter'
 " slightly different method
 Plug 'mattn/vim-findroot'
 "
-" rtags for code navigation (**modified++)
-"Plug 'lyuts/vim-rtags'
-Plug 'mckellygit/vim-rtags'
-"
 Plug 'tweekmonster/exception.vim'
+"
+" ============= LSP =============
+"
+" mother of auto-completion
+"Plug 'Valloric/YouCompleteMe'
+"
+" vim-clang auto-completion
+"Plug 'justmao945/vim-clang'
+if !has("nvim")
+    Plug 'mckellygit/vim-clang', { 'branch': 'mck_mods' }
+endif
+"
+" rtags for code navigation (**modified++)
+if !has("nvim")
+    "Plug 'lyuts/vim-rtags'
+    Plug 'mckellygit/vim-rtags'
+endif
 "
 " ---------------------
 "
@@ -164,34 +171,41 @@ if g:has_wsl == 0 && has("nvim")
     Plug 'neovim/nvim-lspconfig'
     Plug 'nvim-treesitter/nvim-treesitter'
     "https://github.com/tree-sitter/tree-sitter.git
-    Plug 'hrsh7th/nvim-compe'
 
     " better quickfix with fzf ...
     "Plug 'kevinhwang91/nvim-bqf'
 
-    "Plug 'hrsh7th/nvim-cmp'
-    "Plug 'nvim-telescope/telescope.nvim'
+    " LSP to use fzf instead of quickfix ...
+    Plug 'ojroques/nvim-lspfuzzy'
+
+    Plug 'nvim-lua/plenary.nvim'
+    Plug 'nvim-telescope/telescope.nvim'
+
     "Plug 'kabouzeid/nvim-lspinstall'
 
     " LSP Support (setup in this order)
-    "Plug 'williamboman/mason.nvim'
-    "Plug 'williamboman/mason-lspconfig.nvim'
+    Plug 'williamboman/mason.nvim'
+    Plug 'williamboman/mason-lspconfig.nvim'
     "Plug 'neovim/nvim-lspconfig'
 
     " Autocompletion
-    "Plug 'hrsh7th/nvim-cmp'
-    "Plug 'hrsh7th/cmp-buffer'
-    "Plug 'hrsh7th/cmp-path'
+    Plug 'onsails/lspkind.nvim'
+    Plug 'hrsh7th/nvim-cmp'
+    Plug 'hrsh7th/cmp-buffer'
+    Plug 'hrsh7th/cmp-path'
+    Plug 'hrsh7th/cmp-cmdline'
     "Plug 'saadparwaiz1/cmp_luasnip'
-    "Plug 'hrsh7th/cmp-nvim-lsp'
-    "Plug 'hrsh7th/cmp-nvim-lua'
+    Plug 'hrsh7th/cmp-nvim-lsp'
+    Plug 'hrsh7th/cmp-nvim-lua'
 
     " Snippets
-    "Plug 'L3MON4D3/LuaSnip'
+    Plug 'L3MON4D3/LuaSnip'
     "Plug 'rafamadriz/friendly-snippets'
 
-    "Plug 'VonHeikemen/lsp-zero.nvim'
+    Plug 'VonHeikemen/lsp-zero.nvim'
 endif
+"
+" ---------------------
 "
 "Plug 'natebosch/vim-lsc'
 "
@@ -200,7 +214,7 @@ endif
 "Plug 'prabirshrestha/asyncomplete.vim'
 "Plug 'prabirshrestha/asyncomplete-lsp.vim'
 "
-" ---------------------
+" ============= LSP =============
 "
 " echodoc function completion
 "Plug 'Shougo/echodoc.vim'
@@ -277,9 +291,6 @@ Plug 'stsewd/fzf-checkout.vim'
 " neovim dependency for tig-explorer -
 "Plug 'rbgrouleff/bclose.vim'
 "Plug 'iberianpig/tig-explorer.vim'
-"
-" telescope - fuzzy finder over lists for vim
-"Plug 'nvim-telescope/telescope.nvim'
 "
 " vgit
 "Plug 'tanvirtin/vgit.nvim'
@@ -1097,7 +1108,7 @@ else
     if exists('$TMUX_PANE')
         let g:fzf_prefer_tmux = 1
         " use tmux popup ...
-        let g:fzf_layout = { 'tmux': '-p -x C -y C -w 80% -h 65%' }
+        let g:fzf_layout = { 'tmux': '-p -x C -y C -w 80% -h 65% --bind=esc:ignore' }
     else
         if g:is_ttyterm < 2
             " use vim popup ...
@@ -1109,7 +1120,7 @@ else
     endif
 endif
 
-let g:fzf_preview_window = ['right:60%:hidden', 'ctrl-alt-p']
+let g:fzf_preview_window = ['right:60%:hidden:+{2}-/2', 'ctrl-alt-p']
 
 let g:fzf_action = {
     \ 'ctrl-t': 'tab split',
@@ -2537,9 +2548,10 @@ endfunction
 " QFEnter -------------
 
 " QFGrep --------------
-nmap qg <Plug>QFGrepG
-nmap qv <Plug>QFGrepV
-nmap qr <Plug>QFRestore
+" NOTE: do not map these q* 2+ letter bindings starting with q because we have mapped just q ...
+"nmap qg <Plug>QFGrepG
+"nmap qv <Plug>QFGrepV
+"nmap qr <Plug>QFRestore
 nmap <Leader>qg <Plug>QFGrepG
 nmap <Leader>qv <Plug>QFGrepV
 nmap <Leader>qr <Plug>QFRestore
@@ -6472,7 +6484,9 @@ function! s:MyVisV2()
 endfunction
 
 " <C-q> seems to start visual mode ...
-nmap <silent> <C-q> <Nop>
+" NOTE: could also map this to 'q' like we do with <M-q> ...
+"nmap <silent> <C-q> <Nop>
+nmap <silent> <expr> <C-q> (&buftype == 'terminal') ? '<C-q>' : 'q'
 "nmap <silent> <expr> <C-q><C-q> (&buftype == 'terminal') ? 'i' : ''
 " TODO: can we get <C-q> to leave normal mode of terminal ?
 "       or use <M-q> for that ?
@@ -8415,7 +8429,8 @@ imap <silent> <F18> <C-v><Esc>q
 tmap <silent> <F18> <Esc>q
 if has("nvim")
     "nmap <silent> <M-q> <Nop>
-    nmap <silent> <expr> <M-q> (&buftype == 'terminal') ? 'i' : ''
+    " NOTE: if we map it to q then LSP hover window will quit ...
+    nmap <silent> <expr> <M-q> (&buftype == 'terminal') ? 'i' : 'q'
     vmap <silent> <M-q> <Esc>
     cmap <silent> <F18> <M-q>
     imap <silent> <F18> <M-q>
@@ -10778,7 +10793,7 @@ endif " has("autocmd")
 "================================================================
 "================================================================
 
-set completeopt=longest,menuone,preview,noselect,noinsert
+set completeopt=menu,menuone,preview,noselect,noinsert
 if !has("nvim")
     set completeopt+=popup
 endif
@@ -10811,12 +10826,13 @@ inoremap <silent> <C-^><Tab> <C-i>
 
 " vim-clang ----------
 " put preview window at bottom
-" if have preview,popup in completeopt then vim will use an addl popup instead of preview window
-" nvim doesnt support popup, but there is a float-preview to do similar
-let g:clang_debug=0
 set splitbelow
 set splitright
 set previewheight=5
+if !has("nvim")
+" if have preview,popup in completeopt then vim will use an addl popup instead of preview window
+" nvim doesnt support popup, but there is a float-preview to do similar
+let g:clang_debug=0
 " BUG: since vim 8.2.2426 completefunc cannot change windows and vim-clang does this
 "      disable for now until we can start diag window some other way ...
 "let g:clang_diagsopt = ''
@@ -10836,8 +10852,8 @@ let g:clang_cpp_options = '-std=c++11 -DNDEBUG -Wno-inconsistent-missing-overrid
 if has("nvim")
     " adding preview here without popup isnt great as we get preview window split
     " there is a nvim float-preview plugin but that doesnt stop the preview split
-    let g:clang_c_completeopt = 'longest,menuone,preview,noselect,noinsert'
-    let g:clang_cpp_completeopt = 'longest,menuone,preview,noselect,noinsert'
+    let g:clang_c_completeopt = 'menu,menuone,preview,noselect,noinsert'
+    let g:clang_cpp_completeopt = 'menu,menuone,preview,noselect,noinsert'
     " is there a way to supress preview window ?
     " this works, but it flashes the preview window for a brief moment ...
     "autocmd User FloatPreviewWinOpen pclose
@@ -10851,8 +10867,8 @@ if has("nvim")
     aug END
 else
     " vim has popup option ...
-    let g:clang_c_completeopt = 'longest,menuone,preview,noselect,noinsert,popup'
-    let g:clang_cpp_completeopt = 'longest,menuone,preview,noselect,noinsert,popup'
+    let g:clang_c_completeopt = 'menu,menuone,popup,noselect,noinsert'
+    let g:clang_cpp_completeopt = 'menu,menuone,popup,noselect,noinsert'
 endif
 let g:clang_complete_copen = 1
 let g:clang_auto = 1
@@ -10860,6 +10876,9 @@ let g:clang_load_if_clang_dotfile = 1
 let g:clang_dotfile = '.clang_complete'
 " close autocomplete window when finished with selection
 autocmd CompleteDone * silent! pclose!
+else "nvim lsp
+noremap <silent> <Leader>dc :lcl<bar>echo ""<bar>redraw<CR>
+endif "nvim lsp
 " vim-clang ----------
 
 " localvimrc ---------
@@ -10951,6 +10970,7 @@ map <C-w>} <Nop>
 "set notagstack
 
 " rtags -----------------
+if !has("nvim")
 " download/build/install rtags
 " start rdm daemon
 " run rc -J /path/to/compile_commands.json
@@ -10981,15 +11001,6 @@ map <C-w>} <Nop>
 "\r:    Toggle use colon in keyword (<cword>)
 " -------------------------------------
 "
-function s:CloseClangWin() abort
-    try
-        silent execute "normal :ClangCloseWindow\<CR>"
-    catch /E492:/
-    endtry
-    redraw!
-    echo " "
-endfunction
-
 let g:rtagsUseLocationList=1
 " dont start rdm if from sudo
 if $USER != 'root'
@@ -10997,81 +11008,21 @@ if $USER != 'root'
 else
   let g:rtagsAutoLaunchRdm=0
 endif
-" NOTE: to prevent tag search ...
-vnoremap <C-]> <Nop>
-" <C-]> is the same as <Leader>rj ...
-nnoremap <silent> <C-]> :call rtags#JumpTo(g:SAME_WINDOW)<CR>
-" we are using <C-w>] now to toggle terminal/normal mode ...
-"nnoremap <silent> <expr> <C-]> (&buftype == 'terminal') ? 'i' : ':call rtags#JumpTo(g:SAME_WINDOW)<CR>'
-autocmd BufReadPost quickfix nnoremap <silent> <buffer> <C-]> <Return>
-" C-o to go back
-" C-t to go back (not implemented)
-" nmap <C-t> :call rtags#JumpBack()<bar>:echo<CR>
-" \cc to close quickfix, listview, preview
-
-function s:IsTerminalFinished()
-    " just to clear the cmdline of this function ...
-    redraw!
-    echo "\r"
-    redir => lsout
-    silent ls
-    redir END
-    if empty(lsout)
-        return
-    endif
-    let lblist = split(lsout, '\n')
-    for lline in lblist
-        let bdict = split(lline, ' ')
-        if bdict[1] ==# 'aF' || bdict[1] ==# '%aF'
-            let bnum = str2nr(bdict[0])
-            if getbufvar(bnum, '&buftype') ==# 'terminal'
-                "echo "finished terminal buffer to end: " . bnum
-                try
-                    silent exec "normal :bdel! " . bnum . "\<CR>"
-                catch /.*/
-                    " just to clear the cmdline of this function ...
-                    redraw!
-                    echo "\r"
-                endtry
-            endif
-        endif
-    endfor
-    echo "\r"
-    redraw!
-endfunction
-
-function s:CloseUtilWins()
-    " just to clear the cmdline of this function ...
-    redraw!
-    echo "\r"
-    " if we pcl first then this will close all of preview, loc-list, quickfix
-    " if we ccl first then it closes preview and leaves loc-list, quickfix
-    pcl
-    ccl
-    lcl
-    call s:CloseClangWin()
-    call s:IsTerminalFinished()
-endfunction
-
-nnoremap <silent> <Leader>cc           :call <SID>CloseUtilWins()<CR>
-vnoremap <silent> <Leader>cc <C-\><C-n>:<C-u>call <SID>CloseUtilWins()<CR>
-
-"nnoremap <silent> <Leader>cc           :ccl<bar>lcl<bar>pcl<bar>:call <SID>CloseClangWin()<CR>
-"vnoremap <silent> <Leader>cc <C-\><C-n>:ccl<bar>lcl<bar>pcl<bar>:call <SID>CloseClangWin()<CR>
-
-nnoremap <silent> <f10>                :call <SID>CloseUtilWins()<CR>
-vnoremap <silent> <f10>      <C-\><C-n>:<C-u>call <SID>CloseUtilWins()<CR>
-
-"noremap <silent> <Leader>cc :windo lcl<bar>ccl<bar>pcl<bar>:echo<CR>
-" qq to also close location list, but we already have a q mapping ...
-"autocmd BufReadPost quickfix nnoremap <silent> <buffer> qq :ccl<bar>lcl<bar>pcl<bar>:echo<CR>
-" TODO: should qq from regular window also close these ?
 "
 " auto-reindex on file save ...
 " but shouldn't rdm automatically pick up changes ?
 "autocmd BufWritePost,FileWritePost,FileAppendPost *.{c,h,C,cc,cpp,hpp,ipp,tpp} call rtags#ReindexFile()
 " this is done in plugin now ...
 let g:rtagsAutoReindexOnWrite=1
+"
+" <C-]> is the same as <Leader>rj ...
+nnoremap <silent> <C-]> :call rtags#JumpTo(g:SAME_WINDOW)<CR>
+" we are using <C-w>] now to toggle terminal/normal mode ...
+"nnoremap <silent> <expr> <C-]> (&buftype == 'terminal') ? 'i' : ':call rtags#JumpTo(g:SAME_WINDOW)<CR>'
+"
+" C-t to go back (not implemented)
+" nmap <C-t> :call rtags#JumpBack()<bar>:echo<CR>
+endif "nvim lsp
 " rtags -----------------
 
 " fswitch ---------------
@@ -11993,6 +11944,83 @@ hi WarningMsg cterm=none ctermfg=White ctermbg=Red gui=none guifg=White guibg=Re
 "if !has("gui_running")
 "  hi Normal ctermbg=none
 "endif
+
+" -----------------------------
+
+" NOTE: to prevent tag search ...
+vnoremap <C-]> <Nop>
+
+autocmd BufReadPost quickfix nnoremap <silent> <buffer> <C-]> <Return>
+
+" C-o to go back
+" \cc to close quickfix, listview, preview
+
+function s:IsTerminalFinished()
+    " just to clear the cmdline of this function ...
+    redraw!
+    echo "\r"
+    redir => lsout
+    silent ls
+    redir END
+    if empty(lsout)
+        return
+    endif
+    let lblist = split(lsout, '\n')
+    for lline in lblist
+        let bdict = split(lline, ' ')
+        if bdict[1] ==# 'aF' || bdict[1] ==# '%aF'
+            let bnum = str2nr(bdict[0])
+            if getbufvar(bnum, '&buftype') ==# 'terminal'
+                "echo "finished terminal buffer to end: " . bnum
+                try
+                    silent exec "normal :bdel! " . bnum . "\<CR>"
+                catch /.*/
+                    " just to clear the cmdline of this function ...
+                    redraw!
+                    echo "\r"
+                endtry
+            endif
+        endif
+    endfor
+    echo "\r"
+    redraw!
+endfunction
+
+function s:CloseClangWin() abort
+    try
+        silent execute "normal :ClangCloseWindow\<CR>"
+    catch /E492:/
+    endtry
+    redraw!
+    echo " "
+endfunction
+
+function s:CloseUtilWins()
+    " just to clear the cmdline of this function ...
+    redraw!
+    echo "\r"
+    " if we pcl first then this will close all of preview, loc-list, quickfix
+    " if we ccl first then it closes preview and leaves loc-list, quickfix
+    pcl
+    ccl
+    lcl
+    call s:CloseClangWin()
+    call s:IsTerminalFinished()
+endfunction
+
+nnoremap <silent> <Leader>cc           :call <SID>CloseUtilWins()<CR>
+vnoremap <silent> <Leader>cc <C-\><C-n>:<C-u>call <SID>CloseUtilWins()<CR>
+
+"nnoremap <silent> <Leader>cc           :ccl<bar>lcl<bar>pcl<bar>:call <SID>CloseClangWin()<CR>
+"vnoremap <silent> <Leader>cc <C-\><C-n>:ccl<bar>lcl<bar>pcl<bar>:call <SID>CloseClangWin()<CR>
+
+nnoremap <silent> <f10>                :call <SID>CloseUtilWins()<CR>
+vnoremap <silent> <f10>      <C-\><C-n>:<C-u>call <SID>CloseUtilWins()<CR>
+
+"noremap <silent> <Leader>cc :windo lcl<bar>ccl<bar>pcl<bar>:echo<CR>
+" qq to also close location list, but we already have a q mapping ...
+"autocmd BufReadPost quickfix nnoremap <silent> <buffer> qq :ccl<bar>lcl<bar>pcl<bar>:echo<CR>
+" TODO: should qq from regular window also close these ?
 
 " -----------------------------
 
@@ -13942,7 +13970,7 @@ NVIM_LUA_EOF
 
 endif
 
-if has("nvim-SKIP")
+if has("nvim")
 
 " NOTE: must do this first if using packer below ...
 " git clone --depth 1 https://github.com/wbthomason/packer.nvim \
@@ -13957,14 +13985,148 @@ lua << NVIM_LUA_EOF1
 --  use 'neovim/nvim-lspconfig' -- Configurations for Nvim LSP
 --end)
 
+-- lsp zero method
+-- Learn the keybindings, see :help lsp-zero-keybindings
+-- Learn to configure LSP servers, see :help lsp-zero-api-showcase
+--local lsp = require('lsp-zero')
+--lsp.preset('recommended')
+--lsp.setup()
+
+--local lsp_log = require('vim.lsp.log')
+
+require('lspfuzzy').setup {
+    fzf_action = {                 -- FZF actions
+        ['ctrl-t'] = 'tab split',  -- go to location in a new tab
+        ['ctrl-v'] = 'vsplit',     -- go to location in a vertical split
+        ['ctrl-x'] = 'split',      -- go to location in a horizontal split
+    },
+    fzf_preview = {'hidden:up:+{2}-/2'},
+    fzf_modifier = ':~:.',   -- format FZF entries, see |filename-modifiers|
+    fzf_trim = true,         -- trim FZF entries
+}
+
+local lsp_zero = require('lsp-zero')
+
+local wrap = function(func, ...)
+  local args = {...}
+  return function()
+    func(unpack(args))
+  end
+end
+
+local hover_close = function(base_win_id, keyx)
+    local windows = vim.api.nvim_tabpage_list_wins(0)
+    for _, win_id in ipairs(windows) do
+        if win_id ~= base_win_id then
+            local win_cfg = vim.api.nvim_win_get_config(win_id)
+            if win_cfg.relative == "win" and win_cfg.win == base_win_id then
+                vim.api.nvim_win_close(win_id, {})
+                break
+            end
+        end
+    end
+end
+
+lsp_zero.on_attach(function(client, bufnr)
+  print('LSP: attach ' .. client.name)
+  -- see :help lsp-zero-keybindings
+  -- to learn the available actions
+  --lsp_zero.default_keymaps({buffer = bufnr})
+
+  local opts = {buffer = bufnr}
+
+  -- Enable completion triggered by <c-x><c-o>
+  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+  --vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+  vim.keymap.set('n', '<leader>rd', '<cmd>lua vim.lsp.buf.definition()<cr><cmd>echo "LSP: goto def"<cr><cmd>sleep 800m<cr><cmd>echo ""<cr>', opts)
+  vim.keymap.set('n', '<C-]>',      '<cmd>lua vim.lsp.buf.definition()<cr><cmd>echo "LSP: goto def"<cr><cmd>sleep 800m<cr><cmd>echo ""<cr>', opts)
+
+  --vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
+  vim.keymap.set('n', '<leader>rD', '<cmd>lua vim.lsp.buf.declaration()<cr><cmd>echo "LSP: goto dec"<cr><cmd>sleep 800m<cr><cmd>echo ""<cr>', opts)
+
+  --vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
+  vim.keymap.set('n', '<leader>rv', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
+  vim.keymap.set('n', '<leader>ri', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
+
+  --vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
+  vim.keymap.set('n', '<leader>rf', '<cmd>lua vim.lsp.buf.references()<cr><cmd>echo "LSP: find ref"<cr><cmd>sleep 800m<cr><cmd>echo ""<cr>', opts)
+  vim.keymap.set('n', '<leader>rr', '<cmd>lua vim.lsp.buf.references()<cr><cmd>echo "LSP: find ref"<cr><cmd>sleep 800m<cr><cmd>echo ""<cr>', opts)
+
+  --vim.keymap.set('n', 'gH', vim.lsp.buf.hover, bufopts)
+  -- call vim.lsp.buf.hover() twice to enter hover floating window
+  vim.keymap.set('n', '<leader>rs', '<cmd>lua vim.lsp.buf.hover()<cr><cmd>lua vim.lsp.buf.hover()<cr><cmd>echo "LSP: sym"<cr><cmd>sleep 800m<cr><cmd>echo ""<cr>', opts)
+  -- can we have <M-q>, <C-q> close hover window w/o hijacking these already existing mappings ?
+  -- maybe by mapping <M-q> to q when not a terminal ... (see above), but what about <C-q> ???
+  --vim.keymap.set('n', 'qq', function() hover_close(vim.api.nvim_get_current_win(), 1) end, opts)
+  --vim.keymap.set('n', '<C-q>', function() hover_close(vim.api.nvim_get_current_win(), 2) end, opts)
+  --vim.keymap.set('n', '<M-q>', function() hover_close(vim.api.nvim_get_current_win(), 3) end, opts)
+
+  vim.keymap.set('n', '<leader>rS', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
+
+  --vim.keymap.set('n', 'gT', vim.lsp.buf.type_definition, bufopts)
+  vim.keymap.set('n', '<leader>rt', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
+
+  -- does not seem to be sent to fzf
+  --vim.keymap.set('n', '<leader>rT', '<cmd>lua vim.lsp.buf.typehierarchy()<cr>', opts)
+
+  vim.keymap.set('n', '<leader>rI', '<cmd>lua vim.lsp.buf.incoming_calls()<cr>', opts)
+
+  -- does not seem to be supported
+  --vim.keymap.set('n', '<leader>rO', '<cmd>lua vim.lsp.buf.outgoing_calls()<cr>', opts)
+
+  -- list all symbols in the file
+  vim.keymap.set('n', '<leader>rL', '<cmd>lua vim.lsp.buf.document_symbol()<cr>', opts)
+
+  -- does not seem to open float
+  --vim.keymap.set('n', '[e', vim.diagnostic.open_float, opts)
+  vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
+  vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
+  vim.keymap.set('n', '[q', vim.diagnostic.setloclist, opts)
+
+  -- can we get this to fzf ?
+  vim.keymap.set('n', '<leader>do', vim.diagnostic.setloclist, opts)
+
+  -- no Telescope for now, since using qf->fzf lspfuzzy plugin
+  --vim.keymap.set('n', 'gd', '<cmd>Telescope lsp_definitions<cr>', opts)
+  --vim.keymap.set('n', 'gi', '<cmd>Telescope lsp_implementations<cr>', opts)
+  --vim.keymap.set('n', 'gr', '<cmd>Telescope lsp_references<cr>', opts)
+
+end)
+
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+require("mason").setup()
+
+-- install LSPs ...
+-- install clangd (sudo apt-get install clangd)
+-- install pyright (sudo pip3 install pyright)
+-- install rust-analyzer ...
+
+local lspconfig = require'lspconfig'
+lspconfig.clangd.setup {
+  init_options = {
+    compilationDatabaseDirectory = "buildln";
+    index = {
+      threads = 0;
+    };
+    clang = {
+      excludeArgs = { "-frounding-math"} ;
+    };
+  }
+}
+
+-- clangd add .clangd config file in project root
+
 -- Setup lspconfig
 require('lspconfig')['pyright'].setup{
     on_attach = on_attach,
     flags = lsp_flags,
 }
-require('lspconfig')['ccls'].setup{
+require('lspconfig')['clangd'].setup{
     on_attach = on_attach,
     flags = lsp_flags,
+    capabilities = capabilities,
 }
 require('lspconfig')['rust_analyzer'].setup{
     on_attach = on_attach,
@@ -13975,64 +14137,90 @@ require('lspconfig')['rust_analyzer'].setup{
     }
 }
 
-local lspconfig = require'lspconfig'
-lspconfig.ccls.setup {
-  init_options = {
-    compilationDatabaseDirectory = "build";
-    index = {
-      threads = 0;
-    };
-    clang = {
-      excludeArgs = { "-frounding-math"} ;
-    };
-  }
-}
-
--- Mappings
--- See `:help vim.diagnostic.*` for documentation on any of the below functions
-local opts = { noremap=true, silent=true }
-vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
-vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
-
--- Use an on_attach function to only map the following keys
--- after the language server attaches to the current buffer
-local on_attach = function(client, bufnr)
-  -- Enable completion triggered by <c-x><c-o>
-  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-
-  -- Mappings.
-  -- See `:help vim.lsp.*` for documentation on any of the below functions
-  local bufopts = { noremap=true, silent=true, buffer=bufnr }
-  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
-  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
-  vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
-  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
-  vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
-  vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, bufopts)
-  vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
-  vim.keymap.set('n', '<space>wl', function()
-    print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-  end, bufopts)
-  vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
-  vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
-  vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
-  vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
-  vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, bufopts)
-end
-
 local lsp_flags = {
   -- This is the default in Nvim 0.7+
   debounce_text_changes = 150,
 }
 
--- lsp zero method
--- Learn the keybindings, see :help lsp-zero-keybindings
--- Learn to configure LSP servers, see :help lsp-zero-api-showcase
---local lsp = require('lsp-zero')
---lsp.preset('recommended')
---lsp.setup()
+local cmp = require'cmp'
+local lspkind = require'lspkind'
+local luasnip = require('luasnip')
+
+cmp.setup({
+  snippet = {
+    expand = function(args)
+      -- For `ultisnips` user.
+      vim.fn["UltiSnips#Anon"](args.body)
+    end,
+  },
+  mapping = cmp.mapping.preset.insert({
+          ['<Tab>'] = function(fallback)
+            if cmp.visible() then
+              cmp.select_next_item()
+            else
+              fallback()
+            end
+          end,
+          ['<S-Tab>'] = function(fallback)
+            if cmp.visible() then
+              cmp.select_prev_item()
+            else
+              fallback()
+            end
+          end,
+          ['<CR>'] = cmp.mapping.confirm({ select = true }),
+          ['<C-q>'] = cmp.mapping.abort(),
+          ['<M-q>'] = cmp.mapping.close(),
+          ['<M-CR>'] = cmp.mapping.close(),
+          ['<Esc>'] = function(fallback)
+                          cmp.mapping.close()
+                          vim.api.nvim_input('<Esc>')
+                          fallback()
+                      end,
+          ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+          ['<C-f>'] = cmp.mapping.scroll_docs(4),
+        }),
+  sources = {
+    { name = 'nvim_lsp' }, -- For nvim-lsp
+    { name = 'ultisnips' }, -- For ultisnips user.
+    { name = 'nvim_lua' }, -- for nvim lua function
+    { name = 'path' }, -- for path completion
+    { name = 'buffer', keyword_length = 4 }, -- for buffer word completion
+    { name = 'omni' },
+    { name = 'emoji', insert = true, } -- emoji completion
+  },
+  completion = {
+    keyword_length = 1,
+    completeopt = "menu,menuone,preview,noselect,noinsert"
+  },
+  view = {
+    entries = 'custom',
+  },
+  formatting = {
+    format = lspkind.cmp_format({
+      mode = "symbol_text",
+      menu = ({
+        nvim_lsp = "[LSP]",
+        ultisnips = "[US]",
+        nvim_lua = "[Lua]",
+        path = "[Path]",
+        buffer = "[Buffer]",
+        emoji = "[Emoji]",
+          omni = "[Omni]",
+      }),
+    }),
+  },
+})
+
+require('telescope').setup{
+    defaults = {
+        path_display = {
+            filename_first = {
+                reverse_directories = false
+            }
+        },
+    }
+}
 
 NVIM_LUA_EOF1
 
