@@ -4,7 +4,9 @@
 --tabs="4"
 
 # Set the theme to "TwoDark"
---theme="Monokai Extended"
+#--theme="Monokai Extended"
+# molo is Monokai Extended but with a more visible lineHighlight
+--theme="molo"
 
 # Show line numbers, Git modifications and file header (but no grid)
 #--style="numbers,changes,header"
