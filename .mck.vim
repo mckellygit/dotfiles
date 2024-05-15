@@ -1482,9 +1482,11 @@ autocmd FileType git              vmap <silent> <buffer> d       <Nop>
 
 " fugitive/GV to be like gitgutter/tig ...
 " SPECIAL: some terminals may map <C-S-n> to <C-_>N ...
-autocmd FileType git              map <buffer> <C-_>N /^+\\|^-<CR>
+autocmd FileType git              map <buffer> <C-_>N  /^+\\|^-<CR>
+autocmd FileType git              map <buffer> <C-S-N> /^+\\|^-<CR>
 " SPECIAL: some terminals may map <C-S-p> to <C-_>P ...
-autocmd FileType git              map <buffer> <C-_>P ?^+\\|^-<CR>
+autocmd FileType git              map <buffer> <C-_>P  ?^+\\|^-<CR>
+autocmd FileType git              map <buffer> <C-S-P> ?^+\\|^-<CR>
 
 " ----------------
 
@@ -1596,7 +1598,9 @@ nmap <silent> <Leader>gp :call <SID>GitGutterPrevHunkCycle()<CR>
 " NOTE: kitty previously used ctrl+shift+p + ... for url selection
 " and this was changed to ctrl+shift+/ so we can use C-S-p here ...
 nmap <silent> <C-_>N  :call <SID>GitGutterNextHunkCycle()<CR>
+nmap <silent> <C-S-N> :call <SID>GitGutterNextHunkCycle()<CR>
 nmap <silent> <C-_>P  :call <SID>GitGutterPrevHunkCycle()<CR>
+nmap <silent> <C-S-P> :call <SID>GitGutterPrevHunkCycle()<CR>
 
 " TODO: or use M-n/p or M-n/N or C-A-n/p ?
 " NOTE: tmux maps <M-n> to <C-^>n and same for N,p,P
@@ -1611,6 +1615,7 @@ nmap <silent> <C-p> :call <SID>GitGutterPrevHunkCycle()<CR>
 nmap <silent> <Leader>gg :call gitgutter#process_buffer(bufnr(''), 0)<CR>
 " SPECIAL: some terminals may map <C-S-g> to <C-_>G ...
 nmap <silent> <C-_>G     :call gitgutter#process_buffer(bufnr(''), 0)<CR>
+nmap <silent> <C-S-G>    :call gitgutter#process_buffer(bufnr(''), 0)<CR>
 
 aug gg_init
   au!
@@ -2825,6 +2830,7 @@ if 0 " --- DISABLED ---
 " in vim, <C-\> _may_ stop system() cmds (if stty quit is ^\) [but not nvim] - but may generate core file
 " <C-S-bslash> (does <C-bar> exist ?) might be mapped to <C-_><bslash> in some terminals ...
 noremap <silent> <expr> <C-_><bslash> (&buftype ==# 'terminal') ? 'i' : '<C-c>:AsyncStop!<CR>:sleep 500m<CR>:AsyncStop!<CR>'
+noremap <silent> <expr> <C-S-bslash>  (&buftype ==# 'terminal') ? 'i' : '<C-c>:AsyncStop!<CR>:sleep 500m<CR>:AsyncStop!<CR>'
 " DONE: is there a way to map <C-c> to both send <C-c> AND also run :AsyncStop ?
 "       or can we change AsyncRun to know if <C-c> was pressed ?
 "       or change any-jump searches to use AsyncRun ?
@@ -8327,6 +8333,8 @@ inoremap <silent> <expr> <C-Del> (col('.') == 1 && col('$') == 1) ? '<C-o>"_dW' 
 tnoremap <silent>        <F36>   <C-Del>
 tnoremap <silent>        <C-Del> <C-Del>
 
+" NOTE: no special terminal mappings for <C-S-Del> to <C-_><Del> (or other C-S-Home/End keys) ...
+
 " ctrl-shift-del to delete whole word under cursor
 "nnoremap <silent> <expr> <S-F15> (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? 'lb"_dW' : ':call <SID>CSDel()<CR>'
 nnoremap <silent> <expr> <S-F15>   (col('.') == 1 && col('$') == 1) ? '"_dW' : (col('.') != col('$')-1) ? 'lb"_dW' : (nr2char(strgetchar(getline('.')[col('.') - 1:], 0)) == ' ') ? '"_dvb' : '"_diw'
@@ -9046,17 +9054,14 @@ noremap <silent> <expr> <C-k>      AtBot(0) ? (line('w0') == 1) ? 'gk' : '<C-y>'
 
 noremap <C-S-BS>   gk
 noremap <C-_><BS>  gk
-noremap <C-_><Del> gk
 "noremap <silent> <expr> <C-S-BS> AtBot(0) ? ((line("w0") - 1 - line("0")) >= 10 ? '10<C-y>' : (line("w0") - 1 - line("0")) >= 9 ? '9<C-y>' : (line("w0") - 1 - line("0")) >= 8 ? '8<C-y>' : (line("w0") - 1 - line("0")) >= 7 ? '7<C-y>' : (line("w0") - 1 - line("0")) >= 6 ? '6<C-y>' : (line("w0") - 1 - line("0")) >= 5 ? '5<C-y>' : (line("w0") - 1 - line("0")) >= 4 ? '4<C-y>' : (line("w0") - 1 - line("0")) >= 3 ? '3<C-y>' : (line("w0") - 1 - line("0")) >= 2 ? '2<C-y>' : (line("w0") - 1 - line("0")) >= 1 ? '1<C-y>' : '') : ((line("w0") - 1 - line("0")) >= 10 ? '10<C-y>10k' : (line("w0") - 1 - line("0")) >= 9 ? '9<C-y>9k' : (line("w0") - 1 - line("0")) >= 8 ? '8<C-y>8k' : (line("w0") - 1 - line("0")) >= 7 ? '7<C-y>7k' : (line("w0") - 1 - line("0")) >= 6 ? '6<C-y>6k' : (line("w0") - 1 - line("0")) >= 5 ? '5<C-y>5k' : (line("w0") - 1 - line("0")) >= 4 ? '4<C-y>4k' : (line("w0") - 1 - line("0")) >= 3 ? '3<C-y>3k' : (line("w0") - 1 - line("0")) >= 2 ? '2<C-y>2k' : (line("w0") - 1 - line("0")) >= 1 ? '1<C-y>1k' : '')
 " SPECIAL: NOTE: some terminals map <C-S-BS> to <C-_><BS>
 "noremap <silent> <expr> <C-_><BS> AtBot(0) ? ((line("w0") - 1 - line("0")) >= 10 ? '10<C-y>' : (line("w0") - 1 - line("0")) >= 9 ? '9<C-y>' : (line("w0") - 1 - line("0")) >= 8 ? '8<C-y>' : (line("w0") - 1 - line("0")) >= 7 ? '7<C-y>' : (line("w0") - 1 - line("0")) >= 6 ? '6<C-y>' : (line("w0") - 1 - line("0")) >= 5 ? '5<C-y>' : (line("w0") - 1 - line("0")) >= 4 ? '4<C-y>' : (line("w0") - 1 - line("0")) >= 3 ? '3<C-y>' : (line("w0") - 1 - line("0")) >= 2 ? '2<C-y>' : (line("w0") - 1 - line("0")) >= 1 ? '1<C-y>' : '') : ((line("w0") - 1 - line("0")) >= 10 ? '10<C-y>10k' : (line("w0") - 1 - line("0")) >= 9 ? '9<C-y>9k' : (line("w0") - 1 - line("0")) >= 8 ? '8<C-y>8k' : (line("w0") - 1 - line("0")) >= 7 ? '7<C-y>7k' : (line("w0") - 1 - line("0")) >= 6 ? '6<C-y>6k' : (line("w0") - 1 - line("0")) >= 5 ? '5<C-y>5k' : (line("w0") - 1 - line("0")) >= 4 ? '4<C-y>4k' : (line("w0") - 1 - line("0")) >= 3 ? '3<C-y>3k' : (line("w0") - 1 - line("0")) >= 2 ? '2<C-y>2k' : (line("w0") - 1 - line("0")) >= 1 ? '1<C-y>1k' : '')
 
 " TODO: what about <C-_><C-h> ?
 
-"tnoremap <C-_><BS>  <C-BS>
 tnoremap <C-S-BS>   <C-BS>
 tnoremap <C-_><BS>  <C-BS>
-tnoremap <C-_><Del> <C-BS>
 tnoremap <C-_><C-h> <C-BS>
 
 "vnoremap <silent>       <C-Up> <C-y>k
@@ -9387,8 +9392,10 @@ else
 endif
 
 " SPECIAL: some terminals might map C-S-k to <C-_>K ...
- noremap <C-_>K 10gk
-inoremap <C-_>K <C-\><C-o>10gk
+ noremap <C-_>K  10gk
+ noremap <C-S-K> 10gk
+inoremap <C-_>K  <C-\><C-o>10gk
+inoremap <C-S-K> <C-\><C-o>10gk
 
 " SPECIAL: some terminals might map C-A-j / A-C-j to C-M-o / M-C-o ...
 " use ^O instead of ^J (or ^M or \n or \r)
@@ -9411,16 +9418,22 @@ else
 endif
 
 " SPECIAL: some terminals might map C-S-j to <C-_>J ...
- noremap <C-_>J 10gj
-inoremap <C-_>J <C-\><C-o>10gj
+ noremap <C-_>J  10gj
+ noremap <C-S-J> 10gj
+inoremap <C-_>J  <C-\><C-o>10gj
+inoremap <C-S-J> <C-\><C-o>10gj
 
 " ---------
 
- noremap <C-_>H 10h
-inoremap <C-_>H <C-\><C-o>10h
+ noremap <C-_>H  10h
+ noremap <C-S-H> 10h
+inoremap <C-_>H  <C-\><C-o>10h
+inoremap <C-S-H> <C-\><C-o>10h
 
- noremap <C-_>L 10l
-inoremap <C-_>L <C-\><C-o>10l
+ noremap <C-_>L  10l
+ noremap <C-S-L> 10l
+inoremap <C-_>L  <C-\><C-o>10l
+inoremap <C-S-L> <C-\><C-o>10l
 
 " ---------
 
@@ -9499,8 +9512,10 @@ inoremap <silent> <C-^>p <C-p>
 inoremap <silent> <C-^>N <C-n>
 inoremap <silent> <C-^>P <C-p>
 
-inoremap <silent> <C-_>N <C-n>
-inoremap <silent> <C-_>P <C-p>
+inoremap <silent> <C-_>N  <C-n>
+inoremap <silent> <C-S-N> <C-n>
+inoremap <silent> <C-_>P  <C-p>
+inoremap <silent> <C-S-P> <C-p>
 
 " -------------------------------
 
