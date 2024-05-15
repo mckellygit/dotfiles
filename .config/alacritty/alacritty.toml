@@ -1,4 +1,4 @@
-custom_cursor_colors = true
+#custom_cursor_colors = true
 
 [bell]
 duration = 0
@@ -20,9 +20,9 @@ yellow = "#ffd700"
 cursor = "#d78700"
 text = "#111111"
 
-[colors.footer.bar]
-background = "#000000"
-foreground = "#000000"
+#[colors.footer.bar]
+#background = "#000000"
+#foreground = "#000000"
 
 [colors.normal]
 black = "#000000"
@@ -52,9 +52,9 @@ log_level = "Warn"
 persistent_logging = false
 render_timer = false
 
-[dpi]
-x = 120.0
-y = 120.0
+#[dpi]
+#x = 120.0
+#y = 120.0
 
 [env]
 TERM = "alacritty"
@@ -594,9 +594,9 @@ action = "None"
 mods = "Alt|Shift"
 mouse = "Middle"
 
-[mouse.hints]
-launcher = "xdg-open"
-modifiers = "Shift"
+#[mouse.hints]
+#launcher = "xdg-open"
+#modifiers = "Shift"
 
 [scrolling]
 history = 0
