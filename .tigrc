@@ -75,6 +75,10 @@ bind stage     <Ctrl-P>     :?^diff --git|^@@
 #bind diff      <Ctrl-_>P    :?^\+|^-
 #bind stage     <Ctrl-_>N    :/^\+|^-
 #bind stage     <Ctrl-_>P    :?^\+|^-
+bind diff      <Ctrl-_>N     :/^diff --git|^@@
+bind diff      <Ctrl-_>P     :?^diff --git|^@@
+bind stage     <Ctrl-_>N     :/^diff --git|^@@
+bind stage     <Ctrl-_>P     :?^diff --git|^@@
 #
 bind generic   <Ctrl-_><Space>      move-down
 bind generic   <Ctrl-_><Backspace>  move-up
@@ -211,15 +215,15 @@ bind generic   <Esc>[1;7F   move-last-line
 #bind generic   <Alt-Down>   scroll-line-down
 #bind generic   <Alt-Up>     scroll-line-up
 #
-#bind generic   <C-Left>     scroll-left
-#bind generic   <C-Right>    scroll-right
-#bind generic   <A-Left>     scroll-left
-#bind generic   <A-Right>    scroll-right
+#bind generic   <Ctrl-Left>     scroll-left
+#bind generic   <Ctrl-Right>    scroll-right
+#bind generic   <Alt-Left>     scroll-left
+#bind generic   <Alt-Right>    scroll-right
 #
-#bind generic   <C-Home>     move-first-line
-#bind generic   <C-End>      move-last-line
-#bind generic   <A-C-Home>   move-first-line
-#bind generic   <A-C-End>    move-last-line
+#bind generic   <Ctrl-Home>     move-first-line
+#bind generic   <Ctrl-End>      move-last-line
+#bind generic   <Alt-Ctrl-Home>   move-first-line
+#bind generic   <Alt-Ctrl-End>    move-last-line
 #
 bind generic   <Insert>     none
 bind generic   <Delete>     none
