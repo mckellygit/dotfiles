@@ -1098,6 +1098,14 @@ let g:findroot_not_for_subdir = 1
 " findroot ------------
 
 " fzf -----------------
+" NOTE: this solves bind for esc when floaterm is used instead of tmux ...
+"       should really be able to add this binding to fzf_layout but ...
+let fzf_opts=$FZF_DEFAULT_OPTS
+if !empty(fzf_opts)
+    let fzf_new_opts=fzf_opts . ' --bind="esc:ignore"'
+    call setenv("FZF_DEFAULT_OPTS", fzf_new_opts)
+endif
+
 if 0 " use vim popup always ...
     " NOTE: cannot use ctrl-\ key as vim terminal uses <C-\><C-n> to go into normal mode
     "       (after <C-\> vim terminal always expects another key) ...
@@ -1120,7 +1128,7 @@ else
     endif
 endif
 
-let g:fzf_preview_window = ['right:60%:hidden:+{2}-/2', 'ctrl-alt-p']
+let g:fzf_preview_window = [ 'right:60%:hidden:+{2}-/2', 'ctrl-alt-p' ]
 
 let g:fzf_action = {
     \ 'ctrl-t': 'tab split',
@@ -14054,11 +14062,11 @@ lsp_zero.on_attach(function(client, bufnr)
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
   --vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
-  vim.keymap.set('n', '<leader>rd', '<cmd>lua vim.lsp.buf.definition()<cr><cmd>echo "LSP: goto def"<cr><cmd>sleep 800m<cr><cmd>echo ""<cr>', opts)
-  vim.keymap.set('n', '<C-]>',      '<cmd>lua vim.lsp.buf.definition()<cr><cmd>echo "LSP: goto def"<cr><cmd>sleep 800m<cr><cmd>echo ""<cr>', opts)
+  vim.keymap.set('n', '<leader>rd', '<cmd>lua vim.lsp.buf.definition()<cr><cmd>echo "LSP: goto def"<cr><cmd>sleep 800m<cr><cmd>redraw!<cr>', opts)
+  vim.keymap.set('n', '<C-]>',      '<cmd>lua vim.lsp.buf.definition()<cr><cmd>echo "LSP: goto def"<cr><cmd>sleep 800m<cr><cmd>redraw!<cr>', opts)
 
   --vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
-  vim.keymap.set('n', '<leader>rD', '<cmd>lua vim.lsp.buf.declaration()<cr><cmd>echo "LSP: goto dec"<cr><cmd>sleep 800m<cr><cmd>echo ""<cr>', opts)
+  vim.keymap.set('n', '<leader>rD', '<cmd>lua vim.lsp.buf.declaration()<cr><cmd>echo "LSP: goto dec"<cr><cmd>sleep 800m<cr><cmd>redraw!<cr>', opts)
 
   --vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
   vim.keymap.set('n', '<leader>rv', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
