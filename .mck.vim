@@ -11607,6 +11607,8 @@ command! -nargs=* -bang AGit call AgitFzf(<q-args>, 1)
 
 " -------------------------------------------------------------
 
+" NOTE: also look into amber as a replacement of rg / ag / ack, it has replace also ...
+
 " NOTE: rg ags --column --line-number --no-heading is the same as --vimgrep ...
 
 function! RipgrepFzf(aquery, ufzf, fullscreen)
@@ -14051,7 +14053,7 @@ local hover_close = function(base_win_id, keyx)
 end
 
 lsp_zero.on_attach(function(client, bufnr)
-  print('LSP: attach ' .. client.name)
+  -- print('LSP: attach ' .. client.name)
   -- see :help lsp-zero-keybindings
   -- to learn the available actions
   --lsp_zero.default_keymaps({buffer = bufnr})

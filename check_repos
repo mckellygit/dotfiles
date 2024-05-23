@@ -143,6 +143,9 @@ fi
 #   cargo build --release --features 'pcre2'
 #   sudo cp target/release/rg /usr/local/bin
 
+# amber: (has replace)
+#   git clone https://github.com/dalance/amber.git
+
 # CopyQ: (also copyq-commands)
 #   git clone https://github.com/hluk/CopyQ.git
 #   -or-
