@@ -146,6 +146,9 @@ fi
 # amber: (has replace)
 #   git clone https://github.com/dalance/amber.git
 
+# bytehound (memory profiler)
+#   git clone https://github.com/koute/bytehound.git
+
 # CopyQ: (also copyq-commands)
 #   git clone https://github.com/hluk/CopyQ.git
 #   -or-
