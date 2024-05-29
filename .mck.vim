@@ -2992,8 +2992,8 @@ let g:csv_bind_B = 1
 
 " vim-man ----------
 " use vim-man instead of default vim K at root level ...
-nnoremap <silent> <buffer> K :call man#get_page_from_cword('horizontal', v:count)<CR>
-vnoremap <silent> <buffer> K <C-\><C-n>:call man#get_page_from_cword('horizontal', v:count)<CR>
+nnoremap <silent> K :call man#get_page_from_cword('horizontal', v:count)<CR>
+vnoremap <silent> K <C-\><C-n>:call man#get_page_from_cword('horizontal', v:count)<CR>
 " skip q for closing man window, use qq instead ...
 autocmd FileType man nmap <buffer> q  <Nop>
 autocmd FileType man nmap <buffer> qq :q<CR>
