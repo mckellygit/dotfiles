@@ -160,10 +160,13 @@ if !has("nvim")
 endif
 "
 " rtags for code navigation (**modified++)
-if !has("nvim")
-    "Plug 'lyuts/vim-rtags'
-    Plug 'mckellygit/vim-rtags'
+if has("nvim")
+    let g:rtagsUseDefaultMappings = 0
+else
+    let g:rtagsUseDefaultMappings = 1
 endif
+"Plug 'lyuts/vim-rtags'
+Plug 'mckellygit/vim-rtags'
 "
 " ---------------------
 "
@@ -10993,34 +10996,33 @@ map <C-w>} <Nop>
 "set notagstack
 
 " rtags -----------------
-if !has("nvim")
 " download/build/install rtags
 " start rdm daemon
 " run rc -J /path/to/compile_commands.json
 "
 " -------------------------------------
-"\ri    Symbol info
-"\rj    Follow location (jump to)
-"\rJ    Follow declaration location
-"\rH    Follow location (open in horizontal split)
-"\rV    Follow location (open in vertical split)
-"\rT    Follow location (open in new tab)
-"\rt    Follow location (if not in same file then open in new tab)
-"\rp    Jump to parent
-"\rc    Find subclasses
-"\rC    Find superclasses
+"\rs    Symbol info
+"\ro    Diagnose file for warnings and errors
+"\rj,d  Follow location (jump to)
+"\rJ,D  Follow declaration location
 "\rf    Find references
 "\rF    Call tree (o - open node, Enter - jump)
-"\rn    Find references by name
-"\rs    Find symbols by name
-"\rr    Reindex current file
-"\rl    List all available projects
-"\rw    Rename symbol under cursor
-"\rv    Find virtuals
-"\rd    Diagnose file for warnings and errors
+"\rv,i  Find virtuals
+"\rV,|  Follow location (open in vertical split)
+"\rH,_  Follow location (open in horizontal split)
+"\rX    Follow location (open in new tab)
+"\r<Tab> Follow location (if not in same file then open in new tab)
+"\rp    Jump to parent
 "\rb    Jump to prev location
 "\r,    Jump to prev location (<)
 "\r.    Jump to next location (>)
+"\rc    Find subclasses
+"\rC    Find superclasses
+"\rn    Find references by name
+"\rK    Find symbols by name
+"\rr    Reindex current file
+"\rl    List all available projects
+"\rw    Rename symbol under cursor
 "\r:    Toggle use colon in keyword (<cword>)
 " -------------------------------------
 "
@@ -11038,13 +11040,74 @@ endif
 " this is done in plugin now ...
 let g:rtagsAutoReindexOnWrite=1
 "
-" <C-]> is the same as <Leader>rj ...
-nnoremap <silent> <C-]> :call rtags#JumpTo(g:SAME_WINDOW)<CR>
-" we are using <C-w>] now to toggle terminal/normal mode ...
-"nnoremap <silent> <expr> <C-]> (&buftype == 'terminal') ? 'i' : ':call rtags#JumpTo(g:SAME_WINDOW)<CR>'
-"
-" C-t to go back (not implemented)
-" nmap <C-t> :call rtags#JumpBack()<bar>:echo<CR>
+if !has("nvim")
+    " <C-]> is the same as <Leader>rj ...
+    nnoremap <silent> <C-]> :call rtags#JumpTo(g:SAME_WINDOW)<CR>
+    " we are using <C-w>] now to toggle terminal/normal mode ...
+    "nnoremap <silent> <expr> <C-]> (&buftype == 'terminal') ? 'i' : ':call rtags#JumpTo(g:SAME_WINDOW)<CR>'
+    "
+    " C-t to go back (not implemented)
+    " nmap <C-t> :call rtags#JumpBack()<bar>:echo<CR>
+else
+    noremap <Leader>Rs <C-\><C-n>:<C-u>call rtags#SymbolInfo()<CR>
+    noremap <Leader>RS <C-\><C-n>:<C-u>call rtags#SymbolInfo()<CR>
+
+    noremap <Leader>Ro <C-\><C-n>:<C-u>call rtags#Diagnostics()<CR>
+
+    noremap <Leader>Rj <C-\><C-n>:<C-u>call rtags#JumpTo(g:SAME_WINDOW)<CR>
+    noremap <Leader>Rd <C-\><C-n>:<C-u>call rtags#JumpTo(g:SAME_WINDOW)<CR>
+
+    noremap <Leader>RJ <C-\><C-n>:<C-u>call rtags#JumpTo(g:SAME_WINDOW, { '--declaration-only' : '' })<CR>
+    noremap <Leader>RD <C-\><C-n>:<C-u>call rtags#JumpTo(g:SAME_WINDOW, { '--declaration-only' : '' })<CR>
+
+    noremap <Leader>Rf <C-\><C-n>:<C-u>call rtags#FindRefs()<CR>
+    noremap <Leader>RF <C-\><C-n>:<C-u>call rtags#FindRefsCallTree()<CR>
+
+    noremap <Leader>Rv <C-\><C-n>:<C-u>call rtags#FindVirtuals()<CR>
+    noremap <Leader>Ri <C-\><C-n>:<C-u>call rtags#FindVirtuals()<CR>
+
+    "nnoremap <Leader>rS <C-\><C-n>:<C-u>call rtags#JumpTo(g:H_SPLIT)<CR>
+    noremap <Leader>rV <C-\><C-n>:<C-u>call rtags#JumpTo(g:V_SPLIT)<CR>
+    " mck - add rH for Horizontal split
+    noremap <Leader>rH <C-\><C-n>:<C-u>call rtags#JumpTo(g:H_SPLIT)<CR>
+    " mck - really a tab split if same file
+    noremap <Leader>rX <C-\><C-n>:<C-u>call rtags#JumpTo(g:NEW_TAB)<CR>
+    " mck - to match tmux ...
+    noremap <Leader>r\| <C-\><C-n>:<C-u>call rtags#JumpTo(g:V_SPLIT)<CR>
+    noremap <Leader>r_  <C-\><C-n>:<C-u>call rtags#JumpTo(g:H_SPLIT)<CR>
+    " mck - add rt for new tab if diff file
+    noremap <Leader>r<Tab> <C-\><C-n>:<C-u>call rtags#JumpTo(g:NEW_TAB_IF_DIFF_FILE)<CR>
+
+    noremap <Leader>rp <C-\><C-n>:<C-u>call rtags#JumpToParent()<CR>
+
+    noremap <Leader>rb <C-\><C-n>:<C-u>call rtags#JumpBack()<CR>
+    noremap <Leader>r, <C-\><C-n>:<C-u>call rtags#JumpBack()<CR>
+    noremap <Leader>r. <C-\><C-n>:<C-u>call rtags#JumpForward()<CR>
+    noremap <Leader>rh <C-\><C-n>:<C-u>call rtags#ShowHierarchy()<CR>
+    noremap <Leader>rC <C-\><C-n>:<C-u>call rtags#FindSuperClasses()<CR>
+    noremap <Leader>rc <C-\><C-n>:<C-u>call rtags#FindSubClasses()<CR>
+
+    " CompleteSymbols can be huge and take too long ...
+    "nnoremap <Leader>rn <C-\><C-n>:<C-u>call rtags#FindRefsByName(input("Pattern? ", "", "customlist,rtags#CompleteSymbols"))<CR>
+    noremap <Leader>rn <C-\><C-n>:<C-u>call rtags#FindRefsByName(input("Pattern? "))<CR>
+    noremap <Leader>rk <C-\><C-n>:<C-u>call rtags#FindSymbolsOfWordUnderCursor()<CR>
+    "nnoremap <Leader>rK <C-\><C-n>:<C-u>call rtags#FindSymbols(input("Pattern? ", "", "customlist,rtags#CompleteSymbols"))<CR>
+    noremap <Leader>rK <C-\><C-n>:<C-u>call rtags#FindSymbols(input("Pattern? "))<CR>
+    "nnoremap <Leader>rm <C-\><C-n>:<C-u>call rtags#JumpToMethod(input("Pattern? ", "", "customlist,rtags#CompleteSymbols"))<CR>
+    noremap <Leader>rm <C-\><C-n>:<C-u>call rtags#JumpToMethod(input("Pattern? "))<CR>
+
+    noremap <Leader>rl <C-\><C-n>:<C-u>call rtags#ProjectList()<CR>
+    noremap <Leader>rw <C-\><C-n>:<C-u>call rtags#RenameSymbolUnderCursor()<CR>
+
+    noremap <silent> <Leader>rr <C-\><C-n>:<C-u>call rtags#ReindexFile(1)<CR>
+
+    noremap <silent> <Leader>RL <Cmd>call rtags#TailRDMLog()<CR>
+
+    noremap <silent> <Leader>rR <Cmd>call rtags#ReindexFile(2)<CR>
+
+    noremap <Leader>r0 <C-\><C-n>:<C-u>call rtags#SuspendIndexing()<CR>
+    noremap <Leader>r1 <C-\><C-n>:<C-u>call rtags#ResumeIndexing()<CR>
+    noremap <Leader>r: <C-\><C-n>:<C-u>call rtags#ToggleColonKeyword()<CR>
 endif "nvim lsp
 " rtags -----------------
 
@@ -14065,10 +14128,12 @@ lsp_zero.on_attach(function(client, bufnr)
 
   --vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
   vim.keymap.set('n', '<leader>rd', '<cmd>lua vim.lsp.buf.definition()<cr><cmd>echo "LSP: goto def"<cr><cmd>sleep 800m<cr><cmd>redraw!<cr>', opts)
+  vim.keymap.set('n', '<leader>rj', '<cmd>lua vim.lsp.buf.definition()<cr><cmd>echo "LSP: goto def"<cr><cmd>sleep 800m<cr><cmd>redraw!<cr>', opts)
   vim.keymap.set('n', '<C-]>',      '<cmd>lua vim.lsp.buf.definition()<cr><cmd>echo "LSP: goto def"<cr><cmd>sleep 800m<cr><cmd>redraw!<cr>', opts)
 
   --vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
   vim.keymap.set('n', '<leader>rD', '<cmd>lua vim.lsp.buf.declaration()<cr><cmd>echo "LSP: goto dec"<cr><cmd>sleep 800m<cr><cmd>redraw!<cr>', opts)
+  vim.keymap.set('n', '<leader>rJ', '<cmd>lua vim.lsp.buf.declaration()<cr><cmd>echo "LSP: goto dec"<cr><cmd>sleep 800m<cr><cmd>redraw!<cr>', opts)
 
   --vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
   vim.keymap.set('n', '<leader>rv', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
@@ -14103,14 +14168,15 @@ lsp_zero.on_attach(function(client, bufnr)
   -- list all symbols in the file
   vim.keymap.set('n', '<leader>rL', '<cmd>lua vim.lsp.buf.document_symbol()<cr>', opts)
 
+  -- can we get this to fzf ?
+  vim.keymap.set('n', '<leader>ro', vim.diagnostic.setloclist, opts)
+  vim.keymap.set('n', '<leader>do', vim.diagnostic.setloclist, opts)
+
   -- does not seem to open float
   --vim.keymap.set('n', '[e', vim.diagnostic.open_float, opts)
   vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
   vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
   vim.keymap.set('n', '[q', vim.diagnostic.setloclist, opts)
-
-  -- can we get this to fzf ?
-  vim.keymap.set('n', '<leader>do', vim.diagnostic.setloclist, opts)
 
   -- no Telescope for now, since using qf->fzf lspfuzzy plugin
   --vim.keymap.set('n', 'gd', '<cmd>Telescope lsp_definitions<cr>', opts)
