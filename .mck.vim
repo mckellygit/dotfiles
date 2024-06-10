@@ -507,10 +507,11 @@ Plug 'voldikss/fzf-floaterm'
 " nvim completeopt does not have popup ...
 " this plugin provides the same behavior, but it does not stop preview split
 " but we may be able to add an autocmd to pclose preview ...
-if !has("nvim")
+" NOTE: nvim now has completeopt popup (and fuzzy) ...
+"if !has("nvim")
   let g:float_preview#loaded = 1
-endif
-Plug 'ncm2/float-preview.nvim'
+"endif
+"Plug 'ncm2/float-preview.nvim'
 "
 " CMake utils
 "Plug 'vhdirk/vim-cmake'
@@ -3137,6 +3138,7 @@ nnoremap <silent> <Leader>fM :TabVifm<CR>
 " vifm -------------
 
 " float-preview ----
+" NOTE: nvim now has completeopt popup (and fuzzy) ...
 let g:float_preview#docked = 0
 let g:float_preview#max_width = 180
 " float-preview ----
@@ -10819,10 +10821,10 @@ endif " has("autocmd")
 "================================================================
 "================================================================
 
-set completeopt=menu,menuone,preview,noselect,noinsert
-if !has("nvim")
-    set completeopt+=popup
-endif
+set completeopt=menu,menuone,noselect,noinsert,popup,fuzzy
+"if !has("nvim")
+"    set completeopt+=popup,fuzzy
+"endif
 inoremap <silent> <expr> <Tab>   pumvisible() ? '<Down>' : '<Tab>'
 inoremap <silent> <expr> <S-Tab> pumvisible() ? '<Up>' : '<S-Tab>'
 inoremap <silent> <C-^><Tab> <C-i>
@@ -10878,8 +10880,8 @@ let g:clang_cpp_options = '-std=c++11 -DNDEBUG -Wno-inconsistent-missing-overrid
 if has("nvim")
     " adding preview here without popup isnt great as we get preview window split
     " there is a nvim float-preview plugin but that doesnt stop the preview split
-    let g:clang_c_completeopt = 'menu,menuone,preview,noselect,noinsert'
-    let g:clang_cpp_completeopt = 'menu,menuone,preview,noselect,noinsert'
+    let g:clang_c_completeopt = 'menu,menuone,noselect,noinsert,popup,fuzzy'
+    let g:clang_cpp_completeopt = 'menu,menuone,preview,noinsert,popup,fuzzy'
     " is there a way to supress preview window ?
     " this works, but it flashes the preview window for a brief moment ...
     "autocmd User FloatPreviewWinOpen pclose
@@ -10887,14 +10889,15 @@ if has("nvim")
     "autocmd WinEnter * if &previewwindow && pumvisible() | pclose | endif
     " this seems ok so far ...
     " maybe do this only for &filetype == 'cpp' || &filetype == 'c' ?
-    aug fltpop
-        au!
-        autocmd WinEnter <buffer> if pumvisible() | pclose | endif
-    aug END
+    " NOTE: dont need this if float-preview plugin is not installed
+    "aug fltpop
+    "    au!
+    "    autocmd WinEnter <buffer> if pumvisible() | pclose | endif
+    "aug END
 else
     " vim has popup option ...
-    let g:clang_c_completeopt = 'menu,menuone,popup,noselect,noinsert'
-    let g:clang_cpp_completeopt = 'menu,menuone,popup,noselect,noinsert'
+    let g:clang_c_completeopt = 'menu,menuone,noselect,noinsert,popup,fuzzy'
+    let g:clang_cpp_completeopt = 'menu,menuone,noselect,noinsert,popup,fuzzy'
 endif
 let g:clang_complete_copen = 1
 let g:clang_auto = 1
@@ -14282,7 +14285,7 @@ cmp.setup({
   },
   completion = {
     keyword_length = 1,
-    completeopt = "menu,menuone,preview,noselect,noinsert"
+    completeopt = "menu,menuone,noselect,noinsert,popup,fuzzy"
   },
   view = {
     entries = 'custom',
