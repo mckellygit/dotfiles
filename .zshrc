@@ -1118,7 +1118,7 @@ alias gco='git checkout '
 # -x S -y R are not supported values
 if [ -n "$TMUX_PANE" -a -z "$VIM_TERMINAL" ] ; then
     # was -y 38 - perhaps so we can see more of the cmdline below popup ?
-    alias fzf='fzf-tmux -p -x C -y C -w 80% -h 65% --bind=esc:ignore'
+    alias fzf='fzf-tmux -p -w 80% -h 65% --bind=esc:ignore'
 fi
 
 # to use tmux window instead of popup, add -d arg
@@ -1351,7 +1351,7 @@ tere() {
 # export FZF_DEFAULT_OPTS="--extended --cycle --reverse"
 
 # dont think this is used anymore ...
-export FZF_TMUX_OPTS="-p -x C -y -C -w 80% -h 65% --bind=esc:ignore"
+export FZF_TMUX_OPTS="-p -w 80% -h 65% --bind=esc:ignore"
 
 # --preview="head -n 200 {}" --preview-window=right:hidden --bind=ctrl-\\:toggle-preview
 
@@ -1655,7 +1655,7 @@ fzf-history-widget() {
 
 my-fzfcmd() {
   if [ -n "$TMUX_PANE" -a -z "$VIM_TERMINAL" ] ; then
-    echo "fzf-tmux -p -x C -y C -w 80% -h 65% --bind=esc:ignore"
+    echo "fzf-tmux -p -w 80% -h 65% --bind=esc:ignore"
   else
     echo "command fzf --height 40% "
   fi
@@ -1682,6 +1682,31 @@ zle -N my-fzf-history-widget
 
 # an unusual and vim harmless mapping from tmux for M-"
 bindkey "\e\"" my-fzf-history-widget
+
+fzf-files-widget() {
+  local cmd="${FZF_CTRL_T_COMMAND:-"command find -L . -mindepth 1 \\( -path '*/\\.*' -o -fstype 'sysfs' -o -fstype 'devfs' -o -fstype 'devtmpfs' -o -fstype 'proc' \\) -prune \
+    -o -type f -print \
+    -o -type d -print \
+    -o -type l -print 2> /dev/null | cut -b3-"}"
+  setopt localoptions pipefail no_aliases 2> /dev/null
+  local item
+  local selected
+  selected=""
+  #FZF_DEFAULT_COMMAND="$cmd" FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse --bind=ctrl-z:ignore $FZF_DEFAULT_OPTS $FZF_CTRL_T_OPTS" $(my-fzfcmd) -m "$@" < /dev/tty | while read item; do
+  FZF_DEFAULT_COMMAND="$cmd" FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --bind=ctrl-z:ignore $FZF_DEFAULT_OPTS $FZF_CTRL_T_OPTS" $(_fzfcmd) -m "$@" < /dev/tty | while read item; do
+    selected="${selected} ${(q)item} "
+    #echo -n "${(q)item} "
+  done
+  local ret=$?
+# echo
+  if [ -n "$selected" ]; then
+    zle -U "${selected:1}"
+  fi
+  zle reset-prompt
+  return $ret
+}
+zle -N fzf-files-widget
+bindkey "^T" fzf-files-widget
 
 my-fzf-files-widget() {
   local cmd="${FZF_CTRL_T_COMMAND:-"command find -L . -mindepth 1 \\( -path '*/\\.*' -o -fstype 'sysfs' -o -fstype 'devfs' -o -fstype 'devtmpfs' -o -fstype 'proc' \\) -prune \
