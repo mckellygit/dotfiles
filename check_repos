@@ -238,6 +238,31 @@ fi
 # tmux:
 #   git clone https://github.com/tmux/tmux.git
 
+# zellij
+#   git clone https://github.com/zellij-org/zellij.git
+
+# shpool
+#   git clone https://github.com/shell-pool/shpool.git
+
+# dtach
+#   git clone https://github.com/crigler/dtach.git
+
+# dvtm / abduco
+#   https://www.brain-dump.org/projects/dvtm
+#   https://www.brain-dump.org/projects/abduco
+
+# EternalTerminal
+#   git clone https://github.com/MisterTea/EternalTerminal.git
+
+# mosh
+#   git clone https://github.com/mobile-shell/mosh.git
+
+# reptyr (re-attach terminal)
+#   git clone https://github.com/nelhage/reptyr.git
+
+# retty (re-attach terminal)
+#   git clone https://github.com/lkundrak/retty.git
+
 # vifm:
 #   git clone https://github.com/vifm/vifm.git
 
