@@ -1635,7 +1635,7 @@ fzf-cd-widget() {
 
 fzf-history-widget() {
   local selected num
-  setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2> /dev/null
+  setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases noglob 2> /dev/null
   selected="$(fc -l 1 | awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, "", cmd); if (!seen[cmd]++) print $0 }' |
     FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --scheme=history --bind=ctrl-r:abort,ctrl-z:ignore $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} +m" $(_fzfcmd))"
   local ret=$?
@@ -1663,7 +1663,7 @@ my-fzfcmd() {
 
 my-fzf-history-widget() {
   local selected num
-  setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2> /dev/null
+  setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases noglob 2> /dev/null
   selected="$(fc -l 1 | awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, "", cmd); if (!seen[cmd]++) print $0 }' |
     FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --scheme=history --bind=ctrl-r:abort,ctrl-z:ignore $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} +m" $(my-fzfcmd))"
   local ret=$?
