@@ -197,13 +197,25 @@ if g:has_wsl == 0 && has("nvim")
     Plug 'hrsh7th/cmp-buffer'
     Plug 'hrsh7th/cmp-path'
     Plug 'hrsh7th/cmp-cmdline'
-    "Plug 'saadparwaiz1/cmp_luasnip'
     Plug 'hrsh7th/cmp-nvim-lsp'
     Plug 'hrsh7th/cmp-nvim-lua'
 
-    " Snippets
-    Plug 'L3MON4D3/LuaSnip'
-    "Plug 'rafamadriz/friendly-snippets'
+    " For ultisnips users.
+    Plug 'SirVer/ultisnips'
+    " Plug 'quangnguyen30192/cmp-nvim-ultisnips'
+
+    " For vsnip users.
+    " Plug 'hrsh7th/cmp-vsnip'
+    " Plug 'hrsh7th/vim-vsnip'
+
+    " For luasnip users.
+    " Plug 'L3MON4D3/LuaSnip'
+    " Plug 'saadparwaiz1/cmp_luasnip'
+    " Plug 'rafamadriz/friendly-snippets'
+
+    " For snippy users.
+    " Plug 'dcampos/nvim-snippy'
+    " Plug 'dcampos/cmp-snippy'
 
     Plug 'VonHeikemen/lsp-zero.nvim'
 endif
@@ -14005,7 +14017,8 @@ endif
 
 " vim+gdb debugging, requires gdb v7.12+
 " :help terminal-debug
-packadd termdebug
+" already aded by default now ...
+"packadd termdebug
 ":Termdebug a.out
 
 " -----------------------------
@@ -14190,25 +14203,52 @@ end)
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-require("mason").setup()
+-- require("mason").setup()
 
 -- install LSPs ...
 -- install clangd (sudo apt-get install clangd)
 -- install pyright (sudo pip3 install pyright)
 -- install rust-analyzer ...
 
-local lspconfig = require'lspconfig'
-lspconfig.clangd.setup {
-  init_options = {
-    compilationDatabaseDirectory = "buildln";
-    index = {
-      threads = 0;
-    };
-    clang = {
-      excludeArgs = { "-frounding-math"} ;
-    };
-  }
-}
+-- local lspconfig = require'lspconfig'
+-- lspconfig.clangd.setup {
+--   capabilities = {
+--     offsetEncoding = 'utf-8',
+--   },
+--   init_options = {
+--     compilationDatabaseDirectory = "../buildln/";
+--     index = {
+--       threads = 4;
+--     };
+--     clang = {
+--       excludeArgs = { "-frounding-math"} ;
+--     };
+--   }
+-- }
+
+require('mason').setup({})
+
+require('mason-lspconfig').setup({
+  handlers = {
+    lsp_zero.default_setup,
+    clangd = function()
+      require('lspconfig').clangd.setup({
+        capabilities = {
+          offsetEncoding = 'utf-8',
+        },
+        init_options = {
+          compilationDatabaseDirectory = "../buildln/";
+          index = {
+            threads = 4;
+          };
+          clang = {
+            excludeArgs = { "-frounding-math"} ;
+          };
+        },
+      })
+    end,
+  },
+})
 
 -- clangd add .clangd config file in project root
 
@@ -14238,15 +14278,23 @@ local lsp_flags = {
 
 local cmp = require'cmp'
 local lspkind = require'lspkind'
-local luasnip = require('luasnip')
+-- local luasnip = require('luasnip')
 
 cmp.setup({
   snippet = {
-    expand = function(args)
-      -- For `ultisnips` user.
-      vim.fn["UltiSnips#Anon"](args.body)
-    end,
-  },
+      -- REQUIRED - you must specify a snippet engine
+      expand = function(args)
+        vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+        -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+        -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+        -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
+        -- vim.snippet.expand(args.body) -- For native neovim snippets (Neovim v0.10+)
+      end,
+    },
+    window = {
+      -- completion = cmp.config.window.bordered(),
+      -- documentation = cmp.config.window.bordered(),
+    },
   mapping = cmp.mapping.preset.insert({
           ['<Tab>'] = function(fallback)
             if cmp.visible() then
@@ -14274,15 +14322,20 @@ cmp.setup({
           ['<C-b>'] = cmp.mapping.scroll_docs(-4),
           ['<C-f>'] = cmp.mapping.scroll_docs(4),
         }),
+
   sources = {
     { name = 'nvim_lsp' }, -- For nvim-lsp
-    { name = 'ultisnips' }, -- For ultisnips user.
     { name = 'nvim_lua' }, -- for nvim lua function
+    { name = 'ultisnips' }, -- For ultisnips users.
+    -- { name = 'luasnip' }, -- For luasnip users.
+    -- { name = 'vsnip' }, -- For vsnip users.
+    -- { name = 'snippy' }, -- For snippy users.
     { name = 'path' }, -- for path completion
-    { name = 'buffer', keyword_length = 4 }, -- for buffer word completion
+    { name = 'buffer', keyword_length = 5 }, -- for buffer word completion
     { name = 'omni' },
     { name = 'emoji', insert = true, } -- emoji completion
   },
+
   completion = {
     keyword_length = 1,
     completeopt = "menu,menuone,noselect,noinsert,popup,fuzzy"
@@ -14295,15 +14348,34 @@ cmp.setup({
       mode = "symbol_text",
       menu = ({
         nvim_lsp = "[LSP]",
-        ultisnips = "[US]",
         nvim_lua = "[Lua]",
+        ultisnips = "[US]",
         path = "[Path]",
         buffer = "[Buffer]",
+        omni = "[Omni]",
         emoji = "[Emoji]",
-          omni = "[Omni]",
       }),
     }),
   },
+})
+
+-- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline({ '/', '?' }, {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = {
+    { name = 'buffer' }
+  }
+})
+
+-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline(':', {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = cmp.config.sources({
+    { name = 'path' }
+  }, {
+    { name = 'cmdline' }
+  }),
+  matching = { disallow_symbol_nonprefix_matching = false }
 })
 
 require('telescope').setup{
@@ -14315,6 +14387,14 @@ require('telescope').setup{
         },
     }
 }
+
+--local autocmd = vim.api.nvim_create_autocmd
+--autocmd("FileType", {
+--   pattern = "c,cpp,python",
+--   callback = function()
+--      require("cmp").setup.buffer { enabled = true }
+--   end,
+--   })
 
 NVIM_LUA_EOF1
 
